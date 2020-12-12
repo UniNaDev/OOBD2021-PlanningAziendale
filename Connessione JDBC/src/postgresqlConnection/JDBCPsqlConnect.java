@@ -1,16 +1,13 @@
 package postgresqlConnection;
-
 import java.sql.*;
 
 public class JDBCPsqlConnect {
 
-	
-	String url= "jdbc:postgresql://localhost:5432/MikeDB";
+	String url= "jdbc:postgresql://databaseprogetto.cu47fid9uycm.eu-south-1.rds.amazonaws.com:5432/postgres";
 	String user= "postgres";
-	String password= "michele";
+	String password= "postgres";
 	String classdriver="org.postgresql.Driver";
-	
-	          
+		          
 	public void connect() {
 	
 		//Ckeck esistenza classe
@@ -26,21 +23,21 @@ public class JDBCPsqlConnect {
 		try {
 			
 			Connection Conn= DriverManager.getConnection(url, user, password);
-			System.out.println("Connessione al server PostgreSQL effettuata con successo");
+			System.out.println("Connessione al server PostgreSQL effettuata");
 			
 			//Creazione Statement
 			Statement MyStatement=Conn.createStatement();
 			ResultSet resultSet = null;
 			try {
 				//Esecuzione Statement
-				resultSet = MyStatement.executeQuery("SELECT * FROM persona ORDER BY id_code");
+				resultSet = MyStatement.executeQuery("SELECT * FROM persona");
 				
 				//Stampa ResultSet
 				while(resultSet.next())
 				{
 					
-					System.out.println("ID_Code"+resultSet.getString("id_code"));
-					System.out.println("Nome"+resultSet.getString("nome"));
+					System.out.println("ID_Code: "+resultSet.getString("cf"));
+					System.out.println("Nome: "+resultSet.getString("nome"));
 					
 				}
 			} catch (Exception e) {
@@ -57,9 +54,6 @@ public class JDBCPsqlConnect {
 			
 			System.out.println("Connessione al server PostgreSQL fallita");
 		}
-		
-
-		
 		
 	}
 	
