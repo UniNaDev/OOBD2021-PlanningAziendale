@@ -2096,7 +2096,7 @@
 											"top": 612,
 											"width": 151.38525390625,
 											"height": 13,
-											"text": "+IndirizzoSede: varchar[1]",
+											"text": "+Indirizzo: varchar[1]",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2604,7 +2604,7 @@
 										"$ref": "AAAAAAF2TcKq2/uuAyo="
 									},
 									"edgePosition": 2,
-									"text": "*"
+									"text": "1..*"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -3972,7 +3972,7 @@
 									"hostEdge": {
 										"$ref": "AAAAAAF2Urjawr9MSVg="
 									},
-									"text": "0..*"
+									"text": "1..*"
 								},
 								{
 									"_type": "UMLQualifierCompartmentView",
@@ -5191,7 +5191,7 @@
 											"top": 478,
 											"width": 160.7607421875,
 											"height": 13,
-											"text": "+CodProvincia: varchar[1]",
+											"text": "+CodProvincia: char[1]",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5403,7 +5403,7 @@
 											"top": 478,
 											"width": 158,
 											"height": 13,
-											"text": "+CodComune: varchar[1]",
+											"text": "+CodComune: char[1]",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6241,7 +6241,7 @@
 								"reference": {
 									"$ref": "AAAAAAF2TaHd8+V3F2w="
 								},
-								"multiplicity": "*"
+								"multiplicity": "1..*"
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",
@@ -6880,7 +6880,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2Tbk98PL++2g="
 							},
-							"name": "IndirizzoSede",
+							"name": "Indirizzo",
 							"type": "varchar",
 							"multiplicity": "1"
 						},
@@ -6933,7 +6933,7 @@
 								"reference": {
 									"$ref": "AAAAAAF2TaHd8+V3F2w="
 								},
-								"multiplicity": "0..*"
+								"multiplicity": "1..*"
 							}
 						}
 					],
@@ -7209,7 +7209,7 @@
 								"$ref": "AAAAAAF2VlTGXGV3bo8="
 							},
 							"name": "CodProvincia",
-							"type": "varchar",
+							"type": "char",
 							"multiplicity": "1"
 						},
 						{
@@ -7273,7 +7273,7 @@
 								"$ref": "AAAAAAF2VlVk1GiOwvk="
 							},
 							"name": "CodComune",
-							"type": "varchar",
+							"type": "char",
 							"multiplicity": "1"
 						},
 						{

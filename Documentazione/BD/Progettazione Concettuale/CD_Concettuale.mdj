@@ -2891,7 +2891,7 @@
 										"$ref": "AAAAAAF2TcKq2/uuAyo="
 									},
 									"edgePosition": 2,
-									"text": "*"
+									"text": "1..*"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -4259,7 +4259,7 @@
 									"hostEdge": {
 										"$ref": "AAAAAAF2Urjawr9MSVg="
 									},
-									"text": "0..*"
+									"text": "1..*"
 								},
 								{
 									"_type": "UMLQualifierCompartmentView",
@@ -4537,7 +4537,7 @@
 								"reference": {
 									"$ref": "AAAAAAF2TaHd8+V3F2w="
 								},
-								"multiplicity": "*"
+								"multiplicity": "1..*"
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",
@@ -5091,7 +5091,7 @@
 								"reference": {
 									"$ref": "AAAAAAF2TaHd8+V3F2w="
 								},
-								"multiplicity": "0..*"
+								"multiplicity": "1..*"
 							}
 						}
 					],
