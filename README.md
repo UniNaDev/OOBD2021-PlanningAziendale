@@ -13,7 +13,7 @@ Si sviluppi un sistema informativo, composto da una base di dati relazionale e u
 ###### Progetto
 - [ ] Creare un progetto
   - [ ] Assegnare dipendenti e ruoli
-    - [ ] Filtrare dipendenti per skill, stipendio e numero di progetti già in corso
+    - [ ] Filtrare dipendenti per skill, stipendio, progetti in cui hanno partecipato e valutazione
 - [ ] Visualizzare i propri progetti
   - [ ] Filtrare la lista per ambiti, tipologia, scadenza e terminazione
 - [ ] Modificare un progetto se se ne è il creatore/project manager
