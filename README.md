@@ -5,7 +5,7 @@ Si sviluppi un sistema informativo, composto da una base di dati relazionale e u
 
 ## Funzionalità
 ###### Dipendente
--[ ] Sistema di credenziali con accesso e creazione account
+- [ ] Sistema di credenziali con accesso e creazione account
   -[ ] Generazione del codice fiscale
 -[ ] Visualizzare e modificare le informazioni del proprio account
 -[ ] Vedere e modificare le proprie skill lavorative
