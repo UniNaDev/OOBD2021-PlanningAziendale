@@ -6,24 +6,24 @@ Si sviluppi un sistema informativo, composto da una base di dati relazionale e u
 ## Funzionalità
 ###### Dipendente
 - [ ] Sistema di credenziali con accesso e creazione account
-  -[ ] Generazione del codice fiscale
--[ ] Visualizzare e modificare le informazioni del proprio account
--[ ] Vedere e modificare le proprie skill lavorative
+  - [ ] Generazione del codice fiscale
+- [ ] Visualizzare e modificare le informazioni del proprio account
+- [ ] Vedere e modificare le proprie skill lavorative
 
 ###### Progetto
--[ ] Creare un progetto
-  -[ ] Assegnare dipendenti e ruoli
-    -[ ] Filtrare dipendenti per skill, stipendio e numero di progetti già in corso
--[ ] Visualizzare i propri progetti
-  -[ ] Filtrare la lista per ambiti, tipologia, scadenza e terminazione
--[ ] Modificare un progetto se se ne è il creatore/project manager
-  -[ ] Terminare un progetto
+- [ ] Creare un progetto
+  - [ ] Assegnare dipendenti e ruoli
+    - [ ] Filtrare dipendenti per skill, stipendio e numero di progetti già in corso
+- [ ] Visualizzare i propri progetti
+  - [ ] Filtrare la lista per ambiti, tipologia, scadenza e terminazione
+- [ ] Modificare un progetto se se ne è il creatore/project manager
+  - [ ] Terminare un progetto
 
 ###### Meeting
--[ ] Organizzare un meeting
-  -[ ] Controllo delle prenotazioni delle sale
--[ ] Modificare meeting se se ne è gli organizzatori
-  -[ ] Assegnare presenze degli invitati
-    -[ ] Aggiornare valutazione dei dipendenti
--[ ] Visualizzare tutti i meeting a cui si è invitati
-  -[ ] Filtrare la lista per date di inizio e per progetti discussi
+- [ ] Organizzare un meeting
+  - [ ] Controllo delle prenotazioni delle sale
+- [ ] Modificare meeting se se ne è gli organizzatori
+  - [ ] Assegnare presenze degli invitati
+    - [ ] Aggiornare valutazione dei dipendenti
+- [ ] Visualizzare tutti i meeting a cui si è invitati
+  - [ ] Filtrare la lista per date di inizio e per progetti discussi
