@@ -30,14 +30,17 @@ CREATE TYPE tipologia AS ENUM('Ricerca base','Ricerca industriale','Ricerca sper
 CREATE TABLE Progetto (
 	CodProgetto integer ,
 	NomeProgetto varchar(20) NOT NULL,
-	TipoProgetto tipologia ,
+	TipoProgetto tipologia NOT NULL ,
 	DescrizioneProgetto varchar (200),
 	DataCreazione DATE NOT NULL,
 	DataScadenza DATE,
 	DataTerminazione DATE,
 	Creatore char(40) NOT NULL,
 	
-	PRIMARY KEY(CodProgetto)
+	PRIMARY KEY(CodProgetto),
+	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione),
+	CONSTRAINT DataTerminazioneValida CHECK(DataTerminazione <= DataScadenza) --Da rivedere(Se si vuole implementare possibilità di consegnare dopo data scadenza)
+	
 );
 
 
@@ -45,7 +48,7 @@ CREATE TYPE ambito AS ENUM('Economia','Medicina','Militare','Informatico','Scien
 
 CREATE TABLE AmbitoProgetto(
 	IDAmbito integer,
-	NomeAmbito ambito,
+	NomeAmbito ambito NOT NULL,
 	
 	PRIMARY KEY (IDAmbito),
 	UNIQUE (NomeAmbito)
@@ -62,12 +65,13 @@ CREATE TABLE LuogoNascita(
 
 
 CREATE TABLE Dipendente(
-	CF char(16) CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
+	CF char(16) ,
 	Nome varchar(20) NOT NULL,
 	Cognome varchar(20) NOT NULL,
+	Sesso char(1) NOT NULL,
 	DataNascita DATE NOT NULL,
 	Indirizzo varchar(100) NOT NULL,
-	Email varchar(100) CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+	Email varchar(100) NOT NULL ,
 	TelefonoCasa char(10),
 	Cellulare char(10),
 	Salario integer NOT NULL,
@@ -75,13 +79,16 @@ CREATE TABLE Dipendente(
 	Password varchar(50) NOT NULL,
 	CodComune char(20) NOT NULL, 
 
-	
 	PRIMARY KEY(CF),
 	UNIQUE(Email),
 	UNIQUE(TelefonoCasa),
 	UNIQUE(Cellulare),
-	CHECK(Nome ~* '^[ a-zA-Z]+$'),
-	CHECK(Cognome ~* '^[ a-zA-Z]+$'),
+	CONSTRAINT CFLegit CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
+	CONSTRAINT EmailLegit CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+	CONSTRAINT NomeLegit CHECK(Nome ~* '^[ a-zA-Z]+$'),
+	CONSTRAINT CognomeLegit CHECK(Cognome ~* '^[ a-zA-Z]+$'),
+	CONSTRAINT SalarioPositivo CHECK (Salario>0),
+	CONSTRAINT ValutazioneLimitata CHECK ( (Valutazione >=0) AND (Valutazione <=10) ),
 	
 	--Associazione 1 a Molti(LuogoNascita,Dipendente)
 	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune)
@@ -103,7 +110,8 @@ CREATE TABLE SalaRiunione(
 	Indirizzo varchar(50) NOT NULL,
 	Piano integer NOT NULL,
 	
-	PRIMARY KEY(CodSala)
+	PRIMARY KEY(CodSala),
+	CONSTRAINT CapienzaEsistente CHECK (Capienza>0)
 );
 
 
@@ -113,9 +121,9 @@ CREATE TYPE piattaforma AS ENUM('Microsoft Teams','Discord','Google Meet','Zoom'
 CREATE TABLE Meeting(
 	IDMeeting integer,
 	DataInizio DATE NOT NULL,
-	DataFine DATE ,
+	DataFine DATE NOT NULL ,
 	OrarioInizio TIME NOT NULL,
-	OrarioFine TIME,
+	OrarioFine TIME NOT NULL,
 	Modalità modalità,
 	Piattaforma piattaforma,
 	Organizzatore char(40) NOT NULL,
@@ -123,14 +131,15 @@ CREATE TABLE Meeting(
 	CodProgetto integer,
 	
 	PRIMARY KEY(IDMeeting),
-	
+	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),
+	CONSTRAINT OrarioValidoMeeting CHECK(OrarioInizio < OrarioFine),
+
 	--Associazione 1 a Molti(Sala,Meeting)
 	FOREIGN KEY (CodSala) REFERENCES SalaRiunione(CodSala),
 	
 	--Associazione 1 a Molti (Progetto,Meeting)
 	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto)
 );
-
 
 
 
@@ -149,9 +158,10 @@ CREATE TYPE ruolo AS ENUM('Project Manager','Team Member','Team Leader','Chief F
 
 CREATE TABLE Partecipazione(
 	CodProgetto integer,
-	CF char(16) CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
+	CF char(16) ,
 	RuoloDipendente ruolo,
 	
+	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF)
 );
@@ -160,8 +170,9 @@ CREATE TABLE Partecipazione(
 --Associazione Molti a Molti (Dipendente,Skill)
 CREATE TABLE Abilità(
 	IDSkill integer,
-	CF char(16) CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
+	CF char(16) ,
 	
+	CONSTRAINT CfAbilità CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF)
 );
@@ -169,9 +180,10 @@ CREATE TABLE Abilità(
 
 --Associazione Molti a Molti (Meeting,Dipendente)
 CREATE TABLE Presenza(
-	CF char(16) CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
+	CF char(16),
 	IDMeeting integer,
 	
+	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF),
 	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting)
 );
@@ -185,7 +197,7 @@ CREATE TABLE Presenza(
 
 --Progetto
 INSERT INTO Progetto(CodProgetto,NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione,Creatore) VALUES
-	(1,'Mio Progetto','Ricerca base','dffgffgff','16/12/2020',null,null,'Michekle'),
+	(1,'Mio Progetto','Ricerca base','dffgffgff','10/12/2020','18/12/2020','18/12/2020','Michekle'),
 	(2,'MibProgo','Sviluppo sperimentale','dffgffbbgff','16/12/2020',null,null,'Micheggkle'),
 	(3,'MixccProgetto','Ricerca sperimentale','dffgffffgff','16/12/2020',null,null,'Micheklfe');
 
@@ -199,10 +211,10 @@ INSERT INTO AmbitoProgetto(IDAmbito,NomeAmbito) VALUES
 
 
 --Dipendente
-INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Valutazione,Password,CodComune) VALUES
-	('RSSMRA80A01F839W','Mario','Rossi','01/01/1980','via sdff,28','sjdndjnsj@ff.com','0817589891','38789999',10000,10,'pass','F839'),
-	('DLCGPP80L01H243P','Giuseppe','De Lucia','01/07/1980','via sdffcc,27','sj545ffd@sjff2548.com','0817327550','3877199990',50000,1,'paddss','H243'),
-	('SPSNDR02L01L259V','Andrea','Esposito','01/07/2002','via sdff,38','sjdndcccdfjnsj@ff.com','0817589895','3448999000',100000,5,'passw','L259');
+INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Valutazione,Password,CodComune) VALUES
+	('RSSMRA80A01F839W','Mario','Rossi','29/02/2020','M','via sdff,28','m.rossi@unina.it','0817589891','38789999',100,10,'pass','F839'),
+	('DLCGPP80L01H243P','Giuseppe','De Lucia','01/07/1980','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,0,'paddss','H243'),
+	('SPSNDR02L01L259V','Andrea','Esposito','01/07/2002','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,5,'passw','L259');
 
 
 --Skill
@@ -223,9 +235,9 @@ INSERT INTO SalaRiunione(CodSala,Capienza,Indirizzo,Piano) VALUES
 
 --Meeting
 INSERT INTO Meeting(IDMeeting,DataInizio,DataFine,OrarioInizio,OrarioFine,Modalità,Piattaforma,Organizzatore,CodSala) VALUES
-	(1,'12/10/2020',null,'13:55','14:55','Fisico',null,'Micchd','Sala1'),
-	(2,'22/11/2020',null,'13:55','14:55','Online','Discord','Mivcchd',null),
-	(3,'12/10/2020',null,'13:55','14:55','Fisico',null,'Micchddd','Sala2');
+	(1,'12/10/2020','12/10/2020','13:55','14:00','Fisico',null,'Micchd','Sala1'),
+	(2,'15/11/2020','15/11/2020','13:55','16:55','Online','Discord','Mivcchd',null),
+	(3,'21/10/2020','21/10/2020','13:55','14:55','Fisico',null,'Micchddd','Sala2');
 	
 
 --AmbitoProgettoLink
