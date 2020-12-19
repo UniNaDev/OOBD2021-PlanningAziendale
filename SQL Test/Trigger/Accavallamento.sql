@@ -21,9 +21,10 @@ FROM Meeting AS m
 WHERE m.IDMeeting = NEW.Meeting;
 
 --Se la sala usata nell'insert/update già era usata per altre riunioni fisiche
-IF (NEW.Sala IN(
-	SELECT r.Sala
-	FROM Riunione AS r)) THEN
+IF ((SELECT COUNT(r.Sala)
+	FROM Riunione AS r
+	WHERE r.Sala=NEW.Sala
+	GROUP BY r.Sala) >= 2) THEN
 	FOR temp IN
 	SELECT *
 	FROM Riunione JOIN Meeting ON (Riunione.Meeting = Meeting.IDMeeting)
@@ -32,11 +33,11 @@ IF (NEW.Sala IN(
 	--Controlla se hanno stesse date e stessi orari
 	IF (temp.DataInizio = DataInizioNuovo AND temp.DataFine = DataFineNuovo AND OraInizioNuovo BETWEEN temp.OrarioInizio AND temp.OrarioFine) THEN
 		RAISE EXCEPTION 'Errore: più meeting si accavallano nella stessa sala.';
+		RETURN OLD;
 	END IF;
 	END LOOP;
-	RETURN OLD;
 END IF;
-
+RETURN NEW;
 END;
 $$
 -------------------------------------------------------------------------
