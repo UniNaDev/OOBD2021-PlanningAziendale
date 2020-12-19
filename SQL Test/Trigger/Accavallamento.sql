@@ -31,7 +31,7 @@ IF ((SELECT COUNT(r.Sala)
 	WHERE Riunione.Sala = NEW.Sala
 	LOOP
 	--Controlla se hanno stesse date e stessi orari
-	IF (temp.DataInizio = DataInizioNuovo AND temp.DataFine = DataFineNuovo AND ((OraFineNuovo BETWEEN temp.OrarioInizio AND temp.OrarioFine) OR (OraInizioNuovo>=temp.OrarioInizio AND OraFineNuovo > temp.OrarioFine) OR (OraInizioNuovo < temp.OrarioInizio AND OraFineNuovo>temp.OrarioFine))) THEN
+	IF (temp.DataInizio = DataInizioNuovo AND temp.DataFine = DataFineNuovo AND ((OraFineNuovo>temp.OrarioInizio AND OraFineNuovo<=temp.OrarioFine) OR (OraInizioNuovo>=temp.OrarioInizio AND OraFineNuovo > temp.OrarioFine) OR (OraInizioNuovo < temp.OrarioInizio AND OraFineNuovo>temp.OrarioFine))) THEN
 		RAISE EXCEPTION 'Errore: più meeting si accavallano nella stessa sala.';
 		RETURN OLD;
 	END IF;
