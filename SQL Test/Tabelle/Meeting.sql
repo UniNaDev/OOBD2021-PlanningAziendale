@@ -16,7 +16,7 @@ CREATE TYPE piattaforma AS ENUM ('Microsoft Teams','Discord','Google Meet','Zoom
 -----------------------------------------------------------------------------------
 
 --TABELLA MEETING
-----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE Meeting(
 	IDMeeting INTEGER PRIMARY KEY DEFAULT nextval('meeting_serial'),
 	DataInizio DATE NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE Meeting(
 	Piattaforma piattaforma,
 	Organizzatore CHAR(16) NOT NULL,
 	CONSTRAINT fk_dipendente FOREIGN KEY (Organizzatore) REFERENCES Dipendente (CF),
-	CONSTRAINT riunione_telematica CHECK (modalità='Telematico' AND Piattaforma IS NOT NULL),
+	CONSTRAINT riunione_telematica CHECK ((Modalità='Telematico' AND Piattaforma IS NOT NULL) OR (Modalità = 'Fisico' AND Piattaforma IS NULL)),
 	CONSTRAINT fine_valida CHECK (DataFine>=DataInizio AND OrarioFine>=OrarioInizio)
 );
------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------
