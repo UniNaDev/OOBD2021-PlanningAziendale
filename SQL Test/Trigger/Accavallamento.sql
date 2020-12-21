@@ -18,23 +18,24 @@ OraInizioNuovo TIME;
 OraFineNuovo TIME;
 temp RECORD;
 BEGIN
-
+--Salva i valori di datainizio,datafine,orarioinizio,orariofine del nuovo record
 SELECT m.DataInizio, m.DataFine, m.OrarioInizio, m.OrarioFine INTO DataInizioNuovo,DataFineNuovo,OraInizioNuovo,OraFineNuovo
 FROM Meeting AS m
 WHERE m.IDMeeting = NEW.Meeting;
 
---Se la sala usata nell'insert/update già era usata per altre riunioni fisiche
+--Se la sala usata nell'update già era usata per altre riunioni fisiche (se il numero di record con quella sala è almeno 2)
 IF ((SELECT COUNT(r.Sala)
 	FROM Riunione AS r
 	WHERE r.Sala=NEW.Sala
 	GROUP BY r.Sala) >= 2) THEN
+	--Per ogni record in Riunione con sala quella nuova dell'update
 	FOR temp IN
 	SELECT *
 	FROM Riunione JOIN Meeting ON (Riunione.Meeting = Meeting.IDMeeting)
-	WHERE Riunione.Sala = NEW.Sala
+	WHERE Riunione.Sala = NEW.Sala AND Riunione.Meeting<>NEW.Meeting
 	LOOP
 	--Controlla se hanno stesse date e stessi orari
-	IF (temp.DataInizio = DataInizioNuovo AND temp.DataFine = DataFineNuovo AND ((OraFineNuovo>temp.OrarioInizio AND OraFineNuovo<=temp.OrarioFine) OR (OraInizioNuovo>=temp.OrarioInizio AND OraFineNuovo > temp.OrarioFine) OR (OraInizioNuovo < temp.OrarioInizio AND OraFineNuovo>temp.OrarioFine))) THEN
+	IF (temp.DataInizio = DataInizioNuovo AND temp.DataFine = DataFineNuovo AND ( (OraFineNuovo >= temp.OrarioInizio AND OraFineNuovo < temp.OrarioFine) OR (OraInizioNuovo < temp.OrarioFine AND OraFineNuovo >= temp.OrarioFine) )) THEN
 		RAISE EXCEPTION 'Errore: più meeting si accavallano nella stessa sala.';
 		RETURN OLD;
 	END IF;

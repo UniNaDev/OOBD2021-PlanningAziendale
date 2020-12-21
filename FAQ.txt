@@ -7,6 +7,7 @@
 4) Quanto astratto deve essere il class diagram iniziale rispetto a quello strutturato (LuogoNascita)
 5) Vuole l'insert anche dei comuni o capisce che per comodità facciamo un import?
 6) Modalità come enumerazione?
+	No, meglio boolean/char(1).
 7) Classi di associazione nel diagramma ristrutturato
 8) (DA PDF UFFICIALE) "Schema logico con descrizione dei trigger e procedure individuate"?
 9) File SQL quanti/quali?
