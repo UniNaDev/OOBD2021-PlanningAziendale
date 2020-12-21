@@ -62,10 +62,10 @@ BEGIN
 --Ottieni codice sala del meeting modificato
 SELECT Riunione.Sala INTO SalaNuovo FROM Riunione WHERE Meeting=NEW.IDMeeting;
 
-IF (SELECT COUNT(r.Meeting)
+IF ((SELECT COUNT(r.Meeting)
    FROM Riunione AS r
 	WHERE r.Sala = SalaNuovo
-   GROUP BY r.Sala >= 2) THEN --Se in Riunione il meeting modificato ha più istanze nella stessa sala
+   GROUP BY r.Sala) >= 2) THEN --Se in Riunione il meeting modificato ha più istanze nella stessa sala
 		FOR temp IN
 			SELECT *
 			FROM Riunione JOIN Meeting ON (Riunione.Meeting = Meeting.IDMeeting)
