@@ -184,7 +184,7 @@ CREATE TABLE Partecipazione(
 	CF char(16) ,
 	RuoloDipendente ruolo NOT NULL,
 	
-	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$')
+	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PartecipazioneEsistente UNIQUE(CF,CodProgetto),
 	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF)
