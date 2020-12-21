@@ -18,7 +18,7 @@ IF OLD.IDSkill NOT IN (
 END IF;
 RETURN NEW;
 END;
-$$
+$$;
 -------------------------------------------------------
 
 --TRIGGER
