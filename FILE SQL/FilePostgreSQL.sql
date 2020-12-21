@@ -24,31 +24,37 @@ DROP TYPE piattaforma;
 DROP TYPE ruolo;
 */
 
-
+--ENUM PER TipoProgetto di PROGETTO
 CREATE TYPE tipologia AS ENUM('Ricerca base','Ricerca industriale','Ricerca sperimentale','Sviluppo sperimentale','Altro');
 
+--SEQUENCE PER CodProgetto di PROGETTO
+CREATE SEQUENCE CodProgetto_Serial
+START WITH 1
+INCREMENT BY 1;
+
 CREATE TABLE Progetto (
-	CodProgetto integer ,
-	NomeProgetto varchar(20) NOT NULL,
+	CodProgetto integer DEFAULT nextval('CodProgetto_Serial'),
+	NomeProgetto varchar(50) NOT NULL,
 	TipoProgetto tipologia NOT NULL ,
 	DescrizioneProgetto varchar (200),
-	DataCreazione DATE NOT NULL,
+	DataCreazione DATE NOT NULL DEFAULT CURRENT_DATE,
 	DataScadenza DATE,
 	DataTerminazione DATE,
 	Creatore char(40) NOT NULL,
 	
 	PRIMARY KEY(CodProgetto),
-	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione),
-	CONSTRAINT DataTerminazioneValida CHECK(DataTerminazione <= DataScadenza) --Da rivedere(Se si vuole implementare possibilità di consegnare dopo data scadenza)
-	
+	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione)
 );
 
 
-CREATE TYPE ambito AS ENUM('Economia','Medicina','Militare','Informatico','Scientifico','Intrattenimento','Altro');
+--SEQUENCE PER AMBITOPROGETTO
+CREATE SEQUENCE IDAmbito_Serial
+START WITH 1
+INCREMENT BY 1;
 
 CREATE TABLE AmbitoProgetto(
-	IDAmbito integer,
-	NomeAmbito ambito NOT NULL,
+	IDAmbito integer DEFAULT nextval('IDAmbito_Serial'),
+	NomeAmbito VARCHAR(20) NOT NULL,
 	
 	PRIMARY KEY (IDAmbito),
 	UNIQUE (NomeAmbito)
@@ -58,7 +64,7 @@ CREATE TABLE AmbitoProgetto(
 CREATE TABLE LuogoNascita(
 	NomeComune varchar(50) NOT NULL,
 	NomeProvincia varchar(50) NOT NULL,
-	CodComune char(20),
+	CodComune char(4),
 	
 	PRIMARY KEY(CodComune),
 	CONSTRAINT LuogoNascitaEsistente UNIQUE(NomeComune,NomeProvincia,CodComune)
@@ -75,30 +81,31 @@ CREATE TABLE Dipendente(
 	Email varchar(100) NOT NULL ,
 	TelefonoCasa char(10),
 	Cellulare char(10),
-	Salario integer NOT NULL,
-	Valutazione integer NOT NULL,
+	Salario float NOT NULL,
 	Password varchar(50) NOT NULL,
-	CodComune char(20) NOT NULL, 
+	CodComune char(4) NOT NULL, 
 
 	PRIMARY KEY(CF),
 	UNIQUE(Email),
-	UNIQUE(TelefonoCasa),
 	UNIQUE(Cellulare),
 	CONSTRAINT CFLegit CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT EmailLegit CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
 	CONSTRAINT NomeLegit CHECK(Nome ~* '^[ a-zA-Z]+$'),
 	CONSTRAINT CognomeLegit CHECK(Cognome ~* '^[ a-zA-Z]+$'),
 	CONSTRAINT SessoLegit CHECK(Sesso='M' OR Sesso='F'),
-	CONSTRAINT SalarioPositivo CHECK (Salario>0),
-	CONSTRAINT ValutazioneLimitata CHECK ( (Valutazione >=0) AND (Valutazione <=10) ),
+	CONSTRAINT SalarioPositivo CHECK (Salario>=0),
 	
 	--Associazione 1 a Molti(LuogoNascita,Dipendente)
 	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune)
 );
 
+--SEQUENCE PER SKILL
+CREATE SEQUENCE skill_serial
+START WITH 1
+INCREMENT BY 1;
 
 CREATE TABLE Skill(
-	IDSkill integer,
+	IDSkill integer DEFAULT nextval('skill_serial'),
 	NomeSkill varchar(50) NOT NULL,
 	
 	PRIMARY KEY (IDSkill),
@@ -107,7 +114,7 @@ CREATE TABLE Skill(
 
 
 CREATE TABLE SalaRiunione(
-	CodSala char(10),
+	CodSala varchar(10),
 	Capienza integer NOT NULL,
 	Indirizzo varchar(50) NOT NULL,
 	Piano integer NOT NULL,
@@ -117,26 +124,33 @@ CREATE TABLE SalaRiunione(
 	CONSTRAINT PianoEsistente CHECK (Piano>=0)
 );
 
+--SEQUENCE PER MEETING
+CREATE SEQUENCE meeting_serial
+START WITH 1
+INCREMENT BY 1;
 
-CREATE TYPE modalità AS ENUM('Fisico','Online');
-CREATE TYPE piattaforma AS ENUM('Microsoft Teams','Discord','Google Meet','Zoom','CiscoWepex','Skype','Altro');
+CREATE TYPE modalità AS ENUM ('Telematico','Fisico');
+
+CREATE TYPE piattaforma AS ENUM('Microsoft Teams','Discord','Google Meet','Zoom','Cisco Webex','Skype','Altro');
 
 CREATE TABLE Meeting(
-	IDMeeting integer,
+	IDMeeting integer DEFAULT nextval('meeting_serial'),
 	DataInizio DATE NOT NULL,
 	DataFine DATE NOT NULL ,
 	OrarioInizio TIME NOT NULL,
 	OrarioFine TIME NOT NULL,
-	Modalità modalità,
+	Modalità modalità NOT NULL,
 	Piattaforma piattaforma,
-	Organizzatore char(40) NOT NULL,
-	CodSala char(10),
+	Organizzatore char(16) NOT NULL,
+	CodSala varchar(10),
 	CodProgetto integer,
 	
 	PRIMARY KEY(IDMeeting),
 	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),
 	CONSTRAINT OrarioValidoMeeting CHECK(OrarioInizio < OrarioFine),
-
+	CONSTRAINT riunione_telematica CHECK ((Modalità='Telematico' AND Piattaforma IS NOT NULL) OR (Modalità = 'Fisico' AND Piattaforma IS NULL)),
+	
+	
 	--Associazione 1 a Molti(Sala,Meeting)
 	FOREIGN KEY (CodSala) REFERENCES SalaRiunione(CodSala),
 	
@@ -150,6 +164,7 @@ CREATE TABLE AmbitoProgettoLink(
 	IDAmbito integer,
 	CodProgetto integer,
 	
+	CONSTRAINT unique_ID_Cod UNIQUE(IDAmbito,CodProgetto),
 	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
 	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito)
 );
@@ -161,9 +176,8 @@ CREATE TYPE ruolo AS ENUM('Project Manager','Team Member','Team Leader','Chief F
 CREATE TABLE Partecipazione(
 	CodProgetto integer,
 	CF char(16) ,
-	RuoloDipendente ruolo,
+	RuoloDipendente ruolo NOT NULL,
 	
-	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PartecipazioneEsistente UNIQUE(CF,CodProgetto),
 	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF)

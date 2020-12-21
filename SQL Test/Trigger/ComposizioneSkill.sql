@@ -8,13 +8,13 @@ CREATE OR REPLACE FUNCTION check_skill_existence() RETURNS TRIGGER
 LANGUAGE PLPGSQL
 AS $$
 BEGIN
-IF OLD.Skill NOT IN (
-	SELECT a.Skill
+IF OLD.IDSkill NOT IN (
+	SELECT a.IDSkill
 	FROM Abilità AS a
 ) THEN
 	DELETE
 	FROM Skill AS s
-	WHERE s.IDSkill = OLD.Skill;
+	WHERE s.IDSkill = OLD.IDSkill;
 END IF;
 RETURN NEW;
 END;
