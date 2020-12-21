@@ -18,22 +18,27 @@ DROP TABLE SalaRiunione;
 
 
 DROP TYPE tipologia;
-DROP TYPE ambito;
 DROP TYPE modalità;
 DROP TYPE piattaforma;
 DROP TYPE ruolo;
+
+DROP SEQUENCE CodProgettoSerial;
+DROP SEQUENCE IDAmbitoSerial;
+DROP SEQUENCE SkillSerial;
+DROP SEQUENCE MeetingSerial;
 */
 
 --ENUM PER TipoProgetto di PROGETTO
 CREATE TYPE tipologia AS ENUM('Ricerca base','Ricerca industriale','Ricerca sperimentale','Sviluppo sperimentale','Altro');
 
 --SEQUENCE PER CodProgetto di PROGETTO
-CREATE SEQUENCE CodProgetto_Serial
+CREATE SEQUENCE CodProgettoSerial
 START WITH 1
 INCREMENT BY 1;
 
+
 CREATE TABLE Progetto (
-	CodProgetto integer DEFAULT nextval('CodProgetto_Serial'),
+	CodProgetto integer DEFAULT nextval('CodProgettoSerial'),
 	NomeProgetto varchar(50) NOT NULL,
 	TipoProgetto tipologia NOT NULL ,
 	DescrizioneProgetto varchar (200),
@@ -43,17 +48,18 @@ CREATE TABLE Progetto (
 	Creatore char(40) NOT NULL,
 	
 	PRIMARY KEY(CodProgetto),
+	--UNIQUE(NomeProgetto)--
 	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione)
 );
 
 
 --SEQUENCE PER AMBITOPROGETTO
-CREATE SEQUENCE IDAmbito_Serial
+CREATE SEQUENCE IDAmbitoSerial
 START WITH 1
 INCREMENT BY 1;
 
 CREATE TABLE AmbitoProgetto(
-	IDAmbito integer DEFAULT nextval('IDAmbito_Serial'),
+	IDAmbito integer DEFAULT nextval('IDAmbitoSerial'),
 	NomeAmbito VARCHAR(20) NOT NULL,
 	
 	PRIMARY KEY (IDAmbito),
@@ -72,7 +78,7 @@ CREATE TABLE LuogoNascita(
 
 
 CREATE TABLE Dipendente(
-	CF char(16) ,
+	CF char(16),
 	Nome varchar(20) NOT NULL,
 	Cognome varchar(20) NOT NULL,
 	Sesso char(1) NOT NULL,
@@ -100,12 +106,12 @@ CREATE TABLE Dipendente(
 );
 
 --SEQUENCE PER SKILL
-CREATE SEQUENCE skill_serial
+CREATE SEQUENCE SkillSerial
 START WITH 1
 INCREMENT BY 1;
 
 CREATE TABLE Skill(
-	IDSkill integer DEFAULT nextval('skill_serial'),
+	IDSkill integer DEFAULT nextval('SkillSerial'),
 	NomeSkill varchar(50) NOT NULL,
 	
 	PRIMARY KEY (IDSkill),
@@ -125,7 +131,7 @@ CREATE TABLE SalaRiunione(
 );
 
 --SEQUENCE PER MEETING
-CREATE SEQUENCE meeting_serial
+CREATE SEQUENCE MeetingSerial
 START WITH 1
 INCREMENT BY 1;
 
@@ -134,7 +140,7 @@ CREATE TYPE modalità AS ENUM ('Telematico','Fisico');
 CREATE TYPE piattaforma AS ENUM('Microsoft Teams','Discord','Google Meet','Zoom','Cisco Webex','Skype','Altro');
 
 CREATE TABLE Meeting(
-	IDMeeting integer DEFAULT nextval('meeting_serial'),
+	IDMeeting integer DEFAULT nextval('MeetingSerial'),
 	DataInizio DATE NOT NULL,
 	DataFine DATE NOT NULL ,
 	OrarioInizio TIME NOT NULL,
@@ -148,7 +154,7 @@ CREATE TABLE Meeting(
 	PRIMARY KEY(IDMeeting),
 	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),
 	CONSTRAINT OrarioValidoMeeting CHECK(OrarioInizio < OrarioFine),
-	CONSTRAINT riunione_telematica CHECK ((Modalità='Telematico' AND Piattaforma IS NOT NULL) OR (Modalità = 'Fisico' AND Piattaforma IS NULL)),
+	CONSTRAINT ModalitàRiunione CHECK ((Modalità='Telematico' AND Piattaforma IS NOT NULL) OR (Modalità = 'Fisico' AND Piattaforma IS NULL)),
 	
 	
 	--Associazione 1 a Molti(Sala,Meeting)
@@ -178,6 +184,7 @@ CREATE TABLE Partecipazione(
 	CF char(16) ,
 	RuoloDipendente ruolo NOT NULL,
 	
+	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$')
 	CONSTRAINT PartecipazioneEsistente UNIQUE(CF,CodProgetto),
 	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF)
@@ -214,32 +221,32 @@ CREATE TABLE Presenza(
 
 
 --Progetto
-INSERT INTO Progetto(CodProgetto,NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione,Creatore) VALUES
-	(1,'Mio Progetto','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020','Michekle'),
-	(2,'MibProgo','Sviluppo sperimentale','Progetto di sviluppo sperimentale','16/12/2020','18/12/2020','18/12/2020','Micheggkle'),
-	(3,'MixccProgetto','Ricerca sperimentale','Progetto di ricerca sperimentale','16/12/2020','20/12/2020','19/12/2020','Micheklfe');
+INSERT INTO Progetto(NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione,Creatore) VALUES
+	('Mio Progetto','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020','Michekle'),
+	('MibProgo','Sviluppo sperimentale','Progetto di sviluppo sperimentale','16/12/2020','18/12/2020','18/12/2020','Micheggkle'),
+	('MixccProgetto','Ricerca sperimentale','Progetto di ricerca sperimentale','16/12/2020','20/12/2020','19/12/2020','Micheklfe');
 
 
 --AmbitoProgetto
-INSERT INTO AmbitoProgetto(IDAmbito,NomeAmbito) VALUES
-	(1,'Economia'),
-	(2,'Medicina'),
-	(3,'Militare'),
-	(4,'Scientifico');
+INSERT INTO AmbitoProgetto(NomeAmbito) VALUES
+	('Economia'),
+	('Medicina'),
+	('Militare'),
+	('Scientifico');
 
 
 --Dipendente
-INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Valutazione,Password,CodComune) VALUES
-	('RSSMRA80A01F839W','Mario','Rossi','29/02/2020','M','via sdff,28','m.rossi@unina.it','0817589891','38789999',100,10,'pass','F839'),
-	('DLCGPP80L01H243P','Giuseppe','De Lucia','01/07/1980','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,0,'paddss','H243'),
-	('SPSNDR02L01L259V','Andrea','Esposito','01/07/2002','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,5,'passw','L259');
+INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES
+	('RSsMrA80A01F839w','Mario','Rossi','29/02/2020','M','via sdff,28','m.rossi@unina.it','0817589891','387899899',100,'pass','F839'),
+	('DLCGPp80L01H243p','Giuseppe','De Lucia','01/07/1980','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,'paddss','H243'),
+	('SPsNDr02L01L259V','Andrea','Esposito','01/07/2002','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,'passw','L259');
 
 
 --Skill
-INSERT INTO Skill(IDSkill,NomeSkill) VALUES 
-	(1,'Smart'),
-	(2,'Group'),
-	(3,'wow');
+INSERT INTO Skill(NomeSkill) VALUES 
+	('Smart'),
+	('Group'),
+	('wow');
 
 
 --LuogoNascita INSERT tramite file CSV
@@ -252,10 +259,10 @@ INSERT INTO SalaRiunione(CodSala,Capienza,Indirizzo,Piano) VALUES
 	
 
 --Meeting  (Trigger:Un dipendente non può partecipare nello stesso giorno e allo stesso orario a due meeting diversi)
-INSERT INTO Meeting(IDMeeting,DataInizio,DataFine,OrarioInizio,OrarioFine,Modalità,Piattaforma,Organizzatore,CodSala) VALUES
-	(1,'12/10/2020','12/10/2020','13:55','14:00','Fisico',null,'Micchd','Sala1'),
-	(2,'15/11/2020','15/11/2020','13:55','16:55','Online','Discord','Mivcchd',null),
-	(3,'21/10/2020','21/10/2020','13:55','14:55','Fisico',null,'Micchddd','Sala2');
+INSERT INTO Meeting(DataInizio,DataFine,OrarioInizio,OrarioFine,Modalità,Piattaforma,Organizzatore,CodSala,CodProgetto) VALUES
+	('12/10/2020','12/10/2020','13:55','14:00','Fisico',null,'Micchd','Sala1',null),
+	('15/11/2020','15/11/2020','13:55','16:55','Telematico','Discord','Mivcchd',null,null),
+	('21/10/2020','21/10/2020','13:55','14:55','Fisico',null,'Micchddd','Sala2',null);
 	
 
 --AmbitoProgettoLink
@@ -266,27 +273,27 @@ INSERT INTO AmbitoProgettoLink(IDAmbito,CodProgetto) VALUES
 
 
 --Partecipazione (Trigger:Non possono essere inseriti più Project Manager per lo stesso progetto)
+
 INSERT INTO Partecipazione(CodProgetto,CF,RuoloDipendente) VALUES
-	(1,'RSSMRA80A01F839W','Project Manager'),
-	(1,'DLCGPP80L01H243P','Project Manager'),
-    (2,'RSSMRA80A01F839W','Team Member'),
-	(2,'SPSNDR02L01L259V','Team Member');
+	(124,'RSsMrA80A01F839W','Project Manager'),
+	(125,'DLcGpP80L01H243P','Project Manager'),
+    (126,'SPSNDR02L01L259v','Team Member');
 
 
 --Abilità
 INSERT INTO Abilità(IDSkill,CF) VALUES
-	(1,'RSSMRA80A01F839W'),
-	(2,'DLCGPP80L01H243P'),
-	(2,'RSSMRA80A01F839W'),
-	(2,'SPSNDR02L01L259V'),
-	(3,'SPSNDR02L01L259V');
+	(10,'RssMra80A01F839W'),
+	(10,'DLCGPP80L01H243P'),
+	(11,'RSSMRA80A01F839W'),
+	(12,'SpsNdR02L01L259V'),
+	(10,'SpsNDR02L01L259v');
 
 
 --Presenza
 INSERT INTO Presenza(CF,IDMeeting) VALUES
-	('RSSMRA80A01F839W',1),
-	('RSSMRA80A01F839W',3),
-	('SPSNDR02L01L259V',3);
+	('RSSMRA80A01F839W',41),
+	('RSSMRa80A01F839W',42),
+	('SPSNdR02L01L259v',43);
 
 
 
