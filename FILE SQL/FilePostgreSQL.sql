@@ -1,6 +1,5 @@
-/*
-Base di dati di un Planning Aziendale
-*/
+
+/*  Base di dati di un Planning Aziendale   */
 
 /*
 DROP TABLE AmbitoProgettoLink;
@@ -22,23 +21,14 @@ DROP TYPE modalità;
 DROP TYPE piattaforma;
 DROP TYPE ruolo;
 
-DROP SEQUENCE CodProgettoSerial;
-DROP SEQUENCE IDAmbitoSerial;
-DROP SEQUENCE SkillSerial;
-DROP SEQUENCE MeetingSerial;
+
 */
 
 --ENUM PER TipoProgetto di PROGETTO
 CREATE TYPE tipologia AS ENUM('Ricerca base','Ricerca industriale','Ricerca sperimentale','Sviluppo sperimentale','Altro');
 
---SEQUENCE PER CodProgetto di PROGETTO
-CREATE SEQUENCE CodProgettoSerial
-START WITH 1
-INCREMENT BY 1;
-
-
 CREATE TABLE Progetto (
-	CodProgetto integer DEFAULT nextval('CodProgettoSerial'),
+	CodProgetto SERIAL,
 	NomeProgetto varchar(50) NOT NULL,
 	TipoProgetto tipologia NOT NULL ,
 	DescrizioneProgetto varchar (200),
@@ -53,13 +43,8 @@ CREATE TABLE Progetto (
 );
 
 
---SEQUENCE PER AMBITOPROGETTO
-CREATE SEQUENCE IDAmbitoSerial
-START WITH 1
-INCREMENT BY 1;
-
 CREATE TABLE AmbitoProgetto(
-	IDAmbito integer DEFAULT nextval('IDAmbitoSerial'),
+	IDAmbito SERIAL,
 	NomeAmbito VARCHAR(20) NOT NULL,
 	
 	PRIMARY KEY (IDAmbito),
@@ -105,13 +90,9 @@ CREATE TABLE Dipendente(
 	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune)
 );
 
---SEQUENCE PER SKILL
-CREATE SEQUENCE SkillSerial
-START WITH 1
-INCREMENT BY 1;
 
 CREATE TABLE Skill(
-	IDSkill integer DEFAULT nextval('SkillSerial'),
+	IDSkill SERIAL,
 	NomeSkill varchar(50) NOT NULL,
 	
 	PRIMARY KEY (IDSkill),
@@ -120,7 +101,7 @@ CREATE TABLE Skill(
 
 
 CREATE TABLE SalaRiunione(
-	CodSala varchar(10),
+	CodSala varchar(10) ,
 	Capienza integer NOT NULL,
 	Indirizzo varchar(50) NOT NULL,
 	Piano integer NOT NULL,
@@ -130,17 +111,13 @@ CREATE TABLE SalaRiunione(
 	CONSTRAINT PianoEsistente CHECK (Piano>=0)
 );
 
---SEQUENCE PER MEETING
-CREATE SEQUENCE MeetingSerial
-START WITH 1
-INCREMENT BY 1;
 
+--ENUM Modalità,Piattaforma
 CREATE TYPE modalità AS ENUM ('Telematico','Fisico');
-
 CREATE TYPE piattaforma AS ENUM('Microsoft Teams','Discord','Google Meet','Zoom','Cisco Webex','Skype','Altro');
 
 CREATE TABLE Meeting(
-	IDMeeting integer DEFAULT nextval('MeetingSerial'),
+	IDMeeting SERIAL,
 	DataInizio DATE NOT NULL,
 	DataFine DATE NOT NULL ,
 	OrarioInizio TIME NOT NULL,
@@ -149,7 +126,7 @@ CREATE TABLE Meeting(
 	Piattaforma piattaforma,
 	Organizzatore char(16) NOT NULL,
 	CodSala varchar(10),
-	CodProgetto integer,
+	CodProgetto integer ,
 	
 	PRIMARY KEY(IDMeeting),
 	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),
@@ -167,10 +144,10 @@ CREATE TABLE Meeting(
 
 --Associazione Molti a Molti (AmbitoProgetto,Progetto)
 CREATE TABLE AmbitoProgettoLink(
-	IDAmbito integer,
-	CodProgetto integer,
+	IDAmbito integer NOT NULL,
+	CodProgetto integer NOT NULL,
 	
-	CONSTRAINT unique_ID_Cod UNIQUE(IDAmbito,CodProgetto),
+	CONSTRAINT AmbitoProgettoEsistente UNIQUE(IDAmbito,CodProgetto),
 	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
 	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito)
 );
@@ -180,8 +157,8 @@ CREATE TABLE AmbitoProgettoLink(
 CREATE TYPE ruolo AS ENUM('Project Manager','Team Member','Team Leader','Chief Financial Officer');
 
 CREATE TABLE Partecipazione(
-	CodProgetto integer,
-	CF char(16) ,
+	CodProgetto integer NOT NULL,
+	CF char(16) NOT NULL,
 	RuoloDipendente ruolo NOT NULL,
 	
 	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
@@ -194,10 +171,10 @@ CREATE TABLE Partecipazione(
 --Associazione Molti a Molti (Dipendente,Skill)
 CREATE TABLE Abilità(
 	IDSkill integer,
-	CF char(16) ,
+	CF char(16) NOT NULL,
 	
 	CONSTRAINT CfAbilità CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
-	CONSTRAINT SkillEsistente UNIQUE(IDSkill,CF),
+	CONSTRAINT SkillEsistente UNIQUE(IDSkill,CF),--
 	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF)
 );
@@ -205,8 +182,9 @@ CREATE TABLE Abilità(
 
 --Associazione Molti a Molti (Meeting,Dipendente)
 CREATE TABLE Presenza(
-	CF char(16),
-	IDMeeting integer,
+	CF char(16) NOT NULL,
+	IDMeeting integer--NOT NULL--,
+	--Presente boolean,--
 	
 	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PresenzaEsistente UNIQUE(CF,IDMeeting),
@@ -222,7 +200,7 @@ CREATE TABLE Presenza(
 
 --Progetto
 INSERT INTO Progetto(NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione,Creatore) VALUES
-	('Mio Progetto','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020','Michekle'),
+	('Tecniche di Enforcement per la Sicurezza dei Linguaggi e delle Applicazioni ','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020','Michekle'),
 	('MibProgo','Sviluppo sperimentale','Progetto di sviluppo sperimentale','16/12/2020','18/12/2020','18/12/2020','Micheggkle'),
 	('MixccProgetto','Ricerca sperimentale','Progetto di ricerca sperimentale','16/12/2020','20/12/2020','19/12/2020','Micheklfe');
 
@@ -239,14 +217,22 @@ INSERT INTO AmbitoProgetto(NomeAmbito) VALUES
 INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES
 	('RSsMrA80A01F839w','Mario','Rossi','29/02/2020','M','via sdff,28','m.rossi@unina.it','0817589891','387899899',100,'pass','F839'),
 	('DLCGPp80L01H243p','Giuseppe','De Lucia','01/07/1980','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,'paddss','H243'),
-	('SPsNDr02L01L259V','Andrea','Esposito','01/07/2002','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,'passw','L259');
+	('SPsNDr02L01L259V','Andrea','Esposito','01/07/2002','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,'passw','L259'),
+	('CSANDR62B01C129Z','Andrea','Caso','01/02/1962','M','Via Giuseppe Cosenza,27,Castellammare Di Stabia(NA)','Andr.caso@gmail.com','0817327550','3935689810',1000,'paddss','C129');
 
 
 --Skill
 INSERT INTO Skill(NomeSkill) VALUES 
-	('Smart'),
-	('Group'),
-	('wow');
+	('Teamwork'),
+	('Affidabilità'),
+	('Time management'),
+	('Creatività'),
+	('Flessibilità'),
+	('Capacità comunicative'),
+	('Competenze digitali'),
+	('Problem Solving'),
+	('Motivatore'),
+	('Capacità di negoziazione');
 
 
 --LuogoNascita INSERT tramite file CSV
@@ -254,15 +240,17 @@ INSERT INTO Skill(NomeSkill) VALUES
 
 --SalaRiunione
 INSERT INTO SalaRiunione(CodSala,Capienza,Indirizzo,Piano) VALUES
-	('Sala1',100,'Via a achille',10),
-	('Sala2',200,'Via acireale',1);
-	
+	('Sala1',100,'Via Claudio, 21, 80143 Napoli(NA)',2),
+	('Sala2',200,'Via Nuova Poggioreale , 80143 Napoli(NA)',5),
+	('Sala3',75,'Via Foria, 272, 80139 Napoli (NA)',1),
+	('Sala4',206,'Via Toledo, 343, 80134 Napoli (NA)',3),
+	('Sala5',297,'Riviera di Chiaia, 77, 80123 Napoli (NA)',1);
 
---Meeting  (Trigger:Un dipendente non può partecipare nello stesso giorno e allo stesso orario a due meeting diversi)
+--Meeting
 INSERT INTO Meeting(DataInizio,DataFine,OrarioInizio,OrarioFine,Modalità,Piattaforma,Organizzatore,CodSala,CodProgetto) VALUES
-	('12/10/2020','12/10/2020','13:55','14:00','Fisico',null,'Micchd','Sala1',null),
-	('15/11/2020','15/11/2020','13:55','16:55','Telematico','Discord','Mivcchd',null,null),
-	('21/10/2020','21/10/2020','13:55','14:55','Fisico',null,'Micchddd','Sala2',null);
+	('12/10/2020','12/10/2020','18:00','19:50','Telematico','Microsoft Teams','Micchd',null,null),
+	('12/10/2020','12/10/2020','14:05','16:50','Fisico',null,'Micchd','Sala5',null),
+	('21/10/2020','21/10/2020','14:55','15:55','Telematico','Microsoft Teams','Micchddd',null,null);
 	
 
 --AmbitoProgettoLink
@@ -272,56 +260,52 @@ INSERT INTO AmbitoProgettoLink(IDAmbito,CodProgetto) VALUES
 	(3,3);
 
 
---Partecipazione (Trigger:Non possono essere inseriti più Project Manager per lo stesso progetto)
-
+--Partecipazione 
 INSERT INTO Partecipazione(CodProgetto,CF,RuoloDipendente) VALUES
-	(124,'RSsMrA80A01F839W','Project Manager'),
-	(125,'DLcGpP80L01H243P','Project Manager'),
-    (126,'SPSNDR02L01L259v','Team Member');
+	(2,'RSsMrA80A01F839w','Chief Financial Officer'),
+	(3,'DLCGPP80L01H243P','Chief Financial Officer'),
+    (1,'DLCGPP80L01H243P','Project Manager');
 
 
 --Abilità
 INSERT INTO Abilità(IDSkill,CF) VALUES
-	(10,'RssMra80A01F839W'),
-	(10,'DLCGPP80L01H243P'),
-	(11,'RSSMRA80A01F839W'),
-	(12,'SpsNdR02L01L259V'),
-	(10,'SpsNDR02L01L259v');
+	(1,'RssMra80A01F839W'),
+	(1,'DLCGPP80L01H243P'),
+	(2,'RSSMRA80A01F839W'),
+	(2,'SpsNdR02L01L259V'),
+	(3,'SpsNDR02L01L259v');
 
 
 --Presenza
 INSERT INTO Presenza(CF,IDMeeting) VALUES
-	('RSSMRA80A01F839W',41),
-	('RSSMRa80A01F839W',42),
-	('SPSNdR02L01L259v',43);
-
-
-
+	('SPSNdR02L01L259v',39),
+	('RSSMRa80A01F839W',39),
+	('DLCGPP80L01H243P',39);
+	
 
 /* --Interrogazioni-- */
 
 --Dipendenti che hanno partecipato a dei progetti
 SELECT *
-FROM Partecipazione NATURAL JOIN Dipendente
+FROM Partecipazione NATURAL JOIN Progetto
 
 
 --Dipendenti che hanno partecipato ai meeting
-SELECT IDMeeting,CF,Nome,Cognome,valutazione
+SELECT IDMeeting,CF,Nome,Cognome
 FROM Dipendente NATURAL JOIN Presenza
-ORDER BY valutazione DESC
 
 
 --Codice dei progetti e gli ambiti a loro associati
 SELECT codprogetto,nomeambito
 FROM AmbitoProgettoLink NATURAL JOIN Progetto NATURAL JOIN AmbitoProgetto
 
+
 --Dipendenti presenti ai meeting
 SELECT *
 FROM Dipendente NATURAL JOIN Partecipazione
+
 
 --Interrogazione CaseInsensitive
 SELECT *
 FROM Dipendente
 WHERE nome ILIKE 'AnDrEa'
-
-
