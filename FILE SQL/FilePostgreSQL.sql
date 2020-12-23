@@ -185,7 +185,7 @@ CREATE TABLE Abilità(
 CREATE TABLE Presenza(
 	CF char(16) NOT NULL,
 	IDMeeting integer NOT NULL ,
-	--Presente boolean,--
+	Presente BOOLEAN NOT NULL DEFAULT FALSE,
 	
 	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PresenzaEsistente UNIQUE(CF,IDMeeting),
