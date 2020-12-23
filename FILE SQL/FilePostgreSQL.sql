@@ -85,6 +85,7 @@ CREATE TABLE Dipendente(
 	CONSTRAINT CognomeLegit CHECK(Cognome ~* '^[ a-zA-Z]+$'),
 	CONSTRAINT SessoLegit CHECK(Sesso='M' OR Sesso='F'),
 	CONSTRAINT SalarioPositivo CHECK (Salario>=0),
+	CONSTRAINT DataNascitaValida CHECK ((EXTRACT YEAR FROM AGE(DataNascita)) >= 18),
 	
 	--Associazione 1 a Molti(LuogoNascita,Dipendente)
 	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune) ON UPDATE CASCADE
