@@ -29,9 +29,9 @@ CREATE TYPE tipologia AS ENUM('Ricerca base','Ricerca industriale','Ricerca sper
 
 CREATE TABLE Progetto (
 	CodProgetto SERIAL,
-	NomeProgetto varchar(50) NOT NULL,
+	NomeProgetto varchar(100) NOT NULL,
 	TipoProgetto tipologia NOT NULL ,
-	DescrizioneProgetto varchar (200),
+	DescrizioneProgetto varchar (500),
 	DataCreazione DATE NOT NULL DEFAULT CURRENT_DATE,
 	DataScadenza DATE,
 	DataTerminazione DATE,
@@ -87,7 +87,7 @@ CREATE TABLE Dipendente(
 	CONSTRAINT SalarioPositivo CHECK (Salario>=0),
 	
 	--Associazione 1 a Molti(LuogoNascita,Dipendente)
-	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune)
+	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune) ON UPDATE CASCADE
 );
 
 
@@ -135,10 +135,10 @@ CREATE TABLE Meeting(
 	
 	
 	--Associazione 1 a Molti(Sala,Meeting)
-	FOREIGN KEY (CodSala) REFERENCES SalaRiunione(CodSala),
+	FOREIGN KEY (CodSala) REFERENCES SalaRiunione(CodSala) ON DELETE CASCADE ON UPDATE CASCADE,
 	
 	--Associazione 1 a Molti (Progetto,Meeting)
-	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto)
+	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE --ON UPDATE CASCADE--
 );
 
 
@@ -148,8 +148,8 @@ CREATE TABLE AmbitoProgettoLink(
 	CodProgetto integer NOT NULL,
 	
 	CONSTRAINT AmbitoProgettoEsistente UNIQUE(IDAmbito,CodProgetto),
-	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
-	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito)
+	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE,
+	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito) ON DELETE NO ACTION
 );
 
 
@@ -163,8 +163,8 @@ CREATE TABLE Partecipazione(
 	
 	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PartecipazioneEsistente UNIQUE(CF,CodProgetto),
-	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto),
-	FOREIGN KEY (CF) REFERENCES Dipendente(CF)
+	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE,
+	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE
 );
 
 
@@ -174,22 +174,22 @@ CREATE TABLE Abilità(
 	CF char(16) NOT NULL,
 	
 	CONSTRAINT CfAbilità CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
-	CONSTRAINT SkillEsistente UNIQUE(IDSkill,CF),--
-	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill),
-	FOREIGN KEY (CF) REFERENCES Dipendente(CF)
+	CONSTRAINT SkillEsistente UNIQUE(IDSkill,CF),
+	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill) ON DELETE NO ACTION,
+	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE
 );
 
 
 --Associazione Molti a Molti (Meeting,Dipendente)
 CREATE TABLE Presenza(
 	CF char(16) NOT NULL,
-	IDMeeting integer--NOT NULL--,
+	IDMeeting integer NOT NULL ,
 	--Presente boolean,--
 	
 	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PresenzaEsistente UNIQUE(CF,IDMeeting),
-	FOREIGN KEY (CF) REFERENCES Dipendente(CF),
-	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting)
+	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE,
+	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -200,7 +200,7 @@ CREATE TABLE Presenza(
 
 --Progetto
 INSERT INTO Progetto(NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione,Creatore) VALUES
-	('Tecniche di Enforcement per la Sicurezza dei Linguaggi e delle Applicazioni ','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020','Michekle'),
+	('Tecniche dei Linguaggi e delle Applicazioni','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020','Michekle'),
 	('MibProgo','Sviluppo sperimentale','Progetto di sviluppo sperimentale','16/12/2020','18/12/2020','18/12/2020','Micheggkle'),
 	('MixccProgetto','Ricerca sperimentale','Progetto di ricerca sperimentale','16/12/2020','20/12/2020','19/12/2020','Micheklfe');
 
@@ -263,8 +263,8 @@ INSERT INTO AmbitoProgettoLink(IDAmbito,CodProgetto) VALUES
 --Partecipazione 
 INSERT INTO Partecipazione(CodProgetto,CF,RuoloDipendente) VALUES
 	(2,'RSsMrA80A01F839w','Chief Financial Officer'),
-	(3,'DLCGPP80L01H243P','Chief Financial Officer'),
-    (1,'DLCGPP80L01H243P','Project Manager');
+	(3,'RSsMrA80A01F839w','Chief Financial Officer'),
+    (1,'RSsMrA80A01F839w','Project Manager');
 
 
 --Abilità
@@ -278,9 +278,9 @@ INSERT INTO Abilità(IDSkill,CF) VALUES
 
 --Presenza
 INSERT INTO Presenza(CF,IDMeeting) VALUES
-	('SPSNdR02L01L259v',39),
-	('RSSMRa80A01F839W',39),
-	('DLCGPP80L01H243P',39);
+	('RSsMrA80A01F839w',4),
+	('RSsMrA80A01F839w',5),
+	('RSsMrA80A01F839w',6);
 	
 
 /* --Interrogazioni-- */
