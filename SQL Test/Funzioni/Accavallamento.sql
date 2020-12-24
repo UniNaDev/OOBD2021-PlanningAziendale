@@ -8,9 +8,18 @@ CREATE OR REPLACE FUNCTION accavallamento(DataInizioOLD DATE, DataFineOLD DATE, 
 RETURNS BOOLEAN
 LANGUAGE PLPGSQL
 AS $$
+DECLARE
+InizioNEW TIMESTAMP;
+InizioOLD TIMESTAMP;
+FineNEW TIMESTAMP;
+FineOLD TIMESTAMP;
 BEGIN
+InizioNEW := DataInizioNEW + OraInizioNEW;
+InizioOLD := DataInizioOLD + OraInizioOLD;
+FineNEW := DataFineNEW + OraFineNEW;
+FineOLD := DataFineOLD + OraFineOLD;
 --Controlla accavallamento
-IF (DataInizioOLD=DataInizioNEW AND DataFineOLD=DataFineNEW AND ((OraFineNEW >= OraInizioOLD AND OraFineNEW < OraFineOLD)OR(OraInizioNEW < OraFineOLD AND OraFineNEW >= OraFineOLD))) THEN
+IF ((InizioNEW,FineNEW) OVERLAPS (InizioOLD,FineOLD)) THEN
 	RETURN TRUE;	--accavallamento avvenuto
 END IF;
 RETURN FALSE;	--accavallamento non avvenuto
