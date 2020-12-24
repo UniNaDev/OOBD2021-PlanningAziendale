@@ -12,10 +12,9 @@ DECLARE
 OLDMeeting RECORD;
 BEGIN
 	--Se esistono altri record di meeting fisici con la stessa sala del nuovo record
-	IF ((SELECT COUNT(m.IDMeeting)
+	IF (EXISTS(SELECT m.IDMeeting
 		FROM Meeting AS m
-		WHERE m.CodSala=NEW.CodSala AND modalità='Fisico'
-		GROUP BY m.CodSala) >= 2) THEN
+		WHERE m.CodSala=NEW.CodSala AND modalità='Fisico')) THEN
 		--Per ogni meeting con la stessa sala che non sia quello nuovo
 		FOR OLDMeeting IN
 			SELECT *
@@ -37,7 +36,7 @@ $$;
 
 
 --TRIGGER
-CREATE TRIGGER no_accavallamenti AFTER INSERT OR UPDATE ON Meeting
+CREATE TRIGGER no_accavallamenti BEFORE INSERT OR UPDATE ON Meeting
 FOR EACH ROW
 WHEN (NEW.Modalità='Fisico')
 EXECUTE PROCEDURE check_accavallamenti_sale();

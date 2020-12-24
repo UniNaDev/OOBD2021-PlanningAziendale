@@ -17,10 +17,9 @@ NEWOraInizio TIME; --ora inizio //
 NEWOraFine TIME; --ora fine //
 BEGIN
 --Controlla se ci sono altri record in Presenza con lo stesso dipendente del nuovo record
-IF ((SELECT COUNT(p.IDMeeting)
+IF (EXISTS(SELECT p.IDMeeting
 	FROM Presenza AS p
-	WHERE p.CF=NEW.CF
-	GROUP BY p.CF) >= 2) THEN
+	WHERE p.CF=NEW.CF)) THEN
 	--Salva i valori del nuovo record necessari ai confronti con gli altri meeting
 	SELECT m.DataInizio,m.DataFine,m.OrarioInizio,m.OrarioFine INTO NEWDataInizio,NEWDataFine,NEWOraInizio,NEWOraFine
 	FROM Presenza AS p NATURAL JOIN Meeting AS m
@@ -45,7 +44,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_presenza AFTER INSERT OR UPDATE ON Presenza
+CREATE TRIGGER no_onnipresenza_presenza BEFORE INSERT OR UPDATE ON Presenza
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_presenza();
 --------------------------------------------------------------------------
@@ -92,7 +91,7 @@ $$;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_meeting AFTER UPDATE ON Meeting
+CREATE TRIGGER no_onnipresenza_meeting BEFORE UPDATE ON Meeting
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_meeting();
 ----------------------------------------------------------------
