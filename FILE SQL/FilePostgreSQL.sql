@@ -48,7 +48,8 @@ CREATE TABLE AmbitoProgetto(
 	NomeAmbito VARCHAR(20) NOT NULL,
 	
 	PRIMARY KEY (IDAmbito),
-	UNIQUE (NomeAmbito)
+	UNIQUE (NomeAmbito),
+    CONSTRAINT AmbitoLegit CHECK(NomeAmbito ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$')
 );
 
 
@@ -64,8 +65,8 @@ CREATE TABLE LuogoNascita(
 
 CREATE TABLE Dipendente(
 	CF char(16),
-	Nome varchar(20) NOT NULL,
-	Cognome varchar(20) NOT NULL,
+	Nome varchar(30) NOT NULL,
+	Cognome varchar(30) NOT NULL,
 	Sesso char(1) NOT NULL,
 	DataNascita DATE NOT NULL,
 	Indirizzo varchar(100) NOT NULL,
@@ -81,11 +82,11 @@ CREATE TABLE Dipendente(
 	UNIQUE(Cellulare),
 	CONSTRAINT CFLegit CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT EmailLegit CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-	CONSTRAINT NomeLegit CHECK(Nome ~* '^[ a-zA-Z]+$'),
-	CONSTRAINT CognomeLegit CHECK(Cognome ~* '^[ a-zA-Z]+$'),
+	CONSTRAINT NomeLegit CHECK(Nome ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$'),
+	CONSTRAINT CognomeLegit CHECK(Cognome ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$'),
 	CONSTRAINT SessoLegit CHECK(Sesso='M' OR Sesso='F'),
 	CONSTRAINT SalarioPositivo CHECK (Salario>=0),
-	CONSTRAINT DataNascitaValida CHECK ((EXTRACT YEAR FROM AGE(DataNascita)) >= 18),
+	CONSTRAINT DataNascitaValida CHECK (EXTRACT( YEAR FROM AGE(DataNascita)) >= 18),
 	
 	--Associazione 1 a Molti(LuogoNascita,Dipendente)
 	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune) ON UPDATE CASCADE
@@ -97,7 +98,8 @@ CREATE TABLE Skill(
 	NomeSkill varchar(50) NOT NULL,
 	
 	PRIMARY KEY (IDSkill),
-	UNIQUE (NomeSkill)
+	UNIQUE (NomeSkill),
+    CONSTRAINT NomeSkillLegit CHECK (NomeSkill ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$')
 );
 
 
@@ -216,10 +218,10 @@ INSERT INTO AmbitoProgetto(NomeAmbito) VALUES
 
 --Dipendente
 INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES
-	('RSsMrA80A01F839w','Mario','Rossi','29/02/2020','M','via sdff,28','m.rossi@unina.it','0817589891','387899899',100,'pass','F839'),
-	('DLCGPp80L01H243p','Giuseppe','De Lucia','01/07/1980','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,'paddss','H243'),
+	('RSsMrA80A01F839w','Mario','Rossi','29/12/2000','M','via sdff,28','m.rossi@unina.it','0817589891','387899899',100,'pass','F839'),
+	('DLCGPp80L01H243p','Giuseppe Miriam Gerardi','De Lucia','01/07/1980','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,'paddss','H243'),
 	('SPsNDr02L01L259V','Andrea','Esposito','01/07/2002','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,'passw','L259'),
-	('CSANDR62B01C129Z','Andrea','Caso','01/02/1962','M','Via Giuseppe Cosenza,27,Castellammare Di Stabia(NA)','Andr.caso@gmail.com','0817327550','3935689810',1000,'paddss','C129');
+	('CSANDR62B01C129Z','Andrea','Caso','31/12/1962','M','Via Giuseppe Cosenza,27,Castellammare Di Stabia(NA)','Andr.caso@gmail.com','0817327550','3935689810',1000,'paddss','C129');
 
 
 --Skill
@@ -310,3 +312,17 @@ FROM Dipendente NATURAL JOIN Partecipazione
 SELECT *
 FROM Dipendente
 WHERE nome ILIKE 'AnDrEa'
+
+
+--Interrogazione per calcolo età
+SELECT EXTRACT( YEAR FROM AGE(DataNascita))
+FROM Dipendente
+
+
+
+
+
+
+
+
+
