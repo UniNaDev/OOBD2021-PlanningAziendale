@@ -1099,6 +1099,23 @@
 									"subViews": [
 										{
 											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF2qO07/Q08jT8=",
+											"_parent": {
+												"$ref": "AAAAAAF2ljtZiKvsmrU="
+											},
+											"model": {
+												"$ref": "AAAAAAF2qO076Q05HpU="
+											},
+											"font": "Arial;13;0",
+											"left": 1229,
+											"top": 374,
+											"width": 278.59228515625,
+											"height": 13,
+											"text": "-idProgetto: int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
 											"_id": "AAAAAAF2lkEFUq6iqTc=",
 											"_parent": {
 												"$ref": "AAAAAAF2ljtZiKvsmrU="
@@ -1108,7 +1125,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 374,
+											"top": 389,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-nomeProgetto: String",
@@ -1125,7 +1142,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 389,
+											"top": 404,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-ambitiProgetto: ArrayList<AmbitoProgetto>",
@@ -1142,7 +1159,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 404,
+											"top": 419,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-tipoProgetto: String",
@@ -1159,7 +1176,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 419,
+											"top": 434,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-descrizioneProgetto: String",
@@ -1176,7 +1193,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 434,
+											"top": 449,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-dataCreazione: JavaDate",
@@ -1193,7 +1210,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 449,
+											"top": 464,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-scadenza: JavaDate",
@@ -1210,7 +1227,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 464,
+											"top": 479,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-dataTerminazione: JavaDate",
@@ -1227,7 +1244,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 479,
+											"top": 494,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-creatore: Dipendente",
@@ -1244,7 +1261,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 494,
+											"top": 509,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-meetingRelativi: ArrayList<Meeting>",
@@ -1261,7 +1278,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1229,
-											"top": 509,
+											"top": 524,
 											"width": 278.59228515625,
 											"height": 13,
 											"text": "-dipendentiPartecipanti: ArrayList<Dipendente>",
@@ -1272,7 +1289,7 @@
 									"left": 1224,
 									"top": 369,
 									"width": 288.59228515625,
-									"height": 158
+									"height": 173
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -1285,7 +1302,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 1224,
-									"top": 527,
+									"top": 542,
 									"width": 288.59228515625,
 									"height": 10
 								},
@@ -1327,7 +1344,7 @@
 							"left": 1224,
 							"top": 344,
 							"width": 288.59228515625,
-							"height": 193,
+							"height": 208,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2ljtZiKvn4Uo="
 							},
@@ -1812,6 +1829,23 @@
 									"subViews": [
 										{
 											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF2qO3G6Q1Wm+w=",
+											"_parent": {
+												"$ref": "AAAAAAF2ljuv2qxDd/0="
+											},
+											"model": {
+												"$ref": "AAAAAAF2qO3G2g1TqUM="
+											},
+											"font": "Arial;13;0",
+											"left": 1973,
+											"top": 326,
+											"width": 190.7724609375,
+											"height": 13,
+											"text": "-idMeeting: int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
 											"_id": "AAAAAAF2mSC5n/YnxlQ=",
 											"_parent": {
 												"$ref": "AAAAAAF2ljuv2qxDd/0="
@@ -1821,7 +1855,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 326,
+											"top": 341,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-dataInizio: JavaDate",
@@ -1838,7 +1872,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 341,
+											"top": 356,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-dataFine: JavaDate",
@@ -1855,7 +1889,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 356,
+											"top": 371,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-oraInizio: JavaDate",
@@ -1872,7 +1906,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 371,
+											"top": 386,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-oraFine: JavaDate",
@@ -1889,7 +1923,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 386,
+											"top": 401,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-modalità: String",
@@ -1906,7 +1940,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 401,
+											"top": 416,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-sala: SalaRiunione",
@@ -1923,7 +1957,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 416,
+											"top": 431,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-piattaforma: String",
@@ -1940,7 +1974,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 431,
+											"top": 446,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-progettoDiscusso: Progetto",
@@ -1957,7 +1991,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 446,
+											"top": 461,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-organizzatore: Dipendente",
@@ -1974,7 +2008,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 461,
+											"top": 476,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-invitati: ArrayList<Dipendente>",
@@ -1991,7 +2025,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1973,
-											"top": 476,
+											"top": 491,
 											"width": 190.7724609375,
 											"height": 13,
 											"text": "-presenti: ArrayList<Dipendente>",
@@ -2002,7 +2036,7 @@
 									"left": 1968,
 									"top": 321,
 									"width": 200.7724609375,
-									"height": 173
+									"height": 188
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -2015,7 +2049,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 1968,
-									"top": 494,
+									"top": 509,
 									"width": 200.7724609375,
 									"height": 10
 								},
@@ -2057,7 +2091,7 @@
 							"left": 1968,
 							"top": 296,
 							"width": 200.7724609375,
-							"height": 208,
+							"height": 223,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2ljuv2qw+A7E="
 							},
@@ -3244,6 +3278,23 @@
 									"subViews": [
 										{
 											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF2qOyfPQ0yq+A=",
+											"_parent": {
+												"$ref": "AAAAAAF2ljzAPK0a/5E="
+											},
+											"model": {
+												"$ref": "AAAAAAF2qOyfIQ0v0Vw="
+											},
+											"font": "Arial;13;0",
+											"left": 125,
+											"top": 454,
+											"width": 230.49609375,
+											"height": 13,
+											"text": "-idSkill: int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
 											"_id": "AAAAAAF2mOOK8/SilDo=",
 											"_parent": {
 												"$ref": "AAAAAAF2ljzAPK0a/5E="
@@ -3253,7 +3304,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 125,
-											"top": 454,
+											"top": 469,
 											"width": 230.49609375,
 											"height": 13,
 											"text": "-nomeSkill: String",
@@ -3270,7 +3321,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 125,
-											"top": 469,
+											"top": 484,
 											"width": 230.49609375,
 											"height": 13,
 											"text": "-possessoriSkill: ArrayList<Dipendente>",
@@ -3281,7 +3332,7 @@
 									"left": 120,
 									"top": 449,
 									"width": 240.49609375,
-									"height": 38
+									"height": 53
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -3294,7 +3345,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 120,
-									"top": 487,
+									"top": 502,
 									"width": 240.49609375,
 									"height": 10
 								},
@@ -3336,7 +3387,7 @@
 							"left": 120,
 							"top": 424,
 							"width": 240.49609375,
-							"height": 73,
+							"height": 88,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2ljzAPK0VwqY="
 							},
@@ -4847,6 +4898,23 @@
 									"subViews": [
 										{
 											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF2qO2Dcg1NmGs=",
+											"_parent": {
+												"$ref": "AAAAAAF2mRfvxPUgeEQ="
+											},
+											"model": {
+												"$ref": "AAAAAAF2qO2DYQ1KBEM="
+											},
+											"font": "Arial;13;0",
+											"left": 1621,
+											"top": 454,
+											"width": 170.52978515625,
+											"height": 13,
+											"text": "-idAmbito: int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
 											"_id": "AAAAAAF2mRicufVxBnA=",
 											"_parent": {
 												"$ref": "AAAAAAF2mRfvxPUgeEQ="
@@ -4856,7 +4924,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1621,
-											"top": 454,
+											"top": 469,
 											"width": 170.52978515625,
 											"height": 13,
 											"text": "-nomeAmbito: String",
@@ -4873,7 +4941,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1621,
-											"top": 469,
+											"top": 484,
 											"width": 170.52978515625,
 											"height": 13,
 											"text": "-progetti: ArrayList<Progetto>",
@@ -4884,7 +4952,7 @@
 									"left": 1616,
 									"top": 449,
 									"width": 180.52978515625,
-									"height": 38
+									"height": 53
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -4897,7 +4965,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 1616,
-									"top": 487,
+									"top": 502,
 									"width": 180.52978515625,
 									"height": 10
 								},
@@ -4939,7 +5007,7 @@
 							"left": 1616,
 							"top": 424,
 							"width": 180.52978515625,
-							"height": 73,
+							"height": 88,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2mRfvxPUbj3A="
 							},
@@ -5695,6 +5763,16 @@
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
+							"_id": "AAAAAAF2qO076Q05HpU=",
+							"_parent": {
+								"$ref": "AAAAAAF2ljtZiKvka5Q="
+							},
+							"name": "idProgetto",
+							"visibility": "private",
+							"type": "int"
+						},
+						{
+							"_type": "UMLAttribute",
 							"_id": "AAAAAAF2lkEFR66fb48=",
 							"_parent": {
 								"$ref": "AAAAAAF2ljtZiKvka5Q="
@@ -6132,6 +6210,16 @@
 					},
 					"name": "Meeting",
 					"attributes": [
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAF2qO3G2g1TqUM=",
+							"_parent": {
+								"$ref": "AAAAAAF2ljuv2qw7Ssk="
+							},
+							"name": "idMeeting",
+							"visibility": "private",
+							"type": "int"
+						},
 						{
 							"_type": "UMLAttribute",
 							"_id": "AAAAAAF2mSC5h/YkzIw=",
@@ -6818,6 +6906,16 @@
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
+							"_id": "AAAAAAF2qOyfIQ0v0Vw=",
+							"_parent": {
+								"$ref": "AAAAAAF2ljzAPK0ShjU="
+							},
+							"name": "idSkill",
+							"visibility": "private",
+							"type": "int"
+						},
+						{
+							"_type": "UMLAttribute",
 							"_id": "AAAAAAF2mOOK5vSfYrg=",
 							"_parent": {
 								"$ref": "AAAAAAF2ljzAPK0ShjU="
@@ -7112,6 +7210,16 @@
 					},
 					"name": "AmbitoProgetto",
 					"attributes": [
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAF2qO2DYQ1KBEM=",
+							"_parent": {
+								"$ref": "AAAAAAF2mRfvw/UYlI0="
+							},
+							"name": "idAmbito",
+							"visibility": "private",
+							"type": "int"
+						},
 						{
 							"_type": "UMLAttribute",
 							"_id": "AAAAAAF2mRicpvVu4+4=",
