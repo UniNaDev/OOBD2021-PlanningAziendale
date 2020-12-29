@@ -18,7 +18,7 @@
 	<classpathentry kind="lib" path="C:/Users/daddi/.p2/pool/plugins/org.eclipse.ui.workbench_3.120.0.v20200829-1411.jar" sourcepath="C:/Users/daddi/.p2/pool/plugins/org.eclipse.ui.workbench_3.120.0.v20200829-1411.jar"/>
 	<classpathentry kind="lib" path="C:/Users/daddi/.p2/pool/plugins/com.ibm.icu_67.1.0.v20200706-1749.jar" sourcepath="C:/Users/daddi/.p2/pool/plugins/com.ibm.icu_67.1.0.v20200706-1749.jar"/>
 	<classpathentry kind="lib" path="C:/Users/daddi/.p2/pool/plugins/org.eclipse.ui.forms_3.10.0.v20200727-0948.jar" sourcepath="C:/Users/daddi/.p2/pool/plugins/org.eclipse.ui.forms_3.10.0.v20200727-0948.jar"/>
-	<classpathentry kind="lib" path="C:/Users/daddi/Desktop/joda-time-2.10.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/daddi/Desktop/Università/postgresql-42.2.18.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.10.8.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-42.2.18.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
