@@ -10,14 +10,14 @@ public class StarterTest {
 		LuogoNascita luogoNascita =  new LuogoNascita();
 		
 		//MODIFICARE QUESTI DATI PER TESTARE IL CODICE FISCALE
-		luogoNascita.setNomeComune("Vico Equense");				
-		dip.setNome("Davide");
-		dip.setCognome("Soldatini");
-		dip.setDataNascita(new LocalDate(1999,10,06));
+		luogoNascita.setNomeComune("Napoli");				
+		dip.setNome("Andrea");
+		dip.setCognome("Lemmo");
+		dip.setDataNascita(new LocalDate(1995,9,16));
 		dip.setSesso('M');
 		dip.setLuogoNascita(luogoNascita);
 		
-		//QUESTO È IL METODO CHE VA A GENERARE EFFETTIVAMENTE IL CF CON I DATI PRENSENTI NEL DIPENDENTE
+		//QUESTO ï¿½ IL METODO CHE VA A GENERARE EFFETTIVAMENTE IL CF CON I DATI PRENSENTI NEL DIPENDENTE
 		String codiceFiscale = dip.GeneraCF();
 		
 		
