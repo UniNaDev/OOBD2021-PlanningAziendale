@@ -203,7 +203,7 @@
 											"top": 2074,
 											"width": 488.67431640625,
 											"height": 13,
-											"text": "-url: String = \"databaseprogetto.ceaxreltfrnh.eu-central-1.rds.amazonaws.com\" {final}",
+											"text": "-url: String {final}",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3346,13 +3346,30 @@
 											"height": 13,
 											"text": "+GetSkillsByNome(nome: String): ArrayList<Skill>",
 											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF2rgRg15/hH24=",
+											"_parent": {
+												"$ref": "AAAAAAF2qQBHvBhnFwE="
+											},
+											"model": {
+												"$ref": "AAAAAAF2rgRgsp/eYFM="
+											},
+											"font": "Arial;13;0",
+											"left": 101,
+											"top": 1337,
+											"width": 288.62158203125,
+											"height": 13,
+											"text": "+AddSkill(skill: Skill): boolean",
+											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 96,
 									"top": 1302,
 									"width": 298.62158203125,
-									"height": 38
+									"height": 53
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -3392,7 +3409,7 @@
 							"left": 96,
 							"top": 1264,
 							"width": 298.62158203125,
-							"height": 80,
+							"height": 91,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2qQBHvBhheVI="
 							},
@@ -3561,13 +3578,30 @@
 											"height": 13,
 											"text": "-getSkillByNome: PreparedStatement",
 											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF2rgSuV6GlI5U=",
+											"_parent": {
+												"$ref": "AAAAAAF2qQF5bRizPoQ="
+											},
+											"model": {
+												"$ref": "AAAAAAF2rgSuSaGi8Rw="
+											},
+											"font": "Arial;13;0",
+											"left": 93,
+											"top": 1571,
+											"width": 298.03515625,
+											"height": 13,
+											"text": "+addSkill: PreparedStatement",
+											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 88,
 									"top": 1521,
 									"width": 308.03515625,
-									"height": 53
+									"height": 68
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -3590,7 +3624,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 93,
-											"top": 1579,
+											"top": 1594,
 											"width": 298.03515625,
 											"height": 13,
 											"text": "+SkillDAOPSQL(conn: Connection): SkillDAOPSQL",
@@ -3599,7 +3633,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 88,
-									"top": 1574,
+									"top": 1589,
 									"width": 308.03515625,
 									"height": 23
 								},
@@ -3641,7 +3675,7 @@
 							"left": 88,
 							"top": 1496,
 							"width": 308.03515625,
-							"height": 101,
+							"height": 116,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2qQF5bRiuS9s="
 							},
@@ -3680,7 +3714,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 227,
-									"top": 1412,
+									"top": 1418,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -3701,7 +3735,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"left": 212,
-									"top": 1412,
+									"top": 1418,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -3722,7 +3756,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 256,
-									"top": 1413,
+									"top": 1419,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -3740,7 +3774,7 @@
 								"$ref": "AAAAAAF2qQF5bBitPj0="
 							},
 							"lineStyle": 1,
-							"points": "242:1495;243:1344",
+							"points": "242:1495;243:1355",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAF2qQF5xhjWCHo="
@@ -10535,8 +10569,7 @@
 							},
 							"name": "url",
 							"visibility": "private",
-							"type": "String",
-							"defaultValue": "\"databaseprogetto.ceaxreltfrnh.eu-central-1.rds.amazonaws.com\" {final}"
+							"type": "String {final}"
 						}
 					],
 					"operations": [
@@ -11424,6 +11457,36 @@
 									"direction": "return"
 								}
 							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF2rgRgsp/eYFM=",
+							"_parent": {
+								"$ref": "AAAAAAF2qQBHuhheIyk="
+							},
+							"name": "AddSkill",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF2rgSYSaDMX24=",
+									"_parent": {
+										"$ref": "AAAAAAF2rgRgsp/eYFM="
+									},
+									"name": "skill",
+									"type": {
+										"$ref": "AAAAAAF2ljzAPK0ShjU="
+									}
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF2rgSYSaDNkwg=",
+									"_parent": {
+										"$ref": "AAAAAAF2rgRgsp/eYFM="
+									},
+									"type": "boolean",
+									"direction": "return"
+								}
+							]
 						}
 					]
 				},
@@ -11478,6 +11541,15 @@
 							},
 							"name": "getSkillByNome",
 							"visibility": "private",
+							"type": "PreparedStatement"
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAF2rgSuSaGi8Rw=",
+							"_parent": {
+								"$ref": "AAAAAAF2qQF5ahirvAo="
+							},
+							"name": "addSkill",
 							"type": "PreparedStatement"
 						}
 					],
