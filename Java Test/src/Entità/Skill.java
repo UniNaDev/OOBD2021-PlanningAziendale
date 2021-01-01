@@ -16,10 +16,10 @@ public class Skill {
 
 	//METODI
 	
-	//Costruttore banale
+	//Costruttore totale
 	public Skill(int id, String nomeSkill) {
-		this.id = id;
-		this.nomeSkill = nomeSkill;
+		this.id = id;	//primary key
+		this.nomeSkill = nomeSkill;	//not null
 	}
 	
 	//Vari getters e setters

@@ -36,7 +36,7 @@ public class SkillDAOPSQL implements SkillDAO {
 		this.conn = connection;	//ottiene la connessione
 		
 		getSkills = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");	//statement per chiedere al DB tutte le skill
-		getSkillsByNome = conn.prepareStatement("SELECT * FROM Skill WHERE Skill.NomeSkill LIKE ? ORDER BY Skill.NomeSkill");	//statement per chiedere al DB tutte le skill con un nome specifico
+		getSkillsByNome = conn.prepareStatement("SELECT * FROM Skill WHERE Skill.NomeSkill = ?");	//statement per chiedere al DB tutte le skill con un nome specifico
 		addSkill = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");	//statement per inserire una nuova Skill nel DB
 	}
 	
@@ -61,23 +61,17 @@ public class SkillDAOPSQL implements SkillDAO {
 
 	//Metodo GetSkillsByNome.
 	/*Interroga il DB attraverso getSKillsByNome:PreparedStatement e salva il ResultSet ottenuto
-	*in un ArrayList temporaneo (temp:ArrayList<Skill>) che alla fine restituisce.
-	*Ottiene una lista di Skill che hanno nome simile a quello del parametro in input (nome:String) in ordine alfabetico.*/
+	*in una skill temporanea che alla fine restituisce.*/
 	@Override
-	public ArrayList<Skill> GetSkillsByNome(String nome) throws SQLException {
+	public Skill GetSkillByNome(String nome) throws SQLException {
 		getSkillsByNome.setString(1, nome);	//inserisce il parametro nome nella query
 		
 		ResultSet risultato = getSkillsByNome.executeQuery();	//esegue la query per ottenere il ResultSet
-		ArrayList<Skill> temp = new ArrayList<Skill>();	//inizializza l'ArrayList<Skill> temporaneo
-		
-		//finchè ci sono record nel ResultSet crea una nuova Skill temporanea con quei dati e aggiunge la skill alla lista
-		while(risultato.next()) {
-			Skill tempSkill = new Skill(risultato.getInt(1),risultato.getString(2));
-			temp.add(tempSkill);
-		}
+		risultato.next();
+		Skill tempSkill = new Skill(risultato.getInt(1),risultato.getString(2));
 		risultato.close();	//chiude il ResultSet
 		
-		return temp;
+		return tempSkill;
 	}
 
 	//Metodo AddSkill.

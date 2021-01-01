@@ -11,7 +11,7 @@ public class StarterTest {
 		
 		//MODIFICARE QUESTI DATI PER TESTARE IL CODICE FISCALE
 		luogoNascita.setNomeComune("Napoli");				
-		dip.setNome("Andrea");
+		dip.setNome("Renè");
 		dip.setCognome("Lemmo");
 		dip.setDataNascita(new LocalDate(1995,9,16));
 		dip.setSesso('M');

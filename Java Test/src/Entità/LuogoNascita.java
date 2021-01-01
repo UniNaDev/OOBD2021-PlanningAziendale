@@ -16,11 +16,11 @@ public class LuogoNascita {
 	
 	//METODI
 	
-	//Costruttore banale con tutti gli attributi come parametri
+	//Costruttore totale
 	public LuogoNascita(String codiceComune, String nomeComune, String nomeProvincia) {
-		this.codiceComune = codiceComune;
-		this.nomeComune = nomeComune;
-		this.nomeProvincia = nomeProvincia;
+		this.codiceComune = codiceComune;	//primary Key
+		this.nomeComune = nomeComune;	//not null
+		this.nomeProvincia = nomeProvincia;	//not null
 	}
 
 	//Getters banali per ogni attributo
@@ -39,6 +39,6 @@ public class LuogoNascita {
 	//Metodo ToString
 	@Override
 	public String toString() {
-		return "[" + codiceComune + "] " + nomeComune  + " (" + nomeProvincia + ")";
+		return nomeComune  + " [" + codiceComune + "] " + " (" + nomeProvincia + ")";
 	}
 }
