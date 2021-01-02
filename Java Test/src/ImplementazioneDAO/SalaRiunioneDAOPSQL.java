@@ -72,8 +72,8 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	//Metodo che restituisce la lista (temp) di sale nel DB che sono libere nell'intervallo di tempo specificato dai parametri
 	@Override
 	public ArrayList<SalaRiunione> GetSaleLibere(LocalDateTime inizio, LocalDateTime fine) throws SQLException {
-		Timestamp inizioTM = new Timestamp(inizio.toDateTime().getMillis());	//conversione in Timestamp del LocalDate inizio per SQL
-		Timestamp fineTM = new Timestamp(fine.toDateTime().getMillis());	//conversione in Timestamp del LocalDate fine per SQL
+		Timestamp inizioTM = new Timestamp(inizio.toDateTime().getMillis());	//conversione in Timestamp del LocalDateTime inizio per SQL
+		Timestamp fineTM = new Timestamp(fine.toDateTime().getMillis());	//conversione in Timestamp del LocalDateTime fine per SQL
 		
 		//inserisce inizio e fine come Timestamp nella query
 		getSaleLibere.setTimestamp(1, inizioTM);
