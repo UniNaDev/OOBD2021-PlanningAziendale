@@ -5,16 +5,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import DBManager.ManagerConnessioneDB;
 import Entità.Dipendente;
 import Entità.LuogoNascita;
+import Entità.SalaRiunione;
 import Entità.Skill;
 import ImplementazioneDAO.DipendenteDAOPSQL;
 import ImplementazioneDAO.LuogoNascitaDAOPSQL;
+import ImplementazioneDAO.SalaRiunioneDAOPSQL;
 import ImplementazioneDAO.SkillDAOPSQL;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
+import InterfacceDAO.SalaRiunioneDAO;
 import InterfacceDAO.SkillDAO;
 
 public class Starter {
@@ -26,6 +30,7 @@ public class Starter {
 		SkillDAO skillDAO = null;
 		LuogoNascitaDAO luogoDAO = null;
 		DipendenteDAO dipDAO = null;
+		SalaRiunioneDAO salaDAO = null;
 		
 		try 
 		{
@@ -160,6 +165,50 @@ public class Starter {
 			
 			//Genera CF del dipendente Mario Rossi
 			System.out.println(dipendente.GeneraCF());
+			/****************************************************/
+			
+			//Test SalaRiunione***********************************
+			salaDAO = new SalaRiunioneDAOPSQL(connection);
+			ArrayList<SalaRiunione> sale = new ArrayList<SalaRiunione>();
+			
+			//Ottieni tutte le sale nel DB
+			sale = salaDAO.GetSale();
+			System.out.println("Tutte le sale riunioni:");
+			for (SalaRiunione sr : sale)
+				System.out.println(sr);
+			
+			//Ottieni sale con capienza minima 120 posti
+			int cap = 120;
+			sale = salaDAO.GetSaleByCap(cap);
+			System.out.println("Tutte le sale riunioni con capienza minima " + cap);
+			for (SalaRiunione sr : sale)
+				System.out.println(sr);
+			
+			//Inserisci una nuova sala
+			String codSala = "SalaNuova";
+			String indirizzo = "via Di Qui, 22";
+			int piano = 2;
+			SalaRiunione salaNew = new SalaRiunione(codSala,cap,indirizzo,piano);
+			if (salaDAO.AddSala(salaNew))
+				System.out.println(salaNew + " inserita");
+			
+			//Modifica della nuova sala
+			salaNew.setCap(50);
+			if (salaDAO.UpdateSala(salaNew))
+				System.out.println(salaNew + " modificata");
+			
+			//Rimuovi la sala appena aggiunta
+			if (salaDAO.RemoveSala(salaNew))
+				System.out.println(salaNew + " rimossa");
+			
+			//Ottieni sale libere il 21/10/2020 dalle 13:00 alle 15:00
+			LocalDateTime inizio = new LocalDateTime(2020,10,21,13,0);
+			LocalDateTime fine = new LocalDateTime(2020,10,21,15,0);
+			
+			sale = salaDAO.GetSaleLibere(inizio, fine);
+			System.out.println("Tutte le sale riunioni libere dal " + inizio + " a " + fine);
+			for (SalaRiunione sr : sale)
+				System.out.println(sr);
 			/****************************************************/
 		}
 		catch(SQLException e) 
