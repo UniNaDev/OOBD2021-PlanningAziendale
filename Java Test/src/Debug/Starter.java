@@ -8,14 +8,17 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import DBManager.ManagerConnessioneDB;
+import Entità.AmbitoProgetto;
 import Entità.Dipendente;
 import Entità.LuogoNascita;
 import Entità.SalaRiunione;
 import Entità.Skill;
+import ImplementazioneDAO.AmbitoProgettoDAOPSQL;
 import ImplementazioneDAO.DipendenteDAOPSQL;
 import ImplementazioneDAO.LuogoNascitaDAOPSQL;
 import ImplementazioneDAO.SalaRiunioneDAOPSQL;
 import ImplementazioneDAO.SkillDAOPSQL;
+import InterfacceDAO.AmbitoProgettoDAO;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
 import InterfacceDAO.SalaRiunioneDAO;
@@ -31,6 +34,7 @@ public class Starter {
 		LuogoNascitaDAO luogoDAO = null;
 		DipendenteDAO dipDAO = null;
 		SalaRiunioneDAO salaDAO = null;
+		AmbitoProgettoDAO ambitoDAO = null;
 		
 		try 
 		{
@@ -209,6 +213,27 @@ public class Starter {
 			System.out.println("Tutte le sale riunioni libere dal " + inizio + " a " + fine);
 			for (SalaRiunione sr : sale)
 				System.out.println(sr);
+			/****************************************************/
+			
+			//Test AmbitoProgetto*********************************
+			ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
+			ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
+			
+			//Ottieni tutti gli ambiti nel DB
+			System.out.println("Tutti gli ambiti");
+			ambiti = ambitoDAO.getAmbiti();
+			for (AmbitoProgetto a: ambiti)
+				System.out.println(a);
+			
+			//Inserisci un nuovo ambito nel DB
+			String nome = "NuovoAmbito";
+			AmbitoProgetto ambito = new AmbitoProgetto(0,nome);
+			if (ambitoDAO.addAmbito(ambito))
+				System.out.println(ambito + " inserito");
+			
+			//Rimuovi un ambito dal DB
+			if (ambitoDAO.removeAmbito(ambito))
+				System.out.println(ambito + " rimosso");
 			/****************************************************/
 		}
 		catch(SQLException e) 

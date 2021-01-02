@@ -3202,30 +3202,13 @@
 											"height": 13,
 											"text": "-nomeAmbito: String",
 											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLAttributeView",
-											"_id": "AAAAAAF2mSaqifaSbuI=",
-											"_parent": {
-												"$ref": "AAAAAAF2mRfvxPUgeEQ="
-											},
-											"model": {
-												"$ref": "AAAAAAF2mSaqd/aPzP8="
-											},
-											"font": "Arial;13;0",
-											"left": 1533,
-											"top": 1116,
-											"width": 314.6787109375,
-											"height": 13,
-											"text": "-progetti: ArrayList<Progetto>",
-											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1528,
 									"top": 1081,
 									"width": 324.6787109375,
-									"height": 53
+									"height": 38
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -3238,7 +3221,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 1528,
-									"top": 1134,
+									"top": 1119,
 									"width": 324.6787109375,
 									"height": 10
 								},
@@ -3280,7 +3263,7 @@
 							"left": 1528,
 							"top": 1056,
 							"width": 324.6787109375,
-							"height": 88,
+							"height": 73,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2mRfvxPUbj3A="
 							},
@@ -10988,7 +10971,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vshIEUuaHHw="
 									},
-									"name": "String numeroMese"
+									"name": "String numeroMese",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -11016,7 +11000,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vsiIA0x91xw="
 									},
-									"name": "c char"
+									"name": "c char",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -11044,7 +11029,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vsjkhk1gZPM="
 									},
-									"name": "c char"
+									"name": "c char",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -11072,7 +11058,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vskLh05D9h4="
 									},
-									"name": "String tempCF"
+									"name": "String tempCF",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -11690,16 +11677,6 @@
 							"name": "nomeAmbito",
 							"visibility": "private",
 							"type": "String"
-						},
-						{
-							"_type": "UMLAttribute",
-							"_id": "AAAAAAF2mSaqd/aPzP8=",
-							"_parent": {
-								"$ref": "AAAAAAF2mRfvw/UYlI0="
-							},
-							"name": "progetti",
-							"visibility": "private",
-							"type": "ArrayList<Progetto>"
 						}
 					]
 				},
