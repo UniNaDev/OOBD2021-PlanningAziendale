@@ -17,6 +17,10 @@ BEGIN
 SELECT COUNT(*) INTO TotaleMeeting
 FROM Presenza AS p
 WHERE p.CF = dip;
+--Se non ci sono meeting a cui doveva presenziare di default la sua valutazione a riguardo è 10
+IF (TotaleMeeting = 0) THEN
+	RETURN 10;
+END IF;
 --Conta le sue presenze per ciascuno di essi
 SELECT COUNT(*) INTO Presenze
 FROM Presenza AS p
