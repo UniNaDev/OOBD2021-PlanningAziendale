@@ -14,8 +14,8 @@ public interface LuogoNascitaDAO {
 	
 	//METODI
 	
-	public ArrayList<String> GetProvince() throws SQLException;	//metodo che restituisce la lista di tutte le province nel DB
-	public ArrayList<LuogoNascita> GetLuoghiByProvincia(String provincia) throws SQLException;	//metodo che restituisce la lista di luoghi:LuogoNascita di una provincia presenti nel DB
-	public ArrayList<Dipendente> GetDipendentiByLuogo(LuogoNascita luogo) throws SQLException;	//metodo che restituisce i dipendenti nati in un luogo specifico e sua implementazione
-	public LuogoNascita GetLuogoByCod(String codComune) throws SQLException;	//ottiene il luogo di nascita con il codice comune (primary key) uguale la parametro della function
+	public ArrayList<String> getProvince() throws SQLException;	//metodo che restituisce la lista di tutte le province nel DB
+	public ArrayList<LuogoNascita> getLuoghiByProvincia(String provincia) throws SQLException;	//metodo che restituisce la lista di luoghi:LuogoNascita di una provincia presenti nel DB
+	public ArrayList<Dipendente> getDipendentiByLuogo(LuogoNascita luogo) throws SQLException;	//metodo che restituisce i dipendenti nati in un luogo specifico e sua implementazione
+	public LuogoNascita getLuogoByCod(String codComune) throws SQLException;	//ottiene il luogo di nascita con il codice comune (primary key) uguale la parametro della function
 }

@@ -689,7 +689,7 @@
 											"top": 840,
 											"width": 247.80615234375,
 											"height": 13,
-											"text": "+GeneraCF(): String",
+											"text": "+generaCF(): String",
 											"horizontalAlignment": 0
 										},
 										{
@@ -706,7 +706,7 @@
 											"top": 855,
 											"width": 247.80615234375,
 											"height": 13,
-											"text": "-CFNomeCognome(): String",
+											"text": "-cfNomeCognome(): String",
 											"horizontalAlignment": 0
 										},
 										{
@@ -723,7 +723,7 @@
 											"top": 870,
 											"width": 247.80615234375,
 											"height": 13,
-											"text": "-ConvertiMese(String numeroMese): String",
+											"text": "-convertiMese(String numeroMese): String",
 											"horizontalAlignment": 0
 										},
 										{
@@ -740,7 +740,7 @@
 											"top": 885,
 											"width": 247.80615234375,
 											"height": 13,
-											"text": "-ConvertiDispari(c char): int",
+											"text": "-convertiDispari(c char): int",
 											"horizontalAlignment": 0
 										},
 										{
@@ -757,7 +757,7 @@
 											"top": 900,
 											"width": 247.80615234375,
 											"height": 13,
-											"text": "-ConvertiPari(c char): int",
+											"text": "-convertiPari(c char): int",
 											"horizontalAlignment": 0
 										},
 										{
@@ -774,7 +774,7 @@
 											"top": 915,
 											"width": 247.80615234375,
 											"height": 13,
-											"text": "-CarattereControllo(String tempCF): char",
+											"text": "-carattereControllo(String tempCF): char",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3429,7 +3429,7 @@
 											"top": 1307,
 											"width": 288.62158203125,
 											"height": 13,
-											"text": "+GetSkills(): ArrayList<Skill>",
+											"text": "+getSkills(): ArrayList<Skill>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3446,7 +3446,7 @@
 											"top": 1322,
 											"width": 288.62158203125,
 											"height": 13,
-											"text": "+GetSkillByNome(nome: String): Skill",
+											"text": "+getSkillByNome(nome: String): Skill",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3463,7 +3463,7 @@
 											"top": 1337,
 											"width": 288.62158203125,
 											"height": 13,
-											"text": "+AddSkill(skill: Skill): boolean",
+											"text": "+addSkill(skill: Skill): boolean",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3661,7 +3661,7 @@
 											"top": 1541,
 											"width": 298.03515625,
 											"height": 13,
-											"text": "-getSkills: PreparedStatement",
+											"text": "-getSkillsPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3678,7 +3678,7 @@
 											"top": 1556,
 											"width": 298.03515625,
 											"height": 13,
-											"text": "-getSkillByNome: PreparedStatement",
+											"text": "-getSkillByNomePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3695,7 +3695,7 @@
 											"top": 1571,
 											"width": 298.03515625,
 											"height": 13,
-											"text": "+addSkill: PreparedStatement",
+											"text": "+addSkillPS: PreparedStatement",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4020,7 +4020,7 @@
 											"top": 1307,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+GetDipendenti(): ArrayList<Dipendente>",
+											"text": "+getDipendenti(): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4037,7 +4037,7 @@
 											"top": 1322,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+GetDipendentiByEtà(): ArrayList<Dipendente>",
+											"text": "+getDipendentiByEtà(): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4054,7 +4054,7 @@
 											"top": 1337,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+GetValutazione(cf: String): float",
+											"text": "+getValutazione(cf: String): float",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4071,7 +4071,7 @@
 											"top": 1352,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+GetDipendenteByValutazione(min: float): ArrayList<Dipendente>",
+											"text": "+getDipendenteByValutazione(min: float): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4088,7 +4088,7 @@
 											"top": 1367,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+GetDipendentiBySalario(min: float, max: float): ArrayList<Dipendente>",
+											"text": "+getDipendentiBySalario(min: float, max: float): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4105,7 +4105,7 @@
 											"top": 1382,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+GetDipendentiBySkill(skill: Skill): ArrayList<Dipendente>",
+											"text": "+getDipendentiBySkill(skill: Skill): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4122,7 +4122,7 @@
 											"top": 1397,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+AddDipendente(dip: Dipendente): boolean",
+											"text": "+addDipendente(dip: Dipendente): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4139,7 +4139,7 @@
 											"top": 1412,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+UpdateDipendente(dip: Dipendente): boolean",
+											"text": "+updateDipendente(dip: Dipendente): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4156,7 +4156,7 @@
 											"top": 1427,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+LoginCheck(email: String, password: String): Dipendente",
+											"text": "+loginCheck(email: String, password: String): Dipendente",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4173,7 +4173,7 @@
 											"top": 1442,
 											"width": 411.51220703125,
 											"height": 13,
-											"text": "+GetDipendenteByCF(String: CF): Dipendente",
+											"text": "+getDipendenteByCF(String: CF): Dipendente",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4371,7 +4371,7 @@
 											"top": 1541,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-getDipendenti: PreparedStatement",
+											"text": "-getDipendentiPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4388,7 +4388,7 @@
 											"top": 1556,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-getDipendentiByEtà: PreparedStatement",
+											"text": "-getDipendentiByEtàPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4405,7 +4405,7 @@
 											"top": 1571,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-getValutazione: PreparedStatement",
+											"text": "-getValutazionePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4422,7 +4422,7 @@
 											"top": 1586,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-getDipendenteByValutazione: PreparedStatement",
+											"text": "-getDipendenteByValutazionePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4439,7 +4439,7 @@
 											"top": 1601,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-getDipendentiBySalario: PreparedStatement",
+											"text": "-getDipendentiBySalarioPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4456,7 +4456,7 @@
 											"top": 1616,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-getDipendentiBySkill: PreparedStatement",
+											"text": "-getDipendentiBySkillPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4473,7 +4473,7 @@
 											"top": 1631,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-addDipendente: PreparedStatement",
+											"text": "-addDipendentePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4490,7 +4490,7 @@
 											"top": 1646,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-updateDipendente: PreparedStatement",
+											"text": "-updateDipendentePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4507,7 +4507,7 @@
 											"top": 1661,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "-loginCheck: PreparedStatement",
+											"text": "-loginCheckPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4524,7 +4524,7 @@
 											"top": 1676,
 											"width": 383.3603515625,
 											"height": 13,
-											"text": "+getDipendenteByCF: PreparedStatement",
+											"text": "+getDipendenteByCFPS: PreparedStatement",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4849,7 +4849,7 @@
 											"top": 1347,
 											"width": 409.40478515625,
 											"height": 13,
-											"text": "+GetProvince(): ArrayList<String>",
+											"text": "+getProvince(): ArrayList<String>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4866,7 +4866,7 @@
 											"top": 1362,
 											"width": 409.40478515625,
 											"height": 13,
-											"text": "+GetLuoghiByProvincia(pro: String): ArrayList<LuogoNascita>",
+											"text": "+getLuoghiByProvincia(pro: String): ArrayList<LuogoNascita>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4883,7 +4883,7 @@
 											"top": 1377,
 											"width": 409.40478515625,
 											"height": 13,
-											"text": "+GetDipendentiByLuogo(luogo: LuogoNascita): ArrayList<Dipendente>",
+											"text": "+getDipendentiByLuogo(luogo: LuogoNascita): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4900,7 +4900,7 @@
 											"top": 1392,
 											"width": 409.40478515625,
 											"height": 13,
-											"text": "+GetLuogoByCod(codComune: String): LuogoNascita",
+											"text": "+getLuogoByCod(codComune: String): LuogoNascita",
 											"horizontalAlignment": 0
 										}
 									],
@@ -5098,7 +5098,7 @@
 											"top": 1541,
 											"width": 409.3603515625,
 											"height": 13,
-											"text": "-getProvince: PreparedStatement",
+											"text": "-getProvincePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5115,7 +5115,7 @@
 											"top": 1556,
 											"width": 409.3603515625,
 											"height": 13,
-											"text": "-getLuoghiByProvincia: PreparedStatement",
+											"text": "-getLuoghiByProvinciaPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5132,7 +5132,7 @@
 											"top": 1571,
 											"width": 409.3603515625,
 											"height": 13,
-											"text": "-getDipendentiByLuogo: PreparedStatement",
+											"text": "-getDipendentiByLuogoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5149,7 +5149,7 @@
 											"top": 1586,
 											"width": 409.3603515625,
 											"height": 13,
-											"text": "+getLuogoByCod: PreparedStatement",
+											"text": "+getLuogoByCodPS: PreparedStatement",
 											"horizontalAlignment": 0
 										}
 									],
@@ -5474,7 +5474,7 @@
 											"top": 1291,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+GetProgetti(): ArrayList<Progetto>",
+											"text": "+getProgetti(): ArrayList<Progetto>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5491,7 +5491,7 @@
 											"top": 1306,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+GetPartecipanti(proj: Progetto): ArrayList<Dipendente>",
+											"text": "+getPartecipanti(proj: Progetto): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5508,7 +5508,7 @@
 											"top": 1321,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+GetMeetingRelativi(proj: Progetto): ArrayList<Meeting>",
+											"text": "+getMeetingRelativi(proj: Progetto): ArrayList<Meeting>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5525,7 +5525,7 @@
 											"top": 1336,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+GetProgettiByDipendente(dip: Dipendente): ArrayList<Progetto>",
+											"text": "+getProgettiByDipendente(dip: Dipendente): ArrayList<Progetto>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5542,7 +5542,7 @@
 											"top": 1351,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+GetProgettiByCreatore(dip: Dipendente): ArrayList<Progetto>",
+											"text": "+getProgettiByCreatore(dip: Dipendente): ArrayList<Progetto>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5559,7 +5559,7 @@
 											"top": 1366,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+GetProgettiByAmbito(ambito: AmbitoProgetto): ArrayList<Progetto>",
+											"text": "+getProgettiByAmbito(ambito: AmbitoProgetto): ArrayList<Progetto>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5576,7 +5576,7 @@
 											"top": 1381,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+GetProgettiByTipo(tipo: String): ArrayList<Progetto>",
+											"text": "+getProgettiByTipo(tipo: String): ArrayList<Progetto>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5593,7 +5593,7 @@
 											"top": 1396,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+AddProgetto(proj: Progetto): boolean",
+											"text": "+addProgetto(proj: Progetto): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5610,7 +5610,7 @@
 											"top": 1411,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+DeleteProgetto(proj: Progetto): boolean",
+											"text": "+deleteProgetto(proj: Progetto): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5627,7 +5627,7 @@
 											"top": 1426,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+AddPartecipante(dip: Dipendente): boolean",
+											"text": "+addPartecipante(dip: Dipendente): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5644,7 +5644,7 @@
 											"top": 1441,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+DeletePartecipante(dip: Dipendente): boolean",
+											"text": "+deletePartecipante(dip: Dipendente): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5661,7 +5661,7 @@
 											"top": 1456,
 											"width": 396.322265625,
 											"height": 13,
-											"text": "+UpdateProgetto(proj: Progetto): boolean",
+											"text": "+updateProgetto(proj: Progetto): boolean",
 											"horizontalAlignment": 0
 										}
 									],
@@ -5755,7 +5755,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1536,
+											"left": 1520,
 											"top": 704,
 											"height": 13
 										},
@@ -5766,7 +5766,7 @@
 												"$ref": "AAAAAAF2qRpM1h0Fk78="
 											},
 											"font": "Arial;13;1",
-											"left": 2005,
+											"left": 1997,
 											"top": 1519,
 											"width": 348.6513671875,
 											"height": 13,
@@ -5780,7 +5780,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1536,
+											"left": 1520,
 											"top": 704,
 											"width": 73.67724609375,
 											"height": 13,
@@ -5794,14 +5794,14 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1536,
+											"left": 1520,
 											"top": 704,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 2000,
+									"left": 1992,
 									"top": 1512,
 									"width": 358.6513671875,
 									"height": 25,
@@ -5838,7 +5838,7 @@
 												"$ref": "AAAAAAF2qRrbNx0/G/U="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1542,
 											"width": 348.6513671875,
 											"height": 13,
@@ -5855,11 +5855,11 @@
 												"$ref": "AAAAAAF2qRrzHB1Gi2M="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1557,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-getProgetti: PreparedStatement",
+											"text": "-getProgettiPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5872,11 +5872,11 @@
 												"$ref": "AAAAAAF2qRsbnB1NCNM="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1572,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-getMeetingRelativi: PrearedStatement",
+											"text": "-getMeetingRelativiPS: PrearedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5889,11 +5889,11 @@
 												"$ref": "AAAAAAF2qRtkoh1VUzU="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1587,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-getPartecipanti: PreparedStatement",
+											"text": "-getPartecipantiPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5906,11 +5906,11 @@
 												"$ref": "AAAAAAF2qRulpB1c1fU="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1602,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-getProgettiByDipendente: PreparedStatement",
+											"text": "-getProgettiByDipendentePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5923,11 +5923,11 @@
 												"$ref": "AAAAAAF2qRxDrB1jJYQ="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1617,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-getProgettiByCreatore: PreparedStatement",
+											"text": "-getProgettiByCreatorePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5940,11 +5940,11 @@
 												"$ref": "AAAAAAF2qRx8aB1qmRA="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1632,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-getProgettiByAmbito: PreparedStatement",
+											"text": "-getProgettiByAmbitoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5957,11 +5957,11 @@
 												"$ref": "AAAAAAF2qRyvgR1x18Y="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1647,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-getProgettiByTipo: PreparedStatement",
+											"text": "-getProgettiByTipoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5974,11 +5974,11 @@
 												"$ref": "AAAAAAF2qRz9Jx14BvE="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1662,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-addProgetto: PreparedStatement",
+											"text": "-addProgettoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5991,11 +5991,11 @@
 												"$ref": "AAAAAAF2qR0wBh1/b4s="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1677,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-deleteProgetto: PreparedStatement",
+											"text": "-deleteProgettoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6008,11 +6008,11 @@
 												"$ref": "AAAAAAF2qR1dlh2Go7o="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1692,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-updateProgetto: PreparedStatement",
+											"text": "-updateProgettoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6025,11 +6025,11 @@
 												"$ref": "AAAAAAF2qR2ESh2N/3w="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1707,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-addPartecipante: PreparedStatement",
+											"text": "-addPartecipantePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6042,16 +6042,16 @@
 												"$ref": "AAAAAAF2qR2yfh2UWbo="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1722,
 											"width": 348.6513671875,
 											"height": 13,
-											"text": "-deletePartecipante: PreparedStatement",
+											"text": "-deletePartecipantePS: PreparedStatement",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 2000,
+									"left": 1992,
 									"top": 1537,
 									"width": 358.6513671875,
 									"height": 203
@@ -6076,7 +6076,7 @@
 												"$ref": "AAAAAAF2qlzFPYKkiK8="
 											},
 											"font": "Arial;13;0",
-											"left": 2005,
+											"left": 1997,
 											"top": 1745,
 											"width": 348.6513671875,
 											"height": 13,
@@ -6085,7 +6085,7 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 2000,
+									"left": 1992,
 									"top": 1740,
 									"width": 358.6513671875,
 									"height": 23
@@ -6101,7 +6101,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 768,
+									"left": 760,
 									"top": 352,
 									"width": 10,
 									"height": 10
@@ -6117,7 +6117,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 768,
+									"left": 760,
 									"top": 352,
 									"width": 10,
 									"height": 10
@@ -6125,7 +6125,7 @@
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 2000,
+							"left": 1992,
 							"top": 1512,
 							"width": 358.6513671875,
 							"height": 251,
@@ -6166,7 +6166,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 2158,
+									"left": 2155,
 									"top": 1485,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -6187,7 +6187,7 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 2143,
+									"left": 2140,
 									"top": 1485,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -6208,7 +6208,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 2187,
+									"left": 2184,
 									"top": 1486,
 									"height": 13,
 									"alpha": -1.5707963267948966,
@@ -6227,7 +6227,7 @@
 								"$ref": "AAAAAAF2qRpM1h0EV9k="
 							},
 							"lineStyle": 1,
-							"points": "2174:1511;2173:1474",
+							"points": "2170:1511;2170:1474",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAF2qRpNRh0ttjM="
@@ -6371,7 +6371,7 @@
 											"top": 1299,
 											"width": 294.455078125,
 											"height": 13,
-											"text": "+GetAmbiti(): ArrayList<AmbitoProgetto>",
+											"text": "+getAmbiti(): ArrayList<AmbitoProgetto>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6388,7 +6388,7 @@
 											"top": 1314,
 											"width": 294.455078125,
 											"height": 13,
-											"text": "+AddAmbito(ambito: AmbitoProgetto): boolean",
+											"text": "+addAmbito(ambito: AmbitoProgetto): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6405,7 +6405,7 @@
 											"top": 1329,
 											"width": 294.455078125,
 											"height": 13,
-											"text": "+RemoveAmbito(ambito: AmbitoProgetto): boolean",
+											"text": "+removeAmbito(ambito: AmbitoProgetto): boolean",
 											"horizontalAlignment": 0
 										}
 									],
@@ -6603,7 +6603,7 @@
 											"top": 1557,
 											"width": 429.5712890625,
 											"height": 13,
-											"text": "-getAmbiti: PreparedStatement",
+											"text": "-getAmbitiPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6620,7 +6620,7 @@
 											"top": 1572,
 											"width": 429.5712890625,
 											"height": 13,
-											"text": "-addAmbito: PreparedStatement",
+											"text": "-addAmbitoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6637,7 +6637,7 @@
 											"top": 1587,
 											"width": 429.5712890625,
 											"height": 13,
-											"text": "-removeAmbito: PreparedStatement",
+											"text": "-removeAmbitoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										}
 									],
@@ -6962,7 +6962,7 @@
 											"top": 1291,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+GetMeetingsByData(data: JavaDate): ArrayList<Meeting>",
+											"text": "+getMeetingsByData(data: JavaDate): ArrayList<Meeting>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6979,7 +6979,7 @@
 											"top": 1306,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+GetMeetingsOrganizzati(org: Dipendente): ArrayList<Meeting>",
+											"text": "+getMeetingsOrganizzati(org: Dipendente): ArrayList<Meeting>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6996,7 +6996,7 @@
 											"top": 1321,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+GetMeetingsByInvitato(dip: Dipendente): ArrayList<Meeting>",
+											"text": "+getMeetingsByInvitato(dip: Dipendente): ArrayList<Meeting>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7013,7 +7013,7 @@
 											"top": 1336,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+GetInvitati(meeting: Meeting): ArrayList<Dipendente>",
+											"text": "+getInvitati(meeting: Meeting): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7030,7 +7030,7 @@
 											"top": 1351,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+AddMeeting(meeting: Meeting): boolean",
+											"text": "+addMeeting(meeting: Meeting): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7047,7 +7047,7 @@
 											"top": 1366,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+RemoveMeeting(meeting: Meeting): boolean",
+											"text": "+removeMeeting(meeting: Meeting): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7064,7 +7064,7 @@
 											"top": 1381,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+UpdateMeeting(meeting: Meeting): boolean",
+											"text": "+updateMeeting(meeting: Meeting): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7081,7 +7081,7 @@
 											"top": 1396,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+GetMeetingsBySala(sala: SalaRiunione): ArrayList<Meeting>",
+											"text": "+getMeetingsBySala(sala: SalaRiunione): ArrayList<Meeting>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7098,7 +7098,7 @@
 											"top": 1411,
 											"width": 368.15771484375,
 											"height": 13,
-											"text": "+GetMeetingByPiattaforma(platf: String): ArrayList<Meeting>",
+											"text": "+getMeetingByPiattaforma(platf: String): ArrayList<Meeting>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -7296,7 +7296,7 @@
 											"top": 1573,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-getMeetingsByData: PreparedStatement",
+											"text": "-getMeetingsByDataPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7313,7 +7313,7 @@
 											"top": 1588,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-getMeetingsOrganizzati: PreparedStatement",
+											"text": "-getMeetingsOrganizzatiPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7330,7 +7330,7 @@
 											"top": 1603,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-getMeetingsByInvitato: PreparedStatement",
+											"text": "-getMeetingsByInvitatoPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7347,7 +7347,7 @@
 											"top": 1618,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-getInvitati: PreparedStatement",
+											"text": "-getInvitatiPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7364,7 +7364,7 @@
 											"top": 1633,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-addMeeting: PreparedStatement",
+											"text": "-addMeetingPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7381,7 +7381,7 @@
 											"top": 1648,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-removeMeeting: PreparedStatement",
+											"text": "-removeMeetingPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7398,7 +7398,7 @@
 											"top": 1663,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-updateMeeting: PreparedStatement",
+											"text": "-updateMeetingPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7415,7 +7415,7 @@
 											"top": 1678,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-getMeetingsBySala: PreparedStatement",
+											"text": "-getMeetingsBySalaPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7432,7 +7432,7 @@
 											"top": 1693,
 											"width": 342.8623046875,
 											"height": 13,
-											"text": "-getMeetingsByPiattaforma: PreparedStatement",
+											"text": "-getMeetingsByPiattaformaPS: PreparedStatement",
 											"horizontalAlignment": 0
 										}
 									],
@@ -7757,7 +7757,7 @@
 											"top": 1291,
 											"width": 497.25634765625,
 											"height": 13,
-											"text": "+GetSale(): ArrayList<SalaRiunione>",
+											"text": "+getSale(): ArrayList<SalaRiunione>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7774,7 +7774,7 @@
 											"top": 1306,
 											"width": 497.25634765625,
 											"height": 13,
-											"text": "+GetSaleByCap(cap: int): ArrayList<SalaRIunione>",
+											"text": "+getSaleByCap(cap: int): ArrayList<SalaRIunione>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7791,7 +7791,7 @@
 											"top": 1321,
 											"width": 497.25634765625,
 											"height": 13,
-											"text": "+GetSaleLibere(inizio: LocalDateTime, fine: LocalDateTime): ArrayList<SalaRIunione>",
+											"text": "+getSaleLibere(inizio: LocalDateTime, fine: LocalDateTime): ArrayList<SalaRIunione>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7808,7 +7808,7 @@
 											"top": 1336,
 											"width": 497.25634765625,
 											"height": 13,
-											"text": "+AddSala(sala: SalaRiunione): boolean",
+											"text": "+addSala(sala: SalaRiunione): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7825,7 +7825,7 @@
 											"top": 1351,
 											"width": 497.25634765625,
 											"height": 13,
-											"text": "+UpdateSala(sala: SalaRiunione): boolean",
+											"text": "+updateSala(sala: SalaRiunione): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7842,7 +7842,7 @@
 											"top": 1366,
 											"width": 497.25634765625,
 											"height": 13,
-											"text": "+RemoveSala(sala: SalaRiunione): boolean",
+											"text": "+removeSala(sala: SalaRiunione): boolean",
 											"horizontalAlignment": 0
 										}
 									],
@@ -8040,7 +8040,7 @@
 											"top": 1605,
 											"width": 405.03125,
 											"height": 13,
-											"text": "-getSale: PreparedStatement",
+											"text": "-getSalePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8057,7 +8057,7 @@
 											"top": 1620,
 											"width": 405.03125,
 											"height": 13,
-											"text": "-getSaleByCap: PreparedStatement",
+											"text": "-getSaleByCapPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8074,7 +8074,7 @@
 											"top": 1635,
 											"width": 405.03125,
 											"height": 13,
-											"text": "-getSaleLibere: PreparedStatement",
+											"text": "-getSaleLiberePS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8091,7 +8091,7 @@
 											"top": 1650,
 											"width": 405.03125,
 											"height": 13,
-											"text": "-addSala: PreparedStatement",
+											"text": "-addSalaPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8108,7 +8108,7 @@
 											"top": 1665,
 											"width": 405.03125,
 											"height": 13,
-											"text": "-updateSala: PreparedStatement",
+											"text": "-updateSalaPS: PreparedStatement",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8125,7 +8125,7 @@
 											"top": 1680,
 											"width": 405.03125,
 											"height": 13,
-											"text": "-removeSala: PreparedStatement",
+											"text": "-removeSalaPS: PreparedStatement",
 											"horizontalAlignment": 0
 										}
 									],
@@ -10677,275 +10677,6 @@
 							"headQualifiersCompartment": {
 								"$ref": "AAAAAAF2rZVvGJ8DFog="
 							}
-						},
-						{
-							"_type": "UMLAssociationView",
-							"_id": "AAAAAAF2uEclf9/qndU=",
-							"_parent": {
-								"$ref": "AAAAAAFF+qBtyKM79qY="
-							},
-							"model": {
-								"$ref": "AAAAAAF2uEclft/mUIU="
-							},
-							"subViews": [
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/ruR0=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/mUIU="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 877,
-									"top": 1337,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"edgePosition": 1
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/sk1s=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/mUIU="
-									},
-									"visible": null,
-									"font": "Arial;13;0",
-									"left": 878,
-									"top": 1322,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"edgePosition": 1
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/tLsk=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/mUIU="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 876,
-									"top": 1366,
-									"height": 13,
-									"alpha": -1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"edgePosition": 1
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/unqE=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/n274="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 885,
-									"top": 1337,
-									"height": 13,
-									"alpha": 0.5235987755982988,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"edgePosition": 2
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/v5Mw=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/n274="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 888,
-									"top": 1324,
-									"height": 13,
-									"alpha": 0.7853981633974483,
-									"distance": 40,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"edgePosition": 2
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/w/Vs=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/n274="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 880,
-									"top": 1365,
-									"height": 13,
-									"alpha": -0.5235987755982988,
-									"distance": 25,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"edgePosition": 2
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/xcvU=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/oHyk="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 869,
-									"top": 1337,
-									"height": 13,
-									"alpha": -0.5235987755982988,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									}
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/y9XI=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/oHyk="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 867,
-									"top": 1323,
-									"height": 13,
-									"alpha": -0.7853981633974483,
-									"distance": 40,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									}
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAF2uEclf9/zY18=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/oHyk="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 873,
-									"top": 1364,
-									"height": 13,
-									"alpha": 0.5235987755982988,
-									"distance": 25,
-									"hostEdge": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									}
-								},
-								{
-									"_type": "UMLQualifierCompartmentView",
-									"_id": "AAAAAAF2uEclf9/0wO8=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/n274="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"width": 10,
-									"height": 10
-								},
-								{
-									"_type": "UMLQualifierCompartmentView",
-									"_id": "AAAAAAF2uEclf9/1zu8=",
-									"_parent": {
-										"$ref": "AAAAAAF2uEclf9/qndU="
-									},
-									"model": {
-										"$ref": "AAAAAAF2uEclft/oHyk="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"width": 10,
-									"height": 10
-								}
-							],
-							"font": "Arial;13;0",
-							"head": {
-								"$ref": "AAAAAAF2qQTlLBnSFGQ="
-							},
-							"tail": {
-								"$ref": "AAAAAAF2qRObIBtNvWQ="
-							},
-							"lineStyle": 1,
-							"points": "859:1358;895:1359",
-							"showVisibility": true,
-							"nameLabel": {
-								"$ref": "AAAAAAF2uEclf9/ruR0="
-							},
-							"stereotypeLabel": {
-								"$ref": "AAAAAAF2uEclf9/sk1s="
-							},
-							"propertyLabel": {
-								"$ref": "AAAAAAF2uEclf9/tLsk="
-							},
-							"tailRoleNameLabel": {
-								"$ref": "AAAAAAF2uEclf9/unqE="
-							},
-							"tailPropertyLabel": {
-								"$ref": "AAAAAAF2uEclf9/v5Mw="
-							},
-							"tailMultiplicityLabel": {
-								"$ref": "AAAAAAF2uEclf9/w/Vs="
-							},
-							"headRoleNameLabel": {
-								"$ref": "AAAAAAF2uEclf9/xcvU="
-							},
-							"headPropertyLabel": {
-								"$ref": "AAAAAAF2uEclf9/y9XI="
-							},
-							"headMultiplicityLabel": {
-								"$ref": "AAAAAAF2uEclf9/zY18="
-							},
-							"tailQualifiersCompartment": {
-								"$ref": "AAAAAAF2uEclf9/0wO8="
-							},
-							"headQualifiersCompartment": {
-								"$ref": "AAAAAAF2uEclf9/1zu8="
-							}
 						}
 					]
 				},
@@ -11209,7 +10940,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2ljsE3KuPkeg="
 							},
-							"name": "GeneraCF",
+							"name": "generaCF",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -11228,7 +10959,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2ljsE3KuPkeg="
 							},
-							"name": "CFNomeCognome",
+							"name": "cfNomeCognome",
 							"visibility": "private",
 							"parameters": [
 								{
@@ -11248,7 +10979,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2ljsE3KuPkeg="
 							},
-							"name": "ConvertiMese",
+							"name": "convertiMese",
 							"visibility": "private",
 							"parameters": [
 								{
@@ -11257,8 +10988,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vshIEUuaHHw="
 									},
-									"name": "String numeroMese",
-									"type": ""
+									"name": "String numeroMese"
 								},
 								{
 									"_type": "UMLParameter",
@@ -11277,7 +11007,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2ljsE3KuPkeg="
 							},
-							"name": "ConvertiDispari",
+							"name": "convertiDispari",
 							"visibility": "private",
 							"parameters": [
 								{
@@ -11286,8 +11016,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vsiIA0x91xw="
 									},
-									"name": "c char",
-									"type": ""
+									"name": "c char"
 								},
 								{
 									"_type": "UMLParameter",
@@ -11306,7 +11035,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2ljsE3KuPkeg="
 							},
-							"name": "ConvertiPari",
+							"name": "convertiPari",
 							"visibility": "private",
 							"parameters": [
 								{
@@ -11315,8 +11044,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vsjkhk1gZPM="
 									},
-									"name": "c char",
-									"type": ""
+									"name": "c char"
 								},
 								{
 									"_type": "UMLParameter",
@@ -11335,7 +11063,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2ljsE3KuPkeg="
 							},
-							"name": "CarattereControllo",
+							"name": "carattereControllo",
 							"visibility": "private",
 							"parameters": [
 								{
@@ -11344,8 +11072,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF2vskLh05D9h4="
 									},
-									"name": "String tempCF",
-									"type": ""
+									"name": "String tempCF"
 								},
 								{
 									"_type": "UMLParameter",
@@ -11990,7 +11717,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQBHuhheIyk="
 							},
-							"name": "GetSkills",
+							"name": "getSkills",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12009,7 +11736,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQBHuhheIyk="
 							},
-							"name": "GetSkillByNome",
+							"name": "getSkillByNome",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12039,7 +11766,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQBHuhheIyk="
 							},
-							"name": "AddSkill",
+							"name": "addSkill",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12104,7 +11831,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQF5ahirvAo="
 							},
-							"name": "getSkills",
+							"name": "getSkillsPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12114,7 +11841,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQF5ahirvAo="
 							},
-							"name": "getSkillByNome",
+							"name": "getSkillByNomePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12124,7 +11851,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQF5ahirvAo="
 							},
-							"name": "addSkill",
+							"name": "addSkillPS",
 							"type": "PreparedStatement"
 						}
 					],
@@ -12183,7 +11910,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "GetDipendenti",
+							"name": "getDipendenti",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12202,7 +11929,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "GetDipendentiByEtà",
+							"name": "getDipendentiByEtà",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12221,7 +11948,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "GetValutazione",
+							"name": "getValutazione",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12249,7 +11976,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "GetDipendenteByValutazione",
+							"name": "getDipendenteByValutazione",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12277,7 +12004,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "GetDipendentiBySalario",
+							"name": "getDipendentiBySalario",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12314,7 +12041,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "GetDipendentiBySkill",
+							"name": "getDipendentiBySkill",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12344,7 +12071,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "AddDipendente",
+							"name": "addDipendente",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12374,7 +12101,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "UpdateDipendente",
+							"name": "updateDipendente",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12404,7 +12131,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "LoginCheck",
+							"name": "loginCheck",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12443,7 +12170,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQTlLBnQmig="
 							},
-							"name": "GetDipendenteByCF",
+							"name": "getDipendenteByCF",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12508,7 +12235,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "getDipendenti",
+							"name": "getDipendentiPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12518,7 +12245,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "getDipendentiByEtà",
+							"name": "getDipendentiByEtàPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12528,7 +12255,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "getValutazione",
+							"name": "getValutazionePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12538,7 +12265,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "getDipendenteByValutazione",
+							"name": "getDipendenteByValutazionePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12548,7 +12275,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "getDipendentiBySalario",
+							"name": "getDipendentiBySalarioPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12558,7 +12285,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "getDipendentiBySkill",
+							"name": "getDipendentiBySkillPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12568,7 +12295,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "addDipendente",
+							"name": "addDipendentePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12578,7 +12305,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "updateDipendente",
+							"name": "updateDipendentePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12588,7 +12315,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "loginCheck",
+							"name": "loginCheckPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12598,7 +12325,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qQe6Sxqd0sI="
 							},
-							"name": "getDipendenteByCF",
+							"name": "getDipendenteByCFPS",
 							"type": "PreparedStatement"
 						}
 					],
@@ -12678,7 +12405,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRObHxtL17U="
 							},
-							"name": "GetProvince",
+							"name": "getProvince",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12697,7 +12424,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRObHxtL17U="
 							},
-							"name": "GetLuoghiByProvincia",
+							"name": "getLuoghiByProvincia",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12725,7 +12452,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRObHxtL17U="
 							},
-							"name": "GetDipendentiByLuogo",
+							"name": "getDipendentiByLuogo",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12755,7 +12482,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRObHxtL17U="
 							},
-							"name": "GetLuogoByCod",
+							"name": "getLuogoByCod",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12820,7 +12547,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRSozBu8lGc="
 							},
-							"name": "getProvince",
+							"name": "getProvincePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12830,7 +12557,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRSozBu8lGc="
 							},
-							"name": "getLuoghiByProvincia",
+							"name": "getLuoghiByProvinciaPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12840,7 +12567,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRSozBu8lGc="
 							},
-							"name": "getDipendentiByLuogo",
+							"name": "getDipendentiByLuogoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -12850,7 +12577,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRSozBu8lGc="
 							},
-							"name": "getLuogoByCod",
+							"name": "getLuogoByCodPS",
 							"type": "PreparedStatement"
 						}
 					],
@@ -12901,7 +12628,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "GetProgetti",
+							"name": "getProgetti",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12920,7 +12647,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "GetPartecipanti",
+							"name": "getPartecipanti",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12950,7 +12677,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "GetMeetingRelativi",
+							"name": "getMeetingRelativi",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -12980,7 +12707,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "GetProgettiByDipendente",
+							"name": "getProgettiByDipendente",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13010,7 +12737,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "GetProgettiByCreatore",
+							"name": "getProgettiByCreatore",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13040,7 +12767,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "GetProgettiByAmbito",
+							"name": "getProgettiByAmbito",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13070,7 +12797,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "GetProgettiByTipo",
+							"name": "getProgettiByTipo",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13098,7 +12825,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "AddProgetto",
+							"name": "addProgetto",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13128,7 +12855,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "DeleteProgetto",
+							"name": "deleteProgetto",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13158,7 +12885,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "AddPartecipante",
+							"name": "addPartecipante",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13188,7 +12915,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "DeletePartecipante",
+							"name": "deletePartecipante",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13218,7 +12945,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRbcERwcU2M="
 							},
-							"name": "UpdateProgetto",
+							"name": "updateProgetto",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13283,7 +13010,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "getProgetti",
+							"name": "getProgettiPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13293,7 +13020,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "getMeetingRelativi",
+							"name": "getMeetingRelativiPS",
 							"visibility": "private",
 							"type": "PrearedStatement"
 						},
@@ -13303,7 +13030,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "getPartecipanti",
+							"name": "getPartecipantiPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13313,7 +13040,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "getProgettiByDipendente",
+							"name": "getProgettiByDipendentePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13323,7 +13050,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "getProgettiByCreatore",
+							"name": "getProgettiByCreatorePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13333,7 +13060,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "getProgettiByAmbito",
+							"name": "getProgettiByAmbitoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13343,7 +13070,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "getProgettiByTipo",
+							"name": "getProgettiByTipoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13353,7 +13080,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "addProgetto",
+							"name": "addProgettoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13363,7 +13090,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "deleteProgetto",
+							"name": "deleteProgettoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13373,7 +13100,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "updateProgetto",
+							"name": "updateProgettoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13383,7 +13110,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "addPartecipante",
+							"name": "addPartecipantePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13393,7 +13120,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qRpM1h0CiBo="
 							},
-							"name": "deletePartecipante",
+							"name": "deletePartecipantePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						}
@@ -13445,7 +13172,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qR7u7B2stBw="
 							},
-							"name": "GetAmbiti",
+							"name": "getAmbiti",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13464,7 +13191,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qR7u7B2stBw="
 							},
-							"name": "AddAmbito",
+							"name": "addAmbito",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13494,7 +13221,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qR7u7B2stBw="
 							},
-							"name": "RemoveAmbito",
+							"name": "removeAmbito",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13559,7 +13286,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qR/TfR4bUNA="
 							},
-							"name": "getAmbiti",
+							"name": "getAmbitiPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13569,7 +13296,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qR/TfR4bUNA="
 							},
-							"name": "addAmbito",
+							"name": "addAmbitoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13579,7 +13306,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qR/TfR4bUNA="
 							},
-							"name": "removeAmbito",
+							"name": "removeAmbitoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						}
@@ -13631,7 +13358,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "GetMeetingsByData",
+							"name": "getMeetingsByData",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13659,7 +13386,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "GetMeetingsOrganizzati",
+							"name": "getMeetingsOrganizzati",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13689,7 +13416,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "GetMeetingsByInvitato",
+							"name": "getMeetingsByInvitato",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13719,7 +13446,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "GetInvitati",
+							"name": "getInvitati",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13749,7 +13476,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "AddMeeting",
+							"name": "addMeeting",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13779,7 +13506,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "RemoveMeeting",
+							"name": "removeMeeting",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13809,7 +13536,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "UpdateMeeting",
+							"name": "updateMeeting",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13839,7 +13566,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "GetMeetingsBySala",
+							"name": "getMeetingsBySala",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13869,7 +13596,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSHA6R5/sWk="
 							},
-							"name": "GetMeetingByPiattaforma",
+							"name": "getMeetingByPiattaforma",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13932,7 +13659,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "getMeetingsByData",
+							"name": "getMeetingsByDataPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13942,7 +13669,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "getMeetingsOrganizzati",
+							"name": "getMeetingsOrganizzatiPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13952,7 +13679,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "getMeetingsByInvitato",
+							"name": "getMeetingsByInvitatoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13962,7 +13689,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "getInvitati",
+							"name": "getInvitatiPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13972,7 +13699,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "addMeeting",
+							"name": "addMeetingPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13982,7 +13709,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "removeMeeting",
+							"name": "removeMeetingPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -13992,7 +13719,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "updateMeeting",
+							"name": "updateMeetingPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -14002,7 +13729,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "getMeetingsBySala",
+							"name": "getMeetingsBySalaPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -14012,7 +13739,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSTcZh9ONtI="
 							},
-							"name": "getMeetingsByPiattaforma",
+							"name": "getMeetingsByPiattaformaPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						}
@@ -14064,7 +13791,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSgPgCAu3Dc="
 							},
-							"name": "GetSale",
+							"name": "getSale",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -14083,7 +13810,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSgPgCAu3Dc="
 							},
-							"name": "GetSaleByCap",
+							"name": "getSaleByCap",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -14111,7 +13838,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSgPgCAu3Dc="
 							},
-							"name": "GetSaleLibere",
+							"name": "getSaleLibere",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -14148,7 +13875,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSgPgCAu3Dc="
 							},
-							"name": "AddSala",
+							"name": "addSala",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -14178,7 +13905,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSgPgCAu3Dc="
 							},
-							"name": "UpdateSala",
+							"name": "updateSala",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -14208,7 +13935,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSgPgCAu3Dc="
 							},
-							"name": "RemoveSala",
+							"name": "removeSala",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -14273,7 +14000,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSnglyDPo3Q="
 							},
-							"name": "getSale",
+							"name": "getSalePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -14283,7 +14010,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSnglyDPo3Q="
 							},
-							"name": "getSaleByCap",
+							"name": "getSaleByCapPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -14293,7 +14020,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSnglyDPo3Q="
 							},
-							"name": "getSaleLibere",
+							"name": "getSaleLiberePS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -14303,7 +14030,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSnglyDPo3Q="
 							},
-							"name": "addSala",
+							"name": "addSalaPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -14313,7 +14040,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSnglyDPo3Q="
 							},
-							"name": "updateSala",
+							"name": "updateSalaPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						},
@@ -14323,7 +14050,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2qSnglyDPo3Q="
 							},
-							"name": "removeSala",
+							"name": "removeSalaPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						}

@@ -46,7 +46,7 @@ public class ManagerConnessioneDB {
 	
 	//Metodo getter della connessione GetConnection(): Connection
 	/*Restituisce semplicemente la connessione al DB creata dal ManagerConnessioneDB.*/
-	public Connection GetConnection()
+	public Connection getConnection()
 	{
 		return connection;
 	}
@@ -55,12 +55,12 @@ public class ManagerConnessioneDB {
 	/*Metodo static e public. Quando viene chiamato restituisce l'istanza del ManagerConnessioneDB
 	*(e quindi volendo la connessione creata al DB) se l'istanza già esiste e la connessione è aperta,
 	*altrimenti la definisce sul posto.*/
-	public static ManagerConnessioneDB GetInstance() throws SQLException
+	public static ManagerConnessioneDB getInstance() throws SQLException
 	{
 		if (instance==null)	//se l'istanza non esiste ne crea una (e stabilisce una connessione al DB)
 			instance = new ManagerConnessioneDB();
 		else
-			if (instance.GetConnection().isClosed())	//se l'istanza esiste ma la connessione è chiusa la riapre creando una nuova istanza
+			if (instance.getConnection().isClosed())	//se l'istanza esiste ma la connessione è chiusa la riapre creando una nuova istanza
 				instance = new ManagerConnessioneDB();
 		
 		return instance;

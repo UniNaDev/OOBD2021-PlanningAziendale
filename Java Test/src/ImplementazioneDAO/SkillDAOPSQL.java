@@ -25,7 +25,7 @@ public class SkillDAOPSQL implements SkillDAO {
 	//ATTRIBUTI
 	
 	private Connection conn;	//connessione al DB
-	private PreparedStatement getSkills,getSkillsByNome,addSkill;	//PreparedStatement per operazioni rapide sul DB
+	private PreparedStatement getSkillsPS,getSkillsByNomePS,addSkillPS;	//PreparedStatement per operazioni rapide sul DB
 	
 	//METODI
 	
@@ -35,9 +35,9 @@ public class SkillDAOPSQL implements SkillDAO {
 	public SkillDAOPSQL(Connection connection) throws SQLException {
 		this.conn = connection;	//ottiene la connessione
 		
-		getSkills = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");	//statement per chiedere al DB tutte le skill
-		getSkillsByNome = conn.prepareStatement("SELECT * FROM Skill WHERE Skill.NomeSkill = ?");	//statement per chiedere al DB tutte le skill con un nome specifico
-		addSkill = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");	//statement per inserire una nuova Skill nel DB
+		getSkillsPS = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");	//statement per chiedere al DB tutte le skill
+		getSkillsByNomePS = conn.prepareStatement("SELECT * FROM Skill WHERE Skill.NomeSkill = ?");	//statement per chiedere al DB tutte le skill con un nome specifico
+		addSkillPS = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");	//statement per inserire una nuova Skill nel DB
 	}
 	
 	//Metodo GetSkills.
@@ -45,8 +45,8 @@ public class SkillDAOPSQL implements SkillDAO {
 	*in un ArrayList temporaneo (temp:ArrayList<Skill>) che alla fine restituisce.
 	*Ottiene la lista di tutte le skill nel DB in ordine alfabetico.*/
 	@Override
-	public ArrayList<Skill> GetSkills() throws SQLException {
-		ResultSet risultato = getSkills.executeQuery();	//esegue la query per ottenere il ResultSet
+	public ArrayList<Skill> getSkills() throws SQLException {
+		ResultSet risultato = getSkillsPS.executeQuery();	//esegue la query per ottenere il ResultSet
 		ArrayList<Skill> temp = new ArrayList<Skill>();	//inizializza l'ArrayList di Skill
 		
 		//finchè ci sono elementi nel ResultSet crea un nuovo oggetto Skill con i dati ottenuti e lo aggiunge alla lista
@@ -63,10 +63,10 @@ public class SkillDAOPSQL implements SkillDAO {
 	/*Interroga il DB attraverso getSKillsByNome:PreparedStatement e salva il ResultSet ottenuto
 	*in una skill temporanea che alla fine restituisce.*/
 	@Override
-	public Skill GetSkillByNome(String nome) throws SQLException {
-		getSkillsByNome.setString(1, nome);	//inserisce il parametro nome nella query
+	public Skill getSkillByNome(String nome) throws SQLException {
+		getSkillsByNomePS.setString(1, nome);	//inserisce il parametro nome nella query
 		
-		ResultSet risultato = getSkillsByNome.executeQuery();	//esegue la query per ottenere il ResultSet
+		ResultSet risultato = getSkillsByNomePS.executeQuery();	//esegue la query per ottenere il ResultSet
 		risultato.next();
 		Skill tempSkill = new Skill(risultato.getInt(1),risultato.getString(2));
 		risultato.close();	//chiude il ResultSet
@@ -78,10 +78,10 @@ public class SkillDAOPSQL implements SkillDAO {
 	/*Inserisce nel DB una nuova Skill attraverso addSkill:PreparedStatement.
 	*Restituisce true se l'insert ha avuto successo, altrimenti restituisce false.*/
 	@Override
-	public boolean AddSkill(Skill skill) throws SQLException {
-		addSkill.setString(1, skill.getNomeSkill());	//inserisce il nome della nuova skill nello statement
+	public boolean addSkill(Skill skill) throws SQLException {
+		addSkillPS.setString(1, skill.getNomeSkill());	//inserisce il nome della nuova skill nello statement
 		
-		int record = addSkill.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1)
+		int record = addSkillPS.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1)
 		
 		//se il record aggiunto è 1 allora l'insert ha avuto successo, altrimenti no
 		if (record == 1)

@@ -71,12 +71,12 @@ public class Dipendente {
 	}
 	
 	//Metodo che genera il codice fiscale di un dipendente partendo dai suoi dati anagrafici
-	public String GeneraCF() {
-		String temp = CFNomeCognome();	//genera i primi 6 caratteri per nome e cognome (es: LMMNDR)
+	public String generaCF() {
+		String temp = cfNomeCognome();	//genera i primi 6 caratteri per nome e cognome (es: LMMNDR)
 		
 		temp += String.valueOf(dataNascita.getYear()).substring(2);	//aggiunge l'anno al CF nei 2 caratteri successivi (es: LMMNDR95)
 		
-		temp += ConvertiMese(String.valueOf(dataNascita.getMonthOfYear()));	//aggiunge il mese al CF nel carattere successivo (es: LMMNDR95P)
+		temp += convertiMese(String.valueOf(dataNascita.getMonthOfYear()));	//aggiunge il mese al CF nel carattere successivo (es: LMMNDR95P)
 		
 		//aggiunge il giorno della data di nascita nei due caratteri successivi e aggiunge 40 al se è femmina (es: LMMNDR95P16)
 		if (this.sesso == 'M')
@@ -86,7 +86,7 @@ public class Dipendente {
 		
 		temp += luogoNascita.getCodiceComune();	//aggiunge il codice del comune in cui è nato (es: LMMNDR95P16F839)
 		
-		temp += CarattereControllo(temp);	//aggiunge il carattere di controllo (es: LMMNDR95P16F839I)
+		temp += carattereControllo(temp);	//aggiunge il carattere di controllo (es: LMMNDR95P16F839I)
 		
 		return temp;
 	}
@@ -193,7 +193,7 @@ public class Dipendente {
 		return valutazione;
 	}
 
-	//ToString
+	//toString
 	@Override
 	public String toString() {
 		return "Dipendente [cf=" + cf + ", nome=" + nome + ", cognome=" + cognome + ", sesso=" + sesso
@@ -203,7 +203,7 @@ public class Dipendente {
 	}
 	
 	//Metodo che calcola la stringa di caratteri del codice fiscale corrispondente a cognome e nome
-	private String CFNomeCognome() {
+	private String cfNomeCognome() {
 		//setta in maiuscolo nome e cognome del dipendente
 		String nomeUp = this.nome.toUpperCase();
 		String cognomeUp = this.cognome.toUpperCase();
@@ -274,7 +274,7 @@ public class Dipendente {
 	}
 	
 	//Metodo che converte il mese di nascita nel carattere corrispondente per il codice fiscale
-	private String ConvertiMese(String numeroMese) {
+	private String convertiMese(String numeroMese) {
 		String temp = "";
 		
 		switch(numeroMese) {
@@ -320,7 +320,7 @@ public class Dipendente {
 	}
 	
 	//Metodo che converte i caratteri di posto pari del codice fiscale secondo una specifica tabella
-	private int ConvertiDispari(char c) {
+	private int convertiDispari(char c) {
 		int carattereConvertito = 0;
 		
 		if(c == '0')
@@ -400,7 +400,7 @@ public class Dipendente {
 	}
 	
 	//Metodo che converte i caratteri di posto dispari del codice fiscale secondo una specifica tabella
-	private int ConvertiPari(char c) {
+	private int convertiPari(char c) {
 		int carattereConvertito = 0;
 		
 		if(c == '0')
@@ -480,7 +480,7 @@ public class Dipendente {
 	}
 	
 	//Metodo che calcola il carattere di controllo del codice fiscale
-	private char CarattereControllo(String tempCF) {
+	private char carattereControllo(String tempCF) {
 		char temp = ' ';	//inizializza il carattere di controllo
 		
 		int sommaDispari = 0, sommaPari = 0;	//inizializza le somme dei valori dei caratteri di posto pari/dispari
@@ -489,10 +489,10 @@ public class Dipendente {
 		for (int i = 0; i < tempCF.length(); i++) {
 			//controlla se il suo posto è pari o dispari
 			if (i%2 == 1) {
-				sommaPari += ConvertiPari(tempCF.charAt(i)); //conversione di un carattere dispari e aggiornamento della somma dei caratteri dispari
+				sommaPari += convertiPari(tempCF.charAt(i)); //conversione di un carattere dispari e aggiornamento della somma dei caratteri dispari
 			}
 			else {
-				sommaDispari += ConvertiDispari(tempCF.charAt(i)); //conversione di un carattere pari e aggiornamento della somma dei caratteri pari
+				sommaDispari += convertiDispari(tempCF.charAt(i)); //conversione di un carattere pari e aggiornamento della somma dei caratteri pari
 			}
 		}
 		

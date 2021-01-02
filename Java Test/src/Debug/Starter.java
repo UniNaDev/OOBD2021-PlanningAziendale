@@ -35,8 +35,8 @@ public class Starter {
 		try 
 		{
 			//Test connessione******************************
-			connDB = ManagerConnessioneDB.GetInstance();
-			connection = connDB.GetConnection();
+			connDB = ManagerConnessioneDB.getInstance();
+			connection = connDB.getConnection();
 			System.out.println("Connessione riuscita");
 			/**********************************************/
 			
@@ -45,7 +45,7 @@ public class Starter {
 			ArrayList<Skill> skills = new ArrayList<Skill>();
 			
 			//Ottieni tutte le skill
-			skills = skillDAO.GetSkills();
+			skills = skillDAO.getSkills();
 			System.out.println("Tutte le skill:");
 			for(Skill s: skills)
 				System.out.println(s.toString());
@@ -53,7 +53,7 @@ public class Starter {
 			//Ottieni la skill di nome Group
 			String nomeSkill = "Group";
 			System.out.println("Skill che hanno un nome come " + nomeSkill);
-			Skill skill = skillDAO.GetSkillByNome(nomeSkill);
+			Skill skill = skillDAO.getSkillByNome(nomeSkill);
 			System.out.println(skill.toString());
 			
 			//Inserisci una nuova skill
@@ -69,21 +69,21 @@ public class Starter {
 			ArrayList<LuogoNascita> luoghi = new ArrayList<LuogoNascita>();
 			
 			//Ottieni tutte le province
-			province = luogoDAO.GetProvince();
+			province = luogoDAO.getProvince();
 			System.out.println("Tutte le province:");
 			for (String pro : province)
 				System.out.println(pro);
 			
 			//Ottieni tutti i luoghi di una provincia
-			luoghi = luogoDAO.GetLuoghiByProvincia(provincia);
+			luoghi = luogoDAO.getLuoghiByProvincia(provincia);
 			System.out.println("Tutti i luoghi in provincia di " + provincia);
 			for (LuogoNascita luogo: luoghi)
 				System.out.println(luogo);
 			
 			//Ottieni dipendenti che sono nati a Napoli (NA)
-			LuogoNascita luogo = luogoDAO.GetLuogoByCod("f839");
+			LuogoNascita luogo = luogoDAO.getLuogoByCod("f839");
 			ArrayList<Dipendente> dipendenti2 = new ArrayList<Dipendente>();
-			dipendenti2 = luogoDAO.GetDipendentiByLuogo(luogo);
+			dipendenti2 = luogoDAO.getDipendentiByLuogo(luogo);
 			System.out.println("Tutti i dipendenti nati a " + luogo);
 			for (Dipendente d: dipendenti2)
 				System.out.println(d);
@@ -94,7 +94,7 @@ public class Starter {
 			ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 			
 			//Ottieni tutti i dipendenti
-			dipendenti = dipDAO.GetDipendenti();
+			dipendenti = dipDAO.getDipendenti();
 			System.out.println("Tutti i dipendenti:");
 			for (Dipendente d: dipendenti)
 				System.out.println(d);
@@ -102,14 +102,14 @@ public class Starter {
 			//Ottieni tutti i dipendenti con più di 40 anni
 			int eta = 40;
 			System.out.println("Dipendenti con età maggiore di " + eta + " anni");
-			dipendenti = dipDAO.GetDipendentiByEta(eta);
+			dipendenti = dipDAO.getDipendentiByEta(eta);
 			for (Dipendente d: dipendenti)
 				System.out.println(d);
 			
 			//Ottieni tutti i dipendenti con valutazione superiore a 7
 			float val = 7;
 			System.out.println("Dipendenti con valutazione superiore a " + val);
-			dipendenti = dipDAO.GetDipendentiByValutazione(val);
+			dipendenti = dipDAO.getDipendentiByValutazione(val);
 			for (Dipendente d: dipendenti)
 				System.out.println(d);
 			
@@ -117,13 +117,13 @@ public class Starter {
 			float min = 1000;
 			float max = 1100;
 			System.out.println("Dipendenti con salario compreso tra " + min + " e " + max + ":");
-			dipendenti = dipDAO.GetDipendentiBySalario(min,max);
+			dipendenti = dipDAO.getDipendentiBySalario(min,max);
 			for (Dipendente d: dipendenti)
 				System.out.println(d);
 			
 			//Ottieni tutti i dipendenti con la skill Group
 			System.out.println("Dipendenti con la skill " + skill + ":");
-			dipendenti = dipDAO.GetDipendentiBySkill(skill);
+			dipendenti = dipDAO.getDipendentiBySkill(skill);
 			for (Dipendente d: dipendenti)
 				System.out.println(d);
 			
@@ -131,14 +131,14 @@ public class Starter {
 			String cf = "SPSNDR02L01L259V";
 			System.out.println("Dipendente con CF " + cf);
 			Dipendente dipendente = null;
-			dipendente = dipDAO.GetDipendenteByCF(cf);
+			dipendente = dipDAO.getDipendenteByCF(cf);
 			System.out.println(dipendente);
 			
 			//Controlla login con email = m.rossi@unina.it e password=pass
 			String email = "m.rossi@unina.it";
 			String password = "pass";
 			System.out.println("Dipendente che ha fatto login con email: " + email + " e password: " + password);
-			dipendente = dipDAO.LoginCheck(email, password);
+			dipendente = dipDAO.loginCheck(email, password);
 			System.out.println(dipendente);
 			
 			//Inserisci un nuovo dipendente Giacomo Poretti
@@ -164,7 +164,7 @@ public class Starter {
 //			System.out.println("Modificato il salario del dipendente " + dipendente);
 			
 			//Genera CF del dipendente Mario Rossi
-			System.out.println(dipendente.GeneraCF());
+			System.out.println(dipendente.generaCF());
 			/****************************************************/
 			
 			//Test SalaRiunione***********************************
@@ -172,14 +172,14 @@ public class Starter {
 			ArrayList<SalaRiunione> sale = new ArrayList<SalaRiunione>();
 			
 			//Ottieni tutte le sale nel DB
-			sale = salaDAO.GetSale();
+			sale = salaDAO.getSale();
 			System.out.println("Tutte le sale riunioni:");
 			for (SalaRiunione sr : sale)
 				System.out.println(sr);
 			
 			//Ottieni sale con capienza minima 120 posti
 			int cap = 120;
-			sale = salaDAO.GetSaleByCap(cap);
+			sale = salaDAO.getSaleByCap(cap);
 			System.out.println("Tutte le sale riunioni con capienza minima " + cap);
 			for (SalaRiunione sr : sale)
 				System.out.println(sr);
@@ -189,23 +189,23 @@ public class Starter {
 			String indirizzo = "via Di Qui, 22";
 			int piano = 2;
 			SalaRiunione salaNew = new SalaRiunione(codSala,cap,indirizzo,piano);
-			if (salaDAO.AddSala(salaNew))
+			if (salaDAO.addSala(salaNew))
 				System.out.println(salaNew + " inserita");
 			
 			//Modifica della nuova sala
 			salaNew.setCap(50);
-			if (salaDAO.UpdateSala(salaNew))
+			if (salaDAO.updateSala(salaNew))
 				System.out.println(salaNew + " modificata");
 			
 			//Rimuovi la sala appena aggiunta
-			if (salaDAO.RemoveSala(salaNew))
+			if (salaDAO.removeSala(salaNew))
 				System.out.println(salaNew + " rimossa");
 			
 			//Ottieni sale libere il 21/10/2020 dalle 13:00 alle 15:00
 			LocalDateTime inizio = new LocalDateTime(2020,10,21,13,0);
 			LocalDateTime fine = new LocalDateTime(2020,10,21,15,0);
 			
-			sale = salaDAO.GetSaleLibere(inizio, fine);
+			sale = salaDAO.getSaleLibere(inizio, fine);
 			System.out.println("Tutte le sale riunioni libere dal " + inizio + " a " + fine);
 			for (SalaRiunione sr : sale)
 				System.out.println(sr);

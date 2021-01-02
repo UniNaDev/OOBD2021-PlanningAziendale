@@ -10,9 +10,8 @@ public class Skill {
 
 	//ATTRIBUTI
 	
-	int id;	//IDSkill che ha nel DB
-	
-	String nomeSkill;	//nome della skill
+	private int id;	//IDSkill che ha nel DB
+	private String nomeSkill;	//nome della skill
 
 	//METODI
 	
@@ -39,7 +38,7 @@ public class Skill {
 		this.nomeSkill = nomeSkill;
 	}
 	
-	//ToString override
+	//toString
 	@Override
 	public String toString() {
 		return "Skill " + nomeSkill;
