@@ -13,6 +13,13 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 public class Login extends JFrame {
 
@@ -26,38 +33,40 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login(ControllerScelta theController) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
+		setResizable(false);
 		
 		
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 552, 359);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
 		emailTextField = new JTextField();
-		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
-		emailTextField.setBounds(155, 103, 135, 20);
-		contentPane.add(emailTextField);
+		emailTextField.setBounds(186, 128, 173, 26);
+		emailTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		emailTextField.setColumns(10);
 		
 		JLabel emailLabel = new JLabel("Email");
-		emailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		emailLabel.setBounds(88, 106, 57, 14);
-		contentPane.add(emailLabel);
+		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		emailLabel.setBounds(200, 116, 57, 14);
+		emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel passwordLabel = new JLabel("Password");
-		passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		passwordLabel.setBounds(78, 137, 70, 14);
-		contentPane.add(passwordLabel);
+		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		passwordLabel.setBounds(200, 175, 70, 14);
+		passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		passwordField = new JPasswordField();
-		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
-		passwordField.setBounds(155, 134, 135, 20);
-		contentPane.add(passwordField);
+		passwordField.setBounds(186, 188, 173, 26);
+		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JButton accessoButton = new JButton("Accedi");
+		JButton accessoButton = new JButton("Login");
+		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		accessoButton.setBackground(new Color(255, 255, 255));
+		accessoButton.setBounds(212, 262, 121, 26);
 		accessoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theController.verificaCredenziali(emailTextField.getText(),passwordField.getText());
@@ -65,7 +74,27 @@ public class Login extends JFrame {
 				
 			}
 		});
-		accessoButton.setBounds(174, 184, 89, 23);
+		contentPane.setLayout(null);
+		contentPane.add(emailLabel);
+		contentPane.add(passwordLabel);
+		contentPane.add(passwordField);
+		contentPane.add(emailTextField);
 		contentPane.add(accessoButton);
+		
+		JLabel loginIconLabel = new JLabel("Login");
+		loginIconLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		loginIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/employee_64.png")));
+		loginIconLabel.setBounds(190, 0, 165, 88);
+		contentPane.add(loginIconLabel);
+		
+		JLabel emailIconLabel = new JLabel("");
+		emailIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/username_16.png")));
+		emailIconLabel.setBounds(186, 104, 16, 26);
+		contentPane.add(emailIconLabel);
+		
+		JLabel passwordIconLabel = new JLabel("");
+		passwordIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/password_16.png")));
+		passwordIconLabel.setBounds(186, 165, 24, 26);
+		contentPane.add(passwordIconLabel);
 	}
 }
