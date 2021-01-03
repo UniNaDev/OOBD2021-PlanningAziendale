@@ -22,10 +22,13 @@ import javax.swing.ImageIcon;
 import java.awt.ComponentOrientation;
 import java.awt.Component;
 import java.awt.Toolkit;
+import java.awt.Color;
 
 public class iPlanner extends JFrame {
 
 	private JPanel contentPane;
+	private JLabel dipendenteIscrittoLabel;
+	private JLabel nuovoDipendenteLabel;
  
 
     
@@ -43,24 +46,37 @@ public class iPlanner extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel LabelDipendenteIscritto = new JLabel("Sei un dipendente gi\u00E0 iscritto?");
-		LabelDipendenteIscritto.setFont(new Font("Consolas", Font.PLAIN, 15));
-		LabelDipendenteIscritto.setHorizontalAlignment(SwingConstants.CENTER);
+		dipendenteIscrittoLabel = new JLabel("Sei un dipendente gi\u00E0 iscritto?");
+		dipendenteIscrittoLabel.setForeground(Color.BLACK);
+		dipendenteIscrittoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		dipendenteIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		//Quando clicco sull'etichetta con il mouse mi porta alla finestra per fare il login
-		LabelDipendenteIscritto.addMouseListener(new MouseAdapter() {
+		dipendenteIscrittoLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
 				theController.LinkToLoginFrame();
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				//quando passa sopra con il mouse il colore cambia in grigio
+				dipendenteIscrittoLabel.setForeground(Color.GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				//quando il mouse si sposta il colore ritorna nero
+				dipendenteIscrittoLabel.setForeground(Color.BLACK);
+			}
 		});
 		
 		
-		JLabel LabelNuovoDipendente = new JLabel("Sei un nuovo dipendente?");
-		LabelNuovoDipendente.setFont(new Font("Consolas", Font.PLAIN, 14));
-		LabelNuovoDipendente.setHorizontalAlignment(SwingConstants.CENTER);
+		nuovoDipendenteLabel = new JLabel("Sei un nuovo dipendente?");
+		nuovoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		nuovoDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel welcomeLabel = new JLabel("Welcome to iPlanner");
 		welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -82,7 +98,7 @@ public class iPlanner extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(295)
-					.addComponent(LabelNuovoDipendente, GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+					.addComponent(nuovoDipendenteLabel, GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
 					.addGap(285))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(167)
@@ -90,7 +106,7 @@ public class iPlanner extends JFrame {
 					.addGap(158))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(258)
-					.addComponent(LabelDipendenteIscritto, GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+					.addComponent(dipendenteIscrittoLabel, GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
 					.addGap(248))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(369)
@@ -109,9 +125,9 @@ public class iPlanner extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
 					.addComponent(employeeIconLabel)
 					.addGap(18)
-					.addComponent(LabelDipendenteIscritto, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+					.addComponent(dipendenteIscrittoLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(LabelNuovoDipendente, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+					.addComponent(nuovoDipendenteLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
 					.addGap(120)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(createdByLabel)
@@ -120,11 +136,23 @@ public class iPlanner extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		
 		//Quando clicco sull'etichetta con il mouse mi porta alla finestra per creare un nuovo utente
-		LabelNuovoDipendente.addMouseListener(new MouseAdapter() {
+		nuovoDipendenteLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
 				theController.LinkToCreationFrame();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				//quando passa sopra con il mouse il colore cambia in grigio
+				nuovoDipendenteLabel.setForeground(Color.GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				//quando il mouse si sposta il colore ritorna nero
+				nuovoDipendenteLabel.setForeground(Color.BLACK);
 			}
 		});
 
