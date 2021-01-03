@@ -133,7 +133,7 @@ CREATE TABLE Meeting(
 	
 	PRIMARY KEY(IDMeeting),
 	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),
-	CONSTRAINT OrarioValidoMeeting CHECK(OrarioInizio < OrarioFine),
+	CONSTRAINT OrarioValidoMeeting CHECK(OrarioInizio < OrarioFine AND DataInizio = DataFine),
 	CONSTRAINT ModalitàRiunione CHECK ((Modalità='Telematico' AND Piattaforma IS NOT NULL AND CodSala IS NULL) OR (Modalità = 'Fisico' AND Piattaforma IS NULL AND CodSala IS NOT NULL)),
 	
 	
