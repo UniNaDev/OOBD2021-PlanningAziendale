@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.border.MatteBorder;
 
 public class Login extends JFrame {
 
@@ -31,34 +32,42 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login(ControllerAccesso theController) {
+		setResizable(false);
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 552, 359);
+		setBounds(100, 100, 750, 440);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		emailTextField = new JTextField();
+		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		emailTextField.setBounds(285, 133, 173, 26);
 		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		emailTextField.setColumns(10);
 		
 		JLabel emailLabel = new JLabel("Email");
+		emailLabel.setBounds(300, 120, 57, 14);
 		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel passwordLabel = new JLabel("Password");
+		passwordLabel.setBounds(301, 182, 70, 14);
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		passwordField = new JPasswordField();
+		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		passwordField.setBounds(285, 193, 173, 26);
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		JButton accessoButton = new JButton("Login");
+		accessoButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		accessoButton.setBounds(311, 267, 121, 26);
 		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		accessoButton.setBackground(new Color(255, 255, 255));
 		accessoButton.addActionListener(new ActionListener() {
@@ -70,66 +79,37 @@ public class Login extends JFrame {
 		});
 		
 		JLabel loginIconLabel = new JLabel("Login");
+		loginIconLabel.setBounds(289, 5, 165, 88);
 		loginIconLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		loginIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/employee_64.png")));
 		
 		JLabel emailIconLabel = new JLabel("");
+		emailIconLabel.setBounds(286, 108, 16, 26);
 		emailIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/username_16.png")));
 		
 		JLabel passwordIconLabel = new JLabel("");
+		passwordIconLabel.setBounds(286, 170, 16, 26);
 		passwordIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/password_16.png")));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(185)
-					.addComponent(loginIconLabel, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(181)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(emailIconLabel)
-						.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(14)
-							.addComponent(emailLabel, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(181)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(passwordIconLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(14)
-							.addComponent(passwordLabel, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(207)
-					.addComponent(accessoButton, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(loginIconLabel, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-					.addGap(16)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(emailIconLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(24)
-							.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(12)
-							.addComponent(emailLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
-					.addGap(11)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(passwordIconLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(23)
-							.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(10)
-							.addComponent(passwordLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
-					.addGap(48)
-					.addComponent(accessoButton, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-		);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(loginIconLabel);
+		contentPane.add(emailIconLabel);
+		contentPane.add(emailTextField);
+		contentPane.add(emailLabel);
+		contentPane.add(passwordIconLabel);
+		contentPane.add(passwordField);
+		contentPane.add(passwordLabel);
+		contentPane.add(accessoButton);
+		
+		JButton annullaButton = new JButton("Annulla");
+		annullaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		annullaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		annullaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		annullaButton.setBackground(Color.WHITE);
+		annullaButton.setBounds(10, 364, 121, 26);
+		contentPane.add(annullaButton);
 	}
 
 
