@@ -38,6 +38,7 @@ public class iPlanner extends JFrame {
 	 * Create the frame.
 	 */
 	public iPlanner(ControllerScelta theController) {
+		setMinimumSize(new Dimension(850, 500));
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));
@@ -49,6 +50,7 @@ public class iPlanner extends JFrame {
 		setContentPane(contentPane);
 		
 		dipendenteIscrittoLabel = new JLabel("Sei un dipendente gi\u00E0 iscritto?");
+		dipendenteIscrittoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteIscrittoLabel.setForeground(Color.BLACK);
 		dipendenteIscrittoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
 		dipendenteIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -57,6 +59,7 @@ public class iPlanner extends JFrame {
 
 		
 		nuovoDipendenteLabel = new JLabel("Sei un nuovo dipendente?");
+		nuovoDipendenteLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		nuovoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		nuovoDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		

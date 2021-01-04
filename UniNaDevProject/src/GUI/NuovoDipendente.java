@@ -33,6 +33,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 
 import javax.swing.JFormattedTextField;
+import java.awt.Cursor;
 
 
 public class NuovoDipendente extends JFrame {
@@ -157,6 +158,7 @@ public class NuovoDipendente extends JFrame {
 		
 		//Combo Box
 		JComboBox<?> dayComboBox = new JComboBox<Object>();
+		dayComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dayComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		dayComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		dayComboBox.setBounds(483, 274, 44, 22);
@@ -164,6 +166,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(dayComboBox);
 		
 		monthComboBox = new JComboBox<Object>();
+		monthComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		monthComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		monthComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		monthComboBox.setBounds(537, 274, 44, 22);
@@ -171,6 +174,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(monthComboBox);
 		
 		yearComboBox = new JComboBox<Object>();
+		yearComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		yearComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		yearComboBox.setBounds(591, 274, 66, 22);
 		yearComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -189,12 +193,14 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(yearComboBox);
 		
 		provinciaComboBox = new JComboBox<Object>();
+		provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		provinciaComboBox.setBounds(484, 316, 44, 22);
 		provinciaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		contentPane.add(provinciaComboBox);
 		
 		cityComboBox = new JComboBox<Object>();
+		cityComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cityComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		cityComboBox.setBounds(538, 316, 65, 22);
 		cityComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -203,6 +209,7 @@ public class NuovoDipendente extends JFrame {
 
 		//Button
 		createAccountButton = new JButton("Crea Account");
+		createAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		createAccountButton.setBackground(Color.WHITE);
 		createAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		createAccountButton.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -216,6 +223,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(createAccountButton);
 		
 		cancelCreationButton = new JButton("Annulla");
+		cancelCreationButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cancelCreationButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cancelCreationButton.setBackground(Color.WHITE);
 		cancelCreationButton.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -229,6 +237,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(cancelCreationButton);
 		
 		JRadioButton uomoRadioButton = new JRadioButton("Uomo");
+		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		uomoRadioButton.setBounds(417, 240, 61, 23);
 		uomoRadioButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -236,6 +245,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(uomoRadioButton);
 		
 		JRadioButton donnaRadioButton = new JRadioButton("Donna");
+		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		donnaRadioButton.setBounds(489, 240, 66, 23);
 		donnaRadioButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));

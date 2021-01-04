@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
 
 public class Login extends JFrame {
 
@@ -73,6 +74,7 @@ public class Login extends JFrame {
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		JButton accessoButton = new JButton("Login");
+		accessoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		accessoButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		accessoButton.setBounds(311, 267, 121, 26);
 		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -108,6 +110,7 @@ public class Login extends JFrame {
 		contentPane.add(accessoButton);
 		
 		JButton annullaButton = new JButton("Annulla");
+		annullaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annullaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annullaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
