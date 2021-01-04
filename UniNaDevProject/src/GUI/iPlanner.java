@@ -23,19 +23,24 @@ import javax.swing.ImageIcon;
 
 public class iPlanner extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel dipendenteIscrittoLabel;
 	private JLabel nuovoDipendenteLabel;
  
-
+	
     
     
 	/**
 	 * Create the frame.
 	 */
 	public iPlanner(ControllerScelta theController) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));
 		
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 720);

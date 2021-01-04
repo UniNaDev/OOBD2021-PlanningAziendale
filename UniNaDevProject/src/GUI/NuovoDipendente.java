@@ -44,6 +44,9 @@ public class NuovoDipendente extends JFrame {
 	 * Create the frame.
 	 */
 	public NuovoDipendente(ControllerScelta theController) {
+		
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
 		setTitle("Creazione Dipendente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 468, 315);

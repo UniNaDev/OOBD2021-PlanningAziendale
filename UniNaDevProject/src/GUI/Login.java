@@ -16,6 +16,8 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class Login extends JFrame {
 
@@ -29,8 +31,9 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login(ControllerAccesso theController) {
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
-		setResizable(false);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		
 		setTitle("Login");
@@ -41,28 +44,23 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 		
 		emailTextField = new JTextField();
-		emailTextField.setBounds(186, 128, 173, 26);
-		emailTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		emailTextField.setColumns(10);
 		
 		JLabel emailLabel = new JLabel("Email");
 		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		emailLabel.setBounds(200, 116, 57, 14);
 		emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel passwordLabel = new JLabel("Password");
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		passwordLabel.setBounds(200, 175, 70, 14);
 		passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(186, 188, 173, 26);
-		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
+		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		JButton accessoButton = new JButton("Login");
 		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		accessoButton.setBackground(new Color(255, 255, 255));
-		accessoButton.setBounds(212, 262, 121, 26);
 		accessoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theController.verificaCredenziali(emailTextField.getText(),passwordField.getText());
@@ -70,28 +68,68 @@ public class Login extends JFrame {
 				
 			}
 		});
-		contentPane.setLayout(null);
-		contentPane.add(emailLabel);
-		contentPane.add(passwordLabel);
-		contentPane.add(passwordField);
-		contentPane.add(emailTextField);
-		contentPane.add(accessoButton);
 		
 		JLabel loginIconLabel = new JLabel("Login");
 		loginIconLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		loginIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/employee_64.png")));
-		loginIconLabel.setBounds(190, 0, 165, 88);
-		contentPane.add(loginIconLabel);
 		
 		JLabel emailIconLabel = new JLabel("");
 		emailIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/username_16.png")));
-		emailIconLabel.setBounds(186, 104, 16, 26);
-		contentPane.add(emailIconLabel);
 		
 		JLabel passwordIconLabel = new JLabel("");
 		passwordIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/password_16.png")));
-		passwordIconLabel.setBounds(186, 165, 24, 26);
-		contentPane.add(passwordIconLabel);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(185)
+					.addComponent(loginIconLabel, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(181)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(emailIconLabel)
+						.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(14)
+							.addComponent(emailLabel, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(181)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(passwordIconLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(14)
+							.addComponent(passwordLabel, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(207)
+					.addComponent(accessoButton, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(loginIconLabel, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+					.addGap(16)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(emailIconLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(24)
+							.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(12)
+							.addComponent(emailLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
+					.addGap(11)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(passwordIconLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(23)
+							.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(10)
+							.addComponent(passwordLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
+					.addGap(48)
+					.addComponent(accessoButton, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+		);
+		contentPane.setLayout(gl_contentPane);
 	}
 
 

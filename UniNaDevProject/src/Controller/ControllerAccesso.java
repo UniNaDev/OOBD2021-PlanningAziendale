@@ -5,10 +5,10 @@ import GUI.*;
 public class ControllerAccesso {
 	
 	Login loginFrame;
-	User userFrame;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		ControllerAccesso controller2= new ControllerAccesso();
+		ControllerAccesso controllerAccesso= new ControllerAccesso();
 	}
 
 	public void createLoginFrame()
@@ -23,17 +23,12 @@ public class ControllerAccesso {
 		
 		//TODO Se le credenziali sono corrette esegui l'accesso altrimenti JDialog utente non presente o dati incorretti
 		loginFrame.setVisible(false);
-		userFrame=new User();
-		userFrame.setVisible(true);
+		ControllerGestioneProfilo controller=new ControllerGestioneProfilo();
+		controller.createUserFrame();
+		
 		loginFrame.SvuotaCampi();
 	}
 
 
-//	public void viewAccount() {
-//		// TODO Auto-generated method stub
-//		userProfileFrame=new UserProfile();
-//		userProfileFrame.setVisible(true);
-//	}
-	
 
 }

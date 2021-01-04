@@ -4,18 +4,13 @@ import GUI.*;
 
 public class ControllerScelta {
 
-	
 	iPlanner iPlannerFrame;
 	NuovoDipendente nuovoDipendenteFrame;
-	Login loginFrame;
-	User userFrame;
-	UserProfile userProfileFrame;
-	
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		ControllerScelta controller=new ControllerScelta();
+		ControllerScelta controllerScelta=new ControllerScelta();
 		
 	}
 
@@ -23,6 +18,7 @@ public class ControllerScelta {
 		
 		iPlannerFrame=new iPlanner(this);
 		iPlannerFrame.setVisible(true);
+		
 	}
 	
 
@@ -32,26 +28,21 @@ public class ControllerScelta {
 	  
 	  nuovoDipendenteFrame= new NuovoDipendente(this);
 	  nuovoDipendenteFrame.setVisible(true);
-	   
-	
-	
 	}
 	
 	public void linkToLoginFrame() {
 		
 		iPlannerFrame.setVisible(false);
 		
-		ControllerAccesso controll=new ControllerAccesso();
-		controll.createLoginFrame();
-		
-
+		ControllerAccesso controller=new ControllerAccesso();
+		controller.createLoginFrame();
 		
 	}
 	
 	public void reLinkToLoginFrame() {
 		
-		ControllerAccesso controll=new ControllerAccesso();
-		controll.createLoginFrame();
+		ControllerAccesso controller=new ControllerAccesso();
+		controller.createLoginFrame();
 		
 		nuovoDipendenteFrame.setVisible(false);
 		
@@ -62,15 +53,5 @@ public class ControllerScelta {
 		iPlannerFrame.setVisible(true);
 	}
 
-
-
-
-//	public void viewAccount() {
-//	userProfileFrame=new UserProfile();
-//	userProfileFrame.setVisible(true);
-//	}
-//	
-	
-	
 	
 }
