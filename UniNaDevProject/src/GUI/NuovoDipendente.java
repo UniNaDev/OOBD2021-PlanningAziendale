@@ -62,6 +62,11 @@ public class NuovoDipendente extends JFrame {
 	private JTextField telefonoFissoTextField;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JLabel lblNewLabel;
+	private JLabel iconaEmailLabel;
+	private JLabel iconaIndirizzoLabel;
+	private JLabel iconaCellulareLabel;
+	private JLabel iconaDataNascitaLabel;
+	private JLabel iconaPasswordLabel;
 	
 	/**
 	 * Create the frame.
@@ -298,5 +303,41 @@ public class NuovoDipendente extends JFrame {
 		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		lblNewLabel.setBounds(377, 11, 226, 75);
 		contentPane.add(lblNewLabel);
+		
+		JLabel iconaNomeLabel = new JLabel("");
+		iconaNomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		iconaNomeLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/nome_16.png")));
+		iconaNomeLabel.setBounds(295, 128, 46, 14);
+		contentPane.add(iconaNomeLabel);
+		
+		iconaEmailLabel = new JLabel("");
+		iconaEmailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		iconaEmailLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/email_16.png")));
+		iconaEmailLabel.setBounds(295, 169, 46, 14);
+		contentPane.add(iconaEmailLabel);
+		
+		iconaIndirizzoLabel = new JLabel("");
+		iconaIndirizzoLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/indirizzo_16.png")));
+		iconaIndirizzoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		iconaIndirizzoLabel.setBounds(295, 386, 46, 30);
+		contentPane.add(iconaIndirizzoLabel);
+		
+		iconaCellulareLabel = new JLabel("");
+		iconaCellulareLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/cellulare_16.png")));
+		iconaCellulareLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		iconaCellulareLabel.setBounds(296, 448, 46, 30);
+		contentPane.add(iconaCellulareLabel);
+		
+		iconaDataNascitaLabel = new JLabel("");
+		iconaDataNascitaLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/dataNascita_16.png")));
+		iconaDataNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		iconaDataNascitaLabel.setBounds(296, 269, 46, 30);
+		contentPane.add(iconaDataNascitaLabel);
+		
+		iconaPasswordLabel = new JLabel("");
+		iconaPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/password_16.png")));
+		iconaPasswordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		iconaPasswordLabel.setBounds(295, 538, 46, 30);
+		contentPane.add(iconaPasswordLabel);
 	}
 }
