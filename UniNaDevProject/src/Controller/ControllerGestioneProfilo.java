@@ -25,6 +25,20 @@ public class ControllerGestioneProfilo {
 		userProfileFrame=new UserProfile();
 		userProfileFrame.setVisible(true);
 	}
+
+	public void logout() {
+		// TODO Auto-generated method stub
+		
+		ControllerAccesso controller= new ControllerAccesso();
+		controller.createLoginFrame();
+		userFrame.setVisible(false);
+	}
+
+	public void linkToProjectFrame() {
+		
+		ControllerProgetto controller= new ControllerProgetto();
+		controller.createProjectFrame();
+	}
 	
 	
 }

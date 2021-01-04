@@ -13,6 +13,7 @@ public class ControllerAccesso {
 
 	public void createLoginFrame()
 	{
+		
 		loginFrame=new Login(this);
 		loginFrame.setVisible(true);
 		
@@ -28,6 +29,8 @@ public class ControllerAccesso {
 		
 		loginFrame.SvuotaCampi();
 	}
+
+
 
 
 

@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+<<<<<<< Updated upstream
 import java.awt.Frame;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
@@ -30,6 +31,9 @@ import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+=======
+import javax.swing.JFormattedTextField;
+>>>>>>> Stashed changes
 
 public class NuovoDipendente extends JFrame {
 
