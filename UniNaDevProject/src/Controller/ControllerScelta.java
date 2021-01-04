@@ -53,5 +53,10 @@ public class ControllerScelta {
 		iPlannerFrame.setVisible(true);
 	}
 
+	public void reLinkToIplannerFrame() {
+		// TODO Auto-generated method stub
+		iPlannerFrame.setVisible(true);
+	}
+
 	
 }

@@ -30,6 +30,13 @@ public class ControllerAccesso {
 		loginFrame.SvuotaCampi();
 	}
 
+	public void annulla() {
+		// TODO Auto-generated method stub
+		loginFrame.setVisible(false);
+		ControllerScelta controller=new ControllerScelta();
+		controller.reLinkToIplannerFrame();
+	}
+
 
 
 

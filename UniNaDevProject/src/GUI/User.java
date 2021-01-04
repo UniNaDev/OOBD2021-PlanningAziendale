@@ -30,6 +30,9 @@ public class User extends JFrame {
 		setTitle("Utente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 720);
+		
+		setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -49,6 +52,11 @@ public class User extends JFrame {
 		});
 		
 		JButton btnNewButton_1 = new JButton("Meeting");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				theController.linkToMeetingFrame();
+			}
+		});
 		
 		JButton btnNewButton_2 = new JButton("Logout");
 		btnNewButton_2.addActionListener(new ActionListener() {

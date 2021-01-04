@@ -40,5 +40,10 @@ public class ControllerGestioneProfilo {
 		controller.createProjectFrame();
 	}
 	
-	
+	public void linkToMeetingFrame() {
+		
+		ControllerMeeting controller= new ControllerMeeting();
+		controller.createMeetingFrame();
+		
+	}
 }

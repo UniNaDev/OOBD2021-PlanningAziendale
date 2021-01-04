@@ -28,8 +28,8 @@ public class Project extends JFrame {
 	 */
 	public Project() {
 		setTitle("Progetti");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 720);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -44,17 +44,17 @@ public class Project extends JFrame {
 		panel_1.setBounds(523, 11, 671, 429);
 		contentPane.add(panel_1);
 		
-		JButton btnNewButton = new JButton("Modifica Progetto");
-		btnNewButton.setBounds(800, 481, 156, 39);
-		contentPane.add(btnNewButton);
+		JButton modifyProject = new JButton("Modifica Progetto");
+		modifyProject.setBounds(800, 481, 156, 39);
+		contentPane.add(modifyProject);
 		
-		JButton btnNewButton_1 = new JButton("Inserisci Progetto");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton insertProject = new JButton("Inserisci Progetto");
+		insertProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_1.setBounds(800, 531, 156, 53);
-		contentPane.add(btnNewButton_1);
+		insertProject.setBounds(800, 531, 156, 53);
+		contentPane.add(insertProject);
 	}
 
 }

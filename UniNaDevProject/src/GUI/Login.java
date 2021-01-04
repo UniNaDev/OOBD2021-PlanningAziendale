@@ -13,7 +13,10 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
+
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import javax.swing.GroupLayout;
@@ -27,7 +30,9 @@ public class Login extends JFrame {
 	private JPasswordField passwordField;
 
 
+	
 
+	
 	/**
 	 * Create the frame.
 	 */
@@ -36,10 +41,12 @@ public class Login extends JFrame {
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
 		
-		
+		setLocationRelativeTo(null);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 750, 440);
+		setBounds(650, 150, 750, 440);
+		
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -104,6 +111,7 @@ public class Login extends JFrame {
 		annullaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annullaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				theController.annulla();
 			}
 		});
 		annullaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -119,4 +127,7 @@ public class Login extends JFrame {
 		emailTextField.setText(null);
 		passwordField.setText(null);
 	}
+	
+
+	
 }
