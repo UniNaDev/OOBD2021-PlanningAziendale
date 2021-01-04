@@ -1,16 +1,15 @@
 package GUI;
-import Controller.ControllerScelta;
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import Controller.*;
+import java.awt.*;
 
-import javax.swing.JFrame;
+
+import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 
 
 import javax.swing.JLabel;
-import javax.swing.JToggleButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
@@ -19,10 +18,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
-import java.awt.ComponentOrientation;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.Color;
+
+
 
 public class iPlanner extends JFrame {
 
@@ -52,27 +49,7 @@ public class iPlanner extends JFrame {
 		dipendenteIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
-		//Quando clicco sull'etichetta con il mouse mi porta alla finestra per fare il login
-		dipendenteIscrittoLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				theController.LinkToLoginFrame();
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				//quando passa sopra con il mouse il colore cambia in grigio
-				dipendenteIscrittoLabel.setForeground(Color.GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				//quando il mouse si sposta il colore ritorna nero
-				dipendenteIscrittoLabel.setForeground(Color.BLACK);
-			}
-		});
-		
+
 		
 		nuovoDipendenteLabel = new JLabel("Sei un nuovo dipendente?");
 		nuovoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -135,12 +112,35 @@ public class iPlanner extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 		
+		
+		//Quando clicco sull'etichetta con il mouse mi porta alla finestra per fare il login
+		dipendenteIscrittoLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				theController.linkToLoginFrame();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				//quando passa sopra con il mouse il colore cambia in grigio
+				dipendenteIscrittoLabel.setForeground(Color.GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				//quando il mouse si sposta il colore ritorna nero
+				dipendenteIscrittoLabel.setForeground(Color.BLACK);
+			}
+		});
+		
+		
 		//Quando clicco sull'etichetta con il mouse mi porta alla finestra per creare un nuovo utente
 		nuovoDipendenteLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				theController.LinkToCreationFrame();
+				theController.linkToCreationFrame();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) 

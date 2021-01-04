@@ -1,7 +1,6 @@
 package GUI;
 import Controller.*;
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,15 +8,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.JSpinner;
+
 import javax.swing.JComboBox;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -32,11 +26,11 @@ public class NuovoDipendente extends JFrame {
 	private JLabel surnameLabel;
 	private JLabel emailLabel;
 	private JLabel bornDateLabel;
-	private JComboBox monthComboBox;
-	private JComboBox yearComboBox;
+	private JComboBox<?> monthComboBox;
+	private JComboBox<?> yearComboBox;
 	private JLabel bornPlaceLabel;
-	private JComboBox provinciaComboBox;
-	private JComboBox cityComboBox;
+	private JComboBox<?> provinciaComboBox;
+	private JComboBox<?> cityComboBox;
 	private JPasswordField passwordField;
 	private JLabel passwordLabel;
 	private JLabel confirmPasswordLabel;
@@ -127,23 +121,23 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(confirmPasswordField);
 		
 		//Combo Box
-		JComboBox dayComboBox = new JComboBox();
+		JComboBox<?> dayComboBox = new JComboBox<Object>();
 		dayComboBox.setBounds(153, 118, 30, 22);
 		contentPane.add(dayComboBox);
 		
-		monthComboBox = new JComboBox();
+		monthComboBox = new JComboBox<Object>();
 		monthComboBox.setBounds(193, 117, 65, 22);
 		contentPane.add(monthComboBox);
 		
-		yearComboBox = new JComboBox();
+		yearComboBox = new JComboBox<Object>();
 		yearComboBox.setBounds(268, 117, 44, 22);
 		contentPane.add(yearComboBox);
 		
-		provinciaComboBox = new JComboBox();
+		provinciaComboBox = new JComboBox<Object>();
 		provinciaComboBox.setBounds(154, 146, 44, 22);
 		contentPane.add(provinciaComboBox);
 		
-		cityComboBox = new JComboBox();
+		cityComboBox = new JComboBox<Object>();
 		cityComboBox.setBounds(203, 146, 65, 22);
 		contentPane.add(cityComboBox);
 		
@@ -153,6 +147,7 @@ public class NuovoDipendente extends JFrame {
 		createAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//INSERT Dei dati inseriti nella tabella
+				theController.reLinkToLoginFrame();
 			}
 		});
 		createAccountButton.setBounds(345, 242, 97, 23);
@@ -169,23 +164,5 @@ public class NuovoDipendente extends JFrame {
 		});
 		cancelCreationButton.setBounds(10, 242, 97, 23);
 		contentPane.add(cancelCreationButton);
-	}
-	
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
 	}
 }

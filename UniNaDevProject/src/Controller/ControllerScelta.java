@@ -1,5 +1,4 @@
 package Controller;
-import java.awt.event.MouseEvent;
 
 import GUI.*;
 
@@ -11,6 +10,7 @@ public class ControllerScelta {
 	Login loginFrame;
 	User userFrame;
 	UserProfile userProfileFrame;
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -25,51 +25,51 @@ public class ControllerScelta {
 		iPlannerFrame.setVisible(true);
 	}
 	
-	public void LinkToLoginFrame() {
-		
-		iPlannerFrame.setVisible(false);
-		
-		loginFrame=new Login(this);
-		loginFrame.setVisible(true);
-		
-	}
-	
-	public void LinkToCreationFrame() {
+
+	public void linkToCreationFrame() {
 		
 	  iPlannerFrame.setVisible(false);
 	  
 	  nuovoDipendenteFrame= new NuovoDipendente(this);
 	  nuovoDipendenteFrame.setVisible(true);
-	  
+	   
+	
+	
+	}
+	
+	public void linkToLoginFrame() {
+		
+		iPlannerFrame.setVisible(false);
+		
+		ControllerAccesso controll=new ControllerAccesso();
+		controll.createLoginFrame();
+		
+
+		
+	}
+	
+	public void reLinkToLoginFrame() {
+		
+		ControllerAccesso controll=new ControllerAccesso();
+		controll.createLoginFrame();
+		
+		nuovoDipendenteFrame.setVisible(false);
 		
 	}
 	
 	public void annulla() {
-		
 		nuovoDipendenteFrame.setVisible(false);
 		iPlannerFrame.setVisible(true);
-		
-		
 	}
 
-	public void verificaCredenziali(String user, String pass) {
-	
-		//TODO Se le credenziali sono corrette esegui l'accesso altrimenti JDialog utente non presente o dati incorretti
-		loginFrame.setVisible(false);
-		userFrame=new User(this);
-		userFrame.setVisible(true);
-		
-	}
 
-	public void viewAccount() {
-		// TODO Auto-generated method stub
-		
-		userProfileFrame=new UserProfile();
-		userProfileFrame.setVisible(true);
-		
-	}
 
-	
+
+//	public void viewAccount() {
+//	userProfileFrame=new UserProfile();
+//	userProfileFrame.setVisible(true);
+//	}
+//	
 	
 	
 	

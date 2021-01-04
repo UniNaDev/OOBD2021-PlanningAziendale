@@ -1,7 +1,6 @@
 package GUI;
 import Controller.*;
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,9 +12,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.ImageIcon;
@@ -32,7 +28,7 @@ public class Login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login(ControllerScelta theController) {
+	public Login(ControllerAccesso theController) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
 		setResizable(false);
 		
@@ -96,5 +92,13 @@ public class Login extends JFrame {
 		passwordIconLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/password_16.png")));
 		passwordIconLabel.setBounds(186, 165, 24, 26);
 		contentPane.add(passwordIconLabel);
+	}
+
+
+
+	public void SvuotaCampi() {
+		// TODO Auto-generated method stub
+		emailTextField.setText(null);
+		passwordField.setText(null);
 	}
 }
