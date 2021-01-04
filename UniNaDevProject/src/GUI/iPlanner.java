@@ -42,7 +42,7 @@ public class iPlanner extends JFrame {
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));
-		setTitle("iPlanner");
+		setTitle("iPlanner - HomePage");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();

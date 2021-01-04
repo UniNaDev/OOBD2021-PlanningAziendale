@@ -34,6 +34,9 @@ import javax.swing.ImageIcon;
 
 import javax.swing.JFormattedTextField;
 import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Toolkit;
 
 
 public class NuovoDipendente extends JFrame {
@@ -72,9 +75,10 @@ public class NuovoDipendente extends JFrame {
 	 * Create the frame.
 	 */
 	public NuovoDipendente(ControllerScelta theController) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(NuovoDipendente.class.getResource("/Icone/WindowIcon_16.png")));
 		setResizable(false);
 		
-		setTitle("Creazione Dipendente");
+		setTitle("iPlanner - Sing In");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 700);
 		contentPane = new JPanel();
@@ -214,6 +218,18 @@ public class NuovoDipendente extends JFrame {
 
 		//Button
 		createAccountButton = new JButton("Crea Account");
+		createAccountButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				createAccountButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				createAccountButton.setBackground(Color.WHITE);
+			}
+		});
 		createAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		createAccountButton.setBackground(Color.WHITE);
 		createAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -228,6 +244,18 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(createAccountButton);
 		
 		cancelCreationButton = new JButton("Annulla");
+		cancelCreationButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				cancelCreationButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				cancelCreationButton.setBackground(Color.WHITE);
+			}
+		});
 		cancelCreationButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cancelCreationButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cancelCreationButton.setBackground(Color.WHITE);
