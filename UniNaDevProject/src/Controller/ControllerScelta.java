@@ -21,7 +21,6 @@ public class ControllerScelta {
 		
 	}
 	
-
 	public void linkToCreationFrame() {
 		
 	  iPlannerFrame.setVisible(false);

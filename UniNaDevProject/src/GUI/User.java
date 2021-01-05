@@ -56,22 +56,22 @@ public class User extends JFrame {
 			}
 		});
 		
-		JButton btnNewButton = new JButton("Progetti");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton projectButton = new JButton("Progetti");
+		projectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theController.linkToProjectFrame();
 			}
 		});
 		
-		JButton btnNewButton_1 = new JButton("Meeting");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton meetingButton = new JButton("Meeting");
+		meetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theController.linkToMeetingFrame();
 			}
 		});
 		
-		JButton btnNewButton_2 = new JButton("Logout");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton logoutButton = new JButton("Logout");
+		logoutButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theController.logout();
 			}
@@ -88,13 +88,13 @@ public class User extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(accountButton, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+					.addComponent(projectButton, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+					.addComponent(meetingButton, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(1636, Short.MAX_VALUE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap(1829, Short.MAX_VALUE)
-					.addComponent(btnNewButton_2))
+					.addComponent(logoutButton))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
@@ -107,14 +107,14 @@ public class User extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false)
 						.addComponent(accountButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+						.addComponent(projectButton, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(meetingButton, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
 					.addGap(143)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 805, Short.MAX_VALUE)
 						.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 805, Short.MAX_VALUE))
 					.addGap(28)
-					.addComponent(btnNewButton_2))
+					.addComponent(logoutButton))
 		);
 		
 		JLabel meetingLabel = new JLabel("Meeting Programmati");

@@ -22,8 +22,14 @@ public class ControllerGestioneProfilo {
 	
 	public void viewAccount() {
 		// TODO Auto-generated method stub
-		userProfileFrame=new UserProfile();
+		userProfileFrame=new UserProfile(this);
 		userProfileFrame.setVisible(true);
+	}
+	
+	public void closeWindow() {
+		
+		userProfileFrame.setVisible(false);
+		
 	}
 
 	public void logout() {
