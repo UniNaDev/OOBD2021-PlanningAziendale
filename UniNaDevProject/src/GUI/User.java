@@ -220,10 +220,10 @@ public class User extends JFrame {
 									.addGap(18)
 									.addComponent(emailUtenteLabel))
 								.addComponent(nomeUtenteLabel))
-							.addPreferredGap(ComponentPlacement.RELATED, 1304, Short.MAX_VALUE)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataAttualeLabel, Alignment.TRAILING)
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, 1171, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(dataAttualeLabel)
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
@@ -242,7 +242,9 @@ public class User extends JFrame {
 								.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
 							.addComponent(dataAttualeLabel))
-						.addComponent(nomeUtenteLabel))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(nomeUtenteLabel)))
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(22)
@@ -259,7 +261,7 @@ public class User extends JFrame {
 					.addGap(32)
 					.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
-					);
+		);
 		
 		//PARTE DI CODICE CHE SI OCCUPA DI AGGIORNARE L'ORA IN TEMPO REALE
 						
