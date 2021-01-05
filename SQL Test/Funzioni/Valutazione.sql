@@ -16,15 +16,21 @@ BEGIN
 --Conta tutti i meeting a cui doveva partecipare
 SELECT COUNT(*) INTO TotaleMeeting
 FROM Presenza AS p
-WHERE p.CF = dip;
---Se non ci sono meeting a cui doveva presenziare di default la sua valutazione a riguardo è 10
+WHERE p.CF = dip AND p.IDMeeting IN(
+	SELECT m.IDMeeting
+	FROM Meeting AS m
+	WHERE m.DataFine<CURRENT_DATE OR (m.DataFine=CURRENT_DATE AND m.OrarioFine<CURRENT_TIME));
+--Se non ci sono meeting a cui doveva presenziare di default la sua valutazione a riguardo è 0
 IF (TotaleMeeting = 0) THEN
-	RETURN 10;
+	RETURN 0;
 END IF;
 --Conta le sue presenze per ciascuno di essi
 SELECT COUNT(*) INTO Presenze
 FROM Presenza AS p
-WHERE p.CF=dip AND p.Presente=TRUE;
+WHERE p.CF=dip AND p.Presente=TRUE AND p.IDMeeting IN(
+	SELECT m.IDMeeting
+	FROM Meeting AS m
+	WHERE m.DataFine<CURRENT_DATE OR (m.DataFine=CURRENT_DATE AND m.OrarioFine<CURRENT_TIME));
 --Fai il rapporto e restituisci il valore in decimi
 ValutazioneMeeting := (Presenze*10)/TotaleMeeting;
 RETURN ValutazioneMeeting;
