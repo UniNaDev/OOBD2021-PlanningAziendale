@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Controller.ControllerProgetto;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -26,7 +29,7 @@ public class Project extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Project() {
+	public Project(ControllerProgetto theController) {
 		setTitle("Progetti");
 		setBounds(100, 100, 1280, 720);
 		setLocationRelativeTo(null);
@@ -45,12 +48,18 @@ public class Project extends JFrame {
 		contentPane.add(panel_1);
 		
 		JButton modifyProject = new JButton("Modifica Progetto");
+		modifyProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				theController.createModifyProjectFrame();
+			}
+		});
 		modifyProject.setBounds(800, 481, 156, 39);
 		contentPane.add(modifyProject);
 		
 		JButton insertProject = new JButton("Inserisci Progetto");
 		insertProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				theController.createInsertProjectFrame();
 			}
 		});
 		insertProject.setBounds(800, 531, 156, 53);

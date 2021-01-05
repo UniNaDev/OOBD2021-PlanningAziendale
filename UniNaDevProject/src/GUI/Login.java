@@ -13,9 +13,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import java.awt.Dimension;
+
 import java.awt.Font;
-import java.awt.Frame;
 
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
@@ -23,12 +22,16 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.MatteBorder;
 import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Login extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField emailTextField;
 	private JPasswordField passwordField;
+	private JButton accessoButton;
+	private JButton annullaButton;
 
 
 	
@@ -43,7 +46,7 @@ public class Login extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
 		
 		setLocationRelativeTo(null);
-		setTitle("Login");
+		setTitle("iPlanner - Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(650, 150, 750, 440);
 		
@@ -73,7 +76,19 @@ public class Login extends JFrame {
 		passwordField.setBounds(285, 193, 173, 26);
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		JButton accessoButton = new JButton("Login");
+		accessoButton = new JButton("Login");
+		accessoButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				accessoButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				accessoButton.setBackground(Color.WHITE);
+			}
+		});
 		accessoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		accessoButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		accessoButton.setBounds(311, 267, 121, 26);
@@ -109,7 +124,19 @@ public class Login extends JFrame {
 		contentPane.add(passwordLabel);
 		contentPane.add(accessoButton);
 		
-		JButton annullaButton = new JButton("Annulla");
+		annullaButton = new JButton("Annulla");
+		annullaButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				annullaButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				annullaButton.setBackground(Color.WHITE);
+			}
+		});
 		annullaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annullaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annullaButton.addActionListener(new ActionListener() {
