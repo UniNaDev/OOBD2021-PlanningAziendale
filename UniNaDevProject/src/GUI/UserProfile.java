@@ -30,20 +30,37 @@ import java.awt.Frame;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import java.awt.Color;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 public class UserProfile extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_1;
-	private JTextField textField;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JLabel lblNewLabel;
-	private JLabel lblNome;
-	private JLabel lblCognome;
-	private JLabel lblSesso;
-	private JLabel lblDataDiNascita;
+	private JTextField nomeTextField;
+	private JTextField cfTextField;
+	private JTextField cognomeTextField;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTextField cellulareTextField;
+	private JTextField telefonoFissoTextField;
+	private JRadioButton uomoRadioButton;
+	private JRadioButton donnaRadioButton;
+	private JComboBox giornoComboBox;
+	private JComboBox meseComboBox;
+	private JComboBox annoComboBox;
+	private JComboBox comuneComboBox;
+	private JComboBox provinciaComboBox;
+	private JTextArea indirizzoTextArea;
 
 
 	
@@ -54,8 +71,8 @@ public class UserProfile extends JFrame {
 	 * Create the frame.
 	 */
 	public UserProfile(ControllerGestioneProfilo theController) {
-		setResizable(false);
-		setTitle("Profilo Utente");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(UserProfile.class.getResource("/Icone/WindowIcon_16.png")));
+		setTitle("iPlanner - Il mio Account");
 		setBounds(100, 100, 1280, 720);
 		setLocationRelativeTo(null);
 	
@@ -67,81 +84,123 @@ public class UserProfile extends JFrame {
 		
 
 		
-		JButton btnNewButton = new JButton("Conferma");
-		btnNewButton.setBounds(1171, 634, 96, 42);
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton confermaButton = new JButton("Conferma");
+		confermaButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				confermaButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				confermaButton.setBackground(Color.WHITE);
+			}
+		});
+		confermaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		confermaButton.setBackground(Color.WHITE);
+		confermaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		confermaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		confermaButton.setBounds(1136, 628, 118, 42);
+		confermaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO  UPDATE dei dati se si clicca su conferma
 				theController.closeWindow();
 			}
 		});
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(552, 158, 187, 24);
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
+		nomeTextField = new JTextField();
+		nomeTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		nomeTextField.setText("Mario");
+		nomeTextField.setEditable(false);
+		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		nomeTextField.setBounds(239, 119, 187, 24);
+		nomeTextField.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("Informazioni personali");
-		lblNewLabel_1.setBounds(490, 60, 295, 37);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		JLabel informazioniPersonaliLabel = new JLabel("Informazioni Personali");
+		informazioniPersonaliLabel.setBounds(125, 11, 386, 37);
+		informazioniPersonaliLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-		textField = new JTextField();
-		textField.setBounds(552, 123, 187, 24);
-		textField.setEditable(false);
-		textField.setColumns(10);
+		cfTextField = new JTextField();
+		cfTextField.setText("RSSMRA00R06F839A");
+		cfTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		cfTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		cfTextField.setEditable(false);
+		cfTextField.setBounds(239, 83, 187, 24);
+		cfTextField.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(552, 193, 187, 24);
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
+		cognomeTextField = new JTextField();
+		cognomeTextField.setText("Rossi");
+		cognomeTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		cognomeTextField.setEditable(false);
+		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		cognomeTextField.setBounds(239, 150, 187, 24);
+		cognomeTextField.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(552, 228, 187, 24);
-		textField_3.setEditable(false);
-		textField_3.setColumns(10);
+		JLabel cfLabel = new JLabel("Codice Fiscale");
+		cfLabel.setBounds(85, 87, 144, 19);
+		cfLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		cfLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		textField_4 = new JTextField();
-		textField_4.setBounds(552, 263, 187, 24);
-		textField_4.setEditable(false);
-		textField_4.setColumns(10);
+		JLabel nomeLabel = new JLabel("Nome");
+		nomeLabel.setBounds(167, 123, 62, 19);
+		nomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		nomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		lblNewLabel = new JLabel("CF");
-		lblNewLabel.setBounds(486, 128, 62, 19);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel cognomeLabel = new JLabel("Cognome");
+		cognomeLabel.setBounds(167, 154, 62, 19);
+		cognomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		lblNome = new JLabel("Nome");
-		lblNome.setBounds(486, 163, 62, 19);
-		lblNome.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JLabel sessoLabel = new JLabel("Sesso");
+		sessoLabel.setBounds(167, 198, 62, 19);
+		sessoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		lblCognome = new JLabel("Cognome");
-		lblCognome.setBounds(486, 194, 62, 19);
-		lblCognome.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCognome.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JLabel dataNascitaLabel = new JLabel("Data di nascita");
+		dataNascitaLabel.setBounds(103, 236, 126, 19);
+		dataNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		lblSesso = new JLabel("Sesso");
-		lblSesso.setBounds(486, 228, 62, 19);
-		lblSesso.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSesso.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		lblDataDiNascita = new JLabel("Data di nascita");
-		lblDataDiNascita.setBounds(459, 264, 89, 19);
-		lblDataDiNascita.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDataDiNascita.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		JButton modifyButton = new JButton("Modifica");
-		modifyButton.setBounds(544, 644, 71, 23);
-		modifyButton.addActionListener(new ActionListener() {
+		JButton modificaButton = new JButton("Modifica");
+		modificaButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				modificaButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				modificaButton.setBackground(Color.WHITE);
+			}
+		});
+		modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		modificaButton.setBackground(Color.WHITE);
+		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		modificaButton.setBounds(279, 520, 126, 42);
+		modificaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//Quando viene premuto il bottone modifica i campi del profilo diventano editabili
+				//QUANDO VIENE PREMUTO IL TASTO DI MODIFICA QUESTI CAMPI DIVENTANO EDITABILI							
 				
-				textField.setEditable(true);
-				textField_1.setEditable(true);
-				textField_2.setEditable(true);
-				textField_4.setEditable(true);
-				textField_3.setEditable(true);
+				nomeTextField.setEditable(true);
+				cognomeTextField.setEditable(true);
+				//radio buttons sesso
+				uomoRadioButton.setEnabled(true);				
+				donnaRadioButton.setEnabled(true);
+				//combo box data e luogo di nascita
+				giornoComboBox.setEnabled(true);				
+				meseComboBox.setEnabled(true);
+				annoComboBox.setEnabled(true);
+				comuneComboBox.setEnabled(true);
+				provinciaComboBox.setEnabled(true);
+				//
+				indirizzoTextArea.setEditable(true);
+				cellulareTextField.setEditable(true);
+				telefonoFissoTextField.setEditable(true);
+							
 				
 				addWindowListener(new WindowAdapter() {
 					//Quando si vuole uscire chiede all'utente quale scelta vuole effettuare
@@ -161,18 +220,219 @@ public class UserProfile extends JFrame {
 			}
 		});
 		contentPane.setLayout(null);
-		contentPane.add(modifyButton);
-		contentPane.add(btnNewButton);
-		contentPane.add(lblNewLabel);
-		contentPane.add(lblNome);
-		contentPane.add(lblCognome);
-		contentPane.add(lblSesso);
-		contentPane.add(lblDataDiNascita);
-		contentPane.add(textField_4);
-		contentPane.add(textField_3);
-		contentPane.add(textField_1);
-		contentPane.add(textField_2);
-		contentPane.add(textField);
-		contentPane.add(lblNewLabel_1);
+		contentPane.add(modificaButton);
+		contentPane.add(confermaButton);
+		contentPane.add(cfLabel);
+		contentPane.add(nomeLabel);
+		contentPane.add(cognomeLabel);
+		contentPane.add(sessoLabel);
+		contentPane.add(dataNascitaLabel);
+		contentPane.add(nomeTextField);
+		contentPane.add(cognomeTextField);
+		contentPane.add(cfTextField);
+		contentPane.add(informazioniPersonaliLabel);
+		
+		JSeparator separator = new JSeparator();
+		separator.setForeground(Color.LIGHT_GRAY);
+		separator.setBackground(Color.WHITE);
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setBounds(631, 97, 2, 510);
+		contentPane.add(separator);
+		
+		uomoRadioButton = new JRadioButton("Uomo");
+		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		uomoRadioButton.setEnabled(false);
+		buttonGroup.add(uomoRadioButton);
+		uomoRadioButton.setSelected(true);
+		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 12));
+		uomoRadioButton.setBounds(248, 195, 62, 23);
+		contentPane.add(uomoRadioButton);
+		
+		donnaRadioButton = new JRadioButton("Donna");
+		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		donnaRadioButton.setEnabled(false);
+		buttonGroup.add(donnaRadioButton);
+		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 12));
+		donnaRadioButton.setBounds(312, 195, 62, 23);
+		contentPane.add(donnaRadioButton);
+		
+		giornoComboBox = new JComboBox();
+		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		giornoComboBox.setEnabled(false);
+		giornoComboBox.setBackground(Color.WHITE);
+		giornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		giornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		giornoComboBox.setSelectedIndex(5);
+		giornoComboBox.setBounds(244, 235, 47, 22);
+		contentPane.add(giornoComboBox);
+		
+		annoComboBox = new JComboBox();
+		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		annoComboBox.setEnabled(false);
+		annoComboBox.setBackground(Color.WHITE);
+		annoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		annoComboBox.setBounds(358, 235, 62, 22);
+		
+		
+		//CREO UN MODELLO PERSONALIZZATO PER L'ANNO DEL COMBO BOX //////////
+				DefaultComboBoxModel myModel = new DefaultComboBoxModel();
+				annoComboBox.setModel(myModel);
+				
+				for(int i=1900;i<= 2021;i++)
+					myModel.addElement(i);
+				
+				annoComboBox.setSelectedIndex(100); //mette di default il 100esimo indice cioè l'anno 2000
+		//////////////////////////////////////////////////////////
+				
+		contentPane.add(annoComboBox);
+		
+		meseComboBox = new JComboBox();
+		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meseComboBox.setEnabled(false);
+		meseComboBox.setBackground(Color.WHITE);
+		meseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		meseComboBox.setSelectedIndex(9);
+		meseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		meseComboBox.setBounds(301, 235, 47, 22);
+		contentPane.add(meseComboBox);
+		
+		JLabel luogoNascitaLabel = new JLabel("Luogo di nascita");
+		luogoNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		luogoNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		luogoNascitaLabel.setBounds(85, 269, 144, 19);
+		contentPane.add(luogoNascitaLabel);
+		
+		provinciaComboBox = new JComboBox();
+		provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		provinciaComboBox.setEnabled(false);
+		provinciaComboBox.setBackground(Color.WHITE);
+		provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		provinciaComboBox.setModel(new DefaultComboBoxModel(new String[] {"NA"}));
+		provinciaComboBox.setBounds(239, 268, 52, 22);
+		contentPane.add(provinciaComboBox);
+		
+		comuneComboBox = new JComboBox();
+		comuneComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		comuneComboBox.setEnabled(false);
+		comuneComboBox.setBackground(Color.WHITE);
+		comuneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		comuneComboBox.setModel(new DefaultComboBoxModel(new String[] {"Napoli"}));
+		comuneComboBox.setBounds(301, 268, 104, 22);
+		contentPane.add(comuneComboBox);
+		
+		JLabel indirizzoLabel = new JLabel("Indirizzo");
+		indirizzoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		indirizzoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		indirizzoLabel.setBounds(85, 345, 144, 19);
+		contentPane.add(indirizzoLabel);
+		
+		JLabel cellulareLabel = new JLabel("Cellulare");
+		cellulareLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		cellulareLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		cellulareLabel.setBounds(85, 415, 144, 19);
+		contentPane.add(cellulareLabel);
+		
+		JLabel telefonoFissoLabel = new JLabel("Telefono Fisso");
+		telefonoFissoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		telefonoFissoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		telefonoFissoLabel.setBounds(85, 452, 144, 19);
+		contentPane.add(telefonoFissoLabel);
+		
+		JScrollPane indirizzoScrollPane = new JScrollPane();
+		indirizzoScrollPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		indirizzoScrollPane.setBounds(239, 319, 285, 70);
+		contentPane.add(indirizzoScrollPane);
+		
+		indirizzoTextArea = new JTextArea();
+		indirizzoTextArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		indirizzoTextArea.setText("Cupa Nuova Cintia 21 , 80126 , Napoli");
+		indirizzoTextArea.setBackground(Color.WHITE);
+		indirizzoTextArea.setEditable(false);
+		indirizzoTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		indirizzoTextArea.setLineWrap(true);
+		indirizzoScrollPane.setViewportView(indirizzoTextArea);
+		
+		cellulareTextField = new JTextField();
+		cellulareTextField.setText("3387649645");
+		cellulareTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		cellulareTextField.setEditable(false);
+		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		cellulareTextField.setColumns(10);
+		cellulareTextField.setBounds(239, 413, 187, 24);
+		contentPane.add(cellulareTextField);
+		
+		telefonoFissoTextField = new JTextField();
+		telefonoFissoTextField.setText("0818084635");
+		telefonoFissoTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		telefonoFissoTextField.setEditable(false);
+		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		telefonoFissoTextField.setColumns(10);
+		telefonoFissoTextField.setBounds(239, 448, 187, 24);
+		contentPane.add(telefonoFissoTextField);
+		
+		JLabel informazioniAziendaliLabel = new JLabel("Informazioni Aziendali");
+		informazioniAziendaliLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		informazioniAziendaliLabel.setBounds(772, 11, 386, 37);
+		contentPane.add(informazioniAziendaliLabel);
+		
+		JLabel laMiaValutazioneLabel = new JLabel("La mia Valutazione:");
+		laMiaValutazioneLabel.setForeground(Color.DARK_GRAY);
+		laMiaValutazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		laMiaValutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		laMiaValutazioneLabel.setBounds(772, 136, 386, 37);
+		contentPane.add(laMiaValutazioneLabel);
+		
+		JLabel valoreValutazioneLabel = new JLabel("8.7 ");
+		valoreValutazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		valoreValutazioneLabel.setForeground(Color.BLACK);
+		valoreValutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		valoreValutazioneLabel.setBounds(772, 184, 386, 37);
+		contentPane.add(valoreValutazioneLabel);
+		
+		JLabel IlMioSalarioLabel = new JLabel("Il mio Salario:");
+		IlMioSalarioLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		IlMioSalarioLabel.setForeground(Color.DARK_GRAY);
+		IlMioSalarioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		IlMioSalarioLabel.setBounds(772, 293, 386, 37);
+		contentPane.add(IlMioSalarioLabel);
+		
+		JLabel valoreSalarioLabel = new JLabel("2560.00€");
+		valoreSalarioLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		valoreSalarioLabel.setForeground(Color.BLACK);
+		valoreSalarioLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		valoreSalarioLabel.setBounds(772, 336, 386, 37);
+		contentPane.add(valoreSalarioLabel);
+		
+		JLabel leMieSkillsLabel = new JLabel("Le mie Skills:");
+		leMieSkillsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		leMieSkillsLabel.setForeground(Color.DARK_GRAY);
+		leMieSkillsLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		leMieSkillsLabel.setBounds(772, 462, 386, 37);
+		contentPane.add(leMieSkillsLabel);
+		
+		JLabel valoreSkillsLabel = new JLabel("Creatività , TeamWork");
+		valoreSkillsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		valoreSkillsLabel.setForeground(Color.BLACK);
+		valoreSkillsLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		valoreSkillsLabel.setBounds(772, 510, 386, 37);
+		contentPane.add(valoreSkillsLabel);
+		
+		JLabel iconaValutazioneLabel = new JLabel("");
+		iconaValutazioneLabel.setForeground(Color.DARK_GRAY);
+		iconaValutazioneLabel.setIcon(new ImageIcon(UserProfile.class.getResource("/Icone/valutazione_32.png")));
+		iconaValutazioneLabel.setBounds(743, 123, 32, 51);
+		contentPane.add(iconaValutazioneLabel);
+		
+		JLabel iconaSalarioLabel = new JLabel("");
+		iconaSalarioLabel.setIcon(new ImageIcon(UserProfile.class.getResource("/Icone/salary_32.png")));
+		iconaSalarioLabel.setForeground(Color.DARK_GRAY);
+		iconaSalarioLabel.setBounds(743, 274, 32, 51);
+		contentPane.add(iconaSalarioLabel);
+		
+		JLabel iconaSkillsLabel = new JLabel("");
+		iconaSkillsLabel.setIcon(new ImageIcon(UserProfile.class.getResource("/Icone/skills_32.png")));
+		iconaSkillsLabel.setForeground(Color.DARK_GRAY);
+		iconaSkillsLabel.setBounds(743, 447, 32, 51);
+		contentPane.add(iconaSkillsLabel);
 	}
 }
