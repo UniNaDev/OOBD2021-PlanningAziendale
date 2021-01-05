@@ -1039,7 +1039,7 @@
 											"top": 889,
 											"width": 278.59228515625,
 											"height": 13,
-											"text": "-dataCreazione: JavaDate",
+											"text": "-dataCreazione: LocalDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1056,7 +1056,7 @@
 											"top": 904,
 											"width": 278.59228515625,
 											"height": 13,
-											"text": "-scadenza: JavaDate",
+											"text": "-scadenza: LocalDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1073,7 +1073,7 @@
 											"top": 919,
 											"width": 278.59228515625,
 											"height": 13,
-											"text": "-dataTerminazione: JavaDate",
+											"text": "-dataTerminazione: LocalDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3137,6 +3137,23 @@
 									"subViews": [
 										{
 											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF2067PHsLNIL0=",
+											"_parent": {
+												"$ref": "AAAAAAF2mRfvxPUgeEQ="
+											},
+											"model": {
+												"$ref": "AAAAAAF2067PCsLKTO0="
+											},
+											"font": "Arial;13;0",
+											"left": 1533,
+											"top": 1086,
+											"width": 314.6787109375,
+											"height": 13,
+											"text": "+idAmbito: int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
 											"_id": "AAAAAAF2mRicufVxBnA=",
 											"_parent": {
 												"$ref": "AAAAAAF2mRfvxPUgeEQ="
@@ -3146,10 +3163,10 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1533,
-											"top": 1086,
+											"top": 1101,
 											"width": 314.6787109375,
 											"height": 13,
-											"text": "-nomeAmbito: String",
+											"text": "-nome: String",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3157,7 +3174,7 @@
 									"left": 1528,
 									"top": 1081,
 									"width": 324.6787109375,
-									"height": 23
+									"height": 38
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -3170,7 +3187,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 1528,
-									"top": 1104,
+									"top": 1119,
 									"width": 324.6787109375,
 									"height": 10
 								},
@@ -3212,7 +3229,7 @@
 							"left": 1528,
 							"top": 1056,
 							"width": 324.6787109375,
-							"height": 58,
+							"height": 73,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2mRfvxPUbj3A="
 							},
@@ -5301,9 +5318,9 @@
 												"$ref": "AAAAAAF2qRbcExwfoAc="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1253,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1245,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "«interface»"
 										},
@@ -5314,9 +5331,9 @@
 												"$ref": "AAAAAAF2qRbcExwfoAc="
 											},
 											"font": "Arial;13;1",
-											"left": 1973,
-											"top": 1268,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1260,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "ProgettoDAO"
 										},
@@ -5328,8 +5345,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1472,
-											"top": 736,
+											"left": 1456,
+											"top": 720,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -5342,16 +5359,16 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1472,
-											"top": 736,
+											"left": 1456,
+											"top": 720,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1968,
-									"top": 1248,
-									"width": 406.322265625,
+									"left": 1960,
+									"top": 1240,
+									"width": 428.07568359375,
 									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF2qRbcExwgmdI="
@@ -5377,8 +5394,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 736,
-									"top": 368,
+									"left": 728,
+									"top": 360,
 									"width": 10,
 									"height": 10
 								},
@@ -5402,9 +5419,9 @@
 												"$ref": "AAAAAAF2qRb78BxHwMU="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1291,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1283,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+getProgetti(): ArrayList<Progetto>",
 											"horizontalAlignment": 0
@@ -5419,9 +5436,9 @@
 												"$ref": "AAAAAAF2qRck5xxQeYY="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1306,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1298,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+getPartecipanti(proj: Progetto): ArrayList<Dipendente>",
 											"horizontalAlignment": 0
@@ -5436,9 +5453,9 @@
 												"$ref": "AAAAAAF2qRdeoBxb7Hw="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1321,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1313,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+getMeetingRelativi(proj: Progetto): ArrayList<Meeting>",
 											"horizontalAlignment": 0
@@ -5453,9 +5470,9 @@
 												"$ref": "AAAAAAF2qRebBxxmYyM="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1336,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1328,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+getProgettiByDipendente(dip: Dipendente): ArrayList<Progetto>",
 											"horizontalAlignment": 0
@@ -5470,9 +5487,9 @@
 												"$ref": "AAAAAAF2qRgUkRxxdzY="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1351,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1343,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+getProgettiByCreatore(dip: Dipendente): ArrayList<Progetto>",
 											"horizontalAlignment": 0
@@ -5487,9 +5504,9 @@
 												"$ref": "AAAAAAF2qRhNGRx8dTo="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1366,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1358,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+getProgettiByAmbito(ambito: AmbitoProgetto): ArrayList<Progetto>",
 											"horizontalAlignment": 0
@@ -5504,9 +5521,9 @@
 												"$ref": "AAAAAAF2qRikXhyHtgw="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1381,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1373,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+getProgettiByTipo(tipo: String): ArrayList<Progetto>",
 											"horizontalAlignment": 0
@@ -5521,9 +5538,9 @@
 												"$ref": "AAAAAAF2qRj03xySWus="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1396,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1388,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+addProgetto(proj: Progetto): boolean",
 											"horizontalAlignment": 0
@@ -5538,9 +5555,9 @@
 												"$ref": "AAAAAAF2qRll+BydosI="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1411,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1403,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+deleteProgetto(proj: Progetto): boolean",
 											"horizontalAlignment": 0
@@ -5555,11 +5572,11 @@
 												"$ref": "AAAAAAF2qRmJFhyoZgY="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1426,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1418,
+											"width": 418.07568359375,
 											"height": 13,
-											"text": "+addPartecipante(dip: Dipendente): boolean",
+											"text": "+addPartecipante(dip: Dipendente, proj: Progetto, ruolo: String): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5572,11 +5589,11 @@
 												"$ref": "AAAAAAF2qRn03xyzMbA="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1441,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1433,
+											"width": 418.07568359375,
 											"height": 13,
-											"text": "+deletePartecipante(dip: Dipendente): boolean",
+											"text": "+deletePartecipante(dip: Dipendente, proj: Progetto): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5589,18 +5606,18 @@
 												"$ref": "AAAAAAF2qR4UJx2fTEM="
 											},
 											"font": "Arial;13;0",
-											"left": 1973,
-											"top": 1456,
-											"width": 396.322265625,
+											"left": 1965,
+											"top": 1448,
+											"width": 418.07568359375,
 											"height": 13,
 											"text": "+updateProgetto(proj: Progetto): boolean",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1968,
-									"top": 1286,
-									"width": 406.322265625,
+									"left": 1960,
+									"top": 1278,
+									"width": 428.07568359375,
 									"height": 188
 								},
 								{
@@ -5614,8 +5631,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 736,
-									"top": 368,
+									"left": 728,
+									"top": 360,
 									"width": 10,
 									"height": 10
 								},
@@ -5630,17 +5647,17 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 736,
-									"top": 368,
+									"left": 728,
+									"top": 360,
 									"width": 10,
 									"height": 10
 								}
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 1968,
-							"top": 1248,
-							"width": 406.322265625,
+							"left": 1960,
+							"top": 1240,
+							"width": 428.07568359375,
 							"height": 226,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2qRbcExwfoAc="
@@ -6098,8 +6115,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 2155,
-									"top": 1485,
+									"left": 2156,
+									"top": 1481,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -6119,8 +6136,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 2140,
-									"top": 1485,
+									"left": 2141,
+									"top": 1480,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -6140,8 +6157,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 2184,
-									"top": 1486,
+									"left": 2185,
+									"top": 1482,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -6159,7 +6176,7 @@
 								"$ref": "AAAAAAF2qRpM1h0EV9k="
 							},
 							"lineStyle": 1,
-							"points": "2170:1511;2170:1474",
+							"points": "2171:1511;2172:1466",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAF2qRpNRh0ttjM="
@@ -6198,9 +6215,9 @@
 												"$ref": "AAAAAAF2qR7u7h2v1BA="
 											},
 											"font": "Arial;13;0",
-											"left": 1589,
+											"left": 1557,
 											"top": 1261,
-											"width": 294.455078125,
+											"width": 360.927734375,
 											"height": 13,
 											"text": "«interface»"
 										},
@@ -6211,9 +6228,9 @@
 												"$ref": "AAAAAAF2qR7u7h2v1BA="
 											},
 											"font": "Arial;13;1",
-											"left": 1589,
+											"left": 1557,
 											"top": 1276,
-											"width": 294.455078125,
+											"width": 360.927734375,
 											"height": 13,
 											"text": "AmbitoProgettoDAO"
 										},
@@ -6225,7 +6242,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -160,
+											"left": -224,
 											"top": 752,
 											"width": 73.67724609375,
 											"height": 13,
@@ -6239,16 +6256,16 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -160,
+											"left": -224,
 											"top": 752,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1584,
+									"left": 1552,
 									"top": 1256,
-									"width": 304.455078125,
+									"width": 370.927734375,
 									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF2qR7u7h2wprc="
@@ -6274,7 +6291,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -80,
+									"left": -112,
 									"top": 376,
 									"width": 10,
 									"height": 10
@@ -6299,9 +6316,9 @@
 												"$ref": "AAAAAAF2qR8NyR3XMfA="
 											},
 											"font": "Arial;13;0",
-											"left": 1589,
+											"left": 1557,
 											"top": 1299,
-											"width": 294.455078125,
+											"width": 360.927734375,
 											"height": 13,
 											"text": "+getAmbiti(): ArrayList<AmbitoProgetto>",
 											"horizontalAlignment": 0
@@ -6316,9 +6333,9 @@
 												"$ref": "AAAAAAF2qR827R3gpVs="
 											},
 											"font": "Arial;13;0",
-											"left": 1589,
+											"left": 1557,
 											"top": 1314,
-											"width": 294.455078125,
+											"width": 360.927734375,
 											"height": 13,
 											"text": "+addAmbito(ambito: AmbitoProgetto): boolean",
 											"horizontalAlignment": 0
@@ -6333,19 +6350,53 @@
 												"$ref": "AAAAAAF2qR9qBx3r6Xs="
 											},
 											"font": "Arial;13;0",
-											"left": 1589,
+											"left": 1557,
 											"top": 1329,
-											"width": 294.455078125,
+											"width": 360.927734375,
 											"height": 13,
 											"text": "+removeAmbito(ambito: AmbitoProgetto): boolean",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF2027cHbe7AfU=",
+											"_parent": {
+												"$ref": "AAAAAAF2qR7u7h21/UU="
+											},
+											"model": {
+												"$ref": "AAAAAAF2027cAre4lgU="
+											},
+											"font": "Arial;13;0",
+											"left": 1557,
+											"top": 1344,
+											"width": 360.927734375,
+											"height": 13,
+											"text": "+getAmbitiProgetto(proj: Progetto): ArrayList<AmbitoProgetto>",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF209EkrcrLRTA=",
+											"_parent": {
+												"$ref": "AAAAAAF2qR7u7h21/UU="
+											},
+											"model": {
+												"$ref": "AAAAAAF209Ekh8rI5es="
+											},
+											"font": "Arial;13;0",
+											"left": 1557,
+											"top": 1359,
+											"width": 360.927734375,
+											"height": 13,
+											"text": "+addAmbitiProgetto(proj: Progetto): boolean",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1584,
+									"left": 1552,
 									"top": 1294,
-									"width": 304.455078125,
-									"height": 53
+									"width": 370.927734375,
+									"height": 83
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -6358,7 +6409,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -80,
+									"left": -112,
 									"top": 376,
 									"width": 10,
 									"height": 10
@@ -6374,7 +6425,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -80,
+									"left": -112,
 									"top": 376,
 									"width": 10,
 									"height": 10
@@ -6382,10 +6433,10 @@
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 1584,
+							"left": 1552,
 							"top": 1256,
-							"width": 304.455078125,
-							"height": 91,
+							"width": 370.927734375,
+							"height": 121,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2qR7u7h2v1BA="
 							},
@@ -6571,13 +6622,47 @@
 											"height": 13,
 											"text": "-removeAmbitoPS: PreparedStatement",
 											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF2029Rcrq8U8c=",
+											"_parent": {
+												"$ref": "AAAAAAF2qR/TfR4jdvU="
+											},
+											"model": {
+												"$ref": "AAAAAAF2029RWrq5dS4="
+											},
+											"font": "Arial;13;0",
+											"left": 1525,
+											"top": 1602,
+											"width": 429.5712890625,
+											"height": 13,
+											"text": "-getAmbitiProgettoPS: PreparedStatement",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF209FcncwRimY=",
+											"_parent": {
+												"$ref": "AAAAAAF2qR/TfR4jdvU="
+											},
+											"model": {
+												"$ref": "AAAAAAF209Fch8wOi5I="
+											},
+											"font": "Arial;13;0",
+											"left": 1525,
+											"top": 1617,
+											"width": 429.5712890625,
+											"height": 13,
+											"text": "-addAmbitiProgettoPS: PreparedStatement",
+											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1520,
 									"top": 1537,
 									"width": 439.5712890625,
-									"height": 68
+									"height": 98
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -6600,7 +6685,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1525,
-											"top": 1610,
+											"top": 1640,
 											"width": 429.5712890625,
 											"height": 13,
 											"text": "+AmbitoProgettoDAOPSQL(conn: Connection): AmbitoProgettoDAOPSQL",
@@ -6609,7 +6694,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 1520,
-									"top": 1605,
+									"top": 1635,
 									"width": 439.5712890625,
 									"height": 23
 								},
@@ -6651,7 +6736,7 @@
 							"left": 1520,
 							"top": 1512,
 							"width": 439.5712890625,
-							"height": 116,
+							"height": 146,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2qR/TfR4evz4="
 							},
@@ -6690,7 +6775,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 1722,
-									"top": 1423,
+									"top": 1437,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -6711,7 +6796,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"left": 1707,
-									"top": 1423,
+									"top": 1437,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -6732,7 +6817,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 1751,
-									"top": 1422,
+									"top": 1438,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -6750,7 +6835,7 @@
 								"$ref": "AAAAAAF2qR/TfR4dAAc="
 							},
 							"lineStyle": 1,
-							"points": "1738:1511;1736:1347",
+							"points": "1738:1511;1737:1377",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAF2qR/UCx5GJk0="
@@ -11157,7 +11242,7 @@
 							},
 							"name": "dataCreazione",
 							"visibility": "private",
-							"type": "JavaDate"
+							"type": "LocalDate"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -11167,7 +11252,7 @@
 							},
 							"name": "scadenza",
 							"visibility": "private",
-							"type": "JavaDate"
+							"type": "LocalDate"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -11177,7 +11262,7 @@
 							},
 							"name": "dataTerminazione",
 							"visibility": "private",
-							"type": "JavaDate"
+							"type": "LocalDate"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -11621,11 +11706,20 @@
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
+							"_id": "AAAAAAF2067PCsLKTO0=",
+							"_parent": {
+								"$ref": "AAAAAAF2mRfvw/UYlI0="
+							},
+							"name": "idAmbito",
+							"type": "int"
+						},
+						{
+							"_type": "UMLAttribute",
 							"_id": "AAAAAAF2mRicpvVu4+4=",
 							"_parent": {
 								"$ref": "AAAAAAF2mRfvw/UYlI0="
 							},
-							"name": "nomeAmbito",
+							"name": "nome",
 							"visibility": "private",
 							"type": "String"
 						}
@@ -12834,6 +12928,26 @@
 									},
 									"type": "boolean",
 									"direction": "return"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF201oSebYPiHE=",
+									"_parent": {
+										"$ref": "AAAAAAF2qRmJFhyoZgY="
+									},
+									"name": "proj",
+									"type": {
+										"$ref": "AAAAAAF2ljtZiKvka5Q="
+									}
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF2096Ie86MY8w=",
+									"_parent": {
+										"$ref": "AAAAAAF2qRmJFhyoZgY="
+									},
+									"name": "ruolo",
+									"type": "String"
 								}
 							]
 						},
@@ -12864,6 +12978,17 @@
 									},
 									"type": "boolean",
 									"direction": "return"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF201pMobaQnJc=",
+									"_parent": {
+										"$ref": "AAAAAAF2qRn03xyzMbA="
+									},
+									"name": "proj",
+									"type": {
+										"$ref": "AAAAAAF2ljtZiKvka5Q="
+									}
 								}
 							]
 						},
@@ -13172,6 +13297,66 @@
 									"direction": "return"
 								}
 							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF2027cAre4lgU=",
+							"_parent": {
+								"$ref": "AAAAAAF2qR7u7B2stBw="
+							},
+							"name": "getAmbitiProgetto",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF2028xDbimrh0=",
+									"_parent": {
+										"$ref": "AAAAAAF2027cAre4lgU="
+									},
+									"name": "proj",
+									"type": {
+										"$ref": "AAAAAAF2ljtZiKvka5Q="
+									}
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF2028xDbinZmk=",
+									"_parent": {
+										"$ref": "AAAAAAF2027cAre4lgU="
+									},
+									"type": "ArrayList<AmbitoProgetto>",
+									"direction": "return"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF209Ekh8rI5es=",
+							"_parent": {
+								"$ref": "AAAAAAF2qR7u7B2stBw="
+							},
+							"name": "addAmbitiProgetto",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF209FLxct3Cr0=",
+									"_parent": {
+										"$ref": "AAAAAAF209Ekh8rI5es="
+									},
+									"name": "proj",
+									"type": {
+										"$ref": "AAAAAAF2ljtZiKvka5Q="
+									}
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF209FLxct4wuk=",
+									"_parent": {
+										"$ref": "AAAAAAF209Ekh8rI5es="
+									},
+									"type": "boolean",
+									"direction": "return"
+								}
+							]
 						}
 					]
 				},
@@ -13235,6 +13420,26 @@
 								"$ref": "AAAAAAF2qR/TfR4bUNA="
 							},
 							"name": "removeAmbitoPS",
+							"visibility": "private",
+							"type": "PreparedStatement"
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAF2029RWrq5dS4=",
+							"_parent": {
+								"$ref": "AAAAAAF2qR/TfR4bUNA="
+							},
+							"name": "getAmbitiProgettoPS",
+							"visibility": "private",
+							"type": "PreparedStatement"
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAF209Fch8wOi5I=",
+							"_parent": {
+								"$ref": "AAAAAAF2qR/TfR4bUNA="
+							},
+							"name": "addAmbitiProgettoPS",
 							"visibility": "private",
 							"type": "PreparedStatement"
 						}

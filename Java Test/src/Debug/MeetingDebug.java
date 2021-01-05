@@ -12,8 +12,10 @@ import Entità.Dipendente;
 import Entità.Meeting;
 import ImplementazioneDAO.DipendenteDAOPSQL;
 import ImplementazioneDAO.MeetingDAOPSQL;
+import ImplementazioneDAO.SalaRiunioneDAOPSQL;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.MeetingDAO;
+import InterfacceDAO.SalaRiunioneDAO;
 
 public class MeetingDebug {
 
@@ -24,6 +26,7 @@ public class MeetingDebug {
 		
 		MeetingDAO meetDAO = null;
 		DipendenteDAO dipDAO = null;
+		SalaRiunioneDAO salaDAO = null;
 		
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
@@ -36,6 +39,7 @@ public class MeetingDebug {
 			
 			meetDAO = new MeetingDAOPSQL(connection);
 			dipDAO = new DipendenteDAOPSQL(connection);
+			salaDAO = new SalaRiunioneDAOPSQL(connection);
 			
 			//Ottieni i meeting a cui è invitato un dipendente
 			Dipendente dipendente = dipDAO.getDipendenteByCF("SPSNDR02L01L259V");
@@ -77,6 +81,24 @@ public class MeetingDebug {
 //			if (meetDAO.removeMeeting(meeting))
 //				System.out.println("Rimosso");
 			
+			//Aggiorna un meeting
+			meetings = meetDAO.getMeetingsByData(day);
+			System.out.println("\nModifca del meeting inserendo la data di terminazione a oggi");
+			meetings.get(0).setDataFine(LocalDate.now());
+			if (meetDAO.updateMeeting(meetings.get(0)))
+				System.out.println("Modificato");
+			
+			//Ottiene i meeting di una specifica sala
+			System.out.println("\nMeeting nella sala " + salaDAO.getSalaByCod("Sala1"));
+			meetings = meetDAO.getMeetingsBySala(salaDAO.getSalaByCod("Sala1"));
+			for (Meeting m : meetings)
+				System.out.println(m);
+			
+			//Ottiene i meeting su una specifica piattaforma
+			System.out.println("\nMeeting su Microsoft Teams");
+			meetings = meetDAO.getMeetingsByPiattaforma("Microsoft Teams");
+			for (Meeting m : meetings)
+				System.out.println(m);
 		}
 		catch(SQLException e) 
 		{

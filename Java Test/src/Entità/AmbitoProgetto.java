@@ -6,12 +6,19 @@ public class AmbitoProgetto {
 	
 	//ATTRIBUTI
 	
+	private int idAmbito;	//id dell'ambito
 	private String nome;	//nome dell'ambito
 	
 	//METODI
 	
-	//Costruttore con tutti gli attributi
+	//Costruttore con gli attributi essenziali per un nuovo oggetto
 	public AmbitoProgetto(String nome) {
+		this.nome = nome;
+	}
+	
+	//Costruttore con tutti gli attributi per le query
+	public AmbitoProgetto(int idAmbito, String nome) {
+		this.idAmbito = idAmbito;
 		this.nome = nome;
 	}
 
@@ -24,6 +31,14 @@ public class AmbitoProgetto {
 		this.nome = nome;
 	}
 	
+	public int getIdAmbito() {
+		return idAmbito;
+	}
+
+	public void setIdAmbito(int idAmbito) {
+		this.idAmbito = idAmbito;
+	}
+
 	//toString
 	@Override
 	public String toString() {

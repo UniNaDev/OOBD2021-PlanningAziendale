@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Entità.AmbitoProgetto;
+import Entità.Progetto;
 
 public interface AmbitoProgettoDAO {
 	
@@ -14,4 +15,6 @@ public interface AmbitoProgettoDAO {
 	public ArrayList<AmbitoProgetto> getAmbiti() throws SQLException;	//metodo che ottiene una lista di tutti gli ambiti esistenti nel DB
 	public boolean addAmbito(AmbitoProgetto ambito) throws SQLException;	//metodo che inserisce un nuovo ambito nel DB
 	public boolean removeAmbito(AmbitoProgetto ambito) throws SQLException;	//metodo che rimuove un ambito esistente nel DB
+	public ArrayList<AmbitoProgetto> getAmbitiProgetto(Progetto proj) throws SQLException;	//metodo che restituisce gli ambiti di un progetto
+	public boolean addAmbitiProgetto(Progetto proj) throws SQLException;	//metodo che inserisce gli ambiti di un progetto nel DB
 }

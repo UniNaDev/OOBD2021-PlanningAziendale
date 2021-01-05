@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Entità.AmbitoProgetto;
+import Entità.Progetto;
 import InterfacceDAO.AmbitoProgettoDAO;
 
 public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
@@ -16,7 +17,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 	//ATTRIBUTI
 	
 	private Connection connection;
-	private PreparedStatement getAmbitiPS, addAmbitoPS, removeAmbitoPS;
+	private PreparedStatement getAmbitiPS, addAmbitoPS, removeAmbitoPS, getAmbitiProgettoPS, addAmbitiProgettoPS;
 	
 	//METODI
 	
@@ -28,6 +29,8 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		getAmbitiPS = connection.prepareStatement("SELECT * FROM AmbitoProgetto");
 		addAmbitoPS = connection.prepareStatement("INSERT INTO AmbitoProgetto(NomeAmbito) VALUES (?)"); //? = nome dell'ambito da inserire
 		removeAmbitoPS = connection.prepareStatement("DELETE FROM AmbitoProgetto WHERE NomeAmbito = ?");	//? = nome dell'ambito da rimuovere
+		getAmbitiProgettoPS = connection.prepareStatement("SELECT * FROM AmbitoProgetto AS ap WHERE ap.IDAmbito IN (SELECT l.IDAmbito FROM AmbitoProgettoLink AS l WHERE l.CodProgetto = ?)");	//?=Codice del progetto di cui si vogliono gli ambiti
+		addAmbitiProgettoPS = connection.prepareStatement("INSERT INTO AmbitoProgettoLink VALUES (?,?)"); //? = id dell'ambito, ? = codice progetto
 	}
 	
 	//Metodo che restituisce una lista di tutti gli ambiti esistenti nel DB
@@ -38,7 +41,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getString("NomeAmbito"));
+			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getInt("IDAmbito"), risultato.getString("NomeAmbito"));
 			temp.add(ambitoTemp);
 		}
 		risultato.close(); //chiude il ResultSet
@@ -67,6 +70,44 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		int record = removeAmbitoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato, 0=non eliminato)
 		
 		if (record == 1)
+			return true;
+		else
+			return false;
+	}
+
+	//Metodo che restituisce gli ambiti di un progetto
+	@Override
+	public ArrayList<AmbitoProgetto> getAmbitiProgetto(Progetto proj) throws SQLException {
+		getAmbitiProgettoPS.setInt(1, proj.getIdProgettto());	//inserisce il codice del progetto nella query
+		ArrayList<AmbitoProgetto> temp = new ArrayList<AmbitoProgetto>();	//inizializza la lista da restituire
+		
+		ResultSet risultato = getAmbitiProgettoPS.executeQuery();	//esegue la query e restituisce il ResultSet
+		
+		//finchè ci sono record nel ResultSet
+		while (risultato.next()) {
+			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getInt("IDAmbito"), risultato.getString("NomeAmbito"));
+			temp.add(ambitoTemp);
+		}
+		risultato.close(); //chiude il ResultSet
+		
+		return temp;
+	}
+
+	//Metodo che inserisce gli ambiti di un progetto
+	@Override
+	public boolean addAmbitiProgetto(Progetto proj) throws SQLException {
+		int record = 0;
+		
+		//per ogni ambito del progetto
+		for (AmbitoProgetto ambito : proj.getAmbiti()) {
+			addAmbitiProgettoPS.setInt(1, ambito.getIdAmbito()); //id ambito
+			addAmbitiProgettoPS.setInt(2, proj.getIdProgettto()); //codice progetto
+			
+			record += addAmbitiProgettoPS.executeUpdate();	//esegue l'insert e aggiorna il numero di record inseriti
+		}
+		
+		//se il numero di record inseriti è lo stesso del numero di ambiti del progetto allora è andato in porto tutto l'inserimento
+		if (record == proj.getAmbiti().size())
 			return true;
 		else
 			return false;

@@ -41,7 +41,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		getMeetingsByInvitatoPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ?)");	//?=codice fiscale del dipendente di cui si vogliono i meeting a cui è invitato
 		addMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, Organizzatore, CodSala) VALUES (?,?,?,?,?,?,?,?)");
 		removeMeetingPS = connection.prepareStatement("DELETE FROM Meeting AS m WHERE m.IDMeeting = ?");	//?=ID del meeting da eliminare
-		updateMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, Organizzatore = ?, CodSala = ?, CodProgetto = ? WHERE IDMeeting = ?");
+		updateMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, CodSala = ? WHERE IDMeeting = ?");
 		getMeetingsBySalaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodSala = ?");	//?=Codice della sala di cui si vogliono i meeting
 		getMeetingsByPiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.Piattaforma = ?");	//?=Piattaforma di cui si cercano i meeting
 	}
@@ -63,7 +63,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		while (risultato.next()) {
 			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"),dipDAO.getDipendenteByCF(risultato.getString("Organizzatore")));
 			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			if (risultato.getString("CodSala") != null)
+				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
 			temp.add(meetingTemp);
 		}
 		risultato.close();
@@ -88,7 +89,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		while (risultato.next()) {
 			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"),dipDAO.getDipendenteByCF(risultato.getString("Organizzatore")));
 			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			if (risultato.getString("CodSala") != null)
+				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
 			temp.add(meetingTemp);
 		}
 		risultato.close();
@@ -112,7 +114,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		while (risultato.next()) {
 			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"),dipDAO.getDipendenteByCF(risultato.getString("Organizzatore")));
 			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			if (risultato.getString("CodSala") != null)
+				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
 			temp.add(meetingTemp);
 		}
 		risultato.close();
@@ -186,22 +189,80 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
+	//Metodo che aggiorna un meeting.
 	@Override
 	public boolean updateMeeting(Meeting meeting) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		updateMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));//data inizio
+		updateMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));//data fine
+		updateMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(),meeting.getOraInizio().getSecondOfMinute()));//ora inizio
+		updateMeetingPS.setTime(4, new Time(meeting.getOraFine().getHourOfDay(),meeting.getOraFine().getMinuteOfHour(),meeting.getOraFine().getSecondOfMinute()));//ora fine
+		updateMeetingPS.setObject(5, meeting.getModalità(), Types.OTHER);//modalità
+		if (meeting.getPiattaforma() != null)
+			updateMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);//piattaforma
+		else
+			updateMeetingPS.setNull(6, Types.OTHER);
+		if (meeting.getSala() != null)
+			updateMeetingPS.setString(7, meeting.getSala().getCodSala());//codSala
+		else
+			updateMeetingPS.setNull(7, Types.CHAR);
+		updateMeetingPS.setInt(8, meeting.getIdMeeting());//idMeeting da modificare
+		
+		int record = updateMeetingPS.executeUpdate();	//esegue l'update e salva il numero di record modificati
+		
+		if (record == 1)
+			return true;
+		else
+			return false;
 	}
 
+	//Metodo che ottiene i meeting che avvengono in una specifica sala.
 	@Override
 	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		getMeetingsBySalaPS.setString(1, sala.getCodSala()); //inserisce il codice della sala di cui si vogliono i meeting
+		
+		ArrayList<Meeting> temp = new ArrayList<Meeting>();	//inizializza la lista da restituire dopo
+		
+		ResultSet risultato = getMeetingsBySalaPS.executeQuery();	//esegue la query e ottiene il Resultset
+		
+		DipendenteDAO dipDAO = new DipendenteDAOPSQL(connection);
+		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
+
+		//finchè ci sono record nel ResultSet
+		while (risultato.next()) {
+			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"),dipDAO.getDipendenteByCF(risultato.getString("Organizzatore")));
+			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
+			if (risultato.getString("CodSala") != null)
+				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			temp.add(meetingTemp);
+		}
+		risultato.close();
+		
+		return temp;
 	}
 
+	//Metodo che ottiene i meeting che avvengono su una specifica piattaforma.
 	@Override
 	public ArrayList<Meeting> getMeetingsByPiattaforma(String platf) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		getMeetingsByPiattaformaPS.setObject(1, platf, Types.OTHER);	//inserisce la piattaforma nella query
+		
+		ArrayList<Meeting> temp = new ArrayList<Meeting>();	//inizializza la lista da restituire dopo
+		
+		ResultSet risultato = getMeetingsByPiattaformaPS.executeQuery();	//esegue la query e ottiene il Resultset
+		
+		DipendenteDAO dipDAO = new DipendenteDAOPSQL(connection);
+		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
+
+		//finchè ci sono record nel ResultSet
+		while (risultato.next()) {
+			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"),dipDAO.getDipendenteByCF(risultato.getString("Organizzatore")));
+			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
+			if (risultato.getString("CodSala") != null)
+				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			temp.add(meetingTemp);
+		}
+		risultato.close();
+		
+		return temp;
 	}
 
 }
