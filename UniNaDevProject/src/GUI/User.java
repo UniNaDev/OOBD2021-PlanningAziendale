@@ -16,6 +16,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
+
 import java.awt.Toolkit;
 import javax.swing.JLabel;
 import java.awt.Frame;
@@ -24,6 +26,7 @@ import javax.swing.border.LineBorder;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import java.awt.Color;
 import javax.swing.JTextArea;
@@ -33,6 +36,10 @@ import javax.swing.AbstractListModel;
 import java.awt.Cursor;
 import javax.swing.border.MatteBorder;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.UIManager;
+import javax.swing.ImageIcon;
 
 public class User extends JFrame {
 
@@ -60,6 +67,18 @@ public class User extends JFrame {
 		setContentPane(contentPane);
 		
 		mioAccountButton = new JButton("Il Mio Account");
+		mioAccountButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				mioAccountButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				mioAccountButton.setBackground(Color.WHITE);
+			}
+		});
 		mioAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mioAccountButton.setBackground(Color.WHITE);
 		mioAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -71,6 +90,18 @@ public class User extends JFrame {
 		});
 		
 		mieiProgettiButton = new JButton("I Miei Progetti");
+		mieiProgettiButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				mieiProgettiButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				mieiProgettiButton.setBackground(Color.WHITE);
+			}
+		});
 		mieiProgettiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mieiProgettiButton.setBackground(Color.WHITE);
 		mieiProgettiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -82,6 +113,19 @@ public class User extends JFrame {
 		});
 		
 		mieiMeetingButton = new JButton("I Miei Meeting");
+		mieiMeetingButton.addMouseListener(new MouseAdapter() {			
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				mieiMeetingButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				mieiMeetingButton.setBackground(Color.WHITE);
+			}
+			
+		});
 		mieiMeetingButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mieiMeetingButton.setBackground(Color.WHITE);
 		mieiMeetingButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -93,6 +137,18 @@ public class User extends JFrame {
 		});
 		
 		JButton logoutButton = new JButton("Logout");
+		logoutButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				logoutButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				logoutButton.setBackground(Color.WHITE);
+			}
+		});
 		logoutButton.setBackground(Color.WHITE);
 		logoutButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		logoutButton.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -110,9 +166,11 @@ public class User extends JFrame {
 		meetingScrollPanel.setBorder(new LineBorder(Color.GRAY, 2));
 		
 		JLabel nomeUtenteLabel = new JLabel("Mario Rossi");
+		nomeUtenteLabel.setIcon(new ImageIcon(User.class.getResource("/Icone/employee_64.png")));
 		nomeUtenteLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		JLabel emailUtenteLabel = new JLabel("m.rossi@gmail.com");
+		emailUtenteLabel.setIcon(null);
 		emailUtenteLabel.setForeground(Color.DARK_GRAY);
 		emailUtenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
@@ -128,63 +186,96 @@ public class User extends JFrame {
 		String dataInStringa = giornoAttuale + " " + String.valueOf(giornoAttualeInt) + " " + meseAttuale + " " + String.valueOf(annoAttuale);
 		
 		JLabel dataAttualeLabel = new JLabel(String.valueOf(dataInStringa));
-		dataAttualeLabel.setForeground(Color.DARK_GRAY);
+		dataAttualeLabel.setForeground(Color.BLACK);
 				
 		/////////////////////////////////////////////////////////////////////////////////////
 		
-		dataAttualeLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		dataAttualeLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		JLabel iconaEmailLabel = new JLabel("");
+		iconaEmailLabel.setIcon(new ImageIcon(User.class.getResource("/Icone/email_32.png")));
+				
+		JLabel oraAttualeLabel = new JLabel("Updating...");
+		oraAttualeLabel.setForeground(Color.BLACK);
+
+		
+		oraAttualeLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(1453, Short.MAX_VALUE))
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
-					.addGap(240)
-					.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
+							.addGap(210)
+							.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE))
+						.addComponent(oraAttualeLabel)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(25)
+									.addComponent(iconaEmailLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addGap(18)
+									.addComponent(emailUtenteLabel))
+								.addComponent(nomeUtenteLabel))
+							.addPreferredGap(ComponentPlacement.RELATED, 1304, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(dataAttualeLabel, Alignment.TRAILING)
+								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+									.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap())
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(nomeUtenteLabel)
-					.addContainerGap(1697, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(emailUtenteLabel)
-					.addContainerGap(1697, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(dataAttualeLabel)
-					.addContainerGap(1708, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(1800, Short.MAX_VALUE)
-					.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false)
-						.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(nomeUtenteLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(emailUtenteLabel)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(dataAttualeLabel)
-					.addGap(66)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
-						.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE))
-					.addGap(18)
-					.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-		);
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false)
+								.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(dataAttualeLabel))
+						.addComponent(nomeUtenteLabel))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(22)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(iconaEmailLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(emailUtenteLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(oraAttualeLabel)))
+					.addGap(55)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+						.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE))
+					.addGap(32)
+					.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+					);
+		
+		//PARTE DI CODICE CHE SI OCCUPA DI AGGIORNARE L'ORA IN TEMPO REALE
+						
+		Timer t = new Timer(1000, new ActionListener(){ //un timer ripete l'azione ogni tot di tempo, in questo caso ogni 1000ms
+		    @Override
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	LocalTime oraAttuale = LocalTime.now();		//prende l'ora attuale
+		    	String oraAttualeStringa = oraAttuale.toString().substring(0, 8); //taglia la parte dei millisecondi che non ci serve
+		    	
+		    	oraAttualeLabel.setText(oraAttualeStringa);
+		    }
+		});
+		t.start(); // fa partire il timer
+				
+		/////////////////////////////////////////////////////////////////
 		
 		JLabel meetingLabel = new JLabel("Meeting Programmati");
 		meetingLabel.setForeground(Color.DARK_GRAY);
@@ -192,6 +283,7 @@ public class User extends JFrame {
 		meetingScrollPanel.setColumnHeaderView(meetingLabel);
 		
 		JList meetingList = new JList();
+		meetingList.setSelectionBackground(Color.LIGHT_GRAY);
 		meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingList.setFixedCellHeight(40);
 		meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -213,6 +305,7 @@ public class User extends JFrame {
 		progettiScrollPanel.setColumnHeaderView(progettiLabel);
 		
 		JList progettiList = new JList();
+		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 		progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettiList.setFixedCellHeight(40);
 		progettiList.setModel(new AbstractListModel() {
