@@ -19,7 +19,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	//ATTRIBUTI
 	private Connection connection;	//connessione al DB
 	
-	private PreparedStatement getSalePS,getSaleByCapPS,getSaleLiberePS,addSalaPS,updateSalaPS,removeSalaPS;
+	private PreparedStatement getSalePS,getSaleByCapPS,getSaleLiberePS,addSalaPS,updateSalaPS,removeSalaPS,getSalaByCodPS;
 	
 	//METODI
 	
@@ -33,6 +33,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		addSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");	//? = codice sala, capienza, indirizzo, piano
 		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");	//?1 = nuovo codice, ?5 = vecchio codice
 		removeSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");	//? = codice sala da cancellare
+		getSalaByCodPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala = ?");	//? = codice della sala da cercare
 	}
 	
 	//Metodo che restituisce la lista (temp) di tutte le sale nel DB
@@ -135,6 +136,19 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 			return true;
 		else
 			return false;
+	}
+
+	//Metodo che restituisce la sala con il codice indicato nei parametri in input
+	@Override
+	public SalaRiunione getSalaByCod(String codSala) throws SQLException {
+		getSalaByCodPS.setString(1, codSala); 	//inserisce il codice della sala nella query
+		
+		ResultSet risultato = getSalaByCodPS.executeQuery();	//esegue la query e restituisce il ResultSet
+		
+		risultato.next();
+		SalaRiunione salaTemp = new SalaRiunione(risultato.getString("CodSala"),risultato.getInt("Capienza"),risultato.getString("Indirizzo"),risultato.getInt("Piano"));
+		
+		return salaTemp;
 	}
 
 }

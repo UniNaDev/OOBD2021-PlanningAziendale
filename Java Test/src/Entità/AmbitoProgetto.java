@@ -6,14 +6,12 @@ public class AmbitoProgetto {
 	
 	//ATTRIBUTI
 	
-	private int id;	//id per distinguerli
 	private String nome;	//nome dell'ambito
 	
 	//METODI
 	
 	//Costruttore con tutti gli attributi
-	public AmbitoProgetto(int id, String nome) {
-		this.id = id;
+	public AmbitoProgetto(String nome) {
 		this.nome = nome;
 	}
 
@@ -25,12 +23,6 @@ public class AmbitoProgetto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	//Manca setId perchè l'id è gestito dal DBMS con una sequence
-	public int getId() {
-		return id;
-	}
-
 	
 	//toString
 	@Override

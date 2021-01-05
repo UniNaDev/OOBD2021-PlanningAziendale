@@ -14,7 +14,7 @@ import Entità.Skill;
 public interface DipendenteDAO {
 
 	public ArrayList<Dipendente> getDipendenti() throws SQLException;	//metodo che restituisce tutti i dipendenti nel DB
-	public ArrayList<Dipendente> getDipendentiByEta(int minima) throws SQLException;	//metodo che restituisce tutti i dipendenti con età superiore al parametro inserito
+	public ArrayList<Dipendente> getDipendentiByEtà(int minima) throws SQLException;	//metodo che restituisce tutti i dipendenti con età superiore al parametro inserito
 	public float getValutazione(String cf) throws SQLException;	//metodo che restituisce la valutazione di un dipendente
 	public ArrayList<Dipendente> getDipendentiByValutazione(float minima) throws SQLException;	//metodo che restituisce tutti i dipendenti con valutazione superiore al parametro inserito
 	public ArrayList<Dipendente> getDipendentiBySalario(float minimo, float massimo) throws SQLException;	//metodo che restituisce i dipendenti con salario compreso tra i parametri inseriti 

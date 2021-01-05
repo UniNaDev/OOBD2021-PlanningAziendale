@@ -38,7 +38,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getInt(1),risultato.getString(2));	//1=ID, 2=NomeAmbito
+			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getString("NomeAmbito"));
 			temp.add(ambitoTemp);
 		}
 		risultato.close(); //chiude il ResultSet

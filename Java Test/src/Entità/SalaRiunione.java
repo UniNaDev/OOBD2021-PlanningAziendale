@@ -61,8 +61,7 @@ public class SalaRiunione {
 	//Metodo ToString
 	@Override
 	public String toString() {
-		return "SalaRiunione [codSala=" + codSala + ", cap=" + cap + ", indirizzo=" + indirizzo + ", piano=" + piano
-				+ "]";
+		return codSala + " (" + cap + ")";
 	}
 	
 	

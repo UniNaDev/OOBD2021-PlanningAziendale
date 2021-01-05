@@ -36,9 +36,9 @@ public class LuogoNascita {
 		return nomeProvincia;
 	}
 	
-	//Metodo ToString
+	//Metodo toString
 	@Override
 	public String toString() {
-		return nomeComune  + " [" + codiceComune + "] " + " (" + nomeProvincia + ")";
+		return nomeComune + ", " + nomeProvincia;
 	}
 }

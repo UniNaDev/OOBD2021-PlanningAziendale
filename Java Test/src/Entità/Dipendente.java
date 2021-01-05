@@ -7,6 +7,8 @@
 
 package Entità;
 
+import java.util.ArrayList;
+
 import org.joda.time.LocalDate;
 
 public class Dipendente {
@@ -25,20 +27,21 @@ public class Dipendente {
 	private String cellulare;	//numero di cellulare del dipendente
 	private float salario;	//salario attuale del dipendente
 	private String password;	//password del dipendente con cui può accedere al servizio
+	
 	private float valutazione;	//valutazione in decimi del dipendente in azienda
 	
 	private String[] vocali = {"A","E","I","O","U"};
 	private String[] simboliNonRichiesti = {" ", "À","Á","È","É","Ì","Ò","Ù","Ä","Ë","Ï","Ö","Ü"};
 	
 	//TODO: attributi per le varie associazioni
+	private ArrayList<Skill> skills = new ArrayList<Skill>();	//skill del dipendente
 	
 	//METODI
 	
 	//Costruttore totale
-	public Dipendente(String cf, String nome, String cognome, char sesso, LocalDate dataNascita,
+	public Dipendente(String nome, String cognome, char sesso, LocalDate dataNascita,
 			LuogoNascita luogoNascita, String indirizzo, String email, String telefonoCasa, String cellulare,
-			float salario, String password, float valutazione) {
-		this.cf = cf;
+			float salario, String password) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.sesso = sesso;
@@ -50,14 +53,11 @@ public class Dipendente {
 		this.cellulare = cellulare;		//può essere null
 		this.salario = salario;
 		this.password = password;
-		this.valutazione = valutazione;
 	}
 	
 	//Costruttore con soli parametri essenziali
-	public Dipendente(String cf, String nome, String cognome, char sesso, LocalDate dataNascita,
-			LuogoNascita luogoNascita, String indirizzo, String email, float salario, String password,
-			float valutazione) {
-		this.cf = cf;	//primary key
+	public Dipendente(String nome, String cognome, char sesso, LocalDate dataNascita,
+			LuogoNascita luogoNascita, String indirizzo, String email, float salario, String password) {
 		this.nome = nome;	//not null
 		this.cognome = cognome;	//not null
 		this.sesso = sesso;	//not null
@@ -67,7 +67,6 @@ public class Dipendente {
 		this.email = email;	//not null
 		this.salario = salario;	//not null
 		this.password = password;	//not null
-		this.valutazione = valutazione;	//not null
 	}
 	
 	//Metodo che genera il codice fiscale di un dipendente partendo dai suoi dati anagrafici
@@ -188,7 +187,10 @@ public class Dipendente {
 		this.password = password;
 	}
 
-	//Manca setValutazione perchè la valutazione viene calcolata direttamente nel DB con una procedura quindi per consistenza può essere solo recuperata da lì
+	public void setValutazione(float valutazione) {
+		this.valutazione = valutazione;
+	}
+	
 	public float getValutazione() {
 		return valutazione;
 	}
@@ -196,10 +198,7 @@ public class Dipendente {
 	//toString
 	@Override
 	public String toString() {
-		return "Dipendente [cf=" + cf + ", nome=" + nome + ", cognome=" + cognome + ", sesso=" + sesso
-				+ ", dataNascita=" + dataNascita + ", luogoNascita=" + luogoNascita + ", indirizzo=" + indirizzo
-				+ ", email=" + email + ", telefonoCasa=" + telefonoCasa + ", cellulare=" + cellulare + ", salario="
-				+ salario + ", password=" + password + ", valutazione=" + valutazione + "]";
+		return nome + " " + cognome + " Salario: " + salario + " Valutazione: " + valutazione;
 	}
 	
 	//Metodo che calcola la stringa di caratteri del codice fiscale corrispondente a cognome e nome
