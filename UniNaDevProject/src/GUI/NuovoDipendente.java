@@ -166,6 +166,7 @@ public class NuovoDipendente extends JFrame {
 		
 		//Combo Box
 		JComboBox<?> dayComboBox = new JComboBox<Object>();
+		dayComboBox.setBackground(Color.WHITE);
 		dayComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dayComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		dayComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -174,6 +175,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(dayComboBox);
 		
 		monthComboBox = new JComboBox<Object>();
+		monthComboBox.setBackground(Color.WHITE);
 		monthComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		monthComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		monthComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -182,6 +184,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(monthComboBox);
 		
 		yearComboBox = new JComboBox<Object>();
+		yearComboBox.setBackground(Color.WHITE);
 		yearComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		yearComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		yearComboBox.setBounds(591, 274, 66, 22);
@@ -201,6 +204,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(yearComboBox);
 		
 		provinciaComboBox = new JComboBox<Object>();
+		provinciaComboBox.setBackground(Color.WHITE);
 		provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		provinciaComboBox.setBounds(484, 316, 44, 22);
@@ -208,6 +212,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(provinciaComboBox);
 		
 		cityComboBox = new JComboBox<Object>();
+		cityComboBox.setBackground(Color.WHITE);
 		cityComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cityComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		cityComboBox.setBounds(538, 316, 65, 22);
