@@ -23,17 +23,12 @@ import javax.swing.ImageIcon;
 
 public class iPlanner extends JFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane;
 	private JLabel dipendenteIscrittoLabel;
 	private JLabel nuovoDipendenteLabel;
  
-	
-    
-    
+
 	/**
 	 * Create the frame.
 	 */
@@ -49,14 +44,12 @@ public class iPlanner extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		//Label
 		dipendenteIscrittoLabel = new JLabel("Sei un dipendente gi\u00E0 iscritto?");
 		dipendenteIscrittoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteIscrittoLabel.setForeground(Color.BLACK);
 		dipendenteIscrittoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
 		dipendenteIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		
-
 		
 		nuovoDipendenteLabel = new JLabel("Sei un nuovo dipendente?");
 		nuovoDipendenteLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -68,6 +61,7 @@ public class iPlanner extends JFrame {
 		welcomeLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/planner_128.png")));
 		welcomeLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
+		//Icon Label
 		JLabel employeeIconLabel = new JLabel("");
 		employeeIconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		employeeIconLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/employee_64.png")));

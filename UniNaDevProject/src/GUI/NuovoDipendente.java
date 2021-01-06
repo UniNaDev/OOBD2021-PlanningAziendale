@@ -77,13 +77,13 @@ public class NuovoDipendente extends JFrame {
 	public NuovoDipendente(ControllerScelta theController) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NuovoDipendente.class.getResource("/Icone/WindowIcon_16.png")));
 		setResizable(false);
-		
+	
 		setTitle("iPlanner - Sing In");
 		setBounds(100, 100, 1000, 700);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		setLocationRelativeTo(null);
 		
 		//Label
 		JLabel nameLabel = new JLabel("Nome*");

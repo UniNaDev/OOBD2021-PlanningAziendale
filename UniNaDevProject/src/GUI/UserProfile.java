@@ -347,9 +347,9 @@ public class UserProfile extends JFrame {
 		indirizzoTextArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		indirizzoTextArea.setText("Cupa Nuova Cintia 21 , 80126 , Napoli");
 		indirizzoTextArea.setBackground(Color.WHITE);
-		indirizzoTextArea.setEditable(false);
 		indirizzoTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		indirizzoTextArea.setLineWrap(true);
+		indirizzoTextArea.setEditable(false);
 		indirizzoScrollPane.setViewportView(indirizzoTextArea);
 		
 		cellulareTextField = new JTextField();
