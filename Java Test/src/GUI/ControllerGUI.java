@@ -1,8 +1,10 @@
 //Controller principale dell'interfaccia grafica
 package GUI;
 
+import java.awt.Window;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import DBManager.ManagerConnessioneDB;
 import Entità.Dipendente;
@@ -15,6 +17,7 @@ public class ControllerGUI {
 	//attributi GUI
 	private StartWindow startWindow;	//finestra iniziale
 	private LoginWindow loginWindow;	//finestra per effettuare il login
+	private ErrorWindow errorWindow;	//finestra per messaggi di errore
 	
 	//altri attributi
 	private Connection connection = null;	//connessione al DB
@@ -34,9 +37,10 @@ public class ControllerGUI {
 			
 			ControllerGUI controller = new ControllerGUI(connection);	//inizializza controller
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} 
+		catch (SQLException e) {
+			ControllerGUI controller = new ControllerGUI();	//inizializza controller senza connessione
+			controller.mostraErrore("Connessione fallita.");	//mostra finestra di errore "connessione fallita"
 		}
 	}
 
@@ -47,6 +51,11 @@ public class ControllerGUI {
 		this.startWindow = new StartWindow(this);	//inizializza la finestra iniziale
 		this.connection = connection;	//ottiene la connessione al DB
 		startWindow.setVisible(true);	//visualizza la finestra iniziale
+	}
+	
+	//Costruttore senza connessione per messaggio di errore di connessione
+	public ControllerGUI() {
+		this.startWindow = new StartWindow(this);
 	}
 	
 	//Metodo che passa da start window a login window
@@ -60,9 +69,19 @@ public class ControllerGUI {
 	public void login(String email, String password) throws SQLException {
 		DipendenteDAO dipDAO = new DipendenteDAOPSQL(this.connection);
 		loggedUser = dipDAO.loginCheck(email, password);
-		System.out.println("Logged in");
 		
 		//TODO: cambia finestra e pulisci credenziali nei field
+	}
+	
+	//Metodo per aprire finestra di errore
+	public void mostraErrore(String errore) {
+		errorWindow = new ErrorWindow(errore);	//inizializza la finestra di errore
+		errorWindow.setVisible(true);	//mostra la finestra di errore
+		errorWindow.setAlwaysOnTop(true); //pone la finestra di errore sempre sopra
+		//rende le finestre visibili sottostanti non interagibili
+		for (Window w: Window.getWindows())
+			if (w.isShowing() && !w.equals(errorWindow))
+				w.setEnabled(false);
 	}
 	
 }

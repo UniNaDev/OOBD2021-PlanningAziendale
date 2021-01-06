@@ -89,8 +89,11 @@ public class LoginWindow extends JFrame {
 				try {
 					controller.login(email, password);
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					controller.mostraErrore("Errore. Credenziali errate.");
+					emailLabel.setForeground(Color.RED);
+					passwordLabel.setForeground(Color.RED);
+					emailTextField.setText("");
+					passwordField.setText("");
 				}
 			}
 		});
