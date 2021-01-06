@@ -26,9 +26,9 @@ public class Progetto {
 	
 	private Dipendente creatore;	//creatore del progetto
 	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
-	private ArrayList<Dipendente> partecipanti = new ArrayList<Dipendente>();	//lista di dipendenti partecipanti al progetto
 	
 	private ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
+	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista di collaborazioni del progetto
 
 	//METODI
 	
@@ -134,12 +134,12 @@ public class Progetto {
 		this.meetingsRelativi = meetingsRelativi;
 	}
 
-	public ArrayList<Dipendente> getPartecipanti() {
-		return partecipanti;
+	public ArrayList<CollaborazioneProgetto> getCollaborazioni() {
+		return collaborazioni;
 	}
 
-	public void setPartecipanti(ArrayList<Dipendente> partecipanti) {
-		this.partecipanti = partecipanti;
+	public void setCollaborazioni(ArrayList<CollaborazioneProgetto> collaborazioni) {
+		this.collaborazioni = collaborazioni;
 	}
 
 	//toString

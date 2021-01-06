@@ -6,6 +6,8 @@
 
 package Entità;
 
+import java.util.ArrayList;
+
 public class SalaRiunione {
 	
 	//ATTRIBUTI
@@ -14,6 +16,8 @@ public class SalaRiunione {
 	private int cap;	//capienza della sala
 	private String indirizzo;	//indirizzo della sede dove si trova
 	private int piano;	//piano in cui si trova la sala
+	
+	private ArrayList<Meeting> meetings = new ArrayList<Meeting>();	//lista di meeting che avvengono nella sala
 	
 	//METODI
 	

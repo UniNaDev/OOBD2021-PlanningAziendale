@@ -5,6 +5,8 @@
 
 package Entità;
 
+import java.util.ArrayList;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -22,6 +24,8 @@ public class Meeting {
 	private Dipendente organizzatore;	//dipendente organizzatore del meeting
 	
 	private SalaRiunione sala;	//sala in cui si può tenere il meeting
+	private Progetto progettoDiscusso;	//progetto discusso nel meeting
+	private ArrayList<PartecipazioneMeeting> partecipazioniDipendenti = new ArrayList<PartecipazioneMeeting>();	//partecipazioni dei dipendenti al meeting
 	
 	//METODI
 	
@@ -119,6 +123,22 @@ public class Meeting {
 
 	public void setSala(SalaRiunione sala) {
 		this.sala = sala;
+	}
+	
+	public Progetto getProgettoDiscusso() {
+		return progettoDiscusso;
+	}
+
+	public void setProgettoDiscusso(Progetto progettoDiscusso) {
+		this.progettoDiscusso = progettoDiscusso;
+	}
+
+	public ArrayList<PartecipazioneMeeting> getPartecipazioniDipendenti() {
+		return partecipazioniDipendenti;
+	}
+
+	public void setPartecipazioniDipendenti(ArrayList<PartecipazioneMeeting> partecipazioniDipendenti) {
+		this.partecipazioniDipendenti = partecipazioniDipendenti;
 	}
 
 	//toString

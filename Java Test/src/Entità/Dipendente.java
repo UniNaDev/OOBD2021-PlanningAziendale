@@ -30,11 +30,14 @@ public class Dipendente {
 	
 	private float valutazione;	//valutazione in decimi del dipendente in azienda
 	
+	//attributi per generazione CF
 	private String[] vocali = {"A","E","I","O","U"};
 	private String[] simboliNonRichiesti = {" ", "À","Á","È","É","Ì","Ò","Ù","Ä","Ë","Ï","Ö","Ü"};
 	
-	//TODO: attributi per le varie associazioni
+	//attributi delle associazioni
 	private ArrayList<Skill> skills = new ArrayList<Skill>();	//skill del dipendente
+	private ArrayList<PartecipazioneMeeting> partecipazioniMeeting = new ArrayList<PartecipazioneMeeting>();	//lista di partecipazione del dipendente ai meeting
+	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista delle collaborazioni del dipendente
 	
 	//METODI
 	
@@ -193,6 +196,30 @@ public class Dipendente {
 	
 	public float getValutazione() {
 		return valutazione;
+	}
+	
+	public ArrayList<Skill> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(ArrayList<Skill> skills) {
+		this.skills = skills;
+	}
+
+	public ArrayList<PartecipazioneMeeting> getPartecipazioniMeeting() {
+		return partecipazioniMeeting;
+	}
+
+	public void setPartecipazioniMeeting(ArrayList<PartecipazioneMeeting> partecipazioniMeeting) {
+		this.partecipazioniMeeting = partecipazioniMeeting;
+	}
+
+	public ArrayList<CollaborazioneProgetto> getCollaborazioni() {
+		return collaborazioni;
+	}
+
+	public void setCollaborazioni(ArrayList<CollaborazioneProgetto> collaborazioni) {
+		this.collaborazioni = collaborazioni;
 	}
 
 	//toString

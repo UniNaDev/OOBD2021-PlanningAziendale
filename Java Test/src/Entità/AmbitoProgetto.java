@@ -2,12 +2,16 @@
 //Rappresenta gli ambiti possibili di un progetto. Sono caratterizzati da un id per distinguerli nel DB e da un nome.
 package Entità;
 
+import java.util.ArrayList;
+
 public class AmbitoProgetto {
 	
 	//ATTRIBUTI
 	
 	private int idAmbito;	//id dell'ambito
 	private String nome;	//nome dell'ambito
+	
+	private ArrayList<Progetto> progetti = new ArrayList<Progetto>();	//lista di progetti di un certo ambito
 	
 	//METODI
 	
@@ -37,6 +41,14 @@ public class AmbitoProgetto {
 
 	public void setIdAmbito(int idAmbito) {
 		this.idAmbito = idAmbito;
+	}
+
+	public ArrayList<Progetto> getProgetti() {
+		return progetti;
+	}
+
+	public void setProgetti(ArrayList<Progetto> progetti) {
+		this.progetti = progetti;
 	}
 
 	//toString
