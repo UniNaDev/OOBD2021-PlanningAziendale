@@ -44,19 +44,8 @@ public class Meeting extends JFrame {
 	private JLabel mieiMeetingLabel;
 
 	private JPanel panel;
-	private JLabel infoLabel;
-	private JList progettiList;
-	private JLabel nomeMettingLabel;
-	private JLabel inizioLabel;
-	private JLabel fineLabel;
-	private JLabel valoreInizioLabel;
-	private JLabel valoreFineLabel;
-	private JSeparator separator;
-	private JScrollPane InvitatiScrollPane;
-	private JList invitatiList;
-	private JLabel InvitatiLabel;
-	private JLabel piattaformaLabel;
-	private JLabel valorePiattaformaLabel;
+	private JList meetingList;
+
 
 
 
@@ -129,8 +118,6 @@ public class Meeting extends JFrame {
 		});
 
 
-		
-
 		mieiMeetingLabel = new JLabel("I Miei Meeting");
 		mieiMeetingLabel.setIcon(new ImageIcon(Meeting.class.getResource("/Icone/meeting_64.png")));
 		mieiMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
@@ -139,133 +126,133 @@ public class Meeting extends JFrame {
 		infoProgettoPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,new Color(255, 255, 255), new Color(160, 160, 160)), "Info", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		infoProgettoPanel.setBackground(Color.WHITE);
 		
-		JLabel dataScadenzaLabel = new JLabel("Modalit\u00E0:");
-		dataScadenzaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataScadenzaLabel.setForeground(Color.DARK_GRAY);
-		dataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		JLabel modalit‡Label = new JLabel("Modalit\u00E0:");
+		modalit‡Label.setHorizontalAlignment(SwingConstants.RIGHT);
+		modalit‡Label.setForeground(Color.DARK_GRAY);
+		modalit‡Label.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
-		JLabel dataTerminazioneLabel = new JLabel("Piattaforma:");
-		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataTerminazioneLabel.setForeground(Color.DARK_GRAY);
-		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		JLabel piattaformaaLabel = new JLabel("Piattaforma:");
+		piattaformaaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		piattaformaaLabel.setForeground(Color.DARK_GRAY);
+		piattaformaaLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
-		JLabel dataCreazioneLabel = new JLabel("Ora fine:");
-		dataCreazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataCreazioneLabel.setForeground(Color.DARK_GRAY);
-		dataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		JLabel oraFineLabel = new JLabel("Ora fine:");
+		oraFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		oraFineLabel.setForeground(Color.DARK_GRAY);
+		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
-		JLabel projectManagerLabel = new JLabel("Ora inizio:");
-		projectManagerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		projectManagerLabel.setForeground(Color.DARK_GRAY);
-		projectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel oraInizioLabel = new JLabel("Ora inizio:");
+		oraInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		oraInizioLabel.setForeground(Color.DARK_GRAY);
+		oraInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel ambitiLabel = new JLabel("Data inizio:");
-		ambitiLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		ambitiLabel.setForeground(Color.DARK_GRAY);
-		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel dataInizioLabel = new JLabel("Data inizio:");
+		dataInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataInizioLabel.setForeground(Color.DARK_GRAY);
+		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valoreTipologiaLabel = new JLabel("Data fine:");
-		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		valoreTipologiaLabel.setForeground(Color.DARK_GRAY);
-		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel dataFineLabel = new JLabel("Data fine:");
+		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataFineLabel.setForeground(Color.DARK_GRAY);
+		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valoreDataTerminazioneLabel = new JLabel("N/A");
-		valoreDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel valorepiattaformaLabel = new JLabel("N/A");
+		valorepiattaformaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valorepiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel lblRicercaSperimentale = new JLabel("10/10/2020");
-		lblRicercaSperimentale.setHorizontalAlignment(SwingConstants.LEFT);
-		lblRicercaSperimentale.setFont(new Font("Consolas", Font.PLAIN, 25));
+		JLabel valoreDataFineLabel = new JLabel("10/10/2020");
+		valoreDataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel valoreTipologieLabel = new JLabel("10/10/2020");
-		valoreTipologieLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreTipologieLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		JLabel valoreDataInizioLabel = new JLabel("10/10/2020");
+		valoreDataInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel valoreProjectManagerLabel = new JLabel("10.00");
-		valoreProjectManagerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreProjectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		JLabel valoreOraInizioLabel = new JLabel("10.00");
+		valoreOraInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreOraInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel valoreDataCreazioneLabel = new JLabel("10.30");
-		valoreDataCreazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel valoreOraFineLabel = new JLabel("10.30");
+		valoreOraFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreOraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valoreDataScadenzaLabel = new JLabel("Fisico");
-		valoreDataScadenzaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel valoreModalit‡Label = new JLabel("Fisico");
+		valoreModalit‡Label.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreModalit‡Label.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel nomeProgettoLabel = new JLabel("Meeting");
-		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		JLabel nomeMeetingLabel = new JLabel("Meeting");
+		nomeMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		nomeMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		GroupLayout gl_infoProgettoPanel = new GroupLayout(infoProgettoPanel);
 		gl_infoProgettoPanel.setHorizontalGroup(
 			gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(dataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
-						.addComponent(projectManagerLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+						.addComponent(modalit‡Label, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+						.addComponent(piattaformaaLabel, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+						.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
+						.addComponent(oraInizioLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+						.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+						.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-								.addComponent(valoreDataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+								.addComponent(valorepiattaformaLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 								.addContainerGap())
 							.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 									.addGroup(gl_infoProgettoPanel.createSequentialGroup()
 										.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblRicercaSperimentale, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(valoreDataFineLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 											.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-												.addComponent(valoreTipologieLabel, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+												.addComponent(valoreDataInizioLabel, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
 												.addPreferredGap(ComponentPlacement.RELATED)))
 										.addGap(98))
 									.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-										.addComponent(valoreProjectManagerLabel, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE)
+										.addComponent(valoreOraInizioLabel, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE)
 										.addContainerGap()))
 								.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-									.addComponent(valoreDataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+									.addComponent(valoreOraFineLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 									.addContainerGap())))
 						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-							.addComponent(valoreDataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+							.addComponent(valoreModalit‡Label, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())))
 				.addGroup(Alignment.TRAILING, gl_infoProgettoPanel.createSequentialGroup()
 					.addGap(148)
-					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+					.addComponent(nomeMeetingLabel, GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
 					.addGap(135))
 		);
 		gl_infoProgettoPanel.setVerticalGroup(
 			gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
 					.addGap(23)
-					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(nomeMeetingLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(55)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreTipologieLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
+						.addComponent(valoreDataInizioLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblRicercaSperimentale, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+						.addComponent(valoreDataFineLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreProjectManagerLabel, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-						.addComponent(projectManagerLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+						.addComponent(valoreOraInizioLabel, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+						.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreDataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataCreazioneLabel))
+						.addComponent(valoreOraFineLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(oraFineLabel))
 					.addGap(18)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreDataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataScadenzaLabel))
+						.addComponent(valoreModalit‡Label, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(modalit‡Label))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreDataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+						.addComponent(valorepiattaformaLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(piattaformaaLabel, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
 					.addGap(169))
 		);
 		infoProgettoPanel.setLayout(gl_infoProgettoPanel);
@@ -313,14 +300,9 @@ public class Meeting extends JFrame {
 		);
 		
 
-		JList list = new JList();
-		list.setSelectionBackground(Color.LIGHT_GRAY);
-		list.setFont(new Font("Consolas", Font.PLAIN, 15));
-		list.setFixedCellHeight(40);
-
-		progettiList = new JList();
-		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
-		progettiList.setModel(new AbstractListModel() {
+		meetingList = new JList();
+		meetingList.setSelectionBackground(Color.LIGHT_GRAY);
+		meetingList.setModel(new AbstractListModel() {
 
 			String[] values = new String[] {"Meeting 1", "Meeting 2", "Meeting 3", "Discord 3", "Riunione Teams", "Leo Pardo Cisco Webex", "Riunione ", "Prova ", "Prova 27"};
 			public int getSize() {
@@ -331,85 +313,13 @@ public class Meeting extends JFrame {
 			}
 
 		});	
-		mieiProgettiScrollPane.setViewportView(list);
+		meetingList.setFixedCellHeight(40);
+		meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
+		meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mieiProgettiScrollPane.setViewportView(meetingList);
+		
 
-		
-		progettiList.setFixedCellHeight(40);
-		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
-		progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mieiProgettiScrollPane.setViewportView(progettiList);
-		panel.setLayout(null);
-		
-		nomeMettingLabel = new JLabel("Meeting 1 [01]");
-		nomeMettingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		nomeMettingLabel.setBounds(248, 49, 196, 36);
-		panel.add(nomeMettingLabel);
-		
-		inizioLabel = new JLabel("Inizio:");
-		inizioLabel.setForeground(Color.DARK_GRAY);
-		inizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		inizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		inizioLabel.setBounds(59, 129, 196, 36);
-		panel.add(inizioLabel);
-		
-		fineLabel = new JLabel("Fine:");
-		fineLabel.setForeground(Color.DARK_GRAY);
-		fineLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		fineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		fineLabel.setBounds(425, 129, 196, 36);
-		panel.add(fineLabel);
-		
-		valoreInizioLabel = new JLabel("07-01-2021 14:00");
-		valoreInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valoreInizioLabel.setBounds(44, 178, 233, 36);
-		panel.add(valoreInizioLabel);
-		
-		valoreFineLabel = new JLabel("07-01-2021 17:00");
-		valoreFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valoreFineLabel.setBounds(405, 178, 233, 36);
-		panel.add(valoreFineLabel);
-		
-		InvitatiScrollPane = new JScrollPane();
-		InvitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		InvitatiScrollPane.setBounds(44, 297, 286, 273);
-		panel.add(InvitatiScrollPane);
-		
-		invitatiList = new JList();
-		invitatiList.setSelectionBackground(Color.LIGHT_GRAY);
-		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		invitatiList.setFixedCellHeight(40);
-		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 15));
-		invitatiList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Mario Rossi", "Luca Bianchi", "Franco Verdi", "Luigi Gialli", "Leo Pardo", "Rino Ceronte", "Marco Antonio"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		InvitatiScrollPane.setViewportView(invitatiList);
-		
-		InvitatiLabel = new JLabel("Invitati:");
-		InvitatiLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		InvitatiLabel.setForeground(Color.DARK_GRAY);
-		InvitatiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		InvitatiScrollPane.setColumnHeaderView(InvitatiLabel);
-		
-		piattaformaLabel = new JLabel("Piattaforma / Sala:");
-		piattaformaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		piattaformaLabel.setForeground(Color.DARK_GRAY);
-		piattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		piattaformaLabel.setBounds(364, 296, 286, 36);
-		panel.add(piattaformaLabel);
-		
-		valorePiattaformaLabel = new JLabel("Microsoft Teams");
-		valorePiattaformaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valorePiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valorePiattaformaLabel.setBounds(388, 355, 233, 36);
-		panel.add(valorePiattaformaLabel);
+
 
 		contentPane.setLayout(gl_contentPane);
 
