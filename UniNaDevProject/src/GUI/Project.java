@@ -188,7 +188,7 @@ public class Project extends JFrame {
 		infoLabel.setBounds(251, 11, 89, 36);
 		infoProgettoPanel.add(infoLabel);
 		
-		JLabel nomeProgettoLabel = new JLabel("Progetto 1 [ECOB2]");
+		JLabel nomeProgettoLabel = new JLabel("Progetto 1 [01]");
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		nomeProgettoLabel.setBounds(149, 67, 295, 38);
@@ -269,23 +269,23 @@ public class Project extends JFrame {
 		valoreDataTerminazioneLabel.setBounds(386, 569, 161, 24);
 		infoProgettoPanel.add(valoreDataTerminazioneLabel);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataCreazione_32.png")));
-		lblNewLabel.setBounds(45, 481, 89, 51);
-		infoProgettoPanel.add(lblNewLabel);
+		JLabel iconaDataCreazioneLabel = new JLabel("");
+		iconaDataCreazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		iconaDataCreazioneLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataCreazione_32.png")));
+		iconaDataCreazioneLabel.setBounds(45, 481, 89, 51);
+		infoProgettoPanel.add(iconaDataCreazioneLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataScadenza_32.png")));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(239, 481, 89, 51);
-		infoProgettoPanel.add(lblNewLabel_1);
+		JLabel iconaDataScadenzaLabel = new JLabel("");
+		iconaDataScadenzaLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataScadenza_32.png")));
+		iconaDataScadenzaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		iconaDataScadenzaLabel.setBounds(239, 481, 89, 51);
+		infoProgettoPanel.add(iconaDataScadenzaLabel);
 		
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataTerminazione_32.png")));
-		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setBounds(426, 481, 89, 51);
-		infoProgettoPanel.add(lblNewLabel_2);
+		JLabel iconaDataTerminazioneLabel = new JLabel("");
+		iconaDataTerminazioneLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataTerminazione_32.png")));
+		iconaDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		iconaDataTerminazioneLabel.setBounds(426, 481, 89, 51);
+		infoProgettoPanel.add(iconaDataTerminazioneLabel);
 		
 		JList progettiList = new JList();
 		progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
