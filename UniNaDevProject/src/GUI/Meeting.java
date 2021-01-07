@@ -27,15 +27,8 @@ import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.border.MatteBorder;
-
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
-
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.ImageIcon;
-
 
 public class Meeting extends JFrame {
 
@@ -43,29 +36,11 @@ public class Meeting extends JFrame {
 	private JButton modificaButton;
 	private JLabel mieiMeetingLabel;
 
-	private JPanel panel;
-	private JLabel infoLabel;
-	private JList progettiList;
-	private JLabel nomeMettingLabel;
-	private JLabel inizioLabel;
-	private JLabel fineLabel;
-	private JLabel valoreInizioLabel;
-	private JLabel valoreFineLabel;
-	private JSeparator separator;
-	private JScrollPane InvitatiScrollPane;
-	private JList invitatiList;
-	private JLabel InvitatiLabel;
-	private JLabel piattaformaLabel;
-	private JLabel valorePiattaformaLabel;
-
-
 
 	/**
 	 * Create the frame.
 	 */
 	public Meeting(ControllerMeeting theController) {
-
-		setMinimumSize(new Dimension(1300, 770));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Meeting.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - Meeting");
@@ -80,19 +55,6 @@ public class Meeting extends JFrame {
 		setContentPane(contentPane);
 		
 		JButton nuovoMeetingButton = new JButton("Nuovo Meeting");
-		nuovoMeetingButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				nuovoMeetingButton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				nuovoMeetingButton.setBackground(Color.WHITE);
-			}
-		});
-		nuovoMeetingButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		nuovoMeetingButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nuovoMeetingButton.setBackground(Color.WHITE);
 		nuovoMeetingButton.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -106,19 +68,6 @@ public class Meeting extends JFrame {
 
 		
 		modificaButton = new JButton("Modifica");
-		modificaButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				modificaButton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				modificaButton.setBackground(Color.WHITE);
-			}
-		});
-		modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		modificaButton.setBackground(Color.WHITE);
 		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -127,35 +76,8 @@ public class Meeting extends JFrame {
 				theController.createModifyMeetingFrame();
 			}
 		});
-
-		okButton = new JButton("OK");
-		okButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				okButton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				okButton.setBackground(Color.WHITE);
-			}
-		});
-		okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		okButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		okButton.setBackground(Color.WHITE);
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		okButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		
-		mieiProgettiScrollPane = new JScrollPane();
-		mieiProgettiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
-
 		mieiMeetingLabel = new JLabel("I Miei Meeting");
-		mieiMeetingLabel.setIcon(new ImageIcon(Meeting.class.getResource("/Icone/meeting_64.png")));
 		mieiMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		JPanel infoProgettoPanel = new JPanel();
@@ -335,16 +257,10 @@ public class Meeting extends JFrame {
 					.addContainerGap())
 		);
 		
-
 		JList list = new JList();
 		list.setSelectionBackground(Color.LIGHT_GRAY);
 		list.setFont(new Font("Consolas", Font.PLAIN, 15));
 		list.setFixedCellHeight(40);list.setModel(new AbstractListModel() {
-
-		progettiList = new JList();
-		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
-		progettiList.setModel(new AbstractListModel() {
-
 			String[] values = new String[] {"Meeting 1", "Meeting 2", "Meeting 3", "Discord 3", "Riunione Teams", "Leo Pardo Cisco Webex", "Riunione ", "Prova ", "Prova 27"};
 			public int getSize() {
 				return values.length;
@@ -352,88 +268,7 @@ public class Meeting extends JFrame {
 			public Object getElementAt(int index) {
 				return values[index];
 			}
-
-		});	
-		mieiProgettiScrollPane.setViewportView(list);
-
-		
-		progettiList.setFixedCellHeight(40);
-		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
-		progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mieiProgettiScrollPane.setViewportView(progettiList);
-		panel.setLayout(null);
-		
-		nomeMettingLabel = new JLabel("Meeting 1 [01]");
-		nomeMettingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		nomeMettingLabel.setBounds(248, 49, 196, 36);
-		panel.add(nomeMettingLabel);
-		
-		inizioLabel = new JLabel("Inizio:");
-		inizioLabel.setForeground(Color.DARK_GRAY);
-		inizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		inizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		inizioLabel.setBounds(59, 129, 196, 36);
-		panel.add(inizioLabel);
-		
-		fineLabel = new JLabel("Fine:");
-		fineLabel.setForeground(Color.DARK_GRAY);
-		fineLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		fineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		fineLabel.setBounds(425, 129, 196, 36);
-		panel.add(fineLabel);
-		
-		valoreInizioLabel = new JLabel("07-01-2021 14:00");
-		valoreInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valoreInizioLabel.setBounds(44, 178, 233, 36);
-		panel.add(valoreInizioLabel);
-		
-		valoreFineLabel = new JLabel("07-01-2021 17:00");
-		valoreFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valoreFineLabel.setBounds(405, 178, 233, 36);
-		panel.add(valoreFineLabel);
-		
-		InvitatiScrollPane = new JScrollPane();
-		InvitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		InvitatiScrollPane.setBounds(44, 297, 286, 273);
-		panel.add(InvitatiScrollPane);
-		
-		invitatiList = new JList();
-		invitatiList.setSelectionBackground(Color.LIGHT_GRAY);
-		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		invitatiList.setFixedCellHeight(40);
-		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 15));
-		invitatiList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Mario Rossi", "Luca Bianchi", "Franco Verdi", "Luigi Gialli", "Leo Pardo", "Rino Ceronte", "Marco Antonio"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		InvitatiScrollPane.setViewportView(invitatiList);
-		
-		InvitatiLabel = new JLabel("Invitati:");
-		InvitatiLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		InvitatiLabel.setForeground(Color.DARK_GRAY);
-		InvitatiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		InvitatiScrollPane.setColumnHeaderView(InvitatiLabel);
-		
-		piattaformaLabel = new JLabel("Piattaforma / Sala:");
-		piattaformaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		piattaformaLabel.setForeground(Color.DARK_GRAY);
-		piattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		piattaformaLabel.setBounds(364, 296, 286, 36);
-		panel.add(piattaformaLabel);
-		
-		valorePiattaformaLabel = new JLabel("Microsoft Teams");
-		valorePiattaformaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valorePiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valorePiattaformaLabel.setBounds(388, 355, 233, 36);
-		panel.add(valorePiattaformaLabel);
-
+		});		mieiProgettiScrollPane.setViewportView(list);
 		contentPane.setLayout(gl_contentPane);
 
 
