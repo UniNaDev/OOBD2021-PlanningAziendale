@@ -38,13 +38,15 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 
 public class Project extends JFrame {
 
 	private JPanel contentPane;
 	private JButton modificaProgettoBotton;
 	private JButton nuovoProgettoBotton;
-	private JButton okButton;
 
 
 	/**
@@ -57,6 +59,7 @@ public class Project extends JFrame {
 		setBounds(100, 100, 1440, 900);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
@@ -83,28 +86,6 @@ public class Project extends JFrame {
 			}
 		});
 		
-		okButton = new JButton("OK");
-		okButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{	
-				okButton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				okButton.setBackground(Color.WHITE);
-			}
-		});
-		okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		okButton.setBackground(Color.WHITE);
-		okButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		okButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
 		nuovoProgettoBotton = new JButton("Nuovo Progetto");
 		nuovoProgettoBotton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -126,171 +107,63 @@ public class Project extends JFrame {
 		JScrollPane mieiProgettiScrollPane = new JScrollPane();
 		mieiProgettiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
+
+		
 		JLabel mieiProgettiLabel = new JLabel("I Miei Progetti");
 		mieiProgettiLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/progetto_64.png")));
 		mieiProgettiLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		JPanel infoProgettoPanel = new JPanel();
+		infoProgettoPanel.setBackground(Color.WHITE);
+		infoProgettoPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,new Color(255, 255, 255), new Color(160, 160, 160)), "Info", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
-		JSeparator separator = new JSeparator();
-		separator.setForeground(Color.LIGHT_GRAY);
-		separator.setBackground(Color.WHITE);
-		separator.setOrientation(SwingConstants.VERTICAL);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(mieiProgettiLabel)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(modificaProgettoBotton, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+							.addGap(36)
+							.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(mieiProgettiLabel)
-								.addComponent(mieiProgettiScrollPane, GroupLayout.PREFERRED_SIZE, 527, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-							.addComponent(separator, GroupLayout.PREFERRED_SIZE, 3, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 578, GroupLayout.PREFERRED_SIZE)
-							.addGap(10))))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(183)
+									.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 599, Short.MAX_VALUE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(modificaProgettoBotton, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)))))
+					.addGap(55))
 		);
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
+					.addComponent(mieiProgettiLabel)
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(infoProgettoPanel, GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(mieiProgettiLabel)
-									.addGap(18)
-									.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)))
-							.addGap(18)
+							.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 425, Short.MAX_VALUE)
+							.addGap(283)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-								.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-								.addComponent(modificaProgettoBotton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(modificaProgettoBotton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
+							.addContainerGap())
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(92)
-							.addComponent(separator, GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
-							.addGap(96))))
+							.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+							.addGap(61))))
 		);
-		infoProgettoPanel.setLayout(null);
 		
-		JLabel infoLabel = new JLabel("Info");
-		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		infoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
-		infoLabel.setBounds(251, 11, 89, 36);
-		infoProgettoPanel.add(infoLabel);
-		
-		JLabel nomeProgettoLabel = new JLabel("Progetto 1 [01]");
-		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		nomeProgettoLabel.setBounds(149, 67, 295, 38);
-		infoProgettoPanel.add(nomeProgettoLabel);
-		
-		JLabel ambitiLabel = new JLabel("Ambiti:");
-		ambitiLabel.setForeground(Color.DARK_GRAY);
-		ambitiLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		ambitiLabel.setBounds(10, 116, 295, 38);
-		infoProgettoPanel.add(ambitiLabel);
-		
-		JLabel valoreTipologieLabel = new JLabel("Economia , Medicina");
-		valoreTipologieLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreTipologieLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valoreTipologieLabel.setBounds(149, 151, 295, 38);
-		infoProgettoPanel.add(valoreTipologieLabel);
-		
-		JLabel valoreTipologiaLabel = new JLabel("Tipologia:");
-		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreTipologiaLabel.setForeground(Color.DARK_GRAY);
-		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		valoreTipologiaLabel.setBounds(10, 231, 295, 38);
-		infoProgettoPanel.add(valoreTipologiaLabel);
-		
-		JLabel lblRicercaSperimentale = new JLabel("Ricerca Sperimentale");
-		lblRicercaSperimentale.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRicercaSperimentale.setFont(new Font("Consolas", Font.PLAIN, 25));
-		lblRicercaSperimentale.setBounds(149, 269, 295, 38);
-		infoProgettoPanel.add(lblRicercaSperimentale);
-		
-		JLabel projectManagerLabel = new JLabel("Project Manager:");
-		projectManagerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		projectManagerLabel.setForeground(Color.DARK_GRAY);
-		projectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		projectManagerLabel.setBounds(10, 356, 295, 38);
-		infoProgettoPanel.add(projectManagerLabel);
-		
-		JLabel valoreProjectManagerLabel = new JLabel("Mario Rossi");
-		valoreProjectManagerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreProjectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		valoreProjectManagerLabel.setBounds(149, 393, 295, 38);
-		infoProgettoPanel.add(valoreProjectManagerLabel);
-		
-		JLabel dataCreazioneLabel = new JLabel("Data Creazione:");
-		dataCreazioneLabel.setForeground(Color.DARK_GRAY);
-		dataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		dataCreazioneLabel.setBounds(10, 531, 172, 24);
-		infoProgettoPanel.add(dataCreazioneLabel);
-		
-		JLabel dataTerminazioneLabel = new JLabel("Data Terminazione:");
-		dataTerminazioneLabel.setForeground(Color.DARK_GRAY);
-		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		dataTerminazioneLabel.setBounds(376, 528, 202, 30);
-		infoProgettoPanel.add(dataTerminazioneLabel);
-		
-		JLabel dataScadenzaLabel = new JLabel("Data Scadenza:");
-		dataScadenzaLabel.setForeground(Color.DARK_GRAY);
-		dataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		dataScadenzaLabel.setBounds(207, 531, 169, 24);
-		infoProgettoPanel.add(dataScadenzaLabel);
-		
-		JLabel valoreDataCreazioneLabel = new JLabel("07/01/2021");
-		valoreDataCreazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreDataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		valoreDataCreazioneLabel.setBounds(10, 565, 161, 24);
-		infoProgettoPanel.add(valoreDataCreazioneLabel);
-		
-		JLabel valoreDataScadenzaLabel = new JLabel("07/01/2022");
-		valoreDataScadenzaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreDataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		valoreDataScadenzaLabel.setBounds(207, 565, 161, 24);
-		infoProgettoPanel.add(valoreDataScadenzaLabel);
-		
-		JLabel valoreDataTerminazioneLabel = new JLabel("N/A");
-		valoreDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreDataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		valoreDataTerminazioneLabel.setBounds(386, 569, 161, 24);
-		infoProgettoPanel.add(valoreDataTerminazioneLabel);
-		
-		JLabel iconaDataCreazioneLabel = new JLabel("");
-		iconaDataCreazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		iconaDataCreazioneLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataCreazione_32.png")));
-		iconaDataCreazioneLabel.setBounds(45, 481, 89, 51);
-		infoProgettoPanel.add(iconaDataCreazioneLabel);
-		
-		JLabel iconaDataScadenzaLabel = new JLabel("");
-		iconaDataScadenzaLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataScadenza_32.png")));
-		iconaDataScadenzaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		iconaDataScadenzaLabel.setBounds(239, 481, 89, 51);
-		infoProgettoPanel.add(iconaDataScadenzaLabel);
-		
-		JLabel iconaDataTerminazioneLabel = new JLabel("");
-		iconaDataTerminazioneLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/dataTerminazione_32.png")));
-		iconaDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		iconaDataTerminazioneLabel.setBounds(426, 481, 89, 51);
-		infoProgettoPanel.add(iconaDataTerminazioneLabel);
-		
-		JList progettiList = new JList();
-		progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		progettiList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Progetto 1", "Progetto 2", "Progetto 3", "Lol", "Ciao", "iPlanner", "Windows 20", "Fortnite", "Rino Ceronte", "Cyberpunk 2077", "Test", "Test1", "Parole a caso per ridimensionare", "bho"};
+		JList list = new JList();
+		list.setSelectionBackground(Color.LIGHT_GRAY);
+		list.setFont(new Font("Consolas", Font.PLAIN, 15));
+		list.setFixedCellHeight(40);
+		list.setModel(new AbstractListModel() {
+			String[] values = new String[] {"Meeting 1", "Meeting 2", "Meeting 3", "Discord 3", "Riunione Teams", "Leo Pardo Cisco Webex", "Riunione ", "Prova ", "Prova 27"};
 			public int getSize() {
 				return values.length;
 			}
@@ -298,10 +171,141 @@ public class Project extends JFrame {
 				return values[index];
 			}
 		});
-		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
-		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
-		progettiList.setFixedCellHeight(40);
-		mieiProgettiScrollPane.setViewportView(progettiList);
+		mieiProgettiScrollPane.setViewportView(list);
+		
+
+
+		
+		JLabel nomeProgettoLabel = new JLabel("Progetto 1 [ECOB2]");
+		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		JLabel ambitiLabel = new JLabel("Ambiti:");
+		ambitiLabel.setForeground(Color.DARK_GRAY);
+		ambitiLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		
+		JLabel valoreTipologieLabel = new JLabel("Economia,Medicina");
+		valoreTipologieLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreTipologieLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		JLabel valoreTipologiaLabel = new JLabel("Tipologia:");
+		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		valoreTipologiaLabel.setForeground(Color.DARK_GRAY);
+		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		
+		JLabel lblRicercaSperimentale = new JLabel("Ricerca Sperimentale");
+		lblRicercaSperimentale.setHorizontalAlignment(SwingConstants.LEFT);
+		lblRicercaSperimentale.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		JLabel projectManagerLabel = new JLabel("Project Manager:");
+		projectManagerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		projectManagerLabel.setForeground(Color.DARK_GRAY);
+		projectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		
+		JLabel valoreProjectManagerLabel = new JLabel("Mario Rossi");
+		valoreProjectManagerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreProjectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		JLabel dataCreazioneLabel = new JLabel("Data Creazione:");
+		dataCreazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataCreazioneLabel.setForeground(Color.DARK_GRAY);
+		dataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		
+		JLabel dataTerminazioneLabel = new JLabel("Data Terminazione:");
+		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataTerminazioneLabel.setForeground(Color.DARK_GRAY);
+		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		
+		JLabel dataScadenzaLabel = new JLabel("Data Scadenza:");
+		dataScadenzaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataScadenzaLabel.setForeground(Color.DARK_GRAY);
+		dataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		
+		JLabel valoreDataCreazioneLabel = new JLabel("07/01/2021");
+		valoreDataCreazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		
+		JLabel valoreDataScadenzaLabel = new JLabel("07/01/2022");
+		valoreDataScadenzaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		
+		JLabel valoreDataTerminazioneLabel = new JLabel("N/A");
+		valoreDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		GroupLayout gl_infoProgettoPanel = new GroupLayout(infoProgettoPanel);
+		gl_infoProgettoPanel.setHorizontalGroup(
+			gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(dataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
+						.addComponent(projectManagerLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+								.addComponent(valoreDataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap())
+							.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+										.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblRicercaSperimentale, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+												.addComponent(valoreTipologieLabel, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+												.addPreferredGap(ComponentPlacement.RELATED)))
+										.addGap(98))
+									.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+										.addComponent(valoreProjectManagerLabel, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE)
+										.addContainerGap()))
+								.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+									.addComponent(valoreDataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+									.addContainerGap())))
+						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+							.addComponent(valoreDataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())))
+				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+					.addGap(130)
+					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+					.addGap(153))
+		);
+		gl_infoProgettoPanel.setVerticalGroup(
+			gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+					.addGap(23)
+					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(55)
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(valoreTipologieLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblRicercaSperimentale, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(valoreProjectManagerLabel, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+						.addComponent(projectManagerLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(valoreDataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataCreazioneLabel))
+					.addGap(18)
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(valoreDataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataScadenzaLabel))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(valoreDataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+					.addGap(169))
+		);
+		infoProgettoPanel.setLayout(gl_infoProgettoPanel);
 		contentPane.setLayout(gl_contentPane);
 	}
 }
