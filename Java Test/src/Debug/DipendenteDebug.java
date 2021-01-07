@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import org.joda.time.LocalDate;
 
 import DBManager.ManagerConnessioneDB;
-import Entità.Dipendente;
-import Entità.LuogoNascita;
-import Entità.Skill;
+import Entita.Dipendente;
+import Entita.LuogoNascita;
+import Entita.Skill;
 import ImplementazioneDAO.DipendenteDAOPSQL;
 import ImplementazioneDAO.LuogoNascitaDAOPSQL;
 import InterfacceDAO.DipendenteDAO;
@@ -61,7 +61,7 @@ public class DipendenteDebug {
 			
 			//Ottieni tutti i dipendenti con più di 40 anni
 			System.out.println("\nDipendenti con età maggiore di " + età + " anni");
-			dipendenti = dipDAO.getDipendentiByEtà(età);
+			dipendenti = dipDAO.getDipendentiByEta(età);
 			for (Dipendente d: dipendenti)
 				System.out.println(d);
 			

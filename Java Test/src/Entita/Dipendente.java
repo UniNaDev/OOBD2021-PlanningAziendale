@@ -5,7 +5,7 @@
 *il codice fiscale è validato a priori se i suoi dati anagrafici sono corretti.
 ***************************************************************************************************************************/
 
-package Entità;
+package Entita;
 
 import java.util.ArrayList;
 

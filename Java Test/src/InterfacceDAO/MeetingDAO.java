@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
 
-import Entità.Dipendente;
-import Entità.Meeting;
-import Entità.SalaRiunione;
+import Entita.Dipendente;
+import Entita.Meeting;
+import Entita.SalaRiunione;
 
 public interface MeetingDAO {
 	

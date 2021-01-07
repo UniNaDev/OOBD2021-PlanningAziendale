@@ -1,6 +1,6 @@
 //Classe AmbitoProgetto.
 //Rappresenta gli ambiti possibili di un progetto. Sono caratterizzati da un id per distinguerli nel DB e da un nome.
-package Entità;
+package Entita;
 
 import java.util.ArrayList;
 

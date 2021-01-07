@@ -6,7 +6,7 @@
 *da una data in cui è terminato il progetto (se è terminato) dataTerminazione e da un dipendente
 *creatore del progetto creatore.
 *************************************************************************************************/
-package Entità;
+package Entita;
 
 import java.util.ArrayList;
 

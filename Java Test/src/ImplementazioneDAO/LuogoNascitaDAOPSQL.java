@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
 
-import Entità.Dipendente;
-import Entità.LuogoNascita;
+import Entita.Dipendente;
+import Entita.LuogoNascita;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
 

@@ -4,7 +4,7 @@
 *dal nome del comune nomeComune:String e  dal nome della provincia di appartenenza nomeProvincia:String.
 *******************************************************************************************************************************/
 
-package Entità;
+package Entita;
 
 public class LuogoNascita {
 

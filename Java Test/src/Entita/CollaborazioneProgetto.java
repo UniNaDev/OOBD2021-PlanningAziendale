@@ -1,6 +1,6 @@
 //Classe di associazione tra entità di tipo Dipendente e Progetto.
 //Contiene il progetto, il dipendente che ci lavora e il ruolo che egli assume in esso.
-package Entità;
+package Entita;
 
 public class CollaborazioneProgetto {
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.joda.time.LocalDateTime;
 
-import Entità.SalaRiunione;
+import Entita.SalaRiunione;
 
 public interface SalaRiunioneDAO {
 	public ArrayList<SalaRiunione> getSale() throws SQLException;	//meotodo che restituisce tutte le sale dell'azienda

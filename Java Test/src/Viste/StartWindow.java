@@ -1,5 +1,5 @@
 //Finestra principale all'avvio del software
-package GUI;
+package Viste;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -7,12 +7,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Controller.ControllerStart;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class StartWindow extends JFrame {
 
@@ -28,7 +32,7 @@ public class StartWindow extends JFrame {
 	//METODI
 	
 	//Crea frame
-	public StartWindow(ControllerGUI controller) {
+	public StartWindow(ControllerStart controller) {
 		setResizable(false);
 		setTitle("iPlanner");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,7 +88,12 @@ public class StartWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//metodo che richiama la nuova finestra tramite controller
-				System.out.println("Cliccato " + nuovoAccountLabel.getText());
+				try {
+					controller.startTOcreaAccount();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		//proprietà

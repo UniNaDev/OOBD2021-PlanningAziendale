@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DBManager.ManagerConnessioneDB;
-import Entità.Dipendente;
-import Entità.LuogoNascita;
+import Entita.Dipendente;
+import Entita.LuogoNascita;
 import ImplementazioneDAO.LuogoNascitaDAOPSQL;
 import InterfacceDAO.LuogoNascitaDAO;
 

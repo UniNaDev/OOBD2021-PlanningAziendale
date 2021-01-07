@@ -7,7 +7,8 @@ package InterfacceDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import Entità.Skill;
+
+import Entita.Skill;
 
 public interface SkillDAO {
 

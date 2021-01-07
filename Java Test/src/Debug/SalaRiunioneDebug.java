@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.joda.time.LocalDateTime;
 
 import DBManager.ManagerConnessioneDB;
-import Entità.SalaRiunione;
+import Entita.SalaRiunione;
 import ImplementazioneDAO.SalaRiunioneDAOPSQL;
 import InterfacceDAO.SalaRiunioneDAO;
 

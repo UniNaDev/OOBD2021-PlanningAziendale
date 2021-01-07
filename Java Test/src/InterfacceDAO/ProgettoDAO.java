@@ -5,10 +5,10 @@ package InterfacceDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Entità.AmbitoProgetto;
-import Entità.Dipendente;
-import Entità.Meeting;
-import Entità.Progetto;
+import Entita.AmbitoProgetto;
+import Entita.Dipendente;
+import Entita.Meeting;
+import Entita.Progetto;
 
 public interface ProgettoDAO {
 
