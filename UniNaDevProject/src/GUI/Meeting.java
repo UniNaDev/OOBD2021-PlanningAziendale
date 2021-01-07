@@ -128,7 +128,30 @@ public class Meeting extends JFrame {
 			}
 		});
 
-
+		okButton = new JButton("OK");
+		okButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				okButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				okButton.setBackground(Color.WHITE);
+			}
+		});
+		okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		okButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		okButton.setBackground(Color.WHITE);
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		okButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		
+		mieiProgettiScrollPane = new JScrollPane();
+		mieiProgettiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 
 		mieiMeetingLabel = new JLabel("I Miei Meeting");
@@ -316,7 +339,7 @@ public class Meeting extends JFrame {
 		JList list = new JList();
 		list.setSelectionBackground(Color.LIGHT_GRAY);
 		list.setFont(new Font("Consolas", Font.PLAIN, 15));
-		list.setFixedCellHeight(40);
+		list.setFixedCellHeight(40);list.setModel(new AbstractListModel() {
 
 		progettiList = new JList();
 		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
