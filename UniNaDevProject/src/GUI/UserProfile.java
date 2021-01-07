@@ -71,6 +71,7 @@ public class UserProfile extends JFrame {
 	 * Create the frame.
 	 */
 	public UserProfile(ControllerGestioneProfilo theController) {
+		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(UserProfile.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - Il mio Account");
 		setBounds(100, 100, 1280, 720);
