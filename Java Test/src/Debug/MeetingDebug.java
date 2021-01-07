@@ -8,8 +8,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import DBManager.ManagerConnessioneDB;
-import Entità.Dipendente;
-import Entità.Meeting;
+import Entita.Dipendente;
+import Entita.Meeting;
 import ImplementazioneDAO.DipendenteDAOPSQL;
 import ImplementazioneDAO.MeetingDAOPSQL;
 import ImplementazioneDAO.SalaRiunioneDAOPSQL;

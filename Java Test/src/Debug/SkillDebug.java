@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DBManager.ManagerConnessioneDB;
-import Entità.Skill;
+import Entita.Skill;
 import ImplementazioneDAO.SkillDAOPSQL;
 import InterfacceDAO.SkillDAO;
 

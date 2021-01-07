@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import org.joda.time.LocalDateTime;
 
-import Entità.SalaRiunione;
+import Entita.SalaRiunione;
 import InterfacceDAO.SalaRiunioneDAO;
 
 public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {

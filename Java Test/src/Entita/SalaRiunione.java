@@ -4,7 +4,7 @@
 *un indirizzo della sede e il piano in cui si trova. Ad essa possono essere associati
 *i meeting che avvengono al suo interno.*/
 
-package Entità;
+package Entita;
 
 import java.util.ArrayList;
 

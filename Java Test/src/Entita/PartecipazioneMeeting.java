@@ -1,7 +1,7 @@
 //Classe di associazione tra entità di tipo Dipendente e di tipo Meeting.
 //Contiene il meeting, il dipendente che deve partecipare e la sua presenza ad esso.
 
-package Entità;
+package Entita;
 
 public class PartecipazioneMeeting {
 	

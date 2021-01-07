@@ -3,7 +3,7 @@
 *un orario di fine, una modalità (Fisico/Telematico), un'eventuale piattaforma qualora fosse telematico e un dipendente organizzatore
 *del meeting.*/
 
-package Entità;
+package Entita;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class Meeting {
 	private LocalDate dataFine;	//data di fine del meeting
 	private LocalTime oraInizio;	//orario di inizio del meeting
 	private LocalTime oraFine;	//orario di fine del meeting
-	private String modalità;	//modalità del meeting ("Fisico" oppure "Telematico")
+	private String modalita;	//modalità del meeting ("Fisico" oppure "Telematico")
 	private String piattaforma;	//piattaforma su cui eventualmente verrà tenuto il meeting
 	private Dipendente organizzatore;	//dipendente organizzatore del meeting
 	
@@ -36,7 +36,7 @@ public class Meeting {
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
 		this.oraFine = oraFine;
-		this.modalità = modalità;
+		this.modalita = modalità;
 		this.organizzatore = organizzatore;
 	}
 
@@ -47,7 +47,7 @@ public class Meeting {
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
 		this.oraFine = oraFine;
-		this.modalità = modalità;
+		this.modalita = modalità;
 		this.piattaforma = piattaforma;
 		this.organizzatore = organizzatore;
 	}
@@ -86,11 +86,11 @@ public class Meeting {
 	}
 
 	public String getModalità() {
-		return modalità;
+		return modalita;
 	}
 
-	public void setModalità(String modalità) {
-		this.modalità = modalità;
+	public void setModalita(String modalità) {
+		this.modalita = modalità;
 	}
 
 	public String getPiattaforma() {
@@ -144,6 +144,6 @@ public class Meeting {
 	//toString
 	@Override
 	public String toString() {
-		return dataInizio.toString() + oraInizio.toString() + " - " + dataFine.toString() + oraFine.toString() + " [" + modalità + "]" + piattaforma + organizzatore;
+		return dataInizio.toString() + oraInizio.toString() + " - " + dataFine.toString() + oraFine.toString() + " [" + modalita + "]" + piattaforma + organizzatore;
 	}
 }

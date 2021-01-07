@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import Entità.AmbitoProgetto;
-import Entità.Dipendente;
-import Entità.Meeting;
-import Entità.Progetto;
+import Entita.AmbitoProgetto;
+import Entita.Dipendente;
+import Entita.Meeting;
+import Entita.Progetto;
 import InterfacceDAO.AmbitoProgettoDAO;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.ProgettoDAO;

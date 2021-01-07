@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Entità.AmbitoProgetto;
-import Entità.Progetto;
+import Entita.AmbitoProgetto;
+import Entita.Progetto;
 import InterfacceDAO.AmbitoProgettoDAO;
 
 public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {

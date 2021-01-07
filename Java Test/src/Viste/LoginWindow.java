@@ -1,5 +1,5 @@
 //Finestra di login del software
-package GUI;
+package Viste;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -7,9 +7,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Controller.ControllerErrori;
+import Controller.ControllerStart;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -32,7 +38,7 @@ public class LoginWindow extends JFrame {
 	//METODI
 	
 	//Crea il frame
-	public LoginWindow(ControllerGUI controller) {
+	public LoginWindow(ControllerStart controller) {
 		setForeground(Color.WHITE);
 		setTitle("Login");
 		setResizable(false);
@@ -88,13 +94,13 @@ public class LoginWindow extends JFrame {
 				String password = passwordField.getText();
 				try {
 					controller.login(email, password);
-				} catch (SQLException e1) {
-					controller.mostraErrore("Errore. Credenziali errate.");
+				} catch (SQLException e1) {	
+					ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e1.getErrorCode() + "\n" + "Credenziali errate.", false);
 					emailLabel.setForeground(Color.RED);
 					passwordLabel.setForeground(Color.RED);
-					emailTextField.setText("");
-					passwordField.setText("");
 				}
+				emailTextField.setText("");
+				passwordField.setText("");
 			}
 		});
 		//proprietà

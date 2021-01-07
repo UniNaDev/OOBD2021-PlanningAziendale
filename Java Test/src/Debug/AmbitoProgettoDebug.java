@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DBManager.ManagerConnessioneDB;
-import Entità.AmbitoProgetto;
+import Entita.AmbitoProgetto;
 import ImplementazioneDAO.AmbitoProgettoDAOPSQL;
 import InterfacceDAO.AmbitoProgettoDAO;
 

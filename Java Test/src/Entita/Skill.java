@@ -2,7 +2,7 @@
 *Classe che rappresenta le skill lavorative dei dipendenti.
 ******************************************************************/
 
-package Entità;
+package Entita;
 
 public class Skill {
 

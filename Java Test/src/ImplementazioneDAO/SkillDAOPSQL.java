@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Entità.Skill;
+import Entita.Skill;
 import InterfacceDAO.SkillDAO;
 
 public class SkillDAOPSQL implements SkillDAO {

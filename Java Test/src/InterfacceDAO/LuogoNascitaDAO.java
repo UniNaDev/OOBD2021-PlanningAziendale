@@ -7,8 +7,8 @@ package InterfacceDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Entità.Dipendente;
-import Entità.LuogoNascita;
+import Entita.Dipendente;
+import Entita.LuogoNascita;
 
 public interface LuogoNascitaDAO {
 	

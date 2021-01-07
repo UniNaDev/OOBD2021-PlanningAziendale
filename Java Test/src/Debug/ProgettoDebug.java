@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import org.joda.time.LocalDate;
 
 import DBManager.ManagerConnessioneDB;
-import Entità.Dipendente;
-import Entità.Meeting;
-import Entità.Progetto;
+import Entita.Dipendente;
+import Entita.Meeting;
+import Entita.Progetto;
 import ImplementazioneDAO.AmbitoProgettoDAOPSQL;
 import ImplementazioneDAO.ProgettoDAOPSQL;
 import InterfacceDAO.AmbitoProgettoDAO;

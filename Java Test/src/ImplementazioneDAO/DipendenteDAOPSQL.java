@@ -15,9 +15,9 @@ import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
 
-import Entità.Dipendente;
-import Entità.LuogoNascita;
-import Entità.Skill;
+import Entita.Dipendente;
+import Entita.LuogoNascita;
+import Entita.Skill;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
 
@@ -26,7 +26,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	//ATTRIBUTI
 	
 	private Connection connection;	//connessione al DB
-	private PreparedStatement getDipendentiPS,getDipendentiByEtàPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
+	private PreparedStatement getDipendentiPS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
 	
 	//METODI
 	
@@ -35,7 +35,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		this.connection = connection;	//ottiene la connessione dal ManagerConnessioneDB
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
-		getDipendentiByEtàPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) >= ?");
+		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) >= ?");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
 		getDipendentiByValutazionePS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE Valutazione(d.CF) >= ?");
 		getDipendentiBySalarioPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.Salario BETWEEN ? AND ?");
@@ -76,9 +76,9 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	/*Metodo che interroga il DB per ottenere una lista di dipendenti
 	* con età superiore al parametro indicato nella funzione.*/
 	@Override
-	public ArrayList<Dipendente> getDipendentiByEtà(int minima) throws SQLException {
-		getDipendentiByEtàPS.setInt(1, minima);	//inserisce il parametro nella query
-		ResultSet risultato = getDipendentiByEtàPS.executeQuery();	//esegue la query e ottiene il ResultSet
+	public ArrayList<Dipendente> getDipendentiByEta(int minima) throws SQLException {
+		getDipendentiByEtaPS.setInt(1, minima);	//inserisce il parametro nella query
+		ResultSet risultato = getDipendentiByEtaPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
 		
 		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
