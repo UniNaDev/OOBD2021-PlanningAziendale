@@ -57,7 +57,13 @@ public class CreaAccountWindow extends JFrame {
 	private String cognome;	//cognome nuovo dipendente
 	private char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
 	private LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
-	ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
+	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
+	private LuogoNascita luogoNascita;	//luogo di nascita del nuovo dipendente
+	private String email;
+	private String password;
+	private String telefono;
+	private String cellulare;
+	private String indirizzo;
 	//METODI	
 	
 	//Crea il frame
@@ -160,14 +166,14 @@ public class CreaAccountWindow extends JFrame {
 		
 		//ComboBox province
 		//inizializza i valori della combobox
-		JComboBox provinciaComboBox = new JComboBox(controller.getLuogoDAO().getProvince().toArray());
+		JComboBox provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
 		provinciaComboBox.addActionListener(new ActionListener() {
 			//Action performed selezione
 			public void actionPerformed(ActionEvent e) {
 				comuneComboBox.setEnabled(true); //attiva il menù dei comuni
 				comuneComboBox.removeAllItems();	//pulisce la lista del menù
 				try {
-					for(LuogoNascita comune: controller.getLuogoDAO().getLuoghiByProvincia(provinciaComboBox.getSelectedItem().toString()))
+					for(LuogoNascita comune: controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
 						comuneComboBox.addItem(comune.getNomeComune());
 				} catch (SQLException e1) {
 					ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e1.getErrorCode() + "\nErrore raccolta informazioni dal database.", true);
@@ -247,7 +253,11 @@ public class CreaAccountWindow extends JFrame {
 			//click mouse destro
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				creaAccount();	//Crea account
+				try {
+					creaAccount(sessoComboBox,giornoComboBox,meseComboBox,annoComboBox,provinciaComboBox,comuneComboBox);	//Crea account
+				} catch (SQLException e1) {
+					ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e1.getErrorCode() + "\nErrore nel recupero informazioni dal database.", true);
+				}
 			}
 		});
 		creaAccountButton.setBounds(614, 554, 131, 29);
@@ -285,6 +295,28 @@ public class CreaAccountWindow extends JFrame {
 		contentPane.add(cellulareTextField);
 	}
 	
-	private void creaAccount() {
-	}
+	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
+	private void creaAccount(JComboBox sessoCB,JComboBox giornoCB,JComboBox meseCB,JComboBox annoCB,JComboBox provCB,JComboBox comCB) throws SQLException {
+		//prende i dati dagli input della GUI
+		nome = nomeTextField.getText();	//nome
+		cognome = cognomeTextField.getText();	//cognome
+		//sesso
+		if (sessoCB.getSelectedItem().equals("Maschio")) 
+			sesso = 'M';
+		else
+			sesso = 'F';
+		//data di nascita
+		dataNascita = new LocalDate(annoCB.getSelectedIndex() + 1900, meseCB.getSelectedIndex() + 1, giornoCB.getSelectedIndex() + 1);
+		//luogo di nascita
+		luogoNascita = controller.ottieniComuni((String) provCB.getSelectedItem()).get(comCB.getSelectedIndex());
+		email = emailTextField.getText(); //email
+		password = passwordField.getText();	//password
+		if (!telefonoTextField.getText().equals(""))
+			telefono = telefonoTextField.getText();	//telefono
+		if (!cellulareTextField.getText().equals(""))
+			telefono = cellulareTextField.getText();	//cellulare
+		indirizzo = indirizzoTextField.getText();	//indirizzo
+		
+		controller.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo);	//mandali al controller che prova a creare il nuovo dipendente con il dao
+	}	
 }

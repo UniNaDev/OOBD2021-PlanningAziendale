@@ -1,19 +1,17 @@
 //Controller principale dell'interfaccia grafica
 package Controller;
 
-import java.awt.Window;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import DBManager.ManagerConnessioneDB;
+import org.joda.time.LocalDate;
+
 import Entita.Dipendente;
-import ImplementazioneDAO.DipendenteDAOPSQL;
-import ImplementazioneDAO.LuogoNascitaDAOPSQL;
+import Entita.LuogoNascita;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
 import Viste.CreaAccountWindow;
-import Viste.ErrorWindow;
 import Viste.LoginWindow;
 import Viste.StartWindow;
 
@@ -35,10 +33,11 @@ public class ControllerStart {
 	//METODI
 	
 	//Costruttore controller GUI
-	public ControllerStart(Connection connection) throws SQLException {
+	public ControllerStart(Connection connection, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO) throws SQLException {
 		this.startWindow = new StartWindow(this);	//inizializza la finestra iniziale
 		this.connection = connection;	//ottiene la connessione al DB
-		this.luogoDAO = new LuogoNascitaDAOPSQL(connection);
+		this.luogoDAO = luogoDAO;
+		this.dipDAO = dipDAO;
 		startWindow.setVisible(true);	//visualizza la finestra iniziale
 	}
 	
@@ -58,18 +57,37 @@ public class ControllerStart {
 	
 	//Metodo per il login
 	public void login(String email, String password) throws SQLException {
-		DipendenteDAO dipDAO = new DipendenteDAOPSQL(this.connection);
 		loggedUser = dipDAO.loginCheck(email, password);
 		
 		//TODO: cambia finestra e pulisci credenziali nei field
 	}
 	
-	//Metodo che crea un nuovo account per il dipendente
-	public void creaAccount() {
-		
+	//Metodo che prende le province per il menù
+	public ArrayList<String> ottieniProvince() throws SQLException{
+		return luogoDAO.getProvince();
 	}
 	
+	//Metodo che prende i comuni di una provincia
+	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException{
+		return luogoDAO.getLuoghiByProvincia(provincia);
+	}
+	
+	//Metodo che crea un nuovo account per il dipendente
+	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) {
+		Dipendente temp = new Dipendente(nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,0f,password);
+		try {
+			if (dipDAO.addDipendente(temp))
+				System.out.println("Operazione riuscita");
+		} catch (SQLException e) {
+			ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e.getErrorCode() + "\n" + e.getMessage(), false);
+		}
+	}
+
 	public LuogoNascitaDAO getLuogoDAO() {
 		return luogoDAO;
+	}
+
+	public DipendenteDAO getDipDAO() {
+		return dipDAO;
 	}
 }

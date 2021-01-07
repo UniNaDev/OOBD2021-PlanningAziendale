@@ -81,10 +81,17 @@ public class Dipendente {
 		temp += convertiMese(String.valueOf(dataNascita.getMonthOfYear()));	//aggiunge il mese al CF nel carattere successivo (es: LMMNDR95P)
 		
 		//aggiunge il giorno della data di nascita nei due caratteri successivi e aggiunge 40 al se è femmina (es: LMMNDR95P16)
+		String giorno = "";
 		if (this.sesso == 'M')
-			temp += String.valueOf(dataNascita.getDayOfMonth());
+			if (dataNascita.getDayOfMonth() < 10) {
+				giorno = "0"+String.valueOf(dataNascita.getDayOfMonth());
+			}
+			else {
+				giorno = String.valueOf(dataNascita.getDayOfMonth());
+			}
 		else
 			temp += String.valueOf(dataNascita.getDayOfMonth()+40);
+		temp += giorno;
 		
 		temp += luogoNascita.getCodiceComune();	//aggiunge il codice del comune in cui è nato (es: LMMNDR95P16F839)
 		
