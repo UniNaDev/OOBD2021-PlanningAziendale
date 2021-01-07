@@ -115,9 +115,11 @@ public class Project extends JFrame {
 		mieiProgettiLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		JPanel infoProgettoPanel = new JPanel();
+		infoProgettoPanel.setFont(new Font("Tahoma", Font.BOLD, 38));
 		infoProgettoPanel.setBackground(Color.WHITE);
-		infoProgettoPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,new Color(255, 255, 255), new Color(160, 160, 160)), "Info", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
-	
+		infoProgettoPanel.setBorder(new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30)));
+		
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
