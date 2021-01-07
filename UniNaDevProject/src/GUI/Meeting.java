@@ -126,20 +126,20 @@ public class Meeting extends JFrame {
 		infoProgettoPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,new Color(255, 255, 255), new Color(160, 160, 160)), "Info", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		infoProgettoPanel.setBackground(Color.WHITE);
 		
-		JLabel modalit‡Label = new JLabel("Modalit\u00E0:");
-		modalit‡Label.setHorizontalAlignment(SwingConstants.RIGHT);
-		modalit‡Label.setForeground(Color.DARK_GRAY);
-		modalit‡Label.setFont(new Font("Consolas", Font.PLAIN, 20));
+		JLabel modalitaLabel = new JLabel("Modalit\u00E0:");
+		modalitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		modalitaLabel.setForeground(Color.DARK_GRAY);
+		modalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		JLabel piattaformaaLabel = new JLabel("Piattaforma:");
 		piattaformaaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		piattaformaaLabel.setForeground(Color.DARK_GRAY);
-		piattaformaaLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		piattaformaaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		JLabel oraFineLabel = new JLabel("Ora fine:");
 		oraFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		oraFineLabel.setForeground(Color.DARK_GRAY);
-		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		JLabel oraInizioLabel = new JLabel("Ora inizio:");
 		oraInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -156,9 +156,9 @@ public class Meeting extends JFrame {
 		dataFineLabel.setForeground(Color.DARK_GRAY);
 		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valorepiattaformaLabel = new JLabel("N/A");
-		valorepiattaformaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valorepiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel valorePiattaformaLabel = new JLabel("N/A");
+		valorePiattaformaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valorePiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
 		JLabel valoreDataFineLabel = new JLabel("10/10/2020");
 		valoreDataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -174,11 +174,11 @@ public class Meeting extends JFrame {
 		
 		JLabel valoreOraFineLabel = new JLabel("10.30");
 		valoreOraFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreOraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		valoreOraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel valoreModalit‡Label = new JLabel("Fisico");
-		valoreModalit‡Label.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreModalit‡Label.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel valoreModalitaLabel = new JLabel("Fisico");
+		valoreModalitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreModalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
 		JLabel nomeMeetingLabel = new JLabel("Meeting");
 		nomeMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -189,7 +189,7 @@ public class Meeting extends JFrame {
 				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(modalit‡Label, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+						.addComponent(modalitaLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
 						.addComponent(piattaformaaLabel, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
 						.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
 						.addComponent(oraInizioLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
@@ -199,7 +199,7 @@ public class Meeting extends JFrame {
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-								.addComponent(valorepiattaformaLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+								.addComponent(valorePiattaformaLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 								.addContainerGap())
 							.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
@@ -217,7 +217,7 @@ public class Meeting extends JFrame {
 									.addComponent(valoreOraFineLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 									.addContainerGap())))
 						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-							.addComponent(valoreModalit‡Label, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+							.addComponent(valoreModalitaLabel, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())))
 				.addGroup(Alignment.TRAILING, gl_infoProgettoPanel.createSequentialGroup()
 					.addGap(148)
@@ -247,11 +247,11 @@ public class Meeting extends JFrame {
 						.addComponent(oraFineLabel))
 					.addGap(18)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreModalit‡Label, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-						.addComponent(modalit‡Label))
+						.addComponent(valoreModalitaLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(modalitaLabel))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valorepiattaformaLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(valorePiattaformaLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(piattaformaaLabel, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
 					.addGap(169))
 		);

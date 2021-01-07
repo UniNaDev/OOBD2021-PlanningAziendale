@@ -29,7 +29,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.awt.Color;
-import javax.swing.JTextArea;
 import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
@@ -38,7 +37,7 @@ import javax.swing.border.MatteBorder;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.UIManager;
+
 import javax.swing.ImageIcon;
 
 public class User extends JFrame {

@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
@@ -24,6 +25,8 @@ import javax.swing.border.MatteBorder;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 
@@ -52,6 +55,7 @@ public class Login extends JFrame {
 		
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
@@ -72,6 +76,7 @@ public class Login extends JFrame {
 		passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		passwordField = new JPasswordField();
+
 		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setBounds(285, 193, 173, 26);
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -144,10 +149,24 @@ public class Login extends JFrame {
 				theController.annulla();
 			}
 		});
+		
+
 		annullaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		annullaButton.setBackground(Color.WHITE);
 		annullaButton.setBounds(10, 364, 121, 26);
 		contentPane.add(annullaButton);
+		
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				String username = emailTextField.getText();
+				if(username.equals("")) {
+					JOptionPane.showMessageDialog(null, "Inserire Email per login");
+				}
+				else if(e.getKeyCode()==KeyEvent.VK_ENTER)
+					theController.verificaCredenziali(emailTextField.getText(), passwordField.getText());
+			}
+		});
 	}
 
 

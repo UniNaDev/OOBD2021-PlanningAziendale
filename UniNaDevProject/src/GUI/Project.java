@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import Controller.ControllerProgetto;
@@ -29,8 +30,9 @@ import javax.swing.JList;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
 import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
+
 import javax.swing.border.MatteBorder;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -114,10 +116,18 @@ public class Project extends JFrame {
 		mieiProgettiLabel.setIcon(new ImageIcon(Project.class.getResource("/Icone/progetto_64.png")));
 		mieiProgettiLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
+	
 		JPanel infoProgettoPanel = new JPanel();
-		infoProgettoPanel.setFont(new Font("Tahoma", Font.BOLD, 38));
+		
 		infoProgettoPanel.setBackground(Color.WHITE);
-		infoProgettoPanel.setBorder(new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30)));
+//		infoProgettoPanel.setBorder(new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30)));
+		TitledBorder titleBorder = new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30));
+		
+		titleBorder.setTitlePosition(TitledBorder.CENTER);
+		
+		infoProgettoPanel.setBorder(titleBorder);
+		
+	
 		
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -188,14 +198,14 @@ public class Project extends JFrame {
 		ambitiLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valoreTipologieLabel = new JLabel("Economia,Medicina");
-		valoreTipologieLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreTipologieLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		JLabel valoreAmbitiLabel = new JLabel("Economia,Medicina");
+		valoreAmbitiLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreAmbitiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel valoreTipologiaLabel = new JLabel("Tipologia:");
-		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		valoreTipologiaLabel.setForeground(Color.DARK_GRAY);
-		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel tipologiaLabel = new JLabel("Tipologia:");
+		tipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		tipologiaLabel.setForeground(Color.DARK_GRAY);
+		tipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		JLabel lblRicercaSperimentale = new JLabel("Ricerca Sperimentale");
 		lblRicercaSperimentale.setHorizontalAlignment(SwingConstants.LEFT);
@@ -247,7 +257,7 @@ public class Project extends JFrame {
 						.addComponent(dataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
 						.addComponent(projectManagerLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
 						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+						.addComponent(tipologiaLabel, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
@@ -260,7 +270,7 @@ public class Project extends JFrame {
 										.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 											.addComponent(lblRicercaSperimentale, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 											.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-												.addComponent(valoreTipologieLabel, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+												.addComponent(valoreAmbitiLabel, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
 												.addPreferredGap(ComponentPlacement.RELATED)))
 										.addGap(98))
 									.addGroup(gl_infoProgettoPanel.createSequentialGroup()
@@ -284,12 +294,12 @@ public class Project extends JFrame {
 					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(55)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreTipologieLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+						.addComponent(valoreAmbitiLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
 						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblRicercaSperimentale, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+						.addComponent(tipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(valoreProjectManagerLabel, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
