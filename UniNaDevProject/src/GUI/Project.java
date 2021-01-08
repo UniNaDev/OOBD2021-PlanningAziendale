@@ -90,6 +90,11 @@ public class Project extends JFrame {
 		});
 		
 		nuovoProgettoBotton = new JButton("Nuovo Progetto");
+		nuovoProgettoBotton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				theController.createInsertProjectFrame();
+			}
+		});
 		nuovoProgettoBotton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
