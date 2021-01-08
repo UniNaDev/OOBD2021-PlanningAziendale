@@ -21,8 +21,8 @@ public class ControllerMeeting {
 	}
 
 	public void createInsertMeetingFrame() {
-		insertMeetingFrame= new GestioneMeeting();
 		
+		insertMeetingFrame= new GestioneMeeting();
 		insertMeetingFrame.setVisible(true);
 		
 		
