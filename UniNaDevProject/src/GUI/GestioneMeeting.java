@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class InsertMeeting extends JFrame {
+public class GestioneMeeting extends JFrame {
 
 	private JPanel contentPane;
 
@@ -15,8 +15,8 @@ public class InsertMeeting extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public InsertMeeting() {
-		setTitle("InsertMeeting");
+	public GestioneMeeting() {
+		setTitle("GestioneMeeting");
 		
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

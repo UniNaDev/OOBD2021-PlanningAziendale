@@ -34,38 +34,45 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.ComponentOrientation;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.DefaultComboBoxModel;
+import java.util.Date;
 
-public class NewProject extends JFrame {
+public class GestioneProgetto extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTextField creatoreTextField;
 	private JTable table;
+	private JTextField textField_5;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public NewProject() {
-		setTitle("Nuovo Progetto");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public GestioneProgetto() {
+		setTitle("iPlanner-Gestione progetto");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.WHITE);
 		
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.WHITE);
 		panel_3.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		panel_3.setAlignmentY(Component.TOP_ALIGNMENT);
 		
@@ -96,51 +103,62 @@ public class NewProject extends JFrame {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
+				{null, null, "", null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"ProgettoID", "Nome", "Ambito/i", "Tipologia"
+				"ProgettoID", "Nome", "Ambito/i", "Tipologia", "Scadenza", "Descrizione", "Creatore"
 			}
 		));
+		table.getColumnModel().getColumn(4).setPreferredWidth(77);
 		scrollPane_1.setViewportView(table);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -157,10 +175,10 @@ public class NewProject extends JFrame {
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnNewButton_1.setAlignmentX(0.5f);
 		
-		JButton btnNewButton_2 = new JButton("Nuovo");
-		btnNewButton_2.setMargin(new Insets(2, 20, 2, 20));
-		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton_2.setAlignmentX(0.5f);
+		JButton insertPartecipante = new JButton("Inserisci partecipanti");
+		insertPartecipante.setMargin(new Insets(2, 20, 2, 20));
+		insertPartecipante.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		insertPartecipante.setAlignmentX(0.5f);
 		
 		JButton btnNewButton_3 = new JButton("Modifica");
 		btnNewButton_3.setMargin(new Insets(2, 20, 2, 20));
@@ -173,7 +191,15 @@ public class NewProject extends JFrame {
 		btnNewButton_4.setAlignmentX(0.5f);
 		panel_3.add(panel_4);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panel_4.add(btnNewButton_2);
+		
+		JLabel lblNewLabel_2 = new JLabel("Cerca");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panel_4.add(lblNewLabel_2);
+		
+		textField_5 = new JTextField();
+		panel_4.add(textField_5);
+		textField_5.setColumns(10);
+		panel_4.add(insertPartecipante);
 		panel_4.add(btnNewButton_3);
 		panel_4.add(btnNewButton_4);
 		panel_4.add(btnNewButton_1);
@@ -184,13 +210,13 @@ public class NewProject extends JFrame {
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		panel_2.setBackground(Color.WHITE);
 		
-		JLabel lblNewLabel = new JLabel("ProgettoID");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel idProgettoLabel = new JLabel("ProgettoID");
+		idProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		idProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblNewLabel_1 = new JLabel("Nome");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel nomeProgettoLabel = new JLabel("Nome");
+		nomeProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
@@ -200,40 +226,71 @@ public class NewProject extends JFrame {
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("Ambito/i");
-		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel ambitoProgettoLabel = new JLabel("Ambito/i");
+		ambitoProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("Tipologia");
-		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel tipologiaProgettoLabel = new JLabel("Tipologia");
+		tipologiaProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		tipologiaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		
-		JLabel lblNewLabel_1_1_1_1 = new JLabel("Scadenza");
-		lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel scadenzaProgettoLabel = new JLabel("Scadenza");
+		scadenzaProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		scadenzaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblNewLabel_1_1_1_2 = new JLabel("Descrizione");
-		lblNewLabel_1_1_1_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1_1_1_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel descrizioneProgettoLabel = new JLabel("Descrizione");
+		descrizioneProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		descrizioneProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblCreatore = new JLabel("Creatore");
-		lblCreatore.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCreatore.setFont(new Font("Tahoma", Font.BOLD, 14));
+		JLabel creatoreProgettoLabel = new JLabel("Creatore");
+		creatoreProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		creatoreProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
+		creatoreTextField = new JTextField();
+		creatoreTextField.setColumns(10);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox giornoComboBox = new JComboBox();
+		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	
+		giornoComboBox.setBackground(Color.WHITE);
+		giornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		giornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		giornoComboBox.setSelectedIndex(5);
+		giornoComboBox.setBounds(244, 235, 47, 22);
+		panel_2.add(giornoComboBox);
 		
-		JComboBox comboBox_1 = new JComboBox();
+		JComboBox meseComboBox = new JComboBox();
+		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meseComboBox.setBackground(Color.WHITE);
+		meseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		meseComboBox.setSelectedIndex(9);
+		meseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		meseComboBox.setBounds(301, 235, 47, 22);
+		panel_2.add(meseComboBox);
 		
-		JComboBox comboBox_2 = new JComboBox();
+		JComboBox annoComboBox = new JComboBox();
+		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		annoComboBox.setBackground(Color.WHITE);
+		annoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		annoComboBox.setBounds(358, 235, 62, 22);
+		//CREO UN MODELLO PERSONALIZZATO PER L'ANNO DEL COMBO BOX //////////
+		DefaultComboBoxModel myModel = new DefaultComboBoxModel();
+		annoComboBox.setModel(myModel);
+		
+		for(int i=1900;i<= 2021;i++)
+			myModel.addElement(i);
+		
+		annoComboBox.setSelectedIndex(100); //mette di default il 100esimo indice cioè l'anno 2000
+//////////////////////////////////////////////////////////
+		
+		panel_2.add(annoComboBox);
+		
 		
 		JTextArea textArea = new JTextArea();
 		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -243,17 +300,17 @@ public class NewProject extends JFrame {
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addGap(43)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_1_1_1_1, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel)
-						.addComponent(lblNewLabel_1_1_1_2, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblCreatore, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+						.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+						.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+						.addComponent(idProgettoLabel)
+						.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+						.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+							.addComponent(creatoreTextField, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED))
 						.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
@@ -265,11 +322,11 @@ public class NewProject extends JFrame {
 									.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(textArea, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
 										.addGroup(gl_panel_2.createSequentialGroup()
-											.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+											.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+											.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
+											.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
 									.addGap(4)))
 							.addGap(275)))
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
@@ -282,34 +339,34 @@ public class NewProject extends JFrame {
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(idProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_1_1_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_1_1_1_2, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblCreatore, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(creatoreTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
 							.addGap(23))))

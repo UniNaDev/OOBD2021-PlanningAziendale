@@ -40,7 +40,6 @@ import javax.swing.ImageIcon;
 public class Meeting extends JFrame {
 
 	private JPanel contentPane;
-	private JButton modificaButton;
 	private JLabel mieiMeetingLabel;
 
 	private JPanel panel;
@@ -57,7 +56,7 @@ public class Meeting extends JFrame {
 		setMinimumSize(new Dimension(1300, 770));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Meeting.class.getResource("/Icone/WindowIcon_16.png")));
-		setTitle("iPlanner - Meeting");
+		setTitle("iPlanner -Meeting");
 		setBounds(650, 150, 1440, 900);
 
 		
@@ -68,7 +67,7 @@ public class Meeting extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JButton nuovoMeetingButton = new JButton("Nuovo Meeting");
+		JButton nuovoMeetingButton = new JButton("Inserisci/Modifica Meeting");
 		nuovoMeetingButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -88,32 +87,6 @@ public class Meeting extends JFrame {
 		nuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theController.createInsertMeetingFrame();
-			}
-		});
-
-
-
-		
-		modificaButton = new JButton("Modifica meeting");
-		modificaButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				modificaButton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				modificaButton.setBackground(Color.WHITE);
-			}
-		});
-		modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		modificaButton.setBackground(Color.WHITE);
-		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		modificaButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				theController.createModifyMeetingFrame();
 			}
 		});
 
@@ -180,7 +153,7 @@ public class Meeting extends JFrame {
 		valoreModalitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreModalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel nomeMeetingLabel = new JLabel("Meeting");
+		JLabel nomeMeetingLabel = new JLabel("Meeting 1");
 		nomeMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nomeMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		GroupLayout gl_infoProgettoPanel = new GroupLayout(infoProgettoPanel);
@@ -265,15 +238,13 @@ public class Meeting extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(44)
 					.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
-					.addGap(10)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(169)
+							.addGap(179)
 							.addComponent(infoProgettoPanel, GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(modificaButton, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)))
 					.addGap(52))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
@@ -289,10 +260,8 @@ public class Meeting extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 425, Short.MAX_VALUE)
-							.addGap(277)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-								.addComponent(modificaButton, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
+							.addGap(265)
+							.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
 							.addGap(37)))

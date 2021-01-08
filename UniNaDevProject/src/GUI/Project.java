@@ -48,7 +48,6 @@ import javax.swing.UIManager;
 public class Project extends JFrame {
 
 	private JPanel contentPane;
-	private JButton modificaProgettoBotton;
 	private JButton nuovoProgettoBotton;
 
 
@@ -66,30 +65,7 @@ public class Project extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		modificaProgettoBotton = new JButton("Modifica Progetto");
-		modificaProgettoBotton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				modificaProgettoBotton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				modificaProgettoBotton.setBackground(Color.WHITE);
-			}
-		});
-		modificaProgettoBotton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		modificaProgettoBotton.setBackground(Color.WHITE);
-		modificaProgettoBotton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		modificaProgettoBotton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		modificaProgettoBotton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				theController.createModifyProjectFrame();
-			}
-		});
-		
-		nuovoProgettoBotton = new JButton("Nuovo Progetto");
+		nuovoProgettoBotton = new JButton("Inserisci/Modifica Progetto");
 		nuovoProgettoBotton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theController.createInsertProjectFrame();
@@ -140,21 +116,14 @@ public class Project extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(mieiProgettiLabel)
-						.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
+						.addComponent(mieiProgettiLabel, Alignment.LEADING)
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 							.addGap(36)
 							.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(183)
-									.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 599, Short.MAX_VALUE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(modificaProgettoBotton, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)))))
+							.addGap(183)
+							.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 599, Short.MAX_VALUE)))
 					.addGap(55))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -166,10 +135,8 @@ public class Project extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 425, Short.MAX_VALUE)
-							.addGap(283)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-								.addComponent(modificaProgettoBotton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
+							.addGap(272)
+							.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)

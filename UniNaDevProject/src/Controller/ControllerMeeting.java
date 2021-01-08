@@ -6,8 +6,8 @@ import GUI.*;
 public class ControllerMeeting {
 
 	Meeting meetingFrame;
-	InsertMeeting insertMeetingFrame;
-	ModifyMeeting modifyMeetingFrame;
+	GestioneMeeting insertMeetingFrame;
+
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -21,18 +21,12 @@ public class ControllerMeeting {
 	}
 
 	public void createInsertMeetingFrame() {
-		insertMeetingFrame= new InsertMeeting();
+		insertMeetingFrame= new GestioneMeeting();
 		
 		insertMeetingFrame.setVisible(true);
 		
 		
 	}
 	
-	public void createModifyMeetingFrame() {
-		modifyMeetingFrame= new ModifyMeeting();
-		
-		modifyMeetingFrame.setVisible(true);
-		
-		
-	}
+
 }

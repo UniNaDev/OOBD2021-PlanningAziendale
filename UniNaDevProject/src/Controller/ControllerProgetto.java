@@ -6,8 +6,9 @@ import GUI.*;
 public class ControllerProgetto {
 
 	Project projectFrame;
-	InsertProject insertProjectFrame;
-	ModifyProject modifyProjectFrame;
+	GestioneProgetto newProjectFrame;
+
+
 	
 	
 	public static void main(String[] args) {
@@ -25,12 +26,9 @@ public class ControllerProgetto {
 
 	public void createInsertProjectFrame() {
 		// TODO Auto-generated method stub
-		insertProjectFrame=new InsertProject();
-		insertProjectFrame.setVisible(true);
+		newProjectFrame=new GestioneProgetto();
+		newProjectFrame.setVisible(true);
 	}
 	
-	public void createModifyProjectFrame() {
-		modifyProjectFrame=new ModifyProject();
-		modifyProjectFrame.setVisible(true);
-	}
+
 }
