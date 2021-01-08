@@ -14,14 +14,13 @@ import Entita.Meeting;
 import Entita.Progetto;
 
 import javax.swing.JLabel;
+
 import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
-import javax.swing.AbstractListModel;
-import javax.swing.border.TitledBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.SwingConstants;
 
@@ -45,6 +44,7 @@ public class MainWindow extends JFrame {
 		emailLabel.setBounds(38, 111, 215, 20);
 		contentPane.add(emailLabel);
 		
+
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
 		JLabel oggiLabel = new JLabel(LocalDateTime.now().toString(formatDate));
 		oggiLabel.setFont(new Font("Calibri", Font.PLAIN, 16));

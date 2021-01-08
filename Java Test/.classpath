@@ -6,12 +6,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Development/Github/OOBD2021-PlanningAziendale/Risorse esterne/postgresql-42.2.18.jar">
+	<classpathentry kind="lib" path="D:/Development/Github/OOBD2021-PlanningAziendale/Java Test/lib/postgresql-42.2.18.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Development/Github/OOBD2021-PlanningAziendale/Risorse esterne/joda-time-2.10.8.jar">
+	<classpathentry kind="lib" path="D:/Development/Github/OOBD2021-PlanningAziendale/Java Test/lib/joda-time-2.10.8.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
