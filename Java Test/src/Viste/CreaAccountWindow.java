@@ -1,7 +1,7 @@
 package Viste;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+
+import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,17 +12,14 @@ import org.joda.time.LocalDate;
 import Controller.ControllerErrori;
 import Controller.ControllerStart;
 import Entita.LuogoNascita;
-import ImplementazioneDAO.LuogoNascitaDAOPSQL;
-import InterfacceDAO.LuogoNascitaDAO;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JList;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSeparator;
@@ -31,10 +28,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.awt.event.ActionEvent;
-import java.time.Month;
-import java.time.DayOfWeek;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -254,7 +248,27 @@ public class CreaAccountWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					creaAccount(sessoComboBox,giornoComboBox,meseComboBox,annoComboBox,provinciaComboBox,comuneComboBox);	//Crea account
+					nomeLabel.setForeground(Color.BLACK);
+					cognomeLabel.setForeground(Color.BLACK);
+					emailLabel.setForeground(Color.BLACK);
+					passwordLabel.setForeground(Color.BLACK);
+					indirizzoLabel.setForeground(Color.BLACK);
+					if (!nomeTextField.getText().isBlank() && !cognomeTextField.getText().isBlank() && !emailTextField.getText().isBlank() && !passwordField.getText().isBlank() && !indirizzoTextField.getText().isBlank())
+						creaAccount(sessoComboBox,giornoComboBox,meseComboBox,annoComboBox,provinciaComboBox,comuneComboBox);	//Crea account
+					else {
+						if (nomeTextField.getText().isBlank()) {
+							nomeLabel.setForeground(Color.RED);
+						}
+						if (cognomeTextField.getText().isBlank())
+							cognomeLabel.setForeground(Color.RED);
+						if (emailTextField.getText().isBlank())
+							emailLabel.setForeground(Color.RED);
+						if (passwordField.getText().isBlank())
+							passwordLabel.setForeground(Color.RED);
+						if (indirizzoTextField.getText().isBlank())
+							indirizzoLabel.setForeground(Color.RED);
+						ControllerErrori errorCTRL = new ControllerErrori("Errore.\nAlcuni campi obbligatori sono vuoti.\nInserisci tutti i valori richiesti.", false);
+					}
 				} catch (SQLException e1) {
 					ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e1.getErrorCode() + "\nErrore nel recupero informazioni dal database.", true);
 				}
@@ -316,7 +330,6 @@ public class CreaAccountWindow extends JFrame {
 		if (!cellulareTextField.getText().equals(""))
 			telefono = cellulareTextField.getText();	//cellulare
 		indirizzo = indirizzoTextField.getText();	//indirizzo
-		
 		controller.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo);	//mandali al controller che prova a creare il nuovo dipendente con il dao
 	}	
 }

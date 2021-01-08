@@ -82,12 +82,16 @@ public class ControllerStart {
 	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) {
 		Dipendente temp = new Dipendente(nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,0f,password);
 		try {
-			if (dipDAO.addDipendente(temp))
-				System.out.println("Operazione riuscita");
+			if (dipDAO.addDipendente(temp)) {
+				loginWindow = new LoginWindow(this);	//inizializza la finestra per il login
+				loginWindow.setVisible(true);	//visualizza la finestra di login
+				creaAccountWindow.setVisible(false); //chiude la finestra creazione del nuovo account
+			}
 		} catch (SQLException e) {
 			ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e.getErrorCode() + "\n" + e.getMessage(), false);
 		}
 	}
+	
 	public LuogoNascitaDAO getLuogoDAO() {
 		return luogoDAO;
 	}

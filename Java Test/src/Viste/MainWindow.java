@@ -12,6 +12,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import Controller.ControllerErrori;
 import Controller.ControllerLogged;
 import Entita.Meeting;
 import Entita.Progetto;
@@ -98,8 +99,7 @@ public class MainWindow extends JFrame {
 			meetingList.setBounds(388, 186, 277, 306);
 			contentPane.add(meetingList);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e.getErrorCode() + "\n" + e.getMessage(), true);
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	private AmbitoProgettoDAO ambitoDAO;
 	
 	//PreparedStatement per ogni query
-	private PreparedStatement getProgettiPS,getPartecipantiPS,getProgettiByDipendentePS,getProgettiByCreatorePS,getProgettiByAmbitoPS,getProgettiByTipoPS,addProgettoPS,removeProgettoPS,addPartecipantePS,deletePartecipantePS,updateProgettoPS, getMeetingRelativiPS;
+	private PreparedStatement getProgettiPS,getPartecipantiPS,getProgettiByDipendentePS,getProgettiByCreatorePS,getProgettiByAmbitoPS,getProgettiByTipoPS,addProgettoPS,removeProgettoPS,addPartecipantePS,deletePartecipantePS,updateProgettoPS, getMeetingRelativiPS, getProgettoByCodPS;
 	
 	//METODI
 	
@@ -50,6 +50,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?"); //? = codice fiscale del dipendente da rimuovere dalla partecipazione, ? = codice progetto da cui rimuoverlo
 		updateProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i meeting
+		getProgettoByCodPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");	//? = codice progetto
 	}
 
 	//Metodo che restituisce una lista di tutti i progetti dell'azienda
@@ -321,6 +322,29 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			return true;
 		else
 			return false;
+	}
+
+	//Metodo che ottiene un progetto dal DB partendo dal suo codice.
+	@Override
+	public Progetto getProgettoByCod(int codProgetto) throws SQLException {
+		getProgettoByCodPS.setInt(1, codProgetto);
+		
+		ResultSet risultato = getProgettoByCodPS.executeQuery();
+		
+		risultato.next();
+		
+		dipDAO = new DipendenteDAOPSQL(connection);
+		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
+		
+		Dipendente creatore = dipDAO.getDipendenteByCF(risultato.getString("Creatore"));	//ottiene il creatore del progetto
+		//crea l'oggetto progetto
+		Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")), creatore);
+		ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
+		projTemp.setAmbiti(ambiti);
+		
+		risultato.close(); //chiude il ResultSet
+		
+		return projTemp;
 	}
 
 }

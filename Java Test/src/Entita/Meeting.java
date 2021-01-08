@@ -149,8 +149,7 @@ public class Meeting {
 	//Sala 1 (oppure Microsoft Teams)
 	@Override
 	public String toString() {
-		String temp = "";
-		//String temp = progettoDiscusso.getNomeProgetto();
+		String temp = progettoDiscusso.getNomeProgetto();
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
