@@ -1,10 +1,13 @@
 package Viste;
 
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -15,6 +18,8 @@ import Entita.Progetto;
 
 import javax.swing.JLabel;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -81,13 +86,15 @@ public class MainWindow extends JFrame {
 			meetingScadenzaLabel.setBounds(531, 164, 134, 17);
 			contentPane.add(meetingScadenzaLabel);
 			
+			MeetingListRenderer renderer = new MeetingListRenderer();
+			
 			ArrayList<Meeting> meetings = controller.ottieniMeeting();
 			JList meetingList = new JList(meetings.toArray());
 			meetingList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			meetingList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			meetingList.setFont(new Font("Calibri", Font.PLAIN, 16));
 			meetingList.setFixedCellHeight(-1);
-
+			meetingList.setCellRenderer(renderer);
 			meetingList.setBounds(388, 186, 277, 306);
 			contentPane.add(meetingList);
 		} catch (SQLException e) {
