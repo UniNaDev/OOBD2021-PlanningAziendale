@@ -42,7 +42,7 @@ import javax.swing.JSpinner;
 public class GestioneMeeting extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField idProgettoTextField;
+	private JTextField idMeetingTextField;
 	private JTable progettoTable;
 	private JTextField cercaTextField;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
@@ -69,10 +69,10 @@ public class GestioneMeeting extends JFrame {
 		panel_3.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		panel_3.setAlignmentY(Component.TOP_ALIGNMENT);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setFont(new Font("Consolas", Font.PLAIN, 11));
-		scrollPane_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		scrollPane_1.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		JScrollPane meetingScrollPane = new JScrollPane();
+		meetingScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
+		meetingScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meetingScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -81,7 +81,7 @@ public class GestioneMeeting extends JFrame {
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(panel_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
 						.addComponent(panel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+						.addComponent(meetingScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -92,16 +92,16 @@ public class GestioneMeeting extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
 					.addGap(26)
-					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+					.addComponent(meetingScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
-		JTable progettoTable = new JTable();
-		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		progettoTable.setBackground(Color.WHITE);
-		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
-		progettoTable.setModel(new DefaultTableModel(
+		JTable meetingTable = new JTable();
+		meetingTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meetingTable.setBackground(Color.WHITE);
+		meetingTable.setSelectionBackground(Color.LIGHT_GRAY);
+		meetingTable.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, "", null, null, null, null},
 				{null, null, null, null, null, null, null},
@@ -158,8 +158,8 @@ public class GestioneMeeting extends JFrame {
 				"ProgettoID", "Nome", "Ambito/i", "Tipologia", "Scadenza", "Descrizione", "Creatore"
 			}
 		));
-		progettoTable.getColumnModel().getColumn(4).setPreferredWidth(77);
-		scrollPane_1.setViewportView(progettoTable);
+		meetingTable.getColumnModel().getColumn(4).setPreferredWidth(77);
+		meetingScrollPane.setViewportView(meetingTable);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel panel_4 = new JPanel();
@@ -280,9 +280,9 @@ public class GestioneMeeting extends JFrame {
 		salvaButton.setAlignmentX(0.5f);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel cercaLbel = new JLabel("Cerca");
-		cercaLbel.setFont(new Font("Consolas", Font.PLAIN, 18));
-		panel_4.add(cercaLbel);
+		JLabel cercaLabel = new JLabel("Cerca");
+		cercaLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
+		panel_4.add(cercaLabel);
 		
 		cercaTextField = new JTextField();
 		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -307,9 +307,9 @@ public class GestioneMeeting extends JFrame {
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		idProgettoTextField = new JTextField();
-		idProgettoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		idProgettoTextField.setColumns(10);
+		idMeetingTextField = new JTextField();
+		idMeetingTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		idMeetingTextField.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
@@ -336,11 +336,11 @@ public class GestioneMeeting extends JFrame {
 		
 		
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Online");
-		buttonGroup.add(rdbtnNewRadioButton);
+		JRadioButton onlineRadioButton = new JRadioButton("Online");
+		buttonGroup.add(onlineRadioButton);
 		
-		JRadioButton rdbtnFisico = new JRadioButton("Fisico");
-		buttonGroup.add(rdbtnFisico);
+		JRadioButton fisicoRadioButton = new JRadioButton("Fisico");
+		buttonGroup.add(fisicoRadioButton);
 		
 		JComboBox dataInizioMeseComboBox = new JComboBox();
 		dataInizioMeseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
@@ -400,8 +400,8 @@ public class GestioneMeeting extends JFrame {
 		
 		panel_2.add(dataFineAnnoComboBox);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"","Microsoft Teams","Discord","Skype"}));
+		JComboBox piattaformaComboBox = new JComboBox();
+		piattaformaComboBox.setModel(new DefaultComboBoxModel(new String[] {"","Microsoft Teams","Discord","Skype"}));
 		
 		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -421,7 +421,7 @@ public class GestioneMeeting extends JFrame {
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(idProgettoTextField, GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+								.addComponent(idMeetingTextField, GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
 								.addGroup(gl_panel_2.createSequentialGroup()
 									.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
@@ -429,11 +429,11 @@ public class GestioneMeeting extends JFrame {
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
 								.addGroup(Alignment.LEADING, gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(comboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(piattaformaComboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
-										.addComponent(rdbtnNewRadioButton)
+										.addComponent(onlineRadioButton)
 										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(rdbtnFisico, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))))
 							.addGap(275))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
@@ -453,7 +453,7 @@ public class GestioneMeeting extends JFrame {
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(idProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(idProgettoTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+								.addComponent(idMeetingTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
@@ -475,12 +475,12 @@ public class GestioneMeeting extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rdbtnNewRadioButton)
-								.addComponent(rdbtnFisico))
+								.addComponent(onlineRadioButton)
+								.addComponent(fisicoRadioButton))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(piattaformaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
 							.addGap(23))))
@@ -493,9 +493,9 @@ public class GestioneMeeting extends JFrame {
 		panel_1.add(panel_2);
 		panel.setLayout(gl_panel);
 		
-		JLabel gestioneProgettoLabel = new JLabel("Gestione Meeting");
-		gestioneProgettoLabel.setIcon(new ImageIcon(GestioneMeeting.class.getResource("/Icone/meeting_64.png")));
-		gestioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		JLabel gestioneMeetingLabel = new JLabel("Gestione Meeting");
+		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeeting.class.getResource("/Icone/meeting_64.png")));
+		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -504,13 +504,13 @@ public class GestioneMeeting extends JFrame {
 					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
 					.addGap(4))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(gestioneProgettoLabel)
+					.addComponent(gestioneMeetingLabel)
 					.addContainerGap(1208, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(gestioneProgettoLabel)
+					.addComponent(gestioneMeetingLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
 					.addContainerGap())
