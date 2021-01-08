@@ -143,12 +143,17 @@ public class Meeting {
 		this.partecipazioniDipendenti = partecipazioniDipendenti;
 	}
 
-	//toString
+	//toString:
+	//Nome Progetto
+	//01/12/2020 13:00 - 01/12/2020 17:00
+	//Sala 1 (oppure Microsoft Teams)
 	@Override
 	public String toString() {
+		String temp = "";
+		//String temp = progettoDiscusso.getNomeProgetto();
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
-		String temp = dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
+		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
 		if (modalita.equals("Telematico"))
 			temp += "\n" + piattaforma;
 		else

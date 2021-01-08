@@ -45,7 +45,8 @@ public class ControllerLogged {
 	}
 	
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		return meetingDAO.getMeetingsByInvitato(loggedUser);
+		ArrayList<Meeting> temp = meetingDAO.getMeetingsByInvitato(loggedUser);
+		return temp;
 	}
 	
 }

@@ -19,6 +19,7 @@ import Entita.SalaRiunione;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
 import InterfacceDAO.MeetingDAO;
+import InterfacceDAO.ProgettoDAO;
 import InterfacceDAO.SalaRiunioneDAO;
 
 public class MeetingDAOPSQL implements MeetingDAO {
