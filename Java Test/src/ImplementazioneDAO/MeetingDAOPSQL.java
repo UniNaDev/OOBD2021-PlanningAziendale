@@ -158,7 +158,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		addMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));	//data fine
 		addMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(),meeting.getOraInizio().getSecondOfMinute()));	//ora inizio
 		addMeetingPS.setTime(4, new Time(meeting.getOraFine().getHourOfDay(),meeting.getOraFine().getMinuteOfHour(),meeting.getOraFine().getSecondOfMinute()));	//ora fine
-		addMeetingPS.setObject(5, meeting.getModalità(),Types.OTHER);	//modalità
+		addMeetingPS.setObject(5, meeting.getModalita(),Types.OTHER);	//modalità
 		addMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);	//piattaforma
 		addMeetingPS.setString(7, meeting.getOrganizzatore().getCf());	//organizzatore
 		if (meeting.getSala() != null)
@@ -196,7 +196,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		updateMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));//data fine
 		updateMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(),meeting.getOraInizio().getSecondOfMinute()));//ora inizio
 		updateMeetingPS.setTime(4, new Time(meeting.getOraFine().getHourOfDay(),meeting.getOraFine().getMinuteOfHour(),meeting.getOraFine().getSecondOfMinute()));//ora fine
-		updateMeetingPS.setObject(5, meeting.getModalità(), Types.OTHER);//modalità
+		updateMeetingPS.setObject(5, meeting.getModalita(), Types.OTHER);//modalità
 		if (meeting.getPiattaforma() != null)
 			updateMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);//piattaforma
 		else

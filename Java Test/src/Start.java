@@ -6,8 +6,12 @@ import Controller.ControllerStart;
 import DBManager.ManagerConnessioneDB;
 import ImplementazioneDAO.DipendenteDAOPSQL;
 import ImplementazioneDAO.LuogoNascitaDAOPSQL;
+import ImplementazioneDAO.MeetingDAOPSQL;
+import ImplementazioneDAO.ProgettoDAOPSQL;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
+import InterfacceDAO.MeetingDAO;
+import InterfacceDAO.ProgettoDAO;
 
 public class Start {
 	
@@ -20,17 +24,21 @@ public class Start {
 			
 			DipendenteDAO dipDAO = null;
 			LuogoNascitaDAO luogoDAO = null;
+			ProgettoDAO projDAO = null;
+			MeetingDAO meetDAO = null;
 			
 			//Inizializzazione DAO implementati per PostgreSQL
 			if (args[0].equals("postgres")) {
 				dipDAO = new DipendenteDAOPSQL(connection);
 				luogoDAO = new LuogoNascitaDAOPSQL(connection);
+				projDAO = new ProgettoDAOPSQL(connection);
+				meetDAO = new MeetingDAOPSQL(connection);
 			}
 			else if (args[0].equals("oracle")) {
 				System.out.println("TODO: implementazione oracle");
 			}
 			
-			ControllerStart controller = new ControllerStart(connection, luogoDAO, dipDAO);	//inizializza controller iniziale
+			ControllerStart controller = new ControllerStart(connection, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza controller iniziale
 		} 
 		catch (SQLException e) {
 			ControllerErrori erroriCTRL = new ControllerErrori("Errore codice " + e.getErrorCode() + "\n" + e.getMessage(), true);	//errore connessione al DB

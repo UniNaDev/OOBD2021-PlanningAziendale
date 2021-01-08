@@ -11,6 +11,8 @@ import Entita.Dipendente;
 import Entita.LuogoNascita;
 import InterfacceDAO.DipendenteDAO;
 import InterfacceDAO.LuogoNascitaDAO;
+import InterfacceDAO.MeetingDAO;
+import InterfacceDAO.ProgettoDAO;
 import Viste.CreaAccountWindow;
 import Viste.LoginWindow;
 import Viste.StartWindow;
@@ -27,17 +29,21 @@ public class ControllerStart {
 	private Connection connection = null;	//connessione al DB
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
+	private ProgettoDAO projDAO = null;
+	private MeetingDAO meetDAO = null;
 	
 	private Dipendente loggedUser = null;	//utente che fa il login
 
 	//METODI
 	
 	//Costruttore controller GUI
-	public ControllerStart(Connection connection, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO) throws SQLException {
+	public ControllerStart(Connection connection, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO) throws SQLException {
 		this.startWindow = new StartWindow(this);	//inizializza la finestra iniziale
 		this.connection = connection;	//ottiene la connessione al DB
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
+		this.projDAO = projDAO;
+		this.meetDAO = meetDAO;
 		startWindow.setVisible(true);	//visualizza la finestra iniziale
 	}
 	
@@ -58,8 +64,8 @@ public class ControllerStart {
 	//Metodo per il login
 	public void login(String email, String password) throws SQLException {
 		loggedUser = dipDAO.loginCheck(email, password);
-		
-		//TODO: cambia finestra e pulisci credenziali nei field
+		ControllerLogged loggedCTRL = new ControllerLogged(connection, loggedUser, projDAO, meetDAO);
+		loginWindow.setVisible(false);
 	}
 	
 	//Metodo che prende le province per il menù
@@ -82,7 +88,6 @@ public class ControllerStart {
 			ControllerErrori errorCTRL = new ControllerErrori("Errore codice " + e.getErrorCode() + "\n" + e.getMessage(), false);
 		}
 	}
-
 	public LuogoNascitaDAO getLuogoDAO() {
 		return luogoDAO;
 	}

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class Meeting {
 	
@@ -31,23 +33,23 @@ public class Meeting {
 	
 	//Costruttore con tutti gli attributi eccetto la piattaforma che può essere NULL nel caso dei meeting fisici
 	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalità, Dipendente organizzatore) {
+			String modalita, Dipendente organizzatore) {
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
 		this.oraFine = oraFine;
-		this.modalita = modalità;
+		this.modalita = modalita;
 		this.organizzatore = organizzatore;
 	}
 
 	//Costruttore con tutti gli attributi, compresa piattaforma
 	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalità, String piattaforma, Dipendente organizzatore) {
+			String modalita, String piattaforma, Dipendente organizzatore) {
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
 		this.oraFine = oraFine;
-		this.modalita = modalità;
+		this.modalita = modalita;
 		this.piattaforma = piattaforma;
 		this.organizzatore = organizzatore;
 	}
@@ -85,7 +87,7 @@ public class Meeting {
 		this.oraFine = oraFine;
 	}
 
-	public String getModalità() {
+	public String getModalita() {
 		return modalita;
 	}
 
@@ -144,6 +146,13 @@ public class Meeting {
 	//toString
 	@Override
 	public String toString() {
-		return dataInizio.toString() + oraInizio.toString() + " - " + dataFine.toString() + oraFine.toString() + " [" + modalita + "]" + piattaforma + organizzatore;
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+		String temp = dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
+		if (modalita.equals("Telematico"))
+			temp += "\n" + piattaforma;
+		else
+			temp += "\n" + sala.getCodSala();
+		return temp;
 	}
 }

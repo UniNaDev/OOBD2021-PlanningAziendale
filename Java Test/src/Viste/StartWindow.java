@@ -44,10 +44,10 @@ public class StartWindow extends JFrame {
 		contentPane.setLayout(null);
 		
 		//Label "Sei già iscritto?"
-		JLabel giàIscrittoLabel = new JLabel("Sei già iscritto?");
-		giàIscrittoLabel.setForeground(new Color(0, 0, 0));
+		JLabel giaIscrittoLabel = new JLabel("Sei già iscritto?");
+		giaIscrittoLabel.setForeground(new Color(0, 0, 0));
 		//EVENTI
-		giàIscrittoLabel.addMouseListener(new MouseAdapter() {
+		giaIscrittoLabel.addMouseListener(new MouseAdapter() {
 			//click destro sulla label
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -56,19 +56,19 @@ public class StartWindow extends JFrame {
 			//mouse destro entrato
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				highlightLabel(giàIscrittoLabel);	//evidenzia
+				highlightLabel(giaIscrittoLabel);	//evidenzia
 			}
 			//mouse destro uscito
 			@Override
 			public void mouseExited(MouseEvent e) {
-				removeHighlightLabel(giàIscrittoLabel);	//rimuovi highlight
+				removeHighlightLabel(giaIscrittoLabel);	//rimuovi highlight
 			}
 		});
 		//proprietà
-		giàIscrittoLabel.setFont(new Font("Calibri Light", Font.PLAIN, 21));
-		giàIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		giàIscrittoLabel.setBounds(212, 230, 174, 26);
-		contentPane.add(giàIscrittoLabel);
+		giaIscrittoLabel.setFont(new Font("Calibri Light", Font.PLAIN, 21));
+		giaIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		giaIscrittoLabel.setBounds(212, 230, 174, 26);
+		contentPane.add(giaIscrittoLabel);
 		
 		//Label "Crea un nuovo account"
 		JLabel nuovoAccountLabel = new JLabel("Crea un nuovo account");
