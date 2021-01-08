@@ -40,17 +40,19 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
 import java.util.Date;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GestioneProgetto extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField idProgettoTextField;
+	private JTextField nomeTextField;
+	private JTextField ambitoTextField;
+	private JTextField tipologiaTextField;
 	private JTextField creatoreTextField;
-	private JTable table;
-	private JTextField textField_5;
+	private JTable progettoTable;
+	private JTextField cercaTextField;
 
 
 	/**
@@ -59,32 +61,31 @@ public class GestioneProgetto extends JFrame {
 	public GestioneProgetto() {
 		setTitle("iPlanner-Gestione progetto");
 		setBounds(100, 100, 1280, 720);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.WHITE);
+		contentPane = new JPanel();		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.WHITE);
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.WHITE);
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(Color.WHITE);
 		panel_3.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		panel_3.setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setFont(new Font("Consolas", Font.PLAIN, 11));
+		scrollPane_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		scrollPane_1.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
 						.addComponent(panel_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(scrollPane_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
 						.addComponent(panel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
 					.addContainerGap())
 		);
@@ -94,14 +95,18 @@ public class GestioneProgetto extends JFrame {
 					.addGap(23)
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+					.addGap(26)
 					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
+		progettoTable = new JTable();
+		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		progettoTable.setBackground(Color.WHITE);
+		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
+		progettoTable.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, "", null, null, null, null},
 				{null, null, null, null, null, null, null},
@@ -158,101 +163,196 @@ public class GestioneProgetto extends JFrame {
 				"ProgettoID", "Nome", "Ambito/i", "Tipologia", "Scadenza", "Descrizione", "Creatore"
 			}
 		));
-		table.getColumnModel().getColumn(4).setPreferredWidth(77);
-		scrollPane_1.setViewportView(table);
+		progettoTable.getColumnModel().getColumn(4).setPreferredWidth(77);
+		scrollPane_1.setViewportView(progettoTable);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		panel_4.setBorder(new LineBorder(new Color(192, 192, 192)));
 		
-		JButton btnNewButton = new JButton("Pulisci");
-		btnNewButton.setAlignmentX(0.5f);
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton.setMargin(new Insets(2, 20, 2, 20));
+		JButton pulisciButton = new JButton("Pulisci");
+		pulisciButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				pulisciButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				pulisciButton.setBackground(Color.WHITE);
+			}
+		});
+		pulisciButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		pulisciButton.setPreferredSize(new Dimension(90, 30));
+		pulisciButton.setMaximumSize(new Dimension(150, 150));
+		pulisciButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		pulisciButton.setBackground(Color.WHITE);
+		pulisciButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		pulisciButton.setAlignmentX(0.5f);
+		pulisciButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		pulisciButton.setMargin(new Insets(2, 20, 2, 20));
 		
-		JButton btnNewButton_1 = new JButton("Elimina");
-		btnNewButton_1.setMargin(new Insets(2, 20, 2, 20));
-		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton_1.setAlignmentX(0.5f);
+		JButton eliminaButton = new JButton("Elimina");
+		eliminaButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				eliminaButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				eliminaButton.setBackground(Color.WHITE);
+			}
+		});
+		eliminaButton.setPreferredSize(new Dimension(90, 30));
+		eliminaButton.setMaximumSize(new Dimension(150, 150));
+		eliminaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		eliminaButton.setBackground(Color.WHITE);
+		eliminaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		eliminaButton.setMargin(new Insets(2, 20, 2, 20));
+		eliminaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		eliminaButton.setAlignmentX(0.5f);
 		
-		JButton insertPartecipante = new JButton("Inserisci partecipanti");
-		insertPartecipante.setMargin(new Insets(2, 20, 2, 20));
-		insertPartecipante.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		insertPartecipante.setAlignmentX(0.5f);
+		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				inserisciPartecipanteButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				inserisciPartecipanteButton.setBackground(Color.WHITE);
+			}
+		});
+		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
+		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
+		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		inserisciPartecipanteButton.setBackground(Color.WHITE);
+		inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
+		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
-		JButton btnNewButton_3 = new JButton("Modifica");
-		btnNewButton_3.setMargin(new Insets(2, 20, 2, 20));
-		btnNewButton_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton_3.setAlignmentX(0.5f);
+		JButton modificaButton = new JButton("Modifica");
+		modificaButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				modificaButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				modificaButton.setBackground(Color.WHITE);
+			}
+		});
+		modificaButton.setPreferredSize(new Dimension(90, 30));
+		modificaButton.setMaximumSize(new Dimension(150, 150));
+		modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		modificaButton.setBackground(Color.WHITE);
+		modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		modificaButton.setMargin(new Insets(2, 20, 2, 20));
+		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		modificaButton.setAlignmentX(0.5f);
 		
-		JButton btnNewButton_4 = new JButton("Salva");
-		btnNewButton_4.setMargin(new Insets(2, 20, 2, 20));
-		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton_4.setAlignmentX(0.5f);
-		panel_3.add(panel_4);
+		JButton salvaButton = new JButton("Salva");
+		salvaButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				salvaButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				salvaButton.setBackground(Color.WHITE);
+			}
+		});
+		salvaButton.setPreferredSize(new Dimension(90, 30));
+		salvaButton.setMaximumSize(new Dimension(150, 150));
+		salvaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		salvaButton.setBackground(Color.WHITE);
+		salvaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		salvaButton.setMargin(new Insets(2, 20, 2, 20));
+		salvaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		salvaButton.setAlignmentX(0.5f);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblNewLabel_2 = new JLabel("Cerca");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		panel_4.add(lblNewLabel_2);
+		JLabel cercaLbel = new JLabel("Cerca");
+		cercaLbel.setFont(new Font("Consolas", Font.PLAIN, 18));
+		panel_4.add(cercaLbel);
 		
-		textField_5 = new JTextField();
-		panel_4.add(textField_5);
-		textField_5.setColumns(10);
-		panel_4.add(insertPartecipante);
-		panel_4.add(btnNewButton_3);
-		panel_4.add(btnNewButton_4);
-		panel_4.add(btnNewButton_1);
-		panel_4.add(btnNewButton);
+		cercaTextField = new JTextField();
+		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		panel_4.add(cercaTextField);
+		cercaTextField.setColumns(10);
+		panel_4.add(inserisciPartecipanteButton);
+		panel_4.add(modificaButton);
+		panel_4.add(salvaButton);
+		panel_4.add(eliminaButton);
+		panel_4.add(pulisciButton);
+		panel_3.add(panel_4);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-		panel_2.setBackground(Color.WHITE);
+		panel_2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		
 		JLabel idProgettoLabel = new JLabel("ProgettoID");
-		idProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		idProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		idProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel nomeProgettoLabel = new JLabel("Nome");
-		nomeProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
+		idProgettoTextField = new JTextField();
+		idProgettoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		idProgettoTextField.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
+		nomeTextField = new JTextField();
+		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		nomeTextField.setColumns(10);
 		
 		JLabel ambitoProgettoLabel = new JLabel("Ambito/i");
-		ambitoProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		ambitoProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
+		ambitoTextField = new JTextField();
+		ambitoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		ambitoTextField.setColumns(10);
 		
 		JLabel tipologiaProgettoLabel = new JLabel("Tipologia");
-		tipologiaProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		tipologiaProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		tipologiaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
+		tipologiaTextField = new JTextField();
+		tipologiaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		tipologiaTextField.setColumns(10);
 		
 		JLabel scadenzaProgettoLabel = new JLabel("Scadenza");
-		scadenzaProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		scadenzaProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		scadenzaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel descrizioneProgettoLabel = new JLabel("Descrizione");
-		descrizioneProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		descrizioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		descrizioneProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel creatoreProgettoLabel = new JLabel("Creatore");
 		creatoreProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		creatoreProgettoLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		creatoreProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		creatoreTextField = new JTextField();
+		creatoreTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		creatoreTextField.setColumns(10);
 		
 		JComboBox giornoComboBox = new JComboBox();
@@ -292,8 +392,8 @@ public class GestioneProgetto extends JFrame {
 		panel_2.add(annoComboBox);
 		
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
+		JTextArea descrizioneTextArea = new JTextArea();
+		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -301,26 +401,27 @@ public class GestioneProgetto extends JFrame {
 					.addGap(43)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
 						.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
 						.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
 						.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(idProgettoLabel)
 						.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-						.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+						.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(tipologiaProgettoLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(idProgettoLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(creatoreTextField, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED))
-						.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(textField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_2, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_1, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_3, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+								.addComponent(idProgettoTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+								.addComponent(ambitoTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tipologiaTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_panel_2.createSequentialGroup()
 									.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(textArea, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
+										.addComponent(descrizioneTextArea, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
 										.addGroup(gl_panel_2.createSequentialGroup()
 											.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
@@ -340,19 +441,19 @@ public class GestioneProgetto extends JFrame {
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(idProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+								.addComponent(idProgettoTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+								.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+								.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
@@ -362,7 +463,7 @@ public class GestioneProgetto extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
+								.addComponent(descrizioneTextArea, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
@@ -373,10 +474,15 @@ public class GestioneProgetto extends JFrame {
 		);
 		
 		JList list = new JList();
+		list.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		scrollPane.setViewportView(list);
 		panel_2.setLayout(gl_panel_2);
 		panel_1.add(panel_2);
 		panel.setLayout(gl_panel);
+		
+		JLabel gestioneProgettoLabel = new JLabel("Gestione Progetto");
+		gestioneProgettoLabel.setIcon(new ImageIcon(GestioneProgetto.class.getResource("/Icone/progetto_64.png")));
+		gestioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -384,11 +490,15 @@ public class GestioneProgetto extends JFrame {
 					.addGap(14)
 					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
 					.addGap(4))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addComponent(gestioneProgettoLabel)
+					.addContainerGap(1208, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
+					.addComponent(gestioneProgettoLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
 					.addContainerGap())
 		);
