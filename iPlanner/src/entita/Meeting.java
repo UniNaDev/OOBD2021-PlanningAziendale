@@ -91,8 +91,8 @@ public class Meeting {
 		return modalita;
 	}
 
-	public void setModalita(String modalità) {
-		this.modalita = modalità;
+	public void setModalita(String modalita) {
+		this.modalita = modalita;
 	}
 
 	public String getPiattaforma() {
