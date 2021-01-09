@@ -81,31 +81,7 @@ public class Login extends JFrame {
 		passwordField.setBounds(285, 193, 173, 26);
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		accessoButton = new JButton("Login");
-		accessoButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				accessoButton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				accessoButton.setBackground(Color.WHITE);
-			}
-		});
-		accessoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		accessoButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		accessoButton.setBounds(311, 267, 121, 26);
-		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-		accessoButton.setBackground(new Color(255, 255, 255));
-		accessoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				theController.verificaCredenziali(emailTextField.getText(),passwordField.getText());
-				
-				
-			}
-		});
+		
 		
 		JLabel loginIconLabel = new JLabel("Login");
 		loginIconLabel.setBounds(289, 5, 165, 88);
@@ -127,7 +103,7 @@ public class Login extends JFrame {
 		contentPane.add(passwordIconLabel);
 		contentPane.add(passwordField);
 		contentPane.add(passwordLabel);
-		contentPane.add(accessoButton);
+	
 		
 		annullaButton = new JButton("Annulla");
 		annullaButton.addMouseListener(new MouseAdapter() {
@@ -156,23 +132,111 @@ public class Login extends JFrame {
 		annullaButton.setBounds(10, 364, 121, 26);
 		contentPane.add(annullaButton);
 		
+		accessoButton = new JButton("Login");
+		accessoButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				accessoButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				accessoButton.setBackground(Color.WHITE);
+			}
+		});
+		accessoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		accessoButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		accessoButton.setBounds(311, 267, 121, 26);
+		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		accessoButton.setBackground(new Color(255, 255, 255));
+		
+		//Quando enter viene premuto all'interno dell' passwordField controlla che i campi vengano inseriti correttamente
 		passwordField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				String username = emailTextField.getText();
-				if(username.equals("")) {
+				if(username.equals("") && passwordField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+					JOptionPane.showMessageDialog(null, "Inserire Email e password per login");
+					
+				}
+				else if(username.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
 					JOptionPane.showMessageDialog(null, "Inserire Email per login");
 				}
-				else if(e.getKeyCode()==KeyEvent.VK_ENTER)
+				else if(passwordField.getText().equals("") && !username.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
+					JOptionPane.showMessageDialog(null, "Inserire password per login");
+					
+				}
+				else if(!username.equals("") && !passwordField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER){
 					theController.verificaCredenziali(emailTextField.getText(), passwordField.getText());
+				}
+					
 			}
 		});
+		
+		//Quando enter viene premuto all'interno dell' email textfield controlla che i campi vengano inseriti correttamente
+		emailTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				String password = passwordField.getText();
+				if(emailTextField.getText().equals("") && password.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+					JOptionPane.showMessageDialog(null, "Inserire Email e password per login");
+					
+				}
+				else if(password.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
+					JOptionPane.showMessageDialog(null, "Inserire password per login");
+				}
+			
+				else if(!password.equals("") && emailTextField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
+					JOptionPane.showMessageDialog(null, "Inserire email per login");
+					
+				}
+				else if(!password.equals("") && !emailTextField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER){
+					theController.verificaCredenziali(emailTextField.getText(), passwordField.getText());
+				}
+					
+			}
+		});
+		
+		//Quando viene premuto il button accedi controlla che i campi vengano inseriti correttamente
+		accessoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String username = emailTextField.getText();
+				String password = passwordField.getText();
+			
+				if(username.equals("") && password.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Inserire Email e password per login");
+					
+				}
+				
+				else if(username.equals("")) {
+					JOptionPane.showMessageDialog(null, "Inserire Email per effettuare login");
+				}
+				else if(password.equals("")) {
+					
+					JOptionPane.showMessageDialog(null, "Inserire password per effettuare login");
+					
+				}
+				else {
+					theController.verificaCredenziali(emailTextField.getText(),passwordField.getText());
+				}
+				
+				
+			}
+		});
+		
+
+		
+		contentPane.add(accessoButton);
 	}
 
 
-
+	//Si occupa di svuotare i campi una volta effettuato il login(Viene chiamato dal controllerAccesso)
 	public void SvuotaCampi() {
-		// TODO Auto-generated method stub
+		
 		emailTextField.setText(null);
 		passwordField.setText(null);
 	}
