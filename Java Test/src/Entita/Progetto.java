@@ -11,6 +11,8 @@ package Entita;
 import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class Progetto {
 	
@@ -145,7 +147,12 @@ public class Progetto {
 	//toString
 	@Override
 	public String toString() {
-		return nomeProgetto + ":\n" + descrizioneProgetto;
+		String temp = nomeProgetto;
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		if (!scadenza.equals(null))
+			temp += " " + scadenza.toString(formatDate);
+				
+		return temp;
 	}
 	
 	

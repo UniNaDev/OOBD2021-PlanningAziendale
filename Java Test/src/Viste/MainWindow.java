@@ -29,6 +29,8 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class MainWindow extends JFrame {
 
@@ -70,15 +72,19 @@ public class MainWindow extends JFrame {
 
 
 		try {
-			ArrayList<String> progetti = new ArrayList<String>();
-			formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-			for (Progetto proj : controller.ottieniProgetti())
-				progetti.add(proj.getNomeProgetto() + " " + proj.getScadenza().toString(formatDate));
-			JList progettiList = new JList(progetti.toArray());
+			JList <Progetto> progettiList = new JList(controller.ottieniProgetti().toArray());
+			progettiList.addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+					if (!progettiList.isSelectionEmpty() && !e.getValueIsAdjusting()) {
+	            		Progetto temp = progettiList.getSelectedValue();
+	            		System.out.println(temp);
+	            	}
+				}
+			});
 			progettiList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			progettiList.setFont(new Font("Calibri", Font.PLAIN, 16));
 			progettiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			progettiList.setBounds(38, 186, 247, 306);
+			progettiList.setBounds(38, 193, 247, 306);
 			contentPane.add(progettiList);
 			
 			JLabel meetingScadenzaLabel = new JLabel("Meeting più vicini");
@@ -90,11 +96,18 @@ public class MainWindow extends JFrame {
 			MeetingListRenderer renderer = new MeetingListRenderer();
 			
 			ArrayList<Meeting> meetings = controller.ottieniMeeting();
-			JList meetingList = new JList(meetings.toArray());
+			JList <Meeting> meetingList = new JList(meetings.toArray());
+			meetingList.addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+		            	if (!meetingList.isSelectionEmpty() && !e.getValueIsAdjusting()) {
+		            		Meeting temp = meetingList.getSelectedValue();
+		            		System.out.println(temp);
+		            	}
+				}
+			});
 			meetingList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			meetingList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			meetingList.setFont(new Font("Calibri", Font.PLAIN, 16));
-			meetingList.setFixedCellHeight(-1);
 			meetingList.setCellRenderer(renderer);
 			meetingList.setBounds(388, 186, 277, 306);
 			contentPane.add(meetingList);
