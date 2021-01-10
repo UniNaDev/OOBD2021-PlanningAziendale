@@ -378,7 +378,7 @@ public class NuovoDipendente extends JFrame {
 					try {
 						creaAccount();	//crea il nuovo account con i valori inseriti
 					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(createAccountButton,
+						JOptionPane.showMessageDialog(null,
 								e1.getMessage(),
 								"Errore #" + e1.getErrorCode(),
 								JOptionPane.ERROR_MESSAGE);

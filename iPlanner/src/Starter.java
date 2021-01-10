@@ -52,13 +52,13 @@ public class Starter {
 			ControllerScelta controller = new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
 		} 
 		catch (SQLException e) {
-			JOptionPane.showMessageDialog(new JFrame(),
+			JOptionPane.showMessageDialog(null,
 			    "Impossibile stabilire una connessione con il database.",
 			    "Errore connessione #" + e.getErrorCode(),
 			    JOptionPane.ERROR_MESSAGE);	//errore di connessione
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
-			JOptionPane.showMessageDialog(new JFrame(),
+			JOptionPane.showMessageDialog(null,
 					"Mancano argomenti di autorizzazione in input. ",
 					"Errore argomenti iniziali",
 					JOptionPane.ERROR_MESSAGE);	//errore argomenti a linea di comando mancanti

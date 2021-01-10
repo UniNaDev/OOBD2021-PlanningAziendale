@@ -84,7 +84,7 @@ public class ControllerScelta {
 			//se l'insert nel database ha successo
 			if (dipDAO.addDipendente(temp)) {
 				//chiedi se vuoi creare un altro account o uscire
-				int yesNo = JOptionPane.showConfirmDialog(nuovoDipendenteFrame,
+				int yesNo = JOptionPane.showConfirmDialog(null,
 						"Creazione riuscita.\nVuoi crearne un altro?",
 						"Creazione riuscita",
 						JOptionPane.YES_NO_OPTION);
@@ -99,7 +99,7 @@ public class ControllerScelta {
 				}
 			}
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(nuovoDipendenteFrame,
+			JOptionPane.showMessageDialog(null,
 					e.getMessage(),
 					"Errore creazione account #" + e.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);	//mostra messaggio di errore nella creazione account
