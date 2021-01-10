@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import entita.Dipendente;
@@ -48,10 +47,8 @@ public class ControllerAccesso {
 	}
 
 	public void annulla() {
-		// TODO Auto-generated method stub
 		loginFrame.setVisible(false);
 		ControllerScelta controller=new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);
-		controller.reLinkToIplannerFrame();
 	}
 
 

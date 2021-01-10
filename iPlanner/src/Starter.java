@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import controller.ControllerScelta;
 import dbManager.ManagerConnessioneDB;
 import implementazioniDAO.DipendenteDAOPSQL;
@@ -17,16 +20,16 @@ public class Starter {
 	public static void main(String[] args) {
 		
 		try {
+			//Crea connessione al database
 			ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
+			Connection connection = connDB.getConnection();
 			
-			Connection connection = connDB.getConnection();	//crea connessione al DB
+			DipendenteDAO dipDAO = null;	//dao dipendente
+			LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
+			ProgettoDAO projDAO = null;	//dao progetto
+			MeetingDAO meetDAO = null;	//dao meeting
 			
-			DipendenteDAO dipDAO = null;
-			LuogoNascitaDAO luogoDAO = null;
-			ProgettoDAO projDAO = null;
-			MeetingDAO meetDAO = null;
-			
-			boolean segreteria = false;
+			boolean segreteria = false;	//indica il tipo di autorizzazione (true = segreteria, false = dipendente)
 			
 			//Inizializzazione DAO implementati per PostgreSQL
 			if (args[0].equals("postgres")) {
@@ -35,23 +38,30 @@ public class Starter {
 				projDAO = new ProgettoDAOPSQL(connection);
 				meetDAO = new MeetingDAOPSQL(connection);
 			}
+			//Implementazioni oracle dei DAO
 			else if (args[0].equals("oracle")) {
 				System.out.println("TODO: implementazione oracle");
 			}
 			
+			//-s = autorizzazione per segreteria, -d autorizzazione per dipendenti
 			if (args[1].equals("-s"))
 				segreteria = true;
 			else if (args[1].equals("-d"))
 				segreteria = false;
 				
-			
-			ControllerScelta controller = new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza controller iniziale
+			ControllerScelta controller = new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
 		} 
 		catch (SQLException e) {
-			//ControllerErrori erroriCTRL = new ControllerErrori("Errore codice " + e.getErrorCode() + "\n" + e.getMessage(), true);	//errore connessione al DB
+			JOptionPane.showMessageDialog(new JFrame(),
+			    "Impossibile stabilire una connessione con il database.",
+			    "Errore connessione #" + e.getErrorCode(),
+			    JOptionPane.ERROR_MESSAGE);	//errore di connessione
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
-			//ControllerErrori erroriCTRL = new ControllerErrori("Errore.\nManca argomento implementazione.", true);	//errore avvio
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Mancano argomenti di autorizzazione in input. ",
+					"Errore argomenti iniziali",
+					JOptionPane.ERROR_MESSAGE);	//errore argomenti a linea di comando mancanti
 		}
 	}
 

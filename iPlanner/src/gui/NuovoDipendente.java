@@ -4,8 +4,8 @@ import controller.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -17,39 +17,31 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import java.awt.Frame;
-import javax.swing.border.SoftBevelBorder;
 
 import org.joda.time.LocalDate;
 
 import entita.LuogoNascita;
 
-import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
-import javax.swing.border.LineBorder;
 import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
 import javax.swing.ButtonGroup;
 import java.awt.Font;
-import javax.swing.JSeparator;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 
-import javax.swing.JFormattedTextField;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.Toolkit;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 
 
 public class NuovoDipendente extends JFrame {
 
+	
+	//Attributi GUI
 	private JPanel contentPane;
 	
 	//Label
@@ -80,7 +72,7 @@ public class NuovoDipendente extends JFrame {
 	private JRadioButton donnaRadioButton;
 	private JComboBox<?> dayComboBox;
 	private JComboBox<?> monthComboBox;
-	private JComboBox<?> yearComboBox;
+	private JComboBox<String> yearComboBox;
 	private JComboBox<?> provinciaComboBox;
 	private JComboBox<String> cityComboBox;
 	private JTextField indirizzoTextField;
@@ -95,25 +87,27 @@ public class NuovoDipendente extends JFrame {
 
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	
-	ControllerScelta theController;
+	private ControllerScelta theController;
+	
+	//Altri attributi
 	private String nome;	//nome nuovo dipendente
 	private String cognome;	//cognome nuovo dipendente
 	private char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
 	private LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
 	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
 	private LuogoNascita luogoNascita;	//luogo di nascita del nuovo dipendente
-	private String email;
-	private String password;
-	private String telefono;
-	private String cellulare;
-	private String indirizzo;
+	private String email;	//email del dipendente
+	private String password;	//password del dipendente
+	private String telefono;	//numero di telefono di casa
+	private String cellulare;	//cellulare
+	private String indirizzo;	//indirizzo
 
 	
 	/**
 	 * Create the frame.
 	 */
 	public NuovoDipendente(ControllerScelta theController) {
-		this.theController = theController;
+		this.theController = theController;	//ottiene il controller scelta
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NuovoDipendente.class.getResource("/Icone/WindowIcon_16.png")));
 		setResizable(false);
 	
@@ -125,53 +119,63 @@ public class NuovoDipendente extends JFrame {
 		//Viene visualizzata al centro dello schermo
 		setLocationRelativeTo(null);
 		
-		//Label
+		//Label "Nome*"
 		nameLabel = new JLabel("Nome*");
 		nameLabel.setBounds(352, 147, 66, 14);
 		nameLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Label "Cognome*"
 		surnameLabel = new JLabel("Cognome*");
 		surnameLabel.setBounds(488, 147, 84, 14);
 		surnameLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		surnameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Label "Sesso*"
 		sessoLabel = new JLabel("Sesso*");
 		sessoLabel.setBounds(351, 244, 46, 14);
 		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
+		//Label "Indirizzo*"
 		indirizzoLabel = new JLabel("Indirizzo*");
 		indirizzoLabel.setBounds(351, 419, 84, 14);
 		indirizzoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
+		//Label "Email*"
 		emailLabel = new JLabel("Email*");
 		emailLabel.setBounds(353, 190, 66, 14);
 		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		emailLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Label "Data di nascita*"
 		bornDateLabel = new JLabel("Data di nascita*");
 		bornDateLabel.setBounds(351, 282, 117, 14);
 		bornDateLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		bornDateLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Label "Luogo di nascita*"
 		bornPlaceLabel = new JLabel("Luogo di nascita*");
 		bornPlaceLabel.setBounds(351, 324, 128, 14);
 		bornPlaceLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		bornPlaceLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Label "Telefono fisso"
 		telefonoFissoLabel = new JLabel("Telefono Fisso");
 		telefonoFissoLabel.setBounds(351, 489, 103, 14);
 		telefonoFissoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
+		//Label "Cellulare"
 		cellulareLabel = new JLabel("Cellulare");
 		cellulareLabel.setBounds(351, 458, 84, 14);
 		cellulareLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
+		//Label "Password*"
 		passwordLabel = new JLabel("Password*");
 		passwordLabel.setBounds(351, 550, 66, 14);
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Label "Conferma Password*"
 		confirmPasswordLabel = new JLabel("Conferma Password*");
 		confirmPasswordLabel.setBounds(351, 575, 128, 14);
 		confirmPasswordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -213,25 +217,28 @@ public class NuovoDipendente extends JFrame {
 		iconaPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/password_16.png")));
 		iconaPasswordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Text Field
+		//Text Field per il nome
 		nameTextField = new JTextField();
 		nameTextField.setBounds(351, 125, 130, 20);
 		nameTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nameTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		nameTextField.setColumns(10);
 		
+		//Text Field per il cognome
 		surnameTextField = new JTextField();
 		surnameTextField.setBounds(488, 125, 130, 20);
 		surnameTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		surnameTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		surnameTextField.setColumns(10);
 		
+		//Text Field per l'email
 		emailTextField = new JTextField();
 		emailTextField.setBounds(351, 166, 267, 20);
 		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		emailTextField.setColumns(10);
 		
+		//Radio Button per uomo
 		uomoRadioButton = new JRadioButton("Uomo");
 		uomoRadioButton.setBounds(417, 240, 61, 23);
 		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -239,6 +246,7 @@ public class NuovoDipendente extends JFrame {
 		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		buttonGroup.add(uomoRadioButton);
 		
+		//Radio Button per donna
 		donnaRadioButton = new JRadioButton("Donna");
 		donnaRadioButton.setBounds(489, 240, 66, 23);
 		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -246,7 +254,7 @@ public class NuovoDipendente extends JFrame {
 		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		buttonGroup.add(donnaRadioButton);
 		
-		//Combo Box
+		//Combo Box giorni del mese
 		dayComboBox = new JComboBox<Object>();
 		dayComboBox.setBounds(483, 274, 44, 22);
 		dayComboBox.setBackground(Color.WHITE);
@@ -255,6 +263,7 @@ public class NuovoDipendente extends JFrame {
 		dayComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		dayComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
+		//Combo Box mesi dell'anno
 		monthComboBox = new JComboBox<Object>();
 		monthComboBox.setBounds(537, 274, 44, 22);
 		monthComboBox.setBackground(Color.WHITE);
@@ -263,22 +272,26 @@ public class NuovoDipendente extends JFrame {
 		monthComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		monthComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		yearComboBox = new JComboBox<Object>();
+		//Combo Box anni
+		for (int i = 1900; i < LocalDate.now().getYear(); i++)
+			anni.add(String.valueOf(i));
+		yearComboBox = new JComboBox(anni.toArray());
 		yearComboBox.setBounds(591, 274, 66, 22);
 		yearComboBox.setBackground(Color.WHITE);
 		yearComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		yearComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		yearComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		//CREO UN MODELLO PERSONALIZZATO PER L'ANNO DEL COMBO BOX //////////
-		DefaultComboBoxModel myModel = new DefaultComboBoxModel();
-		yearComboBox.setModel(myModel);
+//		//CREO UN MODELLO PERSONALIZZATO PER L'ANNO DEL COMBO BOX //////////
+//		DefaultComboBoxModel myModel = new DefaultComboBoxModel();
+//		yearComboBox.setModel(myModel);
+//		
+//		for(int i=1900;i<= 2021;i++)
+//			myModel.addElement(i);
 		
-		for(int i=1900;i<= 2021;i++)
-			myModel.addElement(i);
+		yearComboBox.setSelectedIndex((int) yearComboBox.getItemCount()/2);
 		
-		yearComboBox.setSelectedIndex(100);
-		
+		//ComboBox comuni
 		cityComboBox = new JComboBox();
 		cityComboBox.setEnabled(false);
 		cityComboBox.setBounds(483, 347, 210, 22);
@@ -288,6 +301,7 @@ public class NuovoDipendente extends JFrame {
 		cityComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		try {
+			//Combo Box province
 			provinciaComboBox = new JComboBox(theController.ottieniProvince().toArray());
 			provinciaComboBox.addActionListener(new ActionListener() {
 				//Action performed selezione
@@ -295,17 +309,23 @@ public class NuovoDipendente extends JFrame {
 					cityComboBox.setEnabled(true); //attiva il menù dei comuni
 					cityComboBox.removeAllItems();	//pulisce la lista del menù
 					try {
+						//prova a ottenere i comune dal DB e inserirli nella corrispondente combo box
 						for(LuogoNascita comune: theController.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
 								cityComboBox.addItem(comune.getNomeComune());
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					} 
+					catch (SQLException e1) {
+						JOptionPane.showMessageDialog(cityComboBox,
+								e1.getMessage(),
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(provinciaComboBox,
+					e1.getMessage(),
+					"Errore #" + e1.getErrorCode(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 		provinciaComboBox.setBounds(483, 316, 173, 22);
 		provinciaComboBox.setBackground(Color.WHITE);
@@ -313,55 +333,66 @@ public class NuovoDipendente extends JFrame {
 		provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		provinciaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
+		//Text Field indirizzo
 		indirizzoTextField = new JTextField();
 		indirizzoTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		indirizzoTextField.setColumns(10);
 		indirizzoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		indirizzoTextField.setBounds(351, 396, 267, 20);
 		
+		//Text Field telefono di casa
 		telefonoFissoTextField = new JTextField();
 		telefonoFissoTextField.setBounds(464, 484, 86, 20);
 		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		telefonoFissoTextField.setColumns(10);
 		
+		//Text Field cellulare
 		cellulareTextField = new JTextField();
 		cellulareTextField.setBounds(464, 453, 86, 20);
 		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cellulareTextField.setColumns(10);
 		
+		//Password Field per la password
 		passwordField = new JPasswordField();
 		passwordField.setBounds(491, 539, 125, 20);
 		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Password Field per conferma password
 		confirmPasswordField = new JPasswordField();
 		confirmPasswordField.setBounds(491, 570, 125, 20);
 		confirmPasswordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		confirmPasswordField.setHorizontalAlignment(SwingConstants.LEFT);
 
-		//Button
+		//Button "Crea Account"
 		createAccountButton = new JButton("Crea Account");
 		createAccountButton.setBounds(840, 627, 134, 23);
 		createAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		createAccountButton.setBackground(Color.WHITE);
 		createAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		createAccountButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		//Eventi connessi al pulsante "Crea Account"
 		createAccountButton.addActionListener(new ActionListener() {
+			//click del pulsante
 			public void actionPerformed(ActionEvent e) {
-				//INSERT Dei dati inseriti nella tabella
+				//resetta i colori delle label per i valori not null
 				nameLabel.setForeground(Color.BLACK);
 				surnameLabel.setForeground(Color.BLACK);
 				emailLabel.setForeground(Color.BLACK);
 				passwordLabel.setForeground(Color.BLACK);
 				indirizzoLabel.setForeground(Color.BLACK);
+				//se tutti i campi essenziali sono pieni e la password è confermata
 				if ((!nameTextField.getText().isBlank() && !surnameTextField.getText().isBlank() && !emailTextField.getText().isBlank() && !passwordField.getText().isBlank() && !indirizzoTextField.getText().isBlank()) && confirmPasswordField.getText().equals(passwordField.getText()))
 					try {
-						creaAccount();
+						creaAccount();	//crea il nuovo account con i valori inseriti
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(createAccountButton,
+								e1.getMessage(),
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);
 					}
-				else {
+				else //se invece uno dei valori essenziali è vuoto colora la rispettiva label di rosso
+				{
 					if (nameTextField.getText().isBlank()) {
 						nameLabel.setForeground(Color.RED);
 					}
@@ -373,44 +404,57 @@ public class NuovoDipendente extends JFrame {
 						passwordLabel.setForeground(Color.RED);
 					if (indirizzoTextField.getText().isBlank())
 						indirizzoLabel.setForeground(Color.RED);
+					//se le due password non corrispondono colora le label e svuota il campo di conferma password
+					if (passwordField.getText().equals(confirmPasswordField.getText())) {
+						passwordLabel.setForeground(Color.RED);
+						confirmPasswordLabel.setForeground(Color.RED);
+						confirmPasswordLabel.setText("");
+					}
 				}
 			}
 		});
 		createAccountButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				createAccountButton.setBackground(Color.LIGHT_GRAY);
+				createAccountButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
 			}
+			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				createAccountButton.setBackground(Color.WHITE);
+				createAccountButton.setBackground(Color.WHITE);	//smette di evidenziarlo
 			}
 		});
 		
+		//Button "Annulla"
 		cancelCreationButton = new JButton("Annulla");
 		cancelCreationButton.setBounds(10, 627, 97, 23);
 		cancelCreationButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cancelCreationButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cancelCreationButton.setBackground(Color.WHITE);
 		cancelCreationButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		//Eventi connessi al button "Annulla"
 		cancelCreationButton.addActionListener(new ActionListener() {
+			//click sinistro del mouse
 			public void actionPerformed(ActionEvent e) {
 				
-				theController.annulla();
+				theController.annulla();	//annulla tutto e torna alla schermata principale
 			}
 		});
 		cancelCreationButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				cancelCreationButton.setBackground(Color.LIGHT_GRAY);
+				cancelCreationButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
 			}
+			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				cancelCreationButton.setBackground(Color.WHITE);
+				cancelCreationButton.setBackground(Color.WHITE);	//smette di evidenziare il pulsante
 			}
 		});
 		

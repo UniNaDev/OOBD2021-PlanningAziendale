@@ -23,17 +23,21 @@ import javax.swing.ImageIcon;
 
 public class iPlanner extends JFrame {
 
-
+	//Attributi
+	private final String devs = "UninaDev";	//stringa sviluppatori
+	private final String versione = "0.0.1";	//stringa versione del software
+	
+	//Attrubuti GUI
 	private JPanel contentPane;
 	private JLabel dipendenteIscrittoLabel;
 	private JLabel nuovoDipendenteLabel;
-	private boolean segreteria = false;
  
 
 	/**
 	 * Create the frame.
 	 */
 	public iPlanner(ControllerScelta theController, boolean segreteria) {
+		
 		setMinimumSize(new Dimension(850, 500));
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -45,52 +49,58 @@ public class iPlanner extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		//Label "Welcome to iPlanner"
 		JLabel welcomeLabel = new JLabel("Welcome to iPlanner");
 		welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		welcomeLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/planner_128.png")));
 		welcomeLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-		//Icon Label
+		//Icona Label Welcome
 		JLabel employeeIconLabel = new JLabel("");
 		employeeIconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		employeeIconLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/employee_64.png")));
 		
-		JLabel createdByLabel = new JLabel("Created by UniNaDev");
+		//Label "Created by"
+		JLabel createdByLabel = new JLabel("Created by " + devs);
 		createdByLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
 		
-		JLabel versionLabel = new JLabel("v 1.0.0.0");
+		//Label versione del software
+		JLabel versionLabel = new JLabel("v " + versione);
 		versionLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
 		versionLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		
-		//Label
+		//Se l'autorizzazione è di tipo dipendente mostra nella finestra solo l'opzione "Esegui login"
 		if (!segreteria) {
+			//Label "Esegui login"
 		dipendenteIscrittoLabel = new JLabel("Esegui login");
 		dipendenteIscrittoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteIscrittoLabel.setForeground(Color.BLACK);
 		dipendenteIscrittoLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		dipendenteIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		//Quando clicco sull'etichetta con il mouse mi porta alla finestra per fare il login
+		//Eventi connessi alla label "Esegui login"
 		dipendenteIscrittoLabel.addMouseListener(new MouseAdapter() {
+			//click sinistro del mouse
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				theController.linkToLoginFrame();
+				theController.linkToLoginFrame();	//va alla finestra di login
 			}
+			//mouse sopra la label
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				//quando passa sopra con il mouse il colore cambia in grigio
-				dipendenteIscrittoLabel.setForeground(Color.GRAY);
+				dipendenteIscrittoLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
 			}
+			//mouse fuori dalla label
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				//quando il mouse si sposta il colore ritorna nero
-				dipendenteIscrittoLabel.setForeground(Color.BLACK);
+				dipendenteIscrittoLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettando il colore della label
 			}
 		});
 		
+		//Group Layout per il posizionamento delle componenti nel frame
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -126,34 +136,38 @@ public class iPlanner extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 		}
+		//Se l'autorizzazione è di tipo segreteria mostra la finestra con la sola opzione "Aggiungi nuovo dipendente"
 		else {
 		
+			//Label "Aggiungi nuovo dipendente"
 		nuovoDipendenteLabel = new JLabel("Aggiungi nuovo dipendente");
 		nuovoDipendenteLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		nuovoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		nuovoDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		//Quando clicco sull'etichetta con il mouse mi porta alla finestra per creare un nuovo utente
+		//Eventi connessi alla label "Aggiungi nuovo dipendente"
 		nuovoDipendenteLabel.addMouseListener(new MouseAdapter() {
+			//click sinistro del mouse
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				theController.linkToCreationFrame();
+				theController.linkToCreationFrame();	//apre la finestra di creazione account
 			}
+			//mouse sopra la label
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				//quando passa sopra con il mouse il colore cambia in grigio
-				nuovoDipendenteLabel.setForeground(Color.GRAY);
+				nuovoDipendenteLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
 			}
+			//mouse fuori dalla label
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				//quando il mouse si sposta il colore ritorna nero
-				nuovoDipendenteLabel.setForeground(Color.BLACK);
+				nuovoDipendenteLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettandone il colore
 			}
 		});
 		
+		//Group Layout per l'inserimento delle componenti nel frame
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
