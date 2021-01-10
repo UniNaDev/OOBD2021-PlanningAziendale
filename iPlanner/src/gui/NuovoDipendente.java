@@ -611,7 +611,7 @@ public class NuovoDipendente extends JFrame {
 			else
 				sesso = 'F';
 			//data di nascita
-			dataNascita = new LocalDate(yearComboBox.getSelectedIndex() + 1900, monthComboBox.getSelectedIndex() + 1, dayComboBox.getSelectedIndex() + 1);
+			dataNascita = new LocalDate(yearComboBox.getSelectedIndex() + 1900, monthComboBox.getSelectedIndex() + 1, dayComboBox.getSelectedIndex());
 			//luogo di nascita
 			luogoNascita = theController.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cityComboBox.getSelectedIndex());
 			email = emailTextField.getText(); //email
@@ -619,7 +619,7 @@ public class NuovoDipendente extends JFrame {
 			if (!telefonoFissoTextField.getText().equals(""))
 				telefono = telefonoFissoTextField.getText();	//telefono
 			if (!cellulareTextField.getText().equals(""))
-				telefono = cellulareTextField.getText();	//cellulare
+				cellulare = cellulareTextField.getText();	//cellulare
 			indirizzo = indirizzoTextField.getText();	//indirizzo
 			//ottiene le skill selezionate
 			ArrayList<Skill> skills = new ArrayList<Skill>();
