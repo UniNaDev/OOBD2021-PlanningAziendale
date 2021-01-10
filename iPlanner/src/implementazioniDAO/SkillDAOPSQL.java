@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import entita.Dipendente;
 import entita.Skill;
 import interfacceDAO.SkillDAO;
 
@@ -25,7 +26,7 @@ public class SkillDAOPSQL implements SkillDAO {
 	//ATTRIBUTI
 	
 	private Connection conn;	//connessione al DB
-	private PreparedStatement getSkillsPS,getSkillsByNomePS,addSkillPS;	//PreparedStatement per operazioni rapide sul DB
+	private PreparedStatement getSkillsPS,getSkillsByNomePS,addSkillPS, addSkillDipendentePS;	//PreparedStatement per operazioni rapide sul DB
 	
 	//METODI
 	
@@ -38,6 +39,7 @@ public class SkillDAOPSQL implements SkillDAO {
 		getSkillsPS = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");	//statement per chiedere al DB tutte le skill
 		getSkillsByNomePS = conn.prepareStatement("SELECT * FROM Skill WHERE Skill.NomeSkill = ?");	//statement per chiedere al DB tutte le skill con un nome specifico
 		addSkillPS = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");	//statement per inserire una nuova Skill nel DB
+		addSkillDipendentePS = conn.prepareStatement("INSERT INTO Abilità VALUES (?,?)");	//? = id della skill, ? = codice fiscale del dipendente
 	}
 	
 	//Metodo getSkills.
@@ -51,7 +53,7 @@ public class SkillDAOPSQL implements SkillDAO {
 		
 		//finchè ci sono elementi nel ResultSet crea un nuovo oggetto Skill con i dati ottenuti e lo aggiunge alla lista
 		while(risultato.next()) {
-			Skill tempSkill = new Skill(risultato.getString(2));
+			Skill tempSkill = new Skill(risultato.getInt(1), risultato.getString(2));
 			temp.add(tempSkill);
 		}
 		risultato.close();	//chiude il ResultSet
@@ -68,7 +70,7 @@ public class SkillDAOPSQL implements SkillDAO {
 		
 		ResultSet risultato = getSkillsByNomePS.executeQuery();	//esegue la query per ottenere il ResultSet
 		risultato.next();
-		Skill tempSkill = new Skill(risultato.getString(2));
+		Skill tempSkill = new Skill(risultato.getInt(1), risultato.getString(2));
 		risultato.close();	//chiude il ResultSet
 		
 		return tempSkill;
@@ -84,6 +86,21 @@ public class SkillDAOPSQL implements SkillDAO {
 		int record = addSkillPS.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1)
 		
 		//se il record aggiunto è 1 allora l'insert ha avuto successo, altrimenti no
+		if (record == 1)
+			return true;
+		else
+			return false;
+	}
+
+	//Metodo che aggiunge l'associazione tra un dipendente e una sua skill
+	@Override
+	public boolean addSkillDipendente(Skill skill, Dipendente dip) throws SQLException {
+		addSkillDipendentePS.setInt(1, skill.getIdSkill());	//inserisce l'id della skill nell'insert
+		addSkillDipendentePS.setString(2, dip.getCf());	//inserisce il codice fiscale del dipendente nell'insert
+		
+		int record = addSkillDipendentePS.executeUpdate();	//esegue l'insert e salva il numero di record modificati
+		
+		//(1 = successo, 0 = fallimento)
 		if (record == 1)
 			return true;
 		else

@@ -10,10 +10,12 @@ import implementazioniDAO.DipendenteDAOPSQL;
 import implementazioniDAO.LuogoNascitaDAOPSQL;
 import implementazioniDAO.MeetingDAOPSQL;
 import implementazioniDAO.ProgettoDAOPSQL;
+import implementazioniDAO.SkillDAOPSQL;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SkillDAO;
 
 public class Starter {
 	
@@ -28,6 +30,7 @@ public class Starter {
 			LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 			ProgettoDAO projDAO = null;	//dao progetto
 			MeetingDAO meetDAO = null;	//dao meeting
+			SkillDAO skillDAO = null;	//dao delle skill
 			
 			boolean segreteria = false;	//indica il tipo di autorizzazione (true = segreteria, false = dipendente)
 			
@@ -37,6 +40,7 @@ public class Starter {
 				luogoDAO = new LuogoNascitaDAOPSQL(connection);
 				projDAO = new ProgettoDAOPSQL(connection);
 				meetDAO = new MeetingDAOPSQL(connection);
+				skillDAO = new SkillDAOPSQL(connection);
 			}
 			//Implementazioni oracle dei DAO
 			else if (args[0].equals("oracle")) {
@@ -49,7 +53,7 @@ public class Starter {
 			else if (args[1].equals("-d"))
 				segreteria = false;
 				
-			ControllerScelta controller = new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
+			ControllerScelta controller = new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO, skillDAO);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
 		} 
 		catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,

@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import org.joda.time.LocalDate;
 
 import entita.LuogoNascita;
+import entita.Skill;
 
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
@@ -28,6 +29,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 import java.awt.Cursor;
@@ -85,6 +87,17 @@ public class NuovoDipendente extends JFrame {
 	private JPasswordField passwordField;
 	private JPasswordField confirmPasswordField;
 	
+	private JScrollPane skillsScrollPane;
+	private JList skillsList;
+	private JLabel skillsLabel;
+	private JLabel iconaSkillsLabel;
+	private JButton nuovaSkillButton;
+	private JTextField nuovaSkillTextField;
+	private JTextField salarioTextField;
+	private JLabel euroLabel;
+	private JLabel salarioLabel;
+	private JLabel iconaSalarioLabel;
+	
 	//Button
 	private JButton createAccountButton;
 	private JButton cancelCreationButton;
@@ -105,16 +118,6 @@ public class NuovoDipendente extends JFrame {
 	private String telefono;	//numero di telefono di casa
 	private String cellulare;	//cellulare
 	private String indirizzo;	//indirizzo
-	private JScrollPane skillsScrollPane;
-	private JList skillsList;
-	private JLabel skillsLabel;
-	private JLabel iconaSkillsLabel;
-	private JButton nuovaSkillButton;
-	private JTextField nuovaSkillTextField;
-	private JTextField salarioTextField;
-	private JLabel euroLabel;
-	private JLabel salarioLabel;
-	private JLabel iconaSalarioLabel;
 
 	
 	/**
@@ -320,7 +323,7 @@ public class NuovoDipendente extends JFrame {
 								cityComboBox.addItem(comune.getNomeComune());
 					} 
 					catch (SQLException e1) {
-						JOptionPane.showMessageDialog(cityComboBox,
+						JOptionPane.showMessageDialog(null,
 								e1.getMessage(),
 								"Errore #" + e1.getErrorCode(),
 								JOptionPane.ERROR_MESSAGE);
@@ -328,7 +331,7 @@ public class NuovoDipendente extends JFrame {
 				}
 			});
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(provinciaComboBox,
+			JOptionPane.showMessageDialog(null,
 					e1.getMessage(),
 					"Errore #" + e1.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);
@@ -501,24 +504,24 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(createAccountButton);
 		contentPane.add(indirizzoTextField);
 		
+		//Skills
 		skillsScrollPane = new JScrollPane();
 		skillsScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		skillsScrollPane.setBounds(603, 126, 290, 164);
 		contentPane.add(skillsScrollPane);
-		
-		skillsList = new JList();
-		skillsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		skillsList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		skillsList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Skill 1", "Skill 1", "Skill 1", "Skill 1", "Skill 1", "Skill 1", "Skill 1", "Skill 1", "Skill 1", "Skill 1"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		skillsScrollPane.setViewportView(skillsList);
+		//List di skill
+		try {
+			skillsList = new JList(theController.ottieniSkill().toArray());
+			skillsList.setToolTipText("");
+			skillsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			skillsList.setFont(new Font("Consolas", Font.PLAIN, 12));
+			skillsScrollPane.setViewportView(skillsList);
+		} catch (SQLException e1) {
+			JOptionPane.showMessageDialog(null,
+					e1.getMessage(),
+					"Errore #" + e1.getErrorCode(),
+					JOptionPane.ERROR_MESSAGE);
+		}
 		
 		skillsLabel = new JLabel("Skills");
 		skillsLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -532,18 +535,27 @@ public class NuovoDipendente extends JFrame {
 		iconaSkillsLabel.setBounds(531, 182, 60, 39);
 		contentPane.add(iconaSkillsLabel);
 		
+		//Button "Crea Nuova Skill"
 		nuovaSkillButton = new JButton("Crea Nuova Skill");
+		//Eventi connessi al button "Crea Nuova Skill"
 		nuovaSkillButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				nuovaSkillButton.setBackground(Color.LIGHT_GRAY);
+				nuovaSkillButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
 			}
-			
+			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				nuovaSkillButton.setBackground(Color.WHITE);
+				nuovaSkillButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}	
+		});
+		//click del pulsante
+		nuovaSkillButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				creaSkill();
 			}
 		});
 		nuovaSkillButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -553,28 +565,34 @@ public class NuovoDipendente extends JFrame {
 		nuovaSkillButton.setBounds(754, 307, 139, 23);
 		contentPane.add(nuovaSkillButton);
 		
+		//Text Field per il nome della nuova skill
 		nuovaSkillTextField = new JTextField();
 		nuovaSkillTextField.setColumns(10);
 		nuovaSkillTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nuovaSkillTextField.setBounds(603, 308, 141, 22);
 		contentPane.add(nuovaSkillTextField);
 		
-		salarioTextField = new JTextField();
+		//Text Field per il salario
+		salarioTextField = new JTextField("0.00");
+		salarioTextField.setHorizontalAlignment(SwingConstants.RIGHT);
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		salarioTextField.setBounds(603, 389, 141, 22);
 		contentPane.add(salarioTextField);
 		
+		//Label "€"
 		euroLabel = new JLabel("€");
 		euroLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 		euroLabel.setBounds(753, 383, 66, 36);
 		contentPane.add(euroLabel);
 		
+		//Label "Salario"
 		salarioLabel = new JLabel("Salario");
 		salarioLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		salarioLabel.setBounds(603, 416, 66, 14);
 		contentPane.add(salarioLabel);
 		
+		//Icona salario
 		iconaSalarioLabel = new JLabel("");
 		iconaSalarioLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/salario_16.png")));
 		iconaSalarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -603,6 +621,28 @@ public class NuovoDipendente extends JFrame {
 			if (!cellulareTextField.getText().equals(""))
 				telefono = cellulareTextField.getText();	//cellulare
 			indirizzo = indirizzoTextField.getText();	//indirizzo
-			theController.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo);	//mandali al controller che prova a creare il nuovo dipendente con il dao
-		}	
+			//ottiene le skill selezionate
+			ArrayList<Skill> skills = new ArrayList<Skill>();
+			skills.addAll(skillsList.getSelectedValuesList());
+			float salario = Float.valueOf(salarioTextField.getText());	//ottieni il salario
+			theController.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo, skills, salario);	//mandali al controller che prova a creare il nuovo dipendente con il dao
+		}
+		
+		//Metodo che crea una nuova skill e aggiorna la lista delle skill disponibili
+		private void creaSkill() {
+			if (!nuovaSkillTextField.getText().isBlank()) {
+				try {
+					theController.creaNuovaSkill(nuovaSkillTextField.getText());	//inserisce la nuova skill nel database
+					DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();	//aggiorna la lista delle skill
+					skillModel.addAll(theController.ottieniSkill());
+					skillsList.setModel(skillModel);
+					nuovaSkillTextField.setText(""); //svuota il campo
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null,
+							e.getMessage(),
+							"Errore #" + e.getErrorCode(),
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}
 }

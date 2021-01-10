@@ -9,11 +9,13 @@ import org.joda.time.LocalDate;
 
 import entita.Dipendente;
 import entita.LuogoNascita;
+import entita.Skill;
 import gui.*;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SkillDAO;
 
 public class ControllerScelta {
 
@@ -24,16 +26,18 @@ public class ControllerScelta {
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;	//dao progetto
 	private MeetingDAO meetDAO = null;	//dao meeting
+	private SkillDAO skillDAO = null;	//dao delle skill
 	
 	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
 	
 	//Costruttore del controllee di scelta che mostra la prima finestra di scelta
-	public ControllerScelta(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO) {
+	public ControllerScelta(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO) {
 		//Ottiene le implementazioni dei DAO inizializzate nel main Starter
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
+		this.skillDAO = skillDAO;
 		this.segreteria = segreteria;	//ottiene l'autorizzazione presa nel main dagli argomenti a linea di comando
 		
 		iPlannerFrame=new iPlanner(this, segreteria);	//inizializza la prima finestra di scelta
@@ -54,7 +58,7 @@ public class ControllerScelta {
 	public void linkToLoginFrame() {
 		
 		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerAccesso controller=new ControllerAccesso(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
+		ControllerAccesso controller=new ControllerAccesso(segreteria, luogoDAO, dipDAO, projDAO, meetDAO, skillDAO);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
 		
 	}
 	
@@ -77,12 +81,21 @@ public class ControllerScelta {
 	}
 	
 	//Metodo che crea un nuovo account per il dipendente
-	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) {
+	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo, ArrayList<Skill> skills, float salario) {
 		//crea un dipendente temporaneo con i parametri in input
-		Dipendente temp = new Dipendente(nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,0f,password);
+		Dipendente temp = new Dipendente(nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password);
+		temp.setCf(temp.generaCF()); 	//setta il suo codice fiscale appena generato
 		try {
 			//se l'insert nel database ha successo
 			if (dipDAO.addDipendente(temp)) {
+				temp.setSkills(skills);	//setta la skill del dipendente
+				for (Skill skill: skills)	//aggiunge tutte le sue skill nel db in associazione con lui
+					if (!skillDAO.addSkillDipendente(skill, temp)) {
+						JOptionPane.showMessageDialog(null,
+								"Errore inserimento delle skill nel database.",
+								"Errore skill",
+								JOptionPane.ERROR_MESSAGE);	
+					}
 				//chiedi se vuoi creare un altro account o uscire
 				int yesNo = JOptionPane.showConfirmDialog(null,
 						"Creazione riuscita.\nVuoi crearne un altro?",
@@ -96,7 +109,7 @@ public class ControllerScelta {
 					nuovoDipendenteFrame.dispose(); //chiude la finestra di creazione e ne apre un'altra
 					nuovoDipendenteFrame=new NuovoDipendente(this);	//inizializza la prima finestra di creazione account
 					nuovoDipendenteFrame.setVisible(true);	//mostra la finestra inizializzata
-				}
+					}
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
@@ -104,5 +117,16 @@ public class ControllerScelta {
 					"Errore creazione account #" + e.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);	//mostra messaggio di errore nella creazione account
 		}
+	}
+	
+	//Metodo che crea una nuova skill e la inserisce nel database tramite il DAO
+	public void creaNuovaSkill(String nomeSkill) throws SQLException {
+		Skill temp = new Skill(nomeSkill);	//crea la skill temporanea
+		skillDAO.addSkill(temp);	//aggiunge la skill al database
+	}
+	
+	//Metodo che restituisce le skill del database
+	public ArrayList<Skill> ottieniSkill() throws SQLException{
+		return skillDAO.getSkills();
 	}
 }

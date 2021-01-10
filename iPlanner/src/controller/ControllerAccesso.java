@@ -8,6 +8,7 @@ import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SkillDAO;
 
 public class ControllerAccesso {
 	
@@ -19,19 +20,21 @@ public class ControllerAccesso {
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;	//dao progetti
 	private MeetingDAO meetDAO = null;	//dao meeting
+	private SkillDAO skillDAO = null;	//dao skill
 	
 	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
 	
 	private Dipendente loggedUser = null;	//utente che ha fatto il login
 
 	//Costruttore controller di accesso che mostra la finestra di login
-	public ControllerAccesso(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO)
+	public ControllerAccesso(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO)
 	{
 		//Ottiene i dao necessari
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
+		this.skillDAO = skillDAO;
 		
 		this.segreteria = segreteria;	//ottiene l'autorizzazione
 		
@@ -52,7 +55,7 @@ public class ControllerAccesso {
 	//Metodo chiamato dal pulsante annulla del login che fa ritornare l'utente alla schermata di scelta iniziale
 	public void annulla() {
 		loginFrame.setVisible(false);	//chiude la finestra di login
-		ControllerScelta controller=new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza il controller scelta e mostra la finestra iniziale di scelta
+		ControllerScelta controller=new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO, skillDAO);	//inizializza il controller scelta e mostra la finestra iniziale di scelta
 	}
 
 

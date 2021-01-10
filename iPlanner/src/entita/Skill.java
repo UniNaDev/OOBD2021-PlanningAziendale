@@ -8,13 +8,19 @@ public class Skill {
 
 	//ATTRIBUTI
 	
+	private int idSkill;	//id della skill
 	private String nomeSkill;	//nome della skill
 
 	//METODI
 	
-	//Costruttore totale
-	public Skill( String nomeSkill) {
-		this.nomeSkill = nomeSkill;	//not null
+	//Costruttore parziale
+	public Skill(String nomeSkill) {
+		this.nomeSkill = nomeSkill;
+	}
+	
+	public Skill(int idSKill, String nomeSkill) {
+		this.idSkill = idSKill;
+		this.nomeSkill = nomeSkill;
 	}
 	
 	//Getter e Setter
@@ -26,6 +32,10 @@ public class Skill {
 		this.nomeSkill = nomeSkill;
 	}
 	
+	public int getIdSkill() {
+		return idSkill;
+	}
+
 	//toString
 	@Override
 	public String toString() {
