@@ -17,8 +17,8 @@ import interfacceDAO.ProgettoDAO;
 
 public class ControllerScelta {
 
-	iPlanner iPlannerFrame;	//frame della finestra di scelta iniziale
-	NuovoDipendente nuovoDipendenteFrame;	//frame della finestra per creare nuovi account (dipendenti)
+	private iPlanner iPlannerFrame;	//frame della finestra di scelta iniziale
+	private NuovoDipendente nuovoDipendenteFrame;	//frame della finestra per creare nuovi account (dipendenti)
 	
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente

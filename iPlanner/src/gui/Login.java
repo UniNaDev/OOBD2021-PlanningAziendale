@@ -19,8 +19,6 @@ import java.awt.Font;
 
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.MatteBorder;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -31,13 +29,14 @@ import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 
+	//Attributi GUI
 	private JPanel contentPane;
 	private JTextField emailTextField;
 	private JPasswordField passwordField;
 	private JButton accessoButton;
 	private JButton annullaButton;
-
-
+	
+	private ControllerAccesso theController;
 	
 
 	
@@ -45,6 +44,8 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login(ControllerAccesso theController) {
+		this.theController = theController;
+		
 		setResizable(false);
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
@@ -60,30 +61,33 @@ public class Login extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		//Text Field per l'email
 		emailTextField = new JTextField();
 		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		emailTextField.setBounds(285, 133, 173, 26);
 		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		emailTextField.setColumns(10);
 		
+		//Label "Email"
 		JLabel emailLabel = new JLabel("Email");
 		emailLabel.setBounds(300, 120, 57, 14);
 		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		//Label "Password"
 		JLabel passwordLabel = new JLabel("Password");
 		passwordLabel.setBounds(301, 182, 70, 14);
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		//Password Field per la password
 		passwordField = new JPasswordField();
-
 		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setBounds(285, 193, 173, 26);
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		
-		
+		//Icone
 		JLabel loginIconLabel = new JLabel("Login");
 		loginIconLabel.setBounds(289, 5, 165, 88);
 		loginIconLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
@@ -105,45 +109,57 @@ public class Login extends JFrame {
 		contentPane.add(passwordField);
 		contentPane.add(passwordLabel);
 	
-		
+		//Button "Annulla"
 		annullaButton = new JButton("Annulla");
+		//Eventi annessi al button "Annulla"
 		annullaButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				annullaButton.setBackground(Color.LIGHT_GRAY);
+				annullaButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
 			}
+			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				annullaButton.setBackground(Color.WHITE);
+				annullaButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}
+		});
+		annullaButton.addActionListener(new ActionListener() {
+			//click del pulsante
+			public void actionPerformed(ActionEvent e) {
+				theController.annulla();	//annulla tutto e torna alla finestra iniziale di scelta
 			}
 		});
 		annullaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annullaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		annullaButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				theController.annulla();
-			}
-		});
-		
-
 		annullaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		annullaButton.setBackground(Color.WHITE);
 		annullaButton.setBounds(10, 364, 121, 26);
 		contentPane.add(annullaButton);
 		
+		//Button per eseguire il login
 		accessoButton = new JButton("Login");
+		//Eventi connessi al button "Login"
 		accessoButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				accessoButton.setBackground(Color.LIGHT_GRAY);
+				accessoButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
 			}
+			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				accessoButton.setBackground(Color.WHITE);
+				accessoButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}
+		});
+		//click del pulsante
+		accessoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				login(emailLabel, passwordLabel);
 			}
 		});
 		accessoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -151,110 +167,78 @@ public class Login extends JFrame {
 		accessoButton.setBounds(311, 267, 121, 26);
 		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		accessoButton.setBackground(new Color(255, 255, 255));
-		
-		//Quando enter viene premuto all'interno dell' passwordField controlla che i campi vengano inseriti correttamente
-		passwordField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				String username = emailTextField.getText();
-				if(username.equals("") && passwordField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER)
-				{
-					JOptionPane.showMessageDialog(null, "Inserire Email e password per login");
-					
-				}
-				else if(username.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
-					JOptionPane.showMessageDialog(null, "Inserire Email per login");
-				}
-				else if(passwordField.getText().equals("") && !username.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
-					JOptionPane.showMessageDialog(null, "Inserire password per login");
-					
-				}
-				else if(!username.equals("") && !passwordField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER){
-					try {
-						theController.verificaCredenziali(emailTextField.getText(), passwordField.getText());
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-					
-			}
-		});
-		
-		//Quando enter viene premuto all'interno dell' email textfield controlla che i campi vengano inseriti correttamente
-		emailTextField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				String password = passwordField.getText();
-				if(emailTextField.getText().equals("") && password.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER)
-				{
-					JOptionPane.showMessageDialog(null, "Inserire Email e password per login");
-					
-				}
-				else if(password.equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
-					JOptionPane.showMessageDialog(null, "Inserire password per login");
-				}
-			
-				else if(!password.equals("") && emailTextField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER) {
-					JOptionPane.showMessageDialog(null, "Inserire email per login");
-					
-				}
-				else if(!password.equals("") && !emailTextField.getText().equals("") && e.getKeyCode()==KeyEvent.VK_ENTER){
-					try {
-						theController.verificaCredenziali(emailTextField.getText(), passwordField.getText());
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-					
-			}
-		});
-		
-		//Quando viene premuto il button accedi controlla che i campi vengano inseriti correttamente
-		accessoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String username = emailTextField.getText();
-				String password = passwordField.getText();
-			
-				if(username.equals("") && password.equals(""))
-				{
-					JOptionPane.showMessageDialog(null, "Inserire Email e password per login");
-					
-				}
-				
-				else if(username.equals("")) {
-					JOptionPane.showMessageDialog(null, "Inserire Email per effettuare login");
-				}
-				else if(password.equals("")) {
-					
-					JOptionPane.showMessageDialog(null, "Inserire password per effettuare login");
-					
-				}
-				else {
-					try {
-						theController.verificaCredenziali(emailTextField.getText(),passwordField.getText());
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				
-				
-			}
-		});
-		
-
-		
 		contentPane.add(accessoButton);
+		
+		//Eventi connessi al Password Field della password
+		passwordField.addKeyListener(new KeyAdapter() {
+			//Premuto Enter
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					login(emailLabel, passwordLabel);
+			}
+		});
+		
+		//Eventi connessi al Text Field dell'email
+		emailTextField.addKeyListener(new KeyAdapter() {
+			//Premuto Enter
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					login(emailLabel, passwordLabel);
+			}
+		});
 	}
 
-
-	//Si occupa di svuotare i campi una volta effettuato il login(Viene chiamato dal controllerAccesso)
-	public void SvuotaCampi() {
+	//Metodo che tenta di fare il login richiamando il controller
+	private void login(JLabel emailLabel, JLabel passwordLabel) {
+		//resetta i colori delle label
+		emailLabel.setForeground(Color.BLACK);
+		passwordLabel.setForeground(Color.BLACK);
 		
-		emailTextField.setText(null);
-		passwordField.setText(null);
+		//se uno dei due campi email e password è vuoto
+		if (emailTextField.getText().isBlank() || passwordField.getText().isBlank()) {
+			//se il text field dell'email è vuoto
+			if (emailTextField.getText().isBlank()) {
+				emailLabel.setForeground(Color.RED);	//rende rossa la label
+				svuotaCampi();	//svuota i campi
+			}
+			//se il password field della password è vuoto
+			if (passwordField.getText().isBlank()) {
+				passwordLabel.setForeground(Color.RED);	//rende rossa la label
+				svuotaCampi();	//svuota i campi
+			}
+			
+			JOptionPane.showMessageDialog(null,
+					"Inserire Email e Password per login.",
+					"Credenziali vuote",
+					JOptionPane.OK_OPTION);	//mostra un errore
+		}
+		//se invece i campi sono pieni
+		else {
+			//ottiene email e password inseriti
+			String username = emailTextField.getText();
+			String password = passwordField.getText();
+			
+			try {
+				//verifica le credenziali e tenta di effettuare il login
+				theController.verificaCredenziali(emailTextField.getText(),passwordField.getText());
+			} catch (SQLException e1) {
+				JOptionPane.showMessageDialog(null,
+						e1.getMessage(),
+						"Errore #" + e1.getErrorCode(),
+						JOptionPane.ERROR_MESSAGE);	//finestra di errore
+				svuotaCampi();
+			}
+		}
+	}
+	
+
+	//Metodo che svuota i campi di email e password
+	private void svuotaCampi() {
+		
+		emailTextField.setText("");
+		passwordField.setText("");
 	}
 	
 

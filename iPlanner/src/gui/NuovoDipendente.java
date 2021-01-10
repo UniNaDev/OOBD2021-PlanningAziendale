@@ -281,14 +281,6 @@ public class NuovoDipendente extends JFrame {
 		yearComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		yearComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		yearComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-//		//CREO UN MODELLO PERSONALIZZATO PER L'ANNO DEL COMBO BOX //////////
-//		DefaultComboBoxModel myModel = new DefaultComboBoxModel();
-//		yearComboBox.setModel(myModel);
-//		
-//		for(int i=1900;i<= 2021;i++)
-//			myModel.addElement(i);
-		
 		yearComboBox.setSelectedIndex((int) yearComboBox.getItemCount()/2);
 		
 		//ComboBox comuni
@@ -327,7 +319,7 @@ public class NuovoDipendente extends JFrame {
 					"Errore #" + e1.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);
 		}
-		provinciaComboBox.setBounds(483, 316, 173, 22);
+		provinciaComboBox.setBounds(483, 316, 210, 22);
 		provinciaComboBox.setBackground(Color.WHITE);
 		provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));

@@ -11,44 +11,50 @@ import interfacceDAO.ProgettoDAO;
 
 public class ControllerAccesso {
 	
-	Login loginFrame;
+	//Attributi GUI
+	private Login loginFrame;
 	
+	//Altri attributi
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;
-	private MeetingDAO meetDAO = null;
+	private ProgettoDAO projDAO = null;	//dao progetti
+	private MeetingDAO meetDAO = null;	//dao meeting
 	
-	private boolean segreteria = false;
+	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
 	
-	private Dipendente loggedUser = null;
+	private Dipendente loggedUser = null;	//utente che ha fatto il login
 
+	//Costruttore controller di accesso che mostra la finestra di login
 	public ControllerAccesso(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO)
 	{
+		//Ottiene i dao necessari
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
-		this.segreteria = segreteria;
 		
+		this.segreteria = segreteria;	//ottiene l'autorizzazione
+		
+		//Inizializza e mostra la finestra di login
 		loginFrame=new Login(this);
 		loginFrame.setVisible(true);
 		
 	}
 
+	//Metodo che verifica le credenziali per l'accesso e se sono corrette passa alla finestra principale dopo aver salvato l'utente che ha fatto il login
 	public void verificaCredenziali(String user, String pass) throws SQLException {
-		// TODO Auto-generated method stub
 		
-		loggedUser = dipDAO.loginCheck(user, pass);
-		//TODO Se le credenziali sono corrette esegui l'accesso altrimenti JDialog utente non presente o dati incorretti
-		loginFrame.setVisible(false);
-		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(loggedUser, projDAO, meetDAO, luogoDAO);
+		loggedUser = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
+		loginFrame.setVisible(false);	//chiude la finestra di login
+		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(loggedUser, projDAO, meetDAO, luogoDAO);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
 		
-		loginFrame.SvuotaCampi();
+//		loginFrame.SvuotaCampi(); ?
 	}
 
+	//Metodo chiamato dal pulsante annulla del login che fa ritornare l'utente alla schermata di scelta iniziale
 	public void annulla() {
-		loginFrame.setVisible(false);
-		ControllerScelta controller=new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);
+		loginFrame.setVisible(false);	//chiude la finestra di login
+		ControllerScelta controller=new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO);	//inizializza il controller scelta e mostra la finestra iniziale di scelta
 	}
 
 
