@@ -118,6 +118,8 @@ public class NuovoDipendente extends JFrame {
 	private String telefono;	//numero di telefono di casa
 	private String cellulare;	//cellulare
 	private String indirizzo;	//indirizzo
+	private JLabel showPasswordLabel;
+	private JLabel showConfirmPasswordLabel;
 
 	
 	/**
@@ -363,6 +365,7 @@ public class NuovoDipendente extends JFrame {
 		
 		//Password Field per la password
 		passwordField = new JPasswordField();
+		passwordField.setEchoChar('*');
 		passwordField.setBounds(317, 528, 125, 20);
 		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -598,6 +601,42 @@ public class NuovoDipendente extends JFrame {
 		iconaSalarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		iconaSalarioLabel.setBounds(545, 383, 46, 30);
 		contentPane.add(iconaSalarioLabel);
+		
+		showPasswordLabel = new JLabel("");
+		showPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		showPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/showpass_24.png")));
+		showPasswordLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) 
+			{
+				passwordField.setEchoChar((char)0); //quando si tiene premuto con il mouse sull icona mostra il testo non nascosto
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) 
+			{
+				passwordField.setEchoChar('*'); //quando si rilascia il mouse mostra di nuovo il testo nascosto
+			}
+		});
+		showPasswordLabel.setBounds(448, 526, 46, 26);
+		contentPane.add(showPasswordLabel);
+		
+		showConfirmPasswordLabel = new JLabel("");
+		showConfirmPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		showConfirmPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/showpass_24.png")));
+		showConfirmPasswordLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) 
+			{
+				confirmPasswordField.setEchoChar((char)0);	//quando si tiene premuto con il mouse sull icona mostra il testo non nascosto
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) 
+			{
+				confirmPasswordField.setEchoChar('*');	//quando si rilascia il mouse mostra di nuovo il testo nascosto
+			}
+		});
+		showConfirmPasswordLabel.setBounds(448, 556, 47, 29);
+		contentPane.add(showConfirmPasswordLabel);
 	}
 		
 		//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
