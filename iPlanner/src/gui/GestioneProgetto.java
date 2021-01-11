@@ -48,6 +48,10 @@ public class GestioneProgetto extends JFrame {
 	private JTextField creatoreTextField;
 	private JTable progettoTable;
 	private JTextField cercaTextField;
+	private JTextArea descrizioneTextArea;
+	private JComboBox giornoComboBox;
+	private JComboBox meseComboBox;
+	private JComboBox annoComboBox;
 
 
 	/**
@@ -179,7 +183,13 @@ public class GestioneProgetto extends JFrame {
 			}
 		});
 		pulisciButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
+				nomeTextField.setText("");
+				ambitoTextField.setText("");
+				tipologiaTextField.setText("");
+				creatoreTextField.setText("");
+				descrizioneTextArea.setText("");
 			}
 		});
 		pulisciButton.setPreferredSize(new Dimension(90, 30));
@@ -236,6 +246,23 @@ public class GestioneProgetto extends JFrame {
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
 		JButton modificaButton = new JButton("Modifica");
+		
+		//quando preme sul tasto modifica tutti i campi diventano editabili
+		modificaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				nomeTextField.setEditable(true);
+				ambitoTextField.setEditable(true);
+				tipologiaTextField.setEditable(true);
+				descrizioneTextArea.setEditable(true);
+				creatoreTextField.setEditable(true);
+				
+				giornoComboBox.setEnabled(true);
+				meseComboBox.setEnabled(true);
+				annoComboBox.setEnabled(true);
+				
+			}
+		});
 		modificaButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -257,7 +284,22 @@ public class GestioneProgetto extends JFrame {
 		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		modificaButton.setAlignmentX(0.5f);
 		
+		//quando si preme il tasto salva ritornano non editabili
 		JButton salvaButton = new JButton("Salva");
+		salvaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				nomeTextField.setEditable(false);
+				ambitoTextField.setEditable(false);
+				tipologiaTextField.setEditable(false);
+				creatoreTextField.setEditable(false);
+				descrizioneTextArea.setEditable(false);
+				
+				giornoComboBox.setEnabled(false);
+				meseComboBox.setEnabled(false);
+				annoComboBox.setEnabled(false);
+			}
+		});
 		salvaButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -308,6 +350,7 @@ public class GestioneProgetto extends JFrame {
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		idProgettoTextField = new JTextField();
+		idProgettoTextField.setEditable(false);
 		idProgettoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		idProgettoTextField.setColumns(10);
 		
@@ -315,6 +358,7 @@ public class GestioneProgetto extends JFrame {
 		scrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		nomeTextField = new JTextField();
+		nomeTextField.setEditable(false);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nomeTextField.setColumns(10);
 		
@@ -323,6 +367,7 @@ public class GestioneProgetto extends JFrame {
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		ambitoTextField = new JTextField();
+		ambitoTextField.setEditable(false);
 		ambitoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		ambitoTextField.setColumns(10);
 		
@@ -331,6 +376,7 @@ public class GestioneProgetto extends JFrame {
 		tipologiaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		tipologiaTextField = new JTextField();
+		tipologiaTextField.setEditable(false);
 		tipologiaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaTextField.setColumns(10);
 		
@@ -347,10 +393,12 @@ public class GestioneProgetto extends JFrame {
 		creatoreProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		creatoreTextField = new JTextField();
+		creatoreTextField.setEditable(false);
 		creatoreTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		creatoreTextField.setColumns(10);
 		
-		JComboBox giornoComboBox = new JComboBox();
+		giornoComboBox = new JComboBox();
+		giornoComboBox.setEnabled(false);
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		giornoComboBox.setBackground(Color.WHITE);
 		giornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -359,7 +407,8 @@ public class GestioneProgetto extends JFrame {
 		giornoComboBox.setBounds(244, 235, 47, 22);
 		panel_2.add(giornoComboBox);
 		
-		JComboBox meseComboBox = new JComboBox();
+		meseComboBox = new JComboBox();
+		meseComboBox.setEnabled(false);
 		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meseComboBox.setBackground(Color.WHITE);
 		meseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
@@ -368,7 +417,8 @@ public class GestioneProgetto extends JFrame {
 		meseComboBox.setBounds(301, 235, 47, 22);
 		panel_2.add(meseComboBox);
 		
-		JComboBox annoComboBox = new JComboBox();
+		annoComboBox = new JComboBox();
+		annoComboBox.setEnabled(false);
 		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annoComboBox.setBackground(Color.WHITE);
 		annoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -386,7 +436,8 @@ public class GestioneProgetto extends JFrame {
 		panel_2.add(annoComboBox);
 		
 		
-		JTextArea descrizioneTextArea = new JTextArea();
+		descrizioneTextArea = new JTextArea();
+		descrizioneTextArea.setEditable(false);
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(

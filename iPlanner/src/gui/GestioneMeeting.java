@@ -337,9 +337,11 @@ public class GestioneMeeting extends JFrame {
 		
 		
 		JRadioButton onlineRadioButton = new JRadioButton("Online");
+		onlineRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		buttonGroup.add(onlineRadioButton);
 		
 		JRadioButton fisicoRadioButton = new JRadioButton("Fisico");
+		fisicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		buttonGroup.add(fisicoRadioButton);
 		
 		JComboBox dataInizioMeseComboBox = new JComboBox();
@@ -401,6 +403,9 @@ public class GestioneMeeting extends JFrame {
 		panel_2.add(dataFineAnnoComboBox);
 		
 		JComboBox piattaformaComboBox = new JComboBox();
+		piattaformaComboBox.setBackground(Color.WHITE);
+		piattaformaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		piattaformaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		piattaformaComboBox.setModel(new DefaultComboBoxModel(new String[] {"","Microsoft Teams","Discord","Skype"}));
 		
 		
@@ -420,7 +425,7 @@ public class GestioneMeeting extends JFrame {
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(idMeetingTextField, GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
 								.addGroup(gl_panel_2.createSequentialGroup()
 									.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
@@ -428,12 +433,12 @@ public class GestioneMeeting extends JFrame {
 									.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-								.addGroup(Alignment.LEADING, gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(piattaformaComboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
+								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(piattaformaComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addGroup(gl_panel_2.createSequentialGroup()
 										.addComponent(onlineRadioButton)
 										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))))
 							.addGap(275))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
