@@ -3,6 +3,8 @@ package controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.joda.time.LocalDate;
+
 import entita.Meeting;
 import entita.Progetto;
 import entita.Dipendente;
@@ -24,9 +26,11 @@ public class ControllerGestioneProfilo {
 	private ProgettoDAO projDAO = null;
 	private MeetingDAO meetDAO = null;
 	
+	
 	private Dipendente loggedUser = null;
 
-	public ControllerGestioneProfilo(Dipendente loggedUser, ProgettoDAO projDAO, MeetingDAO meetDAO, LuogoNascitaDAO luogoDAO) {
+	public ControllerGestioneProfilo(DipendenteDAO dipDAO,Dipendente loggedUser, ProgettoDAO projDAO, MeetingDAO meetDAO, LuogoNascitaDAO luogoDAO) {
+		this.dipDAO=dipDAO;
 		this.loggedUser = loggedUser;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
@@ -87,6 +91,13 @@ public class ControllerGestioneProfilo {
 	public Dipendente getLoggedUser() {
 		return loggedUser;
 	}
-	
-	
+
+	public void update(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) throws SQLException {
+		
+		Dipendente tempDip=null;
+		tempDip=new Dipendente(nome, cognome, sesso, dataNascita,luogoNascita, indirizzo, email, telefono, cellulare,loggedUser.getSalario(), password);
+		
+		dipDAO.updateDipendente(tempDip);
+		
+	}
 }

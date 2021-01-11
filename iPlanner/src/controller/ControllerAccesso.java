@@ -49,7 +49,7 @@ public class ControllerAccesso {
 		
 		loggedUser = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
 		loginFrame.setVisible(false);	//chiude la finestra di login
-		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(loggedUser, projDAO, meetDAO, luogoDAO);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
+		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(dipDAO,loggedUser, projDAO, meetDAO, luogoDAO);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
 	}
 
 	//Metodo chiamato dal pulsante annulla del login che fa ritornare l'utente alla schermata di scelta iniziale

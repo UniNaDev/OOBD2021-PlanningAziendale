@@ -245,7 +245,7 @@ public class Login extends JFrame {
 				theController.verificaCredenziali(emailTextField.getText(),passwordField.getText());
 			} catch (SQLException e1) {
 				JOptionPane.showMessageDialog(null,
-						e1.getMessage(),
+						"Credenziali Errate",
 						"Errore #" + e1.getErrorCode(),
 						JOptionPane.ERROR_MESSAGE);	//finestra di errore
 				svuotaCampi();

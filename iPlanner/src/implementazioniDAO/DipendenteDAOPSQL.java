@@ -41,7 +41,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getDipendentiBySalarioPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.Salario BETWEEN ? AND ?");
 		getDipendentiBySkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT Dipendente.CF FROM Dipendente NATURAL JOIN (Abilità NATURAL JOIN Skill) WHERE Skill.NomeSkill = ?)");	//? = NomeSkill
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
-		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ? ");
+		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
+		
 		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email = ? AND Password = ?");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
 	}
@@ -245,7 +246,6 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		updateDipendentePS.setFloat(10, dipendente.getSalario());
 		updateDipendentePS.setString(11, dipendente.getPassword());
 		updateDipendentePS.setString(12, dipendente.getLuogoNascita().getCodiceComune());
-		updateDipendentePS.setString(13, oldCF);
 		
 		int record = updateDipendentePS.executeUpdate();	//esegue l'update del dipendente e restituisce il numero di record modificati (1 = modifica effettuata, 0 = fallimento)
 		

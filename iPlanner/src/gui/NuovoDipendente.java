@@ -279,7 +279,7 @@ public class NuovoDipendente extends JFrame {
 		dayComboBox.setBounds(306, 274, 44, 22);
 		dayComboBox.setBackground(Color.WHITE);
 		dayComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dayComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		dayComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		dayComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		dayComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
@@ -645,7 +645,7 @@ public class NuovoDipendente extends JFrame {
 		lblNewLabel.setBounds(603, 338, 290, 20);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblPremereShiftclicTasto = new JLabel("premere SHIFT+clic tasto sx mouse sulla skill");
+		JLabel lblPremereShiftclicTasto = new JLabel("premere CTRL+clic tasto sx mouse sulla skill");
 		lblPremereShiftclicTasto.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPremereShiftclicTasto.setFont(new Font("Consolas", Font.PLAIN, 10));
 		lblPremereShiftclicTasto.setBounds(603, 355, 290, 20);
@@ -675,7 +675,7 @@ public class NuovoDipendente extends JFrame {
 			else
 				sesso = 'F';
 			//data di nascita
-			dataNascita = new LocalDate(yearComboBox.getSelectedIndex() + 1900, monthComboBox.getSelectedIndex() + 1, dayComboBox.getSelectedIndex());
+			dataNascita = new LocalDate(yearComboBox.getSelectedIndex() + 1900, monthComboBox.getSelectedIndex() + 1, dayComboBox.getSelectedIndex()+1);
 			//luogo di nascita
 			luogoNascita = theController.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cityComboBox.getSelectedIndex());
 			email = emailTextField.getText(); //email

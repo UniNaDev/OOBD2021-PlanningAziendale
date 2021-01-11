@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import controller.ControllerGestioneProfilo;
 import entita.Dipendente;
 import entita.LuogoNascita;
+import entita.Skill;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -24,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import java.awt.Font;
@@ -40,6 +42,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.MatteBorder;
+
+import org.joda.time.LocalDate;
+
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -63,15 +68,32 @@ public class UserProfile extends JFrame {
 	private JComboBox <LuogoNascita> comuneComboBox;
 	private JComboBox provinciaComboBox;
 	private JTextField indirizzoTextField;
+	private JTextField emailTextField;
+	private JPasswordField passwordField;
 	
-		
+	
+	
+	private String nome;	//nome nuovo dipendente
+	private String cognome;	//cognome nuovo dipendente
+	private char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
+	private LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
+	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
+	private LuogoNascita luogoNascita;	//luogo di nascita del nuovo dipendente
+	private String email;	//email del dipendente
+	private String password;	//password del dipendente
+	private String telefono;	//numero di telefono di casa
+	private String cellulare;	//cellulare
+	private String indirizzo;	//indirizzo
 
+	
+	private ControllerGestioneProfilo theController;
 
 	/**
 	 * Create the frame.
 	 */
 	public UserProfile(ControllerGestioneProfilo theController) {
 		
+		this.theController=theController;
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(UserProfile.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - Il mio Account");
@@ -107,9 +129,22 @@ public class UserProfile extends JFrame {
 		confermaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO  UPDATE dei dati se si clicca su conferma
+
+				
+				try {
+					updateAccount();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			
 				theController.closeWindow();
 			}
+
 		});
+
+
+		
 		
 		nomeTextField = new JTextField();
 		nomeTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -181,7 +216,7 @@ public class UserProfile extends JFrame {
 		modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		modificaButton.setBackground(Color.WHITE);
 		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-		modificaButton.setBounds(279, 520, 126, 42);
+		modificaButton.setBounds(275, 541, 126, 42);
 		modificaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -312,35 +347,56 @@ public class UserProfile extends JFrame {
 		luogoNascitaLabel.setBounds(85, 269, 144, 19);
 		contentPane.add(luogoNascitaLabel);
 		
-		try {
-			provinciaComboBox = new JComboBox(theController.ottieniProvince().toArray());
-			provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			provinciaComboBox.setEnabled(false);
-			provinciaComboBox.setBackground(Color.WHITE);
-			provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-			provinciaComboBox.setBounds(244, 268, 144, 22);
-			provinciaComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita().getNomeProvincia());
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		contentPane.add(provinciaComboBox);
 		
-		try {
-			comuneComboBox = new JComboBox(theController.ottieniComuni(theController.getLoggedUser().getLuogoNascita().getNomeProvincia()).toArray());
+		
+			comuneComboBox = new JComboBox();
 			comuneComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			comuneComboBox.setEnabled(false);
 			comuneComboBox.setBackground(Color.WHITE);
 			comuneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 			comuneComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita());
 			comuneComboBox.setBounds(244, 301, 201, 22);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+			contentPane.add(comuneComboBox);
+		
+			try {
+				//Combo Box province
+				provinciaComboBox = new JComboBox(theController.ottieniProvince().toArray());
+				provinciaComboBox.addActionListener(new ActionListener() {
+					//Action performed selezione
+					public void actionPerformed(ActionEvent e) {
+						comuneComboBox.setEnabled(true); //attiva il menù dei comuni
+						comuneComboBox.removeAllItems();	//pulisce la lista del menù
+						try {
+							//prova a ottenere i comune dal DB e inserirli nella corrispondente combo box
+							for(LuogoNascita comune: theController.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
+									comuneComboBox.addItem(comune);
+						} 
+						catch (SQLException e1) {
+							JOptionPane.showMessageDialog(null,
+									e1.getMessage(),
+									"Errore #" + e1.getErrorCode(),
+									JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				});
+			} catch (SQLException e1) {
+				JOptionPane.showMessageDialog(null,
+						e1.getMessage(),
+						"Errore #" + e1.getErrorCode(),
+						JOptionPane.ERROR_MESSAGE);
+			}
+		
+			provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			provinciaComboBox.setEnabled(false);
+			provinciaComboBox.setBackground(Color.WHITE);
+			provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+			provinciaComboBox.setBounds(244, 268, 144, 22);
+			provinciaComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita().getNomeProvincia());
 
-		contentPane.add(comuneComboBox);
+
+		contentPane.add(provinciaComboBox);
+		
+
 		
 		JLabel indirizzoLabel = new JLabel("Indirizzo");
 		indirizzoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -351,13 +407,13 @@ public class UserProfile extends JFrame {
 		JLabel cellulareLabel = new JLabel("Cellulare");
 		cellulareLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		cellulareLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		cellulareLabel.setBounds(85, 415, 144, 19);
+		cellulareLabel.setBounds(85, 463, 144, 19);
 		contentPane.add(cellulareLabel);
 		
 		JLabel telefonoFissoLabel = new JLabel("Telefono Fisso");
 		telefonoFissoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		telefonoFissoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		telefonoFissoLabel.setBounds(85, 452, 144, 19);
+		telefonoFissoLabel.setBounds(85, 500, 144, 19);
 		contentPane.add(telefonoFissoLabel);
 		
 		cellulareTextField = new JTextField();
@@ -366,7 +422,7 @@ public class UserProfile extends JFrame {
 		cellulareTextField.setEditable(false);
 		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cellulareTextField.setColumns(10);
-		cellulareTextField.setBounds(244, 413, 187, 24);
+		cellulareTextField.setBounds(239, 460, 187, 24);
 		contentPane.add(cellulareTextField);
 		
 		telefonoFissoTextField = new JTextField();
@@ -375,7 +431,7 @@ public class UserProfile extends JFrame {
 		telefonoFissoTextField.setEditable(false);
 		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		telefonoFissoTextField.setColumns(10);
-		telefonoFissoTextField.setBounds(244, 448, 187, 24);
+		telefonoFissoTextField.setBounds(239, 495, 187, 24);
 		contentPane.add(telefonoFissoTextField);
 		
 		JLabel informazioniAziendaliLabel = new JLabel("Informazioni Aziendali");
@@ -418,7 +474,7 @@ public class UserProfile extends JFrame {
 		leMieSkillsLabel.setBounds(772, 462, 386, 37);
 		contentPane.add(leMieSkillsLabel);
 		
-		JLabel valoreSkillsLabel = new JLabel("Creatività , TeamWork");
+		JLabel valoreSkillsLabel = new JLabel(theController.getLoggedUser().getSkills().toString());
 		valoreSkillsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		valoreSkillsLabel.setForeground(Color.BLACK);
 		valoreSkillsLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
@@ -447,8 +503,49 @@ public class UserProfile extends JFrame {
 		indirizzoTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		indirizzoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		indirizzoTextField.setEditable(false);
-		indirizzoTextField.setBounds(244, 343, 206, 20);
+		indirizzoTextField.setBounds(239, 346, 206, 27);
 		contentPane.add(indirizzoTextField);
 		indirizzoTextField.setColumns(10);
+		
+		emailTextField = new JTextField(theController.getLoggedUser().getEmail());
+		emailTextField.setText((String) null);
+		emailTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		emailTextField.setEditable(false);
+		emailTextField.setColumns(10);
+		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		emailTextField.setBounds(239, 391, 187, 24);
+		contentPane.add(emailTextField);
+		
+		passwordField = new JPasswordField(theController.getLoggedUser().getPassword());
+		passwordField.setBounds(239, 425, 187, 24);
+		contentPane.add(passwordField);
+	}
+
+	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
+	private void updateAccount() throws SQLException {
+		//prende i dati dagli input della GUI
+		nome = nomeTextField.getText();	//nome
+		cognome = cognomeTextField.getText();	//cognome
+	
+		//sesso
+		if (uomoRadioButton.isSelected())
+			sesso = 'M';
+		else
+			sesso = 'F';
+		//data di nascita
+		dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
+		//luogo di nascita
+		luogoNascita = theController.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(comuneComboBox.getSelectedIndex());
+		
+		email = emailTextField.getText(); //email
+		password = passwordField.getText();	//password
+		telefono = telefonoFissoTextField.getText();	//telefono
+		cellulare = cellulareTextField.getText();	//cellulare
+		indirizzo = indirizzoTextField.getText();	//indirizzo
+	
+	
+		
+		
+		theController.update(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo);	//mandali al controller che prova a creare il nuovo dipendente con il dao
 	}
 }
