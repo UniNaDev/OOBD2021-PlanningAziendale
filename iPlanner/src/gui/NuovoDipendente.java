@@ -42,6 +42,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
+import javax.swing.JTextPane;
 
 
 public class NuovoDipendente extends JFrame {
@@ -58,7 +59,7 @@ public class NuovoDipendente extends JFrame {
 	private JLabel indirizzoLabel;
 	private JLabel emailLabel;
 	private JLabel bornDateLabel;
-	private JLabel bornPlaceLabel;
+	private JLabel provNascitaLabel;
 	private JLabel telefonoFissoLabel;
 	private JLabel cellulareLabel;
 	private JLabel passwordLabel;
@@ -173,10 +174,10 @@ public class NuovoDipendente extends JFrame {
 		bornDateLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		//Label "Luogo di nascita*"
-		bornPlaceLabel = new JLabel("Luogo di nascita*");
-		bornPlaceLabel.setBounds(175, 315, 128, 14);
-		bornPlaceLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		bornPlaceLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		provNascitaLabel = new JLabel("Prov. di nascita*");
+		provNascitaLabel.setBounds(175, 315, 128, 14);
+		provNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		provNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		//Label "Telefono fisso"
 		telefonoFissoLabel = new JLabel("Telefono Fisso");
@@ -488,7 +489,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(dayComboBox);
 		contentPane.add(monthComboBox);
 		contentPane.add(yearComboBox);
-		contentPane.add(bornPlaceLabel);
+		contentPane.add(provNascitaLabel);
 		contentPane.add(provinciaComboBox);
 		contentPane.add(cityComboBox);
 		contentPane.add(iconaIndirizzoLabel);
@@ -637,6 +638,30 @@ public class NuovoDipendente extends JFrame {
 		});
 		showConfirmPasswordLabel.setBounds(448, 556, 47, 29);
 		contentPane.add(showConfirmPasswordLabel);
+		
+		JLabel lblNewLabel = new JLabel("N.B. Per inserire più skill contemporanemante");
+		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel.setBounds(603, 338, 290, 20);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblPremereShiftclicTasto = new JLabel("premere SHIFT+clic tasto sx mouse sulla skill");
+		lblPremereShiftclicTasto.setHorizontalAlignment(SwingConstants.LEFT);
+		lblPremereShiftclicTasto.setFont(new Font("Consolas", Font.PLAIN, 10));
+		lblPremereShiftclicTasto.setBounds(603, 355, 290, 20);
+		contentPane.add(lblPremereShiftclicTasto);
+		
+		JLabel campiObbligatoriLabel = new JLabel("* Campi obbligatori");
+		campiObbligatoriLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		campiObbligatoriLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
+		campiObbligatoriLabel.setBounds(603, 460, 290, 20);
+		contentPane.add(campiObbligatoriLabel);
+		
+		JLabel cittàDiNascitaLabel = new JLabel("Città di nascita*");
+		cittàDiNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		cittàDiNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		cittàDiNascitaLabel.setBounds(175, 340, 128, 14);
+		contentPane.add(cittàDiNascitaLabel);
 	}
 		
 		//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
