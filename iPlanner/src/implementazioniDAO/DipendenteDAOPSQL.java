@@ -246,6 +246,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		updateDipendentePS.setFloat(10, dipendente.getSalario());
 		updateDipendentePS.setString(11, dipendente.getPassword());
 		updateDipendentePS.setString(12, dipendente.getLuogoNascita().getCodiceComune());
+		updateDipendentePS.setString(13, oldCF);
 		
 		int record = updateDipendentePS.executeUpdate();	//esegue l'update del dipendente e restituisce il numero di record modificati (1 = modifica effettuata, 0 = fallimento)
 		

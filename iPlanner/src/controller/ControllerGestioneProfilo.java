@@ -68,6 +68,13 @@ public class ControllerGestioneProfilo {
 		ControllerMeeting controller= new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO);
 		
 	}
+	public void reLinkToUserFrame() {
+		
+		userFrame.setVisible(false);
+		
+		userFrame=new User(this);
+		userFrame.setVisible(true);
+	}
 	
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
 		return projDAO.getProgettiByDipendente(loggedUser);
@@ -94,10 +101,23 @@ public class ControllerGestioneProfilo {
 
 	public void update(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) throws SQLException {
 		
-		Dipendente tempDip=null;
-		tempDip=new Dipendente(nome, cognome, sesso, dataNascita,luogoNascita, indirizzo, email, telefono, cellulare,loggedUser.getSalario(), password);
 		
-		dipDAO.updateDipendente(tempDip);
+		loggedUser.setNome(nome);
+		loggedUser.setCognome(cognome);
+		loggedUser.setSesso(sesso);
+		loggedUser.setDataNascita(dataNascita);
+		loggedUser.setLuogoNascita(luogoNascita);
+		
+		if(!loggedUser.getEmail().equals(email))
+		loggedUser.setEmail(email);
+		
+		loggedUser.setPassword(password);
+		loggedUser.setTelefonoCasa(telefono);
+		loggedUser.setCellulare(cellulare);
+		loggedUser.setIndirizzo(indirizzo);
+		
+	
+		dipDAO.updateDipendente(loggedUser);
 		
 	}
 }

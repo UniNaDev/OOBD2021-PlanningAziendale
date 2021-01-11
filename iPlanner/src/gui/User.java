@@ -185,6 +185,7 @@ public class User extends JFrame {
 		emailUtenteLabel.setForeground(Color.DARK_GRAY);
 		emailUtenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
+		
 		//QUESTA PARTE DI CODICE SI OCCUPA DI OTTENERE LA DATA ATTUALE E LA STAMPA COME LABEL
 		
 		LocalDate dataAttuale = LocalDate.now();
