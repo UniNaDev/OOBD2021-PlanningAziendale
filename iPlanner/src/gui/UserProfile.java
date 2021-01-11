@@ -199,7 +199,7 @@ public class UserProfile extends JFrame {
 		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		JLabel dataNascitaLabel = new JLabel("Data di nascita");
-		dataNascitaLabel.setBounds(103, 236, 126, 19);
+		dataNascitaLabel.setBounds(103, 236, 126, 21);
 		dataNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dataNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
@@ -317,7 +317,7 @@ public class UserProfile extends JFrame {
 		giornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		giornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		giornoComboBox.setSelectedIndex(theController.getLoggedUser().getDataNascita().getDayOfMonth() - 1);
-		giornoComboBox.setBounds(244, 235, 47, 22);
+		giornoComboBox.setBounds(239, 236, 47, 22);
 		contentPane.add(giornoComboBox);
 		
 		annoComboBox = new JComboBox();
@@ -325,7 +325,7 @@ public class UserProfile extends JFrame {
 		annoComboBox.setEnabled(false);
 		annoComboBox.setBackground(Color.WHITE);
 		annoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		annoComboBox.setBounds(358, 235, 62, 22);
+		annoComboBox.setBounds(353, 236, 62, 22);
 		
 		
 		//CREO UN MODELLO PERSONALIZZATO PER L'ANNO DEL COMBO BOX //////////
@@ -347,14 +347,14 @@ public class UserProfile extends JFrame {
 		meseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		meseComboBox.setSelectedIndex(theController.getLoggedUser().getDataNascita().getMonthOfYear() - 1);
 		meseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		meseComboBox.setBounds(301, 235, 47, 22);
+		meseComboBox.setBounds(296, 236, 47, 22);
 		contentPane.add(meseComboBox);
 		
-		JLabel luogoNascitaLabel = new JLabel("Luogo di nascita");
-		luogoNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		luogoNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		luogoNascitaLabel.setBounds(85, 269, 144, 19);
-		contentPane.add(luogoNascitaLabel);
+		JLabel provinciaNascitaLabel = new JLabel("Prov. di nascita");
+		provinciaNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		provinciaNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		provinciaNascitaLabel.setBounds(85, 269, 144, 21);
+		contentPane.add(provinciaNascitaLabel);
 		
 		
 		
@@ -365,7 +365,7 @@ public class UserProfile extends JFrame {
 			comuneComboBox.setBackground(Color.WHITE);
 			comuneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 			comuneComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita());
-			comuneComboBox.setBounds(244, 301, 201, 22);
+			comuneComboBox.setBounds(239, 301, 201, 22);
 			contentPane.add(comuneComboBox);
 		
 			try {
@@ -401,7 +401,7 @@ public class UserProfile extends JFrame {
 			provinciaComboBox.setEnabled(false);
 			provinciaComboBox.setBackground(Color.WHITE);
 			provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-			provinciaComboBox.setBounds(244, 268, 144, 22);
+			provinciaComboBox.setBounds(239, 268, 144, 22);
 			provinciaComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita().getNomeProvincia());
 
 
@@ -412,19 +412,19 @@ public class UserProfile extends JFrame {
 		JLabel indirizzoLabel = new JLabel("Indirizzo");
 		indirizzoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		indirizzoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		indirizzoLabel.setBounds(85, 345, 144, 19);
+		indirizzoLabel.setBounds(85, 337, 144, 20);
 		contentPane.add(indirizzoLabel);
 		
 		JLabel cellulareLabel = new JLabel("Cellulare");
 		cellulareLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		cellulareLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		cellulareLabel.setBounds(85, 463, 144, 19);
+		cellulareLabel.setBounds(85, 447, 144, 19);
 		contentPane.add(cellulareLabel);
 		
 		JLabel telefonoFissoLabel = new JLabel("Telefono Fisso");
 		telefonoFissoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		telefonoFissoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		telefonoFissoLabel.setBounds(85, 500, 144, 19);
+		telefonoFissoLabel.setBounds(85, 484, 144, 19);
 		contentPane.add(telefonoFissoLabel);
 		
 		cellulareTextField = new JTextField();
@@ -434,7 +434,7 @@ public class UserProfile extends JFrame {
 		cellulareTextField.setEditable(false);
 		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cellulareTextField.setColumns(10);
-		cellulareTextField.setBounds(239, 460, 187, 24);
+		cellulareTextField.setBounds(239, 444, 187, 24);
 		contentPane.add(cellulareTextField);
 		
 		telefonoFissoTextField = new JTextField();
@@ -444,7 +444,7 @@ public class UserProfile extends JFrame {
 		telefonoFissoTextField.setEditable(false);
 		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		telefonoFissoTextField.setColumns(10);
-		telefonoFissoTextField.setBounds(239, 495, 187, 24);
+		telefonoFissoTextField.setBounds(239, 479, 187, 24);
 		contentPane.add(telefonoFissoTextField);
 		
 		JLabel informazioniAziendaliLabel = new JLabel("Informazioni Aziendali");
@@ -462,7 +462,7 @@ public class UserProfile extends JFrame {
 		JLabel valoreValutazioneLabel = new JLabel(String.format("%.2f", theController.getLoggedUser().getValutazione()));
 		valoreValutazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		valoreValutazioneLabel.setForeground(Color.BLACK);
-		valoreValutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		valoreValutazioneLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
 		valoreValutazioneLabel.setBounds(772, 184, 386, 37);
 		contentPane.add(valoreValutazioneLabel);
 		
@@ -476,7 +476,7 @@ public class UserProfile extends JFrame {
 		JLabel valoreSalarioLabel = new JLabel(String.format("%.2f", theController.getLoggedUser().getSalario()) + "€");
 		valoreSalarioLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		valoreSalarioLabel.setForeground(Color.BLACK);
-		valoreSalarioLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		valoreSalarioLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
 		valoreSalarioLabel.setBounds(772, 336, 386, 37);
 		contentPane.add(valoreSalarioLabel);
 		
@@ -490,7 +490,7 @@ public class UserProfile extends JFrame {
 		JLabel valoreSkillsLabel = new JLabel(theController.getLoggedUser().getSkills().toString());
 		valoreSkillsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		valoreSkillsLabel.setForeground(Color.BLACK);
-		valoreSkillsLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		valoreSkillsLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
 		valoreSkillsLabel.setBounds(772, 510, 386, 37);
 		contentPane.add(valoreSkillsLabel);
 		
@@ -514,29 +514,29 @@ public class UserProfile extends JFrame {
 		
 		indirizzoTextField = new JTextField(theController.getLoggedUser().getIndirizzo());
 		indirizzoTextField.setHorizontalAlignment(SwingConstants.LEFT);
-		indirizzoTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
+		indirizzoTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		indirizzoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		indirizzoTextField.setEditable(false);
-		indirizzoTextField.setBounds(239, 346, 206, 27);
+		indirizzoTextField.setBounds(239, 334, 201, 24);
 		contentPane.add(indirizzoTextField);
 		indirizzoTextField.setColumns(10);
 		
 		passwordField = new JPasswordField(theController.getLoggedUser().getPassword());
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
-		passwordField.setBounds(239, 425, 187, 24);
+		passwordField.setBounds(239, 409, 187, 24);
 		passwordField.setEditable(false);
 		contentPane.add(passwordField);
 		
 		JLabel emailLabel = new JLabel("Email");
 		emailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		emailLabel.setBounds(85, 396, 144, 19);
+		emailLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
+		emailLabel.setBounds(85, 376, 144, 19);
 		contentPane.add(emailLabel);
 		
 		JLabel passwordLabel = new JLabel("Password");
 		passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		passwordLabel.setBounds(85, 430, 144, 19);
+		passwordLabel.setBounds(85, 414, 144, 19);
 		contentPane.add(passwordLabel);
 		
 		emailTextField = new JTextField(theController.getLoggedUser().getEmail());
@@ -545,8 +545,14 @@ public class UserProfile extends JFrame {
 		emailTextField.setEditable(false);
 		emailTextField.setColumns(10);
 		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		emailTextField.setBounds(239, 394, 187, 24);
+		emailTextField.setBounds(239, 374, 187, 24);
 		contentPane.add(emailTextField);
+		
+		JLabel provinciaNascitaLabel_1 = new JLabel("Prov. di nascita");
+		provinciaNascitaLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		provinciaNascitaLabel_1.setFont(new Font("Consolas", Font.PLAIN, 14));
+		provinciaNascitaLabel_1.setBounds(85, 299, 144, 24);
+		contentPane.add(provinciaNascitaLabel_1);
 	}
 
 	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB

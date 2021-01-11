@@ -324,7 +324,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			return false;
 	}
 
-	//Metodo che ottiene un progetto dal DB partendo dal suo codice.
+//	//Metodo che ottiene un progetto dal DB partendo dal suo codice.
 	@Override
 	public Progetto getProgettoByCod(int codProgetto) throws SQLException {
 		getProgettoByCodPS.setInt(1, codProgetto);
