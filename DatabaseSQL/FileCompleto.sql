@@ -35,13 +35,10 @@ CREATE TABLE Progetto (
 	DataCreazione DATE NOT NULL DEFAULT CURRENT_DATE,
 	DataScadenza DATE,
 	DataTerminazione DATE,
-	Creatore char(40) NOT NULL,
 	
 	PRIMARY KEY(CodProgetto),
-	--UNIQUE(NomeProgetto)--
 	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione)
 );
-
 
 CREATE TABLE AmbitoProgetto(
 	IDAmbito SERIAL,
@@ -127,7 +124,6 @@ CREATE TABLE Meeting(
 	OrarioFine TIME NOT NULL,
 	Modalità modalità NOT NULL,
 	Piattaforma piattaforma,
-	Organizzatore char(16) NOT NULL,
 	CodSala varchar(10),
 	CodProgetto integer ,
 	
@@ -162,7 +158,7 @@ CREATE TYPE ruolo AS ENUM('Project Manager','Team Member','Team Leader','Chief F
 CREATE TABLE Partecipazione(
 	CodProgetto integer NOT NULL,
 	CF char(16) NOT NULL,
-	RuoloDipendente ruolo NOT NULL,
+	RuoloDipendente ruolo NOT NULL, --Project Manager = Creatore
 	
 	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PartecipazioneEsistente UNIQUE(CF,CodProgetto),
@@ -188,6 +184,7 @@ CREATE TABLE Presenza(
 	CF char(16) NOT NULL,
 	IDMeeting integer NOT NULL ,
 	Presente BOOLEAN NOT NULL DEFAULT FALSE,
+	Organizzatore BOOLEAN NOT NULL DEFAULT FALSE, --TRUE = Organizzatore del meeting, FALSE = semplice invitato
 	
 	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PresenzaEsistente UNIQUE(CF,IDMeeting),
@@ -549,29 +546,6 @@ FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_meeting();
 ----------------------------------------------------------------
 
-/*TRIGGER PER INVITO DELL'ORGANIZZATORE AL MEETING
-**Ad ogni insert di un meeting aggiungi il suo organizzatore tra gli invitati.
-*****************************************************************************/
-
---FUNZIONE
-CREATE OR REPLACE FUNCTION invita_organizzatore() RETURNS TRIGGER
-LANGUAGE PLPGSQL
-AS $$
-BEGIN
---Inserisce in Presenza l'organizzatore del meeting
-INSERT INTO Presenza
-VALUES (NEW.Organizzatore,NEW.IDMeeting,FALSE);
-RETURN NEW;
-END;
-$$;
--------------------------------------------------------------------
-
---TRIGGER
-CREATE TRIGGER organizzatore_invitato AFTER INSERT ON Meeting
-FOR EACH ROW
-EXECUTE PROCEDURE invita_organizzatore();
---------------------------------------------------------------
-
 CREATE OR REPLACE FUNCTION Abilità_uppercase() RETURNS TRIGGER
 LANGUAGE PLPGSQL 
 AS $$
@@ -650,7 +624,7 @@ BEGIN
 --Controlla che non ci siano altri record in Partecipazione con stesso progetto e ruolo project manager
 IF (EXISTS (SELECT p.CF
 			FROM Partecipazione AS p
-			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.CF<>NEW.CF)) THEN
+			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager')) THEN
 				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto;
 				RETURN OLD;
 END IF;
@@ -660,7 +634,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER unicità_projectmanager BEFORE INSERT OR UPDATE ON Partecipazione
+CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione
 FOR EACH ROW
 EXECUTE PROCEDURE check_projectmanager();
 --------------------------------------------------------------------------------
@@ -668,7 +642,6 @@ EXECUTE PROCEDURE check_projectmanager();
 /* Inserimento Dati */
 
 --LuogoNascita INSERT tramite file CSV
-
 
 --Dipendente
 INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES
@@ -679,10 +652,10 @@ INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,Telefon
 
 
 --Progetto
-INSERT INTO Progetto(NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione,Creatore) VALUES
-	('Tecniche dei Linguaggi e delle Applicazioni','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020','RSSMRA91C06F839S'),
-	('MibProgo','Sviluppo sperimentale','Progetto di sviluppo sperimentale','16/12/2020','18/12/2020','18/12/2020','PRTGCM49T06F839W'),
-	('MixccProgetto','Ricerca sperimentale','Progetto di ricerca sperimentale','16/12/2020','20/12/2020','19/12/2020','FRNGTN76A71F839G');
+INSERT INTO Progetto(NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione) VALUES
+	('Tecniche dei Linguaggi e delle Applicazioni','Ricerca base','Progetto di ricerca di base','10/12/2020','18/12/2020','18/12/2020'),
+	('MibProgo','Sviluppo sperimentale','Progetto di sviluppo sperimentale','16/12/2020','18/12/2020','18/12/2020'),
+	('MixccProgetto','Ricerca sperimentale','Progetto di ricerca sperimentale','16/12/2020','20/12/2020','19/12/2020');
 
 
 --AmbitoProgetto
@@ -714,10 +687,10 @@ INSERT INTO SalaRiunione(CodSala,Capienza,Indirizzo,Piano) VALUES
 	('Sala5',297,'Riviera di Chiaia, 77, 80123 Napoli (NA)',1);
 
 --Meeting
-INSERT INTO Meeting(DataInizio,DataFine,OrarioInizio,OrarioFine,Modalità,Piattaforma,Organizzatore,CodSala,CodProgetto) VALUES
-	('12/10/2020','12/10/2020','18:00','19:50','Telematico','Microsoft Teams','FRNGTN76A71F839G',null,null),
-	('12/10/2020','12/10/2020','14:05','16:50','Fisico',null,'RSSMRA91C06F839S','Sala5',null),
-	('21/10/2020','21/10/2020','14:55','15:55','Telematico','Microsoft Teams','PRTGCM49T06F839W',null,null);
+INSERT INTO Meeting(DataInizio,DataFine,OrarioInizio,OrarioFine,Modalità,Piattaforma,CodSala,CodProgetto) VALUES
+	('12/10/2020','12/10/2020','18:00','19:50','Telematico','Microsoft Teams',null,1),
+	('12/10/2020','12/10/2020','14:05','16:50','Fisico',null,'Sala5',3),
+	('21/10/2020','21/10/2020','14:55','15:55','Telematico','Microsoft Teams',null,2);
 	
 
 --AmbitoProgettoLink
@@ -729,8 +702,8 @@ INSERT INTO AmbitoProgettoLink(IDAmbito,CodProgetto) VALUES
 
 --Partecipazione 
 INSERT INTO Partecipazione(CodProgetto,CF,RuoloDipendente) VALUES
-	(2,'PRTGCM49T06F839W','Chief Financial Officer'),
-	(3,'FRNGTN76A71F839G','Chief Financial Officer'),
+	(2,'PRTGCM49T06F839W','Project Manager'),
+	(3,'FRNGTN76A71F839G','Project Manager'),
     (1,'RSSMRA91C06F839S','Project Manager');
 
 
@@ -744,10 +717,10 @@ INSERT INTO Abilità(IDSkill,CF) VALUES
 
 
 --Presenza
-INSERT INTO Presenza(CF,IDMeeting) VALUES
-	('RSSMRA91C06F839S',1),
-	('FRNGTN76A71F839G',2),
-	('RSSMRA91C06F839S',3);
+INSERT INTO Presenza(CF,IDMeeting,Organizzatore) VALUES
+	('RSSMRA91C06F839S',1, TRUE),
+	('FRNGTN76A71F839G',2, TRUE),
+	('RSSMRA91C06F839S',3, TRUE);
 	
 
 

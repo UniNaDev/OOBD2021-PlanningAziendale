@@ -26,7 +26,6 @@ public class Progetto {
 	private LocalDate scadenza;	//eventuale scadenza del progetto
 	private LocalDate dataTerminazione;	//data in cui è terminato il progetto (se è terminato)
 	
-	private Dipendente creatore;	//creatore del progetto
 	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
 	
 	private ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
@@ -36,7 +35,7 @@ public class Progetto {
 	
 	//Costruttore con tutti gli attributi essenziali per una query
 	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,
-			LocalDate dataCreazione, LocalDate scadenza, LocalDate dataTerminazione, Dipendente creatore) {
+			LocalDate dataCreazione, LocalDate scadenza, LocalDate dataTerminazione) {
 		this.idProgettto = idProgettto;
 		this.nomeProgetto = nomeProgetto;
 		this.tipoProgetto = tipoProgetto;
@@ -44,18 +43,16 @@ public class Progetto {
 		this.dataCreazione = dataCreazione;
 		this.scadenza = scadenza;
 		this.dataTerminazione = dataTerminazione;
-		this.creatore = creatore;
 	}
 
 	//Costruttore con attributi per la creazione di nuovi progetti
 	public Progetto(String nomeProgetto, String tipoProgetto, String descrizioneProgetto, LocalDate dataCreazione,
-			LocalDate scadenza, Dipendente creatore) {
+			LocalDate scadenza) {
 		this.nomeProgetto = nomeProgetto;
 		this.tipoProgetto = tipoProgetto;
 		this.descrizioneProgetto = descrizioneProgetto;
 		this.dataCreazione = dataCreazione;
 		this.scadenza = scadenza;
-		this.creatore = creatore;
 	}
 
 	//Getter e Setter
@@ -110,14 +107,6 @@ public class Progetto {
 
 	public void setDataTerminazione(LocalDate dataTerminazione) {
 		this.dataTerminazione = dataTerminazione;
-	}
-
-	public Dipendente getCreatore() {
-		return creatore;
-	}
-
-	public void setCreatore(Dipendente creatore) {
-		this.creatore = creatore;
 	}
 
 	public ArrayList<AmbitoProgetto> getAmbiti() {

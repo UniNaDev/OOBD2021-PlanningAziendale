@@ -41,10 +41,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		getProgettiPS = connection.prepareStatement("SELECT * FROM Progetto");
 		getPartecipantiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT p.CF FROM Partecipazione AS p WHERE p.CodProgetto = ?)"); //? = codice del progetto di cui si vogliono i partecipanti 
 		getProgettiByDipendentePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT par.CodProgetto FROM Partecipazione AS par WHERE par.CF = ?)"); //? = codice fiscale del dipendente di cui si vogliono i progetti a cui partecipa
-		getProgettiByCreatorePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.Creatore = ?"); //? = codice fiscale del creatore dei progetti
+		getProgettiByCreatorePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT p.CodProgetto FROM Partecipazione AS p WHERE p.CF = ? AND p.Ruolo = 'Project Manager')"); //? = codice fiscale del creatore dei progetti
 		getProgettiByAmbitoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT a.CodProgetto FROM AmbitoProgettoLink AS a WHERE a.IDAmbito = ?)");	//? = nome dell'ambito con cui filtrare i progetti
 		getProgettiByTipoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.TipoProgetto = ?"); //? = tipo di progetti che si cercano
-		addProgettoPS = connection.prepareStatement("INSERT INTO Progetto (NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,Creatore) VALUES (?,?,?,?,?,?)");
+		addProgettoPS = connection.prepareStatement("INSERT INTO Progetto (NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza) VALUES (?,?,?,?,?)");
 		removeProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?"); //? = codice del progetto da eliminare
 		addPartecipantePS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)"); //? = codice del progetto, ? = codice fiscale del partecipante, ? = ruolo
 		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?"); //? = codice fiscale del dipendente da rimuovere dalla partecipazione, ? = codice progetto da cui rimuoverlo
@@ -66,9 +66,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		//finchè il ResultSet contiene record
 		while (risultato.next()) {
 			
-			Dipendente creatore = dipDAO.getDipendenteByCF(risultato.getString("Creatore"));	//ottiene il creatore del progetto
 			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")), creatore);
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -113,7 +112,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResutlSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"),dipDAO.getDipendenteByCF(risultato.getString("Organizzatore")));
+			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"));
 			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
 			if (risultato.getString("CodSala") != null)
 				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
@@ -138,9 +137,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while(risultato.next()) {
-			Dipendente creatore = dipDAO.getDipendenteByCF(risultato.getString("Creatore"));	//ottiene il creatore del progetto
 			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")), creatore);
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -164,9 +162,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while(risultato.next()) {
-			Dipendente creatore = dipDAO.getDipendenteByCF(risultato.getString("Creatore"));	//ottiene il creatore del progetto
 			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")), creatore);
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -190,9 +187,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while(risultato.next()) {
-			Dipendente creatore = dipDAO.getDipendenteByCF(risultato.getString("Creatore"));	//ottiene il creatore del progetto
 			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")), creatore);
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -216,9 +212,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while(risultato.next()) {
-			Dipendente creatore = dipDAO.getDipendenteByCF(risultato.getString("Creatore"));	//ottiene il creatore del progetto
 			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")), creatore);
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -240,7 +235,6 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			addProgettoPS.setDate(5, new Date(proj.getScadenza().toDateTimeAtStartOfDay().getMillis()));
 		else
 			addProgettoPS.setNull(5, Types.DATE);
-		addProgettoPS.setString(6, proj.getCreatore().getCf()); 	//creatore
 		
 		//se il progetto ha degli ambiti allora li inserisce nel DB
 		if (!proj.getAmbiti().isEmpty()) {
@@ -336,9 +330,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		dipDAO = new DipendenteDAOPSQL(connection);
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
 		
-		Dipendente creatore = dipDAO.getDipendenteByCF(risultato.getString("Creatore"));	//ottiene il creatore del progetto
 		//crea l'oggetto progetto
-		Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")), creatore);
+		Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
 		ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 		projTemp.setAmbiti(ambiti);
 		

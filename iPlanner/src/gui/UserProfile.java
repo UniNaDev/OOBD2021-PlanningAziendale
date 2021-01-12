@@ -40,7 +40,6 @@ import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 
 public class UserProfile extends JFrame {
 

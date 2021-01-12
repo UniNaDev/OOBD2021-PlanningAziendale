@@ -9,14 +9,16 @@ public class PartecipazioneMeeting {
 	private Meeting meeting;
 	private Dipendente partecipante;
 	private boolean presenza = false;
+	private boolean organizzatore = false;
 	
 	//METODI
 	
 	//Costruttore della classe con tutti gli attributi
-	public PartecipazioneMeeting(Meeting meeting, Dipendente partecipante, boolean presenza) {
+	public PartecipazioneMeeting(Meeting meeting, Dipendente partecipante, boolean presenza, boolean organizzatore) {
 		this.meeting = meeting;
 		this.partecipante = partecipante;
 		this.presenza = presenza;
+		this.organizzatore = organizzatore;
 	}
 
 	//Getter e setter
@@ -42,6 +44,14 @@ public class PartecipazioneMeeting {
 
 	public void setPresenza(boolean presenza) {
 		this.presenza = presenza;
+	}
+	
+	public boolean isOrganizzatore() {
+		return organizzatore;
+	}
+	
+	public void setOrganizzatore(boolean organizzatore) {
+		this.organizzatore = organizzatore;
 	}
 
 	//toString

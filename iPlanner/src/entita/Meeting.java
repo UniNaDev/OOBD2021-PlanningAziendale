@@ -23,7 +23,6 @@ public class Meeting {
 	private LocalTime oraFine;	//orario di fine del meeting
 	private String modalita;	//modalità del meeting ("Fisico" oppure "Telematico")
 	private String piattaforma;	//piattaforma su cui eventualmente verrà tenuto il meeting
-	private Dipendente organizzatore;	//dipendente organizzatore del meeting
 	
 	private SalaRiunione sala;	//sala in cui si può tenere il meeting
 	private Progetto progettoDiscusso;	//progetto discusso nel meeting
@@ -33,25 +32,23 @@ public class Meeting {
 	
 	//Costruttore con tutti gli attributi eccetto la piattaforma che può essere NULL nel caso dei meeting fisici
 	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalita, Dipendente organizzatore) {
+			String modalita) {
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
 		this.oraFine = oraFine;
 		this.modalita = modalita;
-		this.organizzatore = organizzatore;
 	}
 
 	//Costruttore con tutti gli attributi, compresa piattaforma
 	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalita, String piattaforma, Dipendente organizzatore) {
+			String modalita, String piattaforma) {
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
 		this.oraFine = oraFine;
 		this.modalita = modalita;
 		this.piattaforma = piattaforma;
-		this.organizzatore = organizzatore;
 	}
 
 	//Getter e Setter
@@ -103,21 +100,12 @@ public class Meeting {
 		this.piattaforma = piattaforma;
 	}
 
-	public Dipendente getOrganizzatore() {
-		return organizzatore;
-	}
-
-	public void setOrganizzatore(Dipendente organizzatore) {
-		this.organizzatore = organizzatore;
-	}
-
 	public void setIdMeeting(int idMeeting) {
 		this.idMeeting = idMeeting;
 	}
 	public int getIdMeeting() {
 		return idMeeting;
 	}
-	
 	
 	public SalaRiunione getSala() {
 		return sala;
