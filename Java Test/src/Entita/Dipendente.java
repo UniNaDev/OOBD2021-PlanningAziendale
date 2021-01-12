@@ -279,8 +279,11 @@ public class Dipendente {
 		
 		String risultato2 = "";
 		//controlla che ci siano almeno 3 caratteri nel nome risultante e nel caso li prende
-		if (nomeSenzaVocali.length() >= 3) {
-			risultato2 = risultato2 + nomeSenzaVocali.substring(0,3);
+		if (nomeSenzaVocali.length() > 3) {
+			risultato2 = risultato2 + nomeSenzaVocali.charAt(0) + nomeSenzaVocali.charAt(2) + nomeSenzaVocali.charAt(3);	//prima, terza e quarta consonante
+		}
+		else if (nomeSenzaVocali.length() == 3) {
+			risultato2 = risultato2 + nomeSenzaVocali.substring(0,3);	//uniche tre consonanti
 		}
 		//altrimenti cerca delle vocali nel nome originale e le aggiunge
 		else {
