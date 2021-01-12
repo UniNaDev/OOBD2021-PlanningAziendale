@@ -29,6 +29,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import org.joda.time.LocalDate;
 
@@ -301,6 +302,10 @@ public class UserProfile extends JFrame {
 		}
 		
 		giornoComboBox = new JComboBox();
+		giornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+				
+		giornoComboBox.setUI(new BasicComboBoxUI());
+		
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		giornoComboBox.setEnabled(false);
 		giornoComboBox.setBackground(Color.WHITE);
@@ -311,6 +316,10 @@ public class UserProfile extends JFrame {
 		contentPane.add(giornoComboBox);
 		
 		annoComboBox = new JComboBox();
+		annoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		annoComboBox.setUI(new BasicComboBoxUI());
+		
 		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annoComboBox.setEnabled(false);
 		annoComboBox.setBackground(Color.WHITE);
@@ -331,6 +340,10 @@ public class UserProfile extends JFrame {
 		contentPane.add(annoComboBox);
 		
 		meseComboBox = new JComboBox();
+		meseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		meseComboBox.setUI(new BasicComboBoxUI());
+		
 		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meseComboBox.setEnabled(false);
 		meseComboBox.setBackground(Color.WHITE);
@@ -349,6 +362,10 @@ public class UserProfile extends JFrame {
 		
 		
 			comuneComboBox = new JComboBox();
+			comuneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+			
+			comuneComboBox.setUI(new BasicComboBoxUI());
+			
 			comuneComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			comuneComboBox.setEnabled(false);
 			comuneComboBox.setEditable(false);
@@ -361,6 +378,7 @@ public class UserProfile extends JFrame {
 			try {
 				//Combo Box province
 				provinciaComboBox = new JComboBox(theController.ottieniProvince().toArray());
+				provinciaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 				provinciaComboBox.addActionListener(new ActionListener() {
 					//Action performed selezione
 					public void actionPerformed(ActionEvent e) {
@@ -387,6 +405,8 @@ public class UserProfile extends JFrame {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		
+			provinciaComboBox.setUI(new BasicComboBoxUI());
+			
 			provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			provinciaComboBox.setEnabled(false);
 			provinciaComboBox.setBackground(Color.WHITE);
@@ -505,6 +525,7 @@ public class UserProfile extends JFrame {
 		indirizzoTextField.setColumns(10);
 		
 		passwordField = new JPasswordField(theController.getLoggedUser().getPassword());
+		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		passwordField.setBounds(239, 409, 187, 24);
 		passwordField.setEditable(false);
@@ -538,11 +559,13 @@ public class UserProfile extends JFrame {
 		contentPane.add(provinciaNascitaLabel_1);
 		
 		JScrollPane skillsScrollPane = new JScrollPane();
+		skillsScrollPane.setOpaque(false);
 		skillsScrollPane.setBorder(null);
 		skillsScrollPane.setBounds(753, 510, 427, 107);
 		contentPane.add(skillsScrollPane);
 		
 		JTextArea valoreSkillsTextArea = new JTextArea();
+		valoreSkillsTextArea.setOpaque(false);
 		valoreSkillsTextArea.setBorder(null);
 		valoreSkillsTextArea.setEditable(false);
 		//stesso colore dello sfondo

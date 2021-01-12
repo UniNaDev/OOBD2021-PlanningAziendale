@@ -24,6 +24,8 @@ import entita.LuogoNascita;
 import entita.Skill;
 
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+
 import java.awt.Color;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
@@ -276,6 +278,10 @@ public class NuovoDipendente extends JFrame {
 		
 		//Combo Box giorni del mese
 		dayComboBox = new JComboBox<Object>();
+		
+		//modifica lo stille della combo box
+		dayComboBox.setUI(new BasicComboBoxUI());
+		
 		dayComboBox.setBounds(306, 274, 44, 22);
 		dayComboBox.setBackground(Color.WHITE);
 		dayComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -285,6 +291,10 @@ public class NuovoDipendente extends JFrame {
 		
 		//Combo Box mesi dell'anno
 		monthComboBox = new JComboBox<Object>();
+		
+		//modifica lo stille della combo box
+		monthComboBox.setUI(new BasicComboBoxUI());
+		
 		monthComboBox.setBounds(360, 274, 44, 22);
 		monthComboBox.setBackground(Color.WHITE);
 		monthComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -296,6 +306,10 @@ public class NuovoDipendente extends JFrame {
 		for (int i = 1900; i < LocalDate.now().getYear(); i++)
 			anni.add(String.valueOf(i));
 		yearComboBox = new JComboBox(anni.toArray());
+		
+		//modifica lo stille della combo box
+		yearComboBox.setUI(new BasicComboBoxUI());
+		
 		yearComboBox.setBounds(414, 274, 66, 22);
 		yearComboBox.setBackground(Color.WHITE);
 		yearComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -305,6 +319,10 @@ public class NuovoDipendente extends JFrame {
 		
 		//ComboBox comuni
 		cityComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		cityComboBox.setUI(new BasicComboBoxUI());
+		
 		cityComboBox.setEnabled(false);
 		cityComboBox.setBounds(307, 338, 210, 22);
 		cityComboBox.setBackground(Color.WHITE);
@@ -339,6 +357,10 @@ public class NuovoDipendente extends JFrame {
 					"Errore #" + e1.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);
 		}
+		
+		//modifica lo stille della combo box
+		provinciaComboBox.setUI(new BasicComboBoxUI());
+		
 		provinciaComboBox.setBounds(307, 307, 210, 22);
 		provinciaComboBox.setBackground(Color.WHITE);
 		provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

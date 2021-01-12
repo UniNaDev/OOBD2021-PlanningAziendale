@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.Insets;
@@ -427,6 +428,11 @@ public class GestioneMeeting extends JFrame {
 		buttonGroup.add(fisicoRadioButton);
 		
 		dataInizioMeseComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		dataInizioMeseComboBox.setUI(new BasicComboBoxUI());
+		
+		dataInizioMeseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataInizioMeseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataInizioMeseComboBox.setEnabled(false);
 		dataInizioMeseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
@@ -435,6 +441,11 @@ public class GestioneMeeting extends JFrame {
 		dataInizioMeseComboBox.setBackground(Color.WHITE);
 		
 		dataInizioGiornoComboBox = new JComboBox();
+		
+		//modifica lo stile della combo box
+		dataInizioGiornoComboBox.setUI(new BasicComboBoxUI());
+		
+		dataInizioGiornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataInizioGiornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataInizioGiornoComboBox.setEnabled(false);
 		dataInizioGiornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
@@ -443,6 +454,11 @@ public class GestioneMeeting extends JFrame {
 		dataInizioGiornoComboBox.setBackground(Color.WHITE);
 		
 		dataInizioAnnoComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		dataInizioAnnoComboBox.setUI(new BasicComboBoxUI());
+		
+		dataInizioAnnoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataInizioAnnoComboBox.setEnabled(false);
 		dataInizioAnnoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataInizioAnnoComboBox.setBackground(Color.WHITE);
@@ -461,6 +477,11 @@ public class GestioneMeeting extends JFrame {
 		panel_2.add(dataInizioAnnoComboBox);
 		
 		dataFineGiornoComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		dataFineGiornoComboBox.setUI(new BasicComboBoxUI());
+		
+		dataFineGiornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataFineGiornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataFineGiornoComboBox.setEnabled(false);
 		dataFineGiornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
@@ -469,6 +490,11 @@ public class GestioneMeeting extends JFrame {
 		dataFineGiornoComboBox.setBackground(Color.WHITE);
 		
 		dataFineMeseComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		dataFineMeseComboBox.setUI(new BasicComboBoxUI());
+		
+		dataFineMeseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataFineMeseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataFineMeseComboBox.setEnabled(false);
 		dataFineMeseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
@@ -477,6 +503,11 @@ public class GestioneMeeting extends JFrame {
 		dataFineMeseComboBox.setBackground(Color.WHITE);
 		
 		dataFineAnnoComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		dataFineAnnoComboBox.setUI(new BasicComboBoxUI());
+		
+		dataFineAnnoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataFineAnnoComboBox.setEnabled(false);
 		dataFineAnnoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataFineAnnoComboBox.setBackground(Color.WHITE);
@@ -495,6 +526,11 @@ public class GestioneMeeting extends JFrame {
 		panel_2.add(dataFineAnnoComboBox);
 		
 		piattaformaComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		piattaformaComboBox.setUI(new BasicComboBoxUI());
+		
+		piattaformaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		piattaformaComboBox.setEnabled(false);
 		piattaformaComboBox.setBackground(Color.WHITE);
 		piattaformaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -502,6 +538,11 @@ public class GestioneMeeting extends JFrame {
 		piattaformaComboBox.setModel(new DefaultComboBoxModel(new String[] {"","Microsoft Teams","Discord","Skype"}));
 		
 		oraInizioComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		oraInizioComboBox.setUI(new BasicComboBoxUI());
+		
+		oraInizioComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		oraInizioComboBox.setEnabled(false);
 		oraInizioComboBox.setBackground(Color.WHITE);
 		oraInizioComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -512,6 +553,11 @@ public class GestioneMeeting extends JFrame {
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		minutoInizioComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		minutoInizioComboBox.setUI(new BasicComboBoxUI());
+		
+		minutoInizioComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		minutoInizioComboBox.setEnabled(false);
 		minutoInizioComboBox.setBackground(Color.WHITE);
 		minutoInizioComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -519,6 +565,11 @@ public class GestioneMeeting extends JFrame {
 		minutoInizioComboBox.setModel(new DefaultComboBoxModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"}));
 		
 		oraFineComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		oraFineComboBox.setUI(new BasicComboBoxUI());
+		
+		oraFineComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		oraFineComboBox.setEnabled(false);
 		oraFineComboBox.setBackground(Color.WHITE);
 		oraFineComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -529,6 +580,11 @@ public class GestioneMeeting extends JFrame {
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		minutoFineComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		minutoFineComboBox.setUI(new BasicComboBoxUI());
+		
+		minutoFineComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		minutoFineComboBox.setEnabled(false);
 		minutoFineComboBox.setBackground(Color.WHITE);
 		minutoFineComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

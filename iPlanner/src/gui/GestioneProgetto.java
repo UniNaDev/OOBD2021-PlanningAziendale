@@ -25,6 +25,8 @@ import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -399,6 +401,11 @@ public class GestioneProgetto extends JFrame {
 		creatoreTextField.setColumns(10);
 		
 		giornoComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		giornoComboBox.setUI(new BasicComboBoxUI());
+		
+		giornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		giornoComboBox.setEnabled(false);
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		giornoComboBox.setBackground(Color.WHITE);
@@ -409,6 +416,11 @@ public class GestioneProgetto extends JFrame {
 		panel_2.add(giornoComboBox);
 		
 		meseComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		meseComboBox.setUI(new BasicComboBoxUI());
+		
+		meseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		meseComboBox.setEnabled(false);
 		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meseComboBox.setBackground(Color.WHITE);
@@ -419,6 +431,11 @@ public class GestioneProgetto extends JFrame {
 		panel_2.add(meseComboBox);
 		
 		annoComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		annoComboBox.setUI(new BasicComboBoxUI());
+		
+		annoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annoComboBox.setEnabled(false);
 		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annoComboBox.setBackground(Color.WHITE);
