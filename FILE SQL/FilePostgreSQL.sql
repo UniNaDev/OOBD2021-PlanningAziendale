@@ -251,9 +251,9 @@ INSERT INTO SalaRiunione(CodSala,Capienza,Indirizzo,Piano) VALUES
 
 --Meeting
 INSERT INTO Meeting(DataInizio,DataFine,OrarioInizio,OrarioFine,Modalità,Piattaforma,Organizzatore,CodSala,CodProgetto) VALUES
-	('12/10/2020','12/10/2020','18:00','19:50','Telematico','Microsoft Teams','Micchd',null,null),
-	('12/10/2020','12/10/2020','14:05','16:50','Fisico',null,'Micchd','Sala5',null),
-	('21/10/2020','21/10/2020','14:55','15:55','Telematico','Microsoft Teams','Micchddd',null,null);
+	('12/10/2020','12/10/2020','18:00','19:50','Telematico','Microsoft Teams','RSsMrA80A01F839w',null,null),
+	('12/10/2020','12/10/2020','14:05','16:50','Fisico',null,'RSsMrA80A01F839w','Sala5',null),
+	('21/10/2020','21/10/2020','14:55','15:55','Telematico','Microsoft Teams','RSsMrA80A01F839w',null,null);
 	
 
 --AmbitoProgettoLink
@@ -272,7 +272,7 @@ INSERT INTO Partecipazione(CodProgetto,CF,RuoloDipendente) VALUES
 
 --Abilità
 INSERT INTO Abilità(IDSkill,CF) VALUES
-	(1,'RssMra80A01F839W'),
+	(1,'RssMra80A01F839w'),
 	(1,'DLCGPP80L01H243P'),
 	(2,'RSSMRA80A01F839W'),
 	(2,'SpsNdR02L01L259V'),
@@ -286,37 +286,7 @@ INSERT INTO Presenza(CF,IDMeeting) VALUES
 	('RSsMrA80A01F839w',6);
 	
 
-/* --Interrogazioni-- */
 
---Dipendenti che hanno partecipato a dei progetti
-SELECT *
-FROM Partecipazione NATURAL JOIN Progetto
-
-
---Dipendenti che hanno partecipato ai meeting
-SELECT IDMeeting,CF,Nome,Cognome
-FROM Dipendente NATURAL JOIN Presenza
-
-
---Codice dei progetti e gli ambiti a loro associati
-SELECT codprogetto,nomeambito
-FROM AmbitoProgettoLink NATURAL JOIN Progetto NATURAL JOIN AmbitoProgetto
-
-
---Dipendenti presenti ai meeting
-SELECT *
-FROM Dipendente NATURAL JOIN Partecipazione
-
-
---Interrogazione CaseInsensitive
-SELECT *
-FROM Dipendente
-WHERE nome ILIKE 'AnDrEa'
-
-
---Interrogazione per calcolo età
-SELECT EXTRACT( YEAR FROM AGE(DataNascita))
-FROM Dipendente
 
 
 

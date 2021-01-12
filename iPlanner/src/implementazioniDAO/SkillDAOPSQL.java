@@ -26,7 +26,7 @@ public class SkillDAOPSQL implements SkillDAO {
 	//ATTRIBUTI
 	
 	private Connection conn;	//connessione al DB
-	private PreparedStatement getSkillsPS,getSkillsByNomePS,addSkillPS, addSkillDipendentePS;	//PreparedStatement per operazioni rapide sul DB
+	private PreparedStatement getSkillsPS,getSkillsByNomePS,addSkillPS, addSkillDipendentePS, getSkillDipendentePS;	//PreparedStatement per operazioni rapide sul DB
 	
 	//METODI
 	
@@ -40,6 +40,7 @@ public class SkillDAOPSQL implements SkillDAO {
 		getSkillsByNomePS = conn.prepareStatement("SELECT * FROM Skill WHERE Skill.NomeSkill = ?");	//statement per chiedere al DB tutte le skill con un nome specifico
 		addSkillPS = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");	//statement per inserire una nuova Skill nel DB
 		addSkillDipendentePS = conn.prepareStatement("INSERT INTO Abilità VALUES (?,?)");	//? = id della skill, ? = codice fiscale del dipendente
+		getSkillDipendentePS = conn.prepareStatement("SELECT * FROM Skill AS s WHERE s.IDSkill IN (SELECT a.IDSkill FROM Abilità AS a WHERE a.CF = ?)");	//? = codice fiscale del dipendente di cui si vogliono le skill
 	}
 	
 	//Metodo getSkills.
@@ -105,6 +106,24 @@ public class SkillDAOPSQL implements SkillDAO {
 			return true;
 		else
 			return false;
+	}
+
+	//Metodo che restituisce le skill di un dipendente
+	@Override
+	public ArrayList<Skill> getSkillDipendente(Dipendente dip) throws SQLException {
+		ArrayList<Skill> temp = new ArrayList<Skill>();	//inizializza la lista da restituire
+		
+		getSkillDipendentePS.setString(1, dip.getCf()); //inserisce il codice fiscale del dipendente nella query
+		
+		ResultSet risultato = getSkillDipendentePS.executeQuery();	//esegue la query e ottiene il ResultSet
+		
+		while (risultato.next()) {
+			Skill tempSkill = new Skill(risultato.getInt(1), risultato.getString(2));	//crea la skill temporanea
+			temp.add(tempSkill);
+		}
+		risultato.close(); //chiude il ResultSet
+		
+		return temp;
 	}
 
 }
