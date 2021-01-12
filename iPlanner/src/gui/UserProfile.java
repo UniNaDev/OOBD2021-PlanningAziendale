@@ -37,6 +37,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 
 public class UserProfile extends JFrame {
 
@@ -474,13 +477,6 @@ public class UserProfile extends JFrame {
 		leMieSkillsLabel.setBounds(772, 462, 386, 37);
 		contentPane.add(leMieSkillsLabel);
 		
-		JLabel valoreSkillsLabel = new JLabel(theController.getLoggedUser().getSkills().toString());
-		valoreSkillsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		valoreSkillsLabel.setForeground(Color.BLACK);
-		valoreSkillsLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
-		valoreSkillsLabel.setBounds(772, 510, 386, 37);
-		contentPane.add(valoreSkillsLabel);
-		
 		JLabel iconaValutazioneLabel = new JLabel("");
 		iconaValutazioneLabel.setForeground(Color.DARK_GRAY);
 		iconaValutazioneLabel.setIcon(new ImageIcon(UserProfile.class.getResource("/Icone/valutazione_32.png")));
@@ -540,6 +536,26 @@ public class UserProfile extends JFrame {
 		provinciaNascitaLabel_1.setFont(new Font("Consolas", Font.PLAIN, 14));
 		provinciaNascitaLabel_1.setBounds(85, 299, 144, 24);
 		contentPane.add(provinciaNascitaLabel_1);
+		
+		JScrollPane skillsScrollPane = new JScrollPane();
+		skillsScrollPane.setBorder(null);
+		skillsScrollPane.setBounds(753, 510, 427, 107);
+		contentPane.add(skillsScrollPane);
+		
+		JTextArea valoreSkillsTextArea = new JTextArea();
+		valoreSkillsTextArea.setBorder(null);
+		valoreSkillsTextArea.setEditable(false);
+		//stesso colore dello sfondo
+		valoreSkillsTextArea.setBackground(new Color(240,240,240));
+		//quando va a capo prende tutta la stringa e non la spezza
+		valoreSkillsTextArea.setWrapStyleWord(true);
+		valoreSkillsTextArea.setLineWrap(true);
+		valoreSkillsTextArea.setFont(new Font("Monospaced", Font.PLAIN, 28));
+		
+		//prende le skill dell utente loggato
+		valoreSkillsTextArea.setText(theController.getLoggedUser().getSkills().toString());
+		
+		skillsScrollPane.setViewportView(valoreSkillsTextArea);
 	}
 
 	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
