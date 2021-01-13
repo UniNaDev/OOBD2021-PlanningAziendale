@@ -43,14 +43,6 @@ public class AmbitoProgetto {
 		this.idAmbito = idAmbito;
 	}
 
-	public ArrayList<Progetto> getProgetti() {
-		return progetti;
-	}
-
-	public void setProgetti(ArrayList<Progetto> progetti) {
-		this.progetti = progetti;
-	}
-
 	//toString
 	@Override
 	public String toString() {

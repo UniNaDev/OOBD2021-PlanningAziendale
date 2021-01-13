@@ -645,7 +645,7 @@ EXECUTE PROCEDURE check_projectmanager();
 
 --Dipendente
 INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES
-	('RSSMRA91C06F839S','Mario','Rossi','06/03/1991','M','via sdff,28','m.rossi@unina.it','0817589891','387899899',100,'pass','F839'),
+	('RSSMRA91C06F839S','Mario','Rossi','06/03/1991','M','via sdff,28','m.rossi@unina.it','0817589891','3878998999',100,'pass','F839'),
 	('GNLGML63P10F839I','Grimaldi','Gianluca','10/09/1963','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,'paddss','F839'),
 	('PRTGCM49T06F839W','Giacomo','Poretti','06/12/1949','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,'passw','F839'),
 	('FRNGTN76A71F839G','Gastani','Frinzi','31/01/1976','F','Via Giuseppe Cosenza,27,Castellammare Di Stabia(NA)','Andr.caso@gmail.com','0817327550','3935689810',1000,'paddss','F839');

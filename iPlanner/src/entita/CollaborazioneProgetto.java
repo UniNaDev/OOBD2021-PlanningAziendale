@@ -43,12 +43,4 @@ public class CollaborazioneProgetto {
 	public void setRuolo(String ruolo) {
 		this.ruolo = ruolo;
 	}
-
-	//toString
-	@Override
-	public String toString() {
-		return progetto + " " + collaboratore + ": " + ruolo;
-	}
-	
-	
 }

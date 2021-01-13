@@ -53,14 +53,4 @@ public class PartecipazioneMeeting {
 	public void setOrganizzatore(boolean organizzatore) {
 		this.organizzatore = organizzatore;
 	}
-
-	//toString
-	@Override
-	public String toString() {
-		String presente = "assente";
-		if (presenza)
-			presente = "assente";
-		
-		return partecipante + presente;
-	}
 }

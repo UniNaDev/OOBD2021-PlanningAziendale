@@ -102,8 +102,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return temp;
 	}
 
-//	//Meotdo getMeetingsByInvitato.
-//	/*Metodo che restituisce una lista di meeting (temp) a cui un dipendente è invitato.*/
+	//Meotdo getMeetingsByInvitato.
+	/*Metodo che restituisce una lista di meeting (temp) a cui un dipendente è invitato.*/
 	@Override
 	public ArrayList<Meeting> getMeetingsByInvitato(Dipendente dip) throws SQLException {
 		ArrayList<Meeting> temp = new ArrayList<Meeting>();	//inizializza la lista da restituire dopo
@@ -254,7 +254,6 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		
 		ResultSet risultato = getMeetingsByPiattaformaPS.executeQuery();	//esegue la query e ottiene il Resultset
 		
-		DipendenteDAO dipDAO = new DipendenteDAOPSQL(connection);
 		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
 		ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
 
