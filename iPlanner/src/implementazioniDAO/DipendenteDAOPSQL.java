@@ -13,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import org.joda.time.LocalDate;
 
 import entita.Dipendente;
@@ -253,6 +255,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		if (record == 1)
 			return true;
 		else
+//			JOptionPane.showMessageDialog(null, "Update non eseguito");
 			return false;
 	}
 

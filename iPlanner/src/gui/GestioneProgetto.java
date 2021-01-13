@@ -35,15 +35,29 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import controller.ControllerProgetto;
+import entita.Progetto;
+
 import javax.swing.DefaultComboBoxModel;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.joda.time.LocalDate;
 
 public class GestioneProgetto extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField idProgettoTextField;
 	private JTextField nomeTextField;
 	private JTextField ambitoTextField;
 	private JTextField tipologiaTextField;
@@ -54,12 +68,17 @@ public class GestioneProgetto extends JFrame {
 	private JComboBox giornoComboBox;
 	private JComboBox meseComboBox;
 	private JComboBox annoComboBox;
+	private JComboBox giornoTerminazioneComboBox;
+	private JComboBox meseTerminazioneComboBox;
+	private JComboBox annoTerminazioneComboBox;
+	
+	private PersonalTableModel dataModel;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public GestioneProgetto() {
+	public GestioneProgetto(ControllerProgetto theController) {
 		setMinimumSize(new Dimension(1150, 700));
 		setTitle("iPlanner-Gestione progetto");
 		setBounds(100, 100, 1280, 720);
@@ -103,69 +122,54 @@ public class GestioneProgetto extends JFrame {
 					.addContainerGap())
 		);
 		
-		progettoTable = new JTable();
+		dataModel=new PersonalTableModel();
+		progettoTable = new JTable(dataModel);
+		progettoTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row= progettoTable.getSelectedRow();
+				
+				nomeTextField.setText(progettoTable.getValueAt(row, 1).toString());
+				descrizioneTextArea.setText(progettoTable.getValueAt(row, 2).toString());
+				ambitoTextField.setText(progettoTable.getValueAt(row, 3).toString());
+				tipologiaTextField.setText(progettoTable.getValueAt(row, 4).toString());
+				
+//				LocalDate data = new LocalDate(annoTerminazioneComboBox.getSelectedIndex() + 1900, meseTerminazioneComboBox.getSelectedIndex() + 1, giornoTerminazioneComboBox.getSelectedIndex()+1);
+				
+//				LocalDate data =((LocalDate) progettoTable.getValueAt(row, 5));
+//				giornoTerminazioneComboBox.setSelectedItem(data.dayOfMonth());
+			
+				
+				
+				
+				}
+		});
 		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettoTable.setBackground(Color.WHITE);
 		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
-		progettoTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, "", null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"ProgettoID", "Nome", "Ambito/i", "Tipologia", "Scadenza", "Descrizione", "Creatore"
-			}
-		));
-		progettoTable.getColumnModel().getColumn(4).setPreferredWidth(77);
+		
+		
+		try {
+			dataModel.setProgettiTabella(theController.getElementi());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			setData(theController.getElementi());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	
+	
+	
+	
+		
+		
+		
+	
 		scrollPane_1.setViewportView(progettoTable);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -339,23 +343,13 @@ public class GestioneProgetto extends JFrame {
 		panel_4.add(eliminaButton);
 		panel_4.add(pulisciButton);
 		panel_3.add(panel_4);
-		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		
-		JLabel idProgettoLabel = new JLabel("ProgettoID");
-		idProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		idProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
 		JLabel nomeProgettoLabel = new JLabel("Nome");
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		idProgettoTextField = new JTextField();
-		idProgettoTextField.setEditable(false);
-		idProgettoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		idProgettoTextField.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
@@ -404,7 +398,6 @@ public class GestioneProgetto extends JFrame {
 		
 		//modifica lo stille della combo box
 		giornoComboBox.setUI(new BasicComboBoxUI());
-		
 		giornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		giornoComboBox.setEnabled(false);
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -447,6 +440,7 @@ public class GestioneProgetto extends JFrame {
 		
 		for(int i=1900;i<= 2021;i++)
 			myModel.addElement(i);
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		annoComboBox.setSelectedIndex(100); //mette di default il 100esimo indice cioè l'anno 2000
 //////////////////////////////////////////////////////////
@@ -457,38 +451,83 @@ public class GestioneProgetto extends JFrame {
 		descrizioneTextArea = new JTextArea();
 		descrizioneTextArea.setEditable(false);
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		giornoTerminazioneComboBox = new JComboBox();
+		giornoTerminazioneComboBox.setUI(new BasicComboBoxUI());
+	
+		giornoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		giornoTerminazioneComboBox.setEnabled(false);
+		giornoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		giornoTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		giornoTerminazioneComboBox.setSelectedIndex(0);
+		giornoTerminazioneComboBox.setBackground(Color.WHITE);
+		
+		meseTerminazioneComboBox = new JComboBox();
+		meseTerminazioneComboBox.setUI(new BasicComboBoxUI());
+		meseTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		meseTerminazioneComboBox.setSelectedIndex(0);
+		meseTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		meseTerminazioneComboBox.setEnabled(false);
+		meseTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		meseTerminazioneComboBox.setBackground(Color.WHITE);
+		
+		annoTerminazioneComboBox = new JComboBox();
+		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
+
+		annoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		annoTerminazioneComboBox.setEnabled(false);
+		annoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		annoTerminazioneComboBox.setBackground(Color.WHITE);
+		annoTerminazioneComboBox.setModel(myModel);
+		annoTerminazioneComboBox.setSelectedIndex(100);
+		
+		JLabel dataTerminazioneLabel = new JLabel("Terminato");
+		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
-					.addGap(43)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-						.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(tipologiaProgettoLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(idProgettoLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(idProgettoTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-						.addComponent(ambitoTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-						.addComponent(nomeTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tipologiaTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+					.addGap(68)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(descrizioneTextArea, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+								.addComponent(tipologiaProgettoLabel)
+								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+								.addComponent(creatoreProgettoLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.UNRELATED))
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+							.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+							.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addComponent(descrizioneTextArea, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_panel_2.createSequentialGroup()
 									.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-								.addComponent(creatoreTextField, Alignment.LEADING))
-							.addGap(4)))
-					.addGap(275)
+									.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.RELATED, 300, Short.MAX_VALUE))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(creatoreTextField, 241, 241, 241)
+							.addPreferredGap(ComponentPlacement.RELATED)))
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
 					.addGap(59))
 		);
@@ -498,37 +537,39 @@ public class GestioneProgetto extends JFrame {
 					.addGap(25)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addComponent(idProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(idProgettoTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(descrizioneTextArea, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
+							.addGap(13)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+								.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(creatoreTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(creatoreTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
 							.addGap(23))))
 		);
 		
@@ -562,5 +603,13 @@ public class GestioneProgetto extends JFrame {
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	
+	
+	public void setData(ArrayList<Progetto> db) {
+		
+		dataModel.setProgettiTabella(db);
+		
 	}
 }

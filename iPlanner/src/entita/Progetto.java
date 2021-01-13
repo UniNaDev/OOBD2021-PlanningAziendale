@@ -54,7 +54,7 @@ public class Progetto {
 		this.dataCreazione = dataCreazione;
 		this.scadenza = scadenza;
 	}
-
+	
 	//Getter e Setter
 	//Manca setIdProgetto perchè non si vuole settare ma gestire con una sequence nel DBMS
 	public int getIdProgettto() {
@@ -117,7 +117,7 @@ public class Progetto {
 		this.ambiti = ambiti;
 	}
 
-	public ArrayList<Meeting> getMeetingsRelativi() {
+	public ArrayList<Meeting> getDiscusso() {
 		return meetingsRelativi;
 	}
 

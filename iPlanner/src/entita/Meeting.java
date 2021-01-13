@@ -25,7 +25,7 @@ public class Meeting {
 	private String piattaforma;	//piattaforma su cui eventualmente verrà tenuto il meeting
 	
 	private SalaRiunione sala;	//sala in cui si può tenere il meeting
-	private Progetto progettoDiscusso;	//progetto discusso nel meeting
+	private Progetto releativoA;	//progetto discusso nel meeting
 	private ArrayList<PartecipazioneMeeting> partecipazioniDipendenti = new ArrayList<PartecipazioneMeeting>();	//partecipazioni dei dipendenti al meeting
 	
 	//METODI
@@ -116,11 +116,11 @@ public class Meeting {
 	}
 	
 	public Progetto getProgettoDiscusso() {
-		return progettoDiscusso;
+		return releativoA;
 	}
 
 	public void setProgettoDiscusso(Progetto progettoDiscusso) {
-		this.progettoDiscusso = progettoDiscusso;
+		this.releativoA = progettoDiscusso;
 	}
 
 	public ArrayList<PartecipazioneMeeting> getPartecipazioniDipendenti() {
@@ -137,7 +137,7 @@ public class Meeting {
 	//Sala 1 (oppure Microsoft Teams)
 	@Override
 	public String toString() {
-		String temp = progettoDiscusso.getNomeProgetto();
+		String temp = releativoA.getNomeProgetto();
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
