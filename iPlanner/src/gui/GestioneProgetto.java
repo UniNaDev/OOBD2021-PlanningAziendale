@@ -65,9 +65,9 @@ public class GestioneProgetto extends JFrame {
 	private JTable progettoTable;
 	private JTextField cercaTextField;
 	private JTextArea descrizioneTextArea;
-	private JComboBox giornoComboBox;
-	private JComboBox meseComboBox;
-	private JComboBox annoComboBox;
+	private JComboBox giornoScadenzaComboBox;
+	private JComboBox meseScadenzaComboBox;
+	private JComboBox annoScadenzaComboBox;
 	private JComboBox giornoTerminazioneComboBox;
 	private JComboBox meseTerminazioneComboBox;
 	private JComboBox annoTerminazioneComboBox;
@@ -197,6 +197,16 @@ public class GestioneProgetto extends JFrame {
 				tipologiaTextField.setText("");
 				creatoreTextField.setText("");
 				descrizioneTextArea.setText("");
+				
+				//ricava la data attuale
+				LocalDate dataAttuale = LocalDate.now();
+				
+				//imposta di default giorno e mese come quelli della data attuale (-1 perche gli indici partono da 0)
+				giornoScadenzaComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
+				meseScadenzaComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);				
+				
+				//imposta di default l'anno di scadenza come l'anno successivo 
+				annoScadenzaComboBox.setSelectedIndex(1); 
 			}
 		});
 		pulisciCampiButton.setPreferredSize(new Dimension(150, 30));
@@ -373,55 +383,57 @@ public class GestioneProgetto extends JFrame {
 		creatoreTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		creatoreTextField.setColumns(10);
 		
-		giornoComboBox = new JComboBox();
+		giornoScadenzaComboBox = new JComboBox();
 		
 		//modifica lo stille della combo box
-		giornoComboBox.setUI(new BasicComboBoxUI());
-		giornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		giornoComboBox.setBackground(Color.WHITE);
-		giornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		giornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		giornoComboBox.setSelectedIndex(0);
-		giornoComboBox.setBounds(244, 235, 47, 22);
-		panel_2.add(giornoComboBox);
+		giornoScadenzaComboBox.setUI(new BasicComboBoxUI());
+		giornoScadenzaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		giornoScadenzaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		giornoScadenzaComboBox.setBackground(Color.WHITE);
+		giornoScadenzaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		giornoScadenzaComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		giornoScadenzaComboBox.setSelectedIndex(0);
+		giornoScadenzaComboBox.setBounds(244, 235, 47, 22);
+		panel_2.add(giornoScadenzaComboBox);
 		
-		meseComboBox = new JComboBox();
-		
-		//modifica lo stille della combo box
-		meseComboBox.setUI(new BasicComboBoxUI());
-		
-		meseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		meseComboBox.setBackground(Color.WHITE);
-		meseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-		meseComboBox.setSelectedIndex(0);
-		meseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		meseComboBox.setBounds(301, 235, 47, 22);
-		panel_2.add(meseComboBox);
-		
-		annoComboBox = new JComboBox();
+		meseScadenzaComboBox = new JComboBox();
 		
 		//modifica lo stille della combo box
-		annoComboBox.setUI(new BasicComboBoxUI());
+		meseScadenzaComboBox.setUI(new BasicComboBoxUI());
 		
-		annoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		annoComboBox.setBackground(Color.WHITE);
-		annoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		annoComboBox.setBounds(358, 235, 62, 22);
-		//CREO UN MODELLO PERSONALIZZATO PER L'ANNO DEL COMBO BOX //////////
-		DefaultComboBoxModel myModel = new DefaultComboBoxModel();
-		annoComboBox.setModel(myModel);
+		meseScadenzaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		meseScadenzaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meseScadenzaComboBox.setBackground(Color.WHITE);
+		meseScadenzaComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		meseScadenzaComboBox.setSelectedIndex(0);
+		meseScadenzaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		meseScadenzaComboBox.setBounds(301, 235, 47, 22);
+		panel_2.add(meseScadenzaComboBox);
 		
-		for(int i=1900;i<= 2021;i++)
-			myModel.addElement(i);
+		annoScadenzaComboBox = new JComboBox();
+		
+		//modifica lo stille della combo box
+		annoScadenzaComboBox.setUI(new BasicComboBoxUI());
+		
+		annoScadenzaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		annoScadenzaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		annoScadenzaComboBox.setBackground(Color.WHITE);
+		annoScadenzaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		annoScadenzaComboBox.setBounds(358, 235, 62, 22);
+		
+		//modello personalizzato che parte dall anno attuale ed arriva ai prossimi 20 anni
+		DefaultComboBoxModel annoScadenzaModel = new DefaultComboBoxModel();
+		annoScadenzaComboBox.setModel(annoScadenzaModel);
+		
+		int annoAttuale = LocalDate.now().getYear();
+		
+		for(int i= annoAttuale;i<= annoAttuale + 20;i++)
+			annoScadenzaModel.addElement(i);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		annoComboBox.setSelectedIndex(100); //mette di default il 100esimo indice cioè l'anno 2000
-//////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////
 		
-		panel_2.add(annoComboBox);
+		panel_2.add(annoScadenzaComboBox);
 		
 		
 		descrizioneTextArea = new JTextArea();
@@ -447,10 +459,19 @@ public class GestioneProgetto extends JFrame {
 		annoTerminazioneComboBox = new JComboBox();
 		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 
+		//modello personalizzato che va dal 1900 fino all anno attuale
+		DefaultComboBoxModel annoTerminazioneModel = new DefaultComboBoxModel();
+		
+		int anno = LocalDate.now().getYear();
+		
+		for(int i = 1900; i<=anno ;i++ )
+			annoTerminazioneModel.addElement(i);
+		
+		
 		annoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		annoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annoTerminazioneComboBox.setBackground(Color.WHITE);
-		annoTerminazioneComboBox.setModel(myModel);
+		annoTerminazioneComboBox.setModel(annoTerminazioneModel);
 		annoTerminazioneComboBox.setSelectedIndex(100);
 		
 		JLabel dataTerminazioneLabel = new JLabel("Terminato");
@@ -493,11 +514,11 @@ public class GestioneProgetto extends JFrame {
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel_2.createSequentialGroup()
-								.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+								.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+								.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(creatoreTextField, 241, 241, 241))
 					.addGap(84)
 					.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
@@ -534,9 +555,9 @@ public class GestioneProgetto extends JFrame {
 								.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
