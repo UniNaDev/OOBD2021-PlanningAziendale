@@ -262,7 +262,7 @@ public class GestioneProgetto extends JFrame {
 		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
-		JButton confermaModificheButton = new JButton("Conferma modifiche");
+		JButton confermaModificheButton = new JButton("Conferma Modifiche");
 		
 
 		confermaModificheButton.addActionListener(new ActionListener() {

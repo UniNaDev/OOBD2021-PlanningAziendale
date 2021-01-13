@@ -23,6 +23,10 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import javax.swing.JButton;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -180,7 +184,7 @@ public class GestioneMeeting extends JFrame {
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new LineBorder(new Color(192, 192, 192)));
 		
-		JButton pulisciButton = new JButton("Pulisci");
+		JButton pulisciButton = new JButton("Pulisci Campi");
 		pulisciButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -194,10 +198,35 @@ public class GestioneMeeting extends JFrame {
 			}
 		});
 		pulisciButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			
+			//quando si preme sul tasto pulisci imposta i combobox con valori in base alla data e l'ora attuali
+			public void actionPerformed(ActionEvent e) 
+			{
+				//ricava l'ora e la data attuali
+				LocalDate dataAttuale = LocalDate.now();
+				LocalTime oraAttuale = LocalTime.now();
+				
+				//IMPOSTA LA DATA DI INIZIO COME IL GIORNO ATTUALE
+				dataInizioGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1); //-1 perche gli indici iniziano da 0
+				dataInizioMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
+				dataInizioAnnoComboBox.setSelectedIndex(dataAttuale.getYear() -1900);// -1900 perche nella comboBox gli anni vanno dal 1900 all anno attuale ,quindi 2021
+																					//sarà il (2021 - 1900) 121 esimo indice
+				//IMPOSTA ANCHE LA DATA DI FINE COME IL GIORNO ATTUALE
+				dataFineGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
+				dataFineMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
+				dataFineAnnoComboBox.setSelectedIndex(dataAttuale.getYear() -1900);
+				
+				//IMPOSTA L'ORA DI INIZIO COME L'ORA ATTUALE
+				oraInizioComboBox.setSelectedIndex(oraAttuale.getHourOfDay());
+				minutoInizioComboBox.setSelectedIndex(oraAttuale.getMinuteOfHour());
+				
+				//IMPOSTA DI DEFAULT L'ORA DI FINE COME 2 ORE DOPO 
+				oraFineComboBox.setSelectedIndex(oraAttuale.getHourOfDay() +2);
+				minutoFineComboBox.setSelectedIndex(oraAttuale.getMinuteOfHour());
+				
 			}
 		});
-		pulisciButton.setPreferredSize(new Dimension(90, 30));
+		pulisciButton.setPreferredSize(new Dimension(150, 30));
 		pulisciButton.setMaximumSize(new Dimension(150, 150));
 		pulisciButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		pulisciButton.setBackground(Color.WHITE);
@@ -250,37 +279,13 @@ public class GestioneMeeting extends JFrame {
 		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
-		JButton modificaButton = new JButton("Modifica");
+		JButton modificaButton = new JButton("Conferma Modifiche");
 		modificaButton.addActionListener(new ActionListener() {
 			
 			//quando si preme sul tasto modifica i campi diventano editabili 
 			public void actionPerformed(ActionEvent e) 
 			{
-				//data inizio
-				dataInizioGiornoComboBox.setEnabled(true);
-				dataInizioMeseComboBox.setEnabled(true);
-				dataInizioAnnoComboBox.setEnabled(true);
-				
-				//data fine
-				dataFineGiornoComboBox.setEnabled(true);
-				dataFineMeseComboBox.setEnabled(true);
-				dataFineAnnoComboBox.setEnabled(true);
-				
-				//orario inizio
-				oraInizioComboBox.setEnabled(true);
-				minutoInizioComboBox.setEnabled(true);
-				
-				//orario fine
-				oraFineComboBox.setEnabled(true);
-				minutoFineComboBox.setEnabled(true);
-				
-				//modalita
-				onlineRadioButton.setEnabled(true);
-				fisicoRadioButton.setEnabled(true);
-				
-				//piattaforma
-				piattaformaComboBox.setEnabled(true);
-				
+				//TODO andrà a fare l'update sul meeting
 			}
 		});
 		modificaButton.addMouseListener(new MouseAdapter() {
@@ -295,7 +300,7 @@ public class GestioneMeeting extends JFrame {
 				modificaButton.setBackground(Color.WHITE);
 			}
 		});
-		modificaButton.setPreferredSize(new Dimension(90, 30));
+		modificaButton.setPreferredSize(new Dimension(170, 30));
 		modificaButton.setMaximumSize(new Dimension(150, 150));
 		modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		modificaButton.setBackground(Color.WHITE);
@@ -304,36 +309,12 @@ public class GestioneMeeting extends JFrame {
 		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		modificaButton.setAlignmentX(0.5f);
 		
-		JButton salvaButton = new JButton("Salva");
+		JButton salvaButton = new JButton("Crea Nuovo");
 		salvaButton.addActionListener(new ActionListener() {
 			
-			//quando si preme sul tasto salva i cambi ritornano non editabili
 			public void actionPerformed(ActionEvent e) 
 			{
-				//data inizio
-				dataInizioGiornoComboBox.setEnabled(false);
-				dataInizioMeseComboBox.setEnabled(false);
-				dataInizioAnnoComboBox.setEnabled(false);
-				
-				//data fine
-				dataFineGiornoComboBox.setEnabled(false);
-				dataFineMeseComboBox.setEnabled(false);
-				dataFineAnnoComboBox.setEnabled(false);
-				
-				//orario inizio
-				oraInizioComboBox.setEnabled(false);
-				minutoInizioComboBox.setEnabled(false);
-				
-				//orario fine
-				oraFineComboBox.setEnabled(false);
-				minutoFineComboBox.setEnabled(false);
-				
-				//modalita
-				onlineRadioButton.setEnabled(false);
-				fisicoRadioButton.setEnabled(false);
-				
-				//piattaforma
-				piattaformaComboBox.setEnabled(false);
+				//TODO andrà a fare l'insert di un nuovo meeting
 			}
 		});
 		salvaButton.addMouseListener(new MouseAdapter() {
@@ -348,7 +329,7 @@ public class GestioneMeeting extends JFrame {
 				salvaButton.setBackground(Color.WHITE);
 			}
 		});
-		salvaButton.setPreferredSize(new Dimension(90, 30));
+		salvaButton.setPreferredSize(new Dimension(130, 30));
 		salvaButton.setMaximumSize(new Dimension(150, 150));
 		salvaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		salvaButton.setBackground(Color.WHITE);
@@ -390,9 +371,6 @@ public class GestioneMeeting extends JFrame {
 		idMeetingTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		idMeetingTextField.setColumns(10);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
 		JLabel dataFineLabel = new JLabel("Data fine");
 		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -416,14 +394,13 @@ public class GestioneMeeting extends JFrame {
 		
 		
 		onlineRadioButton = new JRadioButton("Online");
+		onlineRadioButton.setSelected(true);
 		onlineRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		onlineRadioButton.setEnabled(false);
 		onlineRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		buttonGroup.add(onlineRadioButton);
 		
 		fisicoRadioButton = new JRadioButton("Fisico");
 		fisicoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		fisicoRadioButton.setEnabled(false);
 		fisicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		buttonGroup.add(fisicoRadioButton);
 		
@@ -434,7 +411,6 @@ public class GestioneMeeting extends JFrame {
 		
 		dataInizioMeseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataInizioMeseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dataInizioMeseComboBox.setEnabled(false);
 		dataInizioMeseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		dataInizioMeseComboBox.setSelectedIndex(0);
 		dataInizioMeseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -447,7 +423,6 @@ public class GestioneMeeting extends JFrame {
 		
 		dataInizioGiornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataInizioGiornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dataInizioGiornoComboBox.setEnabled(false);
 		dataInizioGiornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		dataInizioGiornoComboBox.setSelectedIndex(0);
 		dataInizioGiornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -459,7 +434,6 @@ public class GestioneMeeting extends JFrame {
 		dataInizioAnnoComboBox.setUI(new BasicComboBoxUI());
 		
 		dataInizioAnnoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		dataInizioAnnoComboBox.setEnabled(false);
 		dataInizioAnnoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataInizioAnnoComboBox.setBackground(Color.WHITE);
 		dataInizioAnnoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -483,7 +457,6 @@ public class GestioneMeeting extends JFrame {
 		
 		dataFineGiornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataFineGiornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dataFineGiornoComboBox.setEnabled(false);
 		dataFineGiornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		dataFineGiornoComboBox.setSelectedIndex(0);
 		dataFineGiornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -496,7 +469,6 @@ public class GestioneMeeting extends JFrame {
 		
 		dataFineMeseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataFineMeseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dataFineMeseComboBox.setEnabled(false);
 		dataFineMeseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		dataFineMeseComboBox.setSelectedIndex(0);
 		dataFineMeseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -508,7 +480,6 @@ public class GestioneMeeting extends JFrame {
 		dataFineAnnoComboBox.setUI(new BasicComboBoxUI());
 		
 		dataFineAnnoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		dataFineAnnoComboBox.setEnabled(false);
 		dataFineAnnoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataFineAnnoComboBox.setBackground(Color.WHITE);
 		dataFineAnnoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -531,7 +502,6 @@ public class GestioneMeeting extends JFrame {
 		piattaformaComboBox.setUI(new BasicComboBoxUI());
 		
 		piattaformaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		piattaformaComboBox.setEnabled(false);
 		piattaformaComboBox.setBackground(Color.WHITE);
 		piattaformaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		piattaformaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -543,7 +513,6 @@ public class GestioneMeeting extends JFrame {
 		oraInizioComboBox.setUI(new BasicComboBoxUI());
 		
 		oraInizioComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		oraInizioComboBox.setEnabled(false);
 		oraInizioComboBox.setBackground(Color.WHITE);
 		oraInizioComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		oraInizioComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -558,7 +527,6 @@ public class GestioneMeeting extends JFrame {
 		minutoInizioComboBox.setUI(new BasicComboBoxUI());
 		
 		minutoInizioComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		minutoInizioComboBox.setEnabled(false);
 		minutoInizioComboBox.setBackground(Color.WHITE);
 		minutoInizioComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		minutoInizioComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -570,7 +538,6 @@ public class GestioneMeeting extends JFrame {
 		oraFineComboBox.setUI(new BasicComboBoxUI());
 		
 		oraFineComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		oraFineComboBox.setEnabled(false);
 		oraFineComboBox.setBackground(Color.WHITE);
 		oraFineComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		oraFineComboBox.setModel(new DefaultComboBoxModel(new String[] {"00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
@@ -585,11 +552,16 @@ public class GestioneMeeting extends JFrame {
 		minutoFineComboBox.setUI(new BasicComboBoxUI());
 		
 		minutoFineComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		minutoFineComboBox.setEnabled(false);
 		minutoFineComboBox.setBackground(Color.WHITE);
 		minutoFineComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		minutoFineComboBox.setModel(new DefaultComboBoxModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"}));
 		minutoFineComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		
+		JScrollPane invitatiScrollPane = new JScrollPane();
+		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		
+		JScrollPane progettoDiscussoScrollPane = new JScrollPane();
+		progettoDiscussoScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -612,48 +584,43 @@ public class GestioneMeeting extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 5, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-							.addGap(390))
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblNewLabel)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+						.addComponent(idMeetingTextField, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(piattaformaComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addGroup(gl_panel_2.createSequentialGroup()
-								.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(lblNewLabel)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-								.addGap(390))
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-										.addComponent(idMeetingTextField, GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-										.addGroup(gl_panel_2.createSequentialGroup()
-											.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-										.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
-											.addComponent(piattaformaComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addGroup(gl_panel_2.createSequentialGroup()
-												.addComponent(onlineRadioButton)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))))
-									.addGap(275))
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)))))
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
-					.addGap(59))
+								.addComponent(onlineRadioButton)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)))
+					.addGap(89)
+					.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
+					.addGap(54)
+					.addComponent(progettoDiscussoScrollPane, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
+					.addGap(48))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addGap(25)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(idMeetingLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
@@ -694,14 +661,24 @@ public class GestioneMeeting extends JFrame {
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(piattaformaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-							.addGap(23))))
+						.addComponent(invitatiScrollPane, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+						.addComponent(progettoDiscussoScrollPane))
+					.addGap(26))
 		);
 		
-		JList list = new JList();
-		list.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		scrollPane.setViewportView(list);
+		JTextArea ProgettoDiscussoTextArea = new JTextArea();
+		progettoDiscussoScrollPane.setViewportView(ProgettoDiscussoTextArea);
+		
+		JLabel progettoDiscussoLabel = new JLabel("Progetto Discusso");
+		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		progettoDiscussoScrollPane.setColumnHeaderView(progettoDiscussoLabel);
+		
+		JList invitatiList = new JList();
+		invitatiScrollPane.setViewportView(invitatiList);
+		
+		JLabel invitatiLabel = new JLabel("Invitati");
+		invitatiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		invitatiScrollPane.setColumnHeaderView(invitatiLabel);
 		panel_2.setLayout(gl_panel_2);
 		panel_1.add(panel_2);
 		panel.setLayout(gl_panel);
