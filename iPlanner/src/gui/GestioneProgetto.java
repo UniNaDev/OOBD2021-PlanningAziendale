@@ -176,20 +176,20 @@ public class GestioneProgetto extends JFrame {
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new LineBorder(new Color(192, 192, 192)));
 		
-		JButton pulisciButton = new JButton("Pulisci");
-		pulisciButton.addMouseListener(new MouseAdapter() {
+		JButton pulisciCampiButton = new JButton(" Pulisci Campi");
+		pulisciCampiButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				pulisciButton.setBackground(Color.LIGHT_GRAY);
+				pulisciCampiButton.setBackground(Color.LIGHT_GRAY);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				pulisciButton.setBackground(Color.WHITE);
+				pulisciCampiButton.setBackground(Color.WHITE);
 			}
 		});
-		pulisciButton.addActionListener(new ActionListener() {
+		pulisciCampiButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
 				nomeTextField.setText("");
@@ -199,14 +199,14 @@ public class GestioneProgetto extends JFrame {
 				descrizioneTextArea.setText("");
 			}
 		});
-		pulisciButton.setPreferredSize(new Dimension(90, 30));
-		pulisciButton.setMaximumSize(new Dimension(150, 150));
-		pulisciButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		pulisciButton.setBackground(Color.WHITE);
-		pulisciButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		pulisciButton.setAlignmentX(0.5f);
-		pulisciButton.setFont(new Font("Consolas", Font.PLAIN, 17));
-		pulisciButton.setMargin(new Insets(2, 20, 2, 20));
+		pulisciCampiButton.setPreferredSize(new Dimension(150, 30));
+		pulisciCampiButton.setMaximumSize(new Dimension(150, 150));
+		pulisciCampiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		pulisciCampiButton.setBackground(Color.WHITE);
+		pulisciCampiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		pulisciCampiButton.setAlignmentX(0.5f);
+		pulisciCampiButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		pulisciCampiButton.setMargin(new Insets(2, 20, 2, 20));
 		
 		JButton eliminaButton = new JButton("Elimina");
 		eliminaButton.addMouseListener(new MouseAdapter() {
@@ -252,81 +252,64 @@ public class GestioneProgetto extends JFrame {
 		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
-		JButton modificaButton = new JButton("Modifica");
+		JButton confermaModificheButton = new JButton("Conferma modifiche");
 		
-		//quando preme sul tasto modifica tutti i campi diventano editabili
-		modificaButton.addActionListener(new ActionListener() {
+
+		confermaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				nomeTextField.setEditable(true);
-				ambitoTextField.setEditable(true);
-				tipologiaTextField.setEditable(true);
-				descrizioneTextArea.setEditable(true);
-				creatoreTextField.setEditable(true);
-				
-				giornoComboBox.setEnabled(true);
-				meseComboBox.setEnabled(true);
-				annoComboBox.setEnabled(true);
-				
+				//TODO andrà a fare l'update sul progetto
 			}
 		});
-		modificaButton.addMouseListener(new MouseAdapter() {
+		confermaModificheButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				modificaButton.setBackground(Color.LIGHT_GRAY);
+				confermaModificheButton.setBackground(Color.LIGHT_GRAY);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				modificaButton.setBackground(Color.WHITE);
+				confermaModificheButton.setBackground(Color.WHITE);
 			}
 		});
-		modificaButton.setPreferredSize(new Dimension(90, 30));
-		modificaButton.setMaximumSize(new Dimension(150, 150));
-		modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		modificaButton.setBackground(Color.WHITE);
-		modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		modificaButton.setMargin(new Insets(2, 20, 2, 20));
-		modificaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
-		modificaButton.setAlignmentX(0.5f);
+		confermaModificheButton.setPreferredSize(new Dimension(170, 30));
+		confermaModificheButton.setMaximumSize(new Dimension(150, 150));
+		confermaModificheButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		confermaModificheButton.setBackground(Color.WHITE);
+		confermaModificheButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		confermaModificheButton.setMargin(new Insets(2, 20, 2, 20));
+		confermaModificheButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		confermaModificheButton.setAlignmentX(0.5f);
 		
-		//quando si preme il tasto salva ritornano non editabili
-		JButton salvaButton = new JButton("Salva");
-		salvaButton.addActionListener(new ActionListener() {
+
+		JButton creaNuovoButton = new JButton("Crea Nuovo");
+		creaNuovoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				nomeTextField.setEditable(false);
-				ambitoTextField.setEditable(false);
-				tipologiaTextField.setEditable(false);
-				creatoreTextField.setEditable(false);
-				descrizioneTextArea.setEditable(false);
-				
-				giornoComboBox.setEnabled(false);
-				meseComboBox.setEnabled(false);
-				annoComboBox.setEnabled(false);
+				//TODO andrà a fare l inserto di un nuovo progetto
 			}
 		});
-		salvaButton.addMouseListener(new MouseAdapter() {
+		creaNuovoButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				salvaButton.setBackground(Color.LIGHT_GRAY);
+				creaNuovoButton.setBackground(Color.LIGHT_GRAY);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				salvaButton.setBackground(Color.WHITE);
+				creaNuovoButton.setBackground(Color.WHITE);
 			}
 		});
-		salvaButton.setPreferredSize(new Dimension(90, 30));
-		salvaButton.setMaximumSize(new Dimension(150, 150));
-		salvaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		salvaButton.setBackground(Color.WHITE);
-		salvaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		salvaButton.setMargin(new Insets(2, 20, 2, 20));
-		salvaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
-		salvaButton.setAlignmentX(0.5f);
+		creaNuovoButton.setPreferredSize(new Dimension(130, 30));
+		creaNuovoButton.setMaximumSize(new Dimension(150, 150));
+		creaNuovoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		creaNuovoButton.setBackground(Color.WHITE);
+		creaNuovoButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		creaNuovoButton.setMargin(new Insets(2, 20, 2, 20));
+		creaNuovoButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		creaNuovoButton.setAlignmentX(0.5f);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel cercaLbel = new JLabel("Cerca");
@@ -338,10 +321,10 @@ public class GestioneProgetto extends JFrame {
 		panel_4.add(cercaTextField);
 		cercaTextField.setColumns(10);
 		panel_4.add(inserisciPartecipanteButton);
-		panel_4.add(modificaButton);
-		panel_4.add(salvaButton);
+		panel_4.add(confermaModificheButton);
+		panel_4.add(creaNuovoButton);
 		panel_4.add(eliminaButton);
-		panel_4.add(pulisciButton);
+		panel_4.add(pulisciCampiButton);
 		panel_3.add(panel_4);
 		
 		JPanel panel_2 = new JPanel();
@@ -355,7 +338,6 @@ public class GestioneProgetto extends JFrame {
 		scrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		nomeTextField = new JTextField();
-		nomeTextField.setEditable(false);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nomeTextField.setColumns(10);
 		
@@ -364,7 +346,6 @@ public class GestioneProgetto extends JFrame {
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		ambitoTextField = new JTextField();
-		ambitoTextField.setEditable(false);
 		ambitoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		ambitoTextField.setColumns(10);
 		
@@ -373,7 +354,6 @@ public class GestioneProgetto extends JFrame {
 		tipologiaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		tipologiaTextField = new JTextField();
-		tipologiaTextField.setEditable(false);
 		tipologiaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaTextField.setColumns(10);
 		
@@ -390,7 +370,6 @@ public class GestioneProgetto extends JFrame {
 		creatoreProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		creatoreTextField = new JTextField();
-		creatoreTextField.setEditable(false);
 		creatoreTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		creatoreTextField.setColumns(10);
 		
@@ -399,7 +378,6 @@ public class GestioneProgetto extends JFrame {
 		//modifica lo stille della combo box
 		giornoComboBox.setUI(new BasicComboBoxUI());
 		giornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		giornoComboBox.setEnabled(false);
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		giornoComboBox.setBackground(Color.WHITE);
 		giornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -414,7 +392,6 @@ public class GestioneProgetto extends JFrame {
 		meseComboBox.setUI(new BasicComboBoxUI());
 		
 		meseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		meseComboBox.setEnabled(false);
 		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meseComboBox.setBackground(Color.WHITE);
 		meseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
@@ -429,7 +406,6 @@ public class GestioneProgetto extends JFrame {
 		annoComboBox.setUI(new BasicComboBoxUI());
 		
 		annoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		annoComboBox.setEnabled(false);
 		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annoComboBox.setBackground(Color.WHITE);
 		annoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -449,14 +425,12 @@ public class GestioneProgetto extends JFrame {
 		
 		
 		descrizioneTextArea = new JTextArea();
-		descrizioneTextArea.setEditable(false);
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		giornoTerminazioneComboBox = new JComboBox();
 		giornoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 	
 		giornoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		giornoTerminazioneComboBox.setEnabled(false);
 		giornoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		giornoTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		giornoTerminazioneComboBox.setSelectedIndex(0);
@@ -467,7 +441,6 @@ public class GestioneProgetto extends JFrame {
 		meseTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		meseTerminazioneComboBox.setSelectedIndex(0);
 		meseTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		meseTerminazioneComboBox.setEnabled(false);
 		meseTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		meseTerminazioneComboBox.setBackground(Color.WHITE);
 		
@@ -475,7 +448,6 @@ public class GestioneProgetto extends JFrame {
 		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 
 		annoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		annoTerminazioneComboBox.setEnabled(false);
 		annoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annoTerminazioneComboBox.setBackground(Color.WHITE);
 		annoTerminazioneComboBox.setModel(myModel);
@@ -484,6 +456,9 @@ public class GestioneProgetto extends JFrame {
 		JLabel dataTerminazioneLabel = new JLabel("Terminato");
 		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		JScrollPane partecipantiScrollPane = new JScrollPane();
+		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -503,39 +478,38 @@ public class GestioneProgetto extends JFrame {
 							.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
 							.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-										.addComponent(descrizioneTextArea, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED, 300, Short.MAX_VALUE))
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(creatoreTextField, 241, 241, 241)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+									.addComponent(descrizioneTextArea, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+									.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+							.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addComponent(giornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(meseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(annoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(creatoreTextField, 241, 241, 241))
+					.addGap(84)
+					.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
+					.addGap(45)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
 					.addGap(59))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addGap(25)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
@@ -568,14 +542,25 @@ public class GestioneProgetto extends JFrame {
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(creatoreTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
-							.addGap(23))))
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+						.addComponent(partecipantiScrollPane))
+					.addGap(27))
 		);
 		
-		JList list = new JList();
-		list.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		scrollPane.setViewportView(list);
+		JList partecipantiList = new JList();
+		partecipantiScrollPane.setViewportView(partecipantiList);
+		
+		JLabel lblNewLabel = new JLabel("Partecipanti");
+		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		partecipantiScrollPane.setColumnHeaderView(lblNewLabel);
+		
+		JList meetingRelativiList = new JList();
+		meetingRelativiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		scrollPane.setViewportView(meetingRelativiList);
+		
+		JLabel meetingRelativiLabel = new JLabel("Meeting Relativi");
+		meetingRelativiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		scrollPane.setColumnHeaderView(meetingRelativiLabel);
 		panel_2.setLayout(gl_panel_2);
 		panel_1.add(panel_2);
 		panel.setLayout(gl_panel);
