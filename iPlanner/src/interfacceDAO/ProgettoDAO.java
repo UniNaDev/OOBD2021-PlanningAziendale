@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entita.AmbitoProgetto;
+import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -13,9 +14,9 @@ import entita.Progetto;
 public interface ProgettoDAO {
 
 	public ArrayList<Progetto> getProgetti() throws SQLException;	//metodo che restituisce tutti i progetti
-	public ArrayList<Dipendente> getPartecipanti(Progetto proj) throws SQLException;	//metodo che restituisce i partecipanti a un progetto
+	public ArrayList<CollaborazioneProgetto> getPartecipanti(Progetto proj) throws SQLException;	//metodo che restituisce i partecipanti a un progetto
 	public ArrayList<Meeting> getMeetingRelativi(Progetto proj) throws SQLException;	//metodo che restituisce i meeting relativi ad un progetto
-	public ArrayList<Progetto> getProgettiByDipendente(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti a cui partecipa un dipendente
+	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti a cui partecipa un dipendente
 	public ArrayList<Progetto> getProgettiByCreatore(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti creati da un dipendente
 	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException;	//metodo che restituisce i progetti di un certo ambito
 	public ArrayList<Progetto> getProgettiByTipo(String tipologia) throws SQLException;	//metodo che restituisce i progetti di un certo tipo

@@ -27,14 +27,11 @@ public class Dipendente {
 	private String cellulare;	//numero di cellulare del dipendente
 	private float salario;	//salario attuale del dipendente
 	private String password;	//password del dipendente con cui può accedere al servizio
-	
 	private float valutazione;	//valutazione in decimi del dipendente in azienda
 	
-	//attributi per generazione CF
 	private String[] vocali = {"A","E","I","O","U"};
 	private String[] simboliNonRichiesti = {" ", "À","Á","È","É","Ì","Ò","Ù","Ä","Ë","Ï","Ö","Ü"};
 	
-	//attributi delle associazioni
 	private ArrayList<Skill> skills = new ArrayList<Skill>();	//skill del dipendente
 	private ArrayList<PartecipazioneMeeting> partecipazioniMeeting = new ArrayList<PartecipazioneMeeting>();	//lista di partecipazione del dipendente ai meeting
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista delle collaborazioni del dipendente
@@ -42,9 +39,10 @@ public class Dipendente {
 	//METODI
 	
 	//Costruttore totale
-	public Dipendente(String nome, String cognome, char sesso, LocalDate dataNascita,
+	public Dipendente(String cf, String nome, String cognome, char sesso, LocalDate dataNascita,
 			LuogoNascita luogoNascita, String indirizzo, String email, String telefonoCasa, String cellulare,
-			float salario, String password) {
+			float salario, String password, float valutazione) {
+		this.cf = cf;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.sesso = sesso;
@@ -56,20 +54,7 @@ public class Dipendente {
 		this.cellulare = cellulare;		//può essere null
 		this.salario = salario;
 		this.password = password;
-	}
-	
-	//Costruttore con soli parametri essenziali
-	public Dipendente(String nome, String cognome, char sesso, LocalDate dataNascita,
-			LuogoNascita luogoNascita, String indirizzo, String email, float salario, String password) {
-		this.nome = nome;	//not null
-		this.cognome = cognome;	//not null
-		this.sesso = sesso;	//not null
-		this.dataNascita = dataNascita;	//not null
-		this.luogoNascita = luogoNascita;	//not null
-		this.indirizzo = indirizzo;	//not null
-		this.email = email;	//not null
-		this.salario = salario;	//not null
-		this.password = password;	//not null
+		this.valutazione = valutazione;
 	}
 	
 	//Metodo che genera il codice fiscale di un dipendente partendo dai suoi dati anagrafici

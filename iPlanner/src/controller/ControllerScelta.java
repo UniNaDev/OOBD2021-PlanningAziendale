@@ -83,7 +83,7 @@ public class ControllerScelta {
 	//Metodo che crea un nuovo account per il dipendente
 	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo, ArrayList<Skill> skills, float salario) {
 		//crea un dipendente temporaneo con i parametri in input
-		Dipendente temp = new Dipendente(nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password);
+		Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
 		temp.setCf(temp.generaCF()); 	//setta il suo codice fiscale appena generato
 		try {
 			//se l'insert nel database ha successo

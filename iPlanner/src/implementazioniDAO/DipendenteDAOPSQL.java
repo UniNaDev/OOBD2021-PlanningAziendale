@@ -30,11 +30,15 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	private Connection connection;	//connessione al DB
 	private PreparedStatement getDipendentiPS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
 	
+	private LuogoNascitaDAOPSQL luogoDAO = null;
+	
 	//METODI
 	
 	//Costruttore
 	public DipendenteDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;	//ottiene la connessione dal ManagerConnessioneDB
+		
+		this.luogoDAO = new LuogoNascitaDAOPSQL(connection);
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
 		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) >= ?");
@@ -56,17 +60,24 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ResultSet risultato = getDipendentiPS.executeQuery();	//esegue la query per ottenere il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire in seguito
 		
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
-		
 		//finchè esistono dipendenti nel ResultSet
 		while(risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 			
-			Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-			tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-			tempDip.setValutazione(getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"),
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close();	//chiude il ResultSet
@@ -83,17 +94,24 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ResultSet risultato = getDipendentiByEtaPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
 		
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
-		
 		//finchè esistono dipendenti nel ResultSet
 		while(risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 			
-			Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-			tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-			tempDip.setValutazione(getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close();	//chiude il ResultSet
@@ -125,17 +143,24 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ResultSet risultato = getDipendentiByValutazionePS.executeQuery();	//esegue la query e ottiene il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
 		
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
-		
 		//finchè esistono dipendenti nel ResultSet
 		while(risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 			
-			Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-			tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-			tempDip.setValutazione(getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close();
@@ -153,16 +178,23 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ResultSet risultato = getDipendentiBySalarioPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
 		
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
-		
 		while(risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 			
-			Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-			tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-			tempDip.setValutazione(getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close();
@@ -179,17 +211,24 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ResultSet risultato = getDipendentiBySkillPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
 		
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
-		
 		//finchè esistono dipendenti nel ResultSet
 		while(risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 			
-			Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-			tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-			tempDip.setValutazione(getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close(); 	//chiude il ResultSet
@@ -267,16 +306,22 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		loginCheckPS.setString(2, password);
 		ResultSet risultato = loginCheckPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
-		
 		risultato.next();	//prende il primo (e unico) record del ResultSet
 		LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 		
-		Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-				luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-				risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-		tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-		tempDip.setValutazione(getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+		Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+				risultato.getString("Nome"),
+				risultato.getString("Cognome"),
+				risultato.getString("Sesso").charAt(0),
+				new LocalDate(risultato.getDate("DataNascita")),
+				luogoTemp,
+				risultato.getString("Indirizzo"),
+				risultato.getString("Email"),
+				risultato.getString("TelefonoCasa"),
+				risultato.getString("Cellulare"),
+				risultato.getFloat("Salario"),
+				risultato.getString("Password"),
+				this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 		
 		risultato.close();	//chiude il ResultSet
 		
@@ -291,17 +336,23 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getDipendenteByCFPS.setString(1, cf);	//inserisce parametro nella query
 		ResultSet risultato = getDipendenteByCFPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(this.connection);	//inizializza il DAO per luogonascita
-		
 		risultato.next();	//prende il primo (e unico) record del ResultSet
 		
 		LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 		
-		Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-				luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-				risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-		tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-		tempDip.setValutazione(getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+		Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+				risultato.getString("Nome"),
+				risultato.getString("Cognome"),
+				risultato.getString("Sesso").charAt(0),
+				new LocalDate(risultato.getDate("DataNascita")),
+				luogoTemp,
+				risultato.getString("Indirizzo"),
+				risultato.getString("Email"),
+				risultato.getString("TelefonoCasa"),
+				risultato.getString("Cellulare"),
+				risultato.getFloat("Salario"),
+				risultato.getString("Password"),
+				this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 		
 		risultato.close(); //chiude il ResultSet
 		

@@ -7,6 +7,7 @@ import org.joda.time.LocalDate;
 
 import entita.Meeting;
 import entita.Progetto;
+import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import gui.User;
@@ -76,7 +77,7 @@ public class ControllerGestioneProfilo {
 		userFrame.setVisible(true);
 	}
 	
-	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
+	public ArrayList<CollaborazioneProgetto> ottieniProgetti() throws SQLException {
 		return projDAO.getProgettiByDipendente(loggedUser);
 	}
 	

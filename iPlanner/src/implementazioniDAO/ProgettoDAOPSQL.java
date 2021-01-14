@@ -12,6 +12,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import entita.AmbitoProgetto;
+import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -40,7 +41,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		//inizializza i PreparedStatement
 		getProgettiPS = connection.prepareStatement("SELECT * FROM Progetto");
 		getPartecipantiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT p.CF FROM Partecipazione AS p WHERE p.CodProgetto = ?)"); //? = codice del progetto di cui si vogliono i partecipanti 
-		getProgettiByDipendentePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT par.CodProgetto FROM Partecipazione AS par WHERE par.CF = ?)"); //? = codice fiscale del dipendente di cui si vogliono i progetti a cui partecipa
+		getProgettiByDipendentePS = connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ?"); //? = codice fiscale del dipendente di cui si vogliono i progetti a cui partecipa
 		getProgettiByCreatorePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT p.CodProgetto FROM Partecipazione AS p WHERE p.CF = ? AND p.Ruolo = 'Project Manager')"); //? = codice fiscale del creatore dei progetti
 		getProgettiByAmbitoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT a.CodProgetto FROM AmbitoProgettoLink AS a WHERE a.IDAmbito = ?)");	//? = nome dell'ambito con cui filtrare i progetti
 		getProgettiByTipoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.TipoProgetto = ?"); //? = tipo di progetti che si cercano
@@ -60,16 +61,23 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		ResultSet risultato = getProgettiPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		
-		dipDAO = new DipendenteDAOPSQL(connection);
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
 		
 		//finchè il ResultSet contiene record
 		while (risultato.next()) {
 			
 			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),
+					risultato.getString("NomeProgetto"),
+					risultato.getString("TipoProgetto"),
+					risultato.getString("DescrizioneProgetto"),
+					new LocalDate(risultato.getDate("DataCreazione")),
+					new LocalDate(risultato.getDate("DataScadenza")),
+					new LocalDate(risultato.getDate("DataTerminazione")));
+			
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
+			
 			temp.add(projTemp);	//aggiunge il progetto alla lista
 		}
 		risultato.close();	//chiude il ResulSet
@@ -79,8 +87,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che restituisce i dipendenti partecipanti a un progetto.
 	@Override
-	public ArrayList<Dipendente> getPartecipanti(Progetto proj) throws SQLException {
-		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista da restituire
+	public ArrayList<CollaborazioneProgetto> getPartecipanti(Progetto proj) throws SQLException {
+		ArrayList<CollaborazioneProgetto> temp = new ArrayList<CollaborazioneProgetto>();	//inizializza la lista da restituire
 		
 		dipDAO = new DipendenteDAOPSQL(connection);
 		
@@ -90,8 +98,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while(risultato.next()) {
-			Dipendente dipTemp = dipDAO.getDipendenteByCF(risultato.getString("CF"));
-			temp.add(dipTemp);	//aggiunge il dipendente alla lista
+			Dipendente partecipante = dipDAO.getDipendenteByCF(risultato.getString("CF"));
+			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(proj, partecipante, risultato.getString("RuoloDipendente"));
+			temp.add(tempPartecipazione);	//aggiunge il dipendente alla lista
 		}
 		risultato.close();	//chiude il ResultSet
 		
@@ -112,8 +121,14 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResutlSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"));
+			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),
+					new LocalDate(risultato.getDate("DataFine").getTime()),
+					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
+					new LocalTime(risultato.getTime("OrarioFine").getTime()),
+					risultato.getString("Modalità"),risultato.getString("Piattaforma"));
+			
 			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
+			
 			if (risultato.getString("CodSala") != null)
 				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
 			temp.add(meetingTemp);
@@ -125,23 +140,32 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che restituisce i progetti a cui partecipa/ha partecipato un dipendente.
 	@Override
-	public ArrayList<Progetto> getProgettiByDipendente(Dipendente dip) throws SQLException {
+	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException {
 		getProgettiByDipendentePS.setString(1, dip.getCf()); 	//inserisce il codice fiscale del dipendente di cui si vogliono i progetti
 		
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();	//inizializza la lista di progetti da restituire
+		ArrayList<CollaborazioneProgetto> temp = new ArrayList<CollaborazioneProgetto>();	//inizializza la lista di progetti da restituire
 		
 		ResultSet risultato = getProgettiByDipendentePS.executeQuery();	//esegue la query e ottiene il ResultSet
 		
-		dipDAO = new DipendenteDAOPSQL(connection);
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
 		
 		//finchè ci sono record nel ResultSet
 		while(risultato.next()) {
 			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),
+					risultato.getString("NomeProgetto"),
+					risultato.getString("TipoProgetto"),
+					risultato.getString("DescrizioneProgetto"),
+					new LocalDate(risultato.getDate("DataCreazione")),
+					new LocalDate(risultato.getDate("DataScadenza")),
+					new LocalDate(risultato.getDate("DataTerminazione")));
+			
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
-			temp.add(projTemp);	//aggiunge il progetto alla lista
+			
+			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(projTemp,dip,risultato.getString("RuoloDipendente"));
+			
+			temp.add(tempPartecipazione);	//aggiunge il progetto alla lista
 		}
 		risultato.close(); //chiude il ResultSet
 		

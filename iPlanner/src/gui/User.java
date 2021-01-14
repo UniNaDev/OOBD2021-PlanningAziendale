@@ -31,6 +31,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import entita.CollaborazioneProgetto;
 import entita.Meeting;
 
 import java.awt.Color;
@@ -258,7 +259,10 @@ public class User extends JFrame {
 		
 		JList<Progetto> progettiList;
 		try {
-			progettiList = new JList(theController.ottieniProgetti().toArray());
+			ArrayList<Progetto> progetti = new ArrayList<Progetto>();
+			for (CollaborazioneProgetto collaborazione: theController.ottieniProgetti())
+				progetti.add(collaborazione.getProgetto());
+			progettiList = new JList(progetti.toArray());
 			progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 			progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			progettiList.setFixedCellHeight(40);

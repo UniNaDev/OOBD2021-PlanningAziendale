@@ -43,4 +43,6 @@ public class CollaborazioneProgetto {
 	public void setRuolo(String ruolo) {
 		this.ruolo = ruolo;
 	}
+	
+	
 }

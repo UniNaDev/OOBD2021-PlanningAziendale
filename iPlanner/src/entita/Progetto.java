@@ -28,7 +28,7 @@ public class Progetto {
 	
 	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
 	
-	private ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
+	private ArrayList<Meeting> discussoIn = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista di collaborazioni del progetto
 
 	//METODI
@@ -118,11 +118,11 @@ public class Progetto {
 	}
 
 	public ArrayList<Meeting> getDiscusso() {
-		return meetingsRelativi;
+		return discussoIn;
 	}
 
 	public void setMeetingsRelativi(ArrayList<Meeting> meetingsRelativi) {
-		this.meetingsRelativi = meetingsRelativi;
+		this.discussoIn = meetingsRelativi;
 	}
 
 	public ArrayList<CollaborazioneProgetto> getCollaborazioni() {

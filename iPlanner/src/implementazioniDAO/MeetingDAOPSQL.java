@@ -143,11 +143,20 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		while(risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
 			
-			Dipendente tempDip = new Dipendente(risultato.getString("Nome"), risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0), new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp, risultato.getString("Indirizzo"), risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"), risultato.getString("Password"));	//crea il dipendente temporaneo
-			tempDip.setCf(risultato.getString("CF"));	//salva il codice fiscale del dipendente
-			tempDip.setValutazione(dipDAO.getValutazione(tempDip.getCf()));	//recupera la sua valutazione
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					dipDAO.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close();
