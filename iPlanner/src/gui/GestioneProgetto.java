@@ -54,6 +54,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.joda.time.LocalDate;
+import javax.swing.JCheckBox;
 
 public class GestioneProgetto extends JFrame {
 
@@ -61,7 +62,6 @@ public class GestioneProgetto extends JFrame {
 	private JTextField nomeTextField;
 	private JTextField ambitoTextField;
 	private JTextField tipologiaTextField;
-	private JTextField creatoreTextField;
 	private JTable progettoTable;
 	private JTextField cercaTextField;
 	private JTextArea descrizioneTextArea;
@@ -73,6 +73,7 @@ public class GestioneProgetto extends JFrame {
 	private JComboBox annoTerminazioneComboBox;
 	
 	private PersonalTableModel dataModel;
+	private JCheckBox progettoTerminatoCheckBox;
 
 
 	/**
@@ -195,7 +196,6 @@ public class GestioneProgetto extends JFrame {
 				nomeTextField.setText("");
 				ambitoTextField.setText("");
 				tipologiaTextField.setText("");
-				creatoreTextField.setText("");
 				descrizioneTextArea.setText("");
 				
 				//ricava la data attuale
@@ -375,14 +375,6 @@ public class GestioneProgetto extends JFrame {
 		descrizioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		descrizioneProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel creatoreProgettoLabel = new JLabel("Creatore");
-		creatoreProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		creatoreProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		creatoreTextField = new JTextField();
-		creatoreTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		creatoreTextField.setColumns(10);
-		
 		giornoScadenzaComboBox = new JComboBox();
 		
 		//modifica lo stille della combo box
@@ -439,16 +431,23 @@ public class GestioneProgetto extends JFrame {
 		descrizioneTextArea = new JTextArea();
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		giornoTerminazioneComboBox = new JComboBox();
+		giornoTerminazioneComboBox = new JComboBox();	
+		giornoTerminazioneComboBox.setEditable(true);
+		
+		
+		giornoTerminazioneComboBox.setEnabled(false);
+
+		
 		giornoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 	
 		giornoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		giornoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		giornoTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		giornoTerminazioneComboBox.setSelectedIndex(0);
+		giornoTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));		
 		giornoTerminazioneComboBox.setBackground(Color.WHITE);
 		
 		meseTerminazioneComboBox = new JComboBox();
+		meseTerminazioneComboBox.setEditable(true);
+		meseTerminazioneComboBox.setEnabled(false);
 		meseTerminazioneComboBox.setUI(new BasicComboBoxUI());
 		meseTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		meseTerminazioneComboBox.setSelectedIndex(0);
@@ -457,6 +456,8 @@ public class GestioneProgetto extends JFrame {
 		meseTerminazioneComboBox.setBackground(Color.WHITE);
 		
 		annoTerminazioneComboBox = new JComboBox();
+		annoTerminazioneComboBox.setEditable(true);
+		annoTerminazioneComboBox.setEnabled(false);
 		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 
 		//modello personalizzato che va dal 1900 fino all anno attuale
@@ -472,55 +473,102 @@ public class GestioneProgetto extends JFrame {
 		annoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annoTerminazioneComboBox.setBackground(Color.WHITE);
 		annoTerminazioneComboBox.setModel(annoTerminazioneModel);
-		annoTerminazioneComboBox.setSelectedIndex(100);
 		
-		JLabel dataTerminazioneLabel = new JLabel("Terminato");
+		JLabel dataTerminazioneLabel = new JLabel("Data Terminazione");
 		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		JScrollPane partecipantiScrollPane = new JScrollPane();
 		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		
+		JLabel progettoTerminatoLabel = new JLabel("Progetto Terminato");
+		progettoTerminatoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		progettoTerminatoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		progettoTerminatoCheckBox = new JCheckBox("");
+		
+		//quando si preme sul checkbox "progetto terminato" se viene selezionato allora i campi del giorno terminazione si attivano , mentre se non viene selezionato 
+		//si disattivano
+		progettoTerminatoCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				//SE IL CHECKBOX È SELEZIONATO ABILITA I CAMPI DEL GIORNO DI TERMINAZIONE
+				if(progettoTerminatoCheckBox.isSelected())
+					{
+						giornoTerminazioneComboBox.setEnabled(true);
+						meseTerminazioneComboBox.setEnabled(true);	
+						annoTerminazioneComboBox.setEnabled(true);
+					}
+				
+				//SE IL CHECKBOX NON È SELEZIONATO DISABILITA I CAMPI DEL GIORNO DI TERMINAZIONE
+				else if(progettoTerminatoCheckBox.isSelected() == false)
+					{
+						giornoTerminazioneComboBox.setEnabled(false);
+						meseTerminazioneComboBox.setEnabled(false);
+						annoTerminazioneComboBox.setEnabled(false);
+					}				
+			}
+		});
+		
+		progettoTerminatoCheckBox.setFont(new Font("Consolas", Font.PLAIN, 14));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
-					.addGap(68)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(tipologiaProgettoLabel)
-								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-								.addComponent(creatoreProgettoLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addGap(68)
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_panel_2.createSequentialGroup()
+											.addGap(18)
+											.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+												.addComponent(tipologiaProgettoLabel)
+												.addComponent(ambitoProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)))
+										.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+											.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+											.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))))
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(dataTerminazioneLabel, GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)))
 							.addPreferredGap(ComponentPlacement.UNRELATED))
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-							.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-							.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(progettoTerminatoLabel, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)))
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-									.addComponent(descrizioneTextArea, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-									.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)))
-							.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-							.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(creatoreTextField, 241, 241, 241))
-					.addGap(84)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+											.addComponent(descrizioneTextArea, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+											.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE))
+										.addComponent(ambitoTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+										.addComponent(tipologiaTextField, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE))
+									.addGap(84))
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_panel_2.createSequentialGroup()
+											.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_panel_2.createSequentialGroup()
+											.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+										.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
+									.addGap(113)))
+							.addPreferredGap(ComponentPlacement.RELATED))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(progettoTerminatoCheckBox)
+							.addGap(304)))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
 					.addGap(45)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
@@ -549,20 +597,20 @@ public class GestioneProgetto extends JFrame {
 								.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(progettoTerminatoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(progettoTerminatoCheckBox))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(creatoreTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
 						.addComponent(partecipantiScrollPane))
 					.addGap(27))
