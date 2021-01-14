@@ -1,6 +1,10 @@
 package controller;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import entita.Dipendente;
+import entita.Meeting;
 import gui.*;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -39,10 +43,38 @@ public class ControllerMeeting {
 	public void createInsertMeetingFrame() {
 		
 		insertMeetingFrame= new GestioneMeeting();
-		insertMeetingFrame.setVisible(true);
-		
-		
+		insertMeetingFrame.setVisible(true);	
+	}
+
+	public MieiMeeting getMeetingFrame() {
+		return meetingFrame;
+	}
+
+	public GestioneMeeting getInsertMeetingFrame() {
+		return insertMeetingFrame;
+	}
+
+	public LuogoNascitaDAO getLuogoDAO() {
+		return luogoDAO;
+	}
+
+	public DipendenteDAO getDipDAO() {
+		return dipDAO;
+	}
+
+	public ProgettoDAO getProjDAO() {
+		return projDAO;
+	}
+
+	public MeetingDAO getMeetDAO() {
+		return meetDAO;
+	}
+
+	public Dipendente getLoggedUser() {
+		return loggedUser;
 	}
 	
-
+	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
+		return meetDAO.getMeetingsByInvitato(loggedUser);
+	}
 }

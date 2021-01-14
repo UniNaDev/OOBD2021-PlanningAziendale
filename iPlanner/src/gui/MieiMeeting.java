@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controller.ControllerMeeting;
+import entita.Meeting;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,7 +36,15 @@ import javax.swing.border.EtchedBorder;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
 import javax.swing.ImageIcon;
+import javax.swing.event.ListSelectionListener;
+
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import javax.swing.event.ListSelectionEvent;
 
 
 public class MieiMeeting extends JFrame {
@@ -43,7 +53,7 @@ public class MieiMeeting extends JFrame {
 	private JLabel mieiMeetingLabel;
 
 	private JPanel panel;
-	private JList meetingList;
+	private JList<Meeting> meetingList;
 
 
 
@@ -287,23 +297,49 @@ public class MieiMeeting extends JFrame {
 		);
 		
 
-		meetingList = new JList();
-		meetingList.setSelectionBackground(Color.LIGHT_GRAY);
-		meetingList.setModel(new AbstractListModel() {
+		try {
+			meetingList = new JList(theController.ottieniMeeting().toArray());
+			meetingList.addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+					Meeting meetingSelezionato = meetingList.getSelectedValue();
+					//aggiorna info del meeting
+					nomeMeetingLabel.setText(meetingSelezionato.getProgettoDiscusso().toString());
+					
+					
+					valoreModalitaLabel.setText(meetingSelezionato.getModalita());
+					
+					if (meetingSelezionato.getModalita().equals("Fisico")) {
+						piattaformaLabel.setText("Sala: ");
+						valorePiattaformaLabel.setText(meetingSelezionato.getSala().getCodSala());
+					}
+					else {
+						piattaformaLabel.setText("Piattaforma: ");
+						valorePiattaformaLabel.setText(meetingSelezionato.getPiattaforma());
+					}
+					
+					DateTimeFormatter formatDateTime = DateTimeFormat.forPattern("hh:mm");
+					valoreOrarioFineLabel.setText(meetingSelezionato.getOraFine().toString(formatDateTime));
+					valoreOrarioInizioLabel.setText(meetingSelezionato.getOraInizio().toString(formatDateTime));
+					
+					formatDateTime = DateTimeFormat.forPattern("dd/MM/yyyy");
+					valoreDataFineLabel.setText(meetingSelezionato.getDataFine().toString(formatDateTime));
+					valoreDataInzioLabel.setText(meetingSelezionato.getDataInizio().toString(formatDateTime));
+				}
+			});
+			MeetingListRenderer renderer = new MeetingListRenderer();
+			meetingList.setCellRenderer(renderer);
+			
+			meetingList.setSelectionBackground(Color.LIGHT_GRAY);
+			meetingList.setFixedCellHeight(60);
+			meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
+			meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			meetingList.setSelectedIndex(0);
+			mieiMeetingPanel.setViewportView(meetingList);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-			String[] values = new String[] {"Meeting 1", "Meeting 2", "Meeting 3", "Discord 3", "Riunione Teams", "Leo Pardo Cisco Webex", "Riunione ", "Prova ", "Prova 27"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-
-		});	
-		meetingList.setFixedCellHeight(40);
-		meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
-		meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mieiMeetingPanel.setViewportView(meetingList);
 		
 
 
