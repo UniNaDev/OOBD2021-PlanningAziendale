@@ -55,7 +55,7 @@ public class UserProfile extends JFrame {
 	private JComboBox giornoComboBox;
 	private JComboBox meseComboBox;
 	private JComboBox annoComboBox;
-	private JComboBox <LuogoNascita> comuneComboBox;
+	private JComboBox comuneComboBox;
 	private JComboBox provinciaComboBox;
 	private JTextField indirizzoTextField;
 	private JPasswordField passwordField;
@@ -225,7 +225,6 @@ public class UserProfile extends JFrame {
 				giornoComboBox.setEnabled(true);				
 				meseComboBox.setEnabled(true);
 				annoComboBox.setEnabled(true);
-				comuneComboBox.setEnabled(true);
 				provinciaComboBox.setEnabled(true);
 				//
 				emailTextField.setEditable(true);
@@ -360,23 +359,27 @@ public class UserProfile extends JFrame {
 		
 		
 		
-			comuneComboBox = new JComboBox();
-			comuneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-			
-			comuneComboBox.setUI(new BasicComboBoxUI());
-			
-			comuneComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			comuneComboBox.setEnabled(false);
-			comuneComboBox.setEditable(false);
-			comuneComboBox.setBackground(Color.WHITE);
-			comuneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-			comuneComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita());
-			comuneComboBox.setBounds(239, 301, 201, 22);
-			contentPane.add(comuneComboBox);
+		comuneComboBox = new JComboBox();
+		comuneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		comuneComboBox.setUI(new BasicComboBoxUI());
+		comuneComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		comuneComboBox.setEnabled(false);
+		comuneComboBox.setEditable(false);
+		comuneComboBox.setBackground(Color.WHITE);
+		comuneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		comuneComboBox.addItem(theController.getLoggedUser().getLuogoNascita().getNomeComune());
+	
+		comuneComboBox.setBounds(239, 301, 201, 22);
+		contentPane.add(comuneComboBox);
 		
-			try {
+		comuneComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita().getNomeComune());
+		try {
 				//Combo Box province
+			
+			
 				provinciaComboBox = new JComboBox(theController.ottieniProvince().toArray());
+				provinciaComboBox.setEnabled(false);
+				
 				provinciaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 				provinciaComboBox.addActionListener(new ActionListener() {
 					//Action performed selezione
@@ -416,6 +419,8 @@ public class UserProfile extends JFrame {
 
 		contentPane.add(provinciaComboBox);
 		
+		
+
 
 		
 		JLabel indirizzoLabel = new JLabel("Indirizzo");
@@ -551,11 +556,11 @@ public class UserProfile extends JFrame {
 		emailTextField.setBounds(239, 374, 187, 24);
 		contentPane.add(emailTextField);
 		
-		JLabel provinciaNascitaLabel_1 = new JLabel("Prov. di nascita");
-		provinciaNascitaLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		provinciaNascitaLabel_1.setFont(new Font("Consolas", Font.PLAIN, 14));
-		provinciaNascitaLabel_1.setBounds(85, 299, 144, 24);
-		contentPane.add(provinciaNascitaLabel_1);
+		JLabel comuneNascitaLabel = new JLabel("Comune di nascita");
+		comuneNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		comuneNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		comuneNascitaLabel.setBounds(85, 299, 144, 24);
+		contentPane.add(comuneNascitaLabel);
 		
 		JScrollPane skillsScrollPane = new JScrollPane();
 		skillsScrollPane.setOpaque(false);

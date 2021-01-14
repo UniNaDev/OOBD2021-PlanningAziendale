@@ -72,6 +72,12 @@ public class NuovoDipendente extends JFrame {
 	private JLabel iconaCellulareLabel;
 	private JLabel iconaDataNascitaLabel;
 	private JLabel iconaPasswordLabel;
+	private JLabel euroLabel;
+	private JLabel salarioLabel;
+	private JLabel iconaSalarioLabel;
+	private JLabel cittàDiNascitaLabel;
+	private JLabel skillsLabel;
+	private JLabel iconaSkillsLabel;
 	
 	//TextField
 	private JTextField nomeTextField;
@@ -92,14 +98,12 @@ public class NuovoDipendente extends JFrame {
 	
 	private JScrollPane skillsScrollPane;
 	private JList skillsList;
-	private JLabel skillsLabel;
-	private JLabel iconaSkillsLabel;
+;
 	private JButton nuovaSkillButton;
 	private JTextField nuovaSkillTextField;
 	private JTextField salarioTextField;
-	private JLabel euroLabel;
-	private JLabel salarioLabel;
-	private JLabel iconaSalarioLabel;
+
+	
 	
 	//Button
 	private JButton creaAccountButton;
@@ -278,7 +282,7 @@ public class NuovoDipendente extends JFrame {
 		giornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		giornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		giornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
+		giornoComboBox.setSelectedIndex(0);
 		//Combo Box mesi dell'anno
 		meseComboBox = new JComboBox<Object>();
 		
@@ -406,9 +410,13 @@ public class NuovoDipendente extends JFrame {
 				cognomeLabel.setForeground(Color.BLACK);
 				emailLabel.setForeground(Color.BLACK);
 				passwordLabel.setForeground(Color.BLACK);
-				indirizzoLabel.setForeground(Color.BLACK);
-				//se tutti i campi essenziali sono pieni e la password è confermata
-				if ((!nomeTextField.getText().isBlank() && !cognomeTextField.getText().isBlank() && !emailTextField.getText().isBlank() && !passwordField.getText().isBlank() && !indirizzoTextField.getText().isBlank()) && confermaPasswordField.getText().equals(passwordField.getText()))
+				sessoLabel.setForeground(Color.BLACK);
+				confermaPasswordLabel.setForeground(Color.BLACK);
+				cittàDiNascitaLabel.setForeground(Color.BLACK);
+				provNascitaLabel.setForeground(Color.BLACK);
+				
+				
+				if ((!nomeTextField.getText().isBlank() && !cognomeTextField.getText().isBlank() && !emailTextField.getText().isBlank() && !passwordField.getText().isBlank()) && confermaPasswordField.getText().equals(passwordField.getText()))
 					try {
 						creaAccount();	//crea il nuovo account con i valori inseriti
 					} catch (SQLException e1) {
@@ -417,26 +425,40 @@ public class NuovoDipendente extends JFrame {
 								"Errore #" + e1.getErrorCode(),
 								JOptionPane.ERROR_MESSAGE);
 					}
-				else //se invece uno dei valori essenziali è vuoto colora la rispettiva label di rosso
+				//se le password inserite sono diverse
+				else if(!passwordField.getText().equals(confermaPasswordField.getText()))
 				{
-					if (nomeTextField.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Le password inserite sono diverse");
+					passwordLabel.setForeground(Color.RED);
+					confermaPasswordLabel.setForeground(Color.RED);
+					
+				}
+				//se uno dei campi obbligatori è vuoto colora la rispettiva label di rosso
+				else if ((nomeTextField.getText().isBlank() || cognomeTextField.getText().isBlank() || emailTextField.getText().isBlank() || passwordField.getText().isBlank()) || confermaPasswordField.getText().equals(passwordField.getText()) || !cittaComboBox.isEnabled()) {
+					
+					JOptionPane.showMessageDialog(null, "Compilare i campi obbligatori vuoti");
+					if (nomeTextField.getText().isBlank())
 						nomeLabel.setForeground(Color.RED);
-					}
 					if (cognomeTextField.getText().isBlank())
 						cognomeLabel.setForeground(Color.RED);
 					if (emailTextField.getText().isBlank())
 						emailLabel.setForeground(Color.RED);
 					if (passwordField.getText().isBlank())
 						passwordLabel.setForeground(Color.RED);
-					if (indirizzoTextField.getText().isBlank())
-						indirizzoLabel.setForeground(Color.RED);
-					//se le due password non corrispondono colora le label e svuota il campo di conferma password
-					if (passwordField.getText().equals(confermaPasswordField.getText())) {
-						passwordLabel.setForeground(Color.RED);
-						confermaPasswordLabel.setForeground(Color.RED);
-						confermaPasswordLabel.setText("");
+					if(!cittaComboBox.isEnabled()) {
+						cittàDiNascitaLabel.setForeground(Color.RED);
+						provNascitaLabel.setForeground(Color.RED);
 					}
+					if(!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+						sessoLabel.setForeground(Color.RED);
+					if (confermaPasswordField.getText().isBlank())
+						confermaPasswordLabel.setForeground(Color.RED);
+				
 				}
+			
+			
+		
+
 			}
 		});
 		creaAccountButton.addMouseListener(new MouseAdapter() {
@@ -670,7 +692,7 @@ public class NuovoDipendente extends JFrame {
 		campiObbligatoriLabel.setBounds(603, 460, 290, 20);
 		contentPane.add(campiObbligatoriLabel);
 		
-		JLabel cittàDiNascitaLabel = new JLabel("Città di nascita*");
+		cittàDiNascitaLabel = new JLabel("Città di nascita*");
 		cittàDiNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		cittàDiNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		cittàDiNascitaLabel.setBounds(175, 340, 128, 14);

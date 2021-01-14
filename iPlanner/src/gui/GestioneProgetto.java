@@ -81,6 +81,7 @@ public class GestioneProgetto extends JFrame {
 	 */
 	public GestioneProgetto(ControllerProgetto theController) {
 		setMinimumSize(new Dimension(1150, 700));
+		setLocationRelativeTo(null);
 		setTitle("iPlanner-Gestione progetto");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();		

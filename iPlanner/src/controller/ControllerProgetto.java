@@ -49,6 +49,8 @@ public class ControllerProgetto {
 		newProjectFrame.setVisible(true);
 	}
 
+	
+	//Ottiene i progetti del dipendente
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(loggedUser);
 		
