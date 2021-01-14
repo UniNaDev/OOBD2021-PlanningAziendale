@@ -152,13 +152,13 @@ public class GestioneProgetto extends JFrame {
 		
 		
 		try {
-			dataModel.setProgettiTabella(theController.getElementi());
+			dataModel.setProgettiTabella(theController.ottieniProgetti());
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
-			setData(theController.getElementi());
+			setData(theController.ottieniProgetti());
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

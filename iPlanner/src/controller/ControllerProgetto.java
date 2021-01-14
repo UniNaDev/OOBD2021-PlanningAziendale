@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.table.TableModel;
 
+import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Progetto;
 import gui.*;
@@ -16,7 +17,7 @@ import interfacceDAO.ProgettoDAO;
 
 public class ControllerProgetto {
 
-	Project projectFrame;
+	MieiProgetti projectFrame;
 	GestioneProgetto newProjectFrame;
 	
 	private ControllerGestioneProfilo controller;
@@ -38,7 +39,7 @@ public class ControllerProgetto {
 		
 		this.loggedUser = controller.getLoggedUser();
 		
-		projectFrame=new Project(this);
+		projectFrame=new MieiProgetti(this);
 		projectFrame.setVisible(true);
 	}
 
@@ -48,12 +49,50 @@ public class ControllerProgetto {
 		newProjectFrame.setVisible(true);
 	}
 
-	public ArrayList<Progetto> getElementi() throws SQLException {
+	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
+		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(loggedUser);
 		
-//		for(Progetto i:projDAO.getProgetti())
-//			System.out.println(i);
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (CollaborazioneProgetto collaborazione: collaborazioni)
+			temp.add(collaborazione.getProgetto());
 		
-		
-		return projDAO.getProgetti();
+		return temp;
 	}
+
+
+	public MieiProgetti getProjectFrame() {
+		return projectFrame;
+	}
+
+
+	public GestioneProgetto getNewProjectFrame() {
+		return newProjectFrame;
+	}
+
+
+	public LuogoNascitaDAO getLuogoDAO() {
+		return luogoDAO;
+	}
+
+
+	public DipendenteDAO getDipDAO() {
+		return dipDAO;
+	}
+
+
+	public ProgettoDAO getProjDAO() {
+		return projDAO;
+	}
+
+
+	public MeetingDAO getMeetDAO() {
+		return meetDAO;
+	}
+
+
+	public Dipendente getLoggedUser() {
+		return loggedUser;
+	}
+	
+	
 }
