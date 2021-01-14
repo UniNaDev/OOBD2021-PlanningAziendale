@@ -109,20 +109,10 @@ public class NuovoDipendente extends JFrame {
 	
 	private ControllerScelta theController;
 	
-	//Altri attributi
-	private String nome;	//nome nuovo dipendente
-	private String cognome;	//cognome nuovo dipendente
-	private char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
-	private LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
-	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
-	private LuogoNascita luogoNascita;	//luogo di nascita del nuovo dipendente
-	private String email;	//email del dipendente
-	private String password;	//password del dipendente
-	private String telefono;	//numero di telefono di casa
-	private String cellulare;	//cellulare
-	private String indirizzo;	//indirizzo
 	private JLabel showPasswordLabel;
 	private JLabel showConfirmPasswordLabel;
+	
+	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
 
 	
 	/**
@@ -689,6 +679,17 @@ public class NuovoDipendente extends JFrame {
 		
 		//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
 		private void creaAccount() throws SQLException {
+			String nome;	//nome nuovo dipendente
+			String cognome;	//cognome nuovo dipendente
+			char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
+			LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
+			LuogoNascita luogoNascita;	//luogo di nascita del nuovo dipendente
+			String email;	//email del dipendente
+			String password;	//password del dipendente
+			String telefono = null;	//numero di telefono di casa
+			String cellulare = null;	//cellulare
+			String indirizzo;	//indirizzo
+			
 			//prende i dati dagli input della GUI
 			nome = nomeTextField.getText();	//nome
 			cognome = cognomeTextField.getText();	//cognome

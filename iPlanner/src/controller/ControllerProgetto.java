@@ -18,24 +18,32 @@ public class ControllerProgetto {
 
 	Project projectFrame;
 	GestioneProgetto newProjectFrame;
+	
+	private ControllerGestioneProfilo controller;
 
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;
 	private MeetingDAO meetDAO = null;
 	
-	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO) {
-		this.luogoDAO = luogoDAO;
-		this.dipDAO = dipDAO;
-		this.projDAO = projDAO;
-		this.meetDAO = meetDAO;
+	private Dipendente loggedUser = null;
+	
+	public ControllerProgetto(ControllerGestioneProfilo controller) {
+		this.controller = controller;
+		
+		this.luogoDAO = controller.getLuogoDAO();
+		this.dipDAO = controller.getDipDAO();
+		this.projDAO = controller.getProjDAO();
+		this.meetDAO = controller.getMeetDAO();
+		
+		this.loggedUser = controller.getLoggedUser();
+		
 		projectFrame=new Project(this);
 		projectFrame.setVisible(true);
 	}
 
 
 	public void createInsertProjectFrame() {
-		// TODO Auto-generated method stub
 		newProjectFrame=new GestioneProgetto(this);
 		newProjectFrame.setVisible(true);
 	}
@@ -47,8 +55,5 @@ public class ControllerProgetto {
 		
 		
 		return projDAO.getProgetti();
-	
 	}
-	
-
 }

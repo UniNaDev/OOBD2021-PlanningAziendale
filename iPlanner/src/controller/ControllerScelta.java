@@ -58,7 +58,7 @@ public class ControllerScelta {
 	public void linkToLoginFrame() {
 		
 		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerAccesso controller=new ControllerAccesso(segreteria, luogoDAO, dipDAO, projDAO, meetDAO, skillDAO);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
+		ControllerAccesso controller=new ControllerAccesso(this);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
 		
 	}
 	
@@ -129,4 +129,32 @@ public class ControllerScelta {
 	public ArrayList<Skill> ottieniSkill() throws SQLException{
 		return skillDAO.getSkills();
 	}
+
+	public LuogoNascitaDAO getLuogoDAO() {
+		return luogoDAO;
+	}
+
+	public DipendenteDAO getDipDAO() {
+		return dipDAO;
+	}
+
+	public ProgettoDAO getProjDAO() {
+		return projDAO;
+	}
+
+	public MeetingDAO getMeetDAO() {
+		return meetDAO;
+	}
+
+	public SkillDAO getSkillDAO() {
+		return skillDAO;
+	}
+
+	public boolean isSegreteria() {
+		return segreteria;
+	}
+
+	public iPlanner getiPlannerFrame() {
+		return iPlannerFrame;
+	}	
 }

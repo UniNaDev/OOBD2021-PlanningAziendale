@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.joda.time.LocalDate;
 
 import entita.Meeting;
-import entita.Progetto;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.LuogoNascita;
@@ -22,20 +21,25 @@ public class ControllerGestioneProfilo {
 	User userFrame;
 	UserProfile userProfileFrame;
 	
+	private ControllerAccesso controller;
+	
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;
-	private MeetingDAO meetDAO = null;
-	
+	private ProgettoDAO projDAO = null;	//dao progetto
+	private MeetingDAO meetDAO = null;	//dao meeting
 	
 	private Dipendente loggedUser = null;
 
-	public ControllerGestioneProfilo(DipendenteDAO dipDAO,Dipendente loggedUser, ProgettoDAO projDAO, MeetingDAO meetDAO, LuogoNascitaDAO luogoDAO) {
-		this.dipDAO=dipDAO;
-		this.loggedUser = loggedUser;
-		this.projDAO = projDAO;
-		this.meetDAO = meetDAO;
-		this.luogoDAO = luogoDAO;
+	public ControllerGestioneProfilo(ControllerAccesso controller) {
+		this.controller = controller;
+		
+		this.luogoDAO = controller.getLuogoDAO();
+		this.dipDAO = controller.getDipDAO();
+		this.projDAO = controller.getProjDAO();
+		this.meetDAO = controller.getMeetDAO();
+		
+		this.loggedUser = controller.getLoggedUser();
+		
 		userFrame=new User(this);
 		userFrame.setVisible(true);
 		
@@ -54,19 +58,17 @@ public class ControllerGestioneProfilo {
 	}
 
 	public void logout() {
-		// TODO Auto-generated method stub
-		
 		System.exit(0);
 	}
 
 	public void linkToProjectFrame() {
 		
-		ControllerProgetto controller= new ControllerProgetto(luogoDAO, dipDAO, projDAO, meetDAO);
+		ControllerProgetto controller= new ControllerProgetto(this);
 	}
 	
 	public void linkToMeetingFrame() {
 		
-		ControllerMeeting controller= new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO);
+		ControllerMeeting controller= new ControllerMeeting(this);
 		
 	}
 	public void reLinkToUserFrame() {
@@ -78,22 +80,12 @@ public class ControllerGestioneProfilo {
 	}
 	
 	public ArrayList<CollaborazioneProgetto> ottieniProgetti() throws SQLException {
-		return projDAO.getProgettiByDipendente(loggedUser);
+		return controller.getProjDAO().getProgettiByDipendente(loggedUser);
 	}
 	
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		ArrayList<Meeting> temp = meetDAO.getMeetingsByInvitato(loggedUser);
+		ArrayList<Meeting> temp = controller.getMeetDAO().getMeetingsByInvitato(loggedUser);
 		return temp;
-	}
-
-	//Metodo che prende le province per il menù
-	public ArrayList<String> ottieniProvince() throws SQLException{
-		return luogoDAO.getProvince();
-	}
-	
-	//Metodo che prende i comuni di una provincia
-	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException{
-		return luogoDAO.getLuoghiByProvincia(provincia);
 	}
 	
 	public Dipendente getLoggedUser() {
@@ -118,7 +110,42 @@ public class ControllerGestioneProfilo {
 		loggedUser.setIndirizzo(indirizzo);
 		
 	
-		dipDAO.updateDipendente(loggedUser);
+		controller.getDipDAO().updateDipendente(loggedUser);
 		
 	}
+
+	public User getUserFrame() {
+		return userFrame;
+	}
+
+	public UserProfile getUserProfileFrame() {
+		return userProfileFrame;
+	}
+	
+	//Metodo che restituisce tutte le province del database
+	public ArrayList<String> ottieniProvince() throws SQLException{
+		return luogoDAO.getProvince();
+	}
+	
+	//Metodo che prende i comuni di una provincia per il menù di creazione account
+	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException{
+		return luogoDAO.getLuoghiByProvincia(provincia);
+	}
+
+	public LuogoNascitaDAO getLuogoDAO() {
+		return luogoDAO;
+	}
+
+	public DipendenteDAO getDipDAO() {
+		return dipDAO;
+	}
+
+	public ProgettoDAO getProjDAO() {
+		return projDAO;
+	}
+
+	public MeetingDAO getMeetDAO() {
+		return meetDAO;
+	}
+	
 }
