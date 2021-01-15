@@ -27,12 +27,18 @@ import javax.swing.table.DefaultTableModel;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import controller.ControllerMeeting;
+import entita.Meeting;
+import entita.Progetto;
+
 import javax.swing.JButton;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
@@ -42,7 +48,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTable;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
-import javax.swing.JSpinner;
+
+
 
 public class GestioneMeeting extends JFrame {
 
@@ -64,12 +71,17 @@ public class GestioneMeeting extends JFrame {
 	private JRadioButton onlineRadioButton;
 	private JRadioButton fisicoRadioButton;
 	private JComboBox piattaformaComboBox;
+	
+
+	private JTable meetingTable;
+	private PersonalTableModelMeeting dataModelMeeting;
+	private JButton pulisciButton;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public GestioneMeeting() {
+	public GestioneMeeting(ControllerMeeting theController) {
 		setMinimumSize(new Dimension(1150, 700));
 		setTitle("GestioneMeeting");
 		
@@ -115,76 +127,13 @@ public class GestioneMeeting extends JFrame {
 					.addContainerGap())
 		);
 		
-		JTable meetingTable = new JTable();
-		meetingTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		meetingTable.setBackground(Color.WHITE);
-		meetingTable.setSelectionBackground(Color.LIGHT_GRAY);
-		meetingTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, "", null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"ProgettoID", "Nome", "Ambito/i", "Tipologia", "Scadenza", "Descrizione", "Creatore"
-			}
-		));
-		meetingTable.getColumnModel().getColumn(4).setPreferredWidth(77);
-		meetingScrollPane.setViewportView(meetingTable);
+		
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new LineBorder(new Color(192, 192, 192)));
 		
-		JButton pulisciButton = new JButton("Pulisci Campi");
+		pulisciButton = new JButton("Pulisci Campi");
 		pulisciButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -202,6 +151,8 @@ public class GestioneMeeting extends JFrame {
 			//quando si preme sul tasto pulisci imposta i combobox con valori in base alla data e l'ora attuali
 			public void actionPerformed(ActionEvent e) 
 			{
+				idMeetingTextField.setText("");
+				
 				//ricava l'ora e la data attuali
 				LocalDate dataAttuale = LocalDate.now();
 				LocalTime oraAttuale = LocalTime.now();
@@ -223,6 +174,12 @@ public class GestioneMeeting extends JFrame {
 				//IMPOSTA DI DEFAULT L'ORA DI FINE COME 2 ORE DOPO 
 				oraFineComboBox.setSelectedIndex(oraAttuale.getHourOfDay() +2);
 				minutoFineComboBox.setSelectedIndex(oraAttuale.getMinuteOfHour());
+				
+				onlineRadioButton.setSelected(false);
+				fisicoRadioButton.setSelected(false);
+				
+				piattaformaComboBox.setSelectedItem(null);
+			
 				
 			}
 		});
@@ -394,7 +351,6 @@ public class GestioneMeeting extends JFrame {
 		
 		
 		onlineRadioButton = new JRadioButton("Online");
-		onlineRadioButton.setSelected(true);
 		onlineRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		onlineRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		buttonGroup.add(onlineRadioButton);
@@ -706,5 +662,82 @@ public class GestioneMeeting extends JFrame {
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
+		
+		dataModelMeeting=new PersonalTableModelMeeting();
+		meetingTable = new JTable(dataModelMeeting);
+		meetingTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meetingTable.setBackground(Color.WHITE);
+		meetingTable.setSelectionBackground(Color.LIGHT_GRAY);
+		meetingTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row= meetingTable.getSelectedRow();
+				
+				idMeetingTextField.setText(meetingTable.getValueAt(row, 0).toString());
+				
+				LocalDate dataInizio=(LocalDate) meetingTable.getValueAt(row, 1);
+				dataInizioAnnoComboBox.setSelectedItem(dataInizio.getYear());
+				dataInizioMeseComboBox.setSelectedIndex(dataInizio.getMonthOfYear()-1);
+				dataInizioGiornoComboBox.setSelectedIndex(dataInizio.getDayOfMonth()-1);
+				
+				LocalDate dataFine=(LocalDate) meetingTable.getValueAt(row, 2);
+				dataFineAnnoComboBox.setSelectedItem(dataFine.getYear());
+				dataFineMeseComboBox.setSelectedIndex(dataFine.getMonthOfYear()-1);
+				dataFineGiornoComboBox.setSelectedIndex(dataFine.getDayOfMonth()-1);
+				
+				
+				LocalTime oraInizio=(LocalTime) meetingTable.getValueAt(row, 3);
+				oraInizioComboBox.setSelectedIndex(oraInizio.getHourOfDay());
+				minutoInizioComboBox.setSelectedIndex(oraInizio.getMinuteOfHour());
+				
+				LocalTime oraFine=(LocalTime) meetingTable.getValueAt(row, 4);
+				oraFineComboBox.setSelectedIndex(oraFine.getHourOfDay());
+				minutoFineComboBox.setSelectedIndex(oraFine.getMinuteOfHour());
+				
+
+			
+				if(meetingTable.getValueAt(row, 5).equals("Telematico"))
+				{
+					onlineRadioButton.setSelected(true);
+					fisicoRadioButton.setSelected(false);
+					piattaformaComboBox.setSelectedItem(meetingTable.getValueAt(row, 6).toString());
+				}
+				else {
+					fisicoRadioButton.setSelected(true);
+					onlineRadioButton.setSelected(false);
+					piattaformaComboBox.setSelectedItem(null);
+				}
+					
+				
+				}
+			
+				
+				
+		});
+		
+		try {
+			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+//		try {
+//			setData(theController.ottieniMeeting());
+//		} catch (SQLException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+
+
+		meetingScrollPane.setViewportView(meetingTable);
 	}
+	
+	
+//	public void setData(ArrayList<Meeting> db) {
+//		
+//		dataModelMeeting.setMeetingTabella(db);
+//		
+//	}
 }

@@ -72,7 +72,7 @@ public class GestioneProgetto extends JFrame {
 	private JComboBox meseTerminazioneComboBox;
 	private JComboBox annoTerminazioneComboBox;
 	
-	private PersonalTableModel dataModel;
+	private PersonalTableModelProgetto dataModel;
 	private JCheckBox progettoTerminatoCheckBox;
 
 
@@ -124,61 +124,13 @@ public class GestioneProgetto extends JFrame {
 					.addContainerGap())
 		);
 		
-		dataModel=new PersonalTableModel();
-		progettoTable = new JTable(dataModel);
-		progettoTable.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int row= progettoTable.getSelectedRow();
-				
-				nomeTextField.setText(progettoTable.getValueAt(row, 1).toString());
-				descrizioneTextArea.setText(progettoTable.getValueAt(row, 2).toString());
-				ambitoTextField.setText(progettoTable.getValueAt(row, 3).toString());
-				tipologiaTextField.setText(progettoTable.getValueAt(row, 4).toString());
-				
-//				LocalDate data = new LocalDate(annoTerminazioneComboBox.getSelectedIndex() + 1900, meseTerminazioneComboBox.getSelectedIndex() + 1, giornoTerminazioneComboBox.getSelectedIndex()+1);
-				
-//				LocalDate data =((LocalDate) progettoTable.getValueAt(row, 5));
-//				giornoTerminazioneComboBox.setSelectedItem(data.dayOfMonth());
-			
-				
-				
-				
-				}
-		});
-		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		progettoTable.setBackground(Color.WHITE);
-		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
 		
-		
-		try {
-			dataModel.setProgettiTabella(theController.ottieniProgetti());
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			setData(theController.ottieniProgetti());
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	
-	
-	
-	
-		
-		
-		
-	
-		scrollPane_1.setViewportView(progettoTable);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new LineBorder(new Color(192, 192, 192)));
 		
-		JButton pulisciCampiButton = new JButton(" Pulisci Campi");
+		JButton pulisciCampiButton = new JButton("Pulisci Campi");
 		pulisciCampiButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -199,8 +151,14 @@ public class GestioneProgetto extends JFrame {
 				tipologiaTextField.setText("");
 				descrizioneTextArea.setText("");
 				
+				progettoTerminatoCheckBox.setSelected(false);
+				
 				//ricava la data attuale
 				LocalDate dataAttuale = LocalDate.now();
+				
+				annoTerminazioneComboBox.setSelectedItem(null);
+				meseTerminazioneComboBox.setSelectedItem(null);
+				giornoTerminazioneComboBox.setSelectedItem(null);
 				
 				//imposta di default giorno e mese come quelli della data attuale (-1 perche gli indici partono da 0)
 				giornoScadenzaComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
@@ -502,7 +460,7 @@ public class GestioneProgetto extends JFrame {
 					}
 				
 				//SE IL CHECKBOX NON È SELEZIONATO DISABILITA I CAMPI DEL GIORNO DI TERMINAZIONE
-				else if(progettoTerminatoCheckBox.isSelected() == false)
+				else 
 					{
 						giornoTerminazioneComboBox.setEnabled(false);
 						meseTerminazioneComboBox.setEnabled(false);
@@ -658,13 +616,65 @@ public class GestioneProgetto extends JFrame {
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
+		
+		dataModel=new PersonalTableModelProgetto();
+		progettoTable = new JTable(dataModel);
+		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		progettoTable.setBackground(Color.WHITE);
+		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
+		progettoTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row= progettoTable.getSelectedRow();
+				
+				nomeTextField.setText(progettoTable.getValueAt(row, 1).toString());
+				descrizioneTextArea.setText(progettoTable.getValueAt(row, 2).toString());
+				ambitoTextField.setText(progettoTable.getValueAt(row, 3).toString());
+				tipologiaTextField.setText(progettoTable.getValueAt(row, 4).toString());
+				
+				LocalDate dataTerminazione=(LocalDate) progettoTable.getValueAt(row, 6);
+				
+					
+				annoTerminazioneComboBox.setSelectedItem(dataTerminazione.getYear());
+				meseTerminazioneComboBox.setSelectedIndex(dataTerminazione.getMonthOfYear()-1);
+				giornoTerminazioneComboBox.setSelectedIndex(dataTerminazione.getDayOfMonth()-1);
+				
+				if(dataTerminazione != null)
+				progettoTerminatoCheckBox.setSelected(true);
+					
+				
+				LocalDate dataScadenza=(LocalDate) progettoTable.getValueAt(row, 7);
+				annoScadenzaComboBox.setSelectedItem(dataScadenza.getYear());
+				meseScadenzaComboBox.setSelectedIndex(dataScadenza.getMonthOfYear()-1);
+				giornoScadenzaComboBox.setSelectedIndex(dataScadenza.getDayOfMonth()-1);
+				
+				}
+		});
+		
+		try {
+			dataModel.setProgettiTabella(theController.ottieniProgetti());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+//		try {
+//			setData(theController.ottieniProgetti());
+//		} catch (SQLException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+	
+		scrollPane_1.setViewportView(progettoTable);
+		
+		
+
+	
 	}
 	
-	
-	
-	public void setData(ArrayList<Progetto> db) {
-		
-		dataModel.setProgettiTabella(db);
-		
-	}
+//	public void setData(ArrayList<Progetto> db) {
+//		
+//		dataModel.setProgettiTabella(db);
+//		
+//	}
 }

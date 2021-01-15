@@ -728,8 +728,10 @@ public class NuovoDipendente extends JFrame {
 			password = passwordField.getText();	//password
 			if (!telefonoFissoTextField.getText().equals(""))
 				telefono = telefonoFissoTextField.getText();	//telefono
-			if (!cellulareTextField.getText().equals(""))
-				cellulare = cellulareTextField.getText();	//cellulare
+			if (!cellulareTextField.getText().isBlank())
+				cellulare = cellulareTextField.getText();    //cellulare
+			else cellulare=null;
+			
 			indirizzo = indirizzoTextField.getText();	//indirizzo
 			//ottiene le skill selezionate
 			ArrayList<Skill> skills = new ArrayList<Skill>();
