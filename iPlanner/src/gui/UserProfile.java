@@ -604,7 +604,10 @@ public class UserProfile extends JFrame {
 		email = emailTextField.getText(); //email
 		password = passwordField.getText();	//password
 		telefono = telefonoFissoTextField.getText();	//telefono
-		cellulare = cellulareTextField.getText();	//cellulare
+		if (!cellulareTextField.getText().isBlank())
+			cellulare = cellulareTextField.getText();    //cellulare
+		else cellulare=null;
+			
 		indirizzo = indirizzoTextField.getText();	//indirizzo
 	
 		theController.update(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo);	//mandali al controller che prova a creare il nuovo dipendente con il dao
