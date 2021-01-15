@@ -63,7 +63,7 @@ public class MieiMeeting extends JFrame {
 	 */
 	public MieiMeeting(ControllerMeeting theController) {
 
-		setMinimumSize(new Dimension(1300, 770));
+		setMinimumSize(new Dimension(1300, 800));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiMeeting.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner -Meeting");
@@ -185,19 +185,13 @@ public class MieiMeeting extends JFrame {
 			gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(592, Short.MAX_VALUE))
+					.addContainerGap(551, Short.MAX_VALUE))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addGap(162)
 					.addComponent(piattaformaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(valorePiattaformaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(159))
-				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(61)
-					.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(valoreModalitaLabel, GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
-					.addGap(41))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addGap(151)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
@@ -218,17 +212,21 @@ public class MieiMeeting extends JFrame {
 					.addComponent(valoreDataFineLabel, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
 					.addGap(169))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-							.addGap(173)
-							.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-							.addGap(9))
-						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-							.addGap(131)
-							.addComponent(nomeMeetingLabel, GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)))
-					.addGap(152))
+					.addGap(173)
+					.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+					.addGap(161))
+				.addGroup(Alignment.LEADING, gl_infoMeetingPanel.createSequentialGroup()
+					.addGap(61)
+					.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(valoreModalitaLabel, GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+					.addGap(41))
+				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
+					.addGap(19)
+					.addComponent(nomeMeetingLabel, GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+					.addGap(56))
 		);
 		gl_infoMeetingPanel.setVerticalGroup(
 			gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
@@ -291,7 +289,7 @@ public class MieiMeeting extends JFrame {
 							.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
 							.addGap(37))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 541, GroupLayout.PREFERRED_SIZE)
+							.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 581, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)))
 					.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
 		);
@@ -303,7 +301,7 @@ public class MieiMeeting extends JFrame {
 				public void valueChanged(ListSelectionEvent e) {
 					Meeting meetingSelezionato = meetingList.getSelectedValue();
 					//aggiorna info del meeting
-					nomeMeetingLabel.setText(meetingSelezionato.getProgettoDiscusso().toString());
+					nomeMeetingLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().toString() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
 					
 					
 					valoreModalitaLabel.setText(meetingSelezionato.getModalita());
