@@ -15,6 +15,7 @@ import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerScelta {
@@ -27,17 +28,19 @@ public class ControllerScelta {
 	private ProgettoDAO projDAO = null;	//dao progetto
 	private MeetingDAO meetDAO = null;	//dao meeting
 	private SkillDAO skillDAO = null;	//dao delle skill
+	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
 	
 	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
 	
 	//Costruttore del controllee di scelta che mostra la prima finestra di scelta
-	public ControllerScelta(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO) {
+	public ControllerScelta(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO) {
 		//Ottiene le implementazioni dei DAO inizializzate nel main Starter
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.skillDAO = skillDAO;
+		this.salaDAO = salaDAO;
 		this.segreteria = segreteria;	//ottiene l'autorizzazione presa nel main dagli argomenti a linea di comando
 		
 		iPlannerFrame=new iPlanner(this, segreteria);	//inizializza la prima finestra di scelta
@@ -156,5 +159,10 @@ public class ControllerScelta {
 
 	public iPlanner getiPlannerFrame() {
 		return iPlannerFrame;
-	}	
+	}
+
+	public SalaRiunioneDAO getSalaDAO() {
+		return salaDAO;
+	}
+	
 }

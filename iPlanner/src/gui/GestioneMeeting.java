@@ -30,6 +30,7 @@ import org.joda.time.LocalTime;
 import controller.ControllerMeeting;
 import entita.Meeting;
 import entita.Progetto;
+import entita.SalaRiunione;
 
 import javax.swing.JButton;
 import java.awt.Insets;
@@ -344,9 +345,9 @@ public class GestioneMeeting extends JFrame {
 		modalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		modalitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel creatoreProgettoLabel = new JLabel("Piattaforma");
-		creatoreProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		creatoreProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		JLabel piattaformaLabel = new JLabel("Piattaforma");
+		piattaformaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		piattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		
 		
@@ -461,7 +462,6 @@ public class GestioneMeeting extends JFrame {
 		piattaformaComboBox.setBackground(Color.WHITE);
 		piattaformaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		piattaformaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		piattaformaComboBox.setModel(new DefaultComboBoxModel(new String[] {"","Microsoft Teams","Discord","Skype"}));
 		
 		oraInizioComboBox = new JComboBox();
 		
@@ -532,7 +532,7 @@ public class GestioneMeeting extends JFrame {
 						.addComponent(idMeetingLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(creatoreProgettoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(piattaformaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
@@ -615,7 +615,7 @@ public class GestioneMeeting extends JFrame {
 								.addComponent(fisicoRadioButton))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(creatoreProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(piattaformaLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(piattaformaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(invitatiScrollPane, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
 						.addComponent(progettoDiscussoScrollPane))
@@ -699,14 +699,28 @@ public class GestioneMeeting extends JFrame {
 			
 				if(meetingTable.getValueAt(row, 5).equals("Telematico"))
 				{
-					onlineRadioButton.setSelected(true);
-					fisicoRadioButton.setSelected(false);
-					piattaformaComboBox.setSelectedItem(meetingTable.getValueAt(row, 6).toString());
+					piattaformaLabel.setText("Piattaforma");
+					try {
+						piattaformaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniPiattaforme().toArray()));
+						onlineRadioButton.setSelected(true);
+						fisicoRadioButton.setSelected(false);
+						piattaformaComboBox.setSelectedItem(meetingTable.getValueAt(row, 6));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				else {
-					fisicoRadioButton.setSelected(true);
-					onlineRadioButton.setSelected(false);
-					piattaformaComboBox.setSelectedItem(null);
+					piattaformaLabel.setText("Sala");
+					try {
+						piattaformaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniSale().toArray()));
+						piattaformaComboBox.setSelectedItem(meetingTable.getValueAt(row, 7));
+						fisicoRadioButton.setSelected(true);
+						onlineRadioButton.setSelected(false);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 					
 				
@@ -718,6 +732,7 @@ public class GestioneMeeting extends JFrame {
 		
 		try {
 			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
+			meetingTable.setRowSelectionInterval(0, 0);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

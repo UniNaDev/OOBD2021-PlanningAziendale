@@ -8,6 +8,7 @@ import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerAccesso {
@@ -23,6 +24,7 @@ public class ControllerAccesso {
 	private ProgettoDAO projDAO = null;	//dao progetto
 	private MeetingDAO meetDAO = null;	//dao meeting
 	private SkillDAO skillDAO = null;	//dao delle skill
+	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
 	
 	private Dipendente loggedUser = null;	//utente che ha fatto il login
 
@@ -36,6 +38,7 @@ public class ControllerAccesso {
 		this.projDAO = controller.getProjDAO();
 		this.meetDAO = controller.getMeetDAO();
 		this.skillDAO = controller.getSkillDAO();
+		this.salaDAO = controller.getSalaDAO();
 		
 		//Inizializza e mostra la finestra di login
 		loginFrame=new Login(this);
@@ -87,4 +90,9 @@ public class ControllerAccesso {
 	public Dipendente getLoggedUser() {
 		return loggedUser;
 	}
+
+	public SalaRiunioneDAO getSalaDAO() {
+		return salaDAO;
+	}
+	
 }

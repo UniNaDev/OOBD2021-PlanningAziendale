@@ -24,4 +24,6 @@ public interface MeetingDAO {
 	public boolean updateMeeting(Meeting meeting) throws SQLException;	//metodo che aggiorna le informazioni di un meeting nel DB
 	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException;	//metodo che restituisce una lista di meeting che avvengono in una specifica sala
 	public ArrayList<Meeting> getMeetingsByPiattaforma(String platf) throws SQLException;	//metodo che restituisce i meeting organizzati su una specifica piattaforma telematica
+	
+	public ArrayList<String> getPiattaforme() throws SQLException;	//metodo che restituisce tutte le piattaforme disponibili
 }

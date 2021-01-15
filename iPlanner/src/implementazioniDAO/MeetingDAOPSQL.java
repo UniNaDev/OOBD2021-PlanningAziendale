@@ -28,7 +28,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//ATTRIBUTI
 	
 	private Connection connection;
-	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS;
+	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS;
 
 	//METODI
 	
@@ -46,6 +46,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		updateMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, CodSala = ? WHERE IDMeeting = ?");
 		getMeetingsBySalaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodSala = ?");	//?=Codice della sala di cui si vogliono i meeting
 		getMeetingsByPiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.Piattaforma = ?");	//?=Piattaforma di cui si cercano i meeting
+		getPiattaformePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::piattaforma))::text AS piattaforma");
 	}
 	
 	//Metodo getMeetingsByData.
@@ -274,6 +275,20 @@ public class MeetingDAOPSQL implements MeetingDAO {
 				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
 			temp.add(meetingTemp);
+		}
+		risultato.close();
+		
+		return temp;
+	}
+
+	@Override
+	public ArrayList<String> getPiattaforme() throws SQLException {
+		ArrayList<String> temp = new ArrayList<String>();
+		
+		ResultSet risultato = getPiattaformePS.executeQuery();
+		
+		while(risultato.next()) {
+			temp.add(risultato.getString("piattaforma"));
 		}
 		risultato.close();
 		

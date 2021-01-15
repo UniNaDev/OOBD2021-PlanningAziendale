@@ -41,4 +41,23 @@ public class LuogoNascita {
 	public String toString() {
 		return nomeComune + ", " + nomeProvincia;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LuogoNascita other = (LuogoNascita) obj;
+		if (codiceComune == null) {
+			if (other.codiceComune != null)
+				return false;
+		} else if (!codiceComune.equals(other.codiceComune))
+			return false;
+		return true;
+	}
+	
+	
 }

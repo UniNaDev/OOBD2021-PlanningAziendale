@@ -15,6 +15,7 @@ import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SalaRiunioneDAO;
 
 public class ControllerGestioneProfilo {
 
@@ -27,6 +28,7 @@ public class ControllerGestioneProfilo {
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;	//dao progetto
 	private MeetingDAO meetDAO = null;	//dao meeting
+	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
 	
 	private Dipendente loggedUser = null;
 
@@ -37,6 +39,7 @@ public class ControllerGestioneProfilo {
 		this.dipDAO = controller.getDipDAO();
 		this.projDAO = controller.getProjDAO();
 		this.meetDAO = controller.getMeetDAO();
+		this.salaDAO = controller.getSalaDAO();
 		
 		this.loggedUser = controller.getLoggedUser();
 		
@@ -147,5 +150,10 @@ public class ControllerGestioneProfilo {
 	public MeetingDAO getMeetDAO() {
 		return meetDAO;
 	}
+
+	public SalaRiunioneDAO getSalaDAO() {
+		return salaDAO;
+	}
+	
 	
 }

@@ -55,7 +55,7 @@ public class UserProfile extends JFrame {
 	private JComboBox giornoComboBox;
 	private JComboBox meseComboBox;
 	private JComboBox annoComboBox;
-	private JComboBox comuneComboBox;
+	private JComboBox<LuogoNascita> comuneComboBox;
 	private JComboBox provinciaComboBox;
 	private JTextField indirizzoTextField;
 	private JPasswordField passwordField;
@@ -367,12 +367,9 @@ public class UserProfile extends JFrame {
 		comuneComboBox.setEditable(false);
 		comuneComboBox.setBackground(Color.WHITE);
 		comuneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		comuneComboBox.addItem(theController.getLoggedUser().getLuogoNascita().getNomeComune());
 	
 		comuneComboBox.setBounds(239, 301, 201, 22);
 		contentPane.add(comuneComboBox);
-		
-		comuneComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita().getNomeComune());
 		try {
 				//Combo Box province
 			
@@ -385,12 +382,11 @@ public class UserProfile extends JFrame {
 					//Action performed selezione
 					public void actionPerformed(ActionEvent e) {
 						if(provinciaComboBox.isEnabled())
-						comuneComboBox.setEnabled(true); //attiva il menù dei comuni
+							comuneComboBox.setEnabled(true); //attiva il menù dei comuni
 						comuneComboBox.removeAllItems();	//pulisce la lista del menù
 						try {
 							//prova a ottenere i comune dal DB e inserirli nella corrispondente combo box
-							for(LuogoNascita comune: theController.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
-									comuneComboBox.addItem(comune);
+							comuneComboBox.setModel(new DefaultComboBoxModel(theController.ottieniComuni(provinciaComboBox.getSelectedItem().toString()).toArray()));
 						} 
 						catch (SQLException e1) {
 							JOptionPane.showMessageDialog(null,
@@ -415,8 +411,8 @@ public class UserProfile extends JFrame {
 			provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 			provinciaComboBox.setBounds(239, 268, 144, 22);
 			provinciaComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita().getNomeProvincia());
-
-
+			comuneComboBox.setSelectedItem(theController.getLoggedUser().getLuogoNascita());
+			
 		contentPane.add(provinciaComboBox);
 		
 		

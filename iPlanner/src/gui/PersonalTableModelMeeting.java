@@ -11,7 +11,7 @@ public class PersonalTableModelMeeting extends AbstractTableModel {
 	private ArrayList<Meeting> meetingTabella=new ArrayList<Meeting>();
 	
 	
-	String[] colnames= {"MeetingID", "Data inizio", "Data fine","Orario inizio", "Orario fine", "Modalità", "Piattaforma", "Organizzatore"};
+	String[] colnames= {"MeetingID", "Data inizio", "Data fine","Orario inizio", "Orario fine", "Modalità", "Piattaforma", "Sala", "Progetto"};
 
 	public void setMeetingTabella(ArrayList<Meeting> meetingTabella) {
 		this.meetingTabella = meetingTabella;
@@ -26,7 +26,7 @@ public class PersonalTableModelMeeting extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		// TODO Auto-generated method stub
-		return 8;
+		return 9;
 	}
 
 	@Override
@@ -57,6 +57,8 @@ public class PersonalTableModelMeeting extends AbstractTableModel {
 		case 6:
 			return meeting.getPiattaforma();
 		case 7:
+			return meeting.getSala();
+		case 8:
 			return meeting.getProgettoDiscusso();
 		
 		

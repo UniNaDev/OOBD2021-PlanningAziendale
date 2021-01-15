@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 import entita.Dipendente;
 import entita.Meeting;
+import entita.SalaRiunione;
 import gui.*;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SalaRiunioneDAO;
 
 
 public class ControllerMeeting {
@@ -23,6 +25,7 @@ public class ControllerMeeting {
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;
 	private MeetingDAO meetDAO = null;
+	private SalaRiunioneDAO salaDAO = null;
 	
 	private Dipendente loggedUser = null;
 
@@ -33,6 +36,7 @@ public class ControllerMeeting {
 		this.dipDAO = controller.getDipDAO();
 		this.projDAO = controller.getProjDAO();
 		this.meetDAO = controller.getMeetDAO();
+		this.salaDAO = controller.getSalaDAO();
 		
 		this.loggedUser = controller.getLoggedUser();
 		
@@ -76,5 +80,13 @@ public class ControllerMeeting {
 	
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
 		return meetDAO.getMeetingsByInvitato(loggedUser);
+	}
+	
+	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
+		return salaDAO.getSale();
+	}
+	
+	public ArrayList<String> ottieniPiattaforme() throws SQLException{
+		return meetDAO.getPiattaforme();
 	}
 }

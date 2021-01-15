@@ -301,7 +301,7 @@ public class MieiMeeting extends JFrame {
 				public void valueChanged(ListSelectionEvent e) {
 					Meeting meetingSelezionato = meetingList.getSelectedValue();
 					//aggiorna info del meeting
-					nomeMeetingLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().toString() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
+					nomeMeetingLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
 					
 					
 					valoreModalitaLabel.setText(meetingSelezionato.getModalita());

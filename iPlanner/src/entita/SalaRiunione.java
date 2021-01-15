@@ -67,6 +67,23 @@ public class SalaRiunione {
 	public String toString() {
 		return codSala + " (" + cap + ")";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SalaRiunione other = (SalaRiunione) obj;
+		if (codSala == null) {
+			if (other.codSala != null)
+				return false;
+		} else if (!codSala.equals(other.codSala))
+			return false;
+		return true;
+	}
 	
 	
 }
