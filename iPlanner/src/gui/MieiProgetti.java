@@ -314,9 +314,10 @@ public class MieiProgetti extends JFrame {
 		);
 		
 		JTextArea descrizioneProgettoTextArea = new JTextArea();
+		descrizioneProgettoTextArea.setEditable(false);
 		descrizioneProgettoTextArea.setWrapStyleWord(true);
 		descrizioneProgettoTextArea.setLineWrap(true);
-		descrizioneProgettoTextArea.setFont(new Font("Consolas", Font.PLAIN, 25));
+		descrizioneProgettoTextArea.setFont(new Font("Consolas", Font.PLAIN, 16));
 		descrizioneScrollPane.setViewportView(descrizioneProgettoTextArea);
 		
 		JLabel descrizioneLabel = new JLabel("Descrizione");

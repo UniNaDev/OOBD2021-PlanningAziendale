@@ -12,6 +12,8 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 
+import org.joda.time.LocalDate;
+
 import entita.Meeting;
 
 public class MeetingListRenderer implements ListCellRenderer<Meeting> {
@@ -43,6 +45,9 @@ public class MeetingListRenderer implements ListCellRenderer<Meeting> {
         	ta.setBackground(list.getSelectionBackground());
         else
         	ta.setBackground(list.getBackground());
+        
+        if (meeting.getDataInizio().isBefore(LocalDate.now()))
+        	ta.setForeground(Color.RED);
         return p;
 	}
 
