@@ -78,6 +78,11 @@ public class NuovoDipendente extends JFrame {
 	private JLabel cittàDiNascitaLabel;
 	private JLabel skillsLabel;
 	private JLabel iconaSkillsLabel;
+	private JLabel showPasswordLabel;
+	private JLabel showConfirmPasswordLabel;
+	private JLabel campiObbligatoriLabel;
+	private JLabel premereCtrlLabel;
+	private JLabel inserireSkillLabel;
 	
 	//TextField
 	private JTextField nomeTextField;
@@ -95,26 +100,21 @@ public class NuovoDipendente extends JFrame {
 	private JTextField telefonoFissoTextField;
 	private JPasswordField passwordField;
 	private JPasswordField confermaPasswordField;
-	
-	private JScrollPane skillsScrollPane;
-	private JList skillsList;
-;
-	private JButton nuovaSkillButton;
 	private JTextField nuovaSkillTextField;
 	private JTextField salarioTextField;
+	
+	//List
+	private JScrollPane skillsScrollPane;
+	private JList skillsList;
 
-	
-	
 	//Button
+	private JButton nuovaSkillButton;
 	private JButton creaAccountButton;
 	private JButton annullaButton;
-
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	
+	//Controller
 	private ControllerScelta theController;
-	
-	private JLabel showPasswordLabel;
-	private JLabel showConfirmPasswordLabel;
 	
 	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
 
@@ -126,7 +126,6 @@ public class NuovoDipendente extends JFrame {
 		this.theController = theController;	//ottiene il controller scelta
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NuovoDipendente.class.getResource("/Icone/WindowIcon_16.png")));
 		setResizable(false);
-	
 		setTitle("iPlanner - Sign in");
 		setBounds(100, 100, 1000, 700);
 		contentPane = new JPanel();
@@ -272,10 +271,8 @@ public class NuovoDipendente extends JFrame {
 		
 		//Combo Box giorni del mese
 		giornoComboBox = new JComboBox<Object>();
-		
-		//modifica lo stille della combo box
+		//modifica lo stile della combo box
 		giornoComboBox.setUI(new BasicComboBoxUI());
-		
 		giornoComboBox.setBounds(306, 274, 44, 22);
 		giornoComboBox.setBackground(Color.WHITE);
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -286,9 +283,8 @@ public class NuovoDipendente extends JFrame {
 		//Combo Box mesi dell'anno
 		meseComboBox = new JComboBox<Object>();
 		
-		//modifica lo stille della combo box
+		//modifica lo stile della combo box
 		meseComboBox.setUI(new BasicComboBoxUI());
-		
 		meseComboBox.setBounds(360, 274, 44, 22);
 		meseComboBox.setBackground(Color.WHITE);
 		meseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -303,7 +299,6 @@ public class NuovoDipendente extends JFrame {
 		
 		//modifica lo stille della combo box
 		annoComboBox.setUI(new BasicComboBoxUI());
-		
 		annoComboBox.setBounds(414, 274, 66, 22);
 		annoComboBox.setBackground(Color.WHITE);
 		annoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -313,10 +308,9 @@ public class NuovoDipendente extends JFrame {
 		
 		//ComboBox comuni
 		cittaComboBox = new JComboBox();
-		
+	
 		//modifica lo stille della combo box
 		cittaComboBox.setUI(new BasicComboBoxUI());
-		
 		cittaComboBox.setEnabled(false);
 		cittaComboBox.setBounds(307, 338, 210, 22);
 		cittaComboBox.setBackground(Color.WHITE);
@@ -339,7 +333,7 @@ public class NuovoDipendente extends JFrame {
 					} 
 					catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null,
-								e1.getMessage(),
+								"Non sono stati trovati i comuni nel DB",
 								"Errore #" + e1.getErrorCode(),
 								JOptionPane.ERROR_MESSAGE);
 					}
@@ -347,7 +341,7 @@ public class NuovoDipendente extends JFrame {
 			});
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null,
-					e1.getMessage(),
+					"Non sono state trovate le province nel DB",
 					"Errore #" + e1.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);
 		}
@@ -428,7 +422,9 @@ public class NuovoDipendente extends JFrame {
 				//se le password inserite sono diverse
 				else if(!passwordField.getText().equals(confermaPasswordField.getText()))
 				{
-					JOptionPane.showMessageDialog(null, "Le password inserite sono diverse");
+					
+					JOptionPane.showMessageDialog(null,"Le password inserite sono diverse","Errore",JOptionPane.ERROR_MESSAGE);
+					
 					passwordLabel.setForeground(Color.RED);
 					confermaPasswordLabel.setForeground(Color.RED);
 					
@@ -436,7 +432,10 @@ public class NuovoDipendente extends JFrame {
 				//se uno dei campi obbligatori è vuoto colora la rispettiva label di rosso
 				else if ((nomeTextField.getText().isBlank() || cognomeTextField.getText().isBlank() || emailTextField.getText().isBlank() || passwordField.getText().isBlank()) || confermaPasswordField.getText().equals(passwordField.getText()) || !cittaComboBox.isEnabled()) {
 					
-					JOptionPane.showMessageDialog(null, "Compilare i campi obbligatori vuoti");
+					JOptionPane.showMessageDialog(null,
+							"Compilare i campi vuoti",
+							"Errore",
+							JOptionPane.ERROR_MESSAGE);
 					if (nomeTextField.getText().isBlank())
 						nomeLabel.setForeground(Color.RED);
 					if (cognomeTextField.getText().isBlank())
@@ -557,7 +556,7 @@ public class NuovoDipendente extends JFrame {
 			skillsScrollPane.setViewportView(skillsList);
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null,
-					e1.getMessage(),
+					"Non sono state trovate delle skill nel DB",
 					"Errore #" + e1.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);
 		}
@@ -674,19 +673,19 @@ public class NuovoDipendente extends JFrame {
 		showConfirmPasswordLabel.setBounds(448, 556, 47, 29);
 		contentPane.add(showConfirmPasswordLabel);
 		
-		JLabel inserireSkillLabel = new JLabel("N.B. Per inserire più skill contemporanemante");
+		inserireSkillLabel = new JLabel("N.B. Per inserire più skill contemporanemante");
 		inserireSkillLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
 		inserireSkillLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		inserireSkillLabel.setBounds(603, 338, 290, 20);
 		contentPane.add(inserireSkillLabel);
 		
-		JLabel premereCtrlLabel = new JLabel("premere CTRL+clic tasto sx mouse sulla skill");
+		premereCtrlLabel = new JLabel("premere CTRL+clic tasto sx mouse sulla skill");
 		premereCtrlLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		premereCtrlLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
 		premereCtrlLabel.setBounds(603, 355, 290, 20);
 		contentPane.add(premereCtrlLabel);
 		
-		JLabel campiObbligatoriLabel = new JLabel("* Campi obbligatori");
+		campiObbligatoriLabel = new JLabel("* Campi obbligatori");
 		campiObbligatoriLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		campiObbligatoriLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
 		campiObbligatoriLabel.setBounds(603, 460, 290, 20);
@@ -751,8 +750,8 @@ public class NuovoDipendente extends JFrame {
 					nuovaSkillTextField.setText(""); //svuota il campo
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(null,
-							e.getMessage(),
-							"Errore #" + e.getErrorCode(),
+							"Sono stati inseriti caratteri non corretti",
+							"Errore #"+e.getErrorCode(),
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}

@@ -37,7 +37,7 @@ public class Login extends JFrame {
 	private JButton annullaButton;
 	
 	private ControllerAccesso theController;
-	private JLabel lblNewLabel;
+	private JLabel mostraPasswordLabel;
 	
 
 	
@@ -171,9 +171,9 @@ public class Login extends JFrame {
 		accessoButton.setBackground(new Color(255, 255, 255));
 		contentPane.add(accessoButton);
 		
-		lblNewLabel = new JLabel("");
-		lblNewLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblNewLabel.addMouseListener(new MouseAdapter() {
+		mostraPasswordLabel = new JLabel("");
+		mostraPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mostraPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) 
 			{
@@ -185,9 +185,9 @@ public class Login extends JFrame {
 				passwordField.setEchoChar('*');	//quando si rilascia il mouse mostra di nuovo i caratteri nascosti
 			}
 		});
-		lblNewLabel.setIcon(new ImageIcon(Login.class.getResource("/icone/showpass_24.png")));
-		lblNewLabel.setBounds(468, 199, 46, 14);
-		contentPane.add(lblNewLabel);
+		mostraPasswordLabel.setIcon(new ImageIcon(Login.class.getResource("/icone/showpass_24.png")));
+		mostraPasswordLabel.setBounds(468, 199, 46, 14);
+		contentPane.add(mostraPasswordLabel);
 		
 		//Eventi connessi al Password Field della password
 		passwordField.addKeyListener(new KeyAdapter() {
