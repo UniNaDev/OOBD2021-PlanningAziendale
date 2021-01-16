@@ -243,7 +243,33 @@ public class GestioneMeeting extends JFrame {
 			//quando si preme sul tasto modifica i campi diventano editabili 
 			public void actionPerformed(ActionEvent e) 
 			{
-				//TODO andrà a fare l'update sul meeting
+				//Update del meeting
+				int id = Integer.valueOf(idMeetingTextField.getText());	//id
+				LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
+				LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
+				LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
+				LocalTime oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);	//ora fine
+				String modalita = "";
+				String piattaforma = null;				
+				SalaRiunione sala = null;
+				if (onlineRadioButton.isSelected()) {
+					modalita = "Telematico";
+					piattaforma = piattaformaComboBox.getSelectedItem().toString();
+				}
+				else if (fisicoRadioButton.isSelected()) {
+					modalita = "Fisico";
+					sala = (SalaRiunione) piattaformaComboBox.getSelectedItem();
+				}
+				Meeting meetingAggiornato = new Meeting(id,dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);
+				try {
+					theController.aggiornaMeeting(meetingAggiornato);
+					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
+					meetingScrollPane.setViewportView(meetingTable);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		modificaButton.addMouseListener(new MouseAdapter() {
@@ -724,35 +750,18 @@ public class GestioneMeeting extends JFrame {
 				}
 					
 				
-				}
-			
-				
-				
+			}		
 		});
 		
 		try {
 			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
-			meetingTable.setRowSelectionInterval(0, 0);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-//		try {
-//			setData(theController.ottieniMeeting());
-//		} catch (SQLException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
 
 
 		meetingScrollPane.setViewportView(meetingTable);
 	}
 	
-	
-//	public void setData(ArrayList<Meeting> db) {
-//		
-//		dataModelMeeting.setMeetingTabella(db);
-//		
-//	}
 }

@@ -64,10 +64,14 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"));
-			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			if (risultato.getString("CodSala") != null)
-				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			Meeting meetingTemp = new Meeting(risultato.getInt("IDMeeting"),
+					new LocalDate(risultato.getDate("DataInizio").getTime()),
+					new LocalDate(risultato.getDate("DataFine").getTime()),
+					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
+					new LocalTime(risultato.getTime("OrarioFine").getTime()),
+					risultato.getString("Modalità"),
+					risultato.getString("Piattaforma"),
+					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
 			temp.add(meetingTemp);
 		}
@@ -91,10 +95,14 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"));
-			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			if (risultato.getString("CodSala") != null)
-				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			Meeting meetingTemp = new Meeting(risultato.getInt("IDMeeting"),
+					new LocalDate(risultato.getDate("DataInizio").getTime()),
+					new LocalDate(risultato.getDate("DataFine").getTime()),
+					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
+					new LocalTime(risultato.getTime("OrarioFine").getTime()),
+					risultato.getString("Modalità"),
+					risultato.getString("Piattaforma"),
+					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
 			temp.add(meetingTemp);
 		}
@@ -117,10 +125,14 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"));
-			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			if (risultato.getString("CodSala") != null)
-				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			Meeting meetingTemp = new Meeting(risultato.getInt("IDMeeting"),
+					new LocalDate(risultato.getDate("DataInizio").getTime()),
+					new LocalDate(risultato.getDate("DataFine").getTime()),
+					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
+					new LocalTime(risultato.getTime("OrarioFine").getTime()),
+					risultato.getString("Modalità"),
+					risultato.getString("Piattaforma"),
+					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
 			temp.add(meetingTemp);
 		}
@@ -243,10 +255,14 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"));
-			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			if (risultato.getString("CodSala") != null)
-				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			Meeting meetingTemp = new Meeting(risultato.getInt("IDMeeting"),
+					new LocalDate(risultato.getDate("DataInizio").getTime()),
+					new LocalDate(risultato.getDate("DataFine").getTime()),
+					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
+					new LocalTime(risultato.getTime("OrarioFine").getTime()),
+					risultato.getString("Modalità"),
+					risultato.getString("Piattaforma"),
+					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
 			temp.add(meetingTemp);
 		}
@@ -269,10 +285,14 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),new LocalDate(risultato.getDate("DataFine").getTime()),new LocalTime(risultato.getTime("OrarioInizio").getTime()),new LocalTime(risultato.getTime("OrarioFine").getTime()),risultato.getString("Modalità"),risultato.getString("Piattaforma"));
-			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			if (risultato.getString("CodSala") != null)
-				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
+			Meeting meetingTemp = new Meeting(risultato.getInt("IDMeeting"),
+					new LocalDate(risultato.getDate("DataInizio").getTime()),
+					new LocalDate(risultato.getDate("DataFine").getTime()),
+					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
+					new LocalTime(risultato.getTime("OrarioFine").getTime()),
+					risultato.getString("Modalità"),
+					risultato.getString("Piattaforma"),
+					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
 			temp.add(meetingTemp);
 		}

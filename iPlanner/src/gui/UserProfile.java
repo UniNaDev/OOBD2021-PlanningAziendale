@@ -573,7 +573,7 @@ public class UserProfile extends JFrame {
 		//quando va a capo prende tutta la stringa e non la spezza
 		valoreSkillsTextArea.setWrapStyleWord(true);
 		valoreSkillsTextArea.setLineWrap(true);
-		valoreSkillsTextArea.setFont(new Font("Monospaced", Font.PLAIN, 28));
+		valoreSkillsTextArea.setFont(new Font("Monospaced", Font.PLAIN, 18));
 		
 		//prende le skill dell utente loggato
 		valoreSkillsTextArea.setText(theController.getLoggedUser().getSkills().toString());

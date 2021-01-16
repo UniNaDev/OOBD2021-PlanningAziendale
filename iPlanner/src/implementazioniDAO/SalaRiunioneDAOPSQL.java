@@ -141,6 +141,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	//Metodo che restituisce la sala con il codice indicato nei parametri in input
 	@Override
 	public SalaRiunione getSalaByCod(String codSala) throws SQLException {
+		if (codSala != null) {
 		getSalaByCodPS.setString(1, codSala); 	//inserisce il codice della sala nella query
 		
 		ResultSet risultato = getSalaByCodPS.executeQuery();	//esegue la query e restituisce il ResultSet
@@ -149,6 +150,9 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		SalaRiunione salaTemp = new SalaRiunione(risultato.getString("CodSala"),risultato.getInt("Capienza"),risultato.getString("Indirizzo"),risultato.getInt("Piano"));
 		
 		return salaTemp;
+		}
+		else
+			return null;
 	}
 
 }

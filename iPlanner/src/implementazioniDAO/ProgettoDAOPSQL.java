@@ -121,16 +121,15 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		//finchè ci sono record nel ResutlSet
 		while (risultato.next()) {
-			Meeting meetingTemp = new Meeting(new LocalDate(risultato.getDate("DataInizio").getTime()),
+			Meeting meetingTemp = new Meeting(risultato.getInt("IDMeeting"),
+					new LocalDate(risultato.getDate("DataInizio").getTime()),
 					new LocalDate(risultato.getDate("DataFine").getTime()),
 					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
 					new LocalTime(risultato.getTime("OrarioFine").getTime()),
-					risultato.getString("Modalità"),risultato.getString("Piattaforma"));
+					risultato.getString("Modalità"),
+					risultato.getString("Piattaforma"),
+					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 			
-			meetingTemp.setIdMeeting(risultato.getInt("IDMeeting"));	//recupera l'id del meeting
-			
-			if (risultato.getString("CodSala") != null)
-				meetingTemp.setSala(salaDAO.getSalaByCod(risultato.getString("CodSala")));	//recupera l'eventuale sala del meeting
 			temp.add(meetingTemp);
 		}
 		risultato.close();	//chiude il ResultSet

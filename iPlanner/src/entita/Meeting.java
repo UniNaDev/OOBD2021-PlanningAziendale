@@ -31,8 +31,9 @@ public class Meeting {
 	//METODI
 	
 	//Costruttore con tutti gli attributi eccetto la piattaforma che può essere NULL nel caso dei meeting fisici
-	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
+	public Meeting(int idMeeting, LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
 			String modalita) {
+		this.idMeeting =idMeeting;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
@@ -41,14 +42,16 @@ public class Meeting {
 	}
 
 	//Costruttore con tutti gli attributi, compresa piattaforma
-	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalita, String piattaforma) {
+	public Meeting(int idMeeting, LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
+			String modalita, String piattaforma, SalaRiunione sala) {
+		this.idMeeting = idMeeting;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
 		this.oraFine = oraFine;
 		this.modalita = modalita;
 		this.piattaforma = piattaforma;
+		this.sala = sala;
 	}
 
 	//Getter e Setter

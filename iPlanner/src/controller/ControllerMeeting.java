@@ -89,4 +89,8 @@ public class ControllerMeeting {
 	public ArrayList<String> ottieniPiattaforme() throws SQLException{
 		return meetDAO.getPiattaforme();
 	}
+	
+	public void aggiornaMeeting(Meeting meeting) throws SQLException {
+		meetDAO.updateMeeting(meeting);
+	}
 }
