@@ -24,11 +24,12 @@ import interfacceDAO.SkillDAO;
 public class SkillDAOPSQL implements SkillDAO {
 
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private Connection conn;	//connessione al DB
 	private PreparedStatement getSkillsPS,getSkillsByNomePS,addSkillPS, addSkillDipendentePS, getSkillDipendentePS;	//PreparedStatement per operazioni rapide sul DB
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore dell'implementazione di questo DAO
 	/*Quando viene creato salva la connessione al DB per poter poi inizializzare gli statement

@@ -17,7 +17,9 @@ import org.joda.time.format.DateTimeFormatter;
 public class Progetto {
 	
 	//ATTRIBUTI
+	//----------------------------------------
 	
+	//Attributi caratteristici
 	private int idProgettto;	//id del progetto (pk)
 	private String nomeProgetto;	//nome progetto (not null)
 	private String tipoProgetto;	//tipologia del progetto (not null)
@@ -25,13 +27,14 @@ public class Progetto {
 	private LocalDate dataCreazione;	//data creazione del progetto (not null)
 	private LocalDate scadenza;	//eventuale scadenza del progetto
 	private LocalDate dataTerminazione;	//data in cui è terminato il progetto (se è terminato)
-	
 	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
 	
+	//Attributi per associazioni
 	private ArrayList<Meeting> discussoIn = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista di collaborazioni del progetto
 
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore con tutti gli attributi essenziali per una query
 	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,

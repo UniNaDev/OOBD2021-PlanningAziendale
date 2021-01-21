@@ -9,7 +9,7 @@ import entita.Progetto;
 
 
 
-public class PersonalTableModelProgetto extends AbstractTableModel {
+public class ProgettoTableModel extends AbstractTableModel {
 	
 	private ArrayList<Progetto> progettiTabella=new ArrayList<Progetto>();
 	

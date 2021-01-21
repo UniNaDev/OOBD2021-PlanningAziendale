@@ -6,12 +6,14 @@ package entita;
 public class PartecipazioneMeeting {
 	
 	//ATTRIBUTI
-	private Meeting meeting;
-	private Dipendente partecipante;
-	private boolean presenza = false;
-	private boolean organizzatore = false;
+	//----------------------------------------
+	private Meeting meeting;	//meeting
+	private Dipendente partecipante;	//dipendente che vi partecipa
+	private boolean presenza = false;	//presente/assente
+	private boolean organizzatore = false;	//organizzatore oppure no del meeting
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore della classe con tutti gli attributi
 	public PartecipazioneMeeting(Meeting meeting, Dipendente partecipante, boolean presenza, boolean organizzatore) {

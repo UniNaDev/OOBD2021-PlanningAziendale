@@ -6,7 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 import entita.Meeting;
 
-public class PersonalTableModelMeeting extends AbstractTableModel {
+public class MeetingTableModel extends AbstractTableModel {
 	
 	private ArrayList<Meeting> meetingTabella=new ArrayList<Meeting>();
 	

@@ -24,11 +24,12 @@ import interfacceDAO.LuogoNascitaDAO;
 public class LuogoNascitaDAOPSQL implements LuogoNascitaDAO {
 
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private Connection connection;	//connessione al DB necessaria per operare
 	private PreparedStatement getProvincePS,getLuoghiByProvinciaPS, getLuogoByCodPS, getDipendentiByLuogoPS;	//PreparedStatemtn delle operazioni più comuni da compiere nel DB
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore
 	public LuogoNascitaDAOPSQL(Connection connection) throws SQLException {

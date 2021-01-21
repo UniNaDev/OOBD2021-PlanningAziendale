@@ -11,15 +11,19 @@ import java.util.ArrayList;
 public class SalaRiunione {
 	
 	//ATTRIBUTI
+	//----------------------------------------
 	
+	//Attributi caratteristici
 	private String codSala;	//codice sala
 	private int cap;	//capienza della sala
 	private String indirizzo;	//indirizzo della sede dove si trova
 	private int piano;	//piano in cui si trova la sala
 	
+	//Attributi per associazioni
 	private ArrayList<Meeting> meetings = new ArrayList<Meeting>();	//lista di meeting che avvengono nella sala
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore della sala con tutti gli attributi
 	public SalaRiunione(String codSala, int cap, String indirizzo, int piano) {
@@ -68,6 +72,7 @@ public class SalaRiunione {
 		return codSala + " (" + cap + ")";
 	}
 
+	//Override equals su codSala soltanto
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -17,11 +17,12 @@ import interfacceDAO.SalaRiunioneDAO;
 public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 
 	//ATTRIBUTI
+	//----------------------------------------
 	private Connection connection;	//connessione al DB
-	
-	private PreparedStatement getSalePS,getSaleByCapPS,getSaleLiberePS,addSalaPS,updateSalaPS,removeSalaPS,getSalaByCodPS;
+	private PreparedStatement getSalePS,getSaleByCapPS,getSaleLiberePS,addSalaPS,updateSalaPS,removeSalaPS,getSalaByCodPS;	//prepared Statements
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore
 	public SalaRiunioneDAOPSQL(Connection connection) throws SQLException {

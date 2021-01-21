@@ -5,12 +5,13 @@ package entita;
 public class CollaborazioneProgetto {
 
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private Progetto progetto;	//progetto a cui il dipendente collabora
 	private Dipendente collaboratore;	//dipendente che collabora al progetto
 	private String ruolo;	//ruolo del dipendente nel progetto
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore della collaborazione
 	public CollaborazioneProgetto(Progetto progetto, Dipendente collaboratore, String ruolo) {
@@ -43,6 +44,4 @@ public class CollaborazioneProgetto {
 	public void setRuolo(String ruolo) {
 		this.ruolo = ruolo;
 	}
-	
-	
 }

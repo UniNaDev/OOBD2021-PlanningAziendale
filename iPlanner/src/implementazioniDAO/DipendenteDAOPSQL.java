@@ -26,13 +26,14 @@ import interfacceDAO.LuogoNascitaDAO;
 public class DipendenteDAOPSQL implements DipendenteDAO {
 
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private Connection connection;	//connessione al DB
 	private PreparedStatement getDipendentiPS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore
 	public DipendenteDAOPSQL(Connection connection) throws SQLException {

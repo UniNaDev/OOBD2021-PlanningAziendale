@@ -15,7 +15,8 @@ import org.joda.time.format.DateTimeFormatter;
 public class Meeting {
 	
 	//ATTRIBUTI
-	
+	//----------------------------------------
+	//Attributi caratteristici
 	private int idMeeting;	//id nel DB che distingue il meeting
 	private LocalDate dataInizio;	//data di inizio del meeting
 	private LocalDate dataFine;	//data di fine del meeting
@@ -23,12 +24,14 @@ public class Meeting {
 	private LocalTime oraFine;	//orario di fine del meeting
 	private String modalita;	//modalità del meeting ("Fisico" oppure "Telematico")
 	private String piattaforma;	//piattaforma su cui eventualmente verrà tenuto il meeting
-	
 	private SalaRiunione sala;	//sala in cui si può tenere il meeting
 	private Progetto releativoA;	//progetto discusso nel meeting
+	
+	//Attributi per associazioni
 	private ArrayList<PartecipazioneMeeting> partecipazioniDipendenti = new ArrayList<PartecipazioneMeeting>();	//partecipazioni dei dipendenti al meeting
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore con tutti gli attributi eccetto la piattaforma che può essere NULL nel caso dei meeting fisici
 	public Meeting(int idMeeting, LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,

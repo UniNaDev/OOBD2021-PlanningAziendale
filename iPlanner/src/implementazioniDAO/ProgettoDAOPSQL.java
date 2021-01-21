@@ -24,9 +24,9 @@ import interfacceDAO.SalaRiunioneDAO;
 public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private Connection  connection;	//connessione al DB
-	
+	//dao necessari
 	private DipendenteDAO dipDAO;
 	private AmbitoProgettoDAO ambitoDAO;
 	
@@ -34,6 +34,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	private PreparedStatement getProgettiPS,getPartecipantiPS,getProgettiByDipendentePS,getProgettiByCreatorePS,getProgettiByAmbitoPS,getProgettiByTipoPS,addProgettoPS,removeProgettoPS,addPartecipantePS,deletePartecipantePS,updateProgettoPS, getMeetingRelativiPS, getProgettoByCodPS;
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore del DAO
 	public ProgettoDAOPSQL(Connection connection) throws SQLException {

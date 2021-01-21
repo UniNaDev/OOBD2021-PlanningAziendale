@@ -72,7 +72,7 @@ public class GestioneProgetti extends JFrame {
 	private JComboBox giornoTerminazioneComboBox;
 	private JComboBox meseTerminazioneComboBox;
 	private JComboBox annoTerminazioneComboBox;
-	private PersonalTableModelProgetto dataModel;
+	private ProgettoTableModel dataModel;
 	private JCheckBox progettoTerminatoCheckBox;
 
 	//Creazione frame
@@ -628,7 +628,7 @@ public class GestioneProgetti extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		
 		//Tabella progetti
-		dataModel=new PersonalTableModelProgetto();
+		dataModel=new ProgettoTableModel();
 		progettoTable = new JTable(dataModel);
 		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

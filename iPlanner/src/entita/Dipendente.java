@@ -14,7 +14,9 @@ import org.joda.time.LocalDate;
 public class Dipendente {
 
 	//ATTRIBUTI
-
+	//----------------------------------------
+	
+	//Attributi caratteristici
 	private String cf;	//codice fiscale del dipendente
 	private String nome;	//nome del dipendente
 	private String cognome;	//cognome del dipendente
@@ -29,16 +31,19 @@ public class Dipendente {
 	private String password;	//password del dipendente con cui può accedere al servizio
 	private float valutazione;	//valutazione in decimi del dipendente in azienda
 	
+	//Altri attributi
 	private String[] vocali = {"A","E","I","O","U"};
 	private String[] simboliNonRichiesti = {" ", "À","Á","È","É","Ì","Ò","Ù","Ä","Ë","Ï","Ö","Ü"};
 	
+	//Attributi per associazioni
 	private ArrayList<Skill> skills = new ArrayList<Skill>();	//skill del dipendente
 	private ArrayList<PartecipazioneMeeting> partecipazioniMeeting = new ArrayList<PartecipazioneMeeting>();	//lista di partecipazione del dipendente ai meeting
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista delle collaborazioni del dipendente
 	
 	//METODI
+	//----------------------------------------
 	
-	//Costruttore totale
+	//Costruttore
 	public Dipendente(String cf, String nome, String cognome, char sesso, LocalDate dataNascita,
 			LuogoNascita luogoNascita, String indirizzo, String email, String telefonoCasa, String cellulare,
 			float salario, String password, float valutazione) {
@@ -50,8 +55,8 @@ public class Dipendente {
 		this.luogoNascita = luogoNascita;
 		this.indirizzo = indirizzo;
 		this.email = email;
-		this.telefonoCasa = telefonoCasa;	//può essere null
-		this.cellulare = cellulare;		//può essere null
+		this.telefonoCasa = telefonoCasa;
+		this.cellulare = cellulare;
 		this.salario = salario;
 		this.password = password;
 		this.valutazione = valutazione;

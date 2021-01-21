@@ -26,11 +26,12 @@ import interfacceDAO.SalaRiunioneDAO;
 public class MeetingDAOPSQL implements MeetingDAO {
 	
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private Connection connection;
 	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS;
 
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore
 	public MeetingDAOPSQL(Connection connection) throws SQLException {

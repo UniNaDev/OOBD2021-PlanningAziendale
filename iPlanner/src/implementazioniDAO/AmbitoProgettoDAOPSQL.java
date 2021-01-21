@@ -15,11 +15,12 @@ import interfacceDAO.AmbitoProgettoDAO;
 public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private Connection connection;
 	private PreparedStatement getAmbitiPS, addAmbitoPS, removeAmbitoPS, getAmbitiProgettoPS, addAmbitiProgettoPS;
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore
 	public AmbitoProgettoDAOPSQL(Connection connection) throws SQLException {

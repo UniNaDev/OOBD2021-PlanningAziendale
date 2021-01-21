@@ -7,11 +7,12 @@ package entita;
 public class Skill {
 
 	//ATTRIBUTI
-	
+	//----------------------------------------
 	private int idSkill;	//id della skill
 	private String nomeSkill;	//nome della skill
 
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore parziale
 	public Skill(String nomeSkill) {

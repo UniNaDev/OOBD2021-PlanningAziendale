@@ -49,33 +49,30 @@ import javax.swing.event.ListSelectionEvent;
 
 public class MieiMeeting extends JFrame {
 
+	//ATTRIBUTI
+	//----------------------------------------------------
+	
+	//Attributi GUI
 	private JPanel contentPane;
 	private JLabel mieiMeetingLabel;
 
 	private JPanel panel;
 	private JList<Meeting> meetingList;
-
-
-
-
-	/**
-	 * Create the frame.
-	 */
+	
+	//Creazione frame
+	//----------------------------------------------------
+	
 	public MieiMeeting(ControllerMeeting theController) {
-
 		setMinimumSize(new Dimension(1300, 800));
-
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiMeeting.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner -Meeting");
 		setBounds(650, 150, 1440, 900);
-
-		
-
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		//Button "Inserisci/Modifica Meeting"
 		JButton nuovoMeetingButton = new JButton("Inserisci/Modifica Meeting");
 		nuovoMeetingButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -94,92 +91,110 @@ public class MieiMeeting extends JFrame {
 		nuovoMeetingButton.setBackground(Color.WHITE);
 		nuovoMeetingButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nuovoMeetingButton.addActionListener(new ActionListener() {
+			//Click sul pulsante
 			public void actionPerformed(ActionEvent e) {
-				theController.createInsertMeetingFrame();
+				theController.apriGestioneMeeting();	//apre la finestra per la gestione dei meeting
 			}
 		});
 
-
-		mieiMeetingLabel = new JLabel("I Miei Meeting");
+		//Label "Miei Meeting"
+		mieiMeetingLabel = new JLabel("Miei Meeting");
 		mieiMeetingLabel.setIcon(new ImageIcon(MieiMeeting.class.getResource("/Icone/meeting_64.png")));
 		mieiMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
+		//ScrollPane per lista meeting
 		JScrollPane mieiMeetingPanel = new JScrollPane();
 		mieiMeetingPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
+		//Panel info del meeting
 		JPanel infoMeetingPanel = new JPanel();
 		infoMeetingPanel.setFont(new Font("Consolas", Font.PLAIN, 21));
 		infoMeetingPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		infoMeetingPanel.setBackground(Color.WHITE);
 		
-		JLabel piattaformaLabel = new JLabel("Piattaforma:");
-		piattaformaLabel.setIconTextGap(40);
-		piattaformaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		piattaformaLabel.setForeground(Color.DARK_GRAY);
-		piattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		//Label "Piattaforma:"/"Sala:"
+		JLabel piattaformaSalaLabel = new JLabel("Piattaforma:");
+		piattaformaSalaLabel.setIconTextGap(40);
+		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		piattaformaSalaLabel.setForeground(Color.DARK_GRAY);
+		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valorePiattaformaLabel = new JLabel("Microsoft Teams");
-		valorePiattaformaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valorePiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		//Label della piattaforma/della sala
+		JLabel valorePiattaformaSalaLabel = new JLabel("Microsoft Teams");
+		valorePiattaformaSalaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valorePiattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
+		//Label "Modalità:"
 		JLabel modalitaLabel = new JLabel("Modalità:");
 		modalitaLabel.setIconTextGap(40);
 		modalitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		modalitaLabel.setForeground(Color.DARK_GRAY);
 		modalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label per la modalità
 		JLabel valoreModalitaLabel = new JLabel("Telematico");
 		valoreModalitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreModalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel orarioFineLabel = new JLabel("Orario Fine:");
-		orarioFineLabel.setIconTextGap(40);
-		orarioFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		orarioFineLabel.setForeground(Color.DARK_GRAY);
-		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		JLabel valoreOrarioFineLabel = new JLabel("16:30");
-		valoreOrarioFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreOrarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		
+		//Label "Orario Inizio:"
 		JLabel orarioInizioLabel = new JLabel("Orario Inizio:");
 		orarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		orarioInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		orarioInizioLabel.setForeground(Color.DARK_GRAY);
 		orarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label dell'orario di inizio
 		JLabel valoreOrarioInizioLabel = new JLabel("14:30");
 		valoreOrarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		valoreOrarioInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreOrarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel dataFineLabel = new JLabel("Data Fine:");
-		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataFineLabel.setForeground(Color.DARK_GRAY);
-		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		//Label "Orario Fine:"
+		JLabel orarioFineLabel = new JLabel("Orario Fine:");
+		orarioFineLabel.setIconTextGap(40);
+		orarioFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		orarioFineLabel.setForeground(Color.DARK_GRAY);
+		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label per orario di fine
+		JLabel valoreOrarioFineLabel = new JLabel("16:30");
+		valoreOrarioFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreOrarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		//Label "Data Inizio:"
 		JLabel dataInizioLabel = new JLabel("Data Inizio:");
 		dataInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dataInizioLabel.setForeground(Color.DARK_GRAY);
 		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valoreDataFineLabel = new JLabel("11-01-2021");
-		valoreDataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		
+		//Label per data di inizio
 		JLabel valoreDataInzioLabel = new JLabel("10-01-2021");
 		valoreDataInzioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreDataInzioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
-		JLabel nomeMeetingLabel = new JLabel("Meeting Progetto");
-		nomeMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		nomeMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
+		//Label "Data Fine:"
+		JLabel dataFineLabel = new JLabel("Data Fine:");
+		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataFineLabel.setForeground(Color.DARK_GRAY);
+		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JPanel panel_1 = new JPanel();
+		//Label per data di fine
+		JLabel valoreDataFineLabel = new JLabel("11-01-2021");
+		valoreDataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
+		//Label del progetto discusso nel meeting
+		JLabel progettoDiscussoLabel = new JLabel("Meeting Progetto");
+		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
+		
+		JPanel panel_1 = new JPanel();	//panel interno a quello delle info dove appare "Info" label
+		
+		//Label "Info"
 		JLabel infoLabel = new JLabel("Info");
 		infoLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		panel_1.add(infoLabel);
+		
 		GroupLayout gl_infoMeetingPanel = new GroupLayout(infoMeetingPanel);
 		gl_infoMeetingPanel.setHorizontalGroup(
 			gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
@@ -188,9 +203,9 @@ public class MieiMeeting extends JFrame {
 					.addContainerGap(551, Short.MAX_VALUE))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addGap(162)
-					.addComponent(piattaformaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(valorePiattaformaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(valorePiattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(159))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addGap(151)
@@ -225,7 +240,7 @@ public class MieiMeeting extends JFrame {
 					.addGap(41))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addGap(19)
-					.addComponent(nomeMeetingLabel, GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
 					.addGap(56))
 		);
 		gl_infoMeetingPanel.setVerticalGroup(
@@ -233,7 +248,7 @@ public class MieiMeeting extends JFrame {
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(44)
-					.addComponent(nomeMeetingLabel)
+					.addComponent(progettoDiscussoLabel)
 					.addGap(48)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
@@ -256,8 +271,8 @@ public class MieiMeeting extends JFrame {
 						.addComponent(valoreModalitaLabel, GroupLayout.PREFERRED_SIZE, 33, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valorePiattaformaLabel, GroupLayout.PREFERRED_SIZE, 26, Short.MAX_VALUE)
-						.addComponent(piattaformaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(valorePiattaformaSalaLabel, GroupLayout.PREFERRED_SIZE, 26, Short.MAX_VALUE)
+						.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addGap(38))
 		);
 		infoMeetingPanel.setLayout(gl_infoMeetingPanel);
@@ -295,38 +310,37 @@ public class MieiMeeting extends JFrame {
 		);
 		
 
+		//List dei meeting
 		try {
 			meetingList = new JList(theController.ottieniMeeting().toArray());
+			//Selezione di un oggetto nella lista
 			meetingList.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
-					Meeting meetingSelezionato = meetingList.getSelectedValue();
-					//aggiorna info del meeting
-					nomeMeetingLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
+					Meeting meetingSelezionato = meetingList.getSelectedValue();	//ottiene il meeting selezionato
 					
-					
-					valoreModalitaLabel.setText(meetingSelezionato.getModalita());
+					progettoDiscussoLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
+					valoreModalitaLabel.setText(meetingSelezionato.getModalita());	//modalità
 					
 					if (meetingSelezionato.getModalita().equals("Fisico")) {
-						piattaformaLabel.setText("Sala: ");
-						valorePiattaformaLabel.setText(meetingSelezionato.getSala().getCodSala());
+						piattaformaSalaLabel.setText("Sala: ");
+						valorePiattaformaSalaLabel.setText(meetingSelezionato.getSala().getCodSala());	//modalità fisica con sala
 					}
 					else {
-						piattaformaLabel.setText("Piattaforma: ");
-						valorePiattaformaLabel.setText(meetingSelezionato.getPiattaforma());
+						piattaformaSalaLabel.setText("Piattaforma: ");
+						valorePiattaformaSalaLabel.setText(meetingSelezionato.getPiattaforma());	//modalità telematica con piattaforma
 					}
 					
 					DateTimeFormatter formatDateTime = DateTimeFormat.forPattern("hh:mm");
-					valoreOrarioFineLabel.setText(meetingSelezionato.getOraFine().toString(formatDateTime));
-					valoreOrarioInizioLabel.setText(meetingSelezionato.getOraInizio().toString(formatDateTime));
+					valoreOrarioFineLabel.setText(meetingSelezionato.getOraFine().toString(formatDateTime));	//orario fine
+					valoreOrarioInizioLabel.setText(meetingSelezionato.getOraInizio().toString(formatDateTime));	//orario inizio
 					
-					formatDateTime = DateTimeFormat.forPattern("dd/MM/yyyy");
-					valoreDataFineLabel.setText(meetingSelezionato.getDataFine().toString(formatDateTime));
-					valoreDataInzioLabel.setText(meetingSelezionato.getDataInizio().toString(formatDateTime));
+					formatDateTime = DateTimeFormat.forPattern("dd/MM/yyyy");	
+					valoreDataFineLabel.setText(meetingSelezionato.getDataFine().toString(formatDateTime));	//data fine
+					valoreDataInzioLabel.setText(meetingSelezionato.getDataInizio().toString(formatDateTime));	//data inizio
 				}
 			});
-			MeetingListRenderer renderer = new MeetingListRenderer();
+			MeetingListRenderer renderer = new MeetingListRenderer();	//applica renderer
 			meetingList.setCellRenderer(renderer);
-			
 			meetingList.setSelectionBackground(Color.LIGHT_GRAY);
 			meetingList.setFixedCellHeight(60);
 			meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -337,14 +351,6 @@ public class MieiMeeting extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
-		
-
-
-
 		contentPane.setLayout(gl_contentPane);
-
-
-
 	}
 }

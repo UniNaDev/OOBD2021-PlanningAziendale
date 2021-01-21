@@ -7,13 +7,16 @@ import java.util.ArrayList;
 public class AmbitoProgetto {
 	
 	//ATTRIBUTI
-	
+	//----------------------------------------
+	//Attributi caratteristici
 	private int idAmbito;	//id dell'ambito
 	private String nome;	//nome dell'ambito
 	
+	//Attributi per associazioni
 	private ArrayList<Progetto> progetti = new ArrayList<Progetto>();	//lista di progetti di un certo ambito
 	
 	//METODI
+	//----------------------------------------
 	
 	//Costruttore con gli attributi essenziali per un nuovo oggetto
 	public AmbitoProgetto(String nome) {
