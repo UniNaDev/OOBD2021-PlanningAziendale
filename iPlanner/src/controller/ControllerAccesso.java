@@ -12,9 +12,11 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerAccesso {
+	//ATTRIBUTI
+	//-----------------------------------------------------------------
 	
 	//Attributi GUI
-	private Login loginFrame;
+	private Login loginFrame;	//finestra di login
 	
 	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
@@ -26,11 +28,15 @@ public class ControllerAccesso {
 	
 	//Altri attributi
 	private boolean segreteria;	//falso = dipendente, vero = segreteria
-	private Dipendente loggedUser = null;	//utente che ha fatto il login
+	
+	private Dipendente dipendente = null;	//utente che ha fatto il login
 
+	//METODI
+	//-----------------------------------------------------------------
+	
 	//Costruttore controller di accesso che mostra la finestra di login
-	public ControllerAccesso(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, boolean segreteria)
-	{	
+	public ControllerAccesso(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, boolean segreteria){	
+		//ottiene tutti i dao
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
@@ -38,7 +44,7 @@ public class ControllerAccesso {
 		this.skillDAO = skillDAO;
 		this.salaDAO = salaDAO;
 		
-		this.segreteria = segreteria;
+		this.segreteria = segreteria;	//ottiene il tipo di autorizzazione
 		
 		//Inizializza e mostra la finestra di login
 		loginFrame=new Login(this);
@@ -48,11 +54,10 @@ public class ControllerAccesso {
 
 	//Metodo che verifica le credenziali per l'accesso e se sono corrette passa alla finestra principale dopo aver salvato l'utente che ha fatto il login
 	public void verificaCredenziali(String user, String pass) throws SQLException {
-		
-		loggedUser = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
-		loggedUser.setSkills(skillDAO.getSkillDipendente(loggedUser)); 	//ottiene le skill del dipendente che ha fatto login
+		dipendente = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
+		dipendente.setSkills(skillDAO.getSkillDipendente(dipendente)); 	//ottiene le skill del dipendente che ha fatto login
 		loginFrame.setVisible(false);	//chiude la finestra di login
-		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,loggedUser);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
+		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,dipendente);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
 	}
 
 	//Metodo chiamato dal pulsante annulla del login che fa ritornare l'utente alla schermata di scelta iniziale

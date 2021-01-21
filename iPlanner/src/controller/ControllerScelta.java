@@ -20,9 +20,14 @@ import interfacceDAO.SkillDAO;
 
 public class ControllerScelta {
 
+	//ATTRIBUTI
+	//-----------------------------------------------------------------
+	
+	//Attributi GUI
 	private iPlanner iPlannerFrame;	//frame della finestra di scelta iniziale
 	private NuovoDipendente nuovoDipendenteFrame;	//frame della finestra per creare nuovi account (dipendenti)
 	
+	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;	//dao progetto
@@ -30,7 +35,11 @@ public class ControllerScelta {
 	private SkillDAO skillDAO = null;	//dao delle skill
 	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
 	
+	//Altri attributi
 	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
+	
+	//METODI
+	//-----------------------------------------------------------------
 	
 	//Costruttore del controllee di scelta che mostra la prima finestra di scelta
 	public ControllerScelta(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, boolean segreteria) {
@@ -41,6 +50,7 @@ public class ControllerScelta {
 		this.meetDAO = meetDAO;
 		this.skillDAO = skillDAO;
 		this.salaDAO = salaDAO;
+		
 		this.segreteria = segreteria;	//ottiene l'autorizzazione presa nel main dagli argomenti a linea di comando
 		
 		iPlannerFrame=new iPlanner(this, segreteria);	//inizializza la prima finestra di scelta
@@ -48,31 +58,32 @@ public class ControllerScelta {
 		
 	}
 	
-	//Metodo che indirizza al frame di registrazione
-	public void linkToCreationFrame() {
-		
+	//Metodi gestione GUI
+	//-----------------------------------------------------------------
+	
+	//Metodo che indirizza al frame di creazione dipendente
+	public void apriNuovoDipendente() {
 	  iPlannerFrame.setVisible(false);	//chiude la finestra di scelta 
 	  nuovoDipendenteFrame= new NuovoDipendente(this);	//inizializza la finestra di creazione del nuovo account/dipendente
-	  nuovoDipendenteFrame.setVisible(true);	//mostra la finestra di creazione dell'account
-	  
+	  nuovoDipendenteFrame.setVisible(true);	//mostra la finestra di creazione dell'account	  
 	}
 	
 	//Metodo che indirizza al Login
-	public void linkToLoginFrame() {
-		
+	public void apriLogin() {
 		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
 		ControllerAccesso controller=new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO, segreteria);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
-		
+
 	}
 	
 	//Metodo che reindirizza al frame di scelta iniziale quando viene annullata la creazione dell'account
-	public void annulla() {
-		
+	public void tornaAiPlanner() {
 		nuovoDipendenteFrame.setVisible(false);	//chiude la finestra di creazione account
 		iPlannerFrame.setVisible(true);	//mostra la finestra di scelta
-		
 	}
 
+	//Altri metodi del controller
+	//-----------------------------------------------------------------
+	
 	//Metodo che prende le province per il menù di creazione account
 	public ArrayList<String> ottieniProvince() throws SQLException{
 		return luogoDAO.getProvince();
@@ -118,7 +129,7 @@ public class ControllerScelta {
 			JOptionPane.showMessageDialog(null,
 					e.getMessage(),
 					"Errore creazione account #" + e.getErrorCode(),
-					JOptionPane.ERROR_MESSAGE);	//mostra messaggio di errore nella creazione account
+					JOptionPane.ERROR_MESSAGE);	//errore nella creazione account
 		}
 	}
 	

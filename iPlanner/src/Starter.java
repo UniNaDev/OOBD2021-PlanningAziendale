@@ -28,6 +28,7 @@ public class Starter {
 			ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
 			Connection connection = connDB.getConnection();
 			
+			//inizializza i DAO
 			DipendenteDAO dipDAO = null;	//dao dipendente
 			LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 			ProgettoDAO projDAO = null;	//dao progetto
@@ -51,7 +52,7 @@ public class Starter {
 				System.out.println("TODO: implementazione oracle");
 			}
 			
-			//-s = autorizzazione per segreteria, -d autorizzazione per dipendenti
+			//Ottiene il tipo di autorizzaione (-s = autorizzazione per segreteria, -d autorizzazione per dipendenti)
 			if (args[1].equals("-s"))
 				segreteria = true;
 			else if (args[1].equals("-d"))
@@ -67,7 +68,7 @@ public class Starter {
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
 			JOptionPane.showMessageDialog(null,
-					"Mancano argomenti di autorizzazione in input. ",
+					"Mancano argomenti di autorizzazione in input.",
 					"Errore argomenti iniziali",
 					JOptionPane.ERROR_MESSAGE);	//errore argomenti a linea di comando mancanti
 		}

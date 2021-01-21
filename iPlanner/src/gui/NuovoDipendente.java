@@ -49,12 +49,13 @@ import javax.swing.JTextPane;
 
 public class NuovoDipendente extends JFrame {
 
+	//ATTRIBUTI
+	//-----------------------------------------------------------------
 	
 	//Attributi GUI
 	private JPanel contentPane;
 	
-	//Label
-	private JLabel signInLabel;
+	private JLabel accediLabel;
 	private JLabel nomeLabel;
 	private JLabel cognomeLabel;
 	private JLabel sessoLabel;
@@ -78,13 +79,12 @@ public class NuovoDipendente extends JFrame {
 	private JLabel cittàDiNascitaLabel;
 	private JLabel skillsLabel;
 	private JLabel iconaSkillsLabel;
-	private JLabel showPasswordLabel;
-	private JLabel showConfirmPasswordLabel;
+	private JLabel mostraPasswordLabel;
+	private JLabel mostraConfirmPasswordLabel;
 	private JLabel campiObbligatoriLabel;
 	private JLabel premereCtrlLabel;
 	private JLabel inserireSkillLabel;
 	
-	//TextField
 	private JTextField nomeTextField;
 	private JTextField cognomeTextField;
 	private JTextField emailTextField;
@@ -102,28 +102,23 @@ public class NuovoDipendente extends JFrame {
 	private JPasswordField confermaPasswordField;
 	private JTextField nuovaSkillTextField;
 	private JTextField salarioTextField;
-	
-	//List
+
 	private JScrollPane skillsScrollPane;
 	private JList skillsList;
 
-	//Button
 	private JButton nuovaSkillButton;
 	private JButton creaAccountButton;
 	private JButton annullaButton;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	
-	//Controller
-	private ControllerScelta theController;
-	
+	//Altri attributi	
 	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
 
 	
-	/**
-	 * Create the frame.
-	 */
-	public NuovoDipendente(ControllerScelta theController) {
-		this.theController = theController;	//ottiene il controller scelta
+	//Creazione del frame
+	//-----------------------------------------------------------------
+	
+	public NuovoDipendente(ControllerScelta controller) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NuovoDipendente.class.getResource("/Icone/WindowIcon_16.png")));
 		setResizable(false);
 		setTitle("iPlanner - Sign in");
@@ -197,10 +192,10 @@ public class NuovoDipendente extends JFrame {
 		confermaPasswordLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		//IconLabel
-		signInLabel = new JLabel("Sign In");
-		signInLabel.setBounds(384, 11, 226, 75);
-		signInLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/registration_64.png")));
-		signInLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		accediLabel = new JLabel("Sign In");
+		accediLabel.setBounds(384, 11, 226, 75);
+		accediLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/Icone/registration_64.png")));
+		accediLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		iconaNomeLabel = new JLabel("");
 		iconaNomeLabel.setBounds(119, 129, 46, 14);
@@ -320,7 +315,7 @@ public class NuovoDipendente extends JFrame {
 		
 		try {
 			//Combo Box province
-			provinciaComboBox = new JComboBox(theController.ottieniProvince().toArray());
+			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
 			provinciaComboBox.addActionListener(new ActionListener() {
 				//Action performed selezione
 				public void actionPerformed(ActionEvent e) {
@@ -328,7 +323,7 @@ public class NuovoDipendente extends JFrame {
 					cittaComboBox.removeAllItems();	//pulisce la lista del menù
 					try {
 						//prova a ottenere i comune dal DB e inserirli nella corrispondente combo box
-						for(LuogoNascita comune: theController.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
+						for(LuogoNascita comune: controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
 								cittaComboBox.addItem(comune.getNomeComune());
 					} 
 					catch (SQLException e1) {
@@ -412,20 +407,19 @@ public class NuovoDipendente extends JFrame {
 				
 				if ((!nomeTextField.getText().isBlank() && !cognomeTextField.getText().isBlank() && !emailTextField.getText().isBlank() && !passwordField.getText().isBlank()) && confermaPasswordField.getText().equals(passwordField.getText()))
 					try {
-						creaAccount();	//crea il nuovo account con i valori inseriti
+						creaAccount(controller);	//crea il nuovo account con i valori inseriti
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null,
 								e1.getMessage(),
 								"Errore #" + e1.getErrorCode(),
-								JOptionPane.ERROR_MESSAGE);
+								JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
 					}
 				//se le password inserite sono diverse
 				else if(!passwordField.getText().equals(confermaPasswordField.getText()))
-				{
+				{	
+					JOptionPane.showMessageDialog(null,"Le password inserite sono diverse","Errore",JOptionPane.ERROR_MESSAGE);	//errore password non confermata
 					
-					JOptionPane.showMessageDialog(null,"Le password inserite sono diverse","Errore",JOptionPane.ERROR_MESSAGE);
-					
-					passwordLabel.setForeground(Color.RED);
+					passwordLabel.setForeground(Color.RED);	//rende rossi i campi
 					confermaPasswordLabel.setForeground(Color.RED);
 					
 				}
@@ -435,7 +429,8 @@ public class NuovoDipendente extends JFrame {
 					JOptionPane.showMessageDialog(null,
 							"Compilare i campi vuoti",
 							"Errore",
-							JOptionPane.ERROR_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);	//errore campi obbligatori vuoti
+					
 					if (nomeTextField.getText().isBlank())
 						nomeLabel.setForeground(Color.RED);
 					if (cognomeTextField.getText().isBlank())
@@ -486,8 +481,7 @@ public class NuovoDipendente extends JFrame {
 		annullaButton.addActionListener(new ActionListener() {
 			//click sinistro del mouse
 			public void actionPerformed(ActionEvent e) {
-				
-				theController.annulla();	//annulla tutto e torna alla schermata principale
+				controller.tornaAiPlanner();	//annulla tutto e torna alla schermata principale
 			}
 		});
 		annullaButton.addMouseListener(new MouseAdapter() {
@@ -506,7 +500,7 @@ public class NuovoDipendente extends JFrame {
 		});
 		
 		contentPane.setLayout(null);
-		contentPane.add(signInLabel);
+		contentPane.add(accediLabel);
 		contentPane.add(iconaNomeLabel);
 		contentPane.add(nomeTextField);
 		contentPane.add(cognomeTextField);
@@ -549,7 +543,7 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(skillsScrollPane);
 		//List di skill
 		try {
-			skillsList = new JList(theController.ottieniSkill().toArray());
+			skillsList = new JList(controller.ottieniSkill().toArray());
 			skillsList.setToolTipText("");
 			skillsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			skillsList.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -561,12 +555,14 @@ public class NuovoDipendente extends JFrame {
 					JOptionPane.ERROR_MESSAGE);
 		}
 		
+		//Label "Skills"
 		skillsLabel = new JLabel("Skills");
 		skillsLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		skillsLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		skillsLabel.setBounds(603, 109, 66, 14);
 		contentPane.add(skillsLabel);
 		
+		//Icona delle skill
 		iconaSkillsLabel = new JLabel("");
 		iconaSkillsLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/skills_32.png")));
 		iconaSkillsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -593,7 +589,7 @@ public class NuovoDipendente extends JFrame {
 		//click del pulsante
 		nuovaSkillButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				creaSkill();
+				creaSkill(controller);	//aggiunge la nuova skill nel DB
 			}
 		});
 		nuovaSkillButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -637,10 +633,10 @@ public class NuovoDipendente extends JFrame {
 		iconaSalarioLabel.setBounds(545, 383, 46, 30);
 		contentPane.add(iconaSalarioLabel);
 		
-		showPasswordLabel = new JLabel("");
-		showPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		showPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/showpass_24.png")));
-		showPasswordLabel.addMouseListener(new MouseAdapter() {
+		mostraPasswordLabel = new JLabel("");
+		mostraPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mostraPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/showpass_24.png")));
+		mostraPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) 
 			{
@@ -652,13 +648,14 @@ public class NuovoDipendente extends JFrame {
 				passwordField.setEchoChar('*'); //quando si rilascia il mouse mostra di nuovo il testo nascosto
 			}
 		});
-		showPasswordLabel.setBounds(448, 526, 46, 26);
-		contentPane.add(showPasswordLabel);
+		mostraPasswordLabel.setBounds(448, 526, 46, 26);
+		contentPane.add(mostraPasswordLabel);
 		
-		showConfirmPasswordLabel = new JLabel("");
-		showConfirmPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		showConfirmPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/showpass_24.png")));
-		showConfirmPasswordLabel.addMouseListener(new MouseAdapter() {
+		//Icona di mostra conferma password
+		mostraConfirmPasswordLabel = new JLabel("");
+		mostraConfirmPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mostraConfirmPasswordLabel.setIcon(new ImageIcon(NuovoDipendente.class.getResource("/icone/showpass_24.png")));
+		mostraConfirmPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) 
 			{
@@ -670,8 +667,8 @@ public class NuovoDipendente extends JFrame {
 				confermaPasswordField.setEchoChar('*');	//quando si rilascia il mouse mostra di nuovo il testo nascosto
 			}
 		});
-		showConfirmPasswordLabel.setBounds(448, 556, 47, 29);
-		contentPane.add(showConfirmPasswordLabel);
+		mostraConfirmPasswordLabel.setBounds(448, 556, 47, 29);
+		contentPane.add(mostraConfirmPasswordLabel);
 		
 		inserireSkillLabel = new JLabel("N.B. Per inserire più skill contemporanemante");
 		inserireSkillLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
@@ -698,62 +695,65 @@ public class NuovoDipendente extends JFrame {
 		contentPane.add(cittàDiNascitaLabel);
 	}
 		
-		//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
-		private void creaAccount() throws SQLException {
-			String nome;	//nome nuovo dipendente
-			String cognome;	//cognome nuovo dipendente
-			char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
-			LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
-			LuogoNascita luogoNascita;	//luogo di nascita del nuovo dipendente
-			String email;	//email del dipendente
-			String password;	//password del dipendente
-			String telefono = null;	//numero di telefono di casa
-			String cellulare = null;	//cellulare
-			String indirizzo;	//indirizzo
-			
-			//prende i dati dagli input della GUI
-			nome = nomeTextField.getText();	//nome
-			cognome = cognomeTextField.getText();	//cognome
-			//sesso
-			if (uomoRadioButton.isSelected())
-				sesso = 'M';
-			else
-				sesso = 'F';
-			//data di nascita
-			dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
-			//luogo di nascita
-			luogoNascita = theController.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
-			email = emailTextField.getText(); //email
-			password = passwordField.getText();	//password
-			if (!telefonoFissoTextField.getText().equals(""))
-				telefono = telefonoFissoTextField.getText();	//telefono
-			if (!cellulareTextField.getText().isBlank())
-				cellulare = cellulareTextField.getText();    //cellulare
-			else cellulare=null;
-			
-			indirizzo = indirizzoTextField.getText();	//indirizzo
-			//ottiene le skill selezionate
-			ArrayList<Skill> skills = new ArrayList<Skill>();
-			skills.addAll(skillsList.getSelectedValuesList());
-			float salario = Float.valueOf(salarioTextField.getText());	//ottieni il salario
-			theController.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo, skills, salario);	//mandali al controller che prova a creare il nuovo dipendente con il dao
-		}
+	//Altri metodi
+	//-----------------------------------------------------------------
+	
+	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
+	private void creaAccount(ControllerScelta controller) throws SQLException {
+		String nome;	//nome nuovo dipendente
+		String cognome;	//cognome nuovo dipendente
+		char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
+		LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
+		LuogoNascita luogoNascita;	//luogo di nascita del nuovo dipendente
+		String email;	//email del dipendente
+		String password;	//password del dipendente
+		String telefono = null;	//numero di telefono di casa
+		String cellulare = null;	//cellulare
+		String indirizzo;	//indirizzo
 		
-		//Metodo che crea una nuova skill e aggiorna la lista delle skill disponibili
-		private void creaSkill() {
-			if (!nuovaSkillTextField.getText().isBlank()) {
-				try {
-					theController.creaNuovaSkill(nuovaSkillTextField.getText());	//inserisce la nuova skill nel database
-					DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();	//aggiorna la lista delle skill
-					skillModel.addAll(theController.ottieniSkill());
-					skillsList.setModel(skillModel);
-					nuovaSkillTextField.setText(""); //svuota il campo
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null,
-							"Sono stati inseriti caratteri non corretti",
-							"Errore #"+e.getErrorCode(),
-							JOptionPane.ERROR_MESSAGE);
-				}
+		//prende i dati dagli input della GUI
+		nome = nomeTextField.getText();	//nome
+		cognome = cognomeTextField.getText();	//cognome
+		//sesso
+		if (uomoRadioButton.isSelected())
+			sesso = 'M';
+		else
+			sesso = 'F';
+		//data di nascita
+		dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
+		//luogo di nascita
+		luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
+		email = emailTextField.getText(); //email
+		password = passwordField.getText();	//password
+		if (!telefonoFissoTextField.getText().equals(""))
+			telefono = telefonoFissoTextField.getText();	//telefono
+		if (!cellulareTextField.getText().isBlank())
+			cellulare = cellulareTextField.getText();    //cellulare
+		else cellulare=null;
+		
+		indirizzo = indirizzoTextField.getText();	//indirizzo
+		//ottiene le skill selezionate
+		ArrayList<Skill> skills = new ArrayList<Skill>();
+		skills.addAll(skillsList.getSelectedValuesList());
+		float salario = Float.valueOf(salarioTextField.getText());	//ottieni il salario
+		controller.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo, skills, salario);	//mandali al controller che prova a creare il nuovo dipendente con il dao
+	}
+	
+	//Metodo che crea una nuova skill e aggiorna la lista delle skill disponibili
+	private void creaSkill(ControllerScelta controller) {
+		if (!nuovaSkillTextField.getText().isBlank()) {
+			try {
+				controller.creaNuovaSkill(nuovaSkillTextField.getText());	//inserisce la nuova skill nel database
+				DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();	//aggiorna la lista delle skill
+				skillModel.addAll(controller.ottieniSkill());
+				skillsList.setModel(skillModel);
+				nuovaSkillTextField.setText(""); //svuota il campo
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null,
+						"Sono stati inseriti caratteri non corretti",
+						"Errore #"+e.getErrorCode(),
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
 }

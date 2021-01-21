@@ -23,20 +23,22 @@ import javax.swing.ImageIcon;
 
 public class iPlanner extends JFrame {
 
-	//Attributi
-	private final String devs = "UninaDev";	//stringa sviluppatori
-	private final String versione = "0.0.1";	//stringa versione del software
+	//ATTRIBUTI
+	//-----------------------------------------------------------------
 	
 	//Attrubuti GUI
 	private JPanel contentPane;
-	private JLabel dipendenteIscrittoLabel;
-	private JLabel nuovoDipendenteLabel;
+	private JLabel loginLabel;	//label clickabile per effettuare login
+	private JLabel nuovoDipendenteLabel;	//label clickabile per creare nuovi dipendenti
  
-
-	/**
-	 * Create the frame.
-	 */
-	public iPlanner(ControllerScelta theController, boolean segreteria) {
+	//Altri attributi
+	private final String devs = "UninaDevs";	//stringa sviluppatori
+	private final String versione = "0.0.1";	//stringa versione del software
+	
+	//Creazione Frame
+	//-----------------------------------------------------------------
+	
+	public iPlanner(ControllerScelta controller, boolean segreteria) {
 		
 		setMinimumSize(new Dimension(850, 500));
 		
@@ -50,53 +52,52 @@ public class iPlanner extends JFrame {
 		setContentPane(contentPane);
 		
 		//Label "Welcome to iPlanner"
-		JLabel welcomeLabel = new JLabel("Welcome to iPlanner");
-		welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		welcomeLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/planner_128.png")));
-		welcomeLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		JLabel benvenutoLabel = new JLabel("Benvenuto su iPlanner");
+		benvenutoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		benvenutoLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/planner_128.png")));
+		benvenutoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		//Icona Label Welcome
-		JLabel employeeIconLabel = new JLabel("");
-		employeeIconLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		employeeIconLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/employee_64.png")));
+		JLabel iconaDipendenteLabel = new JLabel("");
+		iconaDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		iconaDipendenteLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/employee_64.png")));
 		
 		//Label "Created by"
-		JLabel createdByLabel = new JLabel("Created by " + devs);
-		createdByLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
+		JLabel creatoDaLabel = new JLabel("Creato da: " + devs);
+		creatoDaLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
 		
 		//Label versione del software
-		JLabel versionLabel = new JLabel("v " + versione);
-		versionLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
-		versionLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		JLabel versioneLabel = new JLabel("v " + versione);
+		versioneLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
+		versioneLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		
 		//Se l'autorizzazione è di tipo dipendente mostra nella finestra solo l'opzione "Esegui login"
 		if (!segreteria) {
 			//Label "Esegui login"
-		dipendenteIscrittoLabel = new JLabel("Esegui login");
-		dipendenteIscrittoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dipendenteIscrittoLabel.setForeground(Color.BLACK);
-		dipendenteIscrittoLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		dipendenteIscrittoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		loginLabel = new JLabel("Esegui login");
+		loginLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		loginLabel.setForeground(Color.BLACK);
+		loginLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		//Eventi connessi alla label "Esegui login"
-		dipendenteIscrittoLabel.addMouseListener(new MouseAdapter() {
+		loginLabel.addMouseListener(new MouseAdapter() {
 			//click sinistro del mouse
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				theController.linkToLoginFrame();	//va alla finestra di login
+				controller.apriLogin();	//va alla finestra di login
 			}
 			//mouse sopra la label
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				dipendenteIscrittoLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
+				loginLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
 			}
 			//mouse fuori dalla label
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				dipendenteIscrittoLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettando il colore della label
+				loginLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettando il colore della label
 			}
 		});
 		
@@ -106,33 +107,33 @@ public class iPlanner extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(167)
-					.addComponent(welcomeLabel, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+					.addComponent(benvenutoLabel, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
 					.addGap(158))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(258)
-					.addComponent(dipendenteIscrittoLabel, GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+					.addComponent(loginLabel, GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
 					.addGap(248))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(369)
-					.addComponent(employeeIconLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(iconaDipendenteLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(360))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(createdByLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+					.addComponent(creatoDaLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, 1090, Short.MAX_VALUE)
-					.addComponent(versionLabel))
+					.addComponent(versioneLabel))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(29)
-					.addComponent(welcomeLabel)
+					.addComponent(benvenutoLabel)
 					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-					.addComponent(employeeIconLabel)
+					.addComponent(iconaDipendenteLabel)
 					.addGap(18)
-					.addComponent(dipendenteIscrittoLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addComponent(loginLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(createdByLabel)
-						.addComponent(versionLabel)))
+						.addComponent(creatoDaLabel)
+						.addComponent(versioneLabel)))
 		);
 		contentPane.setLayout(gl_contentPane);
 		}
@@ -149,9 +150,8 @@ public class iPlanner extends JFrame {
 		nuovoDipendenteLabel.addMouseListener(new MouseAdapter() {
 			//click sinistro del mouse
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				theController.linkToCreationFrame();	//apre la finestra di creazione account
+			public void mouseClicked(MouseEvent e) {	
+				controller.apriNuovoDipendente();	//apre la finestra di creazione account
 			}
 			//mouse sopra la label
 			@Override
@@ -177,29 +177,29 @@ public class iPlanner extends JFrame {
 						.addGap(248))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(167)
-					.addComponent(welcomeLabel, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+					.addComponent(benvenutoLabel, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
 					.addGap(158))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(369)
-					.addComponent(employeeIconLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(iconaDipendenteLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(360))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(createdByLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+					.addComponent(creatoDaLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, 1090, Short.MAX_VALUE)
-					.addComponent(versionLabel))
+					.addComponent(versioneLabel))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(29)
-					.addComponent(welcomeLabel)
+					.addComponent(benvenutoLabel)
 					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-					.addComponent(employeeIconLabel)
+					.addComponent(iconaDipendenteLabel)
 					.addGap(18)
 					.addComponent(nuovoDipendenteLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(createdByLabel)
-						.addComponent(versionLabel)))
+						.addComponent(creatoDaLabel)
+						.addComponent(versioneLabel)))
 		);
 		contentPane.setLayout(gl_contentPane);
 		}	

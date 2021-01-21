@@ -17,41 +17,55 @@ import interfacceDAO.ProgettoDAO;
 
 public class ControllerProgetto {
 
+	//ATTRIBUTI
+	//-----------------------------------------------------------------
+	
 	//Attributi GUI
-	private MieiProgetti projectFrame;
-	private GestioneProgetto newProjectFrame;
+	private MieiProgetti mieiProgetti;
+	private GestioneProgetti gestioneProgetti;
 
 	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;
-	private MeetingDAO meetDAO = null;
+	private ProgettoDAO projDAO = null;	//dao progetti
+	private MeetingDAO meetDAO = null;	//dao meeting
 	
 	//Altri attributi
-	private Dipendente loggedUser = null;
+	private Dipendente dipendente = null;
 	
-	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, Dipendente loggedUser) {
+	//METODI
+	//-----------------------------------------------------------------
+	
+	//Costruttore
+	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, Dipendente dipendente) {
+		//ottiene i dao
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		
-		this.loggedUser = loggedUser;
+		this.dipendente = dipendente;	//ottiene il dipendente che ha avuto accesso
 		
-		projectFrame=new MieiProgetti(this, this.loggedUser);
-		projectFrame.setVisible(true);
+		//apre la finestra Miei Progetti
+		mieiProgetti=new MieiProgetti(this, this.dipendente);
+		mieiProgetti.setVisible(true);
 	}
 
-
-	public void createInsertProjectFrame() {
-		newProjectFrame=new GestioneProgetto(this);
-		newProjectFrame.setVisible(true);
+	//Metodi di gestione delle GUI
+	//-----------------------------------------------------------------
+	
+	//Metodo che apre la finestra di gestione dei progetti
+	public void apriGestioneProgetti() {
+		gestioneProgetti=new GestioneProgetti(this);
+		gestioneProgetti.setVisible(true);
 	}
 
+	//Altri metodi
+	//-----------------------------------------------------------------
 	
 	//Ottiene i progetti del dipendente
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
-		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(loggedUser);
+		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
 		
 		ArrayList<Progetto> temp = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)

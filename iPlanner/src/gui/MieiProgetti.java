@@ -59,14 +59,17 @@ import javax.swing.event.ListSelectionEvent;
 
 public class MieiProgetti extends JFrame {
 
+	//ATTRIBUTI
+	//-----------------------------------------------------------------
+	
+	//Attributi GUI
 	private JPanel contentPane;
 	private JButton nuovoProgettoBotton;
 
-
-	/**
-	 * Create the frame.
-	 */
-	public MieiProgetti(ControllerProgetto theController, Dipendente loggedUser) {
+	//Creazione frame
+	//-----------------------------------------------------------------
+	
+	public MieiProgetti(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiProgetti.class.getResource("/Icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1200, 900));
 		setTitle("iPlanner - I miei Progetti");
@@ -76,10 +79,12 @@ public class MieiProgetti extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		//Button "Inserisci/Modifica Progetto"
 		nuovoProgettoBotton = new JButton("Inserisci/Modifica Progetto");
+		//Click sul pulsante
 		nuovoProgettoBotton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				theController.createInsertProjectFrame();
+				controller.apriGestioneProgetti();	//apre la finestra per la gestione dei progetti
 			}
 		});
 		nuovoProgettoBotton.addMouseListener(new MouseAdapter() {
@@ -99,29 +104,23 @@ public class MieiProgetti extends JFrame {
 		nuovoProgettoBotton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nuovoProgettoBotton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		
+		//ScrollPane progetti
 		JScrollPane mieiProgettiScrollPane = new JScrollPane();
 		mieiProgettiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
 
-		
-		JLabel mieiProgettiLabel = new JLabel("I Miei Progetti");
+		//Label "Miei Progetti"
+		JLabel mieiProgettiLabel = new JLabel("Miei Progetti");
 		mieiProgettiLabel.setIcon(new ImageIcon(MieiProgetti.class.getResource("/Icone/progetto_64.png")));
 		mieiProgettiLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-	
+		//Panel per info progetto
 		JPanel infoProgettoPanel = new JPanel();
 		infoProgettoPanel.setFont(new Font("Consolas", Font.PLAIN, 21));
-		
 		infoProgettoPanel.setBackground(Color.WHITE);
 //		infoProgettoPanel.setBorder(new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30)));
 		TitledBorder titleBorder = new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30));
-		
 		titleBorder.setTitlePosition(TitledBorder.CENTER);
-		
 		infoProgettoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
-	
-		
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -152,40 +151,47 @@ public class MieiProgetti extends JFrame {
 					.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
 		);
 		
-		
+		//Label per nome del progetto
 		JLabel nomeProgettoLabel = new JLabel("Progetto 1 [01]");
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
 		
+		//Label "Ambiti:"
 		JLabel ambitiLabel = new JLabel("Ambiti:");
 		ambitiLabel.setForeground(Color.DARK_GRAY);
 		ambitiLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label per ambiti del progetto
 		JLabel valoreAmbitiLabel = new JLabel("Economia,Medicina");
 		valoreAmbitiLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreAmbitiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
+		//Label "Tipologia:"
 		JLabel tipologiaLabel = new JLabel("Tipologia:");
 		tipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		tipologiaLabel.setForeground(Color.DARK_GRAY);
 		tipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label per tipologia di progetto
 		JLabel valoreTipologiaLabel = new JLabel("Ricerca Sperimentale");
 		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
+		//Label "Project Manager:"
 		JLabel projectManagerLabel = new JLabel("Project Manager:");
 		projectManagerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		projectManagerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		projectManagerLabel.setForeground(Color.DARK_GRAY);
 		projectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label per project manager
 		JLabel valoreProjectManagerLabel = new JLabel("Mario Rossi");
 		valoreProjectManagerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		valoreProjectManagerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreProjectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
+		//Label "Data Creazione:"
 		JLabel dataCreazioneLabel = new JLabel("Data Creazione:");
 		dataCreazioneLabel.setIconTextGap(40);
 		dataCreazioneLabel.setIcon(null);
@@ -193,6 +199,12 @@ public class MieiProgetti extends JFrame {
 		dataCreazioneLabel.setForeground(Color.DARK_GRAY);
 		dataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label per data di creazione
+		JLabel valoreDataCreazioneLabel = new JLabel("07/01/2021");
+		valoreDataCreazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		//Label "Data Terminazione"
 		JLabel dataTerminazioneLabel = new JLabel("Data Terminazione:");
 		dataTerminazioneLabel.setIconTextGap(40);
 		dataTerminazioneLabel.setIcon(null);
@@ -200,6 +212,12 @@ public class MieiProgetti extends JFrame {
 		dataTerminazioneLabel.setForeground(Color.DARK_GRAY);
 		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
+		//Label per data di terminazione
+		JLabel valoreDataTerminazioneLabel = new JLabel("N/A");
+		valoreDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valoreDataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		
+		//Label "Data Scadenza"
 		JLabel dataScadenzaLabel = new JLabel("Data Scadenza:");
 		dataScadenzaLabel.setIconTextGap(40);
 		dataScadenzaLabel.setIcon(null);
@@ -207,17 +225,10 @@ public class MieiProgetti extends JFrame {
 		dataScadenzaLabel.setForeground(Color.DARK_GRAY);
 		dataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		JLabel valoreDataCreazioneLabel = new JLabel("07/01/2021");
-		valoreDataCreazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		
+		//Label per data scadenza
 		JLabel valoreDataScadenzaLabel = new JLabel("07/01/2022");
 		valoreDataScadenzaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreDataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		
-		JLabel valoreDataTerminazioneLabel = new JLabel("N/A");
-		valoreDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
 		JPanel panel = new JPanel();
 		
@@ -314,6 +325,12 @@ public class MieiProgetti extends JFrame {
 					.addGap(23))
 		);
 		
+		//Label "Descrizione"
+		JLabel descrizioneLabel = new JLabel("Descrizione");
+		descrizioneLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
+		descrizioneScrollPane.setColumnHeaderView(descrizioneLabel);
+		
+		//TextArea descrizione del progetto
 		JTextArea descrizioneProgettoTextArea = new JTextArea();
 		descrizioneProgettoTextArea.setEditable(false);
 		descrizioneProgettoTextArea.setWrapStyleWord(true);
@@ -321,43 +338,41 @@ public class MieiProgetti extends JFrame {
 		descrizioneProgettoTextArea.setFont(new Font("Consolas", Font.PLAIN, 16));
 		descrizioneScrollPane.setViewportView(descrizioneProgettoTextArea);
 		
-		JLabel descrizioneLabel = new JLabel("Descrizione");
-		descrizioneLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
-		descrizioneScrollPane.setColumnHeaderView(descrizioneLabel);
-		
-		
+		//List di progetti
 		JList <Progetto> progettiList;
 		try {
-			progettiList = new JList(theController.ottieniProgetti().toArray());
+			progettiList = new JList(controller.ottieniProgetti().toArray());
+			//Selezione nella lista
 			progettiList.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
 					//Aggiorna le label delle info del progetto
 					Progetto progettoSelezionato = progettiList.getSelectedValue();
-					nomeProgettoLabel.setText("<html>" + progettoSelezionato.getNomeProgetto() + "</html>");
+					nomeProgettoLabel.setText("<html>" + progettoSelezionato.getNomeProgetto() + "</html>");	//nome del progetto
 					
+					//Ambiti
 					String ambiti = "";
 					for (AmbitoProgetto ambito : progettoSelezionato.getAmbiti())
 						ambiti += ambito.toString() + " ";
 					valoreAmbitiLabel.setText(ambiti);
 					
-					valoreTipologiaLabel.setText(progettoSelezionato.getTipoProgetto());
+					valoreTipologiaLabel.setText(progettoSelezionato.getTipoProgetto());	//tipologia del progetto
 					
-					valoreProjectManagerLabel.setText(loggedUser.getNome() + " " + loggedUser.getCognome());
+					valoreProjectManagerLabel.setText(dipendente.getNome() + " " + dipendente.getCognome());	//project manager
 					
-					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy"); 
+					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	//data creazione
 					valoreDataCreazioneLabel.setText(progettoSelezionato.getDataTerminazione().toString(formatDate));
 					
-					if (progettoSelezionato.getDataTerminazione() != null)
+					if (progettoSelezionato.getDataTerminazione() != null)	//data terminazione
 						valoreDataTerminazioneLabel.setText(progettoSelezionato.getDataTerminazione().toString(formatDate));
 					else
 						valoreDataTerminazioneLabel.setText("In corso.");
 					
-					if (progettoSelezionato.getScadenza() != null)
+					if (progettoSelezionato.getScadenza() != null)	//data scadenza
 						valoreDataScadenzaLabel.setText(progettoSelezionato.getScadenza().toString(formatDate));
 					else
 						valoreDataScadenzaLabel.setText("Senza scadenza.");
 					
-					descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());
+					descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());	//descrizione del progetto
 				}
 			});
 			
@@ -372,6 +387,7 @@ public class MieiProgetti extends JFrame {
 		}
 
 
+		//Label "Info"
 		JLabel lblNewLabel = new JLabel("Info");
 		panel.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 25));

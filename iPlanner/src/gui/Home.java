@@ -32,6 +32,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import entita.CollaborazioneProgetto;
+import entita.Dipendente;
 import entita.Meeting;
 
 import java.awt.Color;
@@ -53,21 +54,24 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-public class User extends JFrame {
+public class Home extends JFrame {
 
+	//ATTRIBUTI
+	//-----------------------------------------------------------------
+	
+	//Attributi GUI
 	private JPanel contentPane;
 	private JButton mioAccountButton;
 	private JButton mieiProgettiButton;
 	private JButton mieiMeetingButton;
 
-
-	/**
-	 * Create the frame.
-	 */
-	public User(ControllerGestioneProfilo theController) {
+	//Crezione frame
+	//-----------------------------------------------------------------
+	
+	public Home(ControllerGestioneProfilo controller, Dipendente dipendente) {
 		setMinimumSize(new Dimension(1000, 700));
 		setExtendedState(Frame.MAXIMIZED_BOTH);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(User.class.getResource("/Icone/WindowIcon_16.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Home.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - Main");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1080);
@@ -78,7 +82,8 @@ public class User extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		mioAccountButton = new JButton("Il Mio Account");
+		//Button "Mio Account"
+		mioAccountButton = new JButton("Mio Account");
 		mioAccountButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -95,13 +100,15 @@ public class User extends JFrame {
 		mioAccountButton.setBackground(Color.WHITE);
 		mioAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		mioAccountButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		//Click sul pulsante
 		mioAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				theController.viewAccount();
+				controller.apriMioAccount();	//apre la finestra dei dettagli dell'account
 			}
 		});
 		
-		mieiProgettiButton = new JButton("I Miei Progetti");
+		//Button "Miei Progetti"
+		mieiProgettiButton = new JButton("Miei Progetti");
 		mieiProgettiButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -118,13 +125,15 @@ public class User extends JFrame {
 		mieiProgettiButton.setBackground(Color.WHITE);
 		mieiProgettiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		mieiProgettiButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		//Click sul pulsante
 		mieiProgettiButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				theController.linkToProjectFrame();
+				controller.apriMieiProgetti();	//apre la finestra dei progetti del dipendente
 			}
 		});
 		
-		mieiMeetingButton = new JButton("I Miei Meeting");
+		//Button "Miei Meeting"
+		mieiMeetingButton = new JButton("Miei Meeting");
 		mieiMeetingButton.addMouseListener(new MouseAdapter() {			
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -142,12 +151,14 @@ public class User extends JFrame {
 		mieiMeetingButton.setBackground(Color.WHITE);
 		mieiMeetingButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		mieiMeetingButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		//Click del pulsante
 		mieiMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				theController.linkToMeetingFrame();
+				controller.apriMieiMeeting();	//apre la finestra dei meeting del dipendente
 			}
 		});
 		
+		//Button "Esci"
 		JButton logoutButton = new JButton("Esci");
 		logoutButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -165,9 +176,10 @@ public class User extends JFrame {
 		logoutButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		logoutButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		logoutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		//Click pulsante
 		logoutButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				theController.logout();
+				controller.logout();	//esegue il logout
 			}
 		});
 		
@@ -177,69 +189,65 @@ public class User extends JFrame {
 		JScrollPane meetingScrollPanel = new JScrollPane();
 		meetingScrollPanel.setBorder(new LineBorder(Color.GRAY, 2));
 		
-		JLabel nomeUtenteLabel = new JLabel(theController.getLoggedUser().getNome() + " " + theController.getLoggedUser().getCognome());
-		nomeUtenteLabel.setIcon(new ImageIcon(User.class.getResource("/Icone/employee_64.png")));
+		//Label nome dell'utente
+		JLabel nomeUtenteLabel = new JLabel(dipendente.getNome() + " " + dipendente.getCognome());
+		nomeUtenteLabel.setIcon(new ImageIcon(Home.class.getResource("/Icone/employee_64.png")));
 		nomeUtenteLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-		JLabel emailUtenteLabel = new JLabel(theController.getLoggedUser().getEmail());
+		//Label email del dipendente
+		JLabel emailUtenteLabel = new JLabel(dipendente.getEmail());
 		emailUtenteLabel.setIcon(null);
 		emailUtenteLabel.setForeground(Color.DARK_GRAY);
 		emailUtenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
+		//Icona email
+		JLabel iconaEmailLabel = new JLabel("");
+		iconaEmailLabel.setIcon(new ImageIcon(Home.class.getResource("/Icone/email_32.png")));
 		
-		//QUESTA PARTE DI CODICE SI OCCUPA DI OTTENERE LA DATA ATTUALE E LA STAMPA COME LABEL
+		//Calcolo della data
+		LocalDate dataAttuale = LocalDate.now();	//prende la data attuale
 		
-		LocalDate dataAttuale = LocalDate.now();
+		String giornoAttuale = dataAttuale.dayOfWeek().getAsText();	//seleziona il giorno della settimana
+		int giornoAttualeInt = dataAttuale.getDayOfMonth();	//seleziona il giorno del mese
+		String meseAttuale = dataAttuale.monthOfYear().getAsText();	//seleziona il mese
+		int annoAttuale = dataAttuale.getYear();	//seleziona l'anno
 		
-		String giornoAttuale = dataAttuale.dayOfWeek().getAsText();
-		int giornoAttualeInt = dataAttuale.getDayOfMonth();
-		String meseAttuale = dataAttuale.monthOfYear().getAsText();
-		int annoAttuale = dataAttuale.getYear();
-		
+		//Crea la stringa della data completa
 		String dataInStringa = giornoAttuale + " " + String.valueOf(giornoAttualeInt) + " " + meseAttuale + " " + String.valueOf(annoAttuale);
 		
+		//Label data attuale
 		JLabel dataAttualeLabel = new JLabel(String.valueOf(dataInStringa));
 		dataAttualeLabel.setForeground(Color.BLACK);
-				
-		/////////////////////////////////////////////////////////////////////////////////////
-		
 		dataAttualeLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		
-		JLabel iconaEmailLabel = new JLabel("");
-		iconaEmailLabel.setIcon(new ImageIcon(User.class.getResource("/Icone/email_32.png")));
 				
+		//Calcolo dell'orario attuale
 		JLabel oraAttualeLabel = new JLabel("Updating...");
 		oraAttualeLabel.setForeground(Color.BLACK);
-
-		
 		oraAttualeLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		
-		//PARTE DI CODICE CHE SI OCCUPA DI AGGIORNARE L'ORA IN TEMPO REALE
 						
+		//Timer per l'aggiornamento dell'orario in tempo reale
 		Timer t = new Timer(1000, new ActionListener(){ //un timer ripete l'azione ogni tot di tempo, in questo caso ogni 1000ms
 		    @Override
 		    public void actionPerformed(ActionEvent e)
 		    {
 		    	LocalTime oraAttuale = LocalTime.now();		//prende l'ora attuale
 		    	String oraAttualeStringa = oraAttuale.toString().substring(0, 8); //taglia la parte dei millisecondi che non ci serve
-		    	
 		    	oraAttualeLabel.setText(oraAttualeStringa);
 		    }
 		});
 		t.start(); // fa partire il timer
-				
-		/////////////////////////////////////////////////////////////////
 		
-		JLabel meetingLabel = new JLabel("Meeting Programmati");
+		//Label "Meeting Programmati"
+		JLabel meetingLabel = new JLabel("Meeting");
 		meetingLabel.setForeground(Color.DARK_GRAY);
 		meetingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		meetingScrollPanel.setColumnHeaderView(meetingLabel);
 		
+		//List dei meeting del dipendente
 		JList<Meeting> meetingList;
 		try {
 			MeetingListRenderer renderer = new MeetingListRenderer();
-			meetingList = new JList(theController.ottieniMeeting().toArray());
+			meetingList = new JList(controller.ottieniMeeting().toArray());
 			meetingList.setSelectionBackground(Color.LIGHT_GRAY);
 			meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			meetingList.setFixedCellHeight(60);
@@ -251,16 +259,18 @@ public class User extends JFrame {
 			e2.printStackTrace();
 		}
 		
-		JLabel progettiLabel = new JLabel("Progetti Aziendali");
+		//Progetti Label
+		JLabel progettiLabel = new JLabel("Progetti");
 		progettiLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		progettiLabel.setForeground(Color.DARK_GRAY);
 		progettiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		progettiScrollPanel.setColumnHeaderView(progettiLabel);
 		
+		//List progetti
 		JList<Progetto> progettiList;
 		try {
 			ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-			for (CollaborazioneProgetto collaborazione: theController.ottieniProgetti())
+			for (CollaborazioneProgetto collaborazione: controller.ottieniProgetti())
 				progetti.add(collaborazione.getProgetto());
 			progettiList = new JList(progetti.toArray());
 			progettiList.setSelectionBackground(Color.LIGHT_GRAY);
