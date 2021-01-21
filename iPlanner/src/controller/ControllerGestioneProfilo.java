@@ -16,32 +16,36 @@ import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
 import interfacceDAO.SalaRiunioneDAO;
+import interfacceDAO.SkillDAO;
 
 public class ControllerGestioneProfilo {
 
-	User userFrame;
-	UserProfile userProfileFrame;
+	//Attributi GUI
+	private User userFrame;
+	private UserProfile userProfileFrame;
 	
-	private ControllerAccesso controller;
-	
+	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;	//dao progetto
 	private MeetingDAO meetDAO = null;	//dao meeting
+	private SkillDAO skillDAO = null;	//dao delle skill
 	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
 	
+	//Altri attributi
 	private Dipendente loggedUser = null;
 
-	public ControllerGestioneProfilo(ControllerAccesso controller) {
-		this.controller = controller;
+	//Costruttore
+	public ControllerGestioneProfilo(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, Dipendente loggedUser) {
 		
-		this.luogoDAO = controller.getLuogoDAO();
-		this.dipDAO = controller.getDipDAO();
-		this.projDAO = controller.getProjDAO();
-		this.meetDAO = controller.getMeetDAO();
-		this.salaDAO = controller.getSalaDAO();
+		this.luogoDAO = luogoDAO;
+		this.dipDAO = dipDAO;
+		this.projDAO = projDAO;
+		this.meetDAO = meetDAO;
+		this.skillDAO = skillDAO;
+		this.salaDAO = salaDAO; 
 		
-		this.loggedUser = controller.getLoggedUser();
+		this.loggedUser = loggedUser;
 		
 		userFrame=new User(this);
 		userFrame.setVisible(true);
@@ -49,7 +53,6 @@ public class ControllerGestioneProfilo {
 	}
 	
 	public void viewAccount() {
-		// TODO Auto-generated method stub
 		userProfileFrame=new UserProfile(this);
 		userProfileFrame.setVisible(true);
 	}
@@ -66,12 +69,12 @@ public class ControllerGestioneProfilo {
 
 	public void linkToProjectFrame() {
 		
-		ControllerProgetto controller= new ControllerProgetto(this);
+		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,loggedUser);
 	}
 	
 	public void linkToMeetingFrame() {
 		
-		ControllerMeeting controller= new ControllerMeeting(this);
+		ControllerMeeting controller= new ControllerMeeting(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,loggedUser);
 		
 	}
 	public void reLinkToUserFrame() {
@@ -83,11 +86,11 @@ public class ControllerGestioneProfilo {
 	}
 	
 	public ArrayList<CollaborazioneProgetto> ottieniProgetti() throws SQLException {
-		return controller.getProjDAO().getProgettiByDipendente(loggedUser);
+		return projDAO.getProgettiByDipendente(loggedUser);
 	}
 	
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		ArrayList<Meeting> temp = controller.getMeetDAO().getMeetingsByInvitato(loggedUser);
+		ArrayList<Meeting> temp = meetDAO.getMeetingsByInvitato(loggedUser);
 		return temp;
 	}
 	
@@ -113,16 +116,8 @@ public class ControllerGestioneProfilo {
 		loggedUser.setIndirizzo(indirizzo);
 		
 	
-		controller.getDipDAO().updateDipendente(loggedUser);
+		dipDAO.updateDipendente(loggedUser);
 		
-	}
-
-	public User getUserFrame() {
-		return userFrame;
-	}
-
-	public UserProfile getUserProfileFrame() {
-		return userProfileFrame;
 	}
 	
 	//Metodo che restituisce tutte le province del database
@@ -133,27 +128,5 @@ public class ControllerGestioneProfilo {
 	//Metodo che prende i comuni di una provincia per il menù di creazione account
 	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException{
 		return luogoDAO.getLuoghiByProvincia(provincia);
-	}
-
-	public LuogoNascitaDAO getLuogoDAO() {
-		return luogoDAO;
-	}
-
-	public DipendenteDAO getDipDAO() {
-		return dipDAO;
-	}
-
-	public ProgettoDAO getProjDAO() {
-		return projDAO;
-	}
-
-	public MeetingDAO getMeetDAO() {
-		return meetDAO;
-	}
-
-	public SalaRiunioneDAO getSalaDAO() {
-		return salaDAO;
-	}
-	
-	
+	}	
 }

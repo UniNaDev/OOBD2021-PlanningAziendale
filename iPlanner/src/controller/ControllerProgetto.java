@@ -17,29 +17,28 @@ import interfacceDAO.ProgettoDAO;
 
 public class ControllerProgetto {
 
-	MieiProgetti projectFrame;
-	GestioneProgetto newProjectFrame;
-	
-	private ControllerGestioneProfilo controller;
+	//Attributi GUI
+	private MieiProgetti projectFrame;
+	private GestioneProgetto newProjectFrame;
 
+	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;
 	private MeetingDAO meetDAO = null;
 	
+	//Altri attributi
 	private Dipendente loggedUser = null;
 	
-	public ControllerProgetto(ControllerGestioneProfilo controller) {
-		this.controller = controller;
+	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, Dipendente loggedUser) {
+		this.luogoDAO = luogoDAO;
+		this.dipDAO = dipDAO;
+		this.projDAO = projDAO;
+		this.meetDAO = meetDAO;
 		
-		this.luogoDAO = controller.getLuogoDAO();
-		this.dipDAO = controller.getDipDAO();
-		this.projDAO = controller.getProjDAO();
-		this.meetDAO = controller.getMeetDAO();
+		this.loggedUser = loggedUser;
 		
-		this.loggedUser = controller.getLoggedUser();
-		
-		projectFrame=new MieiProgetti(this);
+		projectFrame=new MieiProgetti(this, this.loggedUser);
 		projectFrame.setVisible(true);
 	}
 
@@ -60,41 +59,4 @@ public class ControllerProgetto {
 		
 		return temp;
 	}
-
-
-	public MieiProgetti getProjectFrame() {
-		return projectFrame;
-	}
-
-
-	public GestioneProgetto getNewProjectFrame() {
-		return newProjectFrame;
-	}
-
-
-	public LuogoNascitaDAO getLuogoDAO() {
-		return luogoDAO;
-	}
-
-
-	public DipendenteDAO getDipDAO() {
-		return dipDAO;
-	}
-
-
-	public ProgettoDAO getProjDAO() {
-		return projDAO;
-	}
-
-
-	public MeetingDAO getMeetDAO() {
-		return meetDAO;
-	}
-
-
-	public Dipendente getLoggedUser() {
-		return loggedUser;
-	}
-	
-	
 }

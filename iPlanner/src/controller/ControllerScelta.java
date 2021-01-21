@@ -33,7 +33,7 @@ public class ControllerScelta {
 	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
 	
 	//Costruttore del controllee di scelta che mostra la prima finestra di scelta
-	public ControllerScelta(boolean segreteria, LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO) {
+	public ControllerScelta(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, boolean segreteria) {
 		//Ottiene le implementazioni dei DAO inizializzate nel main Starter
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
@@ -61,7 +61,7 @@ public class ControllerScelta {
 	public void linkToLoginFrame() {
 		
 		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerAccesso controller=new ControllerAccesso(this);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
+		ControllerAccesso controller=new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO, segreteria);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
 		
 	}
 	
@@ -131,38 +131,6 @@ public class ControllerScelta {
 	//Metodo che restituisce le skill del database
 	public ArrayList<Skill> ottieniSkill() throws SQLException{
 		return skillDAO.getSkills();
-	}
-
-	public LuogoNascitaDAO getLuogoDAO() {
-		return luogoDAO;
-	}
-
-	public DipendenteDAO getDipDAO() {
-		return dipDAO;
-	}
-
-	public ProgettoDAO getProjDAO() {
-		return projDAO;
-	}
-
-	public MeetingDAO getMeetDAO() {
-		return meetDAO;
-	}
-
-	public SkillDAO getSkillDAO() {
-		return skillDAO;
-	}
-
-	public boolean isSegreteria() {
-		return segreteria;
-	}
-
-	public iPlanner getiPlannerFrame() {
-		return iPlannerFrame;
-	}
-
-	public SalaRiunioneDAO getSalaDAO() {
-		return salaDAO;
 	}
 	
 }

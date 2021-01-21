@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.ControllerProgetto;
 import entita.AmbitoProgetto;
+import entita.Dipendente;
 import entita.Progetto;
 
 import javax.swing.BoxLayout;
@@ -65,7 +66,7 @@ public class MieiProgetti extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MieiProgetti(ControllerProgetto theController) {
+	public MieiProgetti(ControllerProgetto theController, Dipendente loggedUser) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiProgetti.class.getResource("/Icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1200, 900));
 		setTitle("iPlanner - I miei Progetti");
@@ -341,7 +342,7 @@ public class MieiProgetti extends JFrame {
 					
 					valoreTipologiaLabel.setText(progettoSelezionato.getTipoProgetto());
 					
-					valoreProjectManagerLabel.setText(theController.getLoggedUser().getNome() + " " + theController.getLoggedUser().getCognome());
+					valoreProjectManagerLabel.setText(loggedUser.getNome() + " " + loggedUser.getCognome());
 					
 					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy"); 
 					valoreDataCreazioneLabel.setText(progettoSelezionato.getDataTerminazione().toString(formatDate));

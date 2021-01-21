@@ -57,7 +57,7 @@ public class Starter {
 			else if (args[1].equals("-d"))
 				segreteria = false;
 				
-			ControllerScelta controller = new ControllerScelta(segreteria, luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
+			ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
 		} 
 		catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,

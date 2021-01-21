@@ -12,33 +12,34 @@ import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
 import interfacceDAO.SalaRiunioneDAO;
+import interfacceDAO.SkillDAO;
 
 
 public class ControllerMeeting {
 
-	MieiMeeting meetingFrame;
-	GestioneMeeting insertMeetingFrame;
-
-	private ControllerGestioneProfilo controller;
+	//Attributi GUI
+	private MieiMeeting meetingFrame;
+	private GestioneMeeting insertMeetingFrame;
 	
+	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;
-	private MeetingDAO meetDAO = null;
-	private SalaRiunioneDAO salaDAO = null;
+	private ProgettoDAO projDAO = null;	//dao dei progetti
+	private MeetingDAO meetDAO = null;	//dao dei meeting
+	private SkillDAO skillDAO = null;	//dao delle skill
+	private SalaRiunioneDAO salaDAO = null;	//dao sale riunione
 	
+	//Altri attributi
 	private Dipendente loggedUser = null;
 
-	public ControllerMeeting(ControllerGestioneProfilo controller) {
-		this.controller = controller;
-		
-		this.luogoDAO = controller.getLuogoDAO();
-		this.dipDAO = controller.getDipDAO();
-		this.projDAO = controller.getProjDAO();
-		this.meetDAO = controller.getMeetDAO();
-		this.salaDAO = controller.getSalaDAO();
-		
-		this.loggedUser = controller.getLoggedUser();
+	public ControllerMeeting(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, Dipendente loggedUser) {
+		this.luogoDAO = luogoDAO;
+		this.dipDAO = dipDAO;
+		this.projDAO = projDAO;
+		this.meetDAO = meetDAO;
+		this.salaDAO = salaDAO;
+
+		this.loggedUser = loggedUser;
 		
 		meetingFrame=new MieiMeeting(this);
 		meetingFrame.setVisible(true);
@@ -48,34 +49,6 @@ public class ControllerMeeting {
 		
 		insertMeetingFrame= new GestioneMeeting(this);
 		insertMeetingFrame.setVisible(true);	
-	}
-
-	public MieiMeeting getMeetingFrame() {
-		return meetingFrame;
-	}
-
-	public GestioneMeeting getInsertMeetingFrame() {
-		return insertMeetingFrame;
-	}
-
-	public LuogoNascitaDAO getLuogoDAO() {
-		return luogoDAO;
-	}
-
-	public DipendenteDAO getDipDAO() {
-		return dipDAO;
-	}
-
-	public ProgettoDAO getProjDAO() {
-		return projDAO;
-	}
-
-	public MeetingDAO getMeetDAO() {
-		return meetDAO;
-	}
-
-	public Dipendente getLoggedUser() {
-		return loggedUser;
 	}
 	
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
