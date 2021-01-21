@@ -31,7 +31,7 @@ public class Starter {
 			
 			//Inizializza il costruttore del DB
 			CostruttoreDB costruttoreDB = new CostruttoreDB(connection);
-			
+
 			//Crea tabelle del DB
 			try{
 				costruttoreDB.creaTabellaSkill();	//crea la tabella skill

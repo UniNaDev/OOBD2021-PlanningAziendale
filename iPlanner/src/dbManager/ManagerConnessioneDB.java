@@ -10,6 +10,7 @@ package dbManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ManagerConnessioneDB {
 	
@@ -37,6 +38,7 @@ public class ManagerConnessioneDB {
 		{
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(url,username,password);	//stabilisce la connessione al DB
+			creaDatabase("iPlanner");	//crea il database se non esiste
 		}
 		catch(ClassNotFoundException ex) 
 		{
@@ -65,4 +67,24 @@ public class ManagerConnessioneDB {
 		
 		return instance;
 	}
+	
+	//Metodo che crea il database nel caso non esista già
+    private void creaDatabase(String nomeDB)
+    {
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate("CREATE DATABASE " + nomeDB);
+        }
+        catch (SQLException sqlException) {
+        	//Errore database già esistente
+            if (sqlException.getErrorCode() == 1007) {
+                System.out.println("Database " + nomeDB + " già esiste.");
+            } 
+            //altri errori
+            else {
+                System.out.println("Errore: " + sqlException.getMessage());
+            }
+        }
+    }
 }
