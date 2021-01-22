@@ -50,6 +50,9 @@ BEGIN
 --Calcola il numero totale di progetti dell'azienda
 SELECT COUNT(*) INTO TotaleProgetti
 FROM Progetto;
+IF (TotaleProgetti = 0) THEN
+	RETURN 0;
+END IF;
 --Calcola il numero di progetti a cui il dipendente partecipa
 SELECT COUNT(*) INTO Partecipazioni
 FROM Partecipazione AS p

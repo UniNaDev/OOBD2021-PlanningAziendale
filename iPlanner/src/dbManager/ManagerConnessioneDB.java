@@ -76,6 +76,7 @@ public class ManagerConnessioneDB {
         try {
             statement = connection.createStatement();
             statement.executeUpdate("CREATE DATABASE " + nomeDB);
+            statement.close();
         }
         catch (SQLException sqlException) {
         	//Errore database già esistente
@@ -84,7 +85,7 @@ public class ManagerConnessioneDB {
             } 
             //altri errori
             else {
-                System.out.println("Errore: " + sqlException.getMessage());
+                System.out.println(sqlException.getMessage());
             }
         }
     }
