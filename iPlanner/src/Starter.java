@@ -33,42 +33,40 @@ public class Starter {
 			CostruttoreDB costruttoreDB = new CostruttoreDB(connection);
 
 			//Crea tabelle del DB
-			try{
-				costruttoreDB.creaTabellaSkill();	//crea la tabella skill
-			}
-			catch (SQLException ex){
-				//inizializza i DAO
-				DipendenteDAO dipDAO = null;	//dao dipendente
-				LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
-				ProgettoDAO projDAO = null;	//dao progetto
-				MeetingDAO meetDAO = null;	//dao meeting
-				SkillDAO skillDAO = null;	//dao delle skill
-				SalaRiunioneDAO salaDAO = null;	//dao delle sale riunioni
-				
-				boolean segreteria = false;	//indica il tipo di autorizzazione (true = segreteria, false = dipendente)
-				
-				//Inizializzazione DAO implementati per PostgreSQL
-				if (args[0].equals("postgres")) {
+				try{
+					costruttoreDB.creaTabelle();	//crea tutte le tabelle del DB
+					costruttoreDB.creaFunzioniTrigger(); 	//crea tutte le funzioni esterne e i trigger del DB
+					costruttoreDB.importaLuoghi();	//import dei luoghi italiani
+				}
+				catch (SQLException ex){
+				}
+				finally {
+					//inizializza i DAO
+					DipendenteDAO dipDAO = null;	//dao dipendente
+					LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
+					ProgettoDAO projDAO = null;	//dao progetto
+					MeetingDAO meetDAO = null;	//dao meeting
+					SkillDAO skillDAO = null;	//dao delle skill
+					SalaRiunioneDAO salaDAO = null;	//dao delle sale riunioni
+					
+					boolean segreteria = false;	//indica il tipo di autorizzazione (true = segreteria, false = dipendente)
+					
+					//Inizializzazione DAO implementati per PostgreSQL
 					dipDAO = new DipendenteDAOPSQL(connection);
 					luogoDAO = new LuogoNascitaDAOPSQL(connection);
 					projDAO = new ProgettoDAOPSQL(connection);
 					meetDAO = new MeetingDAOPSQL(connection);
 					skillDAO = new SkillDAOPSQL(connection);
 					salaDAO = new SalaRiunioneDAOPSQL(connection);
-				}
-				//Implementazioni oracle dei DAO
-				else if (args[0].equals("oracle")) {
-					System.out.println("TODO: implementazione oracle");
-				}
-				
-				//Ottiene il tipo di autorizzaione (-s = autorizzazione per segreteria, -d autorizzazione per dipendenti)
-				if (args[1].equals("-s"))
-					segreteria = true;
-				else if (args[1].equals("-d"))
-					segreteria = false;
 					
-				ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
-			}
+					//Ottiene il tipo di autorizzaione (-s = autorizzazione per segreteria, -d autorizzazione per dipendenti)
+					if (args[0].equals("-s"))
+						segreteria = true;
+					else if (args[0].equals("-d"))
+						segreteria = false;
+						
+					ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
+				}
 			}
 			catch (ArrayIndexOutOfBoundsException e) {
 				JOptionPane.showMessageDialog(null,

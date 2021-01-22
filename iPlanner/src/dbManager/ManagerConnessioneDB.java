@@ -22,8 +22,8 @@ public class ManagerConnessioneDB {
 	
 	private final String username = "postgres";	//username per accesso al DB
 	private final String password = "160995"; //password per accesso al DB
-	
-	private final String url = "jdbc:postgresql://localhost:5432/iPlanner";	//url per accedere al DB su AWS
+	private final String nomeDB = "iplanner";	//nome del database
+	private final String url = "jdbc:postgresql://localhost:5432/";	//url per accedere al DB su AWS
 	
 	//METODI
 	
@@ -38,7 +38,8 @@ public class ManagerConnessioneDB {
 		{
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(url,username,password);	//stabilisce la connessione al DB
-			creaDatabase("iPlanner");	//crea il database se non esiste
+			creaDatabase(nomeDB);	//crea il database se non esiste
+			connection = DriverManager.getConnection(url+nomeDB,username,password);	//si connette al DB creato/esistente
 		}
 		catch(ClassNotFoundException ex) 
 		{
