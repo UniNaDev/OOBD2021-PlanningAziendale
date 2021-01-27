@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import entita.Dipendente;
 import gui.*;
+import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
@@ -25,6 +26,7 @@ public class ControllerAccesso {
 	private MeetingDAO meetDAO = null;	//dao meeting
 	private SkillDAO skillDAO = null;	//dao delle skill
 	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
+	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
 	
 	//Altri attributi
 	private boolean segreteria;	//falso = dipendente, vero = segreteria
@@ -35,7 +37,7 @@ public class ControllerAccesso {
 	//-----------------------------------------------------------------
 	
 	//Costruttore controller di accesso che mostra la finestra di login
-	public ControllerAccesso(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, boolean segreteria){	
+	public ControllerAccesso(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, boolean segreteria){	
 		//ottiene tutti i dao
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
@@ -43,6 +45,7 @@ public class ControllerAccesso {
 		this.meetDAO = meetDAO;
 		this.skillDAO = skillDAO;
 		this.salaDAO = salaDAO;
+		this.ambitoDAO = ambitoDAO;
 		
 		this.segreteria = segreteria;	//ottiene il tipo di autorizzazione
 		
@@ -57,13 +60,13 @@ public class ControllerAccesso {
 		dipendente = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
 		dipendente.setSkills(skillDAO.getSkillDipendente(dipendente)); 	//ottiene le skill del dipendente che ha fatto login
 		loginFrame.setVisible(false);	//chiude la finestra di login
-		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,dipendente);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
+		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO,dipendente);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
 	}
 
 	//Metodo chiamato dal pulsante annulla del login che fa ritornare l'utente alla schermata di scelta iniziale
 	public void annulla() {
 		loginFrame.setVisible(false);	//chiude la finestra di login
-		ControllerScelta controller=new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, segreteria);	//inizializza il controller scelta e mostra la finestra iniziale di scelta
+		ControllerScelta controller=new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza il controller scelta e mostra la finestra iniziale di scelta
 	}
 	
 }

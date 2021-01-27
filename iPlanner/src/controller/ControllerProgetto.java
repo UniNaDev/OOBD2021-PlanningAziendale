@@ -5,10 +5,12 @@ import java.util.ArrayList;
 
 import javax.swing.table.TableModel;
 
+import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Progetto;
 import gui.*;
+import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
@@ -29,6 +31,7 @@ public class ControllerProgetto {
 	private DipendenteDAO dipDAO = null;	//dao del dipendente
 	private ProgettoDAO projDAO = null;	//dao progetti
 	private MeetingDAO meetDAO = null;	//dao meeting
+	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
 	
 	//Altri attributi
 	private Dipendente dipendente = null;
@@ -37,12 +40,13 @@ public class ControllerProgetto {
 	//-----------------------------------------------------------------
 	
 	//Costruttore
-	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, Dipendente dipendente) {
+	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, AmbitoProgettoDAO ambitoDAO, Dipendente dipendente) {
 		//ottiene i dao
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
+		this.ambitoDAO = ambitoDAO;
 		
 		this.dipendente = dipendente;	//ottiene il dipendente che ha avuto accesso
 		
@@ -72,5 +76,15 @@ public class ControllerProgetto {
 			temp.add(collaborazione.getProgetto());
 		
 		return temp;
+	}
+	
+	//Ottiene tutti gli ambiti progetto del database
+	public ArrayList<AmbitoProgetto> ottieniAmbiti() throws SQLException{
+		return ambitoDAO.getAmbiti();
+	}
+	
+	//Ottiene tutte le tipologie possibili nel database
+	public ArrayList<String> ottieniTipologie() throws SQLException{
+		return projDAO.getTipologie();
 	}
 }

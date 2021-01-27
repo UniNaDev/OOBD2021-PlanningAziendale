@@ -11,6 +11,7 @@ import entita.Dipendente;
 import entita.LuogoNascita;
 import gui.Home;
 import gui.MioAccount;
+import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
@@ -34,6 +35,7 @@ public class ControllerGestioneProfilo {
 	private MeetingDAO meetDAO = null;	//dao meeting
 	private SkillDAO skillDAO = null;	//dao delle skill
 	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
+	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
 	
 	//Altri attributi
 	private Dipendente dipendente = null;
@@ -42,14 +44,15 @@ public class ControllerGestioneProfilo {
 	//-----------------------------------------------------------------
 	
 	//Costruttore
-	public ControllerGestioneProfilo(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, Dipendente dipendente) {
+	public ControllerGestioneProfilo(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, Dipendente dipendente) {
 		//ottiene tutti i dao
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.skillDAO = skillDAO;
-		this.salaDAO = salaDAO; 
+		this.salaDAO = salaDAO;
+		this.ambitoDAO = ambitoDAO;
 		
 		this.dipendente = dipendente;	//ottiene il dipendente che ha effettuato il login
 		
@@ -80,7 +83,7 @@ public class ControllerGestioneProfilo {
 
 	//Metodo che apre la gestione progetti del dipendente
 	public void apriMieiProgetti() {
-		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,dipendente);
+		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,ambitoDAO,dipendente);
 	}
 	
 	//Metodo che apre la gestione dei meeting del dipendente

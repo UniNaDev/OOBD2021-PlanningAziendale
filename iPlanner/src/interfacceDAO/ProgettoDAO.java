@@ -26,4 +26,5 @@ public interface ProgettoDAO {
 	public boolean deletePartecipante(Dipendente dip, Progetto proj) throws SQLException;	//metodo che rimuove un partecipante a un progetto
 	public boolean updateProgetto(Progetto proj) throws SQLException;	//metodo che aggiorna un progetto nel DB
 	public Progetto getProgettoByCod(int codProgetto) throws SQLException;	//metodo che recupera un progetto partendo dal suo codice nel DB
+	public ArrayList<String> getTipologie() throws SQLException;	//metodo che ottiene le tipologie possibili di un progetto
 }

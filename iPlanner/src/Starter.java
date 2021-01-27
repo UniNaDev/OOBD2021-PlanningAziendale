@@ -13,6 +13,7 @@ import implementazioniDAO.MeetingDAOPSQL;
 import implementazioniDAO.ProgettoDAOPSQL;
 import implementazioniDAO.SalaRiunioneDAOPSQL;
 import implementazioniDAO.SkillDAOPSQL;
+import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
@@ -48,6 +49,7 @@ public class Starter {
 				MeetingDAO meetDAO = null;	//dao meeting
 				SkillDAO skillDAO = null;	//dao delle skill
 				SalaRiunioneDAO salaDAO = null;	//dao delle sale riunioni
+				AmbitoProgettoDAO ambitoDAO = null;	//dao degli ambiti
 				
 				boolean segreteria = false;	//indica il tipo di autorizzazione (true = segreteria, false = dipendente)
 				
@@ -65,7 +67,7 @@ public class Starter {
 				else if (args[0].equals("-d"))
 					segreteria = false;
 					
-				ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
+				ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
 			}
 			catch (ArrayIndexOutOfBoundsException e) {
 				JOptionPane.showMessageDialog(null,

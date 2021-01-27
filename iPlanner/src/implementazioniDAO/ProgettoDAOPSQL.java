@@ -31,7 +31,20 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	private AmbitoProgettoDAO ambitoDAO;
 	
 	//PreparedStatement per ogni query
-	private PreparedStatement getProgettiPS,getPartecipantiPS,getProgettiByDipendentePS,getProgettiByCreatorePS,getProgettiByAmbitoPS,getProgettiByTipoPS,addProgettoPS,removeProgettoPS,addPartecipantePS,deletePartecipantePS,updateProgettoPS, getMeetingRelativiPS, getProgettoByCodPS;
+	private PreparedStatement getProgettiPS,
+	getPartecipantiPS,
+	getProgettiByDipendentePS,
+	getProgettiByCreatorePS,
+	getProgettiByAmbitoPS,
+	getProgettiByTipoPS,
+	addProgettoPS,
+	removeProgettoPS,
+	addPartecipantePS,
+	deletePartecipantePS,
+	updateProgettoPS,
+	getMeetingRelativiPS,
+	getProgettoByCodPS,
+	getTipologiePS;
 	
 	//METODI
 	//----------------------------------------
@@ -53,6 +66,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		updateProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i meeting
 		getProgettoByCodPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");	//? = codice progetto
+		getTipologiePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::tipologia))");
 	}
 
 	//Metodo che restituisce una lista di tutti i progetti dell'azienda
@@ -342,7 +356,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			return false;
 	}
 
-//	//Metodo che ottiene un progetto dal DB partendo dal suo codice.
+	//Metodo che ottiene un progetto dal DB partendo dal suo codice.
 	@Override
 	public Progetto getProgettoByCod(int codProgetto) throws SQLException {
 		getProgettoByCodPS.setInt(1, codProgetto);
@@ -362,6 +376,21 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		risultato.close(); //chiude il ResultSet
 		
 		return projTemp;
+	}
+
+	//Metodo che restituisce le tipologie nel database
+	@Override
+	public ArrayList<String> getTipologie() throws SQLException {
+		ArrayList<String> temp = new ArrayList<String>();	//inizializza la lista temporanea da restituire
+		
+		ResultSet risultato = getTipologiePS.executeQuery();	//esegue la query
+		
+		while (risultato.next())
+			temp.add(risultato.getString(0));	//aggiunge i risultati alla lista
+		
+		risultato.close(); //chiude il result set
+		
+		return temp;
 	}
 
 }

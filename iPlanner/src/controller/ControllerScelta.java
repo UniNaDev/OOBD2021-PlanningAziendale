@@ -11,6 +11,7 @@ import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
 import gui.*;
+import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
@@ -34,6 +35,7 @@ public class ControllerScelta {
 	private MeetingDAO meetDAO = null;	//dao meeting
 	private SkillDAO skillDAO = null;	//dao delle skill
 	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
+	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
 	
 	//Altri attributi
 	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
@@ -42,7 +44,7 @@ public class ControllerScelta {
 	//-----------------------------------------------------------------
 	
 	//Costruttore del controllee di scelta che mostra la prima finestra di scelta
-	public ControllerScelta(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, boolean segreteria) {
+	public ControllerScelta(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, boolean segreteria) {
 		//Ottiene le implementazioni dei DAO inizializzate nel main Starter
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
@@ -50,6 +52,7 @@ public class ControllerScelta {
 		this.meetDAO = meetDAO;
 		this.skillDAO = skillDAO;
 		this.salaDAO = salaDAO;
+		this.ambitoDAO = ambitoDAO;
 		
 		this.segreteria = segreteria;	//ottiene l'autorizzazione presa nel main dagli argomenti a linea di comando
 		
@@ -71,7 +74,7 @@ public class ControllerScelta {
 	//Metodo che indirizza al Login
 	public void apriLogin() {
 		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerAccesso controller=new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO, segreteria);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
+		ControllerAccesso controller=new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO, segreteria);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
 
 	}
 	
