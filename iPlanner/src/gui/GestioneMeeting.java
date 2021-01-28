@@ -506,14 +506,45 @@ public class GestioneMeeting extends JFrame {
 		
 		//RadioButton "Online"
 		onlineRadioButton = new JRadioButton("Online");
+		
 		onlineRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		onlineRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		onlineRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(onlineRadioButton.isSelected()==true)
+				{
+					piattaformaSalaLabel.setText("Piattaforma");
+					try {
+						piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniPiattaforme().toArray()));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					fisicoRadioButton.setSelected(false);
+				}
+			}
+		});
 		modalitàButtonGroup.add(onlineRadioButton);
 		
 		//RadioButton "Fisico"
 		fisicoRadioButton = new JRadioButton("Fisico");
 		fisicoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		fisicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		fisicoRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fisicoRadioButton.isSelected()==true)
+				{
+					piattaformaSalaLabel.setText("Sala");
+					try {
+						piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniSale().toArray()));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					onlineRadioButton.setSelected(false);
+				}
+			}
+		});
 		modalitàButtonGroup.add(fisicoRadioButton);
 		
 		//scroll pane invitati
@@ -728,6 +759,8 @@ public class GestioneMeeting extends JFrame {
 					}
 				}
 					
+				
+				
 				
 			}		
 		});
