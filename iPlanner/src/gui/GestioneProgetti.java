@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -36,8 +38,11 @@ import javax.swing.table.DefaultTableModel;
 import controller.ControllerProgetto;
 import entita.AmbitoProgetto;
 import entita.Progetto;
+import entita.Skill;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,7 +78,7 @@ public class GestioneProgetti extends JFrame {
 	private JComboBox annoTerminazioneComboBox;
 	private ProgettoTableModel dataModel;
 	private JCheckBox progettoTerminatoCheckBox;
-	JList<AmbitoProgetto> ambitiList;
+	private JList ambitiList;
 
 	//Creazione frame
 	//-----------------------------------------------------------------
@@ -578,9 +583,18 @@ public class GestioneProgetti extends JFrame {
 		ambitoProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		
+		
+		
 		//List ambiti
 		try {
-			ambitiList = new JList(controller.ottieniAmbiti().toArray());
+			ambitiList=new JList<>();
+			DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill
+			ambitoModel.addAll(controller.ottieniAmbiti());
+			ambitiList.setModel(ambitoModel);
+//			ambitiList.setSelectedValue(anObject, shouldScroll);
+			
+
 			ambitiScrollPane.setViewportView(ambitiList);
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
@@ -677,12 +691,27 @@ public class GestioneProgetti extends JFrame {
 					meseScadenzaComboBox.setSelectedItem(null);
 					giornoScadenzaComboBox.setSelectedItem(null);
 				}
-				//ambiti progetto
-				AmbitoProgetto[] ambiti = (AmbitoProgetto[]) progettoTable.getValueAt(row, 3);
+			
+				//testSystem.out.println(progettoTable.getValueAt(row, 3));
+				ArrayList<AmbitoProgetto> ambiti =  (ArrayList<AmbitoProgetto>) progettoTable.getValueAt(row, 3);
 				for (AmbitoProgetto ambito : ambiti)
-					ambitiList.setSelectedValue(ambito, rootPaneCheckingEnabled);
+					{
+					 //TestSystem.out.println(ambito);
+				
+					}
+					
 				//tipologia progetto
-				tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 4));
+
+				try {
+					tipologiaComboBox.setModel(new DefaultComboBoxModel(controller.ottieniTipologie().toArray()));
+					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 4));
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			
+				
+
 			}	
 		});
 		//inserisce i progetti nella tabella

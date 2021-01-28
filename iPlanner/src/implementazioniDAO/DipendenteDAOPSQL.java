@@ -293,7 +293,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		if (record == 1) {
 			dipendente.setCf(dipendente.generaCF());
-			JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
+			
 			return true;
 		}
 			

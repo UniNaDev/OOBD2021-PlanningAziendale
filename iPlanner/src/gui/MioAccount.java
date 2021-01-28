@@ -121,8 +121,7 @@ public class MioAccount extends JFrame {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
-//				controller.chiudiMioAccount();	//chiude finestra account
-//				controller.tornaAHome();	//torna alla home
+
 			}
 		});
 		

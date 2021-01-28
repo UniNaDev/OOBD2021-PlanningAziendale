@@ -386,7 +386,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		ResultSet risultato = getTipologiePS.executeQuery();	//esegue la query
 		
 		while (risultato.next())
-			temp.add(risultato.getString(0));	//aggiunge i risultati alla lista
+			temp.add(risultato.getString(1));	//aggiunge i risultati alla lista
 		
 		risultato.close(); //chiude il result set
 		

@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import controller.ControllerScelta;
 import dbManager.CostruttoreDB;
 import dbManager.ManagerConnessioneDB;
+import implementazioniDAO.AmbitoProgettoDAOPSQL;
 import implementazioniDAO.DipendenteDAOPSQL;
 import implementazioniDAO.LuogoNascitaDAOPSQL;
 import implementazioniDAO.MeetingDAOPSQL;
@@ -60,6 +61,7 @@ public class Starter {
 				meetDAO = new MeetingDAOPSQL(connection);
 				skillDAO = new SkillDAOPSQL(connection);
 				salaDAO = new SalaRiunioneDAOPSQL(connection);
+				ambitoDAO= new AmbitoProgettoDAOPSQL(connection);
 				
 				//Ottiene il tipo di autorizzaione (-s = autorizzazione per segreteria, -d autorizzazione per dipendenti)
 				if (args[0].equals("-s"))

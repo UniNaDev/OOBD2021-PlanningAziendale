@@ -87,4 +87,5 @@ public class ControllerProgetto {
 	public ArrayList<String> ottieniTipologie() throws SQLException{
 		return projDAO.getTipologie();
 	}
+
 }

@@ -131,17 +131,13 @@ public class ControllerGestioneProfilo {
 		dipendente.setCellulare(cellulare);
 		dipendente.setIndirizzo(indirizzo);
 		
-		System.out.println(dipendente.toString());
-	
 
-//		try {
-			dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB	
-			chiudiMioAccount();
-			tornaAHome();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			JOptionPane.showMessageDialog(null, e.getMessage());
-//		}
+
+		dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB	
+		JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
+		chiudiMioAccount();
+		tornaAHome();
+
 		
 	
 		}

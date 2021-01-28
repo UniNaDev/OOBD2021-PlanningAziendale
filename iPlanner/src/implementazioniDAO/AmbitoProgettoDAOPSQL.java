@@ -37,13 +37,15 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 	//Metodo che restituisce una lista di tutti gli ambiti esistenti nel DB
 	@Override
 	public ArrayList<AmbitoProgetto> getAmbiti() throws SQLException {
+		ResultSet risultato = getAmbitiPS.executeQuery();
 		ArrayList<AmbitoProgetto> temp = new ArrayList<AmbitoProgetto>();	//inizializza la lista da poi restituire
-		ResultSet risultato = getAmbitiPS.executeQuery();	//esegue la query e ottiene il ResultSet
+			//esegue la query e ottiene il ResultSet
 		
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
-			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getInt("IDAmbito"), risultato.getString("NomeAmbito"));
+			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getInt(1), risultato.getString(2));
 			temp.add(ambitoTemp);
+			System.out.println(ambitoTemp.toString());
 		}
 		risultato.close(); //chiude il ResultSet
 		
