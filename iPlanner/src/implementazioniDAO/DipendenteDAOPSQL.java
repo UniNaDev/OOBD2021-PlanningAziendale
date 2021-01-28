@@ -272,10 +272,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	@Override
 	public boolean updateDipendente(Dipendente dipendente) throws SQLException {
 		String oldCF = dipendente.getCf();	//salva da parte il vecchio codice fiscale del dipendente
-		dipendente.setCf(dipendente.generaCF());	//genera e setta il nuovo codice fiscale in base alle modifiche effettuate
+//		dipendente.setCf(dipendente.generaCF());	//genera e setta il nuovo codice fiscale in base alle modifiche effettuate
 		
 		//inserisce tutti i parametri nello statement INSERT
-		updateDipendentePS.setString(1, dipendente.getCf());
+		updateDipendentePS.setString(1, dipendente.generaCF());
 		updateDipendentePS.setString(2, dipendente.getNome());
 		updateDipendentePS.setString(3, dipendente.getCognome());
 		updateDipendentePS.setString(4, Character.toString(dipendente.getSesso()));	//conversione da char a String per rispettare il tipo CHAR del DB
@@ -291,10 +291,13 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		int record = updateDipendentePS.executeUpdate();	//esegue l'update del dipendente e restituisce il numero di record modificati (1 = modifica effettuata, 0 = fallimento)
 		
-		if (record == 1)
+		if (record == 1) {
+			dipendente.setCf(dipendente.generaCF());
+			JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
 			return true;
+		}
+			
 		else
-//			JOptionPane.showMessageDialog(null, "Update non eseguito");
 			return false;
 	}
 

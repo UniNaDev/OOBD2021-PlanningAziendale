@@ -3,6 +3,8 @@ package controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import org.joda.time.LocalDate;
 
 import entita.Meeting;
@@ -114,7 +116,9 @@ public class ControllerGestioneProfilo {
 	
 	//Metodo che aggiorna le informazioni del dipendente
 	public void aggiornaInfoDipendente(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) throws SQLException {
+		
 		//setta le nuove informazioni del dipendente
+		
 		dipendente.setNome(nome);
 		dipendente.setCognome(cognome);
 		dipendente.setSesso(sesso);
@@ -126,9 +130,22 @@ public class ControllerGestioneProfilo {
 		dipendente.setTelefonoCasa(telefono);
 		dipendente.setCellulare(cellulare);
 		dipendente.setIndirizzo(indirizzo);
+		
+		System.out.println(dipendente.toString());
+	
 
-		dipDAO.updateDipendente(dipendente);	//tenta di fare l'update nel DB		
-	}
+//		try {
+			dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB	
+			chiudiMioAccount();
+			tornaAHome();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			JOptionPane.showMessageDialog(null, e.getMessage());
+//		}
+		
+	
+		}
+	
 	
 	//Metodo che restituisce tutte le province del database
 	public ArrayList<String> ottieniProvince() throws SQLException{

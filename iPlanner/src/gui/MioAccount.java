@@ -116,13 +116,13 @@ public class MioAccount extends JFrame {
 		confermaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					updateAccount(controller);	//Aggiorna info account
+					updateAccount(controller); //Aggiorna info account
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
-				controller.chiudiMioAccount();	//chiude finestra account
-				controller.tornaAHome();	//torna alla home
+//				controller.chiudiMioAccount();	//chiude finestra account
+//				controller.tornaAHome();	//torna alla home
 			}
 		});
 		
