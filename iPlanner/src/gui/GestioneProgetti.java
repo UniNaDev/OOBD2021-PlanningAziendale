@@ -60,6 +60,7 @@ import javax.swing.table.TableModel;
 
 import org.joda.time.LocalDate;
 import javax.swing.JCheckBox;
+import java.awt.Toolkit;
 
 public class GestioneProgetti extends JFrame {
 
@@ -86,6 +87,7 @@ public class GestioneProgetti extends JFrame {
 	//-----------------------------------------------------------------
 	
 	public GestioneProgetti(ControllerProgetto controller) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgetti.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
 		setTitle("iPlanner-Gestione progetto");
@@ -320,6 +322,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//TextField nome progetto
 		nomeTextField = new JTextField();
+		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nomeTextField.setColumns(10);
 		
@@ -384,6 +387,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//TextArea descrizione progetto
 		descrizioneTextArea = new JTextArea();
+		descrizioneTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		//Label "Data Terminazione"
@@ -466,9 +470,11 @@ public class GestioneProgetti extends JFrame {
 		progettoTerminatoCheckBox.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		JScrollPane ambitiScrollPane = new JScrollPane();
+		ambitiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		//ComboBox per tipologia progetti
 		JComboBox tipologiaComboBox = new JComboBox();
+		tipologiaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
 		gl_infoPanel2.setHorizontalGroup(
@@ -591,6 +597,7 @@ public class GestioneProgetti extends JFrame {
 		//List ambiti
 		try {
 			ambitiList=new JList<>();
+			ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 			DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill
 			ambitoModel.addAll(controller.ottieniAmbiti());
 			ambitiList.setModel(ambitoModel);
@@ -611,6 +618,7 @@ public class GestioneProgetti extends JFrame {
 		//List partecipanti
 		DefaultListModel<Object>listaPartecipantiModel = new DefaultListModel<>();
 		JList partecipantiList = new JList();
+		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 14));
 		partecipantiList.setModel(listaPartecipantiModel);
 		partecipantiScrollPane.setViewportView(partecipantiList);
 				
@@ -626,6 +634,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//List meeting relativi al progetto
 		JList meetingRelativiList = new JList();
+		meetingRelativiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		meetingRelativiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingScrollPane.setViewportView(meetingRelativiList);
 		

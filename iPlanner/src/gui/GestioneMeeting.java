@@ -52,6 +52,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTable;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import java.awt.Toolkit;
 
 
 
@@ -89,6 +90,7 @@ public class GestioneMeeting extends JFrame {
 	//Creazione frame
 	//---------------------------------------------
 	public GestioneMeeting(ControllerMeeting theController) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeeting.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
 		setTitle("GestioneMeeting");
