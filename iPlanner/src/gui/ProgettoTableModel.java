@@ -16,6 +16,12 @@ public class ProgettoTableModel extends AbstractTableModel {
 	
 	String[] colnames= {"ProgettoID", "Nome", "Descrizione","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
 
+	//metodo che ritorna la lista di progetti contenuti nella tabella
+	public ArrayList<Progetto> getProgettiTabella()
+	{
+		return this.progettiTabella;
+	}
+	
 	public void setProgettiTabella(ArrayList<Progetto> progettiTabella) {
 		this.progettiTabella = progettiTabella;
 	}

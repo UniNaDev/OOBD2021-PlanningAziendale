@@ -37,6 +37,8 @@ import javax.swing.table.DefaultTableModel;
 
 import controller.ControllerProgetto;
 import entita.AmbitoProgetto;
+import entita.CollaborazioneProgetto;
+import entita.Dipendente;
 import entita.Progetto;
 import entita.Skill;
 
@@ -607,8 +609,12 @@ public class GestioneProgetti extends JFrame {
 		partecipantiScrollPane.setColumnHeaderView(lblNewLabel);
 		
 		//List partecipanti
+		DefaultListModel<Object>listaPartecipantiModel = new DefaultListModel<>();
 		JList partecipantiList = new JList();
+		partecipantiList.setModel(listaPartecipantiModel);
 		partecipantiScrollPane.setViewportView(partecipantiList);
+				
+				
 		
 		//Label "Meeting Relativi"
 		JLabel meetingRelativiLabel = new JLabel("Meeting Relativi");
@@ -711,6 +717,28 @@ public class GestioneProgetti extends JFrame {
 				}
 			
 				
+				//AGGIUNGE LA LISTA DEI PERTECIPANTI AL PROGETTO 
+				int riga = progettoTable.getSelectedRow(); //prende la riga attualmente selezionata della tabella
+				
+				//dalla lista di progetti presenti nella tabella ne prende quello in posizione della riga selezionata (ES: se si seleziona la prima riga prende il progetto in posizione 0 dell arraylist)
+				Progetto progettoSelezionato = dataModel.getProgettiTabella().get(riga);
+				
+				//ripulisce la lista ogni volta che si preme su una riga della tebell , in modo che non vengano aggiunti dipendenti ogni volta
+				listaPartecipantiModel.clear();
+				
+				//ottiene i partecipanti al progetto selezionato e li aggiunge alla lista
+				try 
+				{
+					ArrayList<Dipendente> partecipanti = controller.getPartecipantiProgetto(progettoSelezionato);
+				
+					listaPartecipantiModel.addAll(partecipanti);
+				} catch (SQLException e1) 
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
 
 			}	
 		});
@@ -721,6 +749,9 @@ public class GestioneProgetti extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		
+		
 		tabellaScrollPane.setViewportView(progettoTable);
 	}
 }

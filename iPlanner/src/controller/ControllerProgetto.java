@@ -88,4 +88,9 @@ public class ControllerProgetto {
 		return projDAO.getTipologie();
 	}
 
+	//Ottiene tutti i partecipanti relativi ad un progetto
+	public ArrayList<Dipendente> getPartecipantiProgetto (Progetto proj) throws SQLException
+	{
+		return projDAO.getPartecipantiSenzaRuolo(proj);
+	}
 }

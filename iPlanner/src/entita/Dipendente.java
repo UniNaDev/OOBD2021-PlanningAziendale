@@ -224,9 +224,7 @@ public class Dipendente {
 	
 	@Override
 	public String toString() {
-		return "Dipendente [cf=" + cf + ", nome=" + nome + ", cognome=" + cognome + ", sesso=" + sesso
-				+ ", dataNascita=" + dataNascita + ", luogoNascita=" + luogoNascita + ", indirizzo=" + indirizzo
-				+ ", email=" + email + ", password=" + password + "]";
+		return nome + " " + cognome;
 	}
 	
 	//Metodo che calcola la stringa di caratteri del codice fiscale corrispondente a cognome e nome

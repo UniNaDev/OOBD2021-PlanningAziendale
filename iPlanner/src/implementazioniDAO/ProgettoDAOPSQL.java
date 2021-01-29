@@ -99,7 +99,29 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		return temp;
 	}
-
+	
+	//METODO DI PROVA
+	//Metodo che restituisce i dipendenti partecipanti a un progetto senza specificare il ruolo.
+		@Override
+		public ArrayList<Dipendente> getPartecipantiSenzaRuolo(Progetto proj) throws SQLException {
+			ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista da restituire
+			
+			dipDAO = new DipendenteDAOPSQL(connection);
+			
+			getPartecipantiPS.setInt(1, proj.getIdProgettto()); 	//inserisce il codice del progetto nella query
+			
+			ResultSet risultato = getPartecipantiPS.executeQuery();	//esegue la query e ottiene il ResultSet
+			
+			//finchè ci sono record nel ResultSet
+			while(risultato.next()) {
+				Dipendente partecipante = dipDAO.getDipendenteByCF(risultato.getString("CF"));
+				temp.add(partecipante);	//aggiunge il dipendente alla lista
+			}
+			risultato.close();	//chiude il ResultSet
+			
+			return temp;
+		}
+	
 	//Metodo che restituisce i dipendenti partecipanti a un progetto.
 	@Override
 	public ArrayList<CollaborazioneProgetto> getPartecipanti(Progetto proj) throws SQLException {
