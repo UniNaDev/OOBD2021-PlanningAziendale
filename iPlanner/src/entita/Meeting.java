@@ -57,6 +57,18 @@ public class Meeting {
 		this.sala = sala;
 	}
 
+	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
+			String modalita, String piattaforma, SalaRiunione sala) {
+		this.dataInizio = dataInizio;
+		this.dataFine = dataFine;
+		this.oraInizio = oraInizio;
+		this.oraFine = oraFine;
+		this.modalita = modalita;
+		this.piattaforma = piattaforma;
+		this.sala = sala;
+	}
+
+
 	//Getter e Setter
 	public LocalDate getDataInizio() {
 		return dataInizio;

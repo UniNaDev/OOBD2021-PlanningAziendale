@@ -28,7 +28,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;
-	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS;
+	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS,getProgettoDiscussoPS;
 
 	//METODI
 	//----------------------------------------
@@ -48,6 +48,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		getMeetingsBySalaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodSala = ?");	//?=Codice della sala di cui si vogliono i meeting
 		getMeetingsByPiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.Piattaforma = ?");	//?=Piattaforma di cui si cercano i meeting
 		getPiattaformePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::piattaforma))::text AS piattaforma");
+		getProgettoDiscussoPS = connection.prepareStatement("SELECT nomeprogetto from Progetto NATURAL JOIN Meeting WHERE idMeeting= ?");
 	}
 	
 	//Metodo getMeetingsByData.
@@ -145,9 +146,9 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//Metodo getInvitati.
 	/*Metodo che restituisce una lista di dipendenti (temp) invitati a un meeting specifico.*/
 	@Override
-	public ArrayList<Dipendente> getInvitati(Meeting meeting) throws SQLException {
+	public ArrayList<Dipendente> getInvitati(int idMeeting) throws SQLException {
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
-		getInvitatiPS.setInt(1, meeting.getIdMeeting()); 	//inserisce l'id del meeting di cui si vogliono gli invitati nella query
+		getInvitatiPS.setInt(1, idMeeting); 	//inserisce l'id del meeting di cui si vogliono gli invitati nella query
 		
 		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(connection);	//inizializza il DAO per luogonascita
 		DipendenteDAO dipDAO = new DipendenteDAOPSQL(connection);
@@ -189,9 +190,9 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		addMeetingPS.setObject(5, meeting.getModalita(),Types.OTHER);	//modalità
 		addMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);	//piattaforma
 		if (meeting.getSala() != null)
-			addMeetingPS.setString(8, meeting.getSala().getCodSala());	//codice sala
+			addMeetingPS.setString(7, meeting.getSala().getCodSala());	//codice sala
 		else
-			addMeetingPS.setNull(8, Types.CHAR);	//codice sala null
+			addMeetingPS.setNull(7, Types.CHAR);	//codice sala null
 		//addMeetingPS.setInt(9, 1);	//codcie progetto
 		
 		int record = addMeetingPS.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1=inserito,0=non inserito)
@@ -205,8 +206,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//Metodo removeMeeting.
 	/*Metodo che rimuove un meeting specifico dal DB usando il suo ID.*/
 	@Override
-	public boolean removeMeeting(Meeting meeting) throws SQLException {
-		removeMeetingPS.setInt(1, meeting.getIdMeeting()); 	//inserisce l'id nella delete
+	public boolean removeMeeting(int idMeeting) throws SQLException {
+		removeMeetingPS.setInt(1, idMeeting); 	//inserisce l'id nella delete
 		
 		int record = removeMeetingPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
 		
@@ -312,6 +313,20 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			temp.add(risultato.getString("piattaforma"));
 		}
 		risultato.close();
+		
+		return temp;
+	}
+
+	@Override
+	public String getProgettoRelativo(int idMeeting) throws SQLException {
+		// TODO Auto-generated method stub
+		String temp=null;
+		
+		getProgettoDiscussoPS.setInt(1,idMeeting);
+		ResultSet risultato=getProgettoDiscussoPS.executeQuery();
+		
+		while(risultato.next())
+			temp = risultato.getString("nomeprogetto");
 		
 		return temp;
 	}

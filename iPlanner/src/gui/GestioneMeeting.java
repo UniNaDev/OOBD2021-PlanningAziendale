@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
@@ -19,6 +20,7 @@ import java.awt.Cursor;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -28,6 +30,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import controller.ControllerMeeting;
+import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
 import entita.SalaRiunione;
@@ -79,11 +82,15 @@ public class GestioneMeeting extends JFrame {
 	private JTable meetingTable;
 	private MeetingTableModel dataModelMeeting;
 	private JButton pulisciButton;
+	private JList invitatiList;
+	
+	private JTextArea ProgettoDiscussoTextArea;
 
 	//Creazione frame
 	//---------------------------------------------
 	public GestioneMeeting(ControllerMeeting theController) {
 		setMinimumSize(new Dimension(1150, 700));
+		setLocationRelativeTo(null);
 		setTitle("GestioneMeeting");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
@@ -171,7 +178,21 @@ public class GestioneMeeting extends JFrame {
 				//Imposta sia online che fisico a falso
 				onlineRadioButton.setSelected(false);
 				fisicoRadioButton.setSelected(false);
-				piattaformaSalaComboBox.setSelectedItem(null);	//setta la combobox della piattaforma/sala a null
+				//setta la combobox della piattaforma/sala a null
+				piattaformaSalaComboBox.setSelectedItem(null);	
+				
+				
+
+				
+				DefaultListModel listmodel=new DefaultListModel();
+				invitatiList.setModel(listmodel);
+				listmodel.removeAllElements();
+				
+				
+				ProgettoDiscussoTextArea.setText(null);
+			
+			
+				
 			}
 		});
 		pulisciButton.setPreferredSize(new Dimension(150, 30));
@@ -185,6 +206,20 @@ public class GestioneMeeting extends JFrame {
 		
 		//Button "Elimina"
 		JButton eliminaButton = new JButton("Elimina");
+		eliminaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row=meetingTable.getSelectedRow();
+				int idMeeting=(int) meetingTable.getValueAt(row, 0);
+				
+				try {
+					theController.rimuoviMeeting(idMeeting);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+				}
+			}
+		});
 		eliminaButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -292,6 +327,13 @@ public class GestioneMeeting extends JFrame {
 		creaNuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				
+				try {
+					insertMeeting(theController);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+				}
 				//TODO andrà a fare l'insert di un nuovo meeting
 			}
 		});
@@ -663,7 +705,7 @@ public class GestioneMeeting extends JFrame {
 		progettoDiscussoScrollPane.setColumnHeaderView(progettoDiscussoLabel);
 		
 		//TextArea progetto discusso
-		JTextArea ProgettoDiscussoTextArea = new JTextArea();
+		ProgettoDiscussoTextArea = new JTextArea();
 		progettoDiscussoScrollPane.setViewportView(ProgettoDiscussoTextArea);
 		
 		//Label "Invitati"
@@ -673,10 +715,6 @@ public class GestioneMeeting extends JFrame {
 		infoPanel2.setLayout(gl_infoPanel2);
 		infoPanel.add(infoPanel2);
 		panel.setLayout(gl_panel);
-		
-		//List invitati al meeting
-		JList invitatiList = new JList();
-		invitatiScrollPane.setViewportView(invitatiList);
 		
 		//Label "Gestione Meeting"
 		JLabel gestioneMeetingLabel = new JLabel("Gestione Meeting");
@@ -759,8 +797,31 @@ public class GestioneMeeting extends JFrame {
 					}
 				}
 					
+				int idMeeting=(int) meetingTable.getValueAt(row, 0);
 				
 				
+				try {
+//					ArrayList<Dipendente> dipend =new ArrayList<Dipendente>();
+//					for(Dipendente invitato: theController.ottieniInvitati(idMeeting))
+//						dipend.add(invitato);
+					
+					invitatiList=new JList<>(theController.ottieniInvitati(idMeeting).toArray());
+					DipendenteInvitatoListRenderer renderer = new DipendenteInvitatoListRenderer();	//applica renderer
+					invitatiList.setCellRenderer(renderer);
+					
+					invitatiScrollPane.setViewportView(invitatiList);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				try {
+					ProgettoDiscussoTextArea.setText(theController.ottieniProgettoDiscusso(idMeeting));
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}		
 		});
@@ -771,5 +832,44 @@ public class GestioneMeeting extends JFrame {
 			e1.printStackTrace();
 		}
 		meetingScrollPane.setViewportView(meetingTable);
+		
+		
+	
+		
 	}
+	public void insertMeeting(ControllerMeeting theController) throws SQLException {
+		// TODO Auto-generated method stub
+
+		LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
+		LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
+		LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
+		LocalTime oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);	//ora fine
+		String modalita = "";
+		String piattaforma = null;				
+		SalaRiunione sala = null;
+		
+	
+		//modalità online e piattaforma
+		if (onlineRadioButton.isSelected()) {
+			modalita = "Telematico";
+			piattaforma = piattaformaSalaComboBox.getSelectedItem().toString();	
+		}
+		//modalità fisica e sala
+		else if (fisicoRadioButton.isSelected()) {
+			modalita = "Fisico";
+			sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
+		}
+		Meeting meetingInserito = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
+		try {
+			theController.inserisciMeeting(meetingInserito);	//tenta di fare l'insert nel DB del meeting
+			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());//aggiorna i dati nella tabella con le modifiche fatte
+		
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+	}
+
 }

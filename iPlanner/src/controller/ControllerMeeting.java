@@ -3,6 +3,8 @@ package controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import entita.Dipendente;
 import entita.Meeting;
 import entita.SalaRiunione;
@@ -80,5 +82,39 @@ public class ControllerMeeting {
 	//Metodo che aggiorna le info di un meeting nel DB
 	public void aggiornaMeeting(Meeting meeting) throws SQLException {
 		meetDAO.updateMeeting(meeting);
+	}
+
+	public ArrayList<Dipendente> ottieniInvitati(int idMeeting) throws SQLException {
+		// TODO Auto-generated method stub
+		return meetDAO.getInvitati(idMeeting);
+	}
+
+	public String ottieniProgettoDiscusso(int idMeeting) throws SQLException {
+		// TODO Auto-generated method stub
+		return meetDAO.getProgettoRelativo(idMeeting);
+	}
+
+	public void inserisciMeeting(Meeting meetingInserito){
+		// TODO Auto-generated method stub
+		
+		try {
+			meetDAO.addMeeting(meetingInserito);
+			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Inserimento non riuscito,controllare i campi inseriti");
+		}
+	
+	}
+
+	public void rimuoviMeeting(int idMeeting) throws SQLException {
+		// TODO Auto-generated method stub
+		meetDAO.removeMeeting(idMeeting);
+		JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
+		gestioneMeeting.setVisible(false);
+		gestioneMeeting= new GestioneMeeting(this);
+		gestioneMeeting.setVisible(true);
+		
+		
 	}
 }
