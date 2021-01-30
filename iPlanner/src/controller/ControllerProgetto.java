@@ -8,6 +8,7 @@ import javax.swing.table.TableModel;
 import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
+import entita.Meeting;
 import entita.Progetto;
 import gui.*;
 import interfacceDAO.AmbitoProgettoDAO;
@@ -92,5 +93,11 @@ public class ControllerProgetto {
 	public ArrayList<Dipendente> getPartecipantiProgetto (Progetto proj) throws SQLException
 	{
 		return projDAO.getPartecipantiSenzaRuolo(proj);
+	}
+
+	//Ottiene tutti i meeting relativi ad un progetto
+	public ArrayList<Meeting> getMeetingRelativiProgetto(Progetto proj) throws SQLException
+	{
+		return projDAO.getMeetingRelativi(proj);
 	}
 }
