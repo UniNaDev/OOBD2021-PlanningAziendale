@@ -80,9 +80,12 @@ public class GestioneProgetti extends JFrame {
 	private JComboBox giornoTerminazioneComboBox;
 	private JComboBox meseTerminazioneComboBox;
 	private JComboBox annoTerminazioneComboBox;
+	private JComboBox tipologiaComboBox;
 	private ProgettoTableModel dataModel;
 	private JCheckBox progettoTerminatoCheckBox;
 	private JList ambitiList;
+	private JList partecipantiList;
+	private JList meetingRelativiList;
 
 	//Creazione frame
 	//-----------------------------------------------------------------
@@ -177,6 +180,13 @@ public class GestioneProgetti extends JFrame {
 				
 				//imposta di default l'anno di scadenza come l'anno successivo 
 				annoScadenzaComboBox.setSelectedIndex(1); 
+				
+				tipologiaComboBox.setSelectedItem(null);
+				
+				DefaultListModel listmodel=new DefaultListModel();
+				partecipantiList.setModel(listmodel);
+				meetingRelativiList.setModel(listmodel);
+				listmodel.removeAllElements();
 			}
 		});
 		pulisciCampiButton.setPreferredSize(new Dimension(150, 30));
@@ -474,7 +484,7 @@ public class GestioneProgetti extends JFrame {
 		ambitiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		//ComboBox per tipologia progetti
-		JComboBox tipologiaComboBox = new JComboBox();
+		tipologiaComboBox = new JComboBox();
 		tipologiaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
@@ -618,7 +628,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//List partecipanti
 		DefaultListModel<Object>listaPartecipantiModel = new DefaultListModel<>();
-		JList partecipantiList = new JList();
+		partecipantiList = new JList();
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 16));
 		partecipantiList.setModel(listaPartecipantiModel);
 		partecipantiScrollPane.setViewportView(partecipantiList);
@@ -636,7 +646,7 @@ public class GestioneProgetti extends JFrame {
 		//List meeting relativi al progetto
 		DefaultListModel<Object>listaMeetingRelativiModel = new DefaultListModel<>();
 		MeetingListRenderer renderer = new MeetingListRenderer();
-		JList meetingRelativiList = new JList();
+		meetingRelativiList = new JList();
 		meetingRelativiList.setFixedCellHeight(100);
 		meetingRelativiList.setModel(listaMeetingRelativiModel);
 		meetingRelativiList.setFont(new Font("Consolas", Font.PLAIN, 15));
