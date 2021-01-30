@@ -166,7 +166,7 @@ public class GestioneMeeting extends JFrame {
 				//Imposta data di inizio a oggi
 				dataInizioGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1); //-1 perche gli indici iniziano da 0
 				dataInizioMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
-				dataInizioAnnoComboBox.setSelectedIndex(dataAttuale.getYear() -1900);// -1900 perche nella comboBox gli anni vanno dal 1900 all anno attuale																//sarà il (2021 - 1900) 121 esimo indice
+				dataInizioAnnoComboBox.setSelectedIndex(dataAttuale.getYear() -1900);// -1900 perche nella comboBox gli anni vanno dal 1900 all anno attuale //sarà il (2021 - 1900) 121 esimo indice
 				//Imposta data di fine a oggi
 				dataFineGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
 				dataFineMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
@@ -297,8 +297,7 @@ public class GestioneMeeting extends JFrame {
 					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//aggiorna i dati nella tabella con le modifiche fatte
 					meetingScrollPane.setViewportView(meetingTable);
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
 			}
 		});
@@ -331,12 +330,13 @@ public class GestioneMeeting extends JFrame {
 			{
 				
 				try {
+					//richiama la funzione insertMeeting
 					insertMeeting(theController);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
-				//TODO andrà a fare l'insert di un nuovo meeting
+				
 			}
 		});
 		creaNuovoMeetingButton.addMouseListener(new MouseAdapter() {
@@ -561,8 +561,7 @@ public class GestioneMeeting extends JFrame {
 					try {
 						piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniPiattaforme().toArray()));
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 					fisicoRadioButton.setSelected(false);
 				}
@@ -582,8 +581,7 @@ public class GestioneMeeting extends JFrame {
 					try {
 						piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniSale().toArray()));
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 					onlineRadioButton.setSelected(false);
 				}
@@ -593,7 +591,9 @@ public class GestioneMeeting extends JFrame {
 		
 		//scroll pane invitati
 		JScrollPane invitatiScrollPane = new JScrollPane();
+		invitatiList=new JList();
 		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		invitatiScrollPane.setViewportView(invitatiList);
 		
 		//scroll pane progetto discusso
 		JScrollPane progettoDiscussoScrollPane = new JScrollPane();
@@ -781,8 +781,7 @@ public class GestioneMeeting extends JFrame {
 						fisicoRadioButton.setSelected(false);
 						piattaformaSalaComboBox.setSelectedItem(meetingTable.getValueAt(row, 6));
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 				}
 				//modalità fisica e sala
@@ -794,8 +793,7 @@ public class GestioneMeeting extends JFrame {
 						fisicoRadioButton.setSelected(true);
 						onlineRadioButton.setSelected(false);
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 				}
 					
@@ -803,26 +801,24 @@ public class GestioneMeeting extends JFrame {
 				
 				
 				try {
-//					ArrayList<Dipendente> dipend =new ArrayList<Dipendente>();
-//					for(Dipendente invitato: theController.ottieniInvitati(idMeeting))
-//						dipend.add(invitato);
-					
-					invitatiList=new JList<>(theController.ottieniInvitati(idMeeting).toArray());
+//					invitatiList=new JList<>(theController.ottieniInvitati(idMeeting).toArray());
+					DefaultListModel listmodel=new DefaultListModel();
+					invitatiList.setModel(listmodel);
+					listmodel.addAll(theController.ottieniInvitati(idMeeting));
 					DipendenteInvitatoListRenderer renderer = new DipendenteInvitatoListRenderer();	//applica renderer
 					invitatiList.setCellRenderer(renderer);
 					
-					invitatiScrollPane.setViewportView(invitatiList);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
 				
 				
 				try {
 					ProgettoDiscussoTextArea.setText(theController.ottieniProgettoDiscusso(idMeeting));
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					
+					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
 				
 			}		
@@ -830,8 +826,7 @@ public class GestioneMeeting extends JFrame {
 		try {
 			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//setta il modello di dati della tabella
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 		meetingScrollPane.setViewportView(meetingTable);
 		
@@ -863,12 +858,12 @@ public class GestioneMeeting extends JFrame {
 		}
 		Meeting meetingInserito = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
 		try {
-			theController.inserisciMeeting(meetingInserito);	//tenta di fare l'insert nel DB del meeting
+			theController.inserisciMeeting(meetingInserito,ProgettoDiscussoTextArea.getText());	//tenta di fare l'insert nel DB del meeting
 			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());//aggiorna i dati nella tabella con le modifiche fatte
 		
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 		
 		

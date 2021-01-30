@@ -28,7 +28,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;
-	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS,getProgettoDiscussoPS;
+	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS,getProgettoDiscussoPS,addPresenzaOrganizzatorePS,getIdProgettoDiscussoPS,lastIdMeetingPS,removePresenzeMeetingEliminato;
 
 	//METODI
 	//----------------------------------------
@@ -42,13 +42,17 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		getMeetingsOrganizzatiPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ? AND p.organizzatore = TRUE)");	//?=codice fiscale dell'organizzatore
 		getInvitatiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT p.CF FROM Presenza AS p WHERE p.IDMeeting = ?)");	//?=ID del meeting di cui si vogliono gli invitati
 		getMeetingsByInvitatoPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ?) ORDER BY m.DataInizio, m.OrarioInizio");	//?=codice fiscale del dipendente di cui si vogliono i meeting a cui è invitato
-		addMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, CodSala) VALUES (?,?,?,?,?,?,?)");
+		addMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, CodSala,CodProgetto) VALUES (?,?,?,?,?,?,?,?)");
 		removeMeetingPS = connection.prepareStatement("DELETE FROM Meeting AS m WHERE m.IDMeeting = ?");	//?=ID del meeting da eliminare
 		updateMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, CodSala = ? WHERE IDMeeting = ?");
 		getMeetingsBySalaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodSala = ?");	//?=Codice della sala di cui si vogliono i meeting
 		getMeetingsByPiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.Piattaforma = ?");	//?=Piattaforma di cui si cercano i meeting
 		getPiattaformePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::piattaforma))::text AS piattaforma");
 		getProgettoDiscussoPS = connection.prepareStatement("SELECT nomeprogetto from Progetto NATURAL JOIN Meeting WHERE idMeeting= ?");
+		getIdProgettoDiscussoPS= connection.prepareStatement("SELECT codProgetto FROM Progetto WHERE nomeProgetto ILIKE ?");
+		addPresenzaOrganizzatorePS= connection.prepareStatement("INSERT INTO Presenza(CF,IdMeeting,Presente,Organizzatore) VALUES(?,?,true,true)");
+		lastIdMeetingPS=connection.prepareStatement("SELECT idMeeting FROM Meeting ORDER BY idMeeting DESC LIMIT 1");
+		removePresenzeMeetingEliminato=connection.prepareStatement("DELETE FROM Presenza WHERE IdMeeting =?");
 	}
 	
 	//Metodo getMeetingsByData.
@@ -182,7 +186,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//Metodo addMeeting.
 	/*Metodo che inserisce un nuovo meeting  nel DB.*/
 	@Override
-	public boolean addMeeting(Meeting meeting) throws SQLException {
+	public boolean addMeeting(Meeting meeting,String nomeProgettoDiscusso) throws SQLException {
 		addMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));	//data inizio
 		addMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));	//data fine
 		addMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(),meeting.getOraInizio().getSecondOfMinute()));	//ora inizio
@@ -193,13 +197,19 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			addMeetingPS.setString(7, meeting.getSala().getCodSala());	//codice sala
 		else
 			addMeetingPS.setNull(7, Types.CHAR);	//codice sala null
-		//addMeetingPS.setInt(9, 1);	//codcie progetto
+		
+		getIdProgettoDiscussoPS.setString(1,nomeProgettoDiscusso);
+		ResultSet risultato=getIdProgettoDiscussoPS.executeQuery();
+		risultato.next();
+		
+		addMeetingPS.setInt(8, risultato.getInt("CodProgetto"));	//codcie progetto
 		
 		int record = addMeetingPS.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1=inserito,0=non inserito)
 		
 		if (record == 1)
 			return true;
 		else
+			
 			return false;
 	}
 
@@ -210,6 +220,10 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		removeMeetingPS.setInt(1, idMeeting); 	//inserisce l'id nella delete
 		
 		int record = removeMeetingPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
+		
+		removePresenzeMeetingEliminato.setInt(1, idMeeting);
+		removePresenzeMeetingEliminato.executeUpdate();
+		
 		
 		if (record == 1)
 			return true;
@@ -329,6 +343,25 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			temp = risultato.getString("nomeprogetto");
 		
 		return temp;
+	}
+	
+	public boolean addOrganizzatore(String CF) throws SQLException {
+		
+	
+		
+		ResultSet risultato=lastIdMeetingPS.executeQuery();
+		risultato.next();
+		
+		addPresenzaOrganizzatorePS.setString(1, CF);
+		addPresenzaOrganizzatorePS.setInt(2, risultato.getInt("idMeeting"));
+		
+		int record= addPresenzaOrganizzatorePS.executeUpdate();
+		
+		if(record==1)
+			return true;
+		else
+			return false;
+	
 	}
 
 }

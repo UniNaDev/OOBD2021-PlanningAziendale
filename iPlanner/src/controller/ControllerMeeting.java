@@ -84,33 +84,47 @@ public class ControllerMeeting {
 		meetDAO.updateMeeting(meeting);
 	}
 
+	//Metodo che ottiene gli invitati al meeting selezionato
 	public ArrayList<Dipendente> ottieniInvitati(int idMeeting) throws SQLException {
-		// TODO Auto-generated method stub
 		return meetDAO.getInvitati(idMeeting);
 	}
 
+	//Metodo che ottiene il progetto discusso nel meeting
 	public String ottieniProgettoDiscusso(int idMeeting) throws SQLException {
-		// TODO Auto-generated method stub
 		return meetDAO.getProgettoRelativo(idMeeting);
 	}
 
-	public void inserisciMeeting(Meeting meetingInserito){
-		// TODO Auto-generated method stub
+	//Metodo che inserisce il meeting del progetto da discutere
+	public void inserisciMeeting(Meeting meetingInserito,String nomeProgettoDisusso){
+
 		
 		try {
-			meetDAO.addMeeting(meetingInserito);
+			//Prova ad inserire il meeting e del progetto da discutere
+			meetDAO.addMeeting(meetingInserito,nomeProgettoDisusso);
 			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
+			
+			//Viene inserito come organizzatore la persona che crea il meeting
+			meetDAO.addOrganizzatore(dipendente.getCf()); 
+			
+			//Viene aggiornata la finestra
+			gestioneMeeting.setVisible(false);
+			gestioneMeeting= new GestioneMeeting(this);
+			gestioneMeeting.setVisible(true);
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			JOptionPane.showMessageDialog(null, "Inserimento non riuscito,controllare i campi inseriti");
 		}
 	
 	}
 
 	public void rimuoviMeeting(int idMeeting) throws SQLException {
-		// TODO Auto-generated method stub
+
+		//Rimuove il meeting selezionato
 		meetDAO.removeMeeting(idMeeting);
 		JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
+		
+		//Viene aggiornata la finestra
 		gestioneMeeting.setVisible(false);
 		gestioneMeeting= new GestioneMeeting(this);
 		gestioneMeeting.setVisible(true);
