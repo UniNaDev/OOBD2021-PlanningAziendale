@@ -158,38 +158,7 @@ public class GestioneProgetti extends JFrame {
 				pulisciCampiButton.setBackground(Color.WHITE);
 			}
 		});
-		//Click sul pulsante
-		pulisciCampiButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				//svuota i campi
-				nomeTextField.setText("");
-				descrizioneTextArea.setText("");
-				
-				progettoTerminatoCheckBox.setSelected(false);
-				
-				//ricava la data attuale
-				LocalDate dataAttuale = LocalDate.now();
-				
-				annoTerminazioneComboBox.setSelectedItem(null);
-				meseTerminazioneComboBox.setSelectedItem(null);
-				giornoTerminazioneComboBox.setSelectedItem(null);
-				
-				//imposta di default giorno e mese come quelli della data attuale (-1 perche gli indici partono da 0)
-				giornoScadenzaComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
-				meseScadenzaComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);				
-				
-				//imposta di default l'anno di scadenza come l'anno successivo 
-				annoScadenzaComboBox.setSelectedIndex(1); 
-				
-				tipologiaComboBox.setSelectedItem(null);
-				
-				DefaultListModel listmodel=new DefaultListModel();
-				partecipantiList.setModel(listmodel);
-				meetingRelativiList.setModel(listmodel);
-				listmodel.removeAllElements();
-			}
-		});
+		
 		pulisciCampiButton.setPreferredSize(new Dimension(150, 30));
 		pulisciCampiButton.setMaximumSize(new Dimension(150, 150));
 		pulisciCampiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -518,7 +487,10 @@ public class GestioneProgetti extends JFrame {
 		
 		//ComboBox per tipologia progetti
 		tipologiaComboBox = new JComboBox();
+		tipologiaComboBox.setBackground(Color.WHITE);
+		tipologiaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		tipologiaComboBox.setUI(new BasicComboBoxUI());
 		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
 		gl_infoPanel2.setHorizontalGroup(
@@ -686,6 +658,39 @@ public class GestioneProgetti extends JFrame {
 		meetingRelativiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingRelativiList.setCellRenderer(renderer);
 		meetingScrollPane.setViewportView(meetingRelativiList);
+		
+		//Click sul pulsante "Pulisci Campi"
+		pulisciCampiButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+				{
+					//svuota i campi
+					nomeTextField.setText("");
+					descrizioneTextArea.setText("");
+						
+					progettoTerminatoCheckBox.setSelected(false);
+						
+					//ricava la data attuale
+					LocalDate dataAttuale = LocalDate.now();
+						
+					annoTerminazioneComboBox.setSelectedItem(null);
+					meseTerminazioneComboBox.setSelectedItem(null);
+					giornoTerminazioneComboBox.setSelectedItem(null);
+						
+					//imposta di default giorno e mese come quelli della data attuale (-1 perche gli indici partono da 0)
+					giornoScadenzaComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
+					meseScadenzaComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);				
+						
+					//imposta di default l'anno di scadenza come l'anno successivo 
+					annoScadenzaComboBox.setSelectedIndex(1); 
+						
+					tipologiaComboBox.setSelectedItem(null);
+					
+					//svuota le liste di partecipanti e meeting
+					listaPartecipantiModel.clear();
+					listaMeetingRelativiModel.clear();
+						
+				}
+		});
 		
 		//Label "Gestione Progetto"
 		JLabel gestioneProgettoLabel = new JLabel("Gestione Progetto");
