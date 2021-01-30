@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
@@ -253,26 +254,35 @@ public class GestioneProgetti extends JFrame {
 				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
 				// NELLA JTABLE (colonna 0 della riga selezionata)
 				
-				int rigaSelezionata = progettoTable.getSelectedRow();
-				
-				//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
-				LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
-				LocalDate nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
-				
-				//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
-				if(!progettoTerminatoCheckBox.isSelected())
-					nuovaDataTerminazione = null;
-				
-				try 
+				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
+				//se l'utente conferma allora vengono effettivamente fatte le modifiche
+				if(conferma == JOptionPane.YES_OPTION)
 				{
-					//prende tutti i campi e fa l'update del progetto
-					controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione);
-				
-				} catch (SQLException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					int rigaSelezionata = progettoTable.getSelectedRow();
+					
+					//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
+					LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
+					LocalDate nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
+					
+					//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
+					if(!progettoTerminatoCheckBox.isSelected())
+						nuovaDataTerminazione = null;
+					
+					try 
+					{
+						//prende tutti i campi e fa l'update del progetto
+						controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione);
+					
+						//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
+						dataModel.setProgettiTabella(controller.ottieniProgetti());
+
+					} catch (SQLException e1) 
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
+						
 			}
 		});
 		confermaModificheButton.addMouseListener(new MouseAdapter() {
@@ -420,6 +430,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//TextArea descrizione progetto
 		descrizioneTextArea = new JTextArea();
+		descrizioneTextArea.setLineWrap(true);
 		descrizioneTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
