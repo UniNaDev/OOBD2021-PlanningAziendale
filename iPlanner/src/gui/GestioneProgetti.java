@@ -39,6 +39,7 @@ import controller.ControllerProgetto;
 import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
+import entita.Meeting;
 import entita.Progetto;
 import entita.Skill;
 
@@ -618,7 +619,7 @@ public class GestioneProgetti extends JFrame {
 		//List partecipanti
 		DefaultListModel<Object>listaPartecipantiModel = new DefaultListModel<>();
 		JList partecipantiList = new JList();
-		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 14));
+		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 16));
 		partecipantiList.setModel(listaPartecipantiModel);
 		partecipantiScrollPane.setViewportView(partecipantiList);
 				
@@ -633,9 +634,14 @@ public class GestioneProgetti extends JFrame {
 		panel.setLayout(gl_panel);
 		
 		//List meeting relativi al progetto
+		DefaultListModel<Object>listaMeetingRelativiModel = new DefaultListModel<>();
+		MeetingListRenderer renderer = new MeetingListRenderer();
 		JList meetingRelativiList = new JList();
-		meetingRelativiList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		meetingRelativiList.setFixedCellHeight(100);
+		meetingRelativiList.setModel(listaMeetingRelativiModel);
+		meetingRelativiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		meetingRelativiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meetingRelativiList.setCellRenderer(renderer);
 		meetingScrollPane.setViewportView(meetingRelativiList);
 		
 		//Label "Gestione Progetto"
@@ -726,21 +732,29 @@ public class GestioneProgetti extends JFrame {
 				}
 			
 				
-				//AGGIUNGE LA LISTA DEI PERTECIPANTI AL PROGETTO 
-				int riga = progettoTable.getSelectedRow(); //prende la riga attualmente selezionata della tabella
+				//AGGIUNGE LA LISTA DEI PERTECIPANTI E DEI PARTECIPANTI E DEI MEETING 
+				
+				int riga = progettoTable.getSelectedRow(); //prende la riga attualmente selezionata della tabella dei progetti
 				
 				//dalla lista di progetti presenti nella tabella ne prende quello in posizione della riga selezionata (ES: se si seleziona la prima riga prende il progetto in posizione 0 dell arraylist)
 				Progetto progettoSelezionato = dataModel.getProgettiTabella().get(riga);
 				
-				//ripulisce la lista ogni volta che si preme su una riga della tebell , in modo che non vengano aggiunti dipendenti ogni volta
+				//ripulisce le liste ogni volta che si preme su una riga della tabella , in modo che non vengano aggiunti elementi ad ogni click
 				listaPartecipantiModel.clear();
+				listaMeetingRelativiModel.clear();
 				
-				//ottiene i partecipanti al progetto selezionato e li aggiunge alla lista
 				try 
 				{
+					//ottiene i partecipanti al progetto selezionato
 					ArrayList<Dipendente> partecipanti = controller.getPartecipantiProgetto(progettoSelezionato);
-				
+					
+					//ottiene i meeting relativi al progetto selezionato
+					ArrayList<Meeting> meetingRelativi = controller.getMeetingRelativiProgetto(progettoSelezionato);
+					
+					//aggiunge meeting e partecipanti alle rispettive liste
+					listaMeetingRelativiModel.addAll(meetingRelativi);
 					listaPartecipantiModel.addAll(partecipanti);
+				
 				} catch (SQLException e1) 
 				{
 					// TODO Auto-generated catch block

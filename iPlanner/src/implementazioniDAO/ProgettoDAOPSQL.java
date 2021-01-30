@@ -166,6 +166,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					risultato.getString("Modalità"),
 					risultato.getString("Piattaforma"),
 					salaDAO.getSalaByCod(risultato.getString("CodSala")));
+					
+					//imposta proj come progetto relativo
+					meetingTemp.setProgettoDiscusso(proj);
 			
 			temp.add(meetingTemp);
 		}
