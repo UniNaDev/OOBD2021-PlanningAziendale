@@ -266,7 +266,7 @@ public class GestioneProgetti extends JFrame {
 				try 
 				{
 					//prende tutti i campi e fa l'update del progetto
-					controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), tipologiaComboBox.getSelectedItem().toString(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione);
+					controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione);
 				
 				} catch (SQLException e1) 
 				{
