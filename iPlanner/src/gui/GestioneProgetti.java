@@ -250,7 +250,29 @@ public class GestioneProgetti extends JFrame {
 		confermaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				//TODO andrà a fare l'update sul progetto
+				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
+				// NELLA JTABLE (colonna 0 della riga selezionata)
+				
+				int rigaSelezionata = progettoTable.getSelectedRow();
+				
+				//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
+				LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
+				LocalDate nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
+				
+				//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
+				if(!progettoTerminatoCheckBox.isSelected())
+					nuovaDataTerminazione = null;
+				
+				try 
+				{
+					//prende tutti i campi e fa l'update del progetto
+					controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), tipologiaComboBox.getSelectedItem().toString(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione);
+				
+				} catch (SQLException e1) 
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		confermaModificheButton.addMouseListener(new MouseAdapter() {

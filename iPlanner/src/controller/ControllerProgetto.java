@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.swing.table.TableModel;
 
+import org.joda.time.LocalDate;
+
 import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
@@ -99,5 +101,14 @@ public class ControllerProgetto {
 	public ArrayList<Meeting> getMeetingRelativiProgetto(Progetto proj) throws SQLException
 	{
 		return projDAO.getMeetingRelativi(proj);
+	}
+
+	//metodo fa l'update del progetto con i nuovi campi inseriti
+	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione, LocalDate dataCreazione , LocalDate nuovaDataScadenza, LocalDate nuovaDataTerminazione) throws SQLException 
+	{
+		//crea un progetto temporaneo con i dati del progetto aggiorati
+		Progetto tmp = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione , dataCreazione , nuovaDataScadenza, nuovaDataTerminazione);
+		
+		projDAO.updateProgetto(tmp);
 	}
 }
