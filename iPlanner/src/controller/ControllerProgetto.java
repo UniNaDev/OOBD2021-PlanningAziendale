@@ -111,4 +111,20 @@ public class ControllerProgetto {
 		
 		projDAO.updateProgetto(tmp);
 	}
+	
+	//metodo che fa l'insert di un nuovo progetto con i campi inseriti
+	public void addProgetto(String nomeProgetto , String tipologia , String descrizioneProgetto , LocalDate dataCreazione , LocalDate dataScadenza,ArrayList<AmbitoProgetto> ambiti) throws SQLException 
+	{
+		Progetto tmp = new Progetto(nomeProgetto, tipologia, descrizioneProgetto , dataCreazione , dataScadenza);
+
+		//DA RIVEDERE
+		//tmp.setAmbiti(ambiti);
+
+		projDAO.addProgetto(tmp);
+
+	}
+		
+	
+		
+	
 }

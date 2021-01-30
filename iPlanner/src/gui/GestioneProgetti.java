@@ -19,6 +19,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JTextArea;
 import java.awt.FlowLayout;
 import java.awt.Component;
@@ -49,6 +50,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -277,13 +279,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//Button "Crea Nuovo"
 		JButton creaNuovoButton = new JButton("Crea Nuovo");
-		//Click sul pulsante
-		creaNuovoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				//TODO andrà a fare l inserto di un nuovo progetto
-			}
-		});
+
 		creaNuovoButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -611,17 +607,21 @@ public class GestioneProgetti extends JFrame {
 		
 		
 		//List ambiti
-		try {
-			ambitiList=new JList<>();
-			ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-			DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill
-			ambitoModel.addAll(controller.ottieniAmbiti());
-			ambitiList.setModel(ambitoModel);
-//			ambitiList.setSelectedValue(anObject, shouldScroll);
+		
+		ambitiList=new JList<>();
+		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill			
+		ambitiList.setModel(ambitoModel);
+		//ambitiList.setSelectedValue(anObject, shouldScroll);
 			
-
-			ambitiScrollPane.setViewportView(ambitiList);
-		} catch (SQLException e2) {
+		ambitiScrollPane.setViewportView(ambitiList);		
+		
+		try 
+		{
+			ambitoModel.addAll(controller.ottieniAmbiti());
+		}
+		catch (SQLException e2) 
+		{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
@@ -658,6 +658,41 @@ public class GestioneProgetti extends JFrame {
 		meetingRelativiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingRelativiList.setCellRenderer(renderer);
 		meetingScrollPane.setViewportView(meetingRelativiList);
+		
+		//CLICK SUL PULSANTE "CREA NUOVO"
+		creaNuovoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				//chiede all utente la conferma della creazione
+				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?\nNOTA: I progetti appena creati hanno data di terminazione nulla");
+				
+				//se l'utente conferma di voler creare un nuovo progetto viene fatto l'insert
+				if (conferma == JOptionPane.YES_OPTION)
+					{
+					LocalDate dataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
+				
+					ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
+				
+					//prende tutte le righe selezionate nella lista degli ambiti
+					int[] selezionati = ambitiList.getSelectedIndices();
+				
+					//DA RIVEDERE
+					//aggiunge alla lista di ambiti gli elementi nelle righe selezionate
+					for(int i : selezionati)
+					ambiti.add(ambitoModel.getElementAt(i));				 
+				
+					try 
+						{
+						controller.addProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
+						} 
+					catch (SQLException e1) 
+						{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						}
+					}
+				}
+		});
 		
 		//Click sul pulsante "Pulisci Campi"
 		pulisciCampiButton.addActionListener(new ActionListener() {
