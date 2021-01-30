@@ -25,6 +25,7 @@ public class ControllerMeeting {
 	//Attributi GUI
 	private MieiMeeting mieiMeeting;
 	private GestioneMeeting gestioneMeeting;
+	private Home home;
 	
 	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
@@ -95,10 +96,10 @@ public class ControllerMeeting {
 	}
 
 	//Metodo che inserisce il meeting del progetto da discutere
-	public void inserisciMeeting(Meeting meetingInserito,String nomeProgettoDisusso){
+	public void inserisciMeeting(Meeting meetingInserito,String nomeProgettoDisusso) throws SQLException{
 
 		
-		try {
+		
 			//Prova ad inserire il meeting e del progetto da discutere
 			meetDAO.addMeeting(meetingInserito,nomeProgettoDisusso);
 			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
@@ -106,15 +107,19 @@ public class ControllerMeeting {
 			//Viene inserito come organizzatore la persona che crea il meeting
 			meetDAO.addOrganizzatore(dipendente.getCf()); 
 			
+			//Viene aggiornata la finestra MieiMeeting
+			mieiMeeting.setVisible(false);
+			mieiMeeting= new MieiMeeting(this);
+			mieiMeeting.setVisible(true);
+			
 			//Viene aggiornata la finestra
 			gestioneMeeting.setVisible(false);
 			gestioneMeeting= new GestioneMeeting(this);
 			gestioneMeeting.setVisible(true);
 			
-		} catch (SQLException e) {
+	
 			
-			JOptionPane.showMessageDialog(null, "Inserimento non riuscito,controllare i campi inseriti");
-		}
+		
 	
 	}
 
@@ -124,10 +129,18 @@ public class ControllerMeeting {
 		meetDAO.removeMeeting(idMeeting);
 		JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
 		
-		//Viene aggiornata la finestra
+		//Viene aggiornata la finestra MieiMeeting
+		mieiMeeting.setVisible(false);
+		mieiMeeting= new MieiMeeting(this);
+		mieiMeeting.setVisible(true);
+		
+		//Viene aggiornata la finestra GestioneMeeting
 		gestioneMeeting.setVisible(false);
 		gestioneMeeting= new GestioneMeeting(this);
 		gestioneMeeting.setVisible(true);
+		
+
+		
 		
 		
 	}

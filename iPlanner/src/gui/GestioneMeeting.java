@@ -66,6 +66,9 @@ public class GestioneMeeting extends JFrame {
 	private JTextField idMeetingTextField;
 	private JTable progettoTable;
 	private JTextField cercaTextField;
+	private JLabel modalitaLabel;
+	private JLabel piattaformaSalaLabel;
+	private JLabel progettoDiscussoLabel;
 	private final ButtonGroup modalitàButtonGroup = new ButtonGroup();
 	private JComboBox dataInizioGiornoComboBox;
 	private JComboBox dataInizioMeseComboBox;
@@ -83,6 +86,8 @@ public class GestioneMeeting extends JFrame {
 	private JTable meetingTable;
 	private MeetingTableModel dataModelMeeting;
 	private JButton pulisciButton;
+	private JButton eliminaButton;
+	private JButton modificaButton;
 	private JList invitatiList;
 	
 	private JTextArea ProgettoDiscussoTextArea;
@@ -93,6 +98,7 @@ public class GestioneMeeting extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeeting.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
+		
 		setTitle("GestioneMeeting");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
@@ -207,7 +213,7 @@ public class GestioneMeeting extends JFrame {
 		pulisciButton.setMargin(new Insets(2, 20, 2, 20));
 		
 		//Button "Elimina"
-		JButton eliminaButton = new JButton("Elimina");
+		eliminaButton = new JButton("Elimina");
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row=meetingTable.getSelectedRow();
@@ -267,12 +273,17 @@ public class GestioneMeeting extends JFrame {
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
 		//Button "Conferma Modifiche"
-		JButton modificaButton = new JButton("Conferma Modifiche");
+		modificaButton = new JButton("Conferma Modifiche");
 		//Click sul pulsante
 		modificaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				if(idMeetingTextField.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Selezionare un meeting da modificare dalla tabella");
+					
+				}
 				//Update del meeting
+				else {
 				int id = Integer.valueOf(idMeetingTextField.getText());	//id
 				LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
 				LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
@@ -295,10 +306,13 @@ public class GestioneMeeting extends JFrame {
 				try {
 					theController.aggiornaMeeting(meetingAggiornato);	//tenta di fare l'update nel DB del meeting
 					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//aggiorna i dati nella tabella con le modifiche fatte
+					JOptionPane.showMessageDialog(null, "Meeting Modificato");
 					meetingScrollPane.setViewportView(meetingTable);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
+			}
+				
 			}
 		});
 		modificaButton.addMouseListener(new MouseAdapter() {
@@ -328,14 +342,43 @@ public class GestioneMeeting extends JFrame {
 		creaNuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				if((onlineRadioButton.isSelected() || fisicoRadioButton.isSelected()) && piattaformaSalaComboBox.getSelectedItem()!=null && !ProgettoDiscussoTextArea.getText().isBlank())
+				{
 				
-				try {
-					//richiama la funzione insertMeeting
-					insertMeeting(theController);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null, e1.getMessage());
+					
+					try {
+						//richiama la funzione insertMeeting
+						insertMeeting(theController);
+						
+					} catch (SQLException e1) {
+						
+						JOptionPane.showMessageDialog(null, "Controlla di aver inserito il progetto discusso");
+					}
+					
 				}
+				else if((!onlineRadioButton.isSelected() || !fisicoRadioButton.isSelected()) || piattaformaSalaComboBox.getSelectedItem()==null ||ProgettoDiscussoTextArea.getText().isBlank())
+				{
+					
+					modalitaLabel.setForeground(Color.BLACK);
+					piattaformaSalaLabel.setForeground(Color.BLACK);
+					progettoDiscussoLabel.setForeground(Color.BLACK);
+					
+					JOptionPane.showMessageDialog(null, "Controllare i campi inseriti");
+					
+					if(!onlineRadioButton.isSelected() && !fisicoRadioButton.isSelected()){
+						modalitaLabel.setForeground(Color.RED);
+					}
+			
+					if(piattaformaSalaComboBox.getSelectedItem()==null) {
+						piattaformaSalaLabel.setForeground(Color.RED);
+					}
+					
+					if(ProgettoDiscussoTextArea.getText().isBlank()) {
+						progettoDiscussoLabel.setForeground(Color.RED);
+					}
+				}
+				
+				
 				
 			}
 		});
@@ -531,12 +574,12 @@ public class GestioneMeeting extends JFrame {
 		
 		
 		//Label "Modalità"
-		JLabel modalitaLabel = new JLabel("Modalità");
+		modalitaLabel = new JLabel("Modalità");
 		modalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		modalitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		//Label "Piattaforma"/"Sala"
-		JLabel piattaformaSalaLabel = new JLabel("Piattaforma");
+		piattaformaSalaLabel = new JLabel("Piattaforma");
 		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
@@ -702,7 +745,7 @@ public class GestioneMeeting extends JFrame {
 		);
 		
 		//Label "Progetto Discusso"
-		JLabel progettoDiscussoLabel = new JLabel("Progetto Discusso");
+		progettoDiscussoLabel = new JLabel("Progetto Discusso");
 		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
 		progettoDiscussoScrollPane.setColumnHeaderView(progettoDiscussoLabel);
 		
