@@ -110,6 +110,16 @@ public class ControllerProgetto {
 		Progetto tmp = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione , dataCreazione , nuovaDataScadenza, nuovaDataTerminazione);
 		
 		projDAO.updateProgetto(tmp);
+		
+		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
+		mieiProgetti.setVisible(false);
+		mieiProgetti = new MieiProgetti(this,dipendente);
+		mieiProgetti.setVisible(true);
+		
+		gestioneProgetti.setVisible(false);
+		gestioneProgetti= new GestioneProgetti(this);
+		gestioneProgetti.setVisible(true);
+								
 	}
 	
 	//metodo che fa l'insert di un nuovo progetto con i campi inseriti
@@ -142,8 +152,28 @@ public class ControllerProgetto {
 		gestioneProgetti.setVisible(true);
 		
 	}
-		
 	
+	//metodo che prende in input il codprogetto e restituisce gli ambiti
+	public ArrayList<AmbitoProgetto> getAmbitiProgettoByCod(int codProgetto) throws SQLException
+	{
+		return ambitoDAO.getAmbitiProgettoByCodice(codProgetto);
+	}
+	
+	//metodo che prende in input il codProgetto e lo elimina dal db
+	public boolean removeProgettoByCod (int codProgetto) throws SQLException
+	{
+		boolean risultato = projDAO.removeProgettoByCod(codProgetto);
 		
+		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
+		mieiProgetti.setVisible(false);
+		mieiProgetti = new MieiProgetti(this,dipendente);
+		mieiProgetti.setVisible(true);
+		
+		gestioneProgetti.setVisible(false);
+		gestioneProgetti= new GestioneProgetti(this);
+		gestioneProgetti.setVisible(true);
+		
+		return risultato;
+	}
 	
 }

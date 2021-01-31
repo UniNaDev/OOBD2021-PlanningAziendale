@@ -116,4 +116,21 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 			return false;
 	}
 
+	//Metodo che restituisce gli ambiti di un progetto prendendo in input solo il codice
+	@Override
+	public ArrayList<AmbitoProgetto> getAmbitiProgettoByCodice(int codProgetto) throws SQLException {
+		getAmbitiProgettoPS.setInt(1, codProgetto);	//inserisce il codice del progetto nella query
+		ArrayList<AmbitoProgetto> temp = new ArrayList<AmbitoProgetto>();	//inizializza la lista da restituire
+		
+		ResultSet risultato = getAmbitiProgettoPS.executeQuery();	//esegue la query e restituisce il ResultSet
+		
+		//finchè ci sono record nel ResultSet
+		while (risultato.next()) {
+			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getInt("IDAmbito"), risultato.getString("NomeAmbito"));
+			temp.add(ambitoTemp);
+		}
+		risultato.close(); //chiude il ResultSet
+		
+		return temp;
+	}
 }

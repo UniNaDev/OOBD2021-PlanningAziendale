@@ -29,4 +29,5 @@ public interface ProgettoDAO {
 	public ArrayList<String> getTipologie() throws SQLException;	//metodo che ottiene le tipologie possibili di un progetto
 	public ArrayList<Dipendente> getPartecipantiSenzaRuolo(Progetto proj) throws SQLException; //metodo che restituisce tutti i partecipanti ad un progetto senza specificare il ruolo
 	public int getCodProgetto(Progetto proj) throws SQLException; //metodo che ottiene il codice di un progetto
+	public boolean removeProgettoByCod(int codProgetto) throws SQLException; //metodo che rimuove un progetto dal db prendendo in input solo il codice
 }

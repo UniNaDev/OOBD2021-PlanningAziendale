@@ -437,4 +437,17 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		return codProgetto;
 	}
+	
+	//Metodo che rimuove un progetto dal DB prendendo in input solo il codice
+	@Override
+	public boolean removeProgettoByCod(int codProgetto) throws SQLException {
+		removeProgettoPS.setInt(1, codProgetto); 	//inserisce il codice del progetto da eliminare nella delete
+		
+		int record = removeProgettoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
+		
+		if (record == 1)
+			return true;
+		else
+			return false;
+	}
 }

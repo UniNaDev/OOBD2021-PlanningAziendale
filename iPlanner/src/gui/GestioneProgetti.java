@@ -172,6 +172,34 @@ public class GestioneProgetti extends JFrame {
 		
 		//Button "Elimina"
 		JButton eliminaButton = new JButton("Elimina");
+		eliminaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				//chiede conferma all utente 
+				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare il progetto selezionato?");
+				
+				if(conferma == JOptionPane.YES_OPTION)
+				{
+					//ricava il codice del progetto selezionato dalla tabella
+					int codProgetto = (int)progettoTable.getValueAt(progettoTable.getSelectedRow(), 0);
+				
+					try 
+					{
+						boolean risultato = controller.removeProgettoByCod(codProgetto);
+						
+						if(risultato)
+							JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
+						else
+							JOptionPane.showMessageDialog(null, "Impossibile eliminare il progetto");
+					
+					} catch (SQLException e1) 
+					{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					}
+				}
+			}
+		});
 		eliminaButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -608,7 +636,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//List ambiti
 		
-		ambitiList=new JList<>();
+		ambitiList=new JList<AmbitoProgetto>();
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill			
 		ambitiList.setModel(ambitoModel);
@@ -821,14 +849,39 @@ public class GestioneProgetti extends JFrame {
 					meseScadenzaComboBox.setSelectedItem(null);
 					giornoScadenzaComboBox.setSelectedItem(null);
 				}
-			
-				//testSystem.out.println(progettoTable.getValueAt(row, 3));
-				ArrayList<AmbitoProgetto> ambiti =  (ArrayList<AmbitoProgetto>) progettoTable.getValueAt(row, 3);
-				for (AmbitoProgetto ambito : ambiti)
-					{
-					 //TestSystem.out.println(ambito);
+								
+				//RICAVA GLI AMBITI DEL PROGETTO E LI SELEZIONA NELLA LISTA
+				ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
 				
+				try 
+				{
+					//prende gli ambiti del progetto che ha come codice la colonna 0 della riga selezionata
+					ambiti = controller.getAmbitiProgettoByCod((int)progettoTable.getValueAt(row, 0));					
+				} 
+				catch (SQLException e2) 
+				{
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+					ArrayList<Integer> selezionati = new ArrayList<Integer>();
+				    
+					//scorre tutti gli ambiti presenti nella lista degli ambiti e li confronta con ogni ambito del progetto per ottenere gli indici degli ambiti da selezionare
+					for(int i = 0 ;i < ambitoModel.size() ; i++) 
+					{
+						for(int j = 0 ; j< ambiti.size() ; j++) 
+						{
+							if(ambiti.get(j).getNome().equals(ambitoModel.getElementAt(i).getNome())) //confonta i nomi degli ambiti
+							{								
+								selezionati.add(i);	 										//aggiunge tutti gli indici ottenuti in una lista
+							}
+						}	
 					}
+						
+					//(preso da stack overflow) converte l'arraylist di integer in int[]
+					int[] array = selezionati.stream().mapToInt(i -> i).toArray();
+					
+								
+					ambitiList.setSelectedIndices(array); //seleziona gli indici recuperati nella lista degli ambiti
 					
 				//tipologia progetto
 
