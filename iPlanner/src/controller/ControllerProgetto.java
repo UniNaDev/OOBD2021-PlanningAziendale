@@ -120,7 +120,7 @@ public class ControllerProgetto {
 		//aggiunge prima il progetto senza ambiti in modo che la sequence nel db crei un CodProgetto
 		projDAO.addProgetto(tmp);
 		
-		//RICAVA L ID DEL PROGETTO DAL DB E LO SETTA COME CODPROGETTO
+		//ricava il codProgetto del progetto appena inserto e lo setta
 		tmp.setIdProgettto(projDAO.getCodProgetto(tmp));
 		
 		//aggiunge gli ambiti presi dalle righe seleziionate al progetto
@@ -128,7 +128,19 @@ public class ControllerProgetto {
 
 		//fa un insert in ambitoProgettoLink nel db
 		ambitoDAO.addAmbitiProgetto(tmp);
-
+		
+		//imposta il dipendente che ha creato il progetto come project Manager
+		projDAO.addPartecipante(dipendente, tmp, "Project Manager");
+	
+		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
+		mieiProgetti.setVisible(false);
+		mieiProgetti = new MieiProgetti(this,dipendente);
+		mieiProgetti.setVisible(true);
+		
+		gestioneProgetti.setVisible(false);
+		gestioneProgetti= new GestioneProgetti(this);
+		gestioneProgetti.setVisible(true);
+		
 	}
 		
 	

@@ -663,8 +663,33 @@ public class GestioneProgetti extends JFrame {
 		creaNuovoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
+				if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
+				{
+										
+					//fa diventare rossi i campi obbligatori che non sono stati inseriti
+					if(nomeTextField.getText().isBlank())					
+							nomeProgettoLabel.setForeground(Color.RED);
+					else if(!nomeTextField.getText().isBlank())
+						nomeProgettoLabel.setForeground(Color.BLACK);
+					
+					if(tipologiaComboBox.getSelectedItem()== null)
+						tipologiaProgettoLabel.setForeground(Color.RED);
+					else if(tipologiaComboBox.getSelectedItem()!= null)
+						tipologiaProgettoLabel.setForeground(Color.BLACK);
+					
+					if(ambitiList.isSelectionEmpty())
+						ambitoProgettoLabel.setForeground(Color.RED);
+					else if(!ambitiList.isSelectionEmpty())
+						ambitoProgettoLabel.setForeground(Color.BLACK);
+					
+					JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
+				
+				}
+				
+				else {
 				//chiede all utente la conferma della creazione
-				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?\nNOTA: I progetti appena creati hanno data di terminazione nulla");
+				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?");
 				
 				//se l'utente conferma di voler creare un nuovo progetto viene fatto l'insert
 				if (conferma == JOptionPane.YES_OPTION)
@@ -690,6 +715,7 @@ public class GestioneProgetti extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						}
+					}
 					}
 				}
 		});
