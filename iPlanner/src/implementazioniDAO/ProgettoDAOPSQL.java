@@ -44,7 +44,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	updateProgettoPS,
 	getMeetingRelativiPS,
 	getProgettoByCodPS,
-	getTipologiePS;
+	getTipologiePS,
+	getCodProgettoPS;
 	
 	//METODI
 	//----------------------------------------
@@ -67,6 +68,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i meeting
 		getProgettoByCodPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");	//? = codice progetto
 		getTipologiePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::tipologia))");
+		getCodProgettoPS = connection.prepareStatement("SELECT codprogetto FROM progetto WHERE nomeprogetto = ? AND datacreazione =?");
 	}
 
 	//Metodo che restituisce una lista di tutti i progetti dell'azienda
@@ -417,5 +419,22 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		return temp;
 	}
-
+	
+	//Metodo che restituisce il codice del progetto
+	@Override
+	public int getCodProgetto(Progetto proj) throws SQLException
+	{
+		int codProgetto;
+		
+		getCodProgettoPS.setString(1, proj.getNomeProgetto());
+		getCodProgettoPS.setDate(2, new Date(proj.getDataCreazione().toDateTimeAtStartOfDay().getMillis()));
+		
+		ResultSet risultato = getCodProgettoPS.executeQuery();
+		
+		risultato.next();
+		
+		codProgetto = risultato.getInt("codprogetto");
+		
+		return codProgetto;
+	}
 }

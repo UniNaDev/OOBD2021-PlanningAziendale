@@ -135,6 +135,10 @@ public class Progetto {
 	public void setCollaborazioni(ArrayList<CollaborazioneProgetto> collaborazioni) {
 		this.collaborazioni = collaborazioni;
 	}
+	
+	public void setIdProgettto(int idProgettto) {
+		this.idProgettto = idProgettto;
+	}
 
 	//toString
 	@Override

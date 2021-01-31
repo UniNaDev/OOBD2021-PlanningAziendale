@@ -117,10 +117,17 @@ public class ControllerProgetto {
 	{
 		Progetto tmp = new Progetto(nomeProgetto, tipologia, descrizioneProgetto , dataCreazione , dataScadenza);
 
-		//DA RIVEDERE
-		//tmp.setAmbiti(ambiti);
-
+		//aggiunge prima il progetto senza ambiti in modo che la sequence nel db crei un CodProgetto
 		projDAO.addProgetto(tmp);
+		
+		//RICAVA L ID DEL PROGETTO DAL DB E LO SETTA COME CODPROGETTO
+		tmp.setIdProgettto(projDAO.getCodProgetto(tmp));
+		
+		//aggiunge gli ambiti presi dalle righe seleziionate al progetto
+		tmp.setAmbiti(ambiti);
+
+		//fa un insert in ambitoProgettoLink nel db
+		ambitoDAO.addAmbitiProgetto(tmp);
 
 	}
 		
