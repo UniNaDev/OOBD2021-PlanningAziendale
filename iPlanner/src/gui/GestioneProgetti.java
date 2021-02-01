@@ -510,7 +510,12 @@ public class GestioneProgetti extends JFrame {
 		ambitiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		//ComboBox per tipologia progetti
-		tipologiaComboBox = new JComboBox();
+		try {
+			tipologiaComboBox = new JComboBox(controller.ottieniTipologie());
+		} catch (SQLException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		tipologiaComboBox.setBackground(Color.WHITE);
 		tipologiaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -647,6 +652,7 @@ public class GestioneProgetti extends JFrame {
 		try 
 		{
 			ambitoModel.addAll(controller.ottieniAmbiti());
+			ambitiList.setModel(ambitoModel);
 		}
 		catch (SQLException e2) 
 		{
@@ -886,7 +892,7 @@ public class GestioneProgetti extends JFrame {
 				//tipologia progetto
 
 				try {
-					tipologiaComboBox.setModel(new DefaultComboBoxModel(controller.ottieniTipologie().toArray()));
+					tipologiaComboBox.setModel(new DefaultComboBoxModel(controller.ottieniTipologie()));
 					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 4));
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block

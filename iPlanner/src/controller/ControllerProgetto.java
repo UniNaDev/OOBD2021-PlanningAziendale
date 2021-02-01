@@ -87,8 +87,11 @@ public class ControllerProgetto {
 	}
 	
 	//Ottiene tutte le tipologie possibili nel database
-	public ArrayList<String> ottieniTipologie() throws SQLException{
-		return projDAO.getTipologie();
+	public String [] ottieniTipologie() throws SQLException{
+		String [] temp = new String [projDAO.getTipologie().size()];
+		for (int i = 0; i < projDAO.getTipologie().size(); i++)
+			temp[i] = projDAO.getTipologie().get(i);
+		return temp;
 	}
 
 	//Ottiene tutti i partecipanti relativi ad un progetto

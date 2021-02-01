@@ -848,8 +848,8 @@ public class GestioneMeeting extends JFrame {
 					DefaultListModel listmodel=new DefaultListModel();
 					invitatiList.setModel(listmodel);
 					listmodel.addAll(theController.ottieniInvitati(idMeeting));
-					DipendenteInvitatoListRenderer renderer = new DipendenteInvitatoListRenderer();	//applica renderer
-					invitatiList.setCellRenderer(renderer);
+//					DipendenteInvitatoListRenderer renderer = new DipendenteInvitatoListRenderer();	//applica renderer
+//					invitatiList.setCellRenderer(renderer);
 					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
