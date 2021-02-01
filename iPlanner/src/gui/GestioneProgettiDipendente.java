@@ -386,6 +386,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//TextArea descrizione progetto
 		descrizioneTextArea = new JTextArea();
+		descrizioneTextArea.setWrapStyleWord(true);
 		descrizioneTextArea.setLineWrap(true);
 		descrizioneTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -773,7 +774,9 @@ public class GestioneProgettiDipendente extends JFrame {
 					descrizioneTextArea.setText("");
 						
 					progettoTerminatoCheckBox.setSelected(false);
-						
+					
+					ambitiList.clearSelection();
+					
 					//ricava la data attuale
 					LocalDate dataAttuale = LocalDate.now();
 						
