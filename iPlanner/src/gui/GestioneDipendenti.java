@@ -603,7 +603,7 @@ public class GestioneDipendenti extends JFrame {
 				
 				//Label città di nascita
 				cittàDiNascitaLabel = new JLabel("Città di nascita*");
-				cittàDiNascitaLabel.setBounds(131, 342, 128, 14);
+				cittàDiNascitaLabel.setBounds(97, 344, 128, 14);
 				infoPanel.add(cittàDiNascitaLabel);
 				cittàDiNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 				cittàDiNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
