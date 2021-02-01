@@ -18,4 +18,6 @@ public interface AmbitoProgettoDAO {
 	public ArrayList<AmbitoProgetto> getAmbitiProgetto(Progetto proj) throws SQLException;	//metodo che restituisce gli ambiti di un progetto
 	public boolean addAmbitiProgetto(Progetto proj) throws SQLException;	//metodo che inserisce gli ambiti di un progetto nel DB
 	public ArrayList<AmbitoProgetto> getAmbitiProgettoByCodice(int codProgetto) throws SQLException; //metodo che restituisce gli ambiti sapendo solo il codice del progetto
+	public boolean removeAmbitiProgetto (Progetto proj) throws SQLException; //Metodo che rimuove tutti gli ambiti di un progetto
+
 }

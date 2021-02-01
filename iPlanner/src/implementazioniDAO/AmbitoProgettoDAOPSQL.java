@@ -17,7 +17,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;
-	private PreparedStatement getAmbitiPS, addAmbitoPS, removeAmbitoPS, getAmbitiProgettoPS, addAmbitiProgettoPS;
+	private PreparedStatement getAmbitiPS, addAmbitoPS, removeAmbitoPS, getAmbitiProgettoPS, addAmbitiProgettoPS,removeAmbitiProgettoPS;
 	
 	//METODI
 	//----------------------------------------
@@ -32,6 +32,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		removeAmbitoPS = connection.prepareStatement("DELETE FROM AmbitoProgetto WHERE NomeAmbito = ?");	//? = nome dell'ambito da rimuovere
 		getAmbitiProgettoPS = connection.prepareStatement("SELECT * FROM AmbitoProgetto AS ap WHERE ap.IDAmbito IN (SELECT l.IDAmbito FROM AmbitoProgettoLink AS l WHERE l.CodProgetto = ?)");	//?=Codice del progetto di cui si vogliono gli ambiti
 		addAmbitiProgettoPS = connection.prepareStatement("INSERT INTO AmbitoProgettoLink VALUES (?,?)"); //? = id dell'ambito, ? = codice progetto
+		removeAmbitiProgettoPS = connection.prepareStatement("DELETE FROM AmbitoProgettoLink WHERE codprogetto = ?");// ? = codice del progetto di cui vogliamo rimuovere tutti gli ambiti
 	}
 	
 	//Metodo che restituisce una lista di tutti gli ambiti esistenti nel DB
@@ -132,5 +133,20 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		risultato.close(); //chiude il ResultSet
 		
 		return temp;
+	}
+
+	//Metodo che rimuove tutti gli ambiti di un progetto
+	@Override
+	public boolean removeAmbitiProgetto (Progetto proj) throws SQLException
+	{
+		removeAmbitiProgettoPS.setInt(1, proj.getIdProgettto());
+		
+		int risultato = removeAmbitiProgettoPS.executeUpdate();
+		
+		if(risultato ==1)
+			return true;		
+		else 
+			return false;
+			
 	}
 }

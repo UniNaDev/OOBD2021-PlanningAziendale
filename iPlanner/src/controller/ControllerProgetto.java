@@ -107,12 +107,20 @@ public class ControllerProgetto {
 	}
 
 	//metodo fa l'update del progetto con i nuovi campi inseriti
-	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione, LocalDate dataCreazione , LocalDate nuovaDataScadenza, LocalDate nuovaDataTerminazione) throws SQLException 
+	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione, LocalDate dataCreazione , LocalDate nuovaDataScadenza, LocalDate nuovaDataTerminazione ,ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException 
 	{
 		//crea un progetto temporaneo con i dati del progetto aggiorati
 		Progetto tmp = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione , dataCreazione , nuovaDataScadenza, nuovaDataTerminazione);
 		
 		projDAO.updateProgetto(tmp);
+		
+		//rimuove i vecchi ambiti che aveva il progetto
+		ambitoDAO.removeAmbitiProgetto(tmp);
+		
+		//setta i nuovi ambiti del progetto e li aggiunge 
+		tmp.setAmbiti(nuoviAmbiti);
+		ambitoDAO.addAmbitiProgetto(tmp);
+		
 		
 		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
 		mieiProgetti.setVisible(false);

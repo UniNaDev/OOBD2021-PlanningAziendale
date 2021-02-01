@@ -246,44 +246,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Button "Conferma Modifiche"
 		JButton confermaModificheButton = new JButton("Conferma Modifiche");
-		//Click sul pulsante
-		confermaModificheButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
-				// NELLA JTABLE (colonna 0 della riga selezionata)
-				
-				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
-				//se l'utente conferma allora vengono effettivamente fatte le modifiche
-				if(conferma == JOptionPane.YES_OPTION)
-				{
-					int rigaSelezionata = progettoTable.getSelectedRow();
-					
-					//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
-					LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
-					LocalDate nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
-					
-					//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
-					if(!progettoTerminatoCheckBox.isSelected())
-						nuovaDataTerminazione = null;
-					
-					try 
-					{
-						//prende tutti i campi e fa l'update del progetto
-						controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione);
-					
-						//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
-						dataModel.setProgettiTabella(controller.ottieniProgetti());
 
-					} catch (SQLException e1) 
-					{
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-						
-			}
-		});
 		confermaModificheButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -692,6 +655,53 @@ public class GestioneProgettiDipendente extends JFrame {
 		meetingRelativiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingRelativiList.setCellRenderer(renderer);
 		meetingScrollPane.setViewportView(meetingRelativiList);
+		
+		//CLICK SUL PULSANTE "CONFERMA MODIFICHE" 
+		confermaModificheButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
+				// NELLA JTABLE (colonna 0 della riga selezionata)
+				
+				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
+				//se l'utente conferma allora vengono effettivamente fatte le modifiche
+				if(conferma == JOptionPane.YES_OPTION)
+				{
+					int rigaSelezionata = progettoTable.getSelectedRow();
+					
+					//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
+					LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
+					LocalDate nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
+					ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
+					
+					//prende tutte le righe selezionate nella lista degli ambiti
+					int[] selezionati = ambitiList.getSelectedIndices();
+									
+					//aggiunge alla lista di ambiti gli elementi nelle righe selezionate
+					for(int i : selezionati)
+					ambiti.add(ambitoModel.getElementAt(i));
+					
+					//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
+					if(!progettoTerminatoCheckBox.isSelected())
+						nuovaDataTerminazione = null;
+					
+					try 
+					{
+						//prende tutti i campi e fa l'update del progetto
+						controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione,ambiti);
+					
+						//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
+						dataModel.setProgettiTabella(controller.ottieniProgetti());
+
+					} catch (SQLException e1) 
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+						
+			}
+		});
 		
 		//CLICK SUL PULSANTE "CREA NUOVO"
 		creaNuovoButton.addActionListener(new ActionListener() {
