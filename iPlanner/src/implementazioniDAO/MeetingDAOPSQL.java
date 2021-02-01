@@ -28,7 +28,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;
-	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS,getProgettoDiscussoPS,addPresenzaOrganizzatorePS,getIdProgettoDiscussoPS,lastIdMeetingPS,removePresenzeMeetingEliminato;
+	private PreparedStatement getMeetingsByDataPS,getMeetingsOrganizzatiPS,getMeetingsByInvitatoPS,getInvitatiPS,addMeetingPS,removeMeetingPS,updateMeetingPS,getMeetingsBySalaPS,getMeetingsByPiattaformaPS,getPiattaformePS,getProgettoDiscussoPS,addPresenzaOrganizzatorePS,getIdProgettoDiscussoPS,lastIdMeetingPS,removePresenzeMeetingEliminato,aggiungiPartecipanteMeetingPS,eliminaPartecipanteMeetingPS;
 
 	//METODI
 	//----------------------------------------
@@ -51,6 +51,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		getProgettoDiscussoPS = connection.prepareStatement("SELECT nomeprogetto from Progetto NATURAL JOIN Meeting WHERE idMeeting= ?");
 		getIdProgettoDiscussoPS= connection.prepareStatement("SELECT codProgetto FROM Progetto WHERE nomeProgetto ILIKE ?");
 		addPresenzaOrganizzatorePS= connection.prepareStatement("INSERT INTO Presenza(CF,IdMeeting,Presente,Organizzatore) VALUES(?,?,true,true)");
+		aggiungiPartecipanteMeetingPS=connection.prepareStatement("INSERT INTO Presenza(CF,IdMeeting,Presente,Organizzatore) VALUES(?,?,true,true)");
+		eliminaPartecipanteMeetingPS=connection.prepareStatement("DELETE FROM Presenza WHERE CF=? AND idMeeting=?");
 		lastIdMeetingPS=connection.prepareStatement("SELECT idMeeting FROM Meeting ORDER BY idMeeting DESC LIMIT 1");
 		removePresenzeMeetingEliminato=connection.prepareStatement("DELETE FROM Presenza WHERE IdMeeting =?");
 	}
@@ -362,6 +364,35 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		else
 			return false;
 	
+	}
+	
+	public boolean aggiungiPartecipanteMeeting(String cf,int idMeeting) throws SQLException {
+		
+		aggiungiPartecipanteMeetingPS.setString(1, cf);
+		aggiungiPartecipanteMeetingPS.setInt(2, idMeeting);
+		
+		int record=aggiungiPartecipanteMeetingPS.executeUpdate();
+		
+		if(record==1)
+			return true;
+		else
+			return false;
+		
+		
+	}
+
+	@Override
+	public boolean eliminaPartecipanteMeeting(String cf, int idMeeting) throws SQLException {
+		
+		eliminaPartecipanteMeetingPS.setString(1, cf);
+		eliminaPartecipanteMeetingPS.setInt(2, idMeeting);
+		
+	int record=eliminaPartecipanteMeetingPS.executeUpdate();
+		
+		if(record==1)
+			return true;
+		else
+			return false;
 	}
 
 }

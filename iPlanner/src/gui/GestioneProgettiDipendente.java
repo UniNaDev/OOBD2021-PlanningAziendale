@@ -620,7 +620,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		}
 		catch (SQLException e2) 
 		{
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		
@@ -758,7 +757,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					catch (SQLException e1) 
 						{
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, e1.getMessage());
 						}
 					}
 					}

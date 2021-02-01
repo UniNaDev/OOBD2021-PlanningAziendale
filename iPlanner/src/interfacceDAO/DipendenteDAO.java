@@ -23,4 +23,5 @@ public interface DipendenteDAO {
 	public boolean updateDipendente(Dipendente dipendente) throws SQLException;	//metodo che aggiorna le informazioni di un dipendente
 	public Dipendente loginCheck(String email, String password) throws SQLException;	//metodo che controlla se le credenziali per il login sono corrette e restituisce nel caso il dipendente che ha fatto accesso
 	public Dipendente getDipendenteByCF(String cf) throws SQLException;	//metodo che ottiene il dipendente con codice fiscale uguale a quello del parametro in input
+	public ArrayList<Dipendente> getDipendenti2() throws SQLException;
 }

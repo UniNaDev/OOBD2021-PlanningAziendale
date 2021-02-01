@@ -58,7 +58,7 @@ public class ControllerAccesso {
 	//Metodo che verifica le credenziali per l'accesso e se sono corrette passa alla finestra principale dopo aver salvato l'utente che ha fatto il login
 	public void verificaCredenziali(String user, String pass) throws SQLException {
 		dipendente = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
-		dipendente.setSkills(skillDAO.getSkillDipendente(dipendente)); 	//ottiene le skill del dipendente che ha fatto login
+		dipendente.setSkills(skillDAO.getSkillDipendente(dipendente.getCf())); 	//ottiene le skill del dipendente che ha fatto login
 		loginFrame.setVisible(false);	//chiude la finestra di login
 		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO,dipendente);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
 	}

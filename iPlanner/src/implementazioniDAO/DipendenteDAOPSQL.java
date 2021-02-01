@@ -28,7 +28,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;	//connessione al DB
-	private PreparedStatement getDipendentiPS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
+	private PreparedStatement getDipendentiPS,getDipendenti2PS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
 	
@@ -42,6 +42,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		this.luogoDAO = new LuogoNascitaDAOPSQL(connection);
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
+		getDipendenti2PS=connection.prepareStatement("SELECT * FROM Dipendente"); //Deve selezionare i dipendenti che non partecipano già al meeting che si sta inserendo.
 		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) >= ?");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
 		getDipendentiByValutazionePS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE Valutazione(d.CF) >= ?");
@@ -85,6 +86,40 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		return temp;
 	}
+	
+	
+	//Metodo getDipendenti.
+		/*Ottiene tutti i dipendenti nella tabella Dipendente del DB.
+		Restituisce una lista con tutti i dipendenti.*/
+		@Override
+		public ArrayList<Dipendente> getDipendenti2() throws SQLException {
+			ResultSet risultato = getDipendenti2PS.executeQuery();	//esegue la query per ottenere il ResultSet
+			ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire in seguito
+			
+			//finchè esistono dipendenti nel ResultSet
+			while(risultato.next()) {
+				LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
+				
+				Dipendente tempDip = new Dipendente(risultato.getString("CF"),
+						risultato.getString("Nome"),
+						risultato.getString("Cognome"),
+						risultato.getString("Sesso").charAt(0),
+						new LocalDate(risultato.getDate("DataNascita")),
+						luogoTemp,
+						risultato.getString("Indirizzo"),
+						risultato.getString("Email"),
+						risultato.getString("TelefonoCasa"),
+						risultato.getString("Cellulare"),
+						risultato.getFloat("Salario"),
+						risultato.getString("Password"),
+						this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+				
+				temp.add(tempDip);	//lo aggiunge alla lista
+			}
+			risultato.close();	//chiude il ResultSet
+			
+			return temp;
+		}
 
 	//Metodo getDipendentiByEtà.
 	/*Metodo che interroga il DB per ottenere una lista di dipendenti

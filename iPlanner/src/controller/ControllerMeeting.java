@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.SalaRiunione;
+import entita.Skill;
 import gui.*;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -25,7 +26,7 @@ public class ControllerMeeting {
 	//Attributi GUI
 	private MieiMeeting mieiMeeting;
 	private GestioneMeetingDipendente gestioneMeeting;
-	private Home home;
+	private InserisciPartecipantiMeeting inserisciPartecipantiMeeting;
 	
 	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
@@ -49,7 +50,7 @@ public class ControllerMeeting {
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.salaDAO = salaDAO;
-
+		this.skillDAO=skillDAO;
 		this.dipendente = dipendente;	//ottiene il dipendente che ha fatto l'accesso
 		
 		mieiMeeting=new MieiMeeting(this);	//apre la finestra dei suoi meeting
@@ -98,8 +99,6 @@ public class ControllerMeeting {
 	//Metodo che inserisce il meeting del progetto da discutere
 	public void inserisciMeeting(Meeting meetingInserito,String nomeProgettoDisusso) throws SQLException{
 
-		
-		
 			//Prova ad inserire il meeting e del progetto da discutere
 			meetDAO.addMeeting(meetingInserito,nomeProgettoDisusso);
 			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
@@ -107,22 +106,19 @@ public class ControllerMeeting {
 			//Viene inserito come organizzatore la persona che crea il meeting
 			meetDAO.addOrganizzatore(dipendente.getCf()); 
 			
-			//Viene aggiornata la finestra MieiMeeting
-			mieiMeeting.setVisible(false);
-			mieiMeeting= new MieiMeeting(this);
-			mieiMeeting.setVisible(true);
-			
-			//Viene aggiornata la finestra
-			gestioneMeeting.setVisible(false);
-			gestioneMeeting= new GestioneMeetingDipendente(this);
-			gestioneMeeting.setVisible(true);
-			
-	
-			
-		
+//			//Viene aggiornata la finestra MieiMeeting
+//			mieiMeeting.setVisible(false);
+//			mieiMeeting= new MieiMeeting(this);
+//			mieiMeeting.setVisible(true);
+//			
+//			//Viene aggiornata la finestra
+//			gestioneMeeting.setVisible(false);
+//			gestioneMeeting= new GestioneMeetingDipendente(this);
+//			gestioneMeeting.setVisible(true);
 	
 	}
 
+	//Metodo che rimuove i meeting
 	public void rimuoviMeeting(int idMeeting) throws SQLException {
 
 		//Rimuove il meeting selezionato
@@ -138,10 +134,40 @@ public class ControllerMeeting {
 		gestioneMeeting.setVisible(false);
 		gestioneMeeting= new GestioneMeetingDipendente(this);
 		gestioneMeeting.setVisible(true);
-		
 
+	}
+
+	//Metodo che ottiene i dipendenti che non partecipano al meeting selezionato
+	public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
+		return dipDAO.getDipendenti2();
+	}
+
+	//Metodo che apre la finestra per inserire i partecipanti ai meeting
+	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato, int codiceMeeting) {
+		
+		inserisciPartecipantiMeeting= new InserisciPartecipantiMeeting(this,meetingSelezionato,codiceMeeting);
+		inserisciPartecipantiMeeting.setVisible(true);
+		
+	}
+
+	//Metodo che ottiene le skill del dipendente
+	public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
+	
+		return skillDAO.getSkillDipendente(cfDipendente);
+	}
+
+	//Metodo che inserisce i partecipanti ad un meeting
+	public void inserisciPartecipante(String cf, int codiceMeeting) throws SQLException {
+		meetDAO.aggiungiPartecipanteMeeting(cf,codiceMeeting);
+	
 		
 		
+	}
+
+	public void eliminaPartecipante(Dipendente dipendente2,int idMeeting) throws SQLException {
+		
+		
+		meetDAO.eliminaPartecipanteMeeting(dipendente2.getCf(),idMeeting);
 		
 	}
 }

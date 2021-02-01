@@ -111,15 +111,15 @@ public class SkillDAOPSQL implements SkillDAO {
 
 	//Metodo che restituisce le skill di un dipendente
 	@Override
-	public ArrayList<Skill> getSkillDipendente(Dipendente dip) throws SQLException {
+	public ArrayList<Skill> getSkillDipendente(String cfDipendente) throws SQLException {
 		ArrayList<Skill> temp = new ArrayList<Skill>();	//inizializza la lista da restituire
 		
-		getSkillDipendentePS.setString(1, dip.getCf()); //inserisce il codice fiscale del dipendente nella query
+		getSkillDipendentePS.setString(1, cfDipendente); //inserisce il codice fiscale del dipendente nella query
 		
 		ResultSet risultato = getSkillDipendentePS.executeQuery();	//esegue la query e ottiene il ResultSet
 		
 		while (risultato.next()) {
-			Skill tempSkill = new Skill(risultato.getInt(1), risultato.getString(2));	//crea la skill temporanea
+			Skill tempSkill = new Skill(risultato.getString(2));	//crea la skill temporanea
 			temp.add(tempSkill);
 		}
 		risultato.close(); //chiude il ResultSet

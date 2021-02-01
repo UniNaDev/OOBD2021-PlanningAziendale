@@ -89,6 +89,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JButton eliminaButton;
 	private JButton modificaButton;
 	private JList invitatiList;
+	private int codiceMeeting;
 	
 	private JTextArea ProgettoDiscussoTextArea;
 
@@ -249,28 +250,6 @@ public class GestioneMeetingDipendente extends JFrame {
 		eliminaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		eliminaButton.setAlignmentX(0.5f);
 		
-		//Button "Inserisci partecipanti"
-		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
-		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				inserisciPartecipanteButton.setBackground(Color.LIGHT_GRAY);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				inserisciPartecipanteButton.setBackground(Color.WHITE);
-			}
-		});
-		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
-		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
-		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		inserisciPartecipanteButton.setBackground(Color.WHITE);
-		inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
-		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
 		//Button "Conferma Modifiche"
 		modificaButton = new JButton("Conferma Modifiche");
@@ -305,8 +284,9 @@ public class GestioneMeetingDipendente extends JFrame {
 				Meeting meetingAggiornato = new Meeting(id,dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
 				try {
 					theController.aggiornaMeeting(meetingAggiornato);	//tenta di fare l'update nel DB del meeting
-					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//aggiorna i dati nella tabella con le modifiche fatte
 					JOptionPane.showMessageDialog(null, "Meeting Modificato");
+					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//aggiorna i dati nella tabella con le modifiche fatte
+					
 					meetingScrollPane.setViewportView(meetingTable);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -349,6 +329,7 @@ public class GestioneMeetingDipendente extends JFrame {
 					try {
 						//richiama la funzione insertMeeting
 						insertMeeting(theController);
+						
 						
 					} catch (SQLException e1) {
 						
@@ -414,7 +395,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		comandiPanel2.add(cercaTextField);
 		cercaTextField.setColumns(10);
-		comandiPanel2.add(inserisciPartecipanteButton);
+		
 		comandiPanel2.add(modificaButton);
 		comandiPanel2.add(creaNuovoMeetingButton);
 		comandiPanel2.add(eliminaButton);
@@ -844,18 +825,20 @@ public class GestioneMeetingDipendente extends JFrame {
 				
 				
 				try {
-//					invitatiList=new JList<>(theController.ottieniInvitati(idMeeting).toArray());
+
 					DefaultListModel listmodel=new DefaultListModel();
 					invitatiList.setModel(listmodel);
 					listmodel.addAll(theController.ottieniInvitati(idMeeting));
-//					DipendenteInvitatoListRenderer renderer = new DipendenteInvitatoListRenderer();	//applica renderer
-//					invitatiList.setCellRenderer(renderer);
+
 					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
 				
+				
+				
+				codiceMeeting=(int) meetingTable.getValueAt(row, 0);
 				
 				try {
 					ProgettoDiscussoTextArea.setText(theController.ottieniProgettoDiscusso(idMeeting));
@@ -873,7 +856,57 @@ public class GestioneMeetingDipendente extends JFrame {
 		}
 		meetingScrollPane.setViewportView(meetingTable);
 		
-		
+		//Button "Inserisci partecipanti"
+				JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+				inserisciPartecipanteButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
+						LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
+						LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
+						LocalTime oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);	//ora fine
+						String modalita = "";
+						String piattaforma = null;				
+						SalaRiunione sala = null;
+						
+					
+						//modalità online e piattaforma
+						if (onlineRadioButton.isSelected()) {
+							modalita = "Telematico";
+							piattaforma = piattaformaSalaComboBox.getSelectedItem().toString();	
+						}
+						//modalità fisica e sala
+						else if (fisicoRadioButton.isSelected()) {
+							modalita = "Fisico";
+							sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
+						}
+						Meeting meetingSelezionato = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);
+						
+						theController.apriInserisciPartecipantiMeeting(meetingSelezionato,codiceMeeting);
+					}
+				});
+				inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent e) 
+					{
+						inserisciPartecipanteButton.setBackground(Color.LIGHT_GRAY);
+					}
+					@Override
+					public void mouseExited(MouseEvent e) 
+					{
+						inserisciPartecipanteButton.setBackground(Color.WHITE);
+					}
+				});
+				inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
+				inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
+				inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				inserisciPartecipanteButton.setBackground(Color.WHITE);
+				inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+				inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
+				inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+				inserisciPartecipanteButton.setAlignmentX(0.5f);
+				comandiPanel2.add(inserisciPartecipanteButton);
+				
 	
 		
 	}
