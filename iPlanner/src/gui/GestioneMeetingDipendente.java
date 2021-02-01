@@ -56,7 +56,7 @@ import java.awt.Toolkit;
 
 
 
-public class GestioneMeeting extends JFrame {
+public class GestioneMeetingDipendente extends JFrame {
 
 	//ATTRIBUTI
 	//---------------------------------------------
@@ -94,8 +94,8 @@ public class GestioneMeeting extends JFrame {
 
 	//Creazione frame
 	//---------------------------------------------
-	public GestioneMeeting(ControllerMeeting theController) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeeting.class.getResource("/icone/WindowIcon_16.png")));
+	public GestioneMeetingDipendente(ControllerMeeting theController) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
 		
@@ -763,7 +763,7 @@ public class GestioneMeeting extends JFrame {
 		
 		//Label "Gestione Meeting"
 		JLabel gestioneMeetingLabel = new JLabel("Gestione Meeting");
-		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeeting.class.getResource("/Icone/meeting_64.png")));
+		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
 		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(

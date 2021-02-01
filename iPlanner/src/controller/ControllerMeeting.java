@@ -24,7 +24,7 @@ public class ControllerMeeting {
 	
 	//Attributi GUI
 	private MieiMeeting mieiMeeting;
-	private GestioneMeeting gestioneMeeting;
+	private GestioneMeetingDipendente gestioneMeeting;
 	private Home home;
 	
 	//DAO
@@ -60,7 +60,7 @@ public class ControllerMeeting {
 	
 	//Metodo che apre la finestra di gestione dei meeting
 	public void apriGestioneMeeting() {
-		gestioneMeeting= new GestioneMeeting(this);
+		gestioneMeeting= new GestioneMeetingDipendente(this);
 		gestioneMeeting.setVisible(true);	
 	}
 	
@@ -114,7 +114,7 @@ public class ControllerMeeting {
 			
 			//Viene aggiornata la finestra
 			gestioneMeeting.setVisible(false);
-			gestioneMeeting= new GestioneMeeting(this);
+			gestioneMeeting= new GestioneMeetingDipendente(this);
 			gestioneMeeting.setVisible(true);
 			
 	
@@ -136,7 +136,7 @@ public class ControllerMeeting {
 		
 		//Viene aggiornata la finestra GestioneMeeting
 		gestioneMeeting.setVisible(false);
-		gestioneMeeting= new GestioneMeeting(this);
+		gestioneMeeting= new GestioneMeetingDipendente(this);
 		gestioneMeeting.setVisible(true);
 		
 

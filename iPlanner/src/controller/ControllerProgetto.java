@@ -27,7 +27,7 @@ public class ControllerProgetto {
 	
 	//Attributi GUI
 	private MieiProgetti mieiProgetti;
-	private GestioneProgetti gestioneProgetti;
+	private GestioneProgettiDipendente gestioneProgetti;
 
 	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
@@ -63,7 +63,7 @@ public class ControllerProgetto {
 	
 	//Metodo che apre la finestra di gestione dei progetti
 	public void apriGestioneProgetti() {
-		gestioneProgetti=new GestioneProgetti(this);
+		gestioneProgetti=new GestioneProgettiDipendente(this);
 		gestioneProgetti.setVisible(true);
 	}
 
@@ -120,7 +120,7 @@ public class ControllerProgetto {
 		mieiProgetti.setVisible(true);
 		
 		gestioneProgetti.setVisible(false);
-		gestioneProgetti= new GestioneProgetti(this);
+		gestioneProgetti= new GestioneProgettiDipendente(this);
 		gestioneProgetti.setVisible(true);
 								
 	}
@@ -151,7 +151,7 @@ public class ControllerProgetto {
 		mieiProgetti.setVisible(true);
 		
 		gestioneProgetti.setVisible(false);
-		gestioneProgetti= new GestioneProgetti(this);
+		gestioneProgetti= new GestioneProgettiDipendente(this);
 		gestioneProgetti.setVisible(true);
 		
 	}
@@ -173,7 +173,7 @@ public class ControllerProgetto {
 		mieiProgetti.setVisible(true);
 		
 		gestioneProgetti.setVisible(false);
-		gestioneProgetti= new GestioneProgetti(this);
+		gestioneProgetti= new GestioneProgettiDipendente(this);
 		gestioneProgetti.setVisible(true);
 		
 		return risultato;

@@ -66,7 +66,7 @@ import org.joda.time.LocalDate;
 import javax.swing.JCheckBox;
 import java.awt.Toolkit;
 
-public class GestioneProgetti extends JFrame {
+public class GestioneProgettiDipendente extends JFrame {
 
 	//ATTRIBUTI
 	//-----------------------------------------------------------------
@@ -93,8 +93,8 @@ public class GestioneProgetti extends JFrame {
 	//Creazione frame
 	//-----------------------------------------------------------------
 	
-	public GestioneProgetti(ControllerProgetto controller) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgetti.class.getResource("/icone/WindowIcon_16.png")));
+	public GestioneProgettiDipendente(ControllerProgetto controller) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
 		setTitle("iPlanner-Gestione progetto");
@@ -123,8 +123,8 @@ public class GestioneProgetti extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(tabellaScrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(tabellaScrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -135,7 +135,7 @@ public class GestioneProgetti extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
 					.addGap(26)
-					.addComponent(tabellaScrollPane, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+					.addComponent(tabellaScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
@@ -789,7 +789,7 @@ public class GestioneProgetti extends JFrame {
 		
 		//Label "Gestione Progetto"
 		JLabel gestioneProgettoLabel = new JLabel("Gestione Progetto");
-		gestioneProgettoLabel.setIcon(new ImageIcon(GestioneProgetti.class.getResource("/Icone/progetto_64.png")));
+		gestioneProgettoLabel.setIcon(new ImageIcon(GestioneProgettiDipendente.class.getResource("/Icone/progetto_64.png")));
 		gestioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);

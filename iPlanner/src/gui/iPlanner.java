@@ -18,6 +18,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 
@@ -29,7 +31,7 @@ public class iPlanner extends JFrame {
 	//Attrubuti GUI
 	private JPanel contentPane;
 	private JLabel loginLabel;	//label clickabile per effettuare login
-	private JLabel nuovoDipendenteLabel;	//label clickabile per creare nuovi dipendenti
+	private JLabel gestisciDipendentiLabel;	//label clickabile per creare nuovi dipendenti
  
 	//Altri attributi
 	private final String devs = "UninaDevs";	//stringa sviluppatori
@@ -39,9 +41,7 @@ public class iPlanner extends JFrame {
 	//-----------------------------------------------------------------
 	
 	public iPlanner(ControllerScelta controller, boolean segreteria) {
-		
 		setMinimumSize(new Dimension(850, 500));
-		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - HomePage");
@@ -140,66 +140,134 @@ public class iPlanner extends JFrame {
 		//Se l'autorizzazione è di tipo segreteria mostra la finestra con la sola opzione "Aggiungi nuovo dipendente"
 		else {
 		
-			//Label "Aggiungi nuovo dipendente"
-		nuovoDipendenteLabel = new JLabel("Aggiungi nuovo dipendente");
-		nuovoDipendenteLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		nuovoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		nuovoDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			//Label "Gestisci dipendenti"
+			gestisciDipendentiLabel = new JLabel("Gestisci dipendenti");
+			gestisciDipendentiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			gestisciDipendentiLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+			gestisciDipendentiLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			//Eventi connessi alla label "Aggiungi nuovo dipendente"
+			gestisciDipendentiLabel.addMouseListener(new MouseAdapter() {
+				//click sinistro del mouse
+				@Override
+				public void mouseClicked(MouseEvent e) {	
+					controller.vaiAGestioneDipendenti();
+				}
+				//mouse sopra la label
+				@Override
+				public void mouseEntered(MouseEvent e) 
+				{
+					gestisciDipendentiLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
+				}
+				//mouse fuori dalla label
+				@Override
+				public void mouseExited(MouseEvent e) 
+				{
+					gestisciDipendentiLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettandone il colore
+				}
+		});
 		
-		//Eventi connessi alla label "Aggiungi nuovo dipendente"
-		nuovoDipendenteLabel.addMouseListener(new MouseAdapter() {
+		//Label Gestisci Meeting
+		JLabel gestisciMeetingLabel = new JLabel("Gestisci meeting");
+		gestisciMeetingLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		gestisciMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		gestisciMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		//Eventi connessi alla label "Gestisci sale"
+		gestisciMeetingLabel.addMouseListener(new MouseAdapter() {
 			//click sinistro del mouse
 			@Override
 			public void mouseClicked(MouseEvent e) {	
-				controller.apriNuovoDipendente();	//apre la finestra di creazione account
+				//TODO: Apre finestra gestione dei meeting
 			}
 			//mouse sopra la label
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				nuovoDipendenteLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
+				gestisciMeetingLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
 			}
 			//mouse fuori dalla label
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				nuovoDipendenteLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettandone il colore
+				gestisciMeetingLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettandone il colore
 			}
-		});
+	});
+		
+		//Label Gestisci Progetti
+		JLabel gestisciProgettiLabel = new JLabel("Gestisci progetti");
+		gestisciProgettiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		gestisciProgettiLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		gestisciProgettiLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		//Eventi connessi alla label "Gestisci ambiti e tipologie"
+		gestisciProgettiLabel.addMouseListener(new MouseAdapter() {
+			//click sinistro del mouse
+			@Override
+			public void mouseClicked(MouseEvent e) {	
+				//TODO: Apre finestra gestione dei progetti
+			}
+			//mouse sopra la label
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				gestisciProgettiLabel.setForeground(Color.GRAY);	//evidenzia la label cambiando colore
+			}
+			//mouse fuori dalla label
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				gestisciProgettiLabel.setForeground(Color.BLACK);	//smette di evidenziarla resettandone il colore
+			}
+	});
 		
 		//Group Layout per l'inserimento delle componenti nel frame
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addGap(258)
-						.addComponent(nuovoDipendenteLabel, GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
-						.addGap(248))
-				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(167)
-					.addComponent(benvenutoLabel, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+					.addComponent(benvenutoLabel, GroupLayout.DEFAULT_SIZE, 929, Short.MAX_VALUE)
 					.addGap(158))
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(369)
-					.addComponent(iconaDipendenteLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(360))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(creatoDaLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 1090, Short.MAX_VALUE)
+					.addComponent(creatoDaLabel, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 1074, Short.MAX_VALUE)
 					.addComponent(versioneLabel))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(131)
+					.addComponent(gestisciDipendentiLabel, GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
+					.addGap(130))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(222)
+					.addComponent(iconaDipendenteLabel, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+					.addGap(221))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(199)
+					.addComponent(gestisciMeetingLabel, GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
+					.addGap(198))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(155)
+					.addComponent(gestisciProgettiLabel, GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
+					.addGap(153))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(29)
 					.addComponent(benvenutoLabel)
-					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
 					.addComponent(iconaDipendenteLabel)
 					.addGap(18)
-					.addComponent(nuovoDipendenteLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(creatoDaLabel)
-						.addComponent(versioneLabel)))
+					.addComponent(gestisciDipendentiLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(gestisciMeetingLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(29)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(creatoDaLabel)
+								.addComponent(versioneLabel)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
+							.addComponent(gestisciProgettiLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
 		}	
