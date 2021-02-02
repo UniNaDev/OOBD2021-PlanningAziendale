@@ -594,7 +594,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Label campi obbligatori
 		campiObbligatoriLabel = new JLabel("* Campi obbligatori");
-		campiObbligatoriLabel.setBounds(738, 558, 290, 20);
+		campiObbligatoriLabel.setBounds(956, 637, 128, 20);
 		infoPanel.add(campiObbligatoriLabel);
 		campiObbligatoriLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		campiObbligatoriLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
@@ -611,6 +611,13 @@ public class GestioneDipendenti extends JFrame {
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(542, 98, 8, 527);
 		infoPanel.add(separator);
+		
+		//Label Valutazione
+		JLabel valutazioneLabel = new JLabel("Valutazione");
+		valutazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		valutazioneLabel.setBounds(701, 545, 128, 14);
+		infoPanel.add(valutazioneLabel);
 		
 		//Button "Esci"
 		esciButton = new JButton("Esci");
@@ -933,6 +940,7 @@ public class GestioneDipendenti extends JFrame {
 					for (Skill skill : selectedDip.getSkills()) {
 						skillsList.setSelectedValue(skill, rootPaneCheckingEnabled);
 					}
+					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione());//valutazione
 				}
 			});
 			dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
