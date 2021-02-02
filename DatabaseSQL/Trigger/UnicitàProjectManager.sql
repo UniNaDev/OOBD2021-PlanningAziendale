@@ -12,7 +12,7 @@ BEGIN
 --Controlla che non ci siano altri record in Partecipazione con stesso progetto e ruolo project manager
 IF (EXISTS (SELECT p.CF
 			FROM Partecipazione AS p
-			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.CF<>NEW.CF)) THEN
+			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente=NEW.ruolodipendente)) THEN
 				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto;
 				RETURN OLD;
 END IF;

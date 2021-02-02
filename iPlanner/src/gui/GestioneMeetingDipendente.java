@@ -88,6 +88,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JButton pulisciButton;
 	private JButton eliminaButton;
 	private JButton modificaButton;
+	private JButton creaNuovoMeetingButton;
 	private JList invitatiList;
 	private int codiceMeeting;
 	
@@ -317,7 +318,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		modificaButton.setAlignmentX(0.5f);
 		
 		//Butotn "Crea Nuovo"
-		JButton creaNuovoMeetingButton = new JButton("Crea Nuovo");
+		creaNuovoMeetingButton = new JButton("Crea Nuovo");
 		//Click sul pulsante
 		creaNuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
@@ -912,7 +913,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 	public void insertMeeting(ControllerMeeting theController) throws SQLException {
 		// TODO Auto-generated method stub
-
+		progettoDiscussoLabel.setBackground(Color.BLACK);
 		LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
 		LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
 		LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
@@ -932,13 +933,16 @@ public class GestioneMeetingDipendente extends JFrame {
 			modalita = "Fisico";
 			sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
 		}
-		Meeting meetingInserito = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
+		Meeting meetingInserito = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting inserito
 		try {
-			theController.inserisciMeeting(meetingInserito,ProgettoDiscussoTextArea.getText());	//tenta di fare l'insert nel DB del meeting
+			Progetto progetto=theController.ottieniProgettoInserito(ProgettoDiscussoTextArea.getText());
+			theController.inserisciMeetingCompleto(meetingInserito,progetto);	//tenta di fare l'insert nel DB del meeting
+			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
 			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());//aggiorna i dati nella tabella con le modifiche fatte
 		
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
+			progettoDiscussoLabel.setBackground(Color.RED);
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 		

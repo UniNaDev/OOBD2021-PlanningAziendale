@@ -40,6 +40,7 @@ import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 
 import java.awt.Cursor;
 import javax.swing.border.MatteBorder;
@@ -246,14 +247,17 @@ public class Home extends JFrame {
 		//List dei meeting del dipendente
 		JList<Meeting> meetingList;
 		try {
-			MeetingListRenderer renderer = new MeetingListRenderer();
-			meetingList = new JList(controller.ottieniMeeting().toArray());
+//			MeetingListRenderer renderer = new MeetingListRenderer();
+			meetingList = new JList();
+			DefaultListModel listmodel=new DefaultListModel();
+			meetingList.setModel(listmodel);
+			listmodel.addAll(controller.ottieniMeeting());
 			meetingList.setSelectionBackground(Color.LIGHT_GRAY);
 			meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			meetingList.setFixedCellHeight(60);
 			meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			meetingScrollPanel.setViewportView(meetingList);
-			meetingList.setCellRenderer(renderer);
+//			meetingList.setCellRenderer(renderer);
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

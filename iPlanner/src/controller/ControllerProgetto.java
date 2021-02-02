@@ -18,6 +18,7 @@ import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SkillDAO;
 
 
 public class ControllerProgetto {
@@ -35,7 +36,7 @@ public class ControllerProgetto {
 	private ProgettoDAO projDAO = null;	//dao progetti
 	private MeetingDAO meetDAO = null;	//dao meeting
 	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
-	
+	private SkillDAO skillDAO=null;
 	//Altri attributi
 	private Dipendente dipendente = null;
 	
@@ -43,14 +44,14 @@ public class ControllerProgetto {
 	//-----------------------------------------------------------------
 	
 	//Costruttore
-	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, AmbitoProgettoDAO ambitoDAO, Dipendente dipendente) {
+	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, AmbitoProgettoDAO ambitoDAO,SkillDAO skillDAO, Dipendente dipendente) {
 		//ottiene i dao
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.ambitoDAO = ambitoDAO;
-		
+		this.skillDAO=skillDAO;
 		this.dipendente = dipendente;	//ottiene il dipendente che ha avuto accesso
 		
 		//apre la finestra Miei Progetti
@@ -60,6 +61,12 @@ public class ControllerProgetto {
 
 	//Metodi di gestione delle GUI
 	//-----------------------------------------------------------------
+	
+	public void apriInserisciPartecipantiProgetto(Progetto progettoSelezionato, int codiceProgetto) {
+		
+		ControllerPartecipantiProgetto controller=new ControllerPartecipantiProgetto(luogoDAO, dipDAO, projDAO, meetDAO, dipendente,skillDAO,progettoSelezionato,codiceProgetto);
+		
+	}
 	
 	//Metodo che apre la finestra di gestione dei progetti
 	public void apriGestioneProgetti() {
@@ -95,15 +102,15 @@ public class ControllerProgetto {
 	}
 
 	//Ottiene tutti i partecipanti relativi ad un progetto
-	public ArrayList<Dipendente> getPartecipantiProgetto (Progetto proj) throws SQLException
+	public ArrayList<Dipendente> getPartecipantiProgetto (int codiceProgetto) throws SQLException
 	{
-		return projDAO.getPartecipantiSenzaRuolo(proj);
+		return projDAO.getPartecipantiSenzaRuolo(codiceProgetto);
 	}
 
 	//Ottiene tutti i meeting relativi ad un progetto
-	public ArrayList<Meeting> getMeetingRelativiProgetto(Progetto proj) throws SQLException
+	public ArrayList<Meeting> getMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException
 	{
-		return projDAO.getMeetingRelativi(proj);
+		return projDAO.getMeetingRelativi(codProgettoSelezionato);
 	}
 
 	//metodo fa l'update del progetto con i nuovi campi inseriti
@@ -151,7 +158,7 @@ public class ControllerProgetto {
 		ambitoDAO.addAmbitiProgetto(tmp);
 		
 		//imposta il dipendente che ha creato il progetto come project Manager
-		projDAO.addPartecipante(dipendente, tmp, "Project Manager");
+		projDAO.addPartecipante(dipendente.getCf(), projDAO.getCodProgetto(tmp), "Project Manager");
 	
 		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
 		mieiProgetti.setVisible(false);
@@ -186,5 +193,7 @@ public class ControllerProgetto {
 		
 		return risultato;
 	}
+
+
 	
 }

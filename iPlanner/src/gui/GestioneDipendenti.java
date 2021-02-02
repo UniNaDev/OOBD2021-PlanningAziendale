@@ -125,7 +125,6 @@ public class GestioneDipendenti extends JFrame {
 	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
 	private JPanel comandiPanel;
 	private JScrollPane tableScrollPanel;
-	private JTable dipendentiTable;
 	private JTextField cercaTextField;
 	private JTextField etàMinimaTextField;
 	private JLabel etàFiltroLabel;
@@ -137,6 +136,7 @@ public class GestioneDipendenti extends JFrame {
 	private JLabel valutazioneFiltroLabel;
 	private JTextField valutazioneMassimaTextField;
 	private JButton eliminaAccountButton;
+	private JTable dipendentiTable;
 
 	
 	//Creazione del frame

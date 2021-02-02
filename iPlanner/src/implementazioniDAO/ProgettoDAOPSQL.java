@@ -45,7 +45,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	getMeetingRelativiPS,
 	getProgettoByCodPS,
 	getTipologiePS,
-	getCodProgettoPS;
+	getRuoliDipendentiPS,
+	getCodProgettoPS,
+	getProgettoInseritoPS;
 	
 	//METODI
 	//----------------------------------------
@@ -68,7 +70,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i meeting
 		getProgettoByCodPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");	//? = codice progetto
 		getTipologiePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::tipologia))");
+		getRuoliDipendentiPS=connection.prepareStatement("SELECT unnest(enum_range(NULL::ruolo))");
 		getCodProgettoPS = connection.prepareStatement("SELECT codprogetto FROM progetto WHERE nomeprogetto = ? AND datacreazione =?");
+		getProgettoInseritoPS=connection.prepareStatement("SELECT nomeProgetto,tipoProgetto,descrizioneProgetto,dataCreazione,datascadenza FROM Progetto WHERE NomeProgetto= ?");
 	}
 
 	//Metodo che restituisce una lista di tutti i progetti dell'azienda
@@ -105,12 +109,12 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	//METODO DI PROVA
 	//Metodo che restituisce i dipendenti partecipanti a un progetto senza specificare il ruolo.
 		@Override
-		public ArrayList<Dipendente> getPartecipantiSenzaRuolo(Progetto proj) throws SQLException {
+		public ArrayList<Dipendente> getPartecipantiSenzaRuolo(int codiceProgetto) throws SQLException {
 			ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista da restituire
 			
 			dipDAO = new DipendenteDAOPSQL(connection);
 			
-			getPartecipantiPS.setInt(1, proj.getIdProgettto()); 	//inserisce il codice del progetto nella query
+			getPartecipantiPS.setInt(1, codiceProgetto); 	//inserisce il codice del progetto nella query
 			
 			ResultSet risultato = getPartecipantiPS.executeQuery();	//esegue la query e ottiene il ResultSet
 			
@@ -125,33 +129,33 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		}
 	
 	//Metodo che restituisce i dipendenti partecipanti a un progetto.
-	@Override
-	public ArrayList<CollaborazioneProgetto> getPartecipanti(Progetto proj) throws SQLException {
-		ArrayList<CollaborazioneProgetto> temp = new ArrayList<CollaborazioneProgetto>();	//inizializza la lista da restituire
-		
-		dipDAO = new DipendenteDAOPSQL(connection);
-		
-		getPartecipantiPS.setInt(1, proj.getIdProgettto()); 	//inserisce il codice del progetto nella query
-		
-		ResultSet risultato = getPartecipantiPS.executeQuery();	//esegue la query e ottiene il ResultSet
-		
-		//finchè ci sono record nel ResultSet
-		while(risultato.next()) {
-			Dipendente partecipante = dipDAO.getDipendenteByCF(risultato.getString("CF"));
-			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(proj, partecipante, risultato.getString("RuoloDipendente"));
-			temp.add(tempPartecipazione);	//aggiunge il dipendente alla lista
-		}
-		risultato.close();	//chiude il ResultSet
-		
-		return temp;
-	}
+//	@Override
+//	public ArrayList<CollaborazioneProgetto> getPartecipanti(Progetto codiceProgetto) throws SQLException {
+//		ArrayList<CollaborazioneProgetto> temp = new ArrayList<CollaborazioneProgetto>();	//inizializza la lista da restituire
+//		
+//		dipDAO = new DipendenteDAOPSQL(connection);
+//		
+//		getPartecipantiPS.setInt(1, codiceProgetto); 	//inserisce il codice del progetto nella query
+//		
+//		ResultSet risultato = getPartecipantiPS.executeQuery();	//esegue la query e ottiene il ResultSet
+//		
+//		//finchè ci sono record nel ResultSet
+//		while(risultato.next()) {
+//			Dipendente partecipante = dipDAO.getDipendenteByCF(risultato.getString("CF"));
+//			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(codiceProgetto, partecipante, risultato.getString("RuoloDipendente"));
+//			temp.add(tempPartecipazione);	//aggiunge il dipendente alla lista
+//		}
+//		risultato.close();	//chiude il ResultSet
+//		
+//		return temp;
+//	}
 
 	//Metodo che restituisce i meeting relativi a un progetto.
 	@Override
-	public ArrayList<Meeting> getMeetingRelativi(Progetto proj) throws SQLException {
+	public ArrayList<Meeting> getMeetingRelativi(int codiceProgettoSelezionato) throws SQLException {
 		ArrayList<Meeting> temp = new ArrayList<Meeting>();	//inizializza la lista da restituire
 		
-		getMeetingRelativiPS.setInt(1, proj.getIdProgettto()); //codice del progetto di cui si vogliono i meeting nella query
+		getMeetingRelativiPS.setInt(1, codiceProgettoSelezionato); //codice del progetto di cui si vogliono i meeting nella query
 		
 		ResultSet risultato = getMeetingRelativiPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		
@@ -169,8 +173,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					risultato.getString("Piattaforma"),
 					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 					
+					
 					//imposta proj come progetto relativo
-					meetingTemp.setProgettoDiscusso(proj);
+//					meetingTemp.setProgettoDiscusso(codiceProgettoSelezionato);
 			
 			temp.add(meetingTemp);
 		}
@@ -331,10 +336,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che inserisce un partecipante al progetto nel DB.
 	@Override
-	public boolean addPartecipante(Dipendente dip, Progetto proj, String ruolo) throws SQLException {
-		addPartecipantePS.setInt(1, proj.getIdProgettto()); 	//codice del progetto
-		addPartecipantePS.setString(2, dip.getCf()); 	//codice fiscale del partecipante
-		addPartecipantePS.setObject(3, ruolo, Types.OTHER); 	//ruolo del partecipante
+	public boolean addPartecipante(String cf, int idProgetto, String ruolo) throws SQLException {
+		addPartecipantePS.setInt(1, idProgetto); 	//codice del progetto
+		addPartecipantePS.setString(2, cf); 	//codice fiscale del partecipante
+		addPartecipantePS.setObject(3, ruolo,Types.OTHER); 	//ruolo del partecipante
 		
 		int record = addPartecipantePS.executeUpdate();	//esegue l'insert e salva il numero di record inseriti (1=inserito,0=non inserito)
 		
@@ -346,10 +351,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che rimuove un partecipante da un progetto.
 	@Override
-	public boolean deletePartecipante(Dipendente dip, Progetto proj) throws SQLException {
+	public boolean deletePartecipante(Dipendente dip, int idProgetto) throws SQLException {
 		//TODO: farlo solo se il dipendente non è project manager oppure controllare i trigger
 		deletePartecipantePS.setString(1, dip.getCf()); 	//codice fiscale del dipendente
-		deletePartecipantePS.setInt(2, proj.getIdProgettto()); 	//codice del progetto
+		deletePartecipantePS.setInt(2, idProgetto); 	//codice del progetto
 		
 		int record = deletePartecipantePS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
 		
@@ -360,6 +365,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	//Metodo che aggiorna un progetto nel DB.
+
 	@Override
 	public boolean updateProgetto(Progetto proj) throws SQLException {
 		updateProgettoPS.setString(1, proj.getNomeProgetto()); //nome progetto
@@ -450,4 +456,39 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		else
 			return false;
 	}
-}
+
+	@Override
+	public ArrayList<String> getRuoliDipendenti() throws SQLException {
+		ArrayList<String> temp = new ArrayList<String>();
+		ResultSet risultato = getRuoliDipendentiPS.executeQuery();
+		
+		while (risultato.next())
+			temp.add(risultato.getString(1));
+		
+		risultato.close();
+		
+		return temp;
+	}
+
+	@Override
+	public Progetto getProgettoInserito(String nomeProgetto) throws SQLException {
+		
+		Progetto progetto=null;
+		
+		getProgettoInseritoPS.setString(1,nomeProgetto);
+		
+		ResultSet risultato=getProgettoInseritoPS.executeQuery();
+		risultato.next();
+		
+		progetto=new Progetto(risultato.getString("nomeProgetto"),
+				risultato.getString("tipoProgetto"), 
+				risultato.getString("descrizioneProgetto"),	
+				new LocalDate(risultato.getDate("DataCreazione")),
+				new LocalDate(risultato.getDate("DataScadenza")));
+		
+		return progetto;
+	}
+	
+
+	}
+

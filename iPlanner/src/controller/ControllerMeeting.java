@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import entita.Dipendente;
 import entita.Meeting;
+import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
 import gui.*;
@@ -64,6 +65,11 @@ public class ControllerMeeting {
 		gestioneMeeting= new GestioneMeetingDipendente(this);
 		gestioneMeeting.setVisible(true);	
 	}
+	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato, int codiceMeeting) {
+		
+		ControllerPartecipantiMeeting controller=new ControllerPartecipantiMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendente,meetingSelezionato,codiceMeeting);
+		
+	}
 	
 	//Altri metodi
 	//Metodo che ottiene tutti i meeting a cui deve partecipare/ha partecipato il dipendente
@@ -101,7 +107,7 @@ public class ControllerMeeting {
 
 			//Prova ad inserire il meeting e del progetto da discutere
 			meetDAO.addMeeting(meetingInserito,nomeProgettoDisusso);
-			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
+			
 			
 			//Viene inserito come organizzatore la persona che crea il meeting
 			meetDAO.addOrganizzatore(dipendente.getCf()); 
@@ -137,37 +143,20 @@ public class ControllerMeeting {
 
 	}
 
-	//Metodo che ottiene i dipendenti che non partecipano al meeting selezionato
-	public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
-		return dipDAO.getDipendenti2();
+	public void inserisciMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException {
+		
+		
+		meetDAO.addMeetingCompleto(meetingInserito, progetto);
 	}
 
-	//Metodo che apre la finestra per inserire i partecipanti ai meeting
-	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato, int codiceMeeting) {
+	public Progetto ottieniProgettoInserito(String progettoInserito) throws SQLException {
 		
-		inserisciPartecipantiMeeting= new InserisciPartecipantiMeeting(this,meetingSelezionato,codiceMeeting);
-		inserisciPartecipantiMeeting.setVisible(true);
-		
+		return projDAO.getProgettoInserito(progettoInserito);
 	}
 
-	//Metodo che ottiene le skill del dipendente
-	public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
 	
-		return skillDAO.getSkillDipendente(cfDipendente);
-	}
 
-	//Metodo che inserisce i partecipanti ad un meeting
-	public void inserisciPartecipante(String cf, int codiceMeeting) throws SQLException {
-		meetDAO.aggiungiPartecipanteMeeting(cf,codiceMeeting);
-	
-		
-		
-	}
 
-	public void eliminaPartecipante(Dipendente dipendente2,int idMeeting) throws SQLException {
-		
-		
-		meetDAO.eliminaPartecipanteMeeting(dipendente2.getCf(),idMeeting);
-		
-	}
+
+
 }

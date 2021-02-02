@@ -69,6 +69,20 @@ public class Meeting {
 	}
 
 
+	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
+			String modalita, String piattaforma, SalaRiunione sala, Progetto releativoA) {
+		super();
+		
+		this.dataInizio = dataInizio;
+		this.dataFine = dataFine;
+		this.oraInizio = oraInizio;
+		this.oraFine = oraFine;
+		this.modalita = modalita;
+		this.piattaforma = piattaforma;
+		this.sala = sala;
+		this.releativoA = releativoA;
+	}
+
 	//Getter e Setter
 	public LocalDate getDataInizio() {
 		return dataInizio;
@@ -137,8 +151,10 @@ public class Meeting {
 		return releativoA;
 	}
 
-	public void setProgettoDiscusso(Progetto progettoDiscusso) {
-		this.releativoA = progettoDiscusso;
+	public void setProgettoDiscusso(Progetto progetto) {
+		
+		
+		this.releativoA = progetto;
 	}
 
 	public ArrayList<PartecipazioneMeeting> getPartecipazioniDipendenti() {
@@ -149,20 +165,30 @@ public class Meeting {
 		this.partecipazioniDipendenti = partecipazioniDipendenti;
 	}
 
+	@Override
+	public String toString() {
+		return "Meeting [ dataInizio=" + dataInizio + ", dataFine=" + dataFine
+				+ ", oraInizio=" + oraInizio + ", oraFine=" + oraFine + ", modalita=" + modalita + ", piattaforma="
+				+ piattaforma + ", sala=" + sala + ", releativoA=" + releativoA + ", partecipazioniDipendenti="
+				+ partecipazioniDipendenti + "]";
+	}
+
+	
+	
 	//toString:
 	//Nome Progetto
 	//01/12/2020 13:00 - 01/12/2020 17:00
 	//Sala 1 (oppure Microsoft Teams)
-	@Override
-	public String toString() {
-		String temp = releativoA.getNomeProgetto();
-		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
-		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
-		if (modalita.equals("Telematico"))
-			temp += "\n" + piattaforma;
-		else
-			temp += "\n" + sala.getCodSala();
-		return temp;
-	}
+//	@Override
+//	public String toString() {
+//		String temp = ;
+//		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+//		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+//		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
+//		if (modalita.equals("Telematico"))
+//			temp += "\n" + piattaforma;
+//		else
+//			temp += "\n" + sala.getCodSala();
+//		return temp;
+//	}
 }

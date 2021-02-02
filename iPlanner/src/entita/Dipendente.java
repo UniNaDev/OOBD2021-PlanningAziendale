@@ -62,6 +62,8 @@ public class Dipendente {
 		this.valutazione = valutazione;
 	}
 	
+	
+	
 	//Metodo che genera il codice fiscale di un dipendente partendo dai suoi dati anagrafici
 	public String generaCF() {
 		String temp = cfNomeCognome();	//genera i primi 6 caratteri per nome e cognome (es: LMMNDR)

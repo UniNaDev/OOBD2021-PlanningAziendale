@@ -223,6 +223,22 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Button "Inserisci partecipanti"
 		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+		inserisciPartecipanteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int row= progettoTable.getSelectedRow();
+				String nomeProgetto = nomeTextField.getText();
+				String tipoProgetto = tipologiaComboBox.getSelectedItem().toString();
+				String descrizioneProgetto = descrizioneTextArea.getText();
+				LocalDate scadenza = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
+				LocalDate creazione = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
+				LocalDate dataCreazione = (LocalDate) progettoTable.getValueAt(row, 6);
+				
+				int codiceProgetto = (int) progettoTable.getValueAt(row, 0);
+				Progetto progettoSelezionato=new Progetto(nomeProgetto, tipoProgetto, descrizioneProgetto, dataCreazione, scadenza);
+				controller.apriInserisciPartecipantiProgetto(progettoSelezionato, codiceProgetto);
+			}
+		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -917,7 +933,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				int riga = progettoTable.getSelectedRow(); //prende la riga attualmente selezionata della tabella dei progetti
 				
 				//dalla lista di progetti presenti nella tabella ne prende quello in posizione della riga selezionata (ES: se si seleziona la prima riga prende il progetto in posizione 0 dell arraylist)
-				Progetto progettoSelezionato = dataModel.getProgettiTabella().get(riga);
+				int codProgettoSelezionato = (int) progettoTable.getValueAt(row, 0);
 				
 				//ripulisce le liste ogni volta che si preme su una riga della tabella , in modo che non vengano aggiunti elementi ad ogni click
 				listaPartecipantiModel.clear();
@@ -926,10 +942,10 @@ public class GestioneProgettiDipendente extends JFrame {
 				try 
 				{
 					//ottiene i partecipanti al progetto selezionato
-					ArrayList<Dipendente> partecipanti = controller.getPartecipantiProgetto(progettoSelezionato);
+					ArrayList<Dipendente> partecipanti = controller.getPartecipantiProgetto(codProgettoSelezionato);
 					
 					//ottiene i meeting relativi al progetto selezionato
-					ArrayList<Meeting> meetingRelativi = controller.getMeetingRelativiProgetto(progettoSelezionato);
+					ArrayList<Meeting> meetingRelativi = controller.getMeetingRelativiProgetto(codProgettoSelezionato);
 					
 					//aggiunge meeting e partecipanti alle rispettive liste
 					listaMeetingRelativiModel.addAll(meetingRelativi);

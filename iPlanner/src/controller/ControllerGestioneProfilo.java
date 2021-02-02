@@ -85,7 +85,7 @@ public class ControllerGestioneProfilo {
 
 	//Metodo che apre la gestione progetti del dipendente
 	public void apriMieiProgetti() {
-		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,ambitoDAO,dipendente);
+		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,ambitoDAO,skillDAO, dipendente);
 	}
 	
 	//Metodo che apre la gestione dei meeting del dipendente

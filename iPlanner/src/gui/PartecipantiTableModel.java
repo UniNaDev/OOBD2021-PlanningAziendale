@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Skill;
@@ -50,7 +53,8 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		case 3:
 			return dipendente.getSesso();
 		case 4:
-			return dipendente.getDataNascita();
+			int età=etàDipendente(dipendente.getDataNascita(),LocalDate.now());
+			return età;
 		case 5:
 			return dipendente.getEmail();
 		case 6:
@@ -61,5 +65,19 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		}
 		return null;
 	}
+
+
+	private int etàDipendente(LocalDate dataNascita, LocalDate dataCorrente) {
+		if ((dataNascita != null) && (dataCorrente != null)) {
+            return Period.fieldDifference(dataNascita, dataCorrente).getYears();
+        } else {
+            return 0;
+		
+	}
+
+	}
+
+
+
 }
 

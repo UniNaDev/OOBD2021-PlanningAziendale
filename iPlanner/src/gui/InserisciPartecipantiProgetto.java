@@ -31,6 +31,7 @@ import org.joda.time.LocalTime;
 
 import controller.ControllerMeeting;
 import controller.ControllerPartecipantiMeeting;
+import controller.ControllerPartecipantiProgetto;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -61,7 +62,7 @@ import javax.swing.JSeparator;
 
 
 
-public class InserisciPartecipantiMeeting extends JFrame {
+public class InserisciPartecipantiProgetto extends JFrame {
 
 	//ATTRIBUTI
 	//---------------------------------------------
@@ -83,21 +84,21 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JTextField etàTextField;
 	private JTextField valutazioneTextField;
 	private JTextField salarioTextField;
-	private JTextField dataInizioTextField;
-	private JTextField dataFineTextField;
-	private JTextField oraInizioTextField;
-	private JTextField oraFineTextField;
 	private JList partecipantiList;
 	private JLabel partecipantiLabel;
+	private JComboBox ruoloComboBox;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
 
 	//Creazione frame
 	//---------------------------------------------
-	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato, int codiceMeeting) {
+	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato, int codiceProgetto) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
 		
-		setTitle("Inserisci Partecipanti Meeting");
+		setTitle("Inserisci Partecipanti Progetto");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -121,12 +122,12 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(DipendenteScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -159,7 +160,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		comandiPanel2.add(cercaTextField);
 		cercaTextField.setColumns(10);
 		comandiPanel.add(comandiPanel2);
-		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		//panel interno a quello delle info
 		JPanel infoPanel2 = new JPanel();
@@ -239,49 +239,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		dataInizioTextField = new JTextField(meetingSelezionato.getDataInizio().toString());
-		dataInizioTextField.setEditable(false);
-		dataInizioTextField.setColumns(10);
-		dataInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		dataFineTextField = new JTextField(meetingSelezionato.getDataFine().toString());
-		dataFineTextField.setEditable(false);
-		dataFineTextField.setColumns(10);
-		dataFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
-		
-		JLabel dataInizioLabel = new JLabel("Data inizio");
-		dataInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		JLabel dataFineLabel = new JLabel("Data fine");
-		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		oraInizioTextField = new JTextField(meetingSelezionato.getOraInizio().toString());
-		oraInizioTextField.setEditable(false);
-		oraInizioTextField.setColumns(10);
-		oraInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		oraFineTextField = new JTextField(meetingSelezionato.getOraFine().toString());
-		oraFineTextField.setEditable(false);
-		oraFineTextField.setColumns(10);
-		oraFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		JLabel oraInizioLabel = new JLabel("Ora inizio");
-		oraInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		oraInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		JLabel oraFineLabel = new JLabel("Ora fine");
-		oraFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		JScrollPane skillScrollPane_1 = new JScrollPane();
 		skillScrollPane_1.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		JLabel lblNewLabel = new JLabel("Info Meeting");
+		JLabel lblNewLabel = new JLabel("Info progetto");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
@@ -291,134 +255,168 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		JScrollPane skillScrollPane = new JScrollPane();
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		
+		textField = new JTextField(progettoSelezionato.getNomeProgetto());
+		textField.setEditable(false);
+		textField.setColumns(10);
+		textField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		JLabel nomeLabel_1 = new JLabel("Nome");
+		nomeLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		nomeLabel_1.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		textField_1 = new JTextField(progettoSelezionato.getTipoProgetto());
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		textField_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		JLabel nomeLabel_1_1 = new JLabel("Tipologia");
+		nomeLabel_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		nomeLabel_1_1.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		textField_2 = new JTextField(progettoSelezionato.getAmbiti().toString());
+		textField_2.setEditable(false);
+		textField_2.setColumns(10);
+		textField_2.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		JLabel nomeLabel_1_1_1 = new JLabel("Ambito/i");
+		nomeLabel_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		nomeLabel_1_1_1.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		try {
+			ruoloComboBox = new JComboBox(controller.ottieniRuoli());
+			ruoloComboBox.setSelectedItem(null);
+		} catch (SQLException e4) {
+			ruoloComboBox.setSelectedItem(null);
+			e4.printStackTrace();
+		}
+		
+		JLabel lblRuolo = new JLabel("Ruolo");
+		lblRuolo.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblRuolo.setFont(new Font("Consolas", Font.PLAIN, 14));
 
 		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
 		gl_infoPanel2.setHorizontalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(184)
 							.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-							.addGap(153))
+							.addGap(136))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(43)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addComponent(valutazioneLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-								.addComponent(sessoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(nomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(cognomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(salarioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(39)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addComponent(valutazioneLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+									.addComponent(sessoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(nomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(cognomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(salarioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addComponent(lblRuolo, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
-									.addGroup(gl_infoPanel2.createSequentialGroup()
-										.addComponent(uomoRadioButton)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(donnaRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
-									.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-									.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-									.addComponent(nomeTextField)
-									.addComponent(cognomeTextField))
-								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-							.addGap(43)))
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(ruoloComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(uomoRadioButton)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(donnaRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
+								.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeTextField)
+								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cognomeTextField, 102, 102, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(6)
+							.addGap(73)
+							.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(53)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(nomeLabel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(nomeLabel_1_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+									.addGap(14))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
+								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
+								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE))
+							.addGap(61)
 							.addComponent(skillScrollPane_1, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-							.addGap(44))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGap(30))
+						.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
-							.addGap(210))))
+							.addGap(235))))
 		);
 		gl_infoPanel2.setVerticalGroup(
-			gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGap(25)
+					.addContainerGap()
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(51)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
+								.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(29)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+										.addComponent(nomeLabel_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(textField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+										.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+									.addGap(9)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+										.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(18)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_infoPanel2.createSequentialGroup()
-											.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+												.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+												.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+												.addGroup(gl_infoPanel2.createSequentialGroup()
+													.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+														.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+														.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+														.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+														.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+												.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+													.addComponent(uomoRadioButton)
+													.addComponent(donnaRadioButton)))
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-												.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-												.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+												.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-												.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-												.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-											.addComponent(uomoRadioButton)
-											.addComponent(donnaRadioButton)))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(skillScrollPane_1, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))
-					.addContainerGap(38, Short.MAX_VALUE))
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addContainerGap(52, Short.MAX_VALUE)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
-						.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))
-					.addGap(39))
+											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+												.addComponent(ruoloComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblRuolo, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+										.addComponent(skillScrollPane_1, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
+										.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)))))
+						.addComponent(separator, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))
+					.addGap(67))
 		);
 		
 		JList skillList = new JList();
@@ -432,7 +430,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		DefaultListModel listmodel=new DefaultListModel();
 		partecipantiList.setModel(listmodel);
 		try {
-			listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
+			listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
 		} catch (SQLException e3) {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
@@ -462,11 +460,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				else {
 					
 					try {
-						controller.eliminaPartecipante((Dipendente)partecipantiList.getSelectedValue(),codiceMeeting);
+						controller.eliminaPartecipante((Dipendente)partecipantiList.getSelectedValue(),codiceProgetto);
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 				
 						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
+						listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -488,20 +486,29 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla tabella");
 					
 				}
+				if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
+					JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
+					
+				}
 				else {
+					
+					
 					
 					int row= dipendenteTable.getSelectedRow();
 					try {
+						String ruolo=ruoloComboBox.getSelectedItem().toString();
+						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(), codiceProgetto,ruolo);
+						JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente");
 						
-						
-						
-						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(), codiceMeeting);
-						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
+						ruoloComboBox.setSelectedItem(null);
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						
+						//Aggiorna la lista dei partecipanti
 						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
+						listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
 					} catch (SQLException e1) {
 						
+						ruoloComboBox.setSelectedItem(null);
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 					
@@ -535,6 +542,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		comandiPanel2.add(inserisciPartecipanteButton);
 		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		comandiPanel2.add(eliminaPartecipanteButton);
+		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		partecipantiLabel = new JLabel("Partecipanti");
 		partecipantiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -619,19 +627,34 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				
 					if(e.getClickCount()==2) {
 					
-					try {
-						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(),codiceMeeting);
-						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
+						if(dipendenteTable.getSelectedRow()==-1) {
+							
+							JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla tabella");
+							
+						}
+						if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
+							JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
+							
+						}
+						else {
+							try {
+								String ruolo=ruoloComboBox.getSelectedItem().toString();
+								controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(),codiceProgetto,ruolo);
+								JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
+								
+								dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+							
+								listmodel.removeAllElements();
+								listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
+				
+							} catch (SQLException e1) {
+								
+								JOptionPane.showMessageDialog(null, e1.getMessage());
+							}
+							
+						}
 						
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-					
-						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
-		
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						JOptionPane.showMessageDialog(null, e1.getMessage());
-					}
+				
 				
 				}
 			

@@ -59,7 +59,7 @@ public class MeetingTableModel extends AbstractTableModel {
 		case 7:
 			return meeting.getSala();
 		case 8:
-			return meeting.getProgettoDiscusso();
+			return meeting.getProgettoDiscusso().getNomeProgetto().toString();
 		
 		
 		}
