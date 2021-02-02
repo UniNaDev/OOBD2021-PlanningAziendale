@@ -132,4 +132,10 @@ public class ControllerDipendentiSegreteria {
 		public ArrayList<Skill> ottieniSkill() throws SQLException{
 			return skillDAO.getSkills();
 		}
+		
+		//Metodo che ottiene tutti i dipendenti
+		public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
+			ArrayList<Dipendente> temp = dipDAO.getDipendenti();
+			return temp;
+		}
 }

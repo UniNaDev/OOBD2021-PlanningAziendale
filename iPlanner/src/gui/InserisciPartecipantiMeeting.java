@@ -76,7 +76,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JRadioButton donnaRadioButton;
 	private JTable dipendenteTable;
 	private JButton eliminaPartecipanteButton;
-	private DipendenteTableModel dataModelDipendente;
+	private PartecipantiTableModel dataModelDipendente;
 	private JTextField nomeTextField;
 	private JTextField cognomeTextField;
 	private JTextField etàTextField;
@@ -565,7 +565,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		
 		//Table dei meeting
-		dataModelDipendente=new DipendenteTableModel();
+		dataModelDipendente=new PartecipantiTableModel();
 		dipendenteTable = new JTable(dataModelDipendente);
 		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

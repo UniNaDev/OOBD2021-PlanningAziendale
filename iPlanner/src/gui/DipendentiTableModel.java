@@ -4,16 +4,18 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import entita.Dipendente;
-import entita.Meeting;
-import entita.Skill;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 
-public class DipendenteTableModel extends AbstractTableModel {
+import entita.Dipendente;
+
+public class DipendentiTableModel extends AbstractTableModel {
 	
 	private ArrayList<Dipendente> dipendenteTabella=new ArrayList<Dipendente>();
 	
 	
-	String[] colnames= {"CF", "Nome", "Cognome","Sesso", "Età", "Email", "Salario", "Valutazione"};
+	private String[] colnames= {"Nome", "Cognome", "Email", "Età", "Salario", "Valutazione"};
 
 	public void setDipendenteTabella(ArrayList<Dipendente> dipendenteTabella) {
 		this.dipendenteTabella = dipendenteTabella;
@@ -27,7 +29,7 @@ public class DipendenteTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 
-		return 8;
+		return colnames.length;
 	}
 
 	@Override
@@ -38,34 +40,29 @@ public class DipendenteTableModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Dipendente dipendente =dipendenteTabella.get(rowIndex);
+		Dipendente dipendente = dipendenteTabella.get(rowIndex);
 		
 		switch(columnIndex) {
 		case 0:
-			return dipendente.getCf();
-		case 1:
 			return dipendente.getNome();
-		case 2:
+		case 1:
 			return dipendente.getCognome();
-		case 3:
-			return dipendente.getSesso();
-		case 4:
-			return dipendente.getDataNascita();
-		case 5:
+		case 2:
 			return dipendente.getEmail();
-		case 6:
+		case 3:
+			Period period = new Period(dipendente.getDataNascita(), LocalDate.now(), PeriodType.yearMonthDay());
+			int age = period.getYears();
+			return age;
+		case 4:
 			return dipendente.getSalario();
-		case 7:
+		case 5:
 			return dipendente.getValutazione();
-
 		}
 		return null;
-		
-		
 	}
-
-
-
-
+	
+	public Dipendente getSelected(int rowIndex) {
+		Dipendente dipendente = dipendenteTabella.get(rowIndex);
+		return dipendente;
+	}
 }
-
