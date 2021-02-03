@@ -22,15 +22,19 @@ import entita.LuogoNascita;
 import entita.Skill;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
+import interfacceDAO.MeetingDAO;
 
 public class DipendenteDAOPSQL implements DipendenteDAO {
 
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;	//connessione al DB
-	private PreparedStatement getDipendentiPS,getDipendenti2PS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
+	private PreparedStatement getDipendentiPartecipantiPS,getDipendentiPS,getDipendenti2PS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
+	private MeetingDAO meetDAO=null;
+	
+	
 	
 	//METODI
 	//----------------------------------------
@@ -38,7 +42,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	//Costruttore
 	public DipendenteDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;	//ottiene la connessione dal ManagerConnessioneDB
-		
+		this.meetDAO=new MeetingDAOPSQL(connection);
 		this.luogoDAO = new LuogoNascitaDAOPSQL(connection);
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
@@ -52,7 +56,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
 		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email = ? AND Password = ?");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
+		getDipendentiPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=?");
 	}
+	
+	
 	
 	//Metodo getDipendenti.
 	/*Ottiene tutti i dipendenti nella tabella Dipendente del DB.
@@ -79,6 +86,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
 			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
@@ -113,6 +121,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 						risultato.getFloat("Salario"),
 						risultato.getString("Password"),
 						this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+				
+			
+				
+				
 				
 				temp.add(tempDip);	//lo aggiunge alla lista
 			}
@@ -396,6 +408,16 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		risultato.close(); //chiude il ResultSet
 		
 		return tempDip;
+	}
+
+
+
+	@Override
+	public ArrayList<Dipendente> getDipendentiPartecipanti() {
+		
+		
+		
+		return null;
 	}
 
 }

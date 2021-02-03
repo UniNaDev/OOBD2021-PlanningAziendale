@@ -247,7 +247,7 @@ public class Home extends JFrame {
 		//List dei meeting del dipendente
 		JList<Meeting> meetingList;
 		try {
-//			MeetingListRenderer renderer = new MeetingListRenderer();
+			MeetingListRenderer renderer = new MeetingListRenderer();
 			meetingList = new JList();
 			DefaultListModel listmodel=new DefaultListModel();
 			meetingList.setModel(listmodel);
@@ -257,7 +257,7 @@ public class Home extends JFrame {
 			meetingList.setFixedCellHeight(60);
 			meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			meetingScrollPanel.setViewportView(meetingList);
-//			meetingList.setCellRenderer(renderer);
+			meetingList.setCellRenderer(renderer);
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

@@ -65,7 +65,7 @@ public class ControllerMeeting {
 		gestioneMeeting= new GestioneMeetingDipendente(this);
 		gestioneMeeting.setVisible(true);	
 	}
-	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato, int codiceMeeting) {
+	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato,int codiceMeeting) {
 		
 		ControllerPartecipantiMeeting controller=new ControllerPartecipantiMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendente,meetingSelezionato,codiceMeeting);
 		
@@ -93,14 +93,14 @@ public class ControllerMeeting {
 	}
 
 	//Metodo che ottiene gli invitati al meeting selezionato
-	public ArrayList<Dipendente> ottieniInvitati(int idMeeting) throws SQLException {
-		return meetDAO.getInvitati(idMeeting);
-	}
+//	public ArrayList<Dipendente> ottieniInvitati() throws SQLException {
+//		return meetDAO.();
+//	}
 
-	//Metodo che ottiene il progetto discusso nel meeting
-	public String ottieniProgettoDiscusso(int idMeeting) throws SQLException {
-		return meetDAO.getProgettoRelativo(idMeeting);
-	}
+//	//Metodo che ottiene il progetto discusso nel meeting
+//	public String ottieniProgettoDiscusso(int idMeeting) throws SQLException {
+//		return meetDAO.getProgettoRelativo(idMeeting);
+//	}
 
 	//Metodo che inserisce il meeting del progetto da discutere
 	public void inserisciMeeting(Meeting meetingInserito,String nomeProgettoDisusso) throws SQLException{
@@ -147,6 +147,7 @@ public class ControllerMeeting {
 		
 		
 		meetDAO.addMeetingCompleto(meetingInserito, progetto);
+		meetDAO.addOrganizzatore(dipendente.getCf()); 
 	}
 
 	public Progetto ottieniProgettoInserito(String progettoInserito) throws SQLException {

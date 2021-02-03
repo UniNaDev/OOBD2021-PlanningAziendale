@@ -81,9 +81,13 @@ public class ControllerProgetto {
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
 		
+		System.out.println(collaborazioni.toString());
+		
 		ArrayList<Progetto> temp = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)
 			temp.add(collaborazione.getProgetto());
+		
+		System.out.println(temp.toString());
 		
 		return temp;
 	}

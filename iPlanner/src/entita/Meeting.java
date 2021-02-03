@@ -28,7 +28,7 @@ public class Meeting {
 	private Progetto releativoA;	//progetto discusso nel meeting
 	
 	//Attributi per associazioni
-	private ArrayList<PartecipazioneMeeting> partecipazioniDipendenti = new ArrayList<PartecipazioneMeeting>();	//partecipazioni dei dipendenti al meeting
+	private ArrayList<Dipendente> partecipazioniDipendenti = new ArrayList<Dipendente>();	//partecipazioni dei dipendenti al meeting
 	
 	//METODI
 	//----------------------------------------
@@ -157,21 +157,21 @@ public class Meeting {
 		this.releativoA = progetto;
 	}
 
-	public ArrayList<PartecipazioneMeeting> getPartecipazioniDipendenti() {
+	public ArrayList<Dipendente> getPartecipazioniDipendenti() {
 		return partecipazioniDipendenti;
 	}
 
-	public void setPartecipazioniDipendenti(ArrayList<PartecipazioneMeeting> partecipazioniDipendenti) {
+	public void setPartecipazioniDipendenti(ArrayList<Dipendente> partecipazioniDipendenti) {
 		this.partecipazioniDipendenti = partecipazioniDipendenti;
 	}
 
-	@Override
-	public String toString() {
-		return "Meeting [ dataInizio=" + dataInizio + ", dataFine=" + dataFine
-				+ ", oraInizio=" + oraInizio + ", oraFine=" + oraFine + ", modalita=" + modalita + ", piattaforma="
-				+ piattaforma + ", sala=" + sala + ", releativoA=" + releativoA + ", partecipazioniDipendenti="
-				+ partecipazioniDipendenti + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Meeting [ dataInizio=" + dataInizio + ", dataFine=" + dataFine
+//				+ ", oraInizio=" + oraInizio + ", oraFine=" + oraFine + ", modalita=" + modalita + ", piattaforma="
+//				+ piattaforma + ", sala=" + sala + ", partecipazioniDipendenti="
+//				+ partecipazioniDipendenti + "]";
+//	}
 
 	
 	
@@ -179,16 +179,16 @@ public class Meeting {
 	//Nome Progetto
 	//01/12/2020 13:00 - 01/12/2020 17:00
 	//Sala 1 (oppure Microsoft Teams)
-//	@Override
-//	public String toString() {
-//		String temp = ;
-//		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-//		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
-//		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
-//		if (modalita.equals("Telematico"))
-//			temp += "\n" + piattaforma;
-//		else
-//			temp += "\n" + sala.getCodSala();
-//		return temp;
-//	}
+	@Override
+	public String toString() {
+		String temp =getProgettoDiscusso().getNomeProgetto();
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
+		if (modalita.equals("Telematico"))
+			temp += "\n" + piattaforma;
+		else
+			temp += "\n" + sala.getCodSala();
+		return temp;
+	}
 }

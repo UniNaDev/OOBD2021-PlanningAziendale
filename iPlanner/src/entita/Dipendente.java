@@ -38,6 +38,7 @@ public class Dipendente {
 	//Attributi per associazioni
 	private ArrayList<Skill> skills = new ArrayList<Skill>();	//skill del dipendente
 	private ArrayList<PartecipazioneMeeting> partecipazioniMeeting = new ArrayList<PartecipazioneMeeting>();	//lista di partecipazione del dipendente ai meeting
+	private ArrayList<Meeting> partecipa=new ArrayList<Meeting>();
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista delle collaborazioni del dipendente
 	
 	//METODI
@@ -224,11 +225,27 @@ public class Dipendente {
 	//toString
 	
 	
+	public ArrayList<Meeting> getPartecipa() {
+		return partecipa;
+	}
+
+
+
+	public void setPartecipa(ArrayList<Meeting> partecipa) {
+		this.partecipa = partecipa;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return nome + " " + cognome;
+		
+
+		return nome + " " +cognome;
 	}
 	
+	
+
 	//Metodo che calcola la stringa di caratteri del codice fiscale corrispondente a cognome e nome
 	private String cfNomeCognome() {
 		//setta in maiuscolo nome e cognome del dipendente
@@ -303,6 +320,9 @@ public class Dipendente {
 		return risultato1+risultato2;
 	}
 	
+
+
+
 	//Metodo che converte il mese di nascita nel carattere corrispondente per il codice fiscale
 	private String convertiMese(String numeroMese) {
 		String temp = "";

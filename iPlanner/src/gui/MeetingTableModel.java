@@ -16,29 +16,37 @@ public class MeetingTableModel extends AbstractTableModel {
 	public void setMeetingTabella(ArrayList<Meeting> meetingTabella) {
 		this.meetingTabella = meetingTabella;
 	}
+	
+	
+
+	public ArrayList<Meeting> getMeetingTabella() {
+		return meetingTabella;
+	}
+
+
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
+		
 		return meetingTabella.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
+		
 		return 9;
 	}
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		// TODO Auto-generated method stub
+		
 		return colnames[columnIndex];
 	}
 
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
+		
 		Meeting meeting =meetingTabella.get(rowIndex);
 		
 		switch(columnIndex) {
@@ -60,6 +68,7 @@ public class MeetingTableModel extends AbstractTableModel {
 			return meeting.getSala();
 		case 8:
 			return meeting.getProgettoDiscusso().getNomeProgetto().toString();
+
 		
 		
 		}

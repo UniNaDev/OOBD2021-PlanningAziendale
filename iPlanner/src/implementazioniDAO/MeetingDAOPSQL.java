@@ -132,6 +132,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		
 		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
 		ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
+	
 		
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
@@ -143,7 +144,9 @@ public class MeetingDAOPSQL implements MeetingDAO {
 					risultato.getString("Modalità"),
 					risultato.getString("Piattaforma"),
 					salaDAO.getSalaByCod(risultato.getString("CodSala")));
+			
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
+			meetingTemp.setPartecipazioniDipendenti(getInvitati(risultato.getInt("idMeeting")));
 			temp.add(meetingTemp);
 		}
 		risultato.close();

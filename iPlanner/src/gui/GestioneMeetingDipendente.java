@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.ReadablePartial;
 
 import controller.ControllerMeeting;
 import entita.Dipendente;
@@ -43,6 +44,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
@@ -225,7 +227,7 @@ public class GestioneMeetingDipendente extends JFrame {
 					theController.rimuoviMeeting(idMeeting);
 					
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
+					
 					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
 			}
@@ -330,6 +332,8 @@ public class GestioneMeetingDipendente extends JFrame {
 					try {
 						//richiama la funzione insertMeeting
 						insertMeeting(theController);
+						
+						
 						
 						
 					} catch (SQLException e1) {
@@ -822,31 +826,23 @@ public class GestioneMeetingDipendente extends JFrame {
 					}
 				}
 					
-				int idMeeting=(int) meetingTable.getValueAt(row, 0);
-				
-				
-				try {
 
 					DefaultListModel listmodel=new DefaultListModel();
 					invitatiList.setModel(listmodel);
-					listmodel.addAll(theController.ottieniInvitati(idMeeting));
+
+					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
+				
+					listmodel.addAll(meeting.getPartecipazioniDipendenti());
 
 					
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-				}
 				
 				
 				
 				codiceMeeting=(int) meetingTable.getValueAt(row, 0);
 				
-				try {
-					ProgettoDiscussoTextArea.setText(theController.ottieniProgettoDiscusso(idMeeting));
-				} catch (SQLException e1) {
-					
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-				}
+				
+					ProgettoDiscussoTextArea.setText(meetingTable.getValueAt(row, 8).toString());
+				
 				
 			}		
 		});
@@ -862,28 +858,31 @@ public class GestioneMeetingDipendente extends JFrame {
 				inserisciPartecipanteButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-						LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
-						LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
-						LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
-						LocalTime oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);	//ora fine
-						String modalita = "";
-						String piattaforma = null;				
-						SalaRiunione sala = null;
+//						LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
+//						LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
+//						LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
+//						LocalTime oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);	//ora fine
+//						String modalita = "";
+//						String piattaforma = null;				
+//						SalaRiunione sala = null;
+//						
+//					
+//						//modalità online e piattaforma
+//						if (onlineRadioButton.isSelected()) {
+//							modalita = "Telematico";
+//							piattaforma = piattaformaSalaComboBox.getSelectedItem().toString();	
+//						}
+//						//modalità fisica e sala
+//						else if (fisicoRadioButton.isSelected()) {
+//							modalita = "Fisico";
+//							sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
+//						}
+//						Meeting meetingSelezionato = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);
 						
-					
-						//modalità online e piattaforma
-						if (onlineRadioButton.isSelected()) {
-							modalita = "Telematico";
-							piattaforma = piattaformaSalaComboBox.getSelectedItem().toString();	
-						}
-						//modalità fisica e sala
-						else if (fisicoRadioButton.isSelected()) {
-							modalita = "Fisico";
-							sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
-						}
-						Meeting meetingSelezionato = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);
+						int row=meetingTable.getSelectedRow();
+						Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
 						
-						theController.apriInserisciPartecipantiMeeting(meetingSelezionato,codiceMeeting);
+						theController.apriInserisciPartecipantiMeeting(meeting,codiceMeeting);
 					}
 				});
 				inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {

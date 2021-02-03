@@ -208,6 +208,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
+			projTemp.setCollaborazioni(temp);
 			
 			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(projTemp,dip,risultato.getString("RuoloDipendente"));
 			

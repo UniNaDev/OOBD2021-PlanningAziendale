@@ -110,8 +110,8 @@ public class ControllerGestioneProfilo {
 	
 	//Metodo che ottiene i meeting a cui partecipa il dipendente
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		ArrayList<Meeting> temp = meetDAO.getMeetingsByInvitato(dipendente);
-		return temp;
+		
+		return meetDAO.getMeetingsByInvitato(dipendente);
 	}
 	
 	//Metodo che aggiorna le informazioni del dipendente

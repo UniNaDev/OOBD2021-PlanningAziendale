@@ -318,7 +318,7 @@ public class MieiMeeting extends JFrame {
 				public void valueChanged(ListSelectionEvent e) {
 					Meeting meetingSelezionato = meetingList.getSelectedValue();	//ottiene il meeting selezionato
 					
-//					progettoDiscussoLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
+					progettoDiscussoLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
 					valoreModalitaLabel.setText(meetingSelezionato.getModalita());	//modalità
 					
 					if (meetingSelezionato.getModalita().equals("Fisico")) {
@@ -348,7 +348,7 @@ public class MieiMeeting extends JFrame {
 			meetingList.setSelectedIndex(0);
 			mieiMeetingPanel.setViewportView(meetingList);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+		
 			e1.printStackTrace();
 		}
 		contentPane.setLayout(gl_contentPane);

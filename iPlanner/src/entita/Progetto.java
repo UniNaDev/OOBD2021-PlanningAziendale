@@ -58,6 +58,22 @@ public class Progetto {
 		this.scadenza = scadenza;
 	}
 	
+	
+	
+	public Progetto(String nomeProgetto, String tipoProgetto, String descrizioneProgetto, LocalDate dataCreazione,
+			LocalDate scadenza, LocalDate dataTerminazione, ArrayList<AmbitoProgetto> ambiti,
+			ArrayList<Meeting> discussoIn) {
+		super();
+		this.nomeProgetto = nomeProgetto;
+		this.tipoProgetto = tipoProgetto;
+		this.descrizioneProgetto = descrizioneProgetto;
+		this.dataCreazione = dataCreazione;
+		this.scadenza = scadenza;
+		this.dataTerminazione = dataTerminazione;
+		this.ambiti = ambiti;
+		this.discussoIn = discussoIn;
+	}
+
 	//Getter e Setter
 	//Manca setIdProgetto perchè non si vuole settare ma gestire con una sequence nel DBMS
 	public int getIdProgettto() {
@@ -140,16 +156,26 @@ public class Progetto {
 		this.idProgettto = idProgettto;
 	}
 
-	//toString
 	@Override
 	public String toString() {
-		String temp = nomeProgetto;
-		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-		if (!scadenza.equals(null))
-			temp += " " + scadenza.toString(formatDate);
-				
-		return temp;
+		return "Progetto [idProgettto=" + idProgettto + ", nomeProgetto=" + nomeProgetto + ", tipoProgetto="
+				+ tipoProgetto + ", descrizioneProgetto=" + descrizioneProgetto + ", dataCreazione=" + dataCreazione
+				+ ", scadenza=" + scadenza + ", dataTerminazione=" + dataTerminazione + ", ambiti=" + ambiti
+				+ ", discussoIn=" + discussoIn + ", collaborazioni=" + collaborazioni + "]";
 	}
+
+	//toString
+//	@Override
+//	public String toString() {
+//		String temp = getNomeProgetto();
+//		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+//		if (!scadenza.equals(null))
+//			temp += " " + scadenza.toString(formatDate);
+//				
+//		return temp;
+//	}
+	
+	
 	
 	
 	

@@ -92,7 +92,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 
 	//Creazione frame
 	//---------------------------------------------
-	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato, int codiceMeeting) {
+	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato,int codiceMeeting) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
@@ -431,13 +431,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		partecipantiList = new JList();
 		DefaultListModel listmodel=new DefaultListModel();
 		partecipantiList.setModel(listmodel);
-		try {
-			listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		
+		listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
+
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		skillScrollPane_1.setViewportView(partecipantiList);
 		
@@ -466,7 +461,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 				
 						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
+						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -499,7 +494,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
+						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
 					} catch (SQLException e1) {
 						
 						JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -624,12 +619,14 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
 						
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						
 					
 						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniInvitati(codiceMeeting));
+						
+						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
 		
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
+						
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 				
