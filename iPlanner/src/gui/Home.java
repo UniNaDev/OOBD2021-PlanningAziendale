@@ -281,9 +281,10 @@ public class Home extends JFrame {
 			progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			progettiList.setFixedCellHeight(40);
 			progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
+			
 			progettiScrollPanel.setViewportView(progettiList);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		
@@ -352,4 +353,6 @@ public class Home extends JFrame {
 		
 		contentPane.setLayout(gl_contentPane);
 	}
+
+
 }

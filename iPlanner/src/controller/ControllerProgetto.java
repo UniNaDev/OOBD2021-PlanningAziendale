@@ -72,6 +72,8 @@ public class ControllerProgetto {
 	public void apriGestioneProgetti() {
 		gestioneProgetti=new GestioneProgettiDipendente(this);
 		gestioneProgetti.setVisible(true);
+		
+		mieiProgetti.setVisible(false);
 	}
 
 	//Altri metodi

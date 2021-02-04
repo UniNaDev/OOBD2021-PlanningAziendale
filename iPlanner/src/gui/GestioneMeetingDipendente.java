@@ -297,7 +297,17 @@ public class GestioneMeetingDipendente extends JFrame {
 					modalita = "Fisico";
 					sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
 				}
-				Meeting meetingAggiornato = new Meeting(id,dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
+				String progettoDiscusso=ProgettoDiscussoTextArea.getText();
+				Progetto progetto=null;
+				Meeting meetingAggiornato=null;
+				try {
+					progetto=theController.ottieniProgettoInserito(progettoDiscusso);
+					meetingAggiornato = new Meeting(id,dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala,progetto);	//crea il meeting modificato
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				
 				try {
 					theController.aggiornaMeeting(meetingAggiornato);	//tenta di fare l'update nel DB del meeting
 					JOptionPane.showMessageDialog(null, "Meeting Modificato");
@@ -845,9 +855,16 @@ public class GestioneMeetingDipendente extends JFrame {
 
 					DefaultListModel listmodel=new DefaultListModel();
 					invitatiList.setModel(listmodel);
-
-					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
 				
+					try {
+						dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
+					} catch (SQLException e1) {
+						
+						e1.printStackTrace();
+					}
+					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
+					
+					listmodel.removeAllElements();
 					listmodel.addAll(meeting.getPartecipazioniDipendenti());
 	
 				codiceMeeting=(int) meetingTable.getValueAt(row, 0);

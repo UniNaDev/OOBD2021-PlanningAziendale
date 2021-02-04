@@ -431,6 +431,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		partecipantiList = new JList();
 		DefaultListModel listmodel=new DefaultListModel();
 		partecipantiList.setModel(listmodel);
+		
 		listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
 
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -459,11 +460,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					try {
 						controller.eliminaPartecipante((Dipendente)partecipantiList.getSelectedValue(),codiceMeeting);
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
+						
+						
 				
-						listmodel.removeAllElements();
-						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
+						listmodel.removeElementAt(partecipantiList.getSelectedIndex());
+						
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
+						
 						e1.printStackTrace();
 					}
 				}
@@ -488,13 +491,12 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					int row= dipendenteTable.getSelectedRow();
 					try {
 						
-						
-						
 						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(), codiceMeeting);
 						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-						listmodel.removeAllElements();
-						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
+						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						listmodel.addElement(dipendente);
+//						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
 					} catch (SQLException e1) {
 						
 						JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -618,12 +620,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(),codiceMeeting);
 						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
 						
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti()); //Per aggiornare tabella
 						
 					
-						listmodel.removeAllElements();
-						
-						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
+						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						listmodel.addElement(dipendente);
 		
 					} catch (SQLException e1) {
 						

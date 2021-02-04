@@ -23,6 +23,7 @@ import entita.Skill;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
+import interfacceDAO.ProgettoDAO;
 
 public class DipendenteDAOPSQL implements DipendenteDAO {
 
@@ -46,7 +47,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
 	private MeetingDAO meetDAO=null;
-	
+	private ProgettoDAO projDAO=null;
 	
 	
 	//METODI
@@ -87,6 +88,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		//finchè esistono dipendenti nel ResultSet
 		while(risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
+			
 			
 			Dipendente tempDip = new Dipendente(risultato.getString("CF"),
 					risultato.getString("Nome"),
@@ -137,7 +139,9 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 						risultato.getString("Password"),
 						this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 				
-			
+				projDAO=new ProgettoDAOPSQL(connection);
+				
+				tempDip.setCollaborazioni(projDAO.getProgettiByDipendente(tempDip));
 				
 				
 				

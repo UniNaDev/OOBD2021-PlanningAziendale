@@ -26,6 +26,7 @@ public class ControllerMeeting {
 	
 	//Attributi GUI
 	private MieiMeeting mieiMeeting;
+	private Home home;
 	private GestioneMeetingDipendente gestioneMeeting;
 	private InserisciPartecipantiMeeting inserisciPartecipantiMeeting;
 	
@@ -63,7 +64,9 @@ public class ControllerMeeting {
 	//Metodo che apre la finestra di gestione dei meeting
 	public void apriGestioneMeeting() {
 		gestioneMeeting= new GestioneMeetingDipendente(this);
-		gestioneMeeting.setVisible(true);	
+		gestioneMeeting.setVisible(true);
+		
+		mieiMeeting.setVisible(false);
 	}
 	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato,int codiceMeeting) {
 		
@@ -129,8 +132,6 @@ public class ControllerMeeting {
 
 		//Rimuove il meeting selezionato
 		meetDAO.removeMeeting(idMeeting);
-		
-		
 //		//Viene aggiornata la finestra MieiMeeting
 //		mieiMeeting.setVisible(false);
 //		mieiMeeting= new MieiMeeting(this);
@@ -144,7 +145,6 @@ public class ControllerMeeting {
 	}
 
 	public void inserisciMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException {
-		
 		
 		meetDAO.addMeetingCompleto(meetingInserito, progetto);
 		meetDAO.addOrganizzatore(dipendente.getCf()); 

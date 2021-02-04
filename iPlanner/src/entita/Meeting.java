@@ -69,10 +69,10 @@ public class Meeting {
 	}
 
 
-	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
+	public Meeting(int idMeeting,LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
 			String modalita, String piattaforma, SalaRiunione sala, Progetto releativoA) {
 		super();
-		
+		this.idMeeting=idMeeting;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.oraInizio = oraInizio;
@@ -83,6 +83,19 @@ public class Meeting {
 		this.releativoA = releativoA;
 	}
 
+
+	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
+			String modalita, String piattaforma, SalaRiunione sala, Progetto releativoA) {
+		super();
+		this.dataInizio = dataInizio;
+		this.dataFine = dataFine;
+		this.oraInizio = oraInizio;
+		this.oraFine = oraFine;
+		this.modalita = modalita;
+		this.piattaforma = piattaforma;
+		this.sala = sala;
+		this.releativoA = releativoA;
+	}
 	//Getter e Setter
 	public LocalDate getDataInizio() {
 		return dataInizio;

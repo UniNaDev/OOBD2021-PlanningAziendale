@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Skill;
+
 import gui.InserisciPartecipantiMeeting;
 import gui.MieiMeeting;
 import interfacceDAO.DipendenteDAO;
@@ -51,6 +52,10 @@ public class ControllerPartecipantiMeeting {
 		//Metodo che ottiene gli invitati al meeting selezionato
 		public ArrayList<Dipendente> ottieniInvitati(int idMeeting) throws SQLException {
 			return meetDAO.getInvitati(idMeeting);
+		}
+		
+		public ArrayList<Meeting> ottieniMeeting() throws SQLException {
+			return meetDAO.getMeetingsByInvitato(dipendente);
 		}
 		
 		//Metodo che ottiene i dipendenti che non partecipano al meeting selezionato

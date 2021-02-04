@@ -58,6 +58,8 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.Toolkit;
 import entita.AmbitoProgetto;
+import entita.CollaborazioneProgetto;
+
 import javax.swing.JSeparator;
 
 
@@ -499,8 +501,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						
 						//Aggiorna la lista dei partecipanti
 						
-						listmodel.removeAllElements();
-						listmodel.addAll(progettoSelezionato.getCollaborazioni());
+						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						listmodel.addElement(dipendente);
 					} catch (SQLException e1) {
 						
 						ruoloComboBox.setSelectedItem(null);
@@ -639,8 +641,11 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								
 								dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 							
-								listmodel.removeAllElements();
-								listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
+								Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+//								CollaborazioneProgetto collaborazioneProgetto;
+//								collaborazioneProgetto=dipendente.getCollaborazioni();
+//								collaborazioneProgetto.getRuolo();
+								listmodel.addElement(dipendente.getCollaborazioni().toArray());
 				
 							} catch (SQLException e1) {
 								
