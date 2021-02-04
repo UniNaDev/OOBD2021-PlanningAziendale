@@ -65,4 +65,9 @@ public class DipendentiTableModel extends AbstractTableModel {
 		Dipendente dipendente = dipendenteTabella.get(rowIndex);
 		return dipendente;
 	}
+	
+	@Override
+	public Class<?> getColumnClass(int columnIndex){
+		return getValueAt(0, columnIndex).getClass();
+	}
 }

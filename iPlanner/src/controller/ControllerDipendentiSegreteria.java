@@ -138,4 +138,24 @@ public class ControllerDipendentiSegreteria {
 			ArrayList<Dipendente> temp = dipDAO.getDipendenti();
 			return temp;
 		}
+		
+		//Meotodo che ottiene il massimo stipendio nel DB per i filtri
+		public float ottieniMaxStipendio() {
+			try {
+				return dipDAO.getMaxStipendio();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return 100000000f;
+			}
+		}
+		
+		//Meotodo che filtra i dipendenti
+		public ArrayList<Dipendente> filtraDipendenti(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException {
+			return dipDAO.getDipendentiFiltrati(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima);
+		}
+		
+		//Metodo che aggiorna le informazioni di un dipendente
+		public void aggiornaDipendente(Dipendente dipendente) throws SQLException {
+			dipDAO.updateDipendente(dipendente);
+		}
 }

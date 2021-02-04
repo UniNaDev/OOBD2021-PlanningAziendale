@@ -14,9 +14,9 @@ import entita.Skill;
 public interface DipendenteDAO {
 
 	public ArrayList<Dipendente> getDipendenti() throws SQLException;	//metodo che restituisce tutti i dipendenti nel DB
-	public ArrayList<Dipendente> getDipendentiByEta(int minima) throws SQLException;	//metodo che restituisce tutti i dipendenti con età superiore al parametro inserito
+	public ArrayList<Dipendente> getDipendentiByEta(int minima, int massima) throws SQLException;	//metodo che restituisce tutti i dipendenti con età superiore al parametro inserito
 	public float getValutazione(String cf) throws SQLException;	//metodo che restituisce la valutazione di un dipendente
-	public ArrayList<Dipendente> getDipendentiByValutazione(float minima) throws SQLException;	//metodo che restituisce tutti i dipendenti con valutazione superiore al parametro inserito
+	public ArrayList<Dipendente> getDipendentiByValutazione(float minima, float massima) throws SQLException;	//metodo che restituisce tutti i dipendenti con valutazione superiore al parametro inserito
 	public ArrayList<Dipendente> getDipendentiBySalario(float minimo, float massimo) throws SQLException;	//metodo che restituisce i dipendenti con salario compreso tra i parametri inseriti 
 	public ArrayList<Dipendente> getDipendentiBySkill(Skill skill) throws SQLException;	//metodo che restituisce i dipendenti con una certa skill
 	public boolean addDipendente(Dipendente dipendente) throws SQLException;	//metodo che aggiunge un nuovo dipendente al DB
@@ -25,4 +25,6 @@ public interface DipendenteDAO {
 	public Dipendente getDipendenteByCF(String cf) throws SQLException;	//metodo che ottiene il dipendente con codice fiscale uguale a quello del parametro in input
 	public ArrayList<Dipendente> getDipendenti2() throws SQLException;
 	public ArrayList<Dipendente> getDipendentiPartecipanti();
+	public float getMaxStipendio() throws SQLException;	//metodo che ottiene il massimo stipendio presente nel DB
+	public ArrayList<Dipendente> getDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException;	//metodo che ottiene i dipendenti filtrati
 }
