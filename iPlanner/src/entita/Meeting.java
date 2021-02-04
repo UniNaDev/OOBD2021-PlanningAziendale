@@ -24,10 +24,10 @@ public class Meeting {
 	private LocalTime oraFine;	//orario di fine del meeting
 	private String modalita;	//modalità del meeting ("Fisico" oppure "Telematico")
 	private String piattaforma;	//piattaforma su cui eventualmente verrà tenuto il meeting
+
+	//Attributi per associazioni
 	private SalaRiunione sala;	//sala in cui si può tenere il meeting
 	private Progetto releativoA;	//progetto discusso nel meeting
-	
-	//Attributi per associazioni
 	private ArrayList<Dipendente> partecipazioniDipendenti = new ArrayList<Dipendente>();	//partecipazioni dei dipendenti al meeting
 	
 	//METODI

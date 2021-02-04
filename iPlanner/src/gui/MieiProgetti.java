@@ -226,7 +226,7 @@ public class MieiProgetti extends JFrame {
 		dataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data scadenza
-		JLabel valoreDataScadenzaLabel = new JLabel("07/01/2022");
+		JLabel valoreDataScadenzaLabel = new JLabel("N/A");
 		valoreDataScadenzaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreDataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -360,14 +360,16 @@ public class MieiProgetti extends JFrame {
 					valoreProjectManagerLabel.setText(dipendente.getNome() + " " + dipendente.getCognome());	//project manager
 					
 					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	//data creazione
-					valoreDataCreazioneLabel.setText(progettoSelezionato.getDataTerminazione().toString(formatDate));
+					valoreDataCreazioneLabel.setText(progettoSelezionato.getDataCreazione().toString(formatDate));
 					
-					if (progettoSelezionato.getDataTerminazione() != null)	//data terminazione
+					System.out.println("Data:"+progettoSelezionato.getDataTerminazione());
+					
+					if (progettoSelezionato.getDataTerminazione() !=null)	//data terminazione
 						valoreDataTerminazioneLabel.setText(progettoSelezionato.getDataTerminazione().toString(formatDate));
 					else
 						valoreDataTerminazioneLabel.setText("In corso.");
 					
-					if (progettoSelezionato.getScadenza() != null)	//data scadenza
+					if (progettoSelezionato.getScadenza()!=null)	//data scadenza
 						valoreDataScadenzaLabel.setText(progettoSelezionato.getScadenza().toString(formatDate));
 					else
 						valoreDataScadenzaLabel.setText("Senza scadenza.");
@@ -382,7 +384,7 @@ public class MieiProgetti extends JFrame {
 			progettiList.setFixedCellHeight(40);
 			mieiProgettiScrollPane.setViewportView(progettiList);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 

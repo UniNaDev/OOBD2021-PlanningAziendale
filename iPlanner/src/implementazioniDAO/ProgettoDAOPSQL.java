@@ -62,7 +62,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		getProgettiByCreatorePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT p.CodProgetto FROM Partecipazione AS p WHERE p.CF = ? AND p.Ruolo = 'Project Manager')"); //? = codice fiscale del creatore dei progetti
 		getProgettiByAmbitoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT a.CodProgetto FROM AmbitoProgettoLink AS a WHERE a.IDAmbito = ?)");	//? = nome dell'ambito con cui filtrare i progetti
 		getProgettiByTipoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.TipoProgetto = ?"); //? = tipo di progetti che si cercano
-		addProgettoPS = connection.prepareStatement("INSERT INTO Progetto (NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza) VALUES (?,?,?,?,?)");
+		addProgettoPS = connection.prepareStatement("INSERT INTO Progetto (NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione) VALUES (?,?,?,?,?,?)");
 		removeProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?"); //? = codice del progetto da eliminare
 		addPartecipantePS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)"); //? = codice del progetto, ? = codice fiscale del partecipante, ? = ruolo
 		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?"); //? = codice fiscale del dipendente da rimuovere dalla partecipazione, ? = codice progetto da cui rimuoverlo
@@ -203,8 +203,18 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					risultato.getString("TipoProgetto"),
 					risultato.getString("DescrizioneProgetto"),
 					new LocalDate(risultato.getDate("DataCreazione")),
-					new LocalDate(risultato.getDate("DataScadenza")),
-					new LocalDate(risultato.getDate("DataTerminazione")));
+					new LocalDate(risultato.getDate("DataScadenza"))
+					);
+			
+			if(risultato.getDate("DataTerminazione")!=null){
+				
+				projTemp.setDataTerminazione(new LocalDate(risultato.getDate("DataTerminazione")));
+			}
+			else {
+				
+				projTemp.setDataTerminazione(null);
+			}
+			
 			
 			projTemp.setMeetingsRelativi(getMeetingRelativi(risultato.getInt("CodProgetto")));
 			projTemp.setCollaborazioni(getPartecipanti(risultato.getInt("CodProgetto")));
@@ -214,12 +224,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			
-			
-			System.out.println(projTemp);
-			
 			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(projTemp,dip,risultato.getString("RuoloDipendente"));
 			
-//			projTemp.setCollaborazioni(tempPa);
+
 			
 			temp.add(tempPartecipazione);	//aggiunge il progetto alla lista
 		}
@@ -315,6 +322,11 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			addProgettoPS.setDate(5, new Date(proj.getScadenza().toDateTimeAtStartOfDay().getMillis()));
 		else
 			addProgettoPS.setNull(5, Types.DATE);
+		
+		if (proj.getDataTerminazione() != null)
+			addProgettoPS.setDate(6, new Date(proj.getDataTerminazione().toDateTimeAtStartOfDay().getMillis()));
+		else
+			addProgettoPS.setNull(6, Types.DATE);
 		
 		//se il progetto ha degli ambiti allora li inserisce nel DB
 		if (!proj.getAmbiti().isEmpty()) {

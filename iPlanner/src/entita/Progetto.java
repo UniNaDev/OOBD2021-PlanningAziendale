@@ -27,9 +27,10 @@ public class Progetto {
 	private LocalDate dataCreazione;	//data creazione del progetto (not null)
 	private LocalDate scadenza;	//eventuale scadenza del progetto
 	private LocalDate dataTerminazione;	//data in cui è terminato il progetto (se è terminato)
-	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
+	
 	
 	//Attributi per associazioni
+	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
 	private ArrayList<Dipendente> comprende=new ArrayList<Dipendente>();
 	private ArrayList<Meeting> discussoIn = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista di collaborazioni del progetto
@@ -39,14 +40,24 @@ public class Progetto {
 	
 	//Costruttore con tutti gli attributi essenziali per una query
 	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,
-			LocalDate dataCreazione, LocalDate scadenza, LocalDate dataTerminazione) {
+			LocalDate dataCreazione, LocalDate scadenza) {
 		this.idProgettto = idProgettto;
 		this.nomeProgetto = nomeProgetto;
 		this.tipoProgetto = tipoProgetto;
 		this.descrizioneProgetto = descrizioneProgetto;
 		this.dataCreazione = dataCreazione;
 		this.scadenza = scadenza;
-		this.dataTerminazione = dataTerminazione;
+
+	}
+	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,
+			LocalDate dataCreazione, LocalDate scadenza,LocalDate dataTerminazione) {
+		this.idProgettto = idProgettto;
+		this.nomeProgetto = nomeProgetto;
+		this.tipoProgetto = tipoProgetto;
+		this.descrizioneProgetto = descrizioneProgetto;
+		this.dataCreazione = dataCreazione;
+		this.scadenza = scadenza;
+		this.dataTerminazione=dataTerminazione;
 	}
 
 	//Costruttore con attributi per la creazione di nuovi progetti

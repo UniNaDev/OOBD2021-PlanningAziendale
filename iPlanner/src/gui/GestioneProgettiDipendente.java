@@ -953,7 +953,7 @@ public class GestioneProgettiDipendente extends JFrame {
 						{
 							if(ambiti.get(j).getNome().equals(ambitoModel.getElementAt(i).getNome())) //confonta i nomi degli ambiti
 							{								
-								selezionati.add(i);	 										//aggiunge tutti gli indici ottenuti in una lista
+								selezionati.add(i);	 //aggiunge tutti gli indici ottenuti in una lista
 							}
 						}	
 					}
@@ -992,7 +992,6 @@ public class GestioneProgettiDipendente extends JFrame {
 					
 					
 					//ottiene i meeting relativi al progetto selezionato
-//					ArrayList<Meeting> meetingRelativi = controller.getMeetingRelativiProgetto(codProgettoSelezionato); //Da eliminare
 					Progetto progetto=dataModel.getProgettiTabella().get(row);
 					
 					//aggiunge meeting e partecipanti alle rispettive liste
@@ -1005,7 +1004,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		try {
 			dataModel.setProgettiTabella(controller.ottieniProgetti());
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		
