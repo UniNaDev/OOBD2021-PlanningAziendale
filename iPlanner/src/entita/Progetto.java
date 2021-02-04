@@ -30,6 +30,7 @@ public class Progetto {
 	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
 	
 	//Attributi per associazioni
+	private ArrayList<Dipendente> comprende=new ArrayList<Dipendente>();
 	private ArrayList<Meeting> discussoIn = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista di collaborazioni del progetto
 
@@ -156,24 +157,44 @@ public class Progetto {
 		this.idProgettto = idProgettto;
 	}
 
-	@Override
-	public String toString() {
-		return "Progetto [idProgettto=" + idProgettto + ", nomeProgetto=" + nomeProgetto + ", tipoProgetto="
-				+ tipoProgetto + ", descrizioneProgetto=" + descrizioneProgetto + ", dataCreazione=" + dataCreazione
-				+ ", scadenza=" + scadenza + ", dataTerminazione=" + dataTerminazione + ", ambiti=" + ambiti
-				+ ", discussoIn=" + discussoIn + ", collaborazioni=" + collaborazioni + "]";
+	public ArrayList<Dipendente> getComprende() {
+		return comprende;
 	}
 
-	//toString
+	public void setComprende(ArrayList<Dipendente> comprende) {
+		this.comprende = comprende;
+	}
+
+	public ArrayList<Meeting> getDiscussoIn() {
+		return discussoIn;
+	}
+
+	public void setDiscussoIn(ArrayList<Meeting> discussoIn) {
+		this.discussoIn = discussoIn;
+	}
+	
+
 //	@Override
 //	public String toString() {
-//		String temp = getNomeProgetto();
-//		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-//		if (!scadenza.equals(null))
-//			temp += " " + scadenza.toString(formatDate);
-//				
-//		return temp;
+//		return "Progetto [idProgettto=" + idProgettto + ", nomeProgetto=" + nomeProgetto + ", tipoProgetto="
+//				+ tipoProgetto + ", descrizioneProgetto=" + descrizioneProgetto + ", dataCreazione=" + dataCreazione
+//				+ ", scadenza=" + scadenza + ", dataTerminazione=" + dataTerminazione + ", ambiti=" + ambiti
+//				+ ", comprende=" + comprende + ", discussoIn=" + discussoIn + ", collaborazioni=" + collaborazioni
+//				+ "]";
 //	}
+
+
+
+	//toString
+	@Override
+	public String toString() {
+		String temp = getNomeProgetto();
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		if (!scadenza.equals(null))
+			temp += " " + scadenza.toString(formatDate);
+				
+		return temp;
+	}
 	
 	
 	

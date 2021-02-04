@@ -429,13 +429,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		partecipantiList = new JList();
 		DefaultListModel listmodel=new DefaultListModel();
 		partecipantiList.setModel(listmodel);
-		try {
-			listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		
+		listmodel.addAll(progettoSelezionato.getCollaborazioni());
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		skillScrollPane_1.setViewportView(partecipantiList);
 		
@@ -464,9 +458,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 				
 						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
+						listmodel.addAll(progettoSelezionato.getCollaborazioni());
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
+					
 						e1.printStackTrace();
 					}
 				}
@@ -504,8 +498,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 						
 						//Aggiorna la lista dei partecipanti
+						
 						listmodel.removeAllElements();
-						listmodel.addAll(controller.ottieniPartecipanti(codiceProgetto));
+						listmodel.addAll(progettoSelezionato.getCollaborazioni());
 					} catch (SQLException e1) {
 						
 						ruoloComboBox.setSelectedItem(null);

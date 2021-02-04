@@ -32,5 +32,7 @@ public interface ProgettoDAO {
 	public boolean removeProgettoByCod(int codProgetto) throws SQLException; //metodo che rimuove un progetto dal db prendendo in input solo il codice
 	public ArrayList<String> getRuoliDipendenti() throws SQLException; //Metodo che ritorna tutti i ruoli presenti nel DB
 	public Progetto getProgettoInserito(String nomeProgetto) throws SQLException;
+//	public ArrayList<CollaborazioneProgetto> getPartecipanti(Progetto progetto, int codiceProgetto) throws SQLException;
+	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException;
 
 }

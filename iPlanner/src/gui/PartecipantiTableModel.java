@@ -21,6 +21,12 @@ public class PartecipantiTableModel extends AbstractTableModel {
 	public void setDipendenteTabella(ArrayList<Dipendente> dipendenteTabella) {
 		this.dipendenteTabella = dipendenteTabella;
 	}
+	
+
+	public ArrayList<Dipendente> getDipendenteTabella() {
+		return dipendenteTabella;
+	}
+
 
 	@Override
 	public int getRowCount() {

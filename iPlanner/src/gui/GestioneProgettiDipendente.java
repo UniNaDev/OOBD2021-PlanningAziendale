@@ -178,7 +178,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				//chiede conferma all utente 
 				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare il progetto selezionato?");
 				
-				if(conferma == JOptionPane.YES_OPTION)
+				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
 				{
 					//ricava il codice del progetto selezionato dalla tabella
 					int codProgetto = (int)progettoTable.getValueAt(progettoTable.getSelectedRow(), 0);
@@ -187,16 +187,21 @@ public class GestioneProgettiDipendente extends JFrame {
 					{
 						boolean risultato = controller.removeProgettoByCod(codProgetto);
 						
-						if(risultato)
-							JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
-						else
-							JOptionPane.showMessageDialog(null, "Impossibile eliminare il progetto");
+						
+						JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
+						dataModel.fireTableDataChanged();
+						dataModel.setProgettiTabella(controller.ottieniProgetti());
+					
 					
 					} catch (SQLException e1) 
 					{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, e1.getMessage());
+					
 					}
+				}
+				else {
+					
+					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
 				}
 			}
 		});
@@ -226,17 +231,28 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				int row= progettoTable.getSelectedRow();
-				String nomeProgetto = nomeTextField.getText();
-				String tipoProgetto = tipologiaComboBox.getSelectedItem().toString();
-				String descrizioneProgetto = descrizioneTextArea.getText();
-				LocalDate scadenza = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
-				LocalDate creazione = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
-				LocalDate dataCreazione = (LocalDate) progettoTable.getValueAt(row, 6);
+//				int row= progettoTable.getSelectedRow();
+//				String nomeProgetto = nomeTextField.getText();
+//				String tipoProgetto = tipologiaComboBox.getSelectedItem().toString();
+//				String descrizioneProgetto = descrizioneTextArea.getText();
+//				LocalDate scadenza = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
+//				LocalDate creazione = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
+//				LocalDate dataCreazione = (LocalDate) progettoTable.getValueAt(row, 6);
+//				Progetto progettoSelezionato=new Progetto(nomeProgetto, tipoProgetto, descrizioneProgetto, dataCreazione, scadenza);
 				
-				int codiceProgetto = (int) progettoTable.getValueAt(row, 0);
-				Progetto progettoSelezionato=new Progetto(nomeProgetto, tipoProgetto, descrizioneProgetto, dataCreazione, scadenza);
-				controller.apriInserisciPartecipantiProgetto(progettoSelezionato, codiceProgetto);
+				int row=progettoTable.getSelectedRow();
+				
+				if(row==-1) {
+					JOptionPane.showMessageDialog(null, "Seleziona un progetto dalla tabella");
+					
+				}
+				else {
+					
+					int codiceProgetto = (int) progettoTable.getValueAt(row, 0);
+					Progetto progettoSelezionato=dataModel.getProgettiTabella().get(row);
+					controller.apriInserisciPartecipantiProgetto(progettoSelezionato, codiceProgetto);
+				}
+				
 			}
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -647,7 +663,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		//List partecipanti
 		DefaultListModel<Object>listaPartecipantiModel = new DefaultListModel<>();
 		partecipantiList = new JList();
-		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 16));
+		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		partecipantiList.setModel(listaPartecipantiModel);
 		partecipantiScrollPane.setViewportView(partecipantiList);
 				
@@ -678,10 +694,33 @@ public class GestioneProgettiDipendente extends JFrame {
 			{
 				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
 				// NELLA JTABLE (colonna 0 della riga selezionata)
+				//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
+				if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
+				{
+										
+					//fa diventare rossi i campi obbligatori che non sono stati inseriti
+					if(nomeTextField.getText().isBlank())					
+							nomeProgettoLabel.setForeground(Color.RED);
+					else if(!nomeTextField.getText().isBlank())
+						nomeProgettoLabel.setForeground(Color.BLACK);
+					
+					if(tipologiaComboBox.getSelectedItem()== null)
+						tipologiaProgettoLabel.setForeground(Color.RED);
+					else if(tipologiaComboBox.getSelectedItem()!= null)
+						tipologiaProgettoLabel.setForeground(Color.BLACK);
+					
+					if(ambitiList.isSelectionEmpty())
+						ambitoProgettoLabel.setForeground(Color.RED);
+					else if(!ambitiList.isSelectionEmpty())
+						ambitoProgettoLabel.setForeground(Color.BLACK);
+					
+					JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
+				}
+			else {
 				
 				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
 				//se l'utente conferma allora vengono effettivamente fatte le modifiche
-				if(conferma == JOptionPane.YES_OPTION)
+				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
 				{
 					int rigaSelezionata = progettoTable.getSelectedRow();
 					
@@ -705,8 +744,9 @@ public class GestioneProgettiDipendente extends JFrame {
 					{
 						//prende tutti i campi e fa l'update del progetto
 						controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione,ambiti);
-					
+						JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
 						//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
+						dataModel.fireTableDataChanged();
 						dataModel.setProgettiTabella(controller.ottieniProgetti());
 
 					} catch (SQLException e1) 
@@ -715,6 +755,10 @@ public class GestioneProgettiDipendente extends JFrame {
 						e1.printStackTrace();
 					}
 				}
+				else
+					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
+			}
+				
 						
 			}
 		});
@@ -769,10 +813,13 @@ public class GestioneProgettiDipendente extends JFrame {
 					try 
 						{
 						controller.addProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
+						JOptionPane.showMessageDialog(null, "Progetto creato con successo");
+						dataModel.fireTableDataChanged();
+						dataModel.setProgettiTabella(controller.ottieniProgetti());
 						} 
 					catch (SQLException e1) 
 						{
-						// TODO Auto-generated catch block
+						
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 						}
 					}
@@ -939,26 +986,19 @@ public class GestioneProgettiDipendente extends JFrame {
 				listaPartecipantiModel.clear();
 				listaMeetingRelativiModel.clear();
 				
-				try 
-				{
+				
 					//ottiene i partecipanti al progetto selezionato
-					ArrayList<Dipendente> partecipanti = controller.getPartecipantiProgetto(codProgettoSelezionato);
+					Progetto partecipanti =dataModel.getProgettiTabella().get(row);
+					
 					
 					//ottiene i meeting relativi al progetto selezionato
-					ArrayList<Meeting> meetingRelativi = controller.getMeetingRelativiProgetto(codProgettoSelezionato);
+//					ArrayList<Meeting> meetingRelativi = controller.getMeetingRelativiProgetto(codProgettoSelezionato); //Da eliminare
+					Progetto progetto=dataModel.getProgettiTabella().get(row);
 					
 					//aggiunge meeting e partecipanti alle rispettive liste
-					listaMeetingRelativiModel.addAll(meetingRelativi);
-					listaPartecipantiModel.addAll(partecipanti);
+					listaMeetingRelativiModel.addAll(progetto.getDiscusso()); //Riempe la lista con i meeting relativi al progetto
+					listaPartecipantiModel.addAll(partecipanti.getCollaborazioni());  //Riempe la lista con i partecipanti al progetto
 				
-				} catch (SQLException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				
-
 			}	
 		});
 		//inserisce i progetti nella tabella

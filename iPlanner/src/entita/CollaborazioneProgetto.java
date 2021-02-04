@@ -47,8 +47,7 @@ public class CollaborazioneProgetto {
 
 	@Override
 	public String toString() {
-		return "CollaborazioneProgetto [progetto=" + progetto.getNomeProgetto() + ", collaboratore=" + collaboratore.getCognome() + ", ruolo=" +ruolo
-				+ "]";
+		return getCollaboratore().getNome()+" "+getCollaboratore().getCognome()+"-"+ruolo;
 	}
 	
 	

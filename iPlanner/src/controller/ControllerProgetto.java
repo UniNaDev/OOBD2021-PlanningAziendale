@@ -134,13 +134,13 @@ public class ControllerProgetto {
 		
 		
 		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
-		mieiProgetti.setVisible(false);
-		mieiProgetti = new MieiProgetti(this,dipendente);
-		mieiProgetti.setVisible(true);
-		
-		gestioneProgetti.setVisible(false);
-		gestioneProgetti= new GestioneProgettiDipendente(this);
-		gestioneProgetti.setVisible(true);
+//		mieiProgetti.setVisible(false);
+//		mieiProgetti = new MieiProgetti(this,dipendente);
+//		mieiProgetti.setVisible(true);
+//		
+//		gestioneProgetti.setVisible(false);
+//		gestioneProgetti= new GestioneProgettiDipendente(this);
+//		gestioneProgetti.setVisible(true);
 								
 	}
 	
@@ -165,13 +165,13 @@ public class ControllerProgetto {
 		projDAO.addPartecipante(dipendente.getCf(), projDAO.getCodProgetto(tmp), "Project Manager");
 	
 		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
-		mieiProgetti.setVisible(false);
-		mieiProgetti = new MieiProgetti(this,dipendente);
-		mieiProgetti.setVisible(true);
-		
-		gestioneProgetti.setVisible(false);
-		gestioneProgetti= new GestioneProgettiDipendente(this);
-		gestioneProgetti.setVisible(true);
+//		mieiProgetti.setVisible(false);
+//		mieiProgetti = new MieiProgetti(this,dipendente);
+//		mieiProgetti.setVisible(true);
+//		
+//		gestioneProgetti.setVisible(false);
+//		gestioneProgetti= new GestioneProgettiDipendente(this);
+//		gestioneProgetti.setVisible(true);
 		
 	}
 	
@@ -187,13 +187,13 @@ public class ControllerProgetto {
 		boolean risultato = projDAO.removeProgettoByCod(codProgetto);
 		
 		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
-		mieiProgetti.setVisible(false);
-		mieiProgetti = new MieiProgetti(this,dipendente);
-		mieiProgetti.setVisible(true);
-		
-		gestioneProgetti.setVisible(false);
-		gestioneProgetti= new GestioneProgettiDipendente(this);
-		gestioneProgetti.setVisible(true);
+//		mieiProgetti.setVisible(false);
+//		mieiProgetti = new MieiProgetti(this,dipendente);
+//		mieiProgetti.setVisible(true);
+//		
+//		gestioneProgetti.setVisible(false);
+//		gestioneProgetti= new GestioneProgettiDipendente(this);
+//		gestioneProgetti.setVisible(true);
 		
 		return risultato;
 	}

@@ -129,17 +129,17 @@ public class ControllerMeeting {
 
 		//Rimuove il meeting selezionato
 		meetDAO.removeMeeting(idMeeting);
-		JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
 		
-		//Viene aggiornata la finestra MieiMeeting
-		mieiMeeting.setVisible(false);
-		mieiMeeting= new MieiMeeting(this);
-		mieiMeeting.setVisible(true);
 		
-		//Viene aggiornata la finestra GestioneMeeting
-		gestioneMeeting.setVisible(false);
-		gestioneMeeting= new GestioneMeetingDipendente(this);
-		gestioneMeeting.setVisible(true);
+//		//Viene aggiornata la finestra MieiMeeting
+//		mieiMeeting.setVisible(false);
+//		mieiMeeting= new MieiMeeting(this);
+//		mieiMeeting.setVisible(true);
+//		
+//		//Viene aggiornata la finestra GestioneMeeting
+//		gestioneMeeting.setVisible(false);
+//		gestioneMeeting= new GestioneMeetingDipendente(this);
+//		gestioneMeeting.setVisible(true);
 
 	}
 

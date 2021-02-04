@@ -221,15 +221,28 @@ public class GestioneMeetingDipendente extends JFrame {
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row=meetingTable.getSelectedRow();
-				int idMeeting=(int) meetingTable.getValueAt(row, 0);
-				
-				try {
-					theController.rimuoviMeeting(idMeeting);
+				if(row==-1) {
+					JOptionPane.showMessageDialog(null, "Seleziona una riga dalla tabella");
 					
-				} catch (SQLException e1) {
-					
-					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
+				else {
+					
+					int idMeeting=(int) meetingTable.getValueAt(row, 0);
+					
+					try {
+						theController.rimuoviMeeting(idMeeting);
+						JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
+						
+						dataModelMeeting.fireTableDataChanged();
+						dataModelMeeting.setMeetingTabella(theController.ottieniMeeting()); //Aggiorna i meeting nella tabella
+						
+					} catch (SQLException e1) {
+						
+						JOptionPane.showMessageDialog(null, e1.getMessage());
+					}
+					
+				}
+			
 			}
 		});
 		eliminaButton.addMouseListener(new MouseAdapter() {
@@ -332,9 +345,6 @@ public class GestioneMeetingDipendente extends JFrame {
 					try {
 						//richiama la funzione insertMeeting
 						insertMeeting(theController);
-						
-						
-						
 						
 					} catch (SQLException e1) {
 						
@@ -779,6 +789,12 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingTable.setBackground(Color.WHITE);
 		meetingTable.setSelectionBackground(Color.LIGHT_GRAY);
+		try {
+			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//setta il modello di dati della tabella
+		} catch (SQLException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage());
+		}
+		
 		//Click sulla tabella
 		meetingTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -833,24 +849,15 @@ public class GestioneMeetingDipendente extends JFrame {
 					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
 				
 					listmodel.addAll(meeting.getPartecipazioniDipendenti());
-
-					
-				
-				
-				
+	
 				codiceMeeting=(int) meetingTable.getValueAt(row, 0);
 				
-				
-					ProgettoDiscussoTextArea.setText(meetingTable.getValueAt(row, 8).toString());
+				ProgettoDiscussoTextArea.setText(meetingTable.getValueAt(row, 8).toString());
 				
 				
 			}		
 		});
-		try {
-			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//setta il modello di dati della tabella
-		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage());
-		}
+	
 		meetingScrollPane.setViewportView(meetingTable);
 		
 		//Button "Inserisci partecipanti"
@@ -880,9 +887,17 @@ public class GestioneMeetingDipendente extends JFrame {
 //						Meeting meetingSelezionato = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);
 						
 						int row=meetingTable.getSelectedRow();
-						Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
+						if(row==-1) {
+							JOptionPane.showMessageDialog(null, "Seleziona una riga dalla tabella");
+							
+						}
+						else {
+							
+							Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
+							
+							theController.apriInserisciPartecipantiMeeting(meeting,codiceMeeting);
+						}
 						
-						theController.apriInserisciPartecipantiMeeting(meeting,codiceMeeting);
 					}
 				});
 				inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -911,7 +926,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 	}
 	public void insertMeeting(ControllerMeeting theController) throws SQLException {
-		// TODO Auto-generated method stub
+	
 		progettoDiscussoLabel.setBackground(Color.BLACK);
 		LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
 		LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
@@ -937,7 +952,9 @@ public class GestioneMeetingDipendente extends JFrame {
 			Progetto progetto=theController.ottieniProgettoInserito(ProgettoDiscussoTextArea.getText());
 			theController.inserisciMeetingCompleto(meetingInserito,progetto);	//tenta di fare l'insert nel DB del meeting
 			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
-			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());//aggiorna i dati nella tabella con le modifiche fatte
+			dataModelMeeting.fireTableDataChanged();
+			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting()); //aggiorna i dati nella tabella con le modifiche fatte
+		
 		
 		} catch (SQLException e1) {
 			
