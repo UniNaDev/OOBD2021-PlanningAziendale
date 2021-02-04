@@ -51,6 +51,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -135,7 +137,8 @@ public class GestioneDipendenti extends JFrame {
 	private JTextField valutazioneMinimaTextField;
 	private JLabel valutazioneFiltroLabel;
 	private JTextField valutazioneMassimaTextField;
-	private JButton eliminaAccountButton;
+	private JButton salvaModificheButton;
+	DipendentiTableModel dataModelDipendente;
 	private JTable dipendentiTable;
 
 	
@@ -183,6 +186,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per il nome
 		nomeTextField = new JTextField();
+		nomeTextField.setEnabled(false);
 		nomeTextField.setBounds(97, 128, 130, 20);
 		infoPanel.add(nomeTextField);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -191,6 +195,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per il cognome
 		cognomeTextField = new JTextField();
+		cognomeTextField.setEnabled(false);
 		cognomeTextField.setBounds(234, 128, 130, 20);
 		infoPanel.add(cognomeTextField);
 		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -219,6 +224,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per l'email
 		emailTextField = new JTextField();
+		emailTextField.setEnabled(false);
 		emailTextField.setBounds(97, 169, 267, 20);
 		infoPanel.add(emailTextField);
 		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -240,6 +246,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Radio Button per uomo
 		uomoRadioButton = new JRadioButton("Uomo");
+		uomoRadioButton.setEnabled(false);
 		uomoRadioButton.setBounds(161, 242, 61, 23);
 		infoPanel.add(uomoRadioButton);
 		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -249,6 +256,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Radio Button per donna
 		donnaRadioButton = new JRadioButton("Donna");
+		donnaRadioButton.setEnabled(false);
 		donnaRadioButton.setBounds(233, 242, 66, 23);
 		infoPanel.add(donnaRadioButton);
 		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -271,6 +279,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Combo Box giorni del mese
 		giornoComboBox = new JComboBox<Object>();
+		giornoComboBox.setEnabled(false);
 		giornoComboBox.setUI(new BasicComboBoxUI());
 		giornoComboBox.setBackground(Color.WHITE);
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -283,6 +292,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Combo Box mesi dell'anno
 		meseComboBox = new JComboBox<Object>();
+		meseComboBox.setEnabled(false);
 		meseComboBox.setBounds(282, 276, 44, 22);
 		meseComboBox.setUI(new BasicComboBoxUI());
 		meseComboBox.setBackground(Color.WHITE);
@@ -296,6 +306,7 @@ public class GestioneDipendenti extends JFrame {
 		for (int i = 1900; i < LocalDate.now().getYear(); i++)
 			anni.add(String.valueOf(i));
 		annoComboBox = new JComboBox(anni.toArray());
+		annoComboBox.setEnabled(false);
 		annoComboBox.setBounds(336, 276, 66, 22);
 		annoComboBox.setUI(new BasicComboBoxUI());
 		annoComboBox.setBackground(Color.WHITE);
@@ -314,6 +325,7 @@ public class GestioneDipendenti extends JFrame {
 		//Combo Box province
 		try {
 			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
+			provinciaComboBox.setEnabled(false);
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -348,12 +360,12 @@ public class GestioneDipendenti extends JFrame {
 		
 		//ComboBox comuni
 		cittaComboBox = new JComboBox();
+		cittaComboBox.setEnabled(false);
 		cittaComboBox.setBounds(229, 340, 210, 22);
 		infoPanel.add(cittaComboBox);
 		
 		//modifica lo stille della combo box
 		cittaComboBox.setUI(new BasicComboBoxUI());
-		cittaComboBox.setEnabled(false);
 		cittaComboBox.setBackground(Color.WHITE);
 		cittaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cittaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -385,6 +397,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field cellulare
 		cellulareTextField = new JTextField();
+		cellulareTextField.setEnabled(false);
 		cellulareTextField.setBounds(209, 457, 86, 20);
 		infoPanel.add(cellulareTextField);
 		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -398,6 +411,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field telefono di casa
 		telefonoFissoTextField = new JTextField();
+		telefonoFissoTextField.setEnabled(false);
 		telefonoFissoTextField.setBounds(209, 488, 86, 20);
 		infoPanel.add(telefonoFissoTextField);
 		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -418,6 +432,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Password Field per la password
 		passwordField = new JPasswordField();
+		passwordField.setEnabled(false);
 		passwordField.setBounds(239, 530, 125, 20);
 		infoPanel.add(passwordField);
 		passwordField.setEchoChar('*');
@@ -433,6 +448,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Password Field per conferma password
 		confermaPasswordField = new JPasswordField();
+		confermaPasswordField.setEnabled(false);
 		confermaPasswordField.setBounds(239, 561, 125, 20);
 		infoPanel.add(confermaPasswordField);
 		confermaPasswordField.setEchoChar('*');
@@ -441,6 +457,7 @@ public class GestioneDipendenti extends JFrame {
 				
 		//Text Field indirizzo
 		indirizzoTextField = new JTextField();
+		indirizzoTextField.setEnabled(false);
 		indirizzoTextField.setBounds(97, 395, 267, 20);
 		infoPanel.add(indirizzoTextField);
 		indirizzoTextField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -454,6 +471,7 @@ public class GestioneDipendenti extends JFrame {
 		skillsScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		try {
 			skillsList = new JList(controller.ottieniSkill().toArray());
+			skillsList.setEnabled(false);
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -516,6 +534,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per il salario
 		salarioTextField = new JTextField("0.00");
+		salarioTextField.setEnabled(false);
 		salarioTextField.setBounds(701, 489, 141, 22);
 		infoPanel.add(salarioTextField);
 		salarioTextField.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -609,7 +628,7 @@ public class GestioneDipendenti extends JFrame {
 		//Separatore verticale
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(542, 98, 8, 527);
+		separator.setBounds(543, 98, 8, 527);
 		infoPanel.add(separator);
 		
 		//Label Valutazione
@@ -656,14 +675,19 @@ public class GestioneDipendenti extends JFrame {
 		contentPane.add(comandiPanel);
 		comandiPanel.setLayout(null);
 		
-		//Button modifica informazioni account
-		JButton modificaAccountButton = new JButton("Modifica");
+		//Button inizia a modificare info account
+		JButton modificaAccountButton = new JButton("<html> <center> Modifica <br> Account <html>");
+		modificaAccountButton.setEnabled(false);
+		modificaAccountButton.setToolTipText("<html>Clicca per cominciare a modificare <br>le informazioni del dipendente<html>");
 		modificaAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: modifica l'account
+				attivaCampi();	//attiva i campi per far modificare le info
+				modificaAccountButton.setEnabled(false);	//disabilita il pulsante per cominciare le modifiche
+				salvaModificheButton.setEnabled(true); //attiva il pulsante per salvare le modifiche
+				dipendentiTable.setEnabled(false);	//disabilita la tabella
 			}
 		});
-		modificaAccountButton.setBounds(912, 7, 95, 23);
+		modificaAccountButton.setBounds(918, 2, 89, 34);
 		comandiPanel.add(modificaAccountButton);
 		modificaAccountButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		modificaAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -686,6 +710,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Button "Crea Account"
 		creaAccountButton = new JButton("Crea");
+		creaAccountButton.setToolTipText("Crea un nuovo dipendente");
 		creaAccountButton.setBounds(1017, 7, 67, 23);
 		comandiPanel.add(creaAccountButton);
 		creaAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -709,7 +734,12 @@ public class GestioneDipendenti extends JFrame {
 				
 				if ((!nomeTextField.getText().isBlank() && !cognomeTextField.getText().isBlank() && !emailTextField.getText().isBlank() && !passwordField.getText().isBlank()) && confermaPasswordField.getText().equals(passwordField.getText()))
 					try {
-						creaAccount(controller);	//crea il nuovo account con i valori inseriti
+						creaDipendente(controller);	//crea il nuovo account con i valori inseriti
+						pulisciCampi();	//azzera tutti i campi
+						//aggiorna tabella dipendenti
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						dipendentiTable.setModel(dataModelDipendente);
+						aggiornaTabella();
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null,
 								e1.getMessage(),
@@ -777,6 +807,12 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Button per filtrare la tabella di dipendenti
 		JButton filtraButton = new JButton("Filtra");
+		filtraButton.setToolTipText("Clicca per applicare i filtri");
+		filtraButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				applicaFiltri(controller);	//applica i filtri
+			}
+		});
 		filtraButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		filtraButton.setBackground(Color.WHITE);
 		filtraButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -870,28 +906,45 @@ public class GestioneDipendenti extends JFrame {
 		valutazioneMassimaTextField.setBounds(740, 9, 39, 20);
 		comandiPanel.add(valutazioneMassimaTextField);
 		
-		//Button eliminazione di un account
-		eliminaAccountButton = new JButton("Elimina");
-		eliminaAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		eliminaAccountButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-		eliminaAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		eliminaAccountButton.setBackground(Color.WHITE);
-		eliminaAccountButton.setBounds(813, 7, 89, 23);
-		eliminaAccountButton.addMouseListener(new MouseAdapter() {
+		//Button salva le modifiche fatte
+		salvaModificheButton = new JButton("<html> <center> Salva <br> Modifiche <html>");
+		salvaModificheButton.setEnabled(false);
+		salvaModificheButton.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
+		salvaModificheButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//salva le modifiche effettuate nel DB
+				try {
+					salvaModifiche(controller, dataModelDipendente.getSelected(dipendentiTable.getSelectedRow()));
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				disattivaCampi();	//disattiva tutti i campi
+				salvaModificheButton.setEnabled(false);	//disattiva il pulsante per salvare le modifiche
+				modificaAccountButton.setEnabled(true);	//riattiva il pulsante per modificare un account
+				dipendentiTable.setEnabled(true);	//riattiva la tabella dei dipendenti
+			}
+		});
+		salvaModificheButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		salvaModificheButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		salvaModificheButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		salvaModificheButton.setBackground(Color.WHITE);
+		salvaModificheButton.setBounds(809, 2, 95, 34);
+		salvaModificheButton.addMouseListener(new MouseAdapter() {
 			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				eliminaAccountButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
+				salvaModificheButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
 			}
 			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				eliminaAccountButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+				salvaModificheButton.setBackground(Color.WHITE);	//smette di evidenziarlo
 			}
 		});
-		comandiPanel.add(eliminaAccountButton);
+		comandiPanel.add(salvaModificheButton);
 		
 		//Scroll Panel per tabella dipendenti
 		tableScrollPanel = new JScrollPane();
@@ -899,15 +952,20 @@ public class GestioneDipendenti extends JFrame {
 		contentPane.add(tableScrollPanel);
 		
 		//Tabella dipendenti
-		DipendentiTableModel dataModelDipendente = new DipendentiTableModel();
+		dataModelDipendente = new DipendentiTableModel();
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 			dipendentiTable = new JTable(dataModelDipendente);
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());	//sorter
+			dipendentiTable.setRowSorter(sorter);
+			dipendentiTable.getRowSorter().toggleSortOrder(0);
 			//Click con mouse
 			dipendentiTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if (dipendentiTable.isEnabled()) {
 					int row = dipendentiTable.getSelectedRow();	//ottiene la riga selezionata
+					row = dipendentiTable.convertRowIndexToModel(row);	//converte la riga correttamente in caso di sorting
 					Dipendente selectedDip = dataModelDipendente.getSelected(row);	//ottiene il dipendente selezionato
 					
 					//Aggiorna la GUI
@@ -930,6 +988,7 @@ public class GestioneDipendenti extends JFrame {
 					//luogo di nascita
 					provinciaComboBox.setSelectedItem(selectedDip.getLuogoNascita().getNomeProvincia());
 					cittaComboBox.setSelectedItem(selectedDip.getLuogoNascita().getNomeComune());
+					cittaComboBox.setEnabled(false);
 					indirizzoTextField.setText(selectedDip.getIndirizzo());	//indirizzo
 					cellulareTextField.setText(selectedDip.getCellulare());	//cellulare
 					telefonoFissoTextField.setText(selectedDip.getTelefonoCasa()); //telefono casa
@@ -941,6 +1000,10 @@ public class GestioneDipendenti extends JFrame {
 						skillsList.setSelectedValue(skill, rootPaneCheckingEnabled);
 					}
 					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione());//valutazione
+					
+					//rende possibile modificare i campi
+					modificaAccountButton.setEnabled(true);
+					}	
 				}
 			});
 			dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -956,7 +1019,7 @@ public class GestioneDipendenti extends JFrame {
 	//-----------------------------------------------------------------
 	
 	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
-	private void creaAccount(ControllerDipendentiSegreteria controller) throws SQLException {
+	private void creaDipendente(ControllerDipendentiSegreteria controller) throws SQLException {
 		String nome;	//nome nuovo dipendente
 		String cognome;	//cognome nuovo dipendente
 		char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
@@ -1012,5 +1075,184 @@ public class GestioneDipendenti extends JFrame {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+	
+	//Metodo che applica i filtri
+	private void applicaFiltri(ControllerDipendentiSegreteria controller) {
+		//stringa per cercare in nome, cognome ed email
+		String nomeCognomeEmail = "%";
+		if (!cercaTextField.getText().isBlank())
+			nomeCognomeEmail = cercaTextField.getText();
+		//età minima
+		int etàMinima = 0;
+		if (!etàMinimaTextField.getText().isBlank())
+			etàMinima = parseInteger(etàMinimaTextField.getText(), etàMinima);
+		//età massima
+		int etàMassima = LocalDate.now().getYear() - 1900;
+		if (!etàMassimaTextField.getText().isBlank())
+			etàMassima = parseInteger(etàMassimaTextField.getText(), etàMassima);
+		//salario minimo
+		float salarioMinimo = 0f;
+		if (!salarioMinimoTextField.getText().isBlank())
+			parseFloat(salarioMinimoTextField.getText(), salarioMinimo);
+		//salario massimo
+		float salarioMassimo = controller.ottieniMaxStipendio();
+		if (!salarioMassimoTextField.getText().isBlank())
+			parseFloat(salarioMassimoTextField.getText(), salarioMassimo);
+		//valutazione minima
+		float valutazioneMinima = 0f;
+		if (!valutazioneMinimaTextField.getText().isBlank())
+			parseFloat(valutazioneMinimaTextField.getText(), valutazioneMinima);
+		//valutazione massima
+		float valutazioneMassima = 10f;
+		if (!valutazioneMassimaTextField.getText().isBlank())
+			parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
+		//filtra dipendenti e aggiorna la tabella
+		try {
+			dataModelDipendente.setDipendenteTabella(controller.filtraDipendenti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima));
+			dipendentiTable.setModel(dataModelDipendente);
+			aggiornaTabella();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Filtro fallito.",
+					"Errore #"+e.getErrorCode(),
+					JOptionPane.ERROR_MESSAGE);
+			dataModelDipendente.fireTableDataChanged();;	//se fallisce il filtro allora non cambia nulla
+		}
+	}
+	
+	//Metodo parse intero usato nei filtri
+	private int parseInteger(String numero, int valoreDefault) {
+		try {
+			return Integer.parseInt(numero);
+		}
+		catch(NumberFormatException e) {
+			return valoreDefault;
+		}
+	}
+	
+	//Metodo parse float usato nei filtri
+	private float parseFloat(String numero, float valoreDefault) {
+		try {
+			return Float.parseFloat(numero);
+			}
+		catch(NumberFormatException e) {
+			return valoreDefault;
+		}
+	}
+	
+	//Metodo che aggiorna la tabella
+	private void aggiornaTabella() {
+		dataModelDipendente.fireTableDataChanged();
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());	//sorter
+		dipendentiTable.setRowSorter(sorter);
+		dipendentiTable.getRowSorter().toggleSortOrder(0);
+	}
+	
+	//Metodo che rende editabili tutti i campi
+	private void attivaCampi() {
+		nomeTextField.setEnabled(true);	//nome
+		cognomeTextField.setEnabled(true);	//cognome
+		emailTextField.setEnabled(true);	//email
+		//sesso
+		uomoRadioButton.setEnabled(true);
+		donnaRadioButton.setEnabled(true);
+		//data di nascita
+		giornoComboBox.setEnabled(true);
+		meseComboBox.setEnabled(true);
+		annoComboBox.setEnabled(true);
+		//luogo di nascita
+		provinciaComboBox.setEnabled(true);
+		cittaComboBox.setEnabled(true);
+		indirizzoTextField.setEnabled(true); //indirizzo
+		cellulareTextField.setEnabled(true); //cellulare
+		telefonoFissoTextField.setEnabled(true); //telefono casa
+		passwordField.setEnabled(true); //password
+		confermaPasswordField.setEnabled(true); //conferma password
+		skillsList.setEnabled(true); //lista skill
+		salarioTextField.setEnabled(true); //salario
+	}
+	
+	//Metodo che salva le modifiche svolte
+	private void salvaModifiche(ControllerDipendentiSegreteria controller, Dipendente dipendente) throws SQLException {		
+		//prende i dati dagli input della GUI
+		dipendente.setNome(nomeTextField.getText());	//nome
+		dipendente.setCognome(cognomeTextField.getText()); //cognome
+		//sesso
+		if (uomoRadioButton.isSelected())
+			dipendente.setSesso('M');
+		else
+			dipendente.setSesso('F');
+		//data di nascita
+		LocalDate dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
+		dipendente.setDataNascita(dataNascita);
+		//luogo di nascita
+		LuogoNascita luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
+		dipendente.setLuogoNascita(luogoNascita);
+		dipendente.setEmail(emailTextField.getText());; //email
+		dipendente.setPassword(passwordField.getText());;	//password
+		if (!telefonoFissoTextField.getText().equals(""))
+			dipendente.setTelefonoCasa(telefonoFissoTextField.getText());	//telefono
+		if (!cellulareTextField.getText().isBlank())
+			dipendente.setCellulare(cellulareTextField.getText());    //cellulare
+		
+		dipendente.setIndirizzo(indirizzoTextField.getText()); //indirizzo
+		//ottiene le skill selezionate
+		ArrayList<Skill> skills = new ArrayList<Skill>();
+		skills.addAll(skillsList.getSelectedValuesList());
+		dipendente.setSkills(skills);
+		dipendente.setSalario(Float.valueOf(salarioTextField.getText()));	//ottieni il salario
+		try {
+			controller.aggiornaDipendente(dipendente);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//Metodo che disattiva tutti i campi
+	private void disattivaCampi() {
+		nomeTextField.setEnabled(false);	//nome
+		cognomeTextField.setEnabled(false);	//cognome
+		emailTextField.setEnabled(false);	//email
+		//sesso
+		uomoRadioButton.setEnabled(false);
+		donnaRadioButton.setEnabled(false);
+		//data di nascita
+		giornoComboBox.setEnabled(false);
+		meseComboBox.setEnabled(false);
+		annoComboBox.setEnabled(false);
+		//luogo di nascita
+		provinciaComboBox.setEnabled(false);
+		cittaComboBox.setEnabled(false);
+		indirizzoTextField.setEnabled(false); //indirizzo
+		cellulareTextField.setEnabled(false); //cellulare
+		telefonoFissoTextField.setEnabled(false); //telefono casa
+		passwordField.setEnabled(false); //password
+		confermaPasswordField.setEnabled(false); //conferma password
+		skillsList.setEnabled(false); //lista skill
+		salarioTextField.setEnabled(false); //salario
+	}
+	
+	//Metodo che pulisce tutti i campi
+	private void pulisciCampi() {
+		nomeTextField.setText(""); //nome
+		cognomeTextField.setText("");	//cognome
+		emailTextField.setText("");	//email
+		//sesso
+		uomoRadioButton.setSelected(false);;
+		donnaRadioButton.setSelected(false);
+		//data di nascita
+		giornoComboBox.setSelectedIndex(0);
+		meseComboBox.setSelectedIndex(0);
+		annoComboBox.setSelectedIndex((int) annoComboBox.getItemCount()/2);;
+		//luogo di nascita
+		provinciaComboBox.setSelectedIndex(0);
+		indirizzoTextField.setText(""); //indirizzo
+		cellulareTextField.setText(""); //cellulare
+		telefonoFissoTextField.setText(""); //telefono casa
+		passwordField.setText(""); //password
+		confermaPasswordField.setText(""); //conferma password
+		salarioTextField.setText(""); //salario
 	}
 }

@@ -29,7 +29,20 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;	//connessione al DB
-	private PreparedStatement getDipendentiPartecipantiPS,getDipendentiPS,getDipendenti2PS,getDipendentiByEtaPS,getValutazionePS,getDipendentiByValutazionePS,getDipendentiBySalarioPS,getDipendentiBySkillPS,addDipendentePS,updateDipendentePS,loginCheckPS,getDipendenteByCFPS;
+	private PreparedStatement getDipendentiPartecipantiPS,
+		getDipendentiPS,
+		getDipendenti2PS,
+		getDipendentiByEtaPS,
+		getValutazionePS,
+		getDipendentiByValutazionePS,
+		getDipendentiBySalarioPS,
+		getDipendentiBySkillPS,
+		addDipendentePS,
+		updateDipendentePS,
+		loginCheckPS,
+		getDipendenteByCFPS,
+		getMaxSalarioPS,
+		getDipendentiFiltratiPS;
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
 	private MeetingDAO meetDAO=null;
@@ -47,9 +60,9 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
 		getDipendenti2PS=connection.prepareStatement("SELECT * FROM Dipendente"); //Deve selezionare i dipendenti che non partecipano già al meeting che si sta inserendo.
-		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) >= ?");
+		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
-		getDipendentiByValutazionePS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE Valutazione(d.CF) >= ?");
+		getDipendentiByValutazionePS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE Valutazione(d.CF) BETWEEN ? AND ?");
 		getDipendentiBySalarioPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.Salario BETWEEN ? AND ?");
 		getDipendentiBySkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT Dipendente.CF FROM Dipendente NATURAL JOIN (Abilità NATURAL JOIN Skill) WHERE Skill.NomeSkill = ?)");	//? = NomeSkill
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
@@ -57,6 +70,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email = ? AND Password = ?");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
 		getDipendentiPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=?");
+		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
+		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome LIKE '%' || ? || '%' OR d.Cognome LIKE '%' || ? || '%' OR d.Email LIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
 	}
 	
 	
@@ -137,8 +152,9 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	/*Metodo che interroga il DB per ottenere una lista di dipendenti
 	* con età superiore al parametro indicato nella funzione.*/
 	@Override
-	public ArrayList<Dipendente> getDipendentiByEta(int minima) throws SQLException {
-		getDipendentiByEtaPS.setInt(1, minima);	//inserisce il parametro nella query
+	public ArrayList<Dipendente> getDipendentiByEta(int minima, int massima) throws SQLException {
+		getDipendentiByEtaPS.setInt(1, minima);	//inserisce l'età minima nella query
+		getDipendentiByEtaPS.setInt(2, massima);	//inserisce l'età massima nella query
 		ResultSet risultato = getDipendentiByEtaPS.executeQuery();	//esegue la query e ottiene il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
 		
@@ -186,7 +202,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	/*Metodo che interroga il DB per ottenere una lista di dipendenti che
 	*hanno una valutazione superiroe a quanto inserito come parametro.*/
 	@Override
-	public ArrayList<Dipendente> getDipendentiByValutazione(float minima) throws SQLException {
+	public ArrayList<Dipendente> getDipendentiByValutazione(float minima, float massima) throws SQLException {
 		getDipendentiByValutazionePS.setFloat(1, minima);	//inserisce il parametro nella query
 		ResultSet risultato = getDipendentiByValutazionePS.executeQuery();	//esegue la query e ottiene il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
@@ -418,6 +434,64 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		
 		return null;
+	}
+
+
+	//Metodo che ottiene il massimo stipendio nel DB
+	@Override
+	public float getMaxStipendio() throws SQLException {
+		int temp = 0;
+		
+		ResultSet risultato = getMaxSalarioPS.executeQuery();
+		risultato.next();
+		temp = risultato.getInt(1);
+		risultato.close();
+		
+		return temp;
+	}
+
+
+	//Metodo che filtra i dipendenti per nome, cognome, email, età, salario e valutazione
+	@Override
+	public ArrayList<Dipendente> getDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima,
+			float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima)
+			throws SQLException {
+		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//lista da restituire alla fine
+		
+		getDipendentiFiltratiPS.setString(1, nomeCognomeEmail);	//nome
+		getDipendentiFiltratiPS.setString(2, nomeCognomeEmail);	//cognome
+		getDipendentiFiltratiPS.setString(3, nomeCognomeEmail);	//email
+		getDipendentiFiltratiPS.setInt(4, etàMinima); //età minima
+		getDipendentiFiltratiPS.setInt(5, etàMassima); //età massima
+		getDipendentiFiltratiPS.setFloat(6, salarioMinimo); //salario minimo
+		getDipendentiFiltratiPS.setFloat(7, salarioMassimo); //salario massimo
+		getDipendentiFiltratiPS.setFloat(8, valutazioneMinima); //valutazione minima
+		getDipendentiFiltratiPS.setFloat(9, valutazioneMassima); //valutazione massima
+		
+		ResultSet risultato = getDipendentiFiltratiPS.executeQuery();	//esegue la query
+		
+		while (risultato.next()) {
+			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
+			
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			
+			temp.add(tempDip);	//lo aggiunge alla lista
+		}
+		risultato.close();
+		
+		return temp;
 	}
 
 }
