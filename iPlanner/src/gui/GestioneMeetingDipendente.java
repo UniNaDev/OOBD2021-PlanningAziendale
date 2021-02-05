@@ -260,7 +260,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				}
 				//Update del meeting
 				else {
-
+				Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
 				LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
 				LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
 				LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
@@ -281,7 +281,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				
 				String nomeProgettoSelezionato=(String) progettoDiscussoComboBox.getSelectedItem();
 				
-				Meeting meetingAggiornato = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
+				Meeting meetingAggiornato = new Meeting(meeting.getIdMeeting(),dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
 				
 					
 				
