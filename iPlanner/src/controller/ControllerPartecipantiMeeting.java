@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import entita.Dipendente;
 import entita.Meeting;
+import entita.PartecipazioneMeeting;
 import entita.Skill;
 
 import gui.InserisciPartecipantiMeeting;
@@ -70,12 +71,25 @@ public class ControllerPartecipantiMeeting {
 		}
 
 		//Metodo che inserisce i partecipanti ad un meeting
-		public void inserisciPartecipante(String cf, int codiceMeeting) throws SQLException {
-			meetDAO.aggiungiPartecipanteMeeting(cf,codiceMeeting);
+//		public void inserisciPartecipante(String cf, int codiceMeeting,boolean presenza) throws SQLException {
+//			meetDAO.aggiungiPartecipanteMeeting(cf,codiceMeeting,presenza);
+//		}
+
+		public void eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting,int idMeeting) throws SQLException {
+			
+			meetDAO.eliminaPartecipanteMeeting(partecipazioneMeeting.getPartecipante().getCf(),idMeeting);
 		}
 
-		public void eliminaPartecipante(Dipendente dipendente2,int idMeeting) throws SQLException {
-			meetDAO.eliminaPartecipanteMeeting(dipendente2.getCf(),idMeeting);
+		public void inserisciPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
+			
+			meetDAO.aggiungiPartecipanteMeeting(partecipazioneMeeting);
+			
+		}
+
+		public void aggiornaPresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
+			
+			meetDAO.aggiornaPresenza(partecipazioneMeeting);
+			
 		}
 
 }

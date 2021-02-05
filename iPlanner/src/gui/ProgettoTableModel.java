@@ -73,10 +73,7 @@ public class ProgettoTableModel extends AbstractTableModel {
 		return progettiTabella.get(rowIndex);
 	}
 
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		return getValueAt(0,columnIndex).getClass();
-	}
+
 	
 	
 }

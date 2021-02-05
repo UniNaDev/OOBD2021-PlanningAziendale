@@ -29,6 +29,7 @@ public class Meeting {
 	private SalaRiunione sala;	//sala in cui si può tenere il meeting
 	private Progetto releativoA;	//progetto discusso nel meeting
 	private ArrayList<Dipendente> partecipazioniDipendenti = new ArrayList<Dipendente>();	//partecipazioni dei dipendenti al meeting
+	private ArrayList<PartecipazioneMeeting>partecipantiAlMeeting= new ArrayList<PartecipazioneMeeting>();
 	
 	//METODI
 	//----------------------------------------
@@ -178,6 +179,7 @@ public class Meeting {
 		this.partecipazioniDipendenti = partecipazioniDipendenti;
 	}
 
+
 //	@Override
 //	public String toString() {
 //		return "Meeting [ dataInizio=" + dataInizio + ", dataFine=" + dataFine
@@ -186,68 +188,16 @@ public class Meeting {
 //				+ partecipazioniDipendenti + "]";
 //	}
 
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Meeting other = (Meeting) obj;
-		if (dataFine == null) {
-			if (other.dataFine != null)
-				return false;
-		} else if (!dataFine.equals(other.dataFine))
-			return false;
-		if (dataInizio == null) {
-			if (other.dataInizio != null)
-				return false;
-		} else if (!dataInizio.equals(other.dataInizio))
-			return false;
-		if (idMeeting != other.idMeeting)
-			return false;
-		if (modalita == null) {
-			if (other.modalita != null)
-				return false;
-		} else if (!modalita.equals(other.modalita))
-			return false;
-		if (oraFine == null) {
-			if (other.oraFine != null)
-				return false;
-		} else if (!oraFine.equals(other.oraFine))
-			return false;
-		if (oraInizio == null) {
-			if (other.oraInizio != null)
-				return false;
-		} else if (!oraInizio.equals(other.oraInizio))
-			return false;
-		if (partecipazioniDipendenti == null) {
-			if (other.partecipazioniDipendenti != null)
-				return false;
-		} else if (!partecipazioniDipendenti.equals(other.partecipazioniDipendenti))
-			return false;
-		if (piattaforma == null) {
-			if (other.piattaforma != null)
-				return false;
-		} else if (!piattaforma.equals(other.piattaforma))
-			return false;
-		if (releativoA == null) {
-			if (other.releativoA != null)
-				return false;
-		} else if (!releativoA.equals(other.releativoA))
-			return false;
-		if (sala == null) {
-			if (other.sala != null)
-				return false;
-		} else if (!sala.equals(other.sala))
-			return false;
-		return true;
+	
+	public ArrayList<PartecipazioneMeeting> getPartecipantiAlMeeting() {
+		return partecipantiAlMeeting;
 	}
 
-	
+
+	public void setPartecipantiAlMeeting(ArrayList<PartecipazioneMeeting> partecipantiAlMeeting) {
+		this.partecipantiAlMeeting = partecipantiAlMeeting;
+	}
+
 	
 	//toString:
 	//Nome Progetto

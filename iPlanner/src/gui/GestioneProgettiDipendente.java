@@ -904,7 +904,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				//aggiorna i campi con le info del progetto corrispondente alla riga selezionata
 				nomeTextField.setText(progettoTable.getValueAt(row, 1).toString());	//nome progetto
 				descrizioneTextArea.setText(progettoTable.getValueAt(row, 2).toString());	//descrizione progetto
-				LocalDate dataTerminazione=(LocalDate) progettoTable.getValueAt(row, 6);	//data terminazione
+				LocalDate dataTerminazione=(LocalDate) progettoTable.getValueAt(row, 5);	//data terminazione
 				if (dataTerminazione != null) {
 					annoTerminazioneComboBox.setSelectedItem(dataTerminazione.getYear());
 					meseTerminazioneComboBox.setSelectedIndex(dataTerminazione.getMonthOfYear()-1);
@@ -918,7 +918,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					giornoTerminazioneComboBox.setSelectedItem(null);
 					progettoTerminatoCheckBox.setSelected(false);
 				}
-				LocalDate dataScadenza=(LocalDate) progettoTable.getValueAt(row, 7);	//data scadenza
+				LocalDate dataScadenza=(LocalDate) progettoTable.getValueAt(row, 6);	//data scadenza
 				if (dataScadenza != null) {
 					annoScadenzaComboBox.setSelectedItem(dataScadenza.getYear());
 					meseScadenzaComboBox.setSelectedIndex(dataScadenza.getMonthOfYear()-1);

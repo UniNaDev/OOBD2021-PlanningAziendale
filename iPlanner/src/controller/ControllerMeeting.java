@@ -131,15 +131,7 @@ public class ControllerMeeting {
 			//Viene inserito come organizzatore la persona che crea il meeting
 			meetDAO.addOrganizzatore(dipendente.getCf()); 
 			
-//			//Viene aggiornata la finestra MieiMeeting
-//			mieiMeeting.setVisible(false);
-//			mieiMeeting= new MieiMeeting(this);
-//			mieiMeeting.setVisible(true);
-//			
-//			//Viene aggiornata la finestra
-//			gestioneMeeting.setVisible(false);
-//			gestioneMeeting= new GestioneMeetingDipendente(this);
-//			gestioneMeeting.setVisible(true);
+
 	
 	}
 
@@ -148,15 +140,6 @@ public class ControllerMeeting {
 
 		//Rimuove il meeting selezionato
 		meetDAO.removeMeeting(idMeeting);
-//		//Viene aggiornata la finestra MieiMeeting
-//		mieiMeeting.setVisible(false);
-//		mieiMeeting= new MieiMeeting(this);
-//		mieiMeeting.setVisible(true);
-//		
-//		//Viene aggiornata la finestra GestioneMeeting
-//		gestioneMeeting.setVisible(false);
-//		gestioneMeeting= new GestioneMeetingDipendente(this);
-//		gestioneMeeting.setVisible(true);
 
 	}
 

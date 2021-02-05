@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -13,8 +14,10 @@ import entita.Meeting;
 public class MeetingTableModel extends AbstractTableModel {
 	
 	private ArrayList<Meeting> meetingTabella=new ArrayList<Meeting>();
+
 	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+
 	
 	String[] colnames= {"Data inizio", "Data fine","Orario inizio", "Orario fine", "Sala/Piattaforma", "Progetto"};
 
@@ -56,13 +59,13 @@ public class MeetingTableModel extends AbstractTableModel {
 		
 		switch(columnIndex) {
 		case 0:
-			return meeting.getDataInizio().toString(formatDate);
+			return meeting.getDataInizio();
 		case 1:
-			return meeting.getDataFine().toString(formatDate);
+			return meeting.getDataFine();
 		case 2:
-			return meeting.getOraInizio().toString(formatHour);
+			return meeting.getOraInizio();
 		case 3:
-			return meeting.getOraFine().toString(formatHour);
+			return meeting.getOraFine();
 		case 4:
 			if (meeting.getModalita().equals("Telematico"))
 				return meeting.getPiattaforma();

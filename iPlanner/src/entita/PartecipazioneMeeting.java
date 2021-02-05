@@ -55,4 +55,19 @@ public class PartecipazioneMeeting {
 	public void setOrganizzatore(boolean organizzatore) {
 		this.organizzatore = organizzatore;
 	}
+
+	@Override
+	public String toString() {
+		String organizzatore =null;
+		if(isOrganizzatore()==true)
+			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"-Presenza: "+isPresenza()+" Organizzatore";
+		else {
+			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"-Presenza: "+isPresenza();
+			
+		}
+		
+		return organizzatore;
+	}
+	
+	
 }

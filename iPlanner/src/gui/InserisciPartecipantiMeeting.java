@@ -33,6 +33,7 @@ import controller.ControllerMeeting;
 import controller.ControllerPartecipantiMeeting;
 import entita.Dipendente;
 import entita.Meeting;
+import entita.PartecipazioneMeeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
@@ -58,6 +59,9 @@ import javax.swing.ButtonGroup;
 import java.awt.Toolkit;
 import entita.AmbitoProgetto;
 import javax.swing.JSeparator;
+import javax.swing.JCheckBox;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 
@@ -77,6 +81,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JRadioButton donnaRadioButton;
 	private JTable dipendenteTable;
 	private JButton eliminaPartecipanteButton;
+	private JButton aggiornaPartecipantiButton;
+	private JButton inserisciPartecipanteButton;
 	private PartecipantiTableModel dataModelDipendente;
 	private JTextField nomeTextField;
 	private JTextField cognomeTextField;
@@ -204,12 +210,14 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		//RadioButton uomo
 		uomoRadioButton = new JRadioButton("M");
+		uomoRadioButton.setEnabled(false);
 		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		modalitàButtonGroup.add(uomoRadioButton);
 		
 		//RadioButton donna
 		donnaRadioButton = new JRadioButton("F");
+		donnaRadioButton.setEnabled(false);
 		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		modalitàButtonGroup.add(donnaRadioButton);
@@ -278,8 +286,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		oraFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		JScrollPane skillScrollPane_1 = new JScrollPane();
-		skillScrollPane_1.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		JScrollPane presenzeScrollPane = new JScrollPane();
+		presenzeScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		JLabel lblNewLabel = new JLabel("Info Meeting");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -291,6 +299,12 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		JScrollPane skillScrollPane = new JScrollPane();
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		
+		JLabel lblPresenza = new JLabel("Presenza");
+		lblPresenza.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPresenza.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		JCheckBox presenzaCheckBox = new JCheckBox("");
 
 		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
@@ -329,27 +343,34 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(6)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+									.addGap(6)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+									.addGap(4)
+									.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-							.addComponent(skillScrollPane_1, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+									.addComponent(presenzaCheckBox)))
+							.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+							.addComponent(presenzeScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
 							.addGap(44))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -377,7 +398,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(presenzaCheckBox)))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
@@ -411,7 +436,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 										.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 										.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(skillScrollPane_1, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))
+								.addComponent(presenzeScrollPane, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))
 					.addContainerGap(38, Short.MAX_VALUE))
 				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addContainerGap(52, Short.MAX_VALUE)
@@ -422,6 +447,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		);
 		
 		JList skillList = new JList();
+		skillList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		skillScrollPane.setViewportView(skillList);
 		
 		JLabel Skill = new JLabel("Skill");
@@ -429,13 +455,34 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		skillScrollPane.setColumnHeaderView(Skill);
 		
 		partecipantiList = new JList();
+		partecipantiList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				
+				
+				PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) partecipantiList.getSelectedValue();
+				if(partecipaz==null) {
+					
+					
+				}else {
+					
+					if(partecipaz.isPresenza()==true)
+						presenzaCheckBox.setSelected(true);
+						else
+							presenzaCheckBox.setSelected(false);
+					
+				}
+					
+				}
+				
+			}
+		);
+		
 		DefaultListModel listmodel=new DefaultListModel();
 		partecipantiList.setModel(listmodel);
-		
-		listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
+		listmodel.addAll(meetingSelezionato.getPartecipantiAlMeeting());
 
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		skillScrollPane_1.setViewportView(partecipantiList);
+		presenzeScrollPane.setViewportView(partecipantiList);
 		
 		eliminaPartecipanteButton = new JButton("Elimina partecipante");
 		eliminaPartecipanteButton.setPreferredSize(new Dimension(190, 30));
@@ -446,6 +493,18 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		eliminaPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
 		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		eliminaPartecipanteButton.setAlignmentX(0.5f);
+		eliminaPartecipanteButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				eliminaPartecipanteButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				eliminaPartecipanteButton.setBackground(Color.WHITE);
+			}
+		});
 		eliminaPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -458,12 +517,14 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				else {
 					
 					try {
-						controller.eliminaPartecipante((Dipendente)partecipantiList.getSelectedValue(),codiceMeeting);
+						
+						//Come per inserimento (passare partecipazione meeting)
+						controller.eliminaPartecipante((PartecipazioneMeeting)partecipantiList.getSelectedValue(),codiceMeeting);
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 						
-						
-				
 						listmodel.removeElementAt(partecipantiList.getSelectedIndex());
+						
+						partecipantiList.setSelectedValue(null,false);
 						
 					} catch (SQLException e1) {
 						
@@ -477,7 +538,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		});
 		
 		//Button "Inserisci partecipanti"
-		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+		inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -491,12 +552,27 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					int row= dipendenteTable.getSelectedRow();
 					try {
 						
-						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(), codiceMeeting);
-						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						
+						boolean presenza;
 						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
-						listmodel.addElement(dipendente);
-//						listmodel.addAll(meetingSelezionato.getPartecipazioniDipendenti());
+						if(presenzaCheckBox.isSelected())
+						{
+							presenza=true;
+						}
+						else
+							presenza=false;
+						
+						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);
+					
+						//Prova a fare l'inserimento del partecipante al meeting
+						controller.inserisciPartecipante(partecipazioneMeeting);
+						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
+					
+						//Aggiunge l'elemento inserito alla lista
+						listmodel.addElement(partecipazioneMeeting);  
+					
+						
+					
 					} catch (SQLException e1) {
 						
 						JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -520,6 +596,68 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				inserisciPartecipanteButton.setBackground(Color.WHITE);
 			}
 		});
+		
+		aggiornaPartecipantiButton = new JButton("Aggiorna partecipanti");
+		aggiornaPartecipantiButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				aggiornaPartecipantiButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				aggiornaPartecipantiButton.setBackground(Color.WHITE);
+			}
+		});
+		aggiornaPartecipantiButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(partecipantiList.getSelectedValue()==null) {
+					
+					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista");
+				}
+				
+				else {
+					
+					boolean presenza;
+					PartecipazioneMeeting partecipazione=(PartecipazioneMeeting) partecipantiList.getSelectedValue();
+					
+					if(presenzaCheckBox.isSelected())
+					{
+						presenza=true;
+					}
+					else
+						presenza=false;
+					
+					PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, partecipazione.getPartecipante(), presenza, false);
+					
+					
+					try {
+						controller.aggiornaPresenzaPartecipante(partecipazioneMeeting);
+						listmodel.removeElementAt(partecipantiList.getSelectedIndex()); //rimuove il vecchio elemento
+						listmodel.addElement(partecipazioneMeeting); //lo aggiorna con il nuovo
+						
+					} catch (SQLException e1) {
+						
+						e1.printStackTrace();
+					}
+				}
+				
+				
+			}
+		});
+		aggiornaPartecipantiButton.setPreferredSize(new Dimension(190, 30));
+		aggiornaPartecipantiButton.setMaximumSize(new Dimension(150, 150));
+		aggiornaPartecipantiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		aggiornaPartecipantiButton.setBackground(Color.WHITE);
+		aggiornaPartecipantiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		aggiornaPartecipantiButton.setMargin(new Insets(2, 20, 2, 20));
+		aggiornaPartecipantiButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		aggiornaPartecipantiButton.setAlignmentX(0.5f);
+		comandiPanel2.add(aggiornaPartecipantiButton);
+		
+		
 		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
 		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
 		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -535,7 +673,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		partecipantiLabel = new JLabel("Partecipanti");
 		partecipantiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
-		skillScrollPane_1.setColumnHeaderView(partecipantiLabel);
+		presenzeScrollPane.setColumnHeaderView(partecipantiLabel);
 		infoPanel2.setLayout(gl_infoPanel2);
 		infoPanel.add(infoPanel2);
 		panel.setLayout(gl_panel);
@@ -617,14 +755,29 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					if(e.getClickCount()==2) {
 					
 					try {
-						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(),codiceMeeting);
+						boolean presenza;
+						
+						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						if(presenzaCheckBox.isSelected())
+						{
+							presenza=true;
+						}
+						else
+							presenza=false;
+						
+						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);
+						
+						
+						controller.inserisciPartecipante(partecipazioneMeeting);
 						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
+						
+						listmodel.addElement(partecipazioneMeeting);
 						
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti()); //Per aggiornare tabella
 						
 					
-						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
-						listmodel.addElement(dipendente);
+						
+					
 		
 					} catch (SQLException e1) {
 						
