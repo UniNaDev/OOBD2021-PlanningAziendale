@@ -16,7 +16,7 @@ public interface MeetingDAO {
 	
 	//METODI
 //	
-//	public ArrayList<Meeting> getMeetingsByData(LocalDate data) throws SQLException; 	//metodo che restituisce la lista di meeting che cominciano in una data specifica
+	public ArrayList<Meeting> getMeetings() throws SQLException; 	//metodo che restituisce la lista di meeting
 //	public ArrayList<Meeting> getMeetingsOrganizzati(Dipendente org) throws SQLException;	//metodo che restituisce la lista di meeting organizzati da un dato dipendente
 	public ArrayList<Meeting> getMeetingsByInvitato(Dipendente dip) throws SQLException;	//metodo che restituisce la lista di meeting a cui un dipendente è invitato
 	public ArrayList<Dipendente> getInvitati(int idMeeting) throws SQLException;	//metodo che restituisce gli invitati a un meeting

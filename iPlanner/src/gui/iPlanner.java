@@ -176,7 +176,7 @@ public class iPlanner extends JFrame {
 			//click sinistro del mouse
 			@Override
 			public void mouseClicked(MouseEvent e) {	
-				//TODO: Apre finestra gestione dei meeting
+				controller.vaiAGestioneMeeting();
 			}
 			//mouse sopra la label
 			@Override

@@ -178,13 +178,13 @@ public class Meeting {
 		this.partecipazioniDipendenti = partecipazioniDipendenti;
 	}
 
-	@Override
-	public String toString() {
-		return "Meeting [ dataInizio=" + dataInizio + ", dataFine=" + dataFine
-				+ ", oraInizio=" + oraInizio + ", oraFine=" + oraFine + ", modalita=" + modalita + ", piattaforma="
-				+ piattaforma + ", sala=" + sala + ", partecipazioniDipendenti="
-				+ partecipazioniDipendenti + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Meeting [ dataInizio=" + dataInizio + ", dataFine=" + dataFine
+//				+ ", oraInizio=" + oraInizio + ", oraFine=" + oraFine + ", modalita=" + modalita + ", piattaforma="
+//				+ piattaforma + ", sala=" + sala + ", partecipazioniDipendenti="
+//				+ partecipazioniDipendenti + "]";
+//	}
 
 
 
@@ -253,16 +253,16 @@ public class Meeting {
 	//Nome Progetto
 	//01/12/2020 13:00 - 01/12/2020 17:00
 	//Sala 1 (oppure Microsoft Teams)
-//	@Override
-//	public String toString() {
-//		String temp =getProgettoDiscusso().getNomeProgetto();
-//		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-//		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
-//		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
-//		if (modalita.equals("Telematico"))
-//			temp += "\n" + piattaforma;
-//		else
-//			temp += "\n" + sala.getCodSala();
-//		return temp;
-//	}
+	@Override
+	public String toString() {
+		String temp =getProgettoDiscusso().getNomeProgetto();
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
+		if (modalita.equals("Telematico"))
+			temp += "\n" + piattaforma;
+		else
+			temp += "\n" + sala.getCodSala();
+		return temp;
+	}
 }

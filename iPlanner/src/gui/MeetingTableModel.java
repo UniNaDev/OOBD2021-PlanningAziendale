@@ -13,10 +13,10 @@ import entita.Meeting;
 public class MeetingTableModel extends AbstractTableModel {
 	
 	private ArrayList<Meeting> meetingTabella=new ArrayList<Meeting>();
-	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd-MM-yyyy");
+	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 	
-	String[] colnames= {"MeetingID", "Data inizio", "Data fine","Orario inizio", "Orario fine", "Modalità", "Piattaforma", "Sala", "Progetto"};
+	String[] colnames= {"Data inizio", "Data fine","Orario inizio", "Orario fine", "Sala/Piattaforma", "Progetto"};
 
 	public void setMeetingTabella(ArrayList<Meeting> meetingTabella) {
 		this.meetingTabella = meetingTabella;
@@ -39,7 +39,7 @@ public class MeetingTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		
-		return 9;
+		return colnames.length;
 	}
 
 	@Override
@@ -56,40 +56,32 @@ public class MeetingTableModel extends AbstractTableModel {
 		
 		switch(columnIndex) {
 		case 0:
-			return meeting.getIdMeeting();
+			return meeting.getDataInizio().toString(formatDate);
 		case 1:
-			LocalDate dataInizio=meeting.getDataInizio();
-			
-			
-			return dataInizio.parse(dataInizio.toString(formatDate), formatDate);
+			return meeting.getDataFine().toString(formatDate);
 		case 2:
-			LocalDate dataFine=meeting.getDataFine();
-			
-			return dataFine.parse(dataFine.toString(formatDate), formatDate);
+			return meeting.getOraInizio().toString(formatHour);
 		case 3:
-			return meeting.getOraInizio();
+			return meeting.getOraFine().toString(formatHour);
 		case 4:
-			return meeting.getOraFine();
+			if (meeting.getModalita().equals("Telematico"))
+				return meeting.getPiattaforma();
+			else
+				return meeting.getSala();
 		case 5:
-			return meeting.getModalita();
-		case 6:
-			return meeting.getPiattaforma();
-		case 7:
-			return meeting.getSala();
-		case 8:
-			return meeting.getProgettoDiscusso().getNomeProgetto();
-
-		
-		
+			return meeting.getProgettoDiscusso().getNomeProgetto();	
 		}
-		return null;
-		
-		
+		return null;	
+	}
+	
+	public Meeting getSelected(int rowIndex) {
+		return meetingTabella.get(rowIndex);
 	}
 
-
-
-
-
-
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return getValueAt(0,columnIndex).getClass();
+	}
+	
+	
 }

@@ -79,4 +79,9 @@ public class ControllerScelta {
 	public void vaiAGestioneProgetti() {
 		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller
 	}
+	
+	//Metodo che indirizza al controller gestione meeting della segreteria
+	public void vaiAGestioneMeeting() {
+		ControllerMeetingSegreteria controller = new ControllerMeetingSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller
+	}
 }
