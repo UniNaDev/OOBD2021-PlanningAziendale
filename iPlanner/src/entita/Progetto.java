@@ -147,11 +147,7 @@ public class Progetto {
 	public void setAmbiti(ArrayList<AmbitoProgetto> ambiti) {
 		this.ambiti = ambiti;
 	}
-
-	public ArrayList<Meeting> getDiscusso() {
-		return discussoIn;
-	}
-
+	
 	public void setMeetingsRelativi(ArrayList<Meeting> meetingsRelativi) {
 		this.discussoIn = meetingsRelativi;
 	}

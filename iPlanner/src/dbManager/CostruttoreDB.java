@@ -1124,8 +1124,8 @@ public class CostruttoreDB {
     int result = -1;	//risultato pari a -1 per ora
     //se la connessione con il db esiste
     if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+        Statement st = connection.createStatement();	//crea uno statement per la creazione della funzione
+        //se la funzione non esiste
             String sql = "CREATE OR REPLACE FUNCTION check_projectmanager() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
@@ -1151,8 +1151,8 @@ public class CostruttoreDB {
     int result = -1;	//risultato pari a -1 per ora
     //se la connessione con il db esiste
     if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+            Statement st = connection.createStatement();	//crea uno statement per la creazione del trigger
+            //se il trigger non esiste
             if (!esisteTrigger("unicità_projectmanager")) {
                 String sql = "CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione\r\n"
                 		+ "FOR EACH ROW\r\n"

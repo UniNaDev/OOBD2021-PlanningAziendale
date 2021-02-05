@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.joda.time.LocalDate;
+
 import controller.ControllerScelta;
 import dbManager.CostruttoreDB;
 import dbManager.ManagerConnessioneDB;
@@ -43,33 +45,34 @@ public class Starter {
 			catch (SQLException e){
 				System.out.println(e.getMessage());
 			}
-				//inizializza i DAO
-				DipendenteDAO dipDAO = null;	//dao dipendente
-				LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
-				ProgettoDAO projDAO = null;	//dao progetto
-				MeetingDAO meetDAO = null;	//dao meeting
-				SkillDAO skillDAO = null;	//dao delle skill
-				SalaRiunioneDAO salaDAO = null;	//dao delle sale riunioni
-				AmbitoProgettoDAO ambitoDAO = null;	//dao degli ambiti
+			
+			//inizializza i DAO
+			DipendenteDAO dipDAO = null;	//dao dipendente
+			LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
+			ProgettoDAO projDAO = null;	//dao progetto
+			MeetingDAO meetDAO = null;	//dao meeting
+			SkillDAO skillDAO = null;	//dao delle skill
+			SalaRiunioneDAO salaDAO = null;	//dao delle sale riunioni
+			AmbitoProgettoDAO ambitoDAO = null;	//dao degli ambiti
+			
+			boolean segreteria = false;	//indica il tipo di autorizzazione (true = segreteria, false = dipendente)
+			
+			//Inizializzazione DAO implementati per PostgreSQL
+			dipDAO = new DipendenteDAOPSQL(connection);
+			luogoDAO = new LuogoNascitaDAOPSQL(connection);
+			projDAO = new ProgettoDAOPSQL(connection);
+			meetDAO = new MeetingDAOPSQL(connection);
+			skillDAO = new SkillDAOPSQL(connection);
+			salaDAO = new SalaRiunioneDAOPSQL(connection);
+			ambitoDAO= new AmbitoProgettoDAOPSQL(connection);
+			
+			//Ottiene il tipo di autorizzaione (-s = autorizzazione per segreteria, -d autorizzazione per dipendenti)
+			if (args[0].equals("-s"))
+				segreteria = true;
+			else if (args[0].equals("-d"))
+				segreteria = false;
 				
-				boolean segreteria = false;	//indica il tipo di autorizzazione (true = segreteria, false = dipendente)
-				
-				//Inizializzazione DAO implementati per PostgreSQL
-				dipDAO = new DipendenteDAOPSQL(connection);
-				luogoDAO = new LuogoNascitaDAOPSQL(connection);
-				projDAO = new ProgettoDAOPSQL(connection);
-				meetDAO = new MeetingDAOPSQL(connection);
-				skillDAO = new SkillDAOPSQL(connection);
-				salaDAO = new SalaRiunioneDAOPSQL(connection);
-				ambitoDAO= new AmbitoProgettoDAOPSQL(connection);
-				
-				//Ottiene il tipo di autorizzaione (-s = autorizzazione per segreteria, -d autorizzazione per dipendenti)
-				if (args[0].equals("-s"))
-					segreteria = true;
-				else if (args[0].equals("-d"))
-					segreteria = false;
-					
-				ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
+			ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
 			}
 			catch (ArrayIndexOutOfBoundsException e) {
 				JOptionPane.showMessageDialog(null,

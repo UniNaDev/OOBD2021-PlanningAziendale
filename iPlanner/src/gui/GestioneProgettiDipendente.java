@@ -906,10 +906,10 @@ public class GestioneProgettiDipendente extends JFrame {
 				descrizioneTextArea.setText(progettoTable.getValueAt(row, 2).toString());	//descrizione progetto
 				LocalDate dataTerminazione=(LocalDate) progettoTable.getValueAt(row, 6);	//data terminazione
 				if (dataTerminazione != null) {
-				annoTerminazioneComboBox.setSelectedItem(dataTerminazione.getYear());
-				meseTerminazioneComboBox.setSelectedIndex(dataTerminazione.getMonthOfYear()-1);
-				giornoTerminazioneComboBox.setSelectedIndex(dataTerminazione.getDayOfMonth()-1);
-				progettoTerminatoCheckBox.setSelected(true);
+					annoTerminazioneComboBox.setSelectedItem(dataTerminazione.getYear());
+					meseTerminazioneComboBox.setSelectedIndex(dataTerminazione.getMonthOfYear()-1);
+					giornoTerminazioneComboBox.setSelectedIndex(dataTerminazione.getDayOfMonth()-1);
+					progettoTerminatoCheckBox.setSelected(true);
 				}
 				else {
 					//pulisci i campi della data di terminazione
@@ -920,9 +920,9 @@ public class GestioneProgettiDipendente extends JFrame {
 				}
 				LocalDate dataScadenza=(LocalDate) progettoTable.getValueAt(row, 7);	//data scadenza
 				if (dataScadenza != null) {
-				annoScadenzaComboBox.setSelectedItem(dataScadenza.getYear());
-				meseScadenzaComboBox.setSelectedIndex(dataScadenza.getMonthOfYear()-1);
-				giornoScadenzaComboBox.setSelectedIndex(dataScadenza.getDayOfMonth()-1);
+					annoScadenzaComboBox.setSelectedItem(dataScadenza.getYear());
+					meseScadenzaComboBox.setSelectedIndex(dataScadenza.getMonthOfYear()-1);
+					giornoScadenzaComboBox.setSelectedIndex(dataScadenza.getDayOfMonth()-1);
 				}
 				else {
 					//pulisci i campi della data di scadenza
@@ -995,7 +995,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					Progetto progetto=dataModel.getProgettiTabella().get(row);
 					
 					//aggiunge meeting e partecipanti alle rispettive liste
-					listaMeetingRelativiModel.addAll(progetto.getDiscusso()); //Riempe la lista con i meeting relativi al progetto
+					listaMeetingRelativiModel.addAll(progetto.getDiscussoIn()); //Riempe la lista con i meeting relativi al progetto
 					listaPartecipantiModel.addAll(partecipanti.getCollaborazioni());  //Riempe la lista con i partecipanti al progetto
 				
 			}	

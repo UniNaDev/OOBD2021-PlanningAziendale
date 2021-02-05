@@ -50,6 +50,7 @@ public class AmbitoProgetto {
 	@Override
 	public String toString() {
 		return nome;
+<<<<<<< Updated upstream
 	}
 
 
@@ -83,4 +84,7 @@ public class AmbitoProgetto {
 	
 	
 		
+=======
+	}		
+>>>>>>> Stashed changes
 }

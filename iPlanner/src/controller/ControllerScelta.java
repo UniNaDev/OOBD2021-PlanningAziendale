@@ -74,4 +74,9 @@ public class ControllerScelta {
 		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
 		ControllerDipendentiSegreteria controller = new ControllerDipendentiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller della segreteria
 	}
+	
+	//Metodo che indirizza al controller gestione progetti della segreteria
+	public void vaiAGestioneProgetti() {
+		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller
+	}
 }

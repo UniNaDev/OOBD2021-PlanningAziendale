@@ -14,7 +14,7 @@ public class ProgettoTableModel extends AbstractTableModel {
 	private ArrayList<Progetto> progettiTabella=new ArrayList<Progetto>();
 	
 	
-	String[] colnames= {"ProgettoID", "Nome", "Descrizione","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
+	String[] colnames= {"Nome", "Descrizione","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
 
 	//metodo che ritorna la lista di progetti contenuti nella tabella
 	public ArrayList<Progetto> getProgettiTabella()
@@ -35,7 +35,7 @@ public class ProgettoTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		// TODO Auto-generated method stub
-		return 8;
+		return colnames.length;
 	}
 
 	@Override
@@ -52,30 +52,31 @@ public class ProgettoTableModel extends AbstractTableModel {
 		
 		switch(columnIndex) {
 		case 0:
-			return proj.getIdProgettto();
-		case 1:
 			return proj.getNomeProgetto();
-		case 2:
+		case 1:
 			return proj.getDescrizioneProgetto();
-		case 3:
+		case 2:
 			return proj.getAmbiti();
-		case 4:
+		case 3:
 			return proj.getTipoProgetto();
-		case 5:
+		case 4:
 			return proj.getDataCreazione();
-		case 6:
+		case 5:
 			return proj.getDataTerminazione();
-		case 7:
+		case 6:
 			return proj.getScadenza();
-		
-		
 		}
 		return null;
-		
-		
+	}
+	
+	public Progetto getSelected(int rowIndex) {
+		return progettiTabella.get(rowIndex);
 	}
 
-
-
-
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return getValueAt(0,columnIndex).getClass();
+	}
+	
+	
 }

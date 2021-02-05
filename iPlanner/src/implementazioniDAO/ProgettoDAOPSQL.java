@@ -97,6 +97,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataTerminazione")));
 			
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
+			projTemp.setDiscussoIn(getMeetingRelativi(projTemp.getIdProgettto()));
 			projTemp.setAmbiti(ambiti);
 			
 			temp.add(projTemp);	//aggiunge il progetto alla lista

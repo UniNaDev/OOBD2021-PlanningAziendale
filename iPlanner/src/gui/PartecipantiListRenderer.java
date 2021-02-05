@@ -10,35 +10,32 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.MatteBorder;
 
-import org.joda.time.LocalDate;
 
-import entita.Meeting;
+import entita.CollaborazioneProgetto;
 
-public class MeetingListRenderer implements ListCellRenderer<Meeting> {
+public class PartecipantiListRenderer implements ListCellRenderer<CollaborazioneProgetto>{
 
 	  	private JPanel p;
 	    private JTextArea ta;
 	
-	public MeetingListRenderer() {
+	public PartecipantiListRenderer() {
         p = new JPanel();
         p.setLayout(new BorderLayout());
         
         // text
         ta = new JTextArea();
-        ta.setLineWrap(false);
-        ta.setWrapStyleWord(false);
+        ta.setLineWrap(true);
+        ta.setWrapStyleWord(true);
         ta.setFont(new Font("Consolas", Font.PLAIN, 15));
         ta.setAlignmentX(Component.CENTER_ALIGNMENT);
         p.add(ta, BorderLayout.CENTER);
     }
-	
+
 	@Override
-	public Component getListCellRendererComponent(JList<? extends Meeting> list, Meeting meeting, int index,
-	        boolean isSelected, boolean cellHasFocus) {
-		
-        ta.setText(meeting.toString());
+	public Component getListCellRendererComponent(JList<? extends CollaborazioneProgetto> list, CollaborazioneProgetto collaborazione, int index, boolean isSelected,
+			boolean cellHasFocus) {
+        ta.setText(collaborazione.toString());
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         if (isSelected)
@@ -46,8 +43,6 @@ public class MeetingListRenderer implements ListCellRenderer<Meeting> {
         else
         	ta.setBackground(list.getBackground());
         
-        if (meeting.getDataInizio().isBefore(LocalDate.now()))
-        	ta.setForeground(Color.RED);
-        return p;
+		return p;
 	}
 }

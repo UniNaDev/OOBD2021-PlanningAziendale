@@ -202,7 +202,8 @@ public class iPlanner extends JFrame {
 			//click sinistro del mouse
 			@Override
 			public void mouseClicked(MouseEvent e) {	
-				//TODO: Apre finestra gestione dei progetti
+				//Apre finestra gestione dei progetti
+				controller.vaiAGestioneProgetti();
 			}
 			//mouse sopra la label
 			@Override

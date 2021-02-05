@@ -138,7 +138,7 @@ public class GestioneDipendenti extends JFrame {
 	private JLabel valutazioneFiltroLabel;
 	private JTextField valutazioneMassimaTextField;
 	private JButton salvaModificheButton;
-	DipendentiTableModel dataModelDipendente;
+	private DipendentiTableModel dataModelDipendente;
 	private JTable dipendentiTable;
 
 	
