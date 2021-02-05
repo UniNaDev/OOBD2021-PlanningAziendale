@@ -4,12 +4,17 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import entita.Meeting;
 
 public class MeetingTableModel extends AbstractTableModel {
 	
 	private ArrayList<Meeting> meetingTabella=new ArrayList<Meeting>();
-	
+	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd-MM-yyyy");
+	DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 	
 	String[] colnames= {"MeetingID", "Data inizio", "Data fine","Orario inizio", "Orario fine", "Modalità", "Piattaforma", "Sala", "Progetto"};
 
@@ -53,9 +58,14 @@ public class MeetingTableModel extends AbstractTableModel {
 		case 0:
 			return meeting.getIdMeeting();
 		case 1:
-			return meeting.getDataInizio();
+			LocalDate dataInizio=meeting.getDataInizio();
+			
+			
+			return dataInizio.parse(dataInizio.toString(formatDate), formatDate);
 		case 2:
-			return meeting.getDataFine();
+			LocalDate dataFine=meeting.getDataFine();
+			
+			return dataFine.parse(dataFine.toString(formatDate), formatDate);
 		case 3:
 			return meeting.getOraInizio();
 		case 4:
@@ -67,7 +77,7 @@ public class MeetingTableModel extends AbstractTableModel {
 		case 7:
 			return meeting.getSala();
 		case 8:
-			return meeting.getProgettoDiscusso().getNomeProgetto().toString();
+			return meeting.getProgettoDiscusso().getNomeProgetto();
 
 		
 		

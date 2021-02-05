@@ -117,7 +117,6 @@ public class MieiProgetti extends JFrame {
 		JPanel infoProgettoPanel = new JPanel();
 		infoProgettoPanel.setFont(new Font("Consolas", Font.PLAIN, 21));
 		infoProgettoPanel.setBackground(Color.WHITE);
-//		infoProgettoPanel.setBorder(new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30)));
 		TitledBorder titleBorder = new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas",Font.PLAIN,30));
 		titleBorder.setTitlePosition(TitledBorder.CENTER);
 		infoProgettoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
@@ -152,7 +151,7 @@ public class MieiProgetti extends JFrame {
 		);
 		
 		//Label per nome del progetto
-		JLabel nomeProgettoLabel = new JLabel("Progetto 1 [01]");
+		JLabel nomeProgettoLabel = new JLabel("N/A");
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
 		
@@ -163,7 +162,7 @@ public class MieiProgetti extends JFrame {
 		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per ambiti del progetto
-		JLabel valoreAmbitiLabel = new JLabel("Economia,Medicina");
+		JLabel valoreAmbitiLabel = new JLabel("N/A");
 		valoreAmbitiLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreAmbitiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -174,7 +173,7 @@ public class MieiProgetti extends JFrame {
 		tipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per tipologia di progetto
-		JLabel valoreTipologiaLabel = new JLabel("Ricerca Sperimentale");
+		JLabel valoreTipologiaLabel = new JLabel("N/A");
 		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -186,7 +185,7 @@ public class MieiProgetti extends JFrame {
 		projectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per project manager
-		JLabel valoreProjectManagerLabel = new JLabel("Mario Rossi");
+		JLabel valoreProjectManagerLabel = new JLabel("N/A");
 		valoreProjectManagerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		valoreProjectManagerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreProjectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
@@ -200,7 +199,7 @@ public class MieiProgetti extends JFrame {
 		dataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di creazione
-		JLabel valoreDataCreazioneLabel = new JLabel("07/01/2021");
+		JLabel valoreDataCreazioneLabel = new JLabel("N/A");
 		valoreDataCreazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreDataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -362,7 +361,6 @@ public class MieiProgetti extends JFrame {
 					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	//data creazione
 					valoreDataCreazioneLabel.setText(progettoSelezionato.getDataCreazione().toString(formatDate));
 					
-					System.out.println("Data:"+progettoSelezionato.getDataTerminazione());
 					
 					if (progettoSelezionato.getDataTerminazione() !=null)	//data terminazione
 						valoreDataTerminazioneLabel.setText(progettoSelezionato.getDataTerminazione().toString(formatDate));

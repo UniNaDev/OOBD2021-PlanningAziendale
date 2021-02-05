@@ -45,7 +45,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		getMeetingsByInvitatoPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ?) ORDER BY m.DataInizio, m.OrarioInizio");	//?=codice fiscale del dipendente di cui si vogliono i meeting a cui è invitato
 		addMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, CodSala,CodProgetto) VALUES (?,?,?,?,?,?,?,?)");
 		removeMeetingPS = connection.prepareStatement("DELETE FROM Meeting AS m WHERE m.IDMeeting = ?");	//?=ID del meeting da eliminare
-		updateMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, CodSala = ? WHERE IDMeeting = ?");
+		updateMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, CodSala = ? , CodProgetto= ? WHERE IDMeeting = ?");
 		getMeetingsBySalaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodSala = ?");	//?=Codice della sala di cui si vogliono i meeting
 		getMeetingsByPiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.Piattaforma = ?");	//?=Piattaforma di cui si cercano i meeting
 		getPiattaformePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::piattaforma))::text AS piattaforma");
@@ -137,10 +137,10 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		//finchè ci sono record nel ResultSet
 		while (risultato.next()) {
 			Meeting meetingTemp = new Meeting(risultato.getInt("IDMeeting"),
-					new LocalDate(risultato.getDate("DataInizio").getTime()),
-					new LocalDate(risultato.getDate("DataFine").getTime()),
-					new LocalTime(risultato.getTime("OrarioInizio").getTime()),
-					new LocalTime(risultato.getTime("OrarioFine").getTime()),
+					new LocalDate(risultato.getDate("DataInizio")),
+					new LocalDate(risultato.getDate("DataFine")),
+					new LocalTime(risultato.getTime("OrarioInizio")),
+					new LocalTime(risultato.getTime("OrarioFine")),
 					risultato.getString("Modalità"),
 					risultato.getString("Piattaforma"),
 					salaDAO.getSalaByCod(risultato.getString("CodSala")));
@@ -196,8 +196,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	public boolean addMeeting(Meeting meeting,String nomeProgettoDiscusso) throws SQLException {
 		addMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));	//data inizio
 		addMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));	//data fine
-		addMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(),meeting.getOraInizio().getSecondOfMinute()));	//ora inizio
-		addMeetingPS.setTime(4, new Time(meeting.getOraFine().getHourOfDay(),meeting.getOraFine().getMinuteOfHour(),meeting.getOraFine().getSecondOfMinute()));	//ora fine
+		addMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(), 0));	//ora inizio
+		addMeetingPS.setTime(4, new Time(meeting.getOraFine().getHourOfDay(),meeting.getOraFine().getMinuteOfHour(),0));	//ora fine
 		addMeetingPS.setObject(5, meeting.getModalita(),Types.OTHER);	//modalità
 		addMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);	//piattaforma
 		if (meeting.getSala() != null)
@@ -230,8 +230,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		
 		removePresenzeMeetingEliminato.setInt(1, idMeeting);
 		removePresenzeMeetingEliminato.executeUpdate();
-		
-		
+
 		if (record == 1)
 			return true;
 		else
@@ -240,7 +239,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 	//Metodo che aggiorna un meeting.
 	@Override
-	public boolean updateMeeting(Meeting meeting) throws SQLException {
+	public boolean updateMeeting(Meeting meeting,String nomeProgettoSelezionato) throws SQLException {
 		updateMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));//data inizio
 		updateMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));//data fine
 		updateMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(),meeting.getOraInizio().getSecondOfMinute()));//ora inizio
@@ -254,7 +253,13 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			updateMeetingPS.setString(7, meeting.getSala().getCodSala());//codSala
 		else
 			updateMeetingPS.setNull(7, Types.CHAR);
-		updateMeetingPS.setInt(8, meeting.getIdMeeting());//idMeeting da modificare
+		updateMeetingPS.setInt(9, meeting.getIdMeeting());//idMeeting da modificare
+		
+		getIdProgettoDiscussoPS.setString(1,nomeProgettoSelezionato);
+		ResultSet risultato=getIdProgettoDiscussoPS.executeQuery();
+		risultato.next();
+		
+		updateMeetingPS.setInt(8, risultato.getInt("CodProgetto"));
 		
 		int record = updateMeetingPS.executeUpdate();	//esegue l'update e salva il numero di record modificati
 		
@@ -402,7 +407,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		
 		addMeetingPS.setDate(1, new Date(meetingInserito.getDataInizio().toDateTimeAtStartOfDay().getMillis()));	//data inizio
 		addMeetingPS.setDate(2, new Date(meetingInserito.getDataFine().toDateTimeAtStartOfDay().getMillis()));	//data fine
-		addMeetingPS.setTime(3, new Time(meetingInserito.getOraInizio().getHourOfDay(),meetingInserito.getOraInizio().getMinuteOfHour(),meetingInserito.getOraInizio().getSecondOfMinute()));	//ora inizio
+		addMeetingPS.setTime(3, new Time(meetingInserito.getOraInizio().getHourOfDay(),meetingInserito.getOraInizio().getMinuteOfHour(), 0));	//ora inizio
 		addMeetingPS.setTime(4, new Time(meetingInserito.getOraFine().getHourOfDay(),meetingInserito.getOraFine().getMinuteOfHour(),meetingInserito.getOraFine().getSecondOfMinute()));	//ora fine
 		addMeetingPS.setObject(5, meetingInserito.getModalita(),Types.OTHER);	//modalità
 		addMeetingPS.setObject(6, meetingInserito.getPiattaforma(), Types.OTHER);	//piattaforma

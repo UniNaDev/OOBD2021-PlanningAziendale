@@ -65,12 +65,10 @@ public class GestioneMeetingDipendente extends JFrame {
 	
 	//Attributi GUI
 	private JPanel contentPane;
-	private JTextField idMeetingTextField;
 	private JTable progettoTable;
 	private JTextField cercaTextField;
 	private JLabel modalitaLabel;
 	private JLabel piattaformaSalaLabel;
-	private JLabel progettoDiscussoLabel;
 	private final ButtonGroup modalitàButtonGroup = new ButtonGroup();
 	private JComboBox dataInizioGiornoComboBox;
 	private JComboBox dataInizioMeseComboBox;
@@ -82,19 +80,21 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JComboBox minutoInizioComboBox;
 	private JComboBox oraFineComboBox;
 	private JComboBox minutoFineComboBox;
+	private JComboBox progettoDiscussoComboBox;
 	private JRadioButton onlineRadioButton;
 	private JRadioButton fisicoRadioButton;
 	private JComboBox piattaformaSalaComboBox;
 	private JTable meetingTable;
 	private MeetingTableModel dataModelMeeting;
+	private DefaultListModel listmodelProgetti;
 	private JButton pulisciButton;
 	private JButton eliminaButton;
 	private JButton modificaButton;
 	private JButton creaNuovoMeetingButton;
 	private JList invitatiList;
 	private int codiceMeeting;
-	
-	private JTextArea ProgettoDiscussoTextArea;
+	private JList progettoDiscussoList;
+	private JLabel progettoDiscussoLabel;
 
 	//Creazione frame
 	//---------------------------------------------
@@ -169,7 +169,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		pulisciButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				idMeetingTextField.setText("");	//id meeting vuoto
+				
 				//ricava l'ora e la data attuali
 				LocalDate dataAttuale = LocalDate.now();
 				LocalTime oraAttuale = LocalTime.now();
@@ -193,15 +193,16 @@ public class GestioneMeetingDipendente extends JFrame {
 				//setta la combobox della piattaforma/sala a null
 				piattaformaSalaComboBox.setSelectedItem(null);	
 				
-				
+				progettoDiscussoComboBox.setSelectedItem(null);
 
 				
 				DefaultListModel listmodel=new DefaultListModel();
 				invitatiList.setModel(listmodel);
 				listmodel.removeAllElements();
 				
-				
-				ProgettoDiscussoTextArea.setText(null);
+				DefaultListModel listmodelProgetti=new DefaultListModel();
+				progettoDiscussoList.setModel(listmodelProgetti);
+				listmodelProgetti.removeAllElements();
 			
 			
 				
@@ -273,13 +274,15 @@ public class GestioneMeetingDipendente extends JFrame {
 		modificaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				if(idMeetingTextField.getText().isBlank()) {
+				int row=meetingTable.getSelectedRow();
+				
+				if(row==-1) {
 					JOptionPane.showMessageDialog(null, "Selezionare un meeting da modificare dalla tabella");
 					
 				}
 				//Update del meeting
 				else {
-				int id = Integer.valueOf(idMeetingTextField.getText());	//id
+				int id = Integer.valueOf((int)meetingTable.getValueAt(row, 0));	//id
 				LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
 				LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
 				LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
@@ -297,19 +300,15 @@ public class GestioneMeetingDipendente extends JFrame {
 					modalita = "Fisico";
 					sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
 				}
-				String progettoDiscusso=ProgettoDiscussoTextArea.getText();
-				Progetto progetto=null;
-				Meeting meetingAggiornato=null;
-				try {
-					progetto=theController.ottieniProgettoInserito(progettoDiscusso);
-					meetingAggiornato = new Meeting(id,dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala,progetto);	//crea il meeting modificato
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
+				
+				String nomeProgettoSelezionato=(String) progettoDiscussoComboBox.getSelectedItem();
+				
+				Meeting meetingAggiornato = new Meeting(id,dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting modificato
+				
+					
 				
 				try {
-					theController.aggiornaMeeting(meetingAggiornato);	//tenta di fare l'update nel DB del meeting
+					theController.aggiornaMeeting(meetingAggiornato,nomeProgettoSelezionato);	//tenta di fare l'update nel DB del meeting
 					JOptionPane.showMessageDialog(null, "Meeting Modificato");
 					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//aggiorna i dati nella tabella con le modifiche fatte
 					
@@ -348,7 +347,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		creaNuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				if((onlineRadioButton.isSelected() || fisicoRadioButton.isSelected()) && piattaformaSalaComboBox.getSelectedItem()!=null && !ProgettoDiscussoTextArea.getText().isBlank())
+				if((onlineRadioButton.isSelected() || fisicoRadioButton.isSelected()) && piattaformaSalaComboBox.getSelectedItem()!=null && progettoDiscussoComboBox.getSelectedItem()!=null)
 				{
 				
 					
@@ -362,7 +361,7 @@ public class GestioneMeetingDipendente extends JFrame {
 					}
 					
 				}
-				else if((!onlineRadioButton.isSelected() || !fisicoRadioButton.isSelected()) || piattaformaSalaComboBox.getSelectedItem()==null ||ProgettoDiscussoTextArea.getText().isBlank())
+				else if((!onlineRadioButton.isSelected() || !fisicoRadioButton.isSelected()) || piattaformaSalaComboBox.getSelectedItem()==null ||progettoDiscussoComboBox.getSelectedItem()!=null)
 				{
 					
 					modalitaLabel.setForeground(Color.BLACK);
@@ -379,7 +378,7 @@ public class GestioneMeetingDipendente extends JFrame {
 						piattaformaSalaLabel.setForeground(Color.RED);
 					}
 					
-					if(ProgettoDiscussoTextArea.getText().isBlank()) {
+					if(progettoDiscussoComboBox.getSelectedItem()!=null) {
 						progettoDiscussoLabel.setForeground(Color.RED);
 					}
 				}
@@ -426,22 +425,10 @@ public class GestioneMeetingDipendente extends JFrame {
 		comandiPanel2.add(eliminaButton);
 		comandiPanel2.add(pulisciButton);
 		comandiPanel.add(comandiPanel2);
-		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		//panel interno a quello delle info
 		JPanel infoPanel2 = new JPanel();
 		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
-		
-		//Label "MeetingID"
-		JLabel idMeetingLabel = new JLabel("MeetingID");
-		idMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		idMeetingLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		//TextField per id meeting
-		idMeetingTextField = new JTextField();
-		idMeetingTextField.setEditable(false);
-		idMeetingTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		idMeetingTextField.setColumns(10);
 		
 		//Label "Data inizio"
 		JLabel dataInizioLabel = new JLabel("Data inizio");
@@ -644,7 +631,24 @@ public class GestioneMeetingDipendente extends JFrame {
 		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		invitatiScrollPane.setViewportView(invitatiList);
 		
-		//scroll pane progetto discusso
+		
+		try {
+			progettoDiscussoComboBox = new JComboBox();
+			progettoDiscussoComboBox.setModel(new DefaultComboBoxModel(theController.ottieniNomiProgetti().toArray()));
+			progettoDiscussoComboBox.setSelectedItem(null);
+		} catch (SQLException e2) {
+			
+			e2.printStackTrace();
+		}
+		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		progettoDiscussoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		progettoDiscussoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		progettoDiscussoComboBox.setBackground(Color.WHITE);
+		
+		JLabel lblProgettoDiscusso = new JLabel("Progetto discusso");
+		lblProgettoDiscusso.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblProgettoDiscusso.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
 		JScrollPane progettoDiscussoScrollPane = new JScrollPane();
 		progettoDiscussoScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
@@ -652,90 +656,108 @@ public class GestioneMeetingDipendente extends JFrame {
 		gl_infoPanel2.setHorizontalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGap(43)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-						.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-						.addComponent(oraInizioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(idMeetingLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_infoPanel2.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGroup(gl_infoPanel2.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+							.addGroup(gl_infoPanel2.createSequentialGroup()
+								.addGap(43)
+								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))
+							.addGroup(gl_infoPanel2.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(oraInizioLabel, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+							.addComponent(lblProgettoDiscusso, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addComponent(oraFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 5, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED, 11, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+											.addGroup(gl_infoPanel2.createSequentialGroup()
+												.addComponent(oraFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 5, GroupLayout.PREFERRED_SIZE))
+											.addComponent(onlineRadioButton, Alignment.LEADING))
+										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+											.addGroup(gl_infoPanel2.createSequentialGroup()
+												.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(lblNewLabel))
+											.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
+										.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+										.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
+									.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblNewLabel)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
-						.addComponent(idMeetingTextField, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(piattaformaSalaComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGroup(gl_infoPanel2.createSequentialGroup()
-								.addComponent(onlineRadioButton)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)))
-					.addGap(89)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(piattaformaSalaComboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(progettoDiscussoComboBox, Alignment.LEADING, 0, 132, Short.MAX_VALUE))))
+					.addGap(112)
 					.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
-					.addGap(54)
+					.addGap(93)
 					.addComponent(progettoDiscussoScrollPane, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
-					.addGap(48))
+					.addGap(98))
 		);
 		gl_infoPanel2.setVerticalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addGap(25)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(progettoDiscussoScrollPane, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(idMeetingLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(idMeetingTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-									.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-									.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-									.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-									.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-									.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-									.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel)
-								.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGap(12)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-									.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-									.addComponent(oraFineComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-								.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+										.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+										.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+									.addGap(16))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)))
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(36)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+										.addComponent(oraFineComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+										.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNewLabel)
+										.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(modalitaLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
@@ -743,21 +765,23 @@ public class GestioneMeetingDipendente extends JFrame {
 								.addComponent(fisicoRadioButton))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(piattaformaSalaLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(piattaformaSalaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(invitatiScrollPane, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-						.addComponent(progettoDiscussoScrollPane))
+								.addComponent(piattaformaSalaLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+								.addComponent(piattaformaSalaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblProgettoDiscusso, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+								.addComponent(progettoDiscussoComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+							.addGap(3))
+						.addComponent(invitatiScrollPane))
 					.addGap(26))
 		);
 		
-		//Label "Progetto Discusso"
+		progettoDiscussoList = new JList();
+		progettoDiscussoScrollPane.setViewportView(progettoDiscussoList);
+		
 		progettoDiscussoLabel = new JLabel("Progetto Discusso");
 		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
 		progettoDiscussoScrollPane.setColumnHeaderView(progettoDiscussoLabel);
-		
-		//TextArea progetto discusso
-		ProgettoDiscussoTextArea = new JTextArea();
-		progettoDiscussoScrollPane.setViewportView(ProgettoDiscussoTextArea);
 		
 		//Label "Invitati"
 		JLabel invitatiLabel = new JLabel("Invitati");
@@ -811,7 +835,7 @@ public class GestioneMeetingDipendente extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int row= meetingTable.getSelectedRow();	//ottiene l'indice di riga selezionata
 				//ricava le info del meeting selezionato
-				idMeetingTextField.setText(meetingTable.getValueAt(row, 0).toString());	//id
+				
 				LocalDate dataInizio=(LocalDate) meetingTable.getValueAt(row, 1);	//data inizio
 				dataInizioAnnoComboBox.setSelectedItem(dataInizio.getYear());
 				dataInizioMeseComboBox.setSelectedIndex(dataInizio.getMonthOfYear()-1);
@@ -852,6 +876,7 @@ public class GestioneMeetingDipendente extends JFrame {
 					}
 				}
 					
+				progettoDiscussoComboBox.setSelectedItem(meetingTable.getValueAt(row, 8)); //Setta come elemento selezionato il progetto relativo al meeting
 
 					DefaultListModel listmodel=new DefaultListModel();
 					invitatiList.setModel(listmodel);
@@ -862,14 +887,22 @@ public class GestioneMeetingDipendente extends JFrame {
 						
 						e1.printStackTrace();
 					}
+					
 					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
+					
+					
 					
 					listmodel.removeAllElements();
 					listmodel.addAll(meeting.getPartecipazioniDipendenti());
+					
+					listmodelProgetti=new DefaultListModel();
+					progettoDiscussoList.setModel(listmodelProgetti);
+					listmodelProgetti.removeAllElements();
+					listmodelProgetti.add(0,meeting.getProgettoDiscusso());
 	
 				codiceMeeting=(int) meetingTable.getValueAt(row, 0);
 				
-				ProgettoDiscussoTextArea.setText(meetingTable.getValueAt(row, 8).toString());
+				
 				
 				
 			}		
@@ -966,7 +999,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		}
 		Meeting meetingInserito = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting inserito
 		try {
-			Progetto progetto=theController.ottieniProgettoInserito(ProgettoDiscussoTextArea.getText());
+			Progetto progetto=theController.ottieniProgettoInserito(progettoDiscussoComboBox.getSelectedItem().toString());
 			theController.inserisciMeetingCompleto(meetingInserito,progetto);	//tenta di fare l'insert nel DB del meeting
 			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
 			dataModelMeeting.fireTableDataChanged();
@@ -981,5 +1014,4 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 		
 	}
-
 }

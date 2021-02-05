@@ -231,14 +231,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-//				int row= progettoTable.getSelectedRow();
-//				String nomeProgetto = nomeTextField.getText();
-//				String tipoProgetto = tipologiaComboBox.getSelectedItem().toString();
-//				String descrizioneProgetto = descrizioneTextArea.getText();
-//				LocalDate scadenza = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
-//				LocalDate creazione = new LocalDate(Integer.valueOf(annoScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(meseScadenzaComboBox.getSelectedItem().toString()), Integer.valueOf(giornoScadenzaComboBox.getSelectedItem().toString()));	//data inizio
-//				LocalDate dataCreazione = (LocalDate) progettoTable.getValueAt(row, 6);
-//				Progetto progettoSelezionato=new Progetto(nomeProgetto, tipoProgetto, descrizioneProgetto, dataCreazione, scadenza);
 				
 				int row=progettoTable.getSelectedRow();
 				
@@ -429,8 +421,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		//ComboBox giorno terminazione
-		giornoTerminazioneComboBox = new JComboBox();	
-		giornoTerminazioneComboBox.setEditable(true);
+		giornoTerminazioneComboBox = new JComboBox();
 		giornoTerminazioneComboBox.setEnabled(false);
 		giornoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 		giornoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -440,7 +431,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//ComboBox mese terminazione
 		meseTerminazioneComboBox = new JComboBox();
-		meseTerminazioneComboBox.setEditable(true);
 		meseTerminazioneComboBox.setEnabled(false);
 		meseTerminazioneComboBox.setUI(new BasicComboBoxUI());
 		meseTerminazioneComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
@@ -451,7 +441,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//ComboBox anno terminazione
 		annoTerminazioneComboBox = new JComboBox();
-		annoTerminazioneComboBox.setEditable(true);
 		annoTerminazioneComboBox.setEnabled(false);
 		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 		DefaultComboBoxModel annoTerminazioneModel = new DefaultComboBoxModel();
@@ -633,16 +622,12 @@ public class GestioneProgettiDipendente extends JFrame {
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		
-		
-		
 		//List ambiti
 		
 		ambitiList=new JList<AmbitoProgetto>();
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill			
-		ambitiList.setModel(ambitoModel);
-		//ambitiList.setSelectedValue(anObject, shouldScroll);
-			
+		ambitiList.setModel(ambitoModel);	
 		ambitiScrollPane.setViewportView(ambitiList);		
 		
 		try 
@@ -695,72 +680,87 @@ public class GestioneProgettiDipendente extends JFrame {
 				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
 				// NELLA JTABLE (colonna 0 della riga selezionata)
 				//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
-				if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
-				{
-										
-					//fa diventare rossi i campi obbligatori che non sono stati inseriti
-					if(nomeTextField.getText().isBlank())					
-							nomeProgettoLabel.setForeground(Color.RED);
-					else if(!nomeTextField.getText().isBlank())
-						nomeProgettoLabel.setForeground(Color.BLACK);
-					
-					if(tipologiaComboBox.getSelectedItem()== null)
-						tipologiaProgettoLabel.setForeground(Color.RED);
-					else if(tipologiaComboBox.getSelectedItem()!= null)
-						tipologiaProgettoLabel.setForeground(Color.BLACK);
-					
-					if(ambitiList.isSelectionEmpty())
-						ambitoProgettoLabel.setForeground(Color.RED);
-					else if(!ambitiList.isSelectionEmpty())
-						ambitoProgettoLabel.setForeground(Color.BLACK);
-					
-					JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
-				}
-			else {
+	
+		
 				
 				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
 				//se l'utente conferma allora vengono effettivamente fatte le modifiche
 				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
 				{
-					int rigaSelezionata = progettoTable.getSelectedRow();
-					
-					//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
-					LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
-					LocalDate nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
-					ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
-					
-					//prende tutte le righe selezionate nella lista degli ambiti
-					int[] selezionati = ambitiList.getSelectedIndices();
-									
-					//aggiunge alla lista di ambiti gli elementi nelle righe selezionate
-					for(int i : selezionati)
-					ambiti.add(ambitoModel.getElementAt(i));
-					
-					//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
-					if(!progettoTerminatoCheckBox.isSelected())
-						nuovaDataTerminazione = null;
-					
-					try 
+					if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
 					{
-						//prende tutti i campi e fa l'update del progetto
-						controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione,ambiti);
-						JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
-						//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
-						dataModel.fireTableDataChanged();
-						dataModel.setProgettiTabella(controller.ottieniProgetti());
-
-					} catch (SQLException e1) 
-					{
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+											
+						//fa diventare rossi i campi obbligatori che non sono stati inseriti
+						if(nomeTextField.getText().isBlank())					
+								nomeProgettoLabel.setForeground(Color.RED);
+						else if(!nomeTextField.getText().isBlank())
+							nomeProgettoLabel.setForeground(Color.BLACK);
+						
+						if(tipologiaComboBox.getSelectedItem()== null)
+							tipologiaProgettoLabel.setForeground(Color.RED);
+						else if(tipologiaComboBox.getSelectedItem()!= null)
+							tipologiaProgettoLabel.setForeground(Color.BLACK);
+						
+						if(ambitiList.isSelectionEmpty())
+							ambitoProgettoLabel.setForeground(Color.RED);
+						else if(!ambitiList.isSelectionEmpty())
+							ambitoProgettoLabel.setForeground(Color.BLACK);
+						
+						
+						
+						JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
 					}
+					
+					else {
+						
+						int rigaSelezionata = progettoTable.getSelectedRow();
+						
+						//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
+						LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
+						
+						LocalDate nuovaDataTerminazione=null;
+						
+						if(annoTerminazioneComboBox.getSelectedItem()!=null && meseTerminazioneComboBox.getSelectedItem()!=null && giornoTerminazioneComboBox.getSelectedItem()!=null)
+						nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
+						ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
+						
+						//prende tutte le righe selezionate nella lista degli ambiti
+						int[] selezionati = ambitiList.getSelectedIndices();
+										
+						//aggiunge alla lista di ambiti gli elementi nelle righe selezionate
+						for(int i : selezionati)
+						ambiti.add(ambitoModel.getElementAt(i));
+						
+						//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
+						if(!progettoTerminatoCheckBox.isSelected())
+							nuovaDataTerminazione = null;
+						
+						try 
+						{
+							//prende tutti i campi e fa l'update del progetto
+							controller.updateProgetto((int)progettoTable.getValueAt(rigaSelezionata, 0), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), (LocalDate)progettoTable.getValueAt(rigaSelezionata, 5), nuovaDataScadenza, nuovaDataTerminazione,ambiti);
+							JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
+							//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
+							dataModel.fireTableDataChanged();
+							dataModel.setProgettiTabella(controller.ottieniProgetti());
+
+						} catch (SQLException e1) 
+						{
+							
+							e1.printStackTrace();
+						}
+						
+					}
+					
+
+					
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
 			}
 				
 						
-			}
+			
 		});
 		
 		//CLICK SUL PULSANTE "CREA NUOVO"

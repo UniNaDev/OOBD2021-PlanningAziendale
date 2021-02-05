@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -80,6 +81,21 @@ public class ControllerMeeting {
 		return meetDAO.getMeetingsByInvitato(dipendente);
 	}
 	
+	//Ottiene i progetti del dipendente
+	public ArrayList<String> ottieniNomiProgetti() throws SQLException {
+		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
+		
+//		System.out.println(collaborazioni.toString());
+		
+		ArrayList<String> temp = new ArrayList<String>();
+		for (CollaborazioneProgetto collaborazione: collaborazioni)
+			temp.add(collaborazione.getProgetto().getNomeProgetto());
+		
+//		System.out.println(temp.toString());
+		
+		return temp;
+	}
+	
 	//Metodo che ottiene tutte le sale disponibili nel DB
 	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
 		return salaDAO.getSale();
@@ -91,8 +107,8 @@ public class ControllerMeeting {
 	}
 	
 	//Metodo che aggiorna le info di un meeting nel DB
-	public void aggiornaMeeting(Meeting meeting) throws SQLException {
-		meetDAO.updateMeeting(meeting);
+	public void aggiornaMeeting(Meeting meeting, String nomeProgettoSelezionato) throws SQLException {
+		meetDAO.updateMeeting(meeting,nomeProgettoSelezionato);
 	}
 
 	//Metodo che ottiene gli invitati al meeting selezionato
