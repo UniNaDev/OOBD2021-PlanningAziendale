@@ -56,11 +56,14 @@ public InvitatiListRenderer() {
 	    
 	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    
-	    if (isSelected)
+	    if (isSelected) {
 	    	ta.setBackground(list.getSelectionBackground());
-	    else
+	    	cb.setBackground(list.getSelectionBackground());
+	    }
+	    else {
 	    	ta.setBackground(list.getBackground());
-	    
+	    	cb.setBackground(list.getBackground());
+	    }
 		return p;
 	}
 }
