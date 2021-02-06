@@ -34,11 +34,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	private PreparedStatement getProgettiPS,
 	getPartecipantiPS,
 	getProgettiByDipendentePS,
-	getProgettiByCreatorePS,
 	getProgettiByAmbitoPS,
 	getProgettiByTipoPS,
 	addProgettoPS,
-	removeProgettoPS,
+	deleteProgettoPS,
 	addPartecipantePS,
 	deletePartecipantePS,
 	updateProgettoPS,
@@ -59,11 +58,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		getProgettiPS = connection.prepareStatement("SELECT * FROM Progetto");
 		getPartecipantiPS = connection.prepareStatement("SELECT * FROM Partecipazione AS p WHERE p.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i partecipanti 
 		getProgettiByDipendentePS = connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ?"); //? = codice fiscale del dipendente di cui si vogliono i progetti a cui partecipa
-		getProgettiByCreatorePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT p.CodProgetto FROM Partecipazione AS p WHERE p.CF = ? AND p.Ruolo = 'Project Manager')"); //? = codice fiscale del creatore dei progetti
 		getProgettiByAmbitoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT a.CodProgetto FROM AmbitoProgettoLink AS a WHERE a.IDAmbito = ?)");	//? = nome dell'ambito con cui filtrare i progetti
 		getProgettiByTipoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.TipoProgetto = ?"); //? = tipo di progetti che si cercano
 		addProgettoPS = connection.prepareStatement("INSERT INTO Progetto (NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione) VALUES (?,?,?,?,?,?)");
-		removeProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?"); //? = codice del progetto da eliminare
+		deleteProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?"); //? = codice del progetto da eliminare
 		addPartecipantePS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)"); //? = codice del progetto, ? = codice fiscale del partecipante, ? = ruolo
 		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?"); //? = codice fiscale del dipendente da rimuovere dalla partecipazione, ? = codice progetto da cui rimuoverlo
 		updateProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
@@ -236,31 +234,6 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return temp;
 	}
 
-	//Metodo che restituisce i progetti creati da un dipendente.
-	@Override
-	public ArrayList<Progetto> getProgettiByCreatore(Dipendente dip) throws SQLException {
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();	//inizializza la lista da restituire
-		
-		getProgettiByCreatorePS.setString(1, dip.getCf()); 	//inserisce il codice fiscale nella query
-		
-		ResultSet risultato = getProgettiByCreatorePS.executeQuery();	//esegue la query e ottiene il ResultSet
-		
-		dipDAO = new DipendenteDAOPSQL(connection);
-		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
-		
-		//finchè ci sono record nel ResultSet
-		while(risultato.next()) {
-			//crea l'oggetto progetto
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),risultato.getString("NomeProgetto"),risultato.getString("TipoProgetto"),risultato.getString("DescrizioneProgetto"),new LocalDate(risultato.getDate("DataCreazione")), new LocalDate(risultato.getDate("DataScadenza")), new LocalDate(risultato.getDate("DataTerminazione")));
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
-			projTemp.setAmbiti(ambiti);
-			temp.add(projTemp);	//aggiunge il progetto alla lista
-		}
-		risultato.close(); //chiude il ResultSet
-		
-		return temp;
-	}
-
 	//Metodo che restituisce i progetti con un certo ambito.
 	@Override
 	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException {		
@@ -347,9 +320,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	//Metodo che rimuove un progetto dal DB.
 	@Override
 	public boolean removeProgetto(Progetto proj) throws SQLException {
-		removeProgettoPS.setInt(1, proj.getIdProgettto()); 	//inserisce il codice del progetto da eliminare nella delete
+		deleteProgettoPS.setInt(1, proj.getIdProgettto()); 	//inserisce il codice del progetto da eliminare nella delete
 		
-		int record = removeProgettoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
+		int record = deleteProgettoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
 		
 		if (record == 1)
 			return true;
@@ -470,9 +443,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	//Metodo che rimuove un progetto dal DB prendendo in input solo il codice
 	@Override
 	public boolean removeProgettoByCod(int codProgetto) throws SQLException {
-		removeProgettoPS.setInt(1, codProgetto); 	//inserisce il codice del progetto da eliminare nella delete
+		deleteProgettoPS.setInt(1, codProgetto); 	//inserisce il codice del progetto da eliminare nella delete
 		
-		int record = removeProgettoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
+		int record = deleteProgettoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
 		
 		if (record == 1)
 			return true;
