@@ -35,6 +35,7 @@ public InvitatiListRenderer() {
     cb = new JCheckBox();
     cb.setText("");
     cb.setSelected(false);
+   
     p.add(cb, BorderLayout.EAST);
 }
 
@@ -51,6 +52,7 @@ public InvitatiListRenderer() {
 	    if (value.isPresenza()) {
 	    	cb.setSelected(true);
 	    }
+	    else cb.setSelected(false);
 	    
 	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    

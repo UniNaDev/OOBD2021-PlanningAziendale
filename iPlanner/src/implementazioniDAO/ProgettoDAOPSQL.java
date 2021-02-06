@@ -41,6 +41,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	removeProgettoPS,
 	addPartecipantePS,
 	deletePartecipantePS,
+	aggiornaRuoloCollaboratorePS,
 	updateProgettoPS,
 	getMeetingRelativiPS,
 	getProgettoByCodPS,
@@ -66,6 +67,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		removeProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?"); //? = codice del progetto da eliminare
 		addPartecipantePS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)"); //? = codice del progetto, ? = codice fiscale del partecipante, ? = ruolo
 		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?"); //? = codice fiscale del dipendente da rimuovere dalla partecipazione, ? = codice progetto da cui rimuoverlo
+		aggiornaRuoloCollaboratorePS=connection.prepareStatement("UPDATE Partecipazione SET RuoloDipendente=? WHERE CF=? AND CodProgetto=?");
 		updateProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i meeting
 		getProgettoByCodPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");	//? = codice progetto
@@ -359,10 +361,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che inserisce un partecipante al progetto nel DB.
 	@Override
-	public boolean addPartecipante(String cf, int idProgetto, String ruolo) throws SQLException {
-		addPartecipantePS.setInt(1, idProgetto); 	//codice del progetto
-		addPartecipantePS.setString(2, cf); 	//codice fiscale del partecipante
-		addPartecipantePS.setObject(3, ruolo,Types.OTHER); 	//ruolo del partecipante
+	public boolean addPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+		addPartecipantePS.setInt(1, collaborazioneProgetto.getProgetto().getIdProgettto()); 	//codice del progetto
+		addPartecipantePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf()); 	//codice fiscale del partecipante
+		addPartecipantePS.setObject(3, collaborazioneProgetto.getRuolo(),Types.OTHER); 	//ruolo del partecipante
 		
 		int record = addPartecipantePS.executeUpdate();	//esegue l'insert e salva il numero di record inseriti (1=inserito,0=non inserito)
 		
@@ -374,10 +376,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che rimuove un partecipante da un progetto.
 	@Override
-	public boolean deletePartecipante(Dipendente dip, int idProgetto) throws SQLException {
+	public boolean deletePartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		//TODO: farlo solo se il dipendente non è project manager oppure controllare i trigger
-		deletePartecipantePS.setString(1, dip.getCf()); 	//codice fiscale del dipendente
-		deletePartecipantePS.setInt(2, idProgetto); 	//codice del progetto
+		deletePartecipantePS.setString(1, collaborazioneProgetto.getCollaboratore().getCf()); 	//codice fiscale del dipendente
+		deletePartecipantePS.setInt(2, collaborazioneProgetto.getProgetto().getIdProgettto()); 	//codice del progetto
 		
 		int record = deletePartecipantePS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
 		
@@ -468,17 +470,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 	
 	//Metodo che rimuove un progetto dal DB prendendo in input solo il codice
-	@Override
-	public boolean removeProgettoByCod(int codProgetto) throws SQLException {
-		removeProgettoPS.setInt(1, codProgetto); 	//inserisce il codice del progetto da eliminare nella delete
-		
-		int record = removeProgettoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
-		
-		if (record == 1)
-			return true;
-		else
-			return false;
-	}
+
 
 	@Override
 	public ArrayList<String> getRuoliDipendenti() throws SQLException {
@@ -510,6 +502,38 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 				new LocalDate(risultato.getDate("DataScadenza")));
 		
 		return progetto;
+	}
+
+	@Override
+	public boolean addProjectManager(String cf, Progetto tmp, String ruolo) throws SQLException {
+		
+		addPartecipantePS.setInt(1, tmp.getIdProgettto()); 	//codice del progetto
+		addPartecipantePS.setString(2, cf); 	//codice fiscale del partecipante
+		addPartecipantePS.setObject(3, ruolo,Types.OTHER); 	//ruolo del partecipante
+		
+		int record = addPartecipantePS.executeUpdate();	//esegue l'insert e salva il numero di record inseriti (1=inserito,0=non inserito)
+		
+		if (record == 1)
+			return true;
+		else
+			return false;
+		
+	}
+
+	@Override
+	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+		
+		aggiornaRuoloCollaboratorePS.setObject(1, collaborazioneProgetto.getRuolo(),Types.OTHER);
+		aggiornaRuoloCollaboratorePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf());
+		aggiornaRuoloCollaboratorePS.setInt(3, collaborazioneProgetto.getProgetto().getIdProgettto());
+		
+		int record=aggiornaRuoloCollaboratorePS.executeUpdate();
+
+		if(record==1)
+			return true;
+		else
+			return false;
+		
 	}
 	
 

@@ -5,6 +5,9 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import entita.Progetto;
 
 
@@ -13,10 +16,13 @@ public class ProgettoTableModel extends AbstractTableModel {
 	
 	private ArrayList<Progetto> progettiTabella=new ArrayList<Progetto>();
 	
+
+	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	
 	String[] colnames= {"Nome", "Descrizione","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
 
 	//metodo che ritorna la lista di progetti contenuti nella tabella
+	
 	public ArrayList<Progetto> getProgettiTabella()
 	{
 		return this.progettiTabella;
@@ -25,6 +31,7 @@ public class ProgettoTableModel extends AbstractTableModel {
 	public void setProgettiTabella(ArrayList<Progetto> progettiTabella) {
 		this.progettiTabella = progettiTabella;
 	}
+	
 
 	@Override
 	public int getRowCount() {
@@ -60,11 +67,14 @@ public class ProgettoTableModel extends AbstractTableModel {
 		case 3:
 			return proj.getTipoProgetto();
 		case 4:
-			return proj.getDataCreazione();
+			return proj.getDataCreazione().toString(formatDate);
 		case 5:
-			return proj.getDataTerminazione();
+			if(proj.getDataTerminazione()==null)
+				return null;
+			else 
+			return proj.getDataTerminazione().toString(formatDate);
 		case 6:
-			return proj.getScadenza();
+			return proj.getScadenza().toString(formatDate);
 		}
 		return null;
 	}

@@ -20,6 +20,7 @@ import org.joda.time.LocalDate;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Meeting;
+import entita.Progetto;
 import entita.Skill;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -34,6 +35,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	private PreparedStatement getDipendentiPartecipantiPS,
 		getDipendentiPS,
 		getDipendenti2PS,
+		getDipendentiNonPartecipantiPS,
 		getDipendentiByEtaPS,
 		getValutazionePS,
 		getDipendentiByValutazionePS,
@@ -62,6 +64,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
 		getDipendenti2PS=connection.prepareStatement("SELECT * FROM Dipendente"); //Deve selezionare i dipendenti che non partecipano già al meeting che si sta inserendo.
+		getDipendentiNonPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )");
 		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
 		getDipendentiByValutazionePS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE Valutazione(d.CF) BETWEEN ? AND ?");
@@ -485,6 +488,46 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close();
+		
+		return temp;
+	}
+
+
+
+
+	@Override
+	public ArrayList<Dipendente> getDipendentiNonPartecipanti(Progetto progettoSelezionato) throws SQLException {
+		
+		getDipendentiNonPartecipantiPS.setInt(1, progettoSelezionato.getIdProgettto());
+		ResultSet risultato = getDipendentiNonPartecipantiPS.executeQuery();	//esegue la query per ottenere il ResultSet
+		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();//inizializza la lista di dipendenti da restituire in seguito
+		
+		projDAO=new ProgettoDAOPSQL(connection);
+		
+		//finchè esistono dipendenti nel ResultSet
+		while(risultato.next()) {
+			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
+			
+			
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"),
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
+			tempDip.setCollaborazioni(projDAO.getPartecipanti(progettoSelezionato.getIdProgettto())); //facoltativo
+			
+			temp.add(tempDip);	//lo aggiunge alla lista
+		}
+		risultato.close();	//chiude il ResultSet
 		
 		return temp;
 	}

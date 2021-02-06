@@ -86,8 +86,5 @@ public class MeetingTableModel extends AbstractTableModel {
 		return meetingTabella.get(rowIndex);
 	}
 
-//	@Override
-//	public Class<?> getColumnClass(int columnIndex) {
-//		return getValueAt(0,columnIndex).getClass();
-//	}	
+
 }

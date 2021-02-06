@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
@@ -34,9 +35,11 @@ import controller.ControllerPartecipantiMeeting;
 import controller.ControllerPartecipantiProgetto;
 import entita.Dipendente;
 import entita.Meeting;
+import entita.PartecipazioneMeeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
+import gui.cellRenderers.PartecipantiListRenderer;
 import gui.tableModels.PartecipantiTableModel;
 
 import javax.swing.JButton;
@@ -62,6 +65,8 @@ import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 
 import javax.swing.JSeparator;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 
@@ -88,6 +93,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private JTextField valutazioneTextField;
 	private JTextField salarioTextField;
 	private JList partecipantiList;
+	private JList skillList;
 	private JLabel partecipantiLabel;
 	private JComboBox ruoloComboBox;
 	private JTextField textField;
@@ -96,7 +102,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 
 	//Creazione frame
 	//---------------------------------------------
-	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato, int codiceProgetto) {
+	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		setLocationRelativeTo(null);
@@ -207,12 +213,14 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		//RadioButton uomo
 		uomoRadioButton = new JRadioButton("M");
+		uomoRadioButton.setEnabled(false);
 		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		modalitàButtonGroup.add(uomoRadioButton);
 		
 		//RadioButton donna
 		donnaRadioButton = new JRadioButton("F");
+		donnaRadioButton.setEnabled(false);
 		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		modalitàButtonGroup.add(donnaRadioButton);
@@ -288,6 +296,11 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		try {
 			ruoloComboBox = new JComboBox(controller.ottieniRuoli());
+			ruoloComboBox.setUI(new BasicComboBoxUI());
+			ruoloComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+			ruoloComboBox.setBackground(Color.WHITE);
+			ruoloComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			ruoloComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 			ruoloComboBox.setSelectedItem(null);
 		} catch (SQLException e4) {
 			ruoloComboBox.setSelectedItem(null);
@@ -422,14 +435,39 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addGap(67))
 		);
 		
-		JList skillList = new JList();
+		DefaultListModel listaSkillModel = new DefaultListModel<>();
+		skillList = new JList();
+		skillList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		skillList.setSelectionBackground(Color.WHITE);
+		skillList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		skillList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		skillList.setModel(listaSkillModel);
 		skillScrollPane.setViewportView(skillList);
+		
 		
 		JLabel Skill = new JLabel("Skill");
 		Skill.setFont(new Font("Consolas", Font.PLAIN, 15));
 		skillScrollPane.setColumnHeaderView(Skill);
 		
 		partecipantiList = new JList();
+		PartecipantiListRenderer partecipantiListRenderer=new PartecipantiListRenderer();
+		partecipantiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		partecipantiList.setCellRenderer(partecipantiListRenderer);
+		partecipantiList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				
+				CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
+				
+				if(collaborazione!=null) {
+					
+					ruoloComboBox.setSelectedItem(collaborazione.getRuolo());
+				}
+				else 
+					ruoloComboBox.setSelectedItem(null);
+					
+				
+			}
+		});
 		DefaultListModel listmodel=new DefaultListModel();
 		partecipantiList.setModel(listmodel);
 		listmodel.addAll(progettoSelezionato.getCollaborazioni());
@@ -445,6 +483,18 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		eliminaPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
 		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		eliminaPartecipanteButton.setAlignmentX(0.5f);
+		eliminaPartecipanteButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				eliminaPartecipanteButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				eliminaPartecipanteButton.setBackground(Color.WHITE);
+			}
+		});
 		eliminaPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -457,11 +507,22 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				else {
 					
 					try {
-						controller.eliminaPartecipante((Dipendente)partecipantiList.getSelectedValue(),codiceProgetto);
+						partecipantiLabel.setForeground(Color.BLACK);
+						
+						controller.eliminaPartecipante((CollaborazioneProgetto)partecipantiList.getSelectedValue());
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 				
-						listmodel.removeAllElements();
-						listmodel.addAll(progettoSelezionato.getCollaborazioni());
+						//Rimuove dalla lista l'elemento eliminato
+						listmodel.removeElementAt(partecipantiList.getSelectedIndex());
+						
+						//Pone il valore selezionato a null
+						partecipantiList.setSelectedValue(null,false);
+						
+						//Aggiorna i dipendenti disponibili
+						dataModelDipendente.fireTableDataChanged();
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+						
+						
 					} catch (SQLException e1) {
 					
 						e1.printStackTrace();
@@ -490,20 +551,31 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				else {
 					
 					
-					
 					int row= dipendenteTable.getSelectedRow();
 					try {
+						
+						//Riceve il ruolo selezionato nella combobox
 						String ruolo=ruoloComboBox.getSelectedItem().toString();
-						controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(), codiceProgetto,ruolo);
+						
+						//Seleziona il dipendente selezionato dalla tabella
+						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						
+						//Crea la collaborazione al progetto
+						CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
+						
+						//Inserisce il partecipante al progetto
+						controller.inserisciPartecipante(collaborazione);
 						JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente");
 						
-						ruoloComboBox.setSelectedItem(null);
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						ruoloComboBox.setSelectedItem(null);		
 						
-						//Aggiorna la lista dei partecipanti
+						//Aggiorna i dipendenti disponibili
+						dataModelDipendente.fireTableDataChanged();
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
 						
-						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
-						listmodel.addElement(dipendente);
+						//Aggiunge l'elemento inserito alla lista
+						listmodel.addElement(collaborazione);
+					
 					} catch (SQLException e1) {
 						
 						ruoloComboBox.setSelectedItem(null);
@@ -528,6 +600,65 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				inserisciPartecipanteButton.setBackground(Color.WHITE);
 			}
 		});
+		
+		JButton aggiornaRuoloButton = new JButton("Aggiorna ruolo");
+		aggiornaRuoloButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(partecipantiList.getSelectedValue()==null) {
+					
+					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista");
+					partecipantiLabel.setForeground(Color.RED);
+					
+				}
+				else
+				{
+					partecipantiLabel.setForeground(Color.BLACK);
+					String nuovoRuolo=ruoloComboBox.getSelectedItem().toString();
+					
+					//Vecchia collaborazione
+					CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
+					
+					//Nuova collaborazione
+					CollaborazioneProgetto collaborazioneProgetto=new CollaborazioneProgetto(progettoSelezionato, collaborazione.getCollaboratore(), nuovoRuolo);
+					
+					try {
+						controller.aggiornaPartecipante(collaborazioneProgetto);
+						JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
+						listmodel.removeElementAt(partecipantiList.getSelectedIndex()); //rimuove il vecchio elemento
+						listmodel.addElement(collaborazioneProgetto); //lo aggiorna con il nuovo
+					} catch (SQLException e1) {
+					
+						JOptionPane.showMessageDialog(null, e1.getMessage());
+					}
+					
+				
+				}
+				
+			}
+		});
+		aggiornaRuoloButton.setPreferredSize(new Dimension(150, 30));
+		aggiornaRuoloButton.setMaximumSize(new Dimension(150, 150));
+		aggiornaRuoloButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		aggiornaRuoloButton.setMargin(new Insets(2, 20, 2, 20));
+		aggiornaRuoloButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		aggiornaRuoloButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		aggiornaRuoloButton.setBackground(Color.WHITE);
+		aggiornaRuoloButton.setAlignmentX(0.5f);
+		aggiornaRuoloButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				aggiornaRuoloButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				aggiornaRuoloButton.setBackground(Color.WHITE);
+			}
+		});
+		comandiPanel2.add(aggiornaRuoloButton);
+		
+		
 		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
 		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
 		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -550,7 +681,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		panel.setLayout(gl_panel);
 		
 		//Label "Gestione Meeting"
-		JLabel gestioneMeetingLabel = new JLabel("Gestione Meeting");
+		JLabel gestioneMeetingLabel = new JLabel("Gestione partecipanti progetto");
 		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
 		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -582,7 +713,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		dipendenteTable.setBackground(Color.WHITE);
 		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
 		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());	//setta il modello di dati della tabella
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));	//setta il modello di dati della tabella
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
@@ -591,8 +722,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
-				//ricava le info del dipendente selezionato
-					
+				
+				//ricava le info del dipendente seleziona
 				nomeTextField.setText(dipendenteTable.getValueAt(row, 1).toString());
 				cognomeTextField.setText(dipendenteTable.getValueAt(row, 2).toString());
 				
@@ -625,28 +756,33 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				
 					if(e.getClickCount()==2) {
 					
-						if(dipendenteTable.getSelectedRow()==-1) {
-							
-							JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla tabella");
-							
-						}
+						
 						if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
 							JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
 							
 						}
 						else {
 							try {
-								String ruolo=ruoloComboBox.getSelectedItem().toString();
-								controller.inserisciPartecipante(dipendenteTable.getValueAt(row, 0).toString(),codiceProgetto,ruolo);
-								JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
 								
-								dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-							
+								//riceve il ruolo selezionato nella combo box
+								String ruolo=ruoloComboBox.getSelectedItem().toString();
+								
+								//Riceve il dipendente selezionato
 								Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
-//								CollaborazioneProgetto collaborazioneProgetto;
-//								collaborazioneProgetto=dipendente.getCollaborazioni();
-//								collaborazioneProgetto.getRuolo();
-								listmodel.addElement(dipendente.getCollaborazioni().toArray());
+								
+								//Creo la collaborazione al progetto
+								CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
+								
+								//Inserisce il partecipante al progetto
+								controller.inserisciPartecipante(collaborazione);
+								JOptionPane.showMessageDialog(null, "Partecipante inserito correttamente");
+								
+								//Aggiorna la lista e la tabella
+								listmodel.addElement(collaborazione);
+								dataModelDipendente.fireTableDataChanged();
+								dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+							
+								ruoloComboBox.setSelectedItem(null);
 				
 							} catch (SQLException e1) {
 								
@@ -655,12 +791,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 							
 						}
 						
-				
-				
 				}
 			
-					
-
 			}
 		});
 		
