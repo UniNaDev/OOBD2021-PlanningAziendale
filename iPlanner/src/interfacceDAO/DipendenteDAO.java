@@ -9,11 +9,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entita.Dipendente;
+import entita.Meeting;
 import entita.Skill;
 
 public interface DipendenteDAO {
 
-	public ArrayList<Dipendente> getDipendenti() throws SQLException;	//metodo che restituisce tutti i dipendenti nel DB
+	public ArrayList<Dipendente> getDipendentiNonInvitati(Meeting meetingSelezionato) throws SQLException;	//metodo che restituisce tutti i dipendenti nel DB
 	public ArrayList<Dipendente> getDipendentiByEta(int minima, int massima) throws SQLException;	//metodo che restituisce tutti i dipendenti con età superiore al parametro inserito
 	public float getValutazione(String cf) throws SQLException;	//metodo che restituisce la valutazione di un dipendente
 	public ArrayList<Dipendente> getDipendentiByValutazione(float minima, float massima) throws SQLException;	//metodo che restituisce tutti i dipendenti con valutazione superiore al parametro inserito
@@ -23,8 +24,7 @@ public interface DipendenteDAO {
 	public boolean updateDipendente(Dipendente dipendente) throws SQLException;	//metodo che aggiorna le informazioni di un dipendente
 	public Dipendente loginCheck(String email, String password) throws SQLException;	//metodo che controlla se le credenziali per il login sono corrette e restituisce nel caso il dipendente che ha fatto accesso
 	public Dipendente getDipendenteByCF(String cf) throws SQLException;	//metodo che ottiene il dipendente con codice fiscale uguale a quello del parametro in input
-	public ArrayList<Dipendente> getDipendenti2() throws SQLException;
-	public ArrayList<Dipendente> getDipendentiPartecipanti();
 	public float getMaxStipendio() throws SQLException;	//metodo che ottiene il massimo stipendio presente nel DB
 	public ArrayList<Dipendente> getDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException;	//metodo che ottiene i dipendenti filtrati
+	public ArrayList<Dipendente> getDipendenti() throws SQLException;
 }

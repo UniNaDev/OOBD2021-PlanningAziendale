@@ -15,13 +15,14 @@ import javax.swing.border.MatteBorder;
 import org.joda.time.LocalDate;
 
 import entita.Meeting;
+import entita.Progetto;
 
-public class MeetingListRenderer implements ListCellRenderer<Meeting> {
+public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
 
 	  	private JPanel panel;
 	    private JTextArea textArea;
 	
-	public MeetingListRenderer() {
+	public ProgettoListRenderer() {
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
@@ -34,20 +35,18 @@ public class MeetingListRenderer implements ListCellRenderer<Meeting> {
         panel.add(textArea, BorderLayout.CENTER);
     }
 	
+	
+
 	@Override
-	public Component getListCellRendererComponent(JList<? extends Meeting> list, Meeting meeting, int index,
-	        boolean isSelected, boolean cellHasFocus) {
-		
-        textArea.setText(meeting.toString());
+	public Component getListCellRendererComponent(JList<? extends Progetto> list, Progetto progetto, int index,
+			boolean isSelected, boolean cellHasFocus) {
+		textArea.setText(progetto.toString());
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         if (isSelected)
         	textArea.setBackground(list.getSelectionBackground());
         else
         	textArea.setBackground(list.getBackground());
-        
-        if (meeting.getDataInizio().isBefore(LocalDate.now()))
-        	textArea.setForeground(Color.RED);
         return panel;
 	}
 }

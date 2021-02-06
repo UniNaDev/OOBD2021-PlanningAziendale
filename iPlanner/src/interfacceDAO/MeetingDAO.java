@@ -29,10 +29,14 @@ public interface MeetingDAO {
 	public String getProgettoRelativo(int idMeeting) throws SQLException; //metodo che restituisce il progetto discusso in quel meeting
 	public ArrayList<String> getPiattaforme() throws SQLException;	//metodo che restituisce tutte le piattaforme disponibili
 	public boolean addOrganizzatore(String CF) throws SQLException; //metodo che aggiunge l'organizzatore tra gli invitati
-	public boolean eliminaPartecipanteMeeting(String cf,int idMeeting)throws SQLException;
+	
 	public boolean addMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException;
-	public boolean aggiungiPartecipanteMeeting(PartecipazioneMeeting partecipazione) throws SQLException;
-	public boolean aggiornaPresenza(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
+
 	public ArrayList<PartecipazioneMeeting> getInvitatiPartecipazioneMeeting(int idMeeting) throws SQLException;
 	public ArrayList<Meeting> getMeetingsByModalità(String modalità) throws SQLException;
+
+	public boolean aggiungiPartecipanteMeeting(PartecipazioneMeeting partecipazione) throws SQLException; //Aggiunge un invitato al meeting
+	public boolean aggiornaPresenza(PartecipazioneMeeting partecipazioneMeeting)throws SQLException; //Aggiorna la presenza ad un meeting
+	public boolean eliminaPartecipanteMeeting(PartecipazioneMeeting partecipazioneMeeting)throws SQLException; //Elimina un invitato dal meeting
+
 }

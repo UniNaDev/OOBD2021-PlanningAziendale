@@ -135,7 +135,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 //		return temp;
 //	}
 
-	//Meotdo getMeetingsByInvitato.
+	//Metodo getMeetingsByInvitato.
 	/*Metodo che restituisce una lista di meeting (temp) a cui un dipendente è invitato.*/
 	@Override
 	public ArrayList<Meeting> getMeetingsByInvitato(Dipendente dip) throws SQLException {
@@ -168,7 +168,12 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return temp;
 	}
 
+
+
+	//Metodo getInvitatiPartecipazioneMeeting.
+	/*Metodo che restituisce una lista di partecipazioneMeeting (temp) a cui un dipendente è invitato.*/
 	public ArrayList<PartecipazioneMeeting> getInvitatiPartecipazioneMeeting(int idMeeting) throws SQLException {
+
 		
 		ArrayList<PartecipazioneMeeting> temp = new ArrayList<PartecipazioneMeeting>();	//inizializza la lista da restituire
 		
@@ -449,6 +454,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return temp;
 	}
 	
+	@Override
 	public boolean addOrganizzatore(String CF) throws SQLException {
 		
 		ResultSet risultato=lastIdMeetingPS.executeQuery();
@@ -466,6 +472,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	
 	}
 	
+	@Override
 	public boolean aggiungiPartecipanteMeeting(PartecipazioneMeeting partecipante) throws SQLException {
 		
 		aggiungiPartecipanteMeetingPS.setString(1, partecipante.getPartecipante().getCf());
@@ -482,10 +489,10 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 
 	@Override
-	public boolean eliminaPartecipanteMeeting(String cf, int idMeeting) throws SQLException {
+	public boolean eliminaPartecipanteMeeting(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 		
-		eliminaPartecipanteMeetingPS.setString(1, cf);
-		eliminaPartecipanteMeetingPS.setInt(2, idMeeting);
+		eliminaPartecipanteMeetingPS.setString(1, partecipazioneMeeting.getPartecipante().getCf());
+		eliminaPartecipanteMeetingPS.setInt(2, partecipazioneMeeting.getMeeting().getIdMeeting());
 		
 	int record=eliminaPartecipanteMeetingPS.executeUpdate();
 		

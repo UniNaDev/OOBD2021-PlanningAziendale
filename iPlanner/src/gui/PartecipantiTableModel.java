@@ -66,7 +66,8 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		case 6:
 			return dipendente.getSalario();
 		case 7:
-			return dipendente.getValutazione();
+			String s = String.format("%.2f",dipendente.getValutazione());
+			return s;
 
 		}
 		return null;

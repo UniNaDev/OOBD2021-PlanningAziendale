@@ -273,12 +273,13 @@ public class Home extends JFrame {
 		//List progetti
 		JList<Progetto> progettiList;
 		try {
+			ProgettoListRenderer progettoCellRenderer = new ProgettoListRenderer();
 			ArrayList<Progetto> progetti = new ArrayList<Progetto>();
 			for (CollaborazioneProgetto collaborazione: controller.ottieniProgetti())
 				progetti.add(collaborazione.getProgetto());
 			progettiList = new JList(progetti.toArray());
 			progettiList.setSelectionBackground(Color.WHITE);
-			progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			progettiList.setCellRenderer(progettoCellRenderer);
 			progettiList.setFixedCellHeight(40);
 			progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			

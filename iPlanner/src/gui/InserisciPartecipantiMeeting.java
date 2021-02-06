@@ -28,6 +28,8 @@ import javax.swing.table.DefaultTableModel;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import controller.ControllerMeeting;
 import controller.ControllerPartecipantiMeeting;
@@ -93,8 +95,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JTextField dataFineTextField;
 	private JTextField oraInizioTextField;
 	private JTextField oraFineTextField;
-	private JList partecipantiList;
-	private JLabel partecipantiLabel;
+	private JList invitatiList;
+	private JLabel invitatiLabel;
 
 	//Creazione frame
 	//---------------------------------------------
@@ -165,7 +167,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		comandiPanel2.add(cercaTextField);
 		cercaTextField.setColumns(10);
 		comandiPanel.add(comandiPanel2);
-		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		//panel interno a quello delle info
 		JPanel infoPanel2 = new JPanel();
@@ -247,12 +248,14 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		dataInizioTextField = new JTextField(meetingSelezionato.getDataInizio().toString());
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+
+		dataInizioTextField = new JTextField(meetingSelezionato.getDataInizio().toString(formatDate));
 		dataInizioTextField.setEditable(false);
 		dataInizioTextField.setColumns(10);
 		dataInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		dataFineTextField = new JTextField(meetingSelezionato.getDataFine().toString());
+		dataFineTextField = new JTextField(meetingSelezionato.getDataFine().toString(formatDate));
 		dataFineTextField.setEditable(false);
 		dataFineTextField.setColumns(10);
 		dataFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -268,12 +271,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		oraInizioTextField = new JTextField(meetingSelezionato.getOraInizio().toString());
+		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+		oraInizioTextField = new JTextField(meetingSelezionato.getOraInizio().toString(formatHour));
 		oraInizioTextField.setEditable(false);
 		oraInizioTextField.setColumns(10);
 		oraInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		oraFineTextField = new JTextField(meetingSelezionato.getOraFine().toString());
+		oraFineTextField = new JTextField(meetingSelezionato.getOraFine().toString(formatHour));
 		oraFineTextField.setEditable(false);
 		oraFineTextField.setColumns(10);
 		oraFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -286,8 +290,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		oraFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		JScrollPane presenzeScrollPane = new JScrollPane();
-		presenzeScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		JScrollPane invitatiScrollPane = new JScrollPane();
+		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		JLabel lblNewLabel = new JLabel("Info Meeting");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -311,11 +315,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		gl_infoPanel2.setHorizontalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(184)
 							.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-							.addGap(153))
+							.addGap(148))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(43)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
@@ -339,8 +343,10 @@ public class InserisciPartecipantiMeeting extends JFrame {
 								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-							.addGap(43)))
+							.addGap(38)))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(5)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
@@ -370,7 +376,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(presenzaCheckBox)))
 							.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-							.addComponent(presenzeScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+							.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
 							.addGap(44))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -436,30 +442,34 @@ public class InserisciPartecipantiMeeting extends JFrame {
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 										.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 										.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(presenzeScrollPane, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))
+								.addComponent(invitatiScrollPane, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))
 					.addContainerGap(38, Short.MAX_VALUE))
 				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addContainerGap(78, Short.MAX_VALUE)
+					.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
+					.addGap(39))
+				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addContainerGap(52, Short.MAX_VALUE)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
-						.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
 					.addGap(39))
 		);
 		
 		JList skillList = new JList();
 		skillList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		skillList.setSelectionBackground(Color.WHITE);
 		skillScrollPane.setViewportView(skillList);
 		
 		JLabel Skill = new JLabel("Skill");
 		Skill.setFont(new Font("Consolas", Font.PLAIN, 15));
 		skillScrollPane.setColumnHeaderView(Skill);
 		
-		partecipantiList = new JList();
-		partecipantiList.addListSelectionListener(new ListSelectionListener() {
+		invitatiList = new JList();
+		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		invitatiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				
 				
-				PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) partecipantiList.getSelectedValue();
+				PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) invitatiList.getSelectedValue();
 				if(partecipaz==null) {
 					
 					
@@ -478,11 +488,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		);
 		
 		DefaultListModel listmodel=new DefaultListModel();
-		partecipantiList.setModel(listmodel);
+		invitatiList.setModel(listmodel);
 		listmodel.addAll(meetingSelezionato.getPartecipantiAlMeeting());
 
-		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		presenzeScrollPane.setViewportView(partecipantiList);
+		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		invitatiScrollPane.setViewportView(invitatiList);
 		
 		eliminaPartecipanteButton = new JButton("Elimina partecipante");
 		eliminaPartecipanteButton.setPreferredSize(new Dimension(190, 30));
@@ -508,23 +518,28 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		eliminaPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(partecipantiList.isSelectionEmpty()) {
+				if(invitatiList.isSelectionEmpty()) {
 					
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante da eliminare");
-					partecipantiLabel.setForeground(Color.RED);
+					invitatiLabel.setForeground(Color.RED);
 					
 				}
 				else {
 					
 					try {
-						
+						invitatiLabel.setForeground(Color.BLACK);
 						//Come per inserimento (passare partecipazione meeting)
-						controller.eliminaPartecipante((PartecipazioneMeeting)partecipantiList.getSelectedValue(),codiceMeeting);
+						controller.eliminaPartecipante((PartecipazioneMeeting)invitatiList.getSelectedValue());
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 						
-						listmodel.removeElementAt(partecipantiList.getSelectedIndex());
+						listmodel.removeElementAt(invitatiList.getSelectedIndex());
 						
-						partecipantiList.setSelectedValue(null,false);
+						invitatiList.setSelectedValue(null,false);
+						
+						
+						//Aggiorna i dipendenti disponibili
+						dataModelDipendente.fireTableDataChanged();
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
 						
 					} catch (SQLException e1) {
 						
@@ -567,6 +582,10 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						//Prova a fare l'inserimento del partecipante al meeting
 						controller.inserisciPartecipante(partecipazioneMeeting);
 						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
+						
+						//Aggiorna i dipendenti disponibili
+						dataModelDipendente.fireTableDataChanged();
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
 					
 						//Aggiunge l'elemento inserito alla lista
 						listmodel.addElement(partecipazioneMeeting);  
@@ -613,15 +632,17 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		aggiornaPartecipantiButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(partecipantiList.getSelectedValue()==null) {
+				if(invitatiList.getSelectedValue()==null) {
 					
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista");
+					invitatiLabel.setForeground(Color.RED);
 				}
 				
 				else {
 					
+					invitatiLabel.setForeground(Color.BLACK);
 					boolean presenza;
-					PartecipazioneMeeting partecipazione=(PartecipazioneMeeting) partecipantiList.getSelectedValue();
+					PartecipazioneMeeting partecipazione=(PartecipazioneMeeting) invitatiList.getSelectedValue();
 					
 					if(presenzaCheckBox.isSelected())
 					{
@@ -635,7 +656,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					
 					try {
 						controller.aggiornaPresenzaPartecipante(partecipazioneMeeting);
-						listmodel.removeElementAt(partecipantiList.getSelectedIndex()); //rimuove il vecchio elemento
+						JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
+						listmodel.removeElementAt(invitatiList.getSelectedIndex()); //rimuove il vecchio elemento
 						listmodel.addElement(partecipazioneMeeting); //lo aggiorna con il nuovo
 						
 					} catch (SQLException e1) {
@@ -670,10 +692,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		comandiPanel2.add(inserisciPartecipanteButton);
 		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		comandiPanel2.add(eliminaPartecipanteButton);
+		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		partecipantiLabel = new JLabel("Partecipanti");
-		partecipantiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
-		presenzeScrollPane.setColumnHeaderView(partecipantiLabel);
+		invitatiLabel = new JLabel("Invitati");
+		invitatiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		invitatiScrollPane.setColumnHeaderView(invitatiLabel);
 		infoPanel2.setLayout(gl_infoPanel2);
 		infoPanel.add(infoPanel2);
 		panel.setLayout(gl_panel);
@@ -711,7 +734,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		dipendenteTable.setBackground(Color.WHITE);
 		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
 		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());	//setta il modello di dati della tabella
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));	//setta il modello di dati della tabella
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
@@ -773,7 +796,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						
 						listmodel.addElement(partecipazioneMeeting);
 						
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti()); //Per aggiornare tabella
+						dataModelDipendente.fireTableDataChanged();
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato)); //Per aggiornare tabella
 						
 					
 						
@@ -789,6 +813,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					
 
 			}
+		
+			
 		});
 		
 		DipendenteScrollPane.setViewportView(dipendenteTable);

@@ -53,7 +53,7 @@ private InserisciPartecipantiProgetto inserisciPartecipantiProgetto;
 		
 		//Metodo che ottiene i dipendenti che non partecipano al meeting selezionato
 		public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
-			return dipDAO.getDipendenti2();
+			return dipDAO.getDipendenti();
 		}
 		
 		//Metodo che ottiene le skill del dipendente

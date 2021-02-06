@@ -60,8 +60,8 @@ public class ControllerPartecipantiMeeting {
 		}
 		
 		//Metodo che ottiene i dipendenti che non partecipano al meeting selezionato
-		public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
-			return dipDAO.getDipendenti();
+		public ArrayList<Dipendente> ottieniDipendenti(Meeting meetingSelezionato) throws SQLException {
+			return dipDAO.getDipendentiNonInvitati(meetingSelezionato);
 		}
 		
 		//Metodo che ottiene le skill del dipendente
@@ -75,9 +75,9 @@ public class ControllerPartecipantiMeeting {
 //			meetDAO.aggiungiPartecipanteMeeting(cf,codiceMeeting,presenza);
 //		}
 
-		public void eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting,int idMeeting) throws SQLException {
+		public void eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 			
-			meetDAO.eliminaPartecipanteMeeting(partecipazioneMeeting.getPartecipante().getCf(),idMeeting);
+			meetDAO.eliminaPartecipanteMeeting(partecipazioneMeeting);
 		}
 
 		public void inserisciPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {

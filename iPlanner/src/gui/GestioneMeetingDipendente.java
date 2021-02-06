@@ -12,6 +12,7 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -29,6 +30,8 @@ import javax.swing.table.DefaultTableModel;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.ReadablePartial;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import controller.ControllerMeeting;
 import entita.Dipendente;
@@ -55,6 +58,8 @@ import javax.swing.JTable;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.Toolkit;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 
 
@@ -252,12 +257,37 @@ public class GestioneMeetingDipendente extends JFrame {
 		modificaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				modalitaLabel.setForeground(Color.BLACK);
+				piattaformaSalaLabel.setForeground(Color.BLACK);
+				progettoDiscussoLabel.setForeground(Color.BLACK);
 				int row=meetingTable.getSelectedRow();
 				
 				if(row==-1) {
 					JOptionPane.showMessageDialog(null, "Selezionare un meeting da modificare dalla tabella");
 					
 				}
+			
+				else if(!onlineRadioButton.isSelected() && !fisicoRadioButton.isSelected() || piattaformaSalaComboBox.getSelectedItem()==null || progettoDiscussoComboBox.getSelectedItem()==null)
+				{
+				
+					
+					JOptionPane.showMessageDialog(null, "Controllare i campi inseriti");
+					
+					if(!onlineRadioButton.isSelected() && !fisicoRadioButton.isSelected()){
+						modalitaLabel.setForeground(Color.RED);
+					}
+			
+					if(piattaformaSalaComboBox.getSelectedItem()==null) {
+						piattaformaSalaLabel.setForeground(Color.RED);
+					}
+					
+					if(progettoDiscussoComboBox.getSelectedItem()==null) {
+						progettoDiscussoLabel.setForeground(Color.RED);
+					}
+					
+				}
+				
+			
 				//Update del meeting
 				else {
 				Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
@@ -325,6 +355,10 @@ public class GestioneMeetingDipendente extends JFrame {
 		creaNuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				modalitaLabel.setForeground(Color.BLACK);
+				piattaformaSalaLabel.setForeground(Color.BLACK);
+				progettoDiscussoLabel.setForeground(Color.BLACK);
+				
 				if((onlineRadioButton.isSelected() || fisicoRadioButton.isSelected()) && piattaformaSalaComboBox.getSelectedItem()!=null && progettoDiscussoComboBox.getSelectedItem()!=null)
 				{
 				
@@ -342,9 +376,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				else if((!onlineRadioButton.isSelected() || !fisicoRadioButton.isSelected()) || piattaformaSalaComboBox.getSelectedItem()==null ||progettoDiscussoComboBox.getSelectedItem()!=null)
 				{
 					
-					modalitaLabel.setForeground(Color.BLACK);
-					piattaformaSalaLabel.setForeground(Color.BLACK);
-					progettoDiscussoLabel.setForeground(Color.BLACK);
+				
 					
 					JOptionPane.showMessageDialog(null, "Controllare i campi inseriti");
 					
@@ -611,7 +643,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		JScrollPane invitatiScrollPane = new JScrollPane();
 		invitatiList=new JList();
 		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		invitatiList.setSelectionBackground(Color.WHITE);
 		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		invitatiScrollPane.setViewportView(invitatiList);
 		
@@ -621,6 +653,29 @@ public class GestioneMeetingDipendente extends JFrame {
 		progettoDiscussoComboBox.setBackground(Color.WHITE);
 		progettoDiscussoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettoDiscussoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		
+		//A seconda del progetto selezionato nella ComboBox aggiorna la lista con le info del progetto selezionato
+		progettoDiscussoComboBox.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		        if(progettoDiscussoComboBox.getSelectedItem()!=null)
+		        {
+		            try {
+						Progetto progetto=theController.ottieniProgettoInserito(progettoDiscussoComboBox.getSelectedItem().toString());
+						listmodelProgetti=new DefaultListModel();
+						progettoDiscussoList.setModel(listmodelProgetti);
+						listmodelProgetti.removeAllElements();
+						listmodelProgetti.add(0,progetto);
+					} catch (SQLException e1) {
+						
+						e1.printStackTrace();
+					}
+		        	
+		        }
+		   
+		        
+		        
+		    }
+		});
 		
 		try {
 			
@@ -763,7 +818,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 		progettoDiscussoList = new JList();
 		progettoDiscussoList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		progettoDiscussoList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		progettoDiscussoList.setSelectionBackground(Color.WHITE);
 		progettoDiscussoScrollPane.setViewportView(progettoDiscussoList);
 		
 		infoProgettoDiscussoLabel = new JLabel("Info progetto discusso");
@@ -822,44 +877,56 @@ public class GestioneMeetingDipendente extends JFrame {
 				int row= meetingTable.getSelectedRow();	//ottiene l'indice di riga selezionata
 				//ricava le info del meeting selezionato
 				
-				LocalDate dataInizio=(LocalDate) meetingTable.getValueAt(row, 0);	//data inizio
+				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+				DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+				
+				LocalDate dataInizio= formatDate.parseLocalDate(meetingTable.getValueAt(row, 0).toString());	//data inizio
 				dataInizioAnnoComboBox.setSelectedItem(dataInizio.getYear());
 				dataInizioMeseComboBox.setSelectedIndex(dataInizio.getMonthOfYear()-1);
 				dataInizioGiornoComboBox.setSelectedIndex(dataInizio.getDayOfMonth()-1);
-				LocalDate dataFine=(LocalDate) meetingTable.getValueAt(row, 1);	//data fine
+				LocalDate dataFine=formatDate.parseLocalDate(meetingTable.getValueAt(row, 1).toString());	//data fine
 				dataFineAnnoComboBox.setSelectedItem(dataFine.getYear());
 				dataFineMeseComboBox.setSelectedIndex(dataFine.getMonthOfYear()-1);
 				dataFineGiornoComboBox.setSelectedIndex(dataFine.getDayOfMonth()-1);
-				LocalTime oraInizio=(LocalTime) meetingTable.getValueAt(row, 2);	//orario inizio
+				
+				LocalTime oraInizio=formatHour.parseLocalTime(meetingTable.getValueAt(row, 2).toString());	//orario inizio
 				oraInizioComboBox.setSelectedIndex(oraInizio.getHourOfDay());
 				minutoInizioComboBox.setSelectedIndex(oraInizio.getMinuteOfHour());
-				LocalTime oraFine=(LocalTime) meetingTable.getValueAt(row, 3);	//orario fine
+				LocalTime oraFine=formatHour.parseLocalTime(meetingTable.getValueAt(row, 3).toString());		//orario fine
 				oraFineComboBox.setSelectedIndex(oraFine.getHourOfDay());
 				minutoFineComboBox.setSelectedIndex(oraFine.getMinuteOfHour());
 				//modalità online e piattaforma
-				if(meetingTable.getValueAt(row, 4).equals("Telematico"))
-				{
-					piattaformaSalaLabel.setText("Piattaforma");
-					try {
-						piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniPiattaforme().toArray()));
-						onlineRadioButton.setSelected(true);
-						fisicoRadioButton.setSelected(false);
-						piattaformaSalaComboBox.setSelectedItem(meetingTable.getValueAt(row, 4));
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage());
+				try {
+					if(theController.ottieniPiattaforme().toString().contains(meetingTable.getValueAt(row, 4).toString()))
+					{
+						piattaformaSalaLabel.setText("Piattaforma");
+						try {
+							piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniPiattaforme().toArray()));
+							onlineRadioButton.setSelected(true);
+							fisicoRadioButton.setSelected(false);
+							piattaformaSalaComboBox.setSelectedItem(meetingTable.getValueAt(row, 4));
+						} catch (SQLException e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage());
+						}
 					}
-				}
-				//modalità fisica e sala
-				else {
-					piattaformaSalaLabel.setText("Sala");
-					try {
-						piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniSale().toArray()));
-						piattaformaSalaComboBox.setSelectedItem(meetingTable.getValueAt(row, 4));
-						fisicoRadioButton.setSelected(true);
-						onlineRadioButton.setSelected(false);
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage());
+					//modalità fisica e sala
+					else {
+						piattaformaSalaLabel.setText("Sala");
+						try {
+							piattaformaSalaComboBox.setModel(new DefaultComboBoxModel(theController.ottieniSale().toArray()));
+							piattaformaSalaComboBox.setSelectedItem(meetingTable.getValueAt(row, 4));
+							fisicoRadioButton.setSelected(true);
+							onlineRadioButton.setSelected(false);
+						} catch (SQLException e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage());
+						}
 					}
+				} catch (HeadlessException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
 					
 				progettoDiscussoComboBox.setSelectedItem(meetingTable.getValueAt(row, 5)); //Setta come elemento selezionato il progetto relativo al meeting
@@ -874,22 +941,16 @@ public class GestioneMeetingDipendente extends JFrame {
 						e1.printStackTrace();
 					}
 					
+					//Prende una riga della tabella
+					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row); 
 					
-					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
-					
+					//Aggiunge alla lista i partecipanti al meeting selezionato
 					listmodel.removeAllElements();
-					listmodel.addAll(meeting.getPartecipantiAlMeeting());
+					listmodel.addAll(meeting.getPartecipantiAlMeeting()); 
 					
-					listmodelProgetti=new DefaultListModel();
-					progettoDiscussoList.setModel(listmodelProgetti);
-					listmodelProgetti.removeAllElements();
-					listmodelProgetti.add(0,meeting.getProgettoDiscusso());
+			
 	
-//				codiceMeeting=(int) meetingTable.getValueAt(row, 0);
-				
-				
-				
-				
+
 			}		
 		});
 	
