@@ -77,11 +77,13 @@ public class ControllerScelta {
 	
 	//Metodo che indirizza al controller gestione progetti della segreteria
 	public void vaiAGestioneProgetti() {
+		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
 		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller
 	}
 	
 	//Metodo che indirizza al controller gestione meeting della segreteria
 	public void vaiAGestioneMeeting() {
+		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
 		ControllerMeetingSegreteria controller = new ControllerMeetingSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller
 	}
 }

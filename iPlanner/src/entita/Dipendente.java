@@ -241,7 +241,7 @@ public class Dipendente {
 	public String toString() {
 		
 //		String temp=getCollaborazioni().toString();
-		return nome + " " +cognome+"-";
+		return nome + " " +cognome+"";
 //		return temp;
 	}
 	

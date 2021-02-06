@@ -60,14 +60,11 @@ public class PartecipazioneMeeting {
 	public String toString() {
 		String organizzatore =null;
 		if(isOrganizzatore()==true)
-			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"-Presenza: "+isPresenza()+" Organizzatore";
+			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"\nPresenza: "+isPresenza()+"\nOrganizzatore";
 		else {
-			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"-Presenza: "+isPresenza();
+			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"\nPresenza: "+isPresenza();
 			
 		}
-		
 		return organizzatore;
-	}
-	
-	
+	}	
 }

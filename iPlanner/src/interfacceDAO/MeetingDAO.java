@@ -24,8 +24,8 @@ public interface MeetingDAO {
 	public boolean addMeeting(Meeting meeting,String nomeProgettoDiscusso) throws SQLException;	//metodo che aggiunge un meeting al DB
 	public boolean removeMeeting(int idMeeting) throws SQLException;	//metodo che rimuove un meeting dal DB
 	public boolean updateMeeting(Meeting meeting, String nomeProgettoSelezionato) throws SQLException;	//metodo che aggiorna le informazioni di un meeting nel DB
-//	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException;	//metodo che restituisce una lista di meeting che avvengono in una specifica sala
-//	public ArrayList<Meeting> getMeetingsByPiattaforma(String platf) throws SQLException;//metodo che restituisce i meeting organizzati su una specifica piattaforma telematica
+	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException;	//metodo che restituisce una lista di meeting che avvengono in una specifica sala
+	public ArrayList<Meeting> getMeetingsByPiattaforma(String platf) throws SQLException;//metodo che restituisce i meeting organizzati su una specifica piattaforma telematica
 	public String getProgettoRelativo(int idMeeting) throws SQLException; //metodo che restituisce il progetto discusso in quel meeting
 	public ArrayList<String> getPiattaforme() throws SQLException;	//metodo che restituisce tutte le piattaforme disponibili
 	public boolean addOrganizzatore(String CF) throws SQLException; //metodo che aggiunge l'organizzatore tra gli invitati
@@ -33,4 +33,6 @@ public interface MeetingDAO {
 	public boolean addMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException;
 	public boolean aggiungiPartecipanteMeeting(PartecipazioneMeeting partecipazione) throws SQLException;
 	public boolean aggiornaPresenza(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
+	public ArrayList<PartecipazioneMeeting> getInvitatiPartecipazioneMeeting(int idMeeting) throws SQLException;
+	public ArrayList<Meeting> getMeetingsByModalità(String modalità) throws SQLException;
 }

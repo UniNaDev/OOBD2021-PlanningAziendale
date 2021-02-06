@@ -35,8 +35,13 @@ public class MeetingTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
+		try {
+			return meetingTabella.size();
+		}
+		catch(NullPointerException e) {
+			return 0;
+		}
 		
-		return meetingTabella.size();
 	}
 
 	@Override
@@ -59,13 +64,13 @@ public class MeetingTableModel extends AbstractTableModel {
 		
 		switch(columnIndex) {
 		case 0:
-			return meeting.getDataInizio();
+			return meeting.getDataInizio().toString(formatDate);
 		case 1:
-			return meeting.getDataFine();
+			return meeting.getDataFine().toString(formatDate);
 		case 2:
-			return meeting.getOraInizio();
+			return meeting.getOraInizio().toString(formatHour);
 		case 3:
-			return meeting.getOraFine();
+			return meeting.getOraFine().toString(formatHour);
 		case 4:
 			if (meeting.getModalita().equals("Telematico"))
 				return meeting.getPiattaforma();
@@ -81,10 +86,8 @@ public class MeetingTableModel extends AbstractTableModel {
 		return meetingTabella.get(rowIndex);
 	}
 
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		return getValueAt(0,columnIndex).getClass();
-	}
-	
-	
+//	@Override
+//	public Class<?> getColumnClass(int columnIndex) {
+//		return getValueAt(0,columnIndex).getClass();
+//	}	
 }

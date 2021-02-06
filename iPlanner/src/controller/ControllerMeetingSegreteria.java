@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
+import entita.SalaRiunione;
 import gui.GestioneMeetingSegreteria;
+import gui.GestioneSale;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -22,6 +24,7 @@ public class ControllerMeetingSegreteria {
 	
 	//Attributi GUI
 	private GestioneMeetingSegreteria gestioneMeetingSegreteria;
+	private GestioneSale gestioneSale;
 	
 	//DAO
 	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
@@ -58,6 +61,20 @@ public class ControllerMeetingSegreteria {
 		gestioneMeetingSegreteria.setVisible(false);	//chiude la finestra di creazione account
 		ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);	//torna ad iPlanner in modalità segreteria
 	}
+	
+	//Metodo che passa alla gestione delle sale
+	public void apriGestioneSale() {
+		gestioneMeetingSegreteria.setEnabled(false);
+		gestioneSale = new GestioneSale(this);
+		gestioneSale.setVisible(true);
+	}
+	
+	//Metodo che esce dalla gestione sale
+	public void chiudiGestioneSale() {
+		gestioneSale.setVisible(false);
+		gestioneMeetingSegreteria.setEnabled(true);
+		gestioneMeetingSegreteria.setAlwaysOnTop(true);
+	}
 		
 	//Altri metodi
 	//-----------------------------------------------------------------
@@ -68,7 +85,37 @@ public class ControllerMeetingSegreteria {
 	}
 	
 	//Metodo che ottiene tutte le partecipazioni ai meeting
-	public ArrayList<Dipendente> ottieniPartecipanti(Meeting meeting) throws SQLException{
-		return meetDAO.getInvitati(meeting.getIdMeeting());
+	public ArrayList<PartecipazioneMeeting> ottieniPartecipanti(Meeting meeting) throws SQLException{
+		return meetDAO.getInvitatiPartecipazioneMeeting(meeting.getIdMeeting());
+	}
+	
+	//Metodo che ottiene tutte le sale
+	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
+		return salaDAO.getSale();
+	}
+	
+	//Metodo che ottiene tutte le piattaforme
+	public ArrayList<String> ottieniPiattaforme() throws SQLException{
+		return meetDAO.getPiattaforme();
+	}
+	
+	//Metodo che ottiene i meeting filtrati per modalità
+	public ArrayList<Meeting> filtraMeetingTelematici() throws SQLException{
+		return meetDAO.getMeetingsByModalità("Telematico");
+	}
+	
+	//Metodo che ottiene i meeting filtrati per modalità
+	public ArrayList<Meeting> filtraMeetingFisici() throws SQLException{
+		return meetDAO.getMeetingsByModalità("Fisico");
+	}
+	
+	//Metodo che ottiene i meeting filtrati per piattaforma
+	public ArrayList<Meeting> filtraMeetingPiattaforma(String piattaforma) throws SQLException{
+		return meetDAO.getMeetingsByPiattaforma(piattaforma);
+	}
+	
+	//Metodo che aggiunge una nuova sala al DB
+	public void creaSala(SalaRiunione sala) throws SQLException {
+		salaDAO.addSala(sala);
 	}
 }
