@@ -19,7 +19,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;	//connessione al DB
-	private PreparedStatement getSalePS,getSaleByCapPS,getSaleLiberePS,addSalaPS,updateSalaPS,removeSalaPS,getSalaByCodPS;	//prepared Statements
+	private PreparedStatement getSalePS,addSalaPS,updateSalaPS,removeSalaPS,getSalaByCodPS;	//prepared Statements
 	
 	//METODI
 	//----------------------------------------
@@ -29,8 +29,6 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		this.connection = connection;
 		
 		getSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione");
-		getSaleByCapPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.capienza >= ?");	//? = capienza minima richiesta
-		getSaleLiberePS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala NOT IN (SELECT m.CodSala FROM Meeting AS m WHERE (DataInizio+OrarioInizio,DataFine+OrarioFine) OVERLAPS (?,?) AND m.modalità = 'Fisico')");	//? = timelapse inizio e fine
 		addSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");	//? = codice sala, capienza, indirizzo, piano
 		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");	//?1 = nuovo codice, ?5 = vecchio codice
 		removeSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");	//? = codice sala da cancellare
@@ -45,47 +43,6 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		
 		//finchè ci sono record di sale nel ResultSet
 		while(risultato.next()) {
-			SalaRiunione salaTemp = new SalaRiunione(risultato.getString("CodSala"),risultato.getInt("Capienza"),risultato.getString("Indirizzo"), risultato.getInt("Piano"));	//crea l'oggetto sala temporaneo da aggiungere alla lista
-			temp.add(salaTemp);	//aggiunge la sala alla lista
-		}
-		risultato.close();	//chiude il ResultSet
-		
-		return temp;
-	}
-
-	//Metodo che restituisce la lista (temp) di tutte le sale nel DB che hanno capienza superiore a quanto indicato nel parametro
-	@Override
-	public ArrayList<SalaRiunione> getSaleByCap(int cap) throws SQLException {
-		getSaleByCapPS.setInt(1, cap);	//inserisce la capienza minima richiesta nella query
-		
-		ResultSet risultato = getSaleByCapPS.executeQuery();	//esegue la query per ottenere il ResultSet
-		ArrayList<SalaRiunione> temp = new ArrayList<SalaRiunione>();	//inizializza la lista da restituire in seguito
-		
-		//finchè ci sono record di sale nel ResultSet
-		while(risultato.next()) {
-			SalaRiunione salaTemp = new SalaRiunione(risultato.getString("CodSala"),risultato.getInt("Capienza"),risultato.getString("Indirizzo"), risultato.getInt("Piano"));	//crea l'oggetto sala temporaneo da aggiungere alla lista
-			temp.add(salaTemp);	//aggiunge la sala alla lista
-		}
-		risultato.close();	//chiude il ResultSet
-		
-		return temp;
-	}
-
-	//Metodo che restituisce la lista (temp) di sale nel DB che sono libere nell'intervallo di tempo specificato dai parametri
-	@Override
-	public ArrayList<SalaRiunione> getSaleLibere(LocalDateTime inizio, LocalDateTime fine) throws SQLException {
-		Timestamp inizioTM = new Timestamp(inizio.toDateTime().getMillis());	//conversione in Timestamp del LocalDateTime inizio per SQL
-		Timestamp fineTM = new Timestamp(fine.toDateTime().getMillis());	//conversione in Timestamp del LocalDateTime fine per SQL
-		
-		//inserisce inizio e fine come Timestamp nella query
-		getSaleLiberePS.setTimestamp(1, inizioTM);
-		getSaleLiberePS.setTimestamp(2, fineTM);
-		
-		ArrayList<SalaRiunione> temp = new ArrayList<SalaRiunione>();	//inizializza la lista di sale da restituire in seguito
-		ResultSet risultato = getSaleLiberePS.executeQuery();	//esegue la query per ottenere il ResultSet
-		
-		//finchè ci sono record nel ResultSet
-		while (risultato.next()) {
 			SalaRiunione salaTemp = new SalaRiunione(risultato.getString("CodSala"),risultato.getInt("Capienza"),risultato.getString("Indirizzo"), risultato.getInt("Piano"));	//crea l'oggetto sala temporaneo da aggiungere alla lista
 			temp.add(salaTemp);	//aggiunge la sala alla lista
 		}

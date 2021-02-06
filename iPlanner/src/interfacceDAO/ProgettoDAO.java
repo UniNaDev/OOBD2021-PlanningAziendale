@@ -14,10 +14,8 @@ import entita.Progetto;
 public interface ProgettoDAO {
 
 	public ArrayList<Progetto> getProgetti() throws SQLException;	//metodo che restituisce tutti i progetti
-//	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException;	//metodo che restituisce i partecipanti a un progetto
 	public ArrayList<Meeting> getMeetingRelativi(int codProgettoSelezionato) throws SQLException;	//metodo che restituisce i meeting relativi ad un progetto
 	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti a cui partecipa un dipendente
-	public ArrayList<Progetto> getProgettiByCreatore(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti creati da un dipendente
 	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException;	//metodo che restituisce i progetti di un certo ambito
 	public ArrayList<Progetto> getProgettiByTipo(String tipologia) throws SQLException;	//metodo che restituisce i progetti di un certo tipo
 	public boolean addProgetto(Progetto proj) throws SQLException;	//metodo che inserisce un nuovo progetto nel DB
@@ -32,7 +30,6 @@ public interface ProgettoDAO {
 
 	public ArrayList<String> getRuoliDipendenti() throws SQLException; //Metodo che ritorna tutti i ruoli presenti nel DB
 	public Progetto getProgettoInserito(String nomeProgetto) throws SQLException;
-//	public ArrayList<CollaborazioneProgetto> getPartecipanti(Progetto progetto, int codiceProgetto) throws SQLException;
 	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException;
 	public boolean addProjectManager(String cf, Progetto tmp, String string) throws SQLException;
 	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;

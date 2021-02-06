@@ -33,14 +33,13 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	//----------------------------------------
 	private Connection connection;	//connessione al DB
 	private PreparedStatement getDipendentiPartecipantiPS,
+		getDipendentiNonInvitatiPS,
 		getDipendentiPS,
 		getDipendenti2PS,
 		getDipendentiNonPartecipantiPS,
 		getDipendentiByEtaPS,
+
 		getValutazionePS,
-		getDipendentiByValutazionePS,
-		getDipendentiBySalarioPS,
-		getDipendentiBySkillPS,
 		addDipendentePS,
 		updateDipendentePS,
 		loginCheckPS,
@@ -66,10 +65,9 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getDipendenti2PS=connection.prepareStatement("SELECT * FROM Dipendente"); //Deve selezionare i dipendenti che non partecipano già al meeting che si sta inserendo.
 		getDipendentiNonPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )");
 		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
+		getDipendentiNonInvitatiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
+		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
-		getDipendentiByValutazionePS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE Valutazione(d.CF) BETWEEN ? AND ?");
-		getDipendentiBySalarioPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.Salario BETWEEN ? AND ?");
-		getDipendentiBySkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT Dipendente.CF FROM Dipendente NATURAL JOIN (Abilità NATURAL JOIN Skill) WHERE Skill.NomeSkill = ?)");	//? = NomeSkill
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
 		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
 		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email = ? AND Password = ?");
@@ -87,7 +85,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	Restituisce una lista con tutti i dipendenti.*/
 	@Override
 	public ArrayList<Dipendente> getDipendenti() throws SQLException {
-		ResultSet risultato = getDipendenti2PS.executeQuery();	//esegue la query per ottenere il ResultSet
+		ResultSet risultato = getDipendentiPS.executeQuery();	//esegue la query per ottenere il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire in seguito
 		
 		//finchè esistono dipendenti nel ResultSet
@@ -122,8 +120,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	Restituisce una lista con tutti i dipendenti.*/
 	@Override
 	public ArrayList<Dipendente> getDipendentiNonInvitati(Meeting meetingSelezionato) throws SQLException {
-		getDipendentiPS.setInt(1, meetingSelezionato.getIdMeeting());
-		ResultSet risultato = getDipendentiPS.executeQuery();	//esegue la query per ottenere il ResultSet
+		getDipendentiNonInvitatiPS.setInt(1, meetingSelezionato.getIdMeeting());
+		ResultSet risultato = getDipendentiNonInvitatiPS.executeQuery();	//esegue la query per ottenere il ResultSet
 		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire in seguito
 		
 		//finchè esistono dipendenti nel ResultSet
@@ -152,44 +150,6 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		return temp;
 	}
-	
-	
-	
-
-	//Metodo getDipendentiByEtà.
-	/*Metodo che interroga il DB per ottenere una lista di dipendenti
-	* con età superiore al parametro indicato nella funzione.*/
-	@Override
-	public ArrayList<Dipendente> getDipendentiByEta(int minima, int massima) throws SQLException {
-		getDipendentiByEtaPS.setInt(1, minima);	//inserisce l'età minima nella query
-		getDipendentiByEtaPS.setInt(2, massima);	//inserisce l'età massima nella query
-		ResultSet risultato = getDipendentiByEtaPS.executeQuery();	//esegue la query e ottiene il ResultSet
-		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
-		
-		//finchè esistono dipendenti nel ResultSet
-		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
-			
-			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
-					risultato.getString("Nome"),
-					risultato.getString("Cognome"),
-					risultato.getString("Sesso").charAt(0),
-					new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp,
-					risultato.getString("Indirizzo"),
-					risultato.getString("Email"),
-					risultato.getString("TelefonoCasa"),
-					risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"),
-					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
-
-			temp.add(tempDip);	//lo aggiunge alla lista
-		}
-		risultato.close();	//chiude il ResultSet
-		
-		return temp;
-	}
 
 	//Metodo getValutazione.
 	/*Interroga il DB richiamando una funzione esterna Valutazione(CF) che
@@ -203,108 +163,6 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		risultato.next();	//prendi il primo (e unico) record del ResultSet
 		float temp = risultato.getFloat(1);	//ottiene la valutazione dal ResultSet
 		risultato.close(); //chiude il ResultSet
-		return temp;
-	}
-
-	//Metodo getDipendentiByValutazione.
-	/*Metodo che interroga il DB per ottenere una lista di dipendenti che
-	*hanno una valutazione superiroe a quanto inserito come parametro.*/
-	@Override
-	public ArrayList<Dipendente> getDipendentiByValutazione(float minima, float massima) throws SQLException {
-		getDipendentiByValutazionePS.setFloat(1, minima);	//inserisce il parametro nella query
-		ResultSet risultato = getDipendentiByValutazionePS.executeQuery();	//esegue la query e ottiene il ResultSet
-		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
-		
-		//finchè esistono dipendenti nel ResultSet
-		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
-			
-			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
-					risultato.getString("Nome"),
-					risultato.getString("Cognome"),
-					risultato.getString("Sesso").charAt(0),
-					new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp,
-					risultato.getString("Indirizzo"),
-					risultato.getString("Email"),
-					risultato.getString("TelefonoCasa"),
-					risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"),
-					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
-			
-			temp.add(tempDip);	//lo aggiunge alla lista
-		}
-		risultato.close();
-		
-		return temp;
-	}
-
-	//Metodo getDipendentiBySalario.
-	/*Metodo che interroga il DB e restituisce una lista di dipendenti che hanno
-	*salario compreso tra gli estremi inseriti come parametri.*/
-	@Override
-	public ArrayList<Dipendente> getDipendentiBySalario(float minimo, float massimo) throws SQLException {
-		getDipendentiBySalarioPS.setFloat(1, minimo);	//inserisce i parametri nella query
-		getDipendentiBySalarioPS.setFloat(2, massimo);
-		ResultSet risultato = getDipendentiBySalarioPS.executeQuery();	//esegue la query e ottiene il ResultSet
-		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
-		
-		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
-			
-			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
-					risultato.getString("Nome"),
-					risultato.getString("Cognome"),
-					risultato.getString("Sesso").charAt(0),
-					new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp,
-					risultato.getString("Indirizzo"),
-					risultato.getString("Email"),
-					risultato.getString("TelefonoCasa"),
-					risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"),
-					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
-
-			temp.add(tempDip);	//lo aggiunge alla lista
-		}
-		risultato.close();
-		
-		return temp;
-	}
-
-	//Metodo getDipendentiBySkill.
-	/*Metodo che interroga il DB per ottenere una lista di dipendenti
-	*che hanno una specifica skill.*/
-	@Override
-	public ArrayList<Dipendente> getDipendentiBySkill(Skill skill) throws SQLException {
-		getDipendentiBySkillPS.setString(1, skill.getNomeSkill()); 	//inserisce il parametro nella query
-		ResultSet risultato = getDipendentiBySkillPS.executeQuery();	//esegue la query e ottiene il ResultSet
-		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire
-		
-		//finchè esistono dipendenti nel ResultSet
-		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
-			
-			Dipendente tempDip = new Dipendente(risultato.getString("CF"), 
-					risultato.getString("Nome"),
-					risultato.getString("Cognome"),
-					risultato.getString("Sesso").charAt(0),
-					new LocalDate(risultato.getDate("DataNascita")),
-					luogoTemp,
-					risultato.getString("Indirizzo"),
-					risultato.getString("Email"),
-					risultato.getString("TelefonoCasa"),
-					risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"),
-					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
-			
-			temp.add(tempDip);	//lo aggiunge alla lista
-		}
-		risultato.close(); 	//chiude il ResultSet
-		
 		return temp;
 	}
 

@@ -17,7 +17,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;
-	private PreparedStatement getAmbitiPS, addAmbitoPS, removeAmbitoPS, getAmbitiProgettoPS, addAmbitiProgettoPS,removeAmbitiProgettoPS;
+	private PreparedStatement getAmbitiPS, addAmbitoPS, getAmbitiProgettoPS, addAmbitiProgettoPS,removeAmbitiProgettoPS;
 	
 	//METODI
 	//----------------------------------------
@@ -29,7 +29,6 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		//inizializza gli statement preparati
 		getAmbitiPS = connection.prepareStatement("SELECT * FROM AmbitoProgetto");
 		addAmbitoPS = connection.prepareStatement("INSERT INTO AmbitoProgetto(NomeAmbito) VALUES (?)"); //? = nome dell'ambito da inserire
-		removeAmbitoPS = connection.prepareStatement("DELETE FROM AmbitoProgetto WHERE NomeAmbito = ?");	//? = nome dell'ambito da rimuovere
 		getAmbitiProgettoPS = connection.prepareStatement("SELECT * FROM AmbitoProgetto AS ap WHERE ap.IDAmbito IN (SELECT l.IDAmbito FROM AmbitoProgettoLink AS l WHERE l.CodProgetto = ?)");	//?=Codice del progetto di cui si vogliono gli ambiti
 		addAmbitiProgettoPS = connection.prepareStatement("INSERT INTO AmbitoProgettoLink VALUES (?,?)"); //? = id dell'ambito, ? = codice progetto
 		removeAmbitiProgettoPS = connection.prepareStatement("DELETE FROM AmbitoProgettoLink WHERE codprogetto = ?");// ? = codice del progetto di cui vogliamo rimuovere tutti gli ambiti
@@ -59,19 +58,6 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		addAmbitoPS.setString(1, ambito.getNome()); 	//inserisce il nome dell'ambito nuovo nell'insert
 		
 		int record = addAmbitoPS.executeUpdate();	//esegue l'insert e salva il numero di record modificati (1=aggiunto, 0=non aggiunto)
-		
-		if (record == 1)
-			return true;
-		else
-			return false;
-	}
-
-	//Metodo che rimuove un ambito dal DB
-	@Override
-	public boolean removeAmbito(AmbitoProgetto ambito) throws SQLException {
-		removeAmbitoPS.setString(1, ambito.getNome());	//inserisce il nome dell'ambito nella delete
-		
-		int record = removeAmbitoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato, 0=non eliminato)
 		
 		if (record == 1)
 			return true;

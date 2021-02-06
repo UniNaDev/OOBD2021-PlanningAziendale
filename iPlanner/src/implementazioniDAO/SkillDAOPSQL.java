@@ -26,7 +26,7 @@ public class SkillDAOPSQL implements SkillDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection conn;	//connessione al DB
-	private PreparedStatement getSkillsPS,getSkillsByNomePS,addSkillPS, addSkillDipendentePS, getSkillDipendentePS;	//PreparedStatement per operazioni rapide sul DB
+	private PreparedStatement getSkillsPS,addSkillPS, addSkillDipendentePS, getSkillDipendentePS;	//PreparedStatement per operazioni rapide sul DB
 	
 	//METODI
 	//----------------------------------------
@@ -38,7 +38,6 @@ public class SkillDAOPSQL implements SkillDAO {
 		this.conn = connection;	//ottiene la connessione
 		
 		getSkillsPS = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");	//statement per chiedere al DB tutte le skill
-		getSkillsByNomePS = conn.prepareStatement("SELECT * FROM Skill WHERE Skill.NomeSkill = ?");	//statement per chiedere al DB tutte le skill con un nome specifico
 		addSkillPS = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");	//statement per inserire una nuova Skill nel DB
 		addSkillDipendentePS = conn.prepareStatement("INSERT INTO Abilità VALUES (?,?)");	//? = id della skill, ? = codice fiscale del dipendente
 		getSkillDipendentePS = conn.prepareStatement("SELECT * FROM Skill AS s WHERE s.IDSkill IN (SELECT a.IDSkill FROM Abilità AS a WHERE a.CF = ?)");	//? = codice fiscale del dipendente di cui si vogliono le skill
@@ -61,21 +60,6 @@ public class SkillDAOPSQL implements SkillDAO {
 		risultato.close();	//chiude il ResultSet
 		
 		return temp;
-	}
-
-	//Metodo getSkillsByNome.
-	/*Interroga il DB attraverso getSKillsByNome:PreparedStatement e salva il ResultSet ottenuto
-	*in una skill temporanea che alla fine restituisce.*/
-	@Override
-	public Skill getSkillByNome(String nome) throws SQLException {
-		getSkillsByNomePS.setString(1, nome);	//inserisce il parametro nome nella query
-		
-		ResultSet risultato = getSkillsByNomePS.executeQuery();	//esegue la query per ottenere il ResultSet
-		risultato.next();
-		Skill tempSkill = new Skill(risultato.getInt(1), risultato.getString(2));
-		risultato.close();	//chiude il ResultSet
-		
-		return tempSkill;
 	}
 
 	//Metodo addSkill.
