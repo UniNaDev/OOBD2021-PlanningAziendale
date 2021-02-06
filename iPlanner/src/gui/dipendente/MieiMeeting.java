@@ -42,6 +42,7 @@ import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.event.ListSelectionListener;
 
+import org.joda.time.Hours;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -331,13 +332,13 @@ public class MieiMeeting extends JFrame {
 						valorePiattaformaSalaLabel.setText(meetingSelezionato.getPiattaforma());	//modalità telematica con piattaforma
 					}
 					
-					DateTimeFormatter formatDateTime = DateTimeFormat.forPattern("hh:mm");
-					valoreOrarioFineLabel.setText(meetingSelezionato.getOraFine().toString(formatDateTime));	//orario fine
-					valoreOrarioInizioLabel.setText(meetingSelezionato.getOraInizio().toString(formatDateTime));	//orario inizio
+					DateTimeFormatter formatTime = DateTimeFormat.forPattern("HH:mm");
+					valoreOrarioFineLabel.setText(meetingSelezionato.getOraFine().toString(formatTime));	//orario fine
+					valoreOrarioInizioLabel.setText(meetingSelezionato.getOraInizio().toString(formatTime));	//orario inizio
 					
-					formatDateTime = DateTimeFormat.forPattern("dd/MM/yyyy");	
-					valoreDataFineLabel.setText(meetingSelezionato.getDataFine().toString(formatDateTime));	//data fine
-					valoreDataInzioLabel.setText(meetingSelezionato.getDataInizio().toString(formatDateTime));	//data inizio
+					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	
+					valoreDataFineLabel.setText(meetingSelezionato.getDataFine().toString(formatDate));	//data fine
+					valoreDataInzioLabel.setText(meetingSelezionato.getDataInizio().toString(formatDate));	//data inizio
 				}
 			});
 			MeetingListRenderer renderer = new MeetingListRenderer();	//applica renderer

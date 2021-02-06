@@ -64,9 +64,9 @@ public class ControllerProgetto {
 	//Metodi di gestione delle GUI
 	//-----------------------------------------------------------------
 	
-	public void apriInserisciPartecipantiProgetto(Progetto progettoSelezionato, int codiceProgetto) {
+	public void apriInserisciPartecipantiProgetto(Progetto progettoSelezionato) {
 		
-		ControllerPartecipantiProgetto controller=new ControllerPartecipantiProgetto(luogoDAO, dipDAO, projDAO, meetDAO, dipendente,skillDAO,progettoSelezionato,codiceProgetto);
+		ControllerPartecipantiProgetto controller=new ControllerPartecipantiProgetto(luogoDAO, dipDAO, projDAO, meetDAO, dipendente,skillDAO,progettoSelezionato);
 		
 	}
 	
@@ -85,13 +85,11 @@ public class ControllerProgetto {
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
 		
-//		System.out.println(collaborazioni.toString());
 		
 		ArrayList<Progetto> temp = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)
 			temp.add(collaborazione.getProgetto());
 		
-//		System.out.println(temp.toString());
 		
 		return temp;
 	}
@@ -122,10 +120,10 @@ public class ControllerProgetto {
 	}
 
 	//metodo fa l'update del progetto con i nuovi campi inseriti
-	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione, LocalDate dataCreazione , LocalDate nuovaDataScadenza, LocalDate nuovaDataTerminazione ,ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException 
+	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione,LocalDate dataCreazione, LocalDate nuovaDataTerminazione , LocalDate nuovaDataScadenza, ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException 
 	{
 		//crea un progetto temporaneo con i dati del progetto aggiorati
-		Progetto tmp = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione , dataCreazione , nuovaDataScadenza, nuovaDataTerminazione);
+		Progetto tmp = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione ,dataCreazione, nuovaDataScadenza, nuovaDataTerminazione);
 		
 		projDAO.updateProgetto(tmp);
 		
@@ -137,14 +135,7 @@ public class ControllerProgetto {
 		ambitoDAO.addAmbitiProgetto(tmp);
 		
 		
-		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
-//		mieiProgetti.setVisible(false);
-//		mieiProgetti = new MieiProgetti(this,dipendente);
-//		mieiProgetti.setVisible(true);
-//		
-//		gestioneProgetti.setVisible(false);
-//		gestioneProgetti= new GestioneProgettiDipendente(this);
-//		gestioneProgetti.setVisible(true);
+
 								
 	}
 	
@@ -166,16 +157,8 @@ public class ControllerProgetto {
 		ambitoDAO.addAmbitiProgetto(tmp);
 		
 		//imposta il dipendente che ha creato il progetto come project Manager
-		projDAO.addPartecipante(dipendente.getCf(), projDAO.getCodProgetto(tmp), "Project Manager");
+		projDAO.addProjectManager(dipendente.getCf(), tmp, "Project Manager");
 	
-		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
-//		mieiProgetti.setVisible(false);
-//		mieiProgetti = new MieiProgetti(this,dipendente);
-//		mieiProgetti.setVisible(true);
-//		
-//		gestioneProgetti.setVisible(false);
-//		gestioneProgetti= new GestioneProgettiDipendente(this);
-//		gestioneProgetti.setVisible(true);
 		
 	}
 	
@@ -186,20 +169,24 @@ public class ControllerProgetto {
 	}
 	
 	//metodo che prende in input il codProgetto e lo elimina dal db
-	public boolean removeProgettoByCod (int codProgetto) throws SQLException
+	public boolean rimuoviProgetto (Progetto progetto) throws SQLException
 	{
-		boolean risultato = projDAO.removeProgettoByCod(codProgetto);
-		
-		//aggiorna le finestre i miei progetti e gestione progetto per visualizzare le modifiche
-//		mieiProgetti.setVisible(false);
-//		mieiProgetti = new MieiProgetti(this,dipendente);
-//		mieiProgetti.setVisible(true);
-//		
-//		gestioneProgetti.setVisible(false);
-//		gestioneProgetti= new GestioneProgettiDipendente(this);
-//		gestioneProgetti.setVisible(true);
+		boolean risultato = projDAO.removeProgetto(progetto);
 		
 		return risultato;
+	}
+
+	public void updateProgetto(Progetto progetto) throws SQLException {
+		
+		projDAO.updateProgetto(progetto);
+		
+		//rimuove i vecchi ambiti che aveva il progetto
+		ambitoDAO.removeAmbitiProgetto(progetto);
+		
+		//setta i nuovi ambiti del progetto e li aggiunge 
+		progetto.setAmbiti(progetto.getAmbiti());
+		ambitoDAO.addAmbitiProgetto(progetto);
+		
 	}
 
 

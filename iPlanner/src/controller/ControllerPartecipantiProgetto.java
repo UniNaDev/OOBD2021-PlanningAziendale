@@ -33,9 +33,8 @@ private InserisciPartecipantiProgetto inserisciPartecipantiProgetto;
 		//Altri attributi
 		private Dipendente dipendente = null;
 		private Progetto progettoSelezionato=null;
-		private int codiceProgetto;
 		//Costruttore
-		public ControllerPartecipantiProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO,Dipendente dipendente, SkillDAO skillDAO, Progetto progettoSelezionato, int codiceProgetto) {
+		public ControllerPartecipantiProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO,Dipendente dipendente, SkillDAO skillDAO, Progetto progettoSelezionato) {
 			//Ottiene i dao
 			this.luogoDAO = luogoDAO;
 			this.dipDAO = dipDAO;
@@ -44,16 +43,15 @@ private InserisciPartecipantiProgetto inserisciPartecipantiProgetto;
 			this.skillDAO=skillDAO;
 			this.dipendente = dipendente;	//ottiene il dipendente che ha fatto l'accesso
 			this.progettoSelezionato=progettoSelezionato;
-			this.codiceProgetto=codiceProgetto;
 			
-			inserisciPartecipantiProgetto=new InserisciPartecipantiProgetto(this,progettoSelezionato,codiceProgetto);
+			inserisciPartecipantiProgetto=new InserisciPartecipantiProgetto(this,progettoSelezionato);
 			inserisciPartecipantiProgetto.setVisible(true);
 		}
 
 		
 		//Metodo che ottiene i dipendenti che non partecipano al meeting selezionato
-		public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
-			return dipDAO.getDipendenti();
+		public ArrayList<Dipendente> ottieniDipendenti(Progetto progettoSelezionato) throws SQLException {
+			return dipDAO.getDipendentiNonPartecipanti(progettoSelezionato);
 		}
 		
 		//Metodo che ottiene le skill del dipendente
@@ -69,15 +67,15 @@ private InserisciPartecipantiProgetto inserisciPartecipantiProgetto;
 		}
 
 
-		public void inserisciPartecipante(String cf, int codiceProgetto2, String ruolo) throws SQLException {
-		projDAO.addPartecipante(cf, codiceProgetto2, ruolo);
+		public void inserisciPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+		projDAO.addPartecipante(collaborazioneProgetto);
 			
 		}
 
 
-		public void eliminaPartecipante(Dipendente selectedValue, int codiceProgetto2) throws SQLException {
+		public void eliminaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		
-			projDAO.deletePartecipante(selectedValue, codiceProgetto2);
+			projDAO.deletePartecipante(collaborazioneProgetto);
 		}
 
 
@@ -91,5 +89,11 @@ private InserisciPartecipantiProgetto inserisciPartecipantiProgetto;
 			for (int i = 0; i < projDAO.getRuoliDipendenti().size(); i++)
 				temp[i] = projDAO.getRuoliDipendenti().get(i);
 			return temp;
+		}
+
+
+		public void aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+			projDAO.aggiornaPartecipante(collaborazioneProgetto);
+			
 		}
 }

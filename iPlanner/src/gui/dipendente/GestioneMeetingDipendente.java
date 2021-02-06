@@ -27,6 +27,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
 
+import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.ReadablePartial;
@@ -38,6 +39,7 @@ import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
 import entita.SalaRiunione;
+import gui.cellRenderers.InvitatiListRenderer;
 import gui.tableModels.MeetingTableModel;
 
 import javax.swing.JButton;
@@ -645,6 +647,10 @@ public class GestioneMeetingDipendente extends JFrame {
 		invitatiList=new JList();
 		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		invitatiList.setSelectionBackground(Color.WHITE);
+		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		InvitatiListRenderer invitatiListRenderer=new InvitatiListRenderer();
+		invitatiList.setCellRenderer(invitatiListRenderer);
+		
 		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		invitatiScrollPane.setViewportView(invitatiList);
 		
@@ -818,6 +824,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		);
 		
 		progettoDiscussoList = new JList();
+		progettoDiscussoList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		progettoDiscussoList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		progettoDiscussoList.setSelectionBackground(Color.WHITE);
 		progettoDiscussoScrollPane.setViewportView(progettoDiscussoList);
@@ -1028,8 +1035,15 @@ public class GestioneMeetingDipendente extends JFrame {
 	public void insertMeeting(ControllerMeeting theController) throws SQLException {
 	
 		infoProgettoDiscussoLabel.setBackground(Color.BLACK);
-		LocalDate dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data inizio
-		LocalDate dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));	//data fine
+		LocalDate dataInizio = null;
+		LocalDate dataFine = null;
+		try {
+			dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
+			dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
+		} catch (IllegalFieldValueException e) {
+		
+			JOptionPane.showMessageDialog(null, "Data inserita non valida");
+		}
 		LocalTime oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);	//ora inizio
 		LocalTime oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);	//ora fine
 		String modalita = "";
@@ -1058,7 +1072,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 		} catch (SQLException e1) {
 			
-			infoProgettoDiscussoLabel.setBackground(Color.RED);
+			
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 		

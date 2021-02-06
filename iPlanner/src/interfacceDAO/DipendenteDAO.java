@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import entita.Dipendente;
 import entita.Meeting;
+import entita.Progetto;
 import entita.Skill;
 
 public interface DipendenteDAO {
@@ -23,4 +24,5 @@ public interface DipendenteDAO {
 	public float getMaxStipendio() throws SQLException;	//metodo che ottiene il massimo stipendio presente nel DB
 	public ArrayList<Dipendente> getDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException;	//metodo che ottiene i dipendenti filtrati
 	public ArrayList<Dipendente> getDipendenti() throws SQLException;
+	public ArrayList<Dipendente> getDipendentiNonPartecipanti(Progetto progettoSelezionato) throws SQLException;
 }

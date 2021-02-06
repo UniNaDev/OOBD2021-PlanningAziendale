@@ -39,6 +39,7 @@ import entita.PartecipazioneMeeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
+import gui.cellRenderers.InvitatiListRenderer;
 import gui.tableModels.PartecipantiTableModel;
 
 import javax.swing.JButton;
@@ -319,8 +320,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(184)
-							.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-							.addGap(148))
+							.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(43)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
@@ -342,14 +342,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 									.addComponent(nomeTextField)
 									.addComponent(cognomeTextField))
 								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-							.addGap(38)))
-					.addPreferredGap(ComponentPlacement.RELATED)
+							.addGap(51)
+							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
+					.addGap(38)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(5)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(5)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addGap(6)
@@ -376,13 +375,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 									.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(presenzaCheckBox)))
-							.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-							.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-							.addGap(44))
+							.addGap(30)
+							.addComponent(invitatiScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+							.addGap(22))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGap(158)
 							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
-							.addGap(210))))
+							.addContainerGap())))
 		);
 		gl_infoPanel2.setVerticalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
@@ -412,11 +411,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 								.addComponent(presenzaCheckBox)))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
+								.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(18)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 										.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
@@ -443,21 +442,25 @@ public class InserisciPartecipantiMeeting extends JFrame {
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 										.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 										.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(invitatiScrollPane, GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))
-					.addContainerGap(38, Short.MAX_VALUE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(18)
+									.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)))))
+					.addContainerGap(58, Short.MAX_VALUE))
 				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addContainerGap(78, Short.MAX_VALUE)
-					.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
-					.addGap(39))
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addContainerGap(52, Short.MAX_VALUE)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
-					.addGap(39))
+					.addContainerGap(47, Short.MAX_VALUE)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
+							.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
+							.addGap(44))))
 		);
 		
 		JList skillList = new JList();
 		skillList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		skillList.setSelectionBackground(Color.WHITE);
+		skillList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		skillScrollPane.setViewportView(skillList);
 		
 		JLabel Skill = new JLabel("Skill");
@@ -465,27 +468,30 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		skillScrollPane.setColumnHeaderView(Skill);
 		
 		invitatiList = new JList();
+		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		InvitatiListRenderer invitatiListRenderer=new InvitatiListRenderer();
+		invitatiList.setCellRenderer(invitatiListRenderer);
 		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		invitatiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				
 				
 				PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) invitatiList.getSelectedValue();
-				if(partecipaz==null) {
-					
-					
-				}else {
+				if(partecipaz!=null) {
 					
 					if(partecipaz.isPresenza()==true)
 						presenzaCheckBox.setSelected(true);
 						else
 							presenzaCheckBox.setSelected(false);
+				}
+					
+					
 					
 				}
 					
 				}
 				
-			}
+			
 		);
 		
 		DefaultListModel listmodel=new DefaultListModel();
@@ -529,14 +535,15 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					
 					try {
 						invitatiLabel.setForeground(Color.BLACK);
-						//Come per inserimento (passare partecipazione meeting)
+						
 						controller.eliminaPartecipante((PartecipazioneMeeting)invitatiList.getSelectedValue());
 						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 						
+						//Rimuove dalla lista l'elemento eliminato
 						listmodel.removeElementAt(invitatiList.getSelectedIndex());
 						
+						//Pone il valore selezionato a null
 						invitatiList.setSelectedValue(null,false);
-						
 						
 						//Aggiorna i dipendenti disponibili
 						dataModelDipendente.fireTableDataChanged();
@@ -578,6 +585,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						else
 							presenza=false;
 						
+						//Crea la partecipazione al meeting
 						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);
 					
 						//Prova a fare l'inserimento del partecipante al meeting
@@ -703,7 +711,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		panel.setLayout(gl_panel);
 		
 		//Label "Gestione Meeting"
-		JLabel gestioneMeetingLabel = new JLabel("Gestione Meeting");
+		JLabel gestioneMeetingLabel = new JLabel("Gestione invitati meeting");
 		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
 		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -779,9 +787,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					if(e.getClickCount()==2) {
 					
 					try {
-						boolean presenza;
 						
-						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						//Controllo la checkbox
+						boolean presenza;
 						if(presenzaCheckBox.isSelected())
 						{
 							presenza=true;
@@ -789,14 +797,18 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						else
 							presenza=false;
 						
+						//Riceve il dipendente selezionato
+						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						
+						//Creo la partecipazione al meeting
 						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);
 						
-						
+						//Inserisce invitato al meeting
 						controller.inserisciPartecipante(partecipazioneMeeting);
 						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
 						
+						//Aggiorna la lista e la tabella
 						listmodel.addElement(partecipazioneMeeting);
-						
 						dataModelDipendente.fireTableDataChanged();
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato)); //Per aggiornare tabella
 						

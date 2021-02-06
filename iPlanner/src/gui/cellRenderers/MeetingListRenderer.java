@@ -27,8 +27,8 @@ public class MeetingListRenderer implements ListCellRenderer<Meeting> {
         
         // text
         textArea = new JTextArea();
-        textArea.setLineWrap(false);
-        textArea.setWrapStyleWord(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
         textArea.setFont(new Font("Consolas", Font.PLAIN, 15));
         textArea.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(textArea, BorderLayout.CENTER);
