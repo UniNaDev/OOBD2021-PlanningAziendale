@@ -1,9 +1,8 @@
-package gui;
+package cellRenderers;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.JList;
@@ -11,19 +10,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.MatteBorder;
 
-import org.joda.time.LocalDate;
 
-import entita.Dipendente;
-import entita.Meeting;
+import entita.CollaborazioneProgetto;
 
-public class DipendenteInvitatoListRenderer implements ListCellRenderer<Dipendente> {
+public class PartecipantiListRenderer implements ListCellRenderer<CollaborazioneProgetto>{
 
 	  	private JPanel p;
 	    private JTextArea ta;
 	
-	public DipendenteInvitatoListRenderer() {
+	public PartecipantiListRenderer() {
         p = new JPanel();
         p.setLayout(new BorderLayout());
         
@@ -35,13 +31,11 @@ public class DipendenteInvitatoListRenderer implements ListCellRenderer<Dipenden
         ta.setAlignmentX(Component.CENTER_ALIGNMENT);
         p.add(ta, BorderLayout.CENTER);
     }
-	
-	
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends Dipendente> list, Dipendente dipendente, int index,
-			boolean isSelected, boolean cellHasFocus) {
-		ta.setText("Nome: "+dipendente.getNome()+" "+"Cognome: "+dipendente.getCognome());
+	public Component getListCellRendererComponent(JList<? extends CollaborazioneProgetto> list, CollaborazioneProgetto collaborazione, int index, boolean isSelected,
+			boolean cellHasFocus) {
+        ta.setText(collaborazione.toString());
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         if (isSelected)
@@ -49,8 +43,6 @@ public class DipendenteInvitatoListRenderer implements ListCellRenderer<Dipenden
         else
         	ta.setBackground(list.getBackground());
         
- 
-        return p;
+		return p;
 	}
-
 }

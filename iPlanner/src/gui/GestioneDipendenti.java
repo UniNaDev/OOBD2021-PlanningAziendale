@@ -23,6 +23,7 @@ import org.joda.time.LocalDate;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
+import tableModels.DipendentiTableModel;
 
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;

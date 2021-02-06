@@ -44,6 +44,8 @@ import javax.swing.event.ListSelectionListener;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import cellRenderers.MeetingListRenderer;
+
 import javax.swing.event.ListSelectionEvent;
 
 

@@ -39,6 +39,7 @@ import entita.PartecipazioneMeeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
+import tableModels.PartecipantiTableModel;
 
 import javax.swing.JButton;
 import java.awt.Insets;
