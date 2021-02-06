@@ -1,4 +1,4 @@
-package gui;
+package gui.segreteria;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -11,7 +11,9 @@ import controller.ControllerProgettiSegreteria;
 import entita.AmbitoProgetto;
 import entita.Meeting;
 import entita.Progetto;
-import tableModels.ProgettoTableModel;
+import gui.cellRenderers.MeetingListRenderer;
+import gui.cellRenderers.PartecipantiListRenderer;
+import gui.tableModels.ProgettoTableModel;
 
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
@@ -44,9 +46,6 @@ import javax.swing.table.TableRowSorter;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import cellRenderers.MeetingListRenderer;
-import cellRenderers.PartecipantiListRenderer;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

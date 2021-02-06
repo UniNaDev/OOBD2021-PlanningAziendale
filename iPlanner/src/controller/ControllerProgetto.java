@@ -13,6 +13,8 @@ import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
 import gui.*;
+import gui.dipendente.GestioneProgettiDipendente;
+import gui.dipendente.MieiProgetti;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;

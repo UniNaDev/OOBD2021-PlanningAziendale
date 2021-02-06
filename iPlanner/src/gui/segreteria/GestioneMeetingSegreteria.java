@@ -1,4 +1,4 @@
-package gui;
+package gui.segreteria;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,7 +10,8 @@ import javax.swing.border.EmptyBorder;
 import controller.ControllerMeetingSegreteria;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
-import tableModels.MeetingTableModel;
+import gui.cellRenderers.InvitatiListRenderer;
+import gui.tableModels.MeetingTableModel;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -22,8 +23,6 @@ import javax.swing.table.TableRowSorter;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import cellRenderers.InvitatiListRenderer;
 
 import java.awt.Color;
 import javax.swing.JScrollPane;

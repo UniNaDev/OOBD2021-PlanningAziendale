@@ -1,4 +1,4 @@
-package gui;
+package gui.dipendente;
 import controller.*;
 
 

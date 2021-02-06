@@ -1,4 +1,4 @@
-package gui;
+package gui.segreteria;
 import controller.*;
 
 
@@ -23,7 +23,7 @@ import org.joda.time.LocalDate;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
-import tableModels.DipendentiTableModel;
+import gui.tableModels.DipendentiTableModel;
 
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;

@@ -1,4 +1,4 @@
-package gui;
+package gui.dipendente;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -37,7 +37,7 @@ import entita.Meeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
-import tableModels.PartecipantiTableModel;
+import gui.tableModels.PartecipantiTableModel;
 
 import javax.swing.JButton;
 import java.awt.Insets;

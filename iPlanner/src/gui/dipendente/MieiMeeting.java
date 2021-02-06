@@ -1,4 +1,4 @@
-package gui;
+package gui.dipendente;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.ControllerMeeting;
 import entita.Meeting;
+import gui.cellRenderers.MeetingListRenderer;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -43,8 +44,6 @@ import javax.swing.event.ListSelectionListener;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import cellRenderers.MeetingListRenderer;
 
 import javax.swing.event.ListSelectionEvent;
 

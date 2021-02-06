@@ -7,9 +7,8 @@ import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
 import entita.Skill;
-
-import gui.InserisciPartecipantiMeeting;
-import gui.MieiMeeting;
+import gui.dipendente.InserisciPartecipantiMeeting;
+import gui.dipendente.MieiMeeting;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;

@@ -1,4 +1,4 @@
-package gui;
+package gui.dipendente;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 
 import controller.ControllerGestioneProfilo;
 import entita.Progetto;
+import gui.cellRenderers.MeetingListRenderer;
+import gui.cellRenderers.ProgettoListRenderer;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -31,8 +33,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import cellRenderers.MeetingListRenderer;
-import cellRenderers.ProgettoListRenderer;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;

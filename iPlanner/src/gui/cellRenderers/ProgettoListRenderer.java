@@ -1,4 +1,4 @@
-package cellRenderers;
+package gui.cellRenderers;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

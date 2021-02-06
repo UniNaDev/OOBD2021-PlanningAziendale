@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Progetto;
-import gui.GestioneProgettiSegreteria;
+import gui.segreteria.GestioneProgettiSegreteria;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;

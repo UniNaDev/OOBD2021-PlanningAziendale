@@ -1,4 +1,4 @@
-package gui;
+package gui.dipendente;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

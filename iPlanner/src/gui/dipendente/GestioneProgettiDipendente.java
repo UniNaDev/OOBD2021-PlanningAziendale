@@ -1,4 +1,4 @@
-package gui;
+package gui.dipendente;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -44,7 +44,8 @@ import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
 import entita.Skill;
-import tableModels.ProgettoTableModel;
+import gui.cellRenderers.MeetingListRenderer;
+import gui.tableModels.ProgettoTableModel;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -64,8 +65,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.joda.time.LocalDate;
-
-import cellRenderers.MeetingListRenderer;
 
 import javax.swing.JCheckBox;
 import java.awt.Toolkit;
