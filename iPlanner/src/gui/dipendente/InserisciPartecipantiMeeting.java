@@ -760,6 +760,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		//Table dei meeting
 		dataModelDipendente=new PartecipantiTableModel();
 		dipendenteTable = new JTable(dataModelDipendente);
+		dipendenteTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteTable.setBackground(Color.WHITE);
