@@ -15989,7 +15989,7 @@
 											"top": 860,
 											"width": 343,
 											"height": 13,
-											"text": "ControllerScelta"
+											"text": "ControllerStart"
 										},
 										{
 											"_type": "LabelView",
@@ -42125,7 +42125,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "ControllerScelta",
+					"name": "ControllerStart",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
