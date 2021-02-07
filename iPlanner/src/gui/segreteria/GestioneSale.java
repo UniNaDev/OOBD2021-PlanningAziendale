@@ -33,6 +33,8 @@ import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import javax.swing.event.ListSelectionListener;
 
+import org.postgresql.util.PSQLException;
+
 import controller.segreteria.ControllerMeetingSegreteria;
 
 import javax.swing.event.ListSelectionEvent;
@@ -55,8 +57,6 @@ public class GestioneSale extends JFrame {
 	private JTextField pianoTextField;
 	private DefaultListModel saleListModel;
 	private JList saleList;
-	
-	private String codSala;
 
 	//METODI
 	//-----------------------------------------------------------------
@@ -173,6 +173,7 @@ public class GestioneSale extends JFrame {
 						else
 							saleList.setSelectedIndex(0);
 					} catch (SQLException e1) {
+						//sala inesistente/errata
 						JOptionPane.showMessageDialog(null,
 								e1.getMessage(),
 								"Errore #" + e1.getErrorCode(),
@@ -272,14 +273,67 @@ public class GestioneSale extends JFrame {
 				pianoLabel.setForeground(Color.BLACK);
 				//crea sala nuova
 				if (!nomeSalaTextField.getText().isBlank() && !capienzaTextField.getText().isBlank() && !indirizzoTextArea.getText().isBlank() && !pianoTextField.getText().isBlank()) {
-					SalaRiunione salaNuova = new SalaRiunione(nomeSalaTextField.getText(), Integer.parseInt(capienzaTextField.getText()), indirizzoTextArea.getText(), Integer.parseInt(pianoTextField.getText()));
 					try {
-						controller.creaSala(salaNuova);
-						saleListModel.addElement(salaNuova);
-						pulisciCampi();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						SalaRiunione salaNuova = new SalaRiunione(nomeSalaTextField.getText(), Integer.parseInt(capienzaTextField.getText()), indirizzoTextArea.getText(), Integer.parseInt(pianoTextField.getText()));
+						try {
+							controller.creaSala(salaNuova);
+							saleListModel.addElement(salaNuova);
+							pulisciCampi();
+						} catch (SQLException e1) {
+							//violazione primary key
+							if (e1.getSQLState().equals("23505")) {
+								JOptionPane.showMessageDialog(null,
+										"La sala di codice " + nomeSalaTextField.getText() + " esiste già.",
+										"Errore Sala Esistente",
+										JOptionPane.ERROR_MESSAGE);
+								nomeSalaLabel.setForeground(Color.RED);
+							}
+							//violazione not null
+							else if (e1.getSQLState().equals("23502")) {
+								JOptionPane.showMessageDialog(null,
+										"Alcuni campi obbligatori per la creazione sono vuoti.",
+										"Errore Campi Obbligatori Vuoti",
+										JOptionPane.ERROR_MESSAGE);
+								if (nomeSalaTextField.getText() == null)
+									nomeSalaLabel.setForeground(Color.RED);
+								if (capienzaTextField.getText() == null)
+									capienzaLabel.setForeground(Color.RED);
+								if (indirizzoTextArea.getText() == null)
+									indirizzoLabel.setForeground(Color.RED);
+								if (pianoTextField.getText() == null)
+									pianoLabel.setForeground(Color.RED);
+							}
+							//violazione vincolo tabella
+							else if(e1.getSQLState().equals("23514")) {
+								JOptionPane.showMessageDialog(null,
+										"I valori inseriti sono errati.\nControlla che piano e capienza non siano valori negativi.",
+										"Errore Vincoli",
+										JOptionPane.ERROR_MESSAGE);
+								if (Integer.parseInt(capienzaTextField.getText()) < 0)
+									capienzaLabel.setForeground(Color.RED);
+								if (Integer.parseInt(pianoTextField.getText()) < 0)
+									pianoLabel.setForeground(Color.RED);
+							}
+							//violazione definizione dati
+							else if(e1.getSQLState().equals("22001")) {
+								JOptionPane.showMessageDialog(null,
+										"I valori testuali inseriti sono troppo lunghi.\nControlla che il nome della sala non superi i 10 caratteri e che il suo indirizzo non superi i 50 caratteri.",
+										"Errore Dati Inseriti",
+										JOptionPane.ERROR_MESSAGE);
+								if (nomeSalaTextField.getText().length() > 10)
+									nomeSalaLabel.setForeground(Color.RED);
+								if (indirizzoTextArea.getText().length() > 50)
+									indirizzoLabel.setForeground(Color.RED);
+							}
+						}
+					}catch(NumberFormatException nfe) {
+						//formato sbagliato per capienza e/o piano scritti
+						JOptionPane.showMessageDialog(null,
+								"I valori di capienza e/o piano sono errati.\nControlla che siano valori numerici.",
+								"Errore Dati Inseriti",
+								JOptionPane.ERROR_MESSAGE);
+						capienzaLabel.setForeground(Color.RED);
+						pianoLabel.setForeground(Color.RED);
 					}
 				}
 				else {
@@ -326,23 +380,81 @@ public class GestioneSale extends JFrame {
 		//Click mouse
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: update delle modifiche
-				try {
-					controller.aggiornaSala(nomeSalaTextField.getText(), Integer.parseInt(capienzaTextField.getText()), indirizzoTextArea.getText(), Integer.parseInt(pianoTextField.getText()));
-					saleListModel.removeAllElements();
-					saleListModel.addAll(controller.ottieniSale());
-					saleList.setModel(saleListModel);
-				} catch (SQLException e1) {
-					if (e1.getErrorCode() == 0)
+				//update delle modifiche
+				if (!nomeSalaTextField.getText().isBlank() && !capienzaTextField.getText().isBlank() && !indirizzoTextArea.getText().isBlank() && !pianoTextField.getText().isBlank()) {
+					try {
+						controller.aggiornaSala(nomeSalaTextField.getText(), Integer.parseInt(capienzaTextField.getText()), indirizzoTextArea.getText(), Integer.parseInt(pianoTextField.getText()));
+						saleListModel.removeAllElements();
+						saleListModel.addAll(controller.ottieniSale());
+						saleList.setModel(saleListModel);
+					} catch (SQLException e1) {
+						//violazione not null
+						if (e1.getSQLState().equals("23502")) {
+							JOptionPane.showMessageDialog(null,
+									"Alcuni campi obbligatori per la creazione sono vuoti.",
+									"Errore Campi Obbligatori Vuoti",
+									JOptionPane.ERROR_MESSAGE);
+							if (nomeSalaTextField.getText() == null)
+								nomeSalaLabel.setForeground(Color.RED);
+							if (capienzaTextField.getText() == null)
+								capienzaLabel.setForeground(Color.RED);
+							if (indirizzoTextArea.getText() == null)
+								indirizzoLabel.setForeground(Color.RED);
+							if (pianoTextField.getText() == null)
+								pianoLabel.setForeground(Color.RED);
+						}
+						//violazione vincolo tabella
+						else if(e1.getSQLState().equals("23514")) {
+							JOptionPane.showMessageDialog(null,
+									"I valori inseriti sono errati.\nControlla che piano e capienza non siano valori negativi.",
+									"Errore Vincoli",
+									JOptionPane.ERROR_MESSAGE);
+							if (Integer.parseInt(capienzaTextField.getText()) < 0)
+								capienzaLabel.setForeground(Color.RED);
+							if (Integer.parseInt(pianoTextField.getText()) < 0)
+								pianoLabel.setForeground(Color.RED);
+						}
+						//violazione definizione dati
+						else if(e1.getSQLState().equals("22001")) {
+							JOptionPane.showMessageDialog(null,
+									"I valori testuali inseriti sono troppo lunghi.\nControlla che il nome della sala non superi i 10 caratteri e che il suo indirizzo non superi i 50 caratteri.",
+									"Errore Dati Inseriti",
+									JOptionPane.ERROR_MESSAGE);
+							if (nomeSalaTextField.getText().length() > 10)
+								nomeSalaLabel.setForeground(Color.RED);
+							if (indirizzoTextArea.getText().length() > 50)
+								indirizzoLabel.setForeground(Color.RED);
+						}
+						//sala inesistente/errata (ResultSet del getSalaByCod vuoto))
+						else if (e1.getErrorCode() == 0)
+							JOptionPane.showMessageDialog(null,
+									"Nome della sala inesistente o errato.",
+									"Errore #" + e1.getErrorCode(),
+									JOptionPane.ERROR_MESSAGE);
+					} 
+					catch(NumberFormatException nfe) {
+						//formato sbagliato per capienza e/o piano scritti
 						JOptionPane.showMessageDialog(null,
-								"Nome della sala inesistente o errato.",
-								"Errore #" + e1.getErrorCode(),
+								"I valori di capienza e/o piano sono errati.\nControlla che siano valori numerici.",
+								"Errore Dati Inseriti",
 								JOptionPane.ERROR_MESSAGE);
-					else
-						JOptionPane.showMessageDialog(null,
-								e1.getMessage(),
-								"Errore #" + e1.getErrorCode(),
-								JOptionPane.ERROR_MESSAGE);
+						capienzaLabel.setForeground(Color.RED);
+						pianoLabel.setForeground(Color.RED);
+					}
+				}else{
+					if (nomeSalaTextField.getText().isBlank())
+						nomeSalaLabel.setForeground(Color.RED);
+					if (capienzaTextField.getText().isBlank())
+						capienzaLabel.setForeground(Color.RED);
+					if (indirizzoTextArea.getText().isBlank())
+						indirizzoLabel.setForeground(Color.RED);
+					if (pianoTextField.getText().isBlank())
+						pianoLabel.setForeground(Color.RED);
+					
+					JOptionPane.showMessageDialog(null,
+							"Alcuni campi obbligatori sono vuoti",
+							"Errore campi vuoti",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
