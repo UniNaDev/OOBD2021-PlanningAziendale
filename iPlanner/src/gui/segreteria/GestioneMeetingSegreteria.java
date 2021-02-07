@@ -250,7 +250,12 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroSaleComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						applicaFiltroSala(controller, (SalaRiunione) filtroSaleComboBox.getSelectedItem());
+						if (!(filtroSaleComboBox.getSelectedItem() == null))
+							applicaFiltroSala(controller, (SalaRiunione) filtroSaleComboBox.getSelectedItem());
+						else {
+							dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
+							dataModelTabella.fireTableDataChanged();
+						}
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -278,7 +283,13 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroPiattaformaComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						applicaFiltroPiattaforma(controller, filtroPiattaformaComboBox.getSelectedItem().toString());
+						if (!(filtroPiattaformaComboBox.getSelectedItem() == null))
+							applicaFiltroPiattaforma(controller, filtroPiattaformaComboBox.getSelectedItem().toString());
+						else {
+							dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
+							dataModelTabella.fireTableDataChanged();
+						}
+							
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

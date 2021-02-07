@@ -97,12 +97,16 @@ public class ControllerMeetingSegreteria {
 	
 	//Metodo che ottiene tutte le sale
 	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
-		return salaDAO.getSale();
+		ArrayList<SalaRiunione> temp = salaDAO.getSale();
+		temp.add(0, null);
+		return temp;
 	}
 	
 	//Metodo che ottiene tutte le piattaforme
 	public ArrayList<String> ottieniPiattaforme() throws SQLException{
-		return meetDAO.getPiattaforme();
+		ArrayList<String> temp = meetDAO.getPiattaforme();
+		temp.add(0, null);
+		return temp;
 	}
 	
 	//Metodo che ottiene i meeting filtrati per modalità
