@@ -68,6 +68,7 @@ public class ControllerMeetingSegreteria {
 		gestioneMeetingSegreteria.setEnabled(false);
 		gestioneSale = new GestioneSale(this);
 		gestioneSale.setVisible(true);
+		gestioneMeetingSegreteria.setAlwaysOnTop(false);
 	}
 	
 	//Metodo che esce dalla gestione sale
