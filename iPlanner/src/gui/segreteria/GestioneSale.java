@@ -173,11 +173,12 @@ public class GestioneSale extends JFrame {
 						else
 							saleList.setSelectedIndex(0);
 					} catch (SQLException e1) {
+						//TODO: aggiungere controlli più dettagliati
 						//sala inesistente/errata
 						JOptionPane.showMessageDialog(null,
-								e1.getMessage(),
-								"Errore #" + e1.getErrorCode(),
-								JOptionPane.ERROR_MESSAGE);
+							"Impossibile ottenere sale dal database.\nControllare che sia stabilita la connessione al database\noppure creare prima una sala.",
+							"Errore Interrogazione Database",
+							JOptionPane.ERROR_MESSAGE);
 						nomeSalaLabel.setForeground(Color.RED);
 					}
 				}

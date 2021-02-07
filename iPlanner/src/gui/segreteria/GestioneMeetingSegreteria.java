@@ -41,6 +41,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -169,15 +170,30 @@ public class GestioneMeetingSegreteria extends JFrame {
 						fisicoRadioButton.setSelected(false);
 						applicaFiltroTelematico(controller);
 					} catch (SQLException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
+						//errore enumerazione modalità (valori diversi da Fisico o Telematico)
+						if (e2.getSQLState().equals("22P02")) {
+							JOptionPane.showMessageDialog(null,
+								"Errore applicazione filtro. Contattare uno sviluppatore.",
+								"Errore Enumerazioni Filtri",
+								JOptionPane.ERROR_MESSAGE);
+						}
+						//altri errori non contemplati (es: ResultSet vuoto)
+						else {
+							JOptionPane.showMessageDialog(null,
+								"Impossibile ottenere meeting fisici dal database.\nControllare che la connessione al database sia stabilita.",
+								"Errore Interrogazione Database",
+								JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				else
 					try {
 						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//errore select per tutti i meeting nel database (es: ResultSet vuoto)
+						JOptionPane.showMessageDialog(null,
+							"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti creare prima un meeting.",
+							"Errore Interrogazione Database",
+							JOptionPane.ERROR_MESSAGE);
 					}
 			}
 		});
@@ -190,14 +206,38 @@ public class GestioneMeetingSegreteria extends JFrame {
 		//RadioButton selezionato/non selezionato
 		fisicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					telematicoRadioButton.setSelected(false);
-					applicaFiltroFisico(controller);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (telematicoRadioButton.isSelected()) {
+					try {
+						telematicoRadioButton.setSelected(false);
+						applicaFiltroFisico(controller);
+					} catch (SQLException e1) {
+						//errore enumerazione modalità (valori diversi da Fisico o Telematico)
+						if (e1.getSQLState().equals("22P02")) {
+							JOptionPane.showMessageDialog(null,
+								"Errore applicazione filtro. Contattare uno sviluppatore.",
+								"Errore Enumerazioni Filtri",
+								JOptionPane.ERROR_MESSAGE);
+						}
+						//altri errori non contemplati (es: ResultSet vuoto)
+						else {
+							JOptionPane.showMessageDialog(null,
+								"Impossibile ottenere meeting fisici dal database.\nControllare che la connessione al database sia stabilita.",
+								"Errore Interrogazione Database",
+								JOptionPane.ERROR_MESSAGE);
+						}
+					}
 				}
-			}
+				else
+					try {
+						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
+					} catch (SQLException e1) {
+						//errore select per tutti i meeting nel database (es: ResultSet vuoto)
+						JOptionPane.showMessageDialog(null,
+							"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti creare prima un meeting.",
+							"Errore Interrogazione Database",
+							JOptionPane.ERROR_MESSAGE);
+					}
+				}
 		});
 		fisicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		fisicoRadioButton.setBounds(177, 9, 75, 23);
@@ -321,15 +361,21 @@ public class GestioneMeetingSegreteria extends JFrame {
 						invitatiListModel.addAll(controller.ottieniPartecipanti(meeting));
 						invitatiList.setModel(invitatiListModel);
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//errore select per tutti gli invitati a un meeting nel database (es: ResultSet vuoto)
+							JOptionPane.showMessageDialog(null,
+								"Impossibile ottenere invitati al meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti aggiungere prima un partecipante al meeting.",
+								"Errore Interrogazione Database",
+								JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
 			tabellaScrollPanel.setViewportView(tabellaMeeting);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			//errore select per tutti i meeting nel database (es: ResultSet vuoto)
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti creare prima un meeting.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 		
 		//Label "Gestione Meeting" titolo
