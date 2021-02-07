@@ -317,13 +317,10 @@ public class GestioneMeetingSegreteria extends JFrame {
 		refreshFiltriLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				try {
-					dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
-					dataModelTabella.fireTableDataChanged();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				telematicoRadioButton.setSelected(false);
+				fisicoRadioButton.setSelected(false);
+				filtroSaleComboBox.setSelectedItem(null);
+				filtroPiattaformaComboBox.setSelectedItem(null);
 			}
 		});
 		refreshFiltriLabel.setIcon(new ImageIcon(GestioneMeetingSegreteria.class.getResource("/icone/refresh.png")));
