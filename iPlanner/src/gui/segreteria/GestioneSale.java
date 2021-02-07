@@ -223,8 +223,11 @@ public class GestioneSale extends JFrame {
 			saleList.setModel(saleListModel);
 			saleListScrollPanel.setViewportView(saleList);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			//errore query per tutte le sale (es: ResultSet vuoto)
+			JOptionPane.showMessageDialog(null,
+					"Impossibile ottenere sale dal database.\nControllare che sia stabilita la connessione al database\noppure creare prima una sala.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		//selezione nella lista di una sala
 		saleList.addListSelectionListener(new ListSelectionListener() {
@@ -238,6 +241,7 @@ public class GestioneSale extends JFrame {
 					indirizzoTextArea.setText(salaSelezionata.getIndirizzo()); //indirizzo
 					pianoTextField.setText(Integer.toString(salaSelezionata.getPiano())); //piano
 				}
+				//formato capienza/piano errati
 				catch(NullPointerException npe) {
 					pulisciCampi();
 				}
@@ -324,6 +328,13 @@ public class GestioneSale extends JFrame {
 									nomeSalaLabel.setForeground(Color.RED);
 								if (indirizzoTextArea.getText().length() > 50)
 									indirizzoLabel.setForeground(Color.RED);
+							}
+							//altri errori non contemplati
+							else {
+								JOptionPane.showMessageDialog(null,
+										e1.getMessage(),
+										"Errore #" + e1.getErrorCode(),
+										JOptionPane.ERROR_MESSAGE);
 							}
 						}
 					}catch(NumberFormatException nfe) {
@@ -426,11 +437,19 @@ public class GestioneSale extends JFrame {
 								indirizzoLabel.setForeground(Color.RED);
 						}
 						//sala inesistente/errata (ResultSet del getSalaByCod vuoto))
-						else if (e1.getErrorCode() == 0)
+						else if (e1.getErrorCode() == 0) {
 							JOptionPane.showMessageDialog(null,
 									"Nome della sala inesistente o errato.",
+									"Errore Sala Errata/Inesistente",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						//altri errori non contemplati
+						else {
+							JOptionPane.showMessageDialog(null,
+									e1.getMessage(),
 									"Errore #" + e1.getErrorCode(),
 									JOptionPane.ERROR_MESSAGE);
+						}
 					} 
 					catch(NumberFormatException nfe) {
 						//formato sbagliato per capienza e/o piano scritti
