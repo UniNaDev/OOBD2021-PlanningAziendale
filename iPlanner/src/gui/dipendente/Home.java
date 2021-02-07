@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
-import controller.ControllerGestioneProfilo;
 import entita.Progetto;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.ProgettoListRenderer;
@@ -33,6 +32,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import controller.dipendente.ControllerGestioneProfilo;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;

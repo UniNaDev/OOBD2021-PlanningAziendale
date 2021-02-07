@@ -31,8 +31,8 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import controller.ControllerMeeting;
-import controller.ControllerPartecipantiMeeting;
+import controller.dipendente.ControllerMeeting;
+import controller.dipendente.ControllerPartecipantiMeeting;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;

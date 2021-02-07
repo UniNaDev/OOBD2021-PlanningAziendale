@@ -1,8 +1,9 @@
-package controller;
+package controller.segreteria;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import controller.ControllerStart;
 import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Progetto;
@@ -54,7 +55,7 @@ public class ControllerProgettiSegreteria {
 	//Metodo che reindirizza al frame di scelta iniziale quando viene annullata la creazione dell'account
 	public void tornaAiPlanner() {
 		gestioneProgettiFrame.setVisible(false);	//chiude la finestra di creazione account
-		ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);	//torna ad iPlanner in modalità segreteria
+		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);	//torna ad iPlanner in modalità segreteria
 	}
 	
 	//Altri metodi

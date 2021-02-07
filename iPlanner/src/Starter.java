@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 
 import org.joda.time.LocalDate;
 
-import controller.ControllerScelta;
+import controller.ControllerStart;
 import dbManager.CostruttoreDB;
 import dbManager.ManagerConnessioneDB;
 import implementazioniDAO.AmbitoProgettoDAOPSQL;
@@ -72,7 +72,7 @@ public class Starter {
 			else if (args[0].equals("-d"))
 				segreteria = false;
 				
-			ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
+			ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza controller iniziale passandogli l'autorizzazione e i dao
 			}
 			catch (ArrayIndexOutOfBoundsException e) {
 				JOptionPane.showMessageDialog(null,

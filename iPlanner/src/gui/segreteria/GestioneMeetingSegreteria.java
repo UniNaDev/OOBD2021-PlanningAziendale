@@ -7,9 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controller.ControllerMeetingSegreteria;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
+import entita.SalaRiunione;
 import gui.cellRenderers.InvitatiListRenderer;
 import gui.tableModels.MeetingTableModel;
 
@@ -24,7 +24,11 @@ import javax.swing.table.TableRowSorter;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import controller.segreteria.ControllerMeetingSegreteria;
+
 import java.awt.Color;
+import java.awt.Cursor;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
@@ -46,6 +50,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
 
 public class GestioneMeetingSegreteria extends JFrame {
 
@@ -201,6 +206,17 @@ public class GestioneMeetingSegreteria extends JFrame {
 		//ComboBox per filtro sale
 		try {
 			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());
+			//Selezione combo box
+			filtroSaleComboBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						applicaFiltroSala(controller, (SalaRiunione) filtroSaleComboBox.getSelectedItem());
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
 			filtroSaleComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 			filtroSaleComboBox.setBounds(308, 9, 108, 22);
 			comandiPanel.add(filtroSaleComboBox);
@@ -274,11 +290,17 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
 			tabellaMeeting = new JTable(dataModelTabella);
+			tabellaMeeting.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tabellaMeeting.setFont(new Font("Consolas", Font.PLAIN, 11));
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaMeeting.getModel());	//sorter
+			tabellaMeeting.setRowSorter(sorter);
+			tabellaMeeting.getRowSorter().toggleSortOrder(0);
 			//Click mouse sinistro
 			tabellaMeeting.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					int row = tabellaMeeting.getSelectedRow();
+					row = tabellaMeeting.convertRowIndexToModel(row);	//converte la riga correttamente in caso di sorting
 					Meeting meeting = dataModelTabella.getSelected(row);	//prende il meeting selezionato in base alla riga
 					
 					//Aggiorna GUI
@@ -304,9 +326,6 @@ public class GestioneMeetingSegreteria extends JFrame {
 					}
 				}
 			});
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaMeeting.getModel());	//sorter
-			tabellaMeeting.setRowSorter(sorter);
-			tabellaMeeting.getRowSorter().toggleSortOrder(0);
 			tabellaScrollPanel.setViewportView(tabellaMeeting);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -329,9 +348,27 @@ public class GestioneMeetingSegreteria extends JFrame {
 				controller.apriGestioneSale();
 			}
 		});
+		//Eventi connessi al button
+		gestisciSaleButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				gestisciSaleButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
+			}
+			//mouse fuori dal pulsante
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				gestisciSaleButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}	
+		});
 		gestisciSaleButton.setBounds(624, 702, 117, 23);
-		contentPane.add(gestisciSaleButton);
+		gestisciSaleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		gestisciSaleButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		gestisciSaleButton.setBackground(Color.WHITE);
 		gestisciSaleButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		contentPane.add(gestisciSaleButton);
 	}
 	
 	//Altri metodi
@@ -353,5 +390,23 @@ public class GestioneMeetingSegreteria extends JFrame {
 	private void applicaFiltroFisico(ControllerMeetingSegreteria controller) throws SQLException {
 		dataModelTabella.setMeetingTabella(controller.filtraMeetingFisici());
 		dataModelTabella.fireTableDataChanged();
+	}
+	
+	//Metodo che filtra i meeting prendendo solo quelli in una certa sala
+	private void applicaFiltroSala(ControllerMeetingSegreteria controller, SalaRiunione sala) throws SQLException {
+		dataModelTabella.setMeetingTabella(controller.filtraMeetingSala(sala));
+		dataModelTabella.fireTableDataChanged();
+	}
+	
+	//Metodo che aggiorna le sale nella combobox
+	public void aggiornaSale(ControllerMeetingSegreteria controller) {
+		filtroSaleComboBox.removeAllItems();
+		try {
+			for (SalaRiunione sala: controller.ottieniSale())
+				filtroSaleComboBox.addItem(sala);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

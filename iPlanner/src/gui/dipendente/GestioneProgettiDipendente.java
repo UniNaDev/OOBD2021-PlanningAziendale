@@ -37,7 +37,6 @@ import java.awt.Dimension;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import controller.ControllerProgetto;
 import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
@@ -69,6 +68,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import controller.dipendente.ControllerProgetto;
 
 import javax.swing.JCheckBox;
 import java.awt.Toolkit;

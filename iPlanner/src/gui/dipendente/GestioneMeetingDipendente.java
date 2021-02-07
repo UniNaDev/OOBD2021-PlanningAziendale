@@ -34,7 +34,7 @@ import org.joda.time.ReadablePartial;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import controller.ControllerMeeting;
+import controller.dipendente.ControllerMeeting;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;

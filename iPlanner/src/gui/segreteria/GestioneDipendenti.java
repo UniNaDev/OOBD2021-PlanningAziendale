@@ -1,6 +1,6 @@
 package gui.segreteria;
 import controller.*;
-
+import controller.segreteria.ControllerDipendentiSegreteria;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

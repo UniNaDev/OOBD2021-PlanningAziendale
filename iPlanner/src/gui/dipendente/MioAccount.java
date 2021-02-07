@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controller.ControllerGestioneProfilo;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
@@ -33,6 +32,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import org.joda.time.LocalDate;
+
+import controller.dipendente.ControllerGestioneProfilo;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;

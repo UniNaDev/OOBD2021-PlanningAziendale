@@ -1,6 +1,6 @@
 package gui.dipendente;
 import controller.*;
-
+import controller.dipendente.ControllerAccesso;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

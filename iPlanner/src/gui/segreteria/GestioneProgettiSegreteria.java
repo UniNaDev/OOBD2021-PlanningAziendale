@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controller.ControllerProgettiSegreteria;
 import entita.AmbitoProgetto;
 import entita.Meeting;
 import entita.Progetto;
@@ -46,6 +45,8 @@ import javax.swing.table.TableRowSorter;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import controller.segreteria.ControllerProgettiSegreteria;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

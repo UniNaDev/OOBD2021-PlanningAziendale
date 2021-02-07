@@ -7,6 +7,10 @@ import javax.swing.JOptionPane;
 
 import org.joda.time.LocalDate;
 
+import controller.dipendente.ControllerAccesso;
+import controller.segreteria.ControllerDipendentiSegreteria;
+import controller.segreteria.ControllerMeetingSegreteria;
+import controller.segreteria.ControllerProgettiSegreteria;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
@@ -19,7 +23,7 @@ import interfacceDAO.ProgettoDAO;
 import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
-public class ControllerScelta {
+public class ControllerStart {
 
 	//ATTRIBUTI
 	//-----------------------------------------------------------------
@@ -43,7 +47,7 @@ public class ControllerScelta {
 	//-----------------------------------------------------------------
 	
 	//Costruttore del controllee di scelta che mostra la prima finestra di scelta
-	public ControllerScelta(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, boolean segreteria) {
+	public ControllerStart(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, boolean segreteria) {
 		//Ottiene le implementazioni dei DAO inizializzate nel main Starter
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;

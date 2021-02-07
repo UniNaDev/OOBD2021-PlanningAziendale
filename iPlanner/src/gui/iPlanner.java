@@ -40,7 +40,7 @@ public class iPlanner extends JFrame {
 	//Creazione Frame
 	//-----------------------------------------------------------------
 	
-	public iPlanner(ControllerScelta controller, boolean segreteria) {
+	public iPlanner(ControllerStart controller, boolean segreteria) {
 		setMinimumSize(new Dimension(850, 500));
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));

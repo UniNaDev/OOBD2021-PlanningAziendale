@@ -1,7 +1,8 @@
-package controller;
+package controller.dipendente;
 
 import java.sql.SQLException;
 
+import controller.ControllerStart;
 import entita.Dipendente;
 import gui.*;
 import gui.dipendente.Login;
@@ -67,7 +68,7 @@ public class ControllerAccesso {
 	//Metodo chiamato dal pulsante annulla del login che fa ritornare l'utente alla schermata di scelta iniziale
 	public void annulla() {
 		loginFrame.setVisible(false);	//chiude la finestra di login
-		ControllerScelta controller=new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza il controller scelta e mostra la finestra iniziale di scelta
+		ControllerStart controller=new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, segreteria);	//inizializza il controller scelta e mostra la finestra iniziale di scelta
 	}
 	
 }

@@ -1,8 +1,9 @@
-package controller;
+package controller.segreteria;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import controller.ControllerStart;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
@@ -59,7 +60,7 @@ public class ControllerMeetingSegreteria {
 	//Metodo che reindirizza al frame di scelta iniziale quando viene annullata la creazione dell'account
 	public void tornaAiPlanner() {
 		gestioneMeetingSegreteria.setVisible(false);	//chiude la finestra di creazione account
-		ControllerScelta controller = new ControllerScelta(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);	//torna ad iPlanner in modalità segreteria
+		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);	//torna ad iPlanner in modalità segreteria
 	}
 	
 	//Metodo che passa alla gestione delle sale
@@ -74,6 +75,11 @@ public class ControllerMeetingSegreteria {
 		gestioneSale.setVisible(false);
 		gestioneMeetingSegreteria.setEnabled(true);
 		gestioneMeetingSegreteria.setAlwaysOnTop(true);
+	}
+	
+	//Metodo che aggiorna le sale nella combobox nei filtri
+	private void aggiornaSaleFiltro() {
+		gestioneMeetingSegreteria.aggiornaSale(this);
 	}
 		
 	//Altri metodi
@@ -114,8 +120,31 @@ public class ControllerMeetingSegreteria {
 		return meetDAO.getMeetingsByPiattaforma(piattaforma);
 	}
 	
+	//Metodo che ottiene i meeting filtrati per sala
+	public ArrayList<Meeting> filtraMeetingSala(SalaRiunione sala) throws SQLException{
+		return meetDAO.getMeetingsBySala(sala);
+	}
+	
 	//Metodo che aggiunge una nuova sala al DB
 	public void creaSala(SalaRiunione sala) throws SQLException {
 		salaDAO.addSala(sala);
+		aggiornaSaleFiltro();
+	}
+	
+	//Metodo che elimina una sala esistente dal DB
+	public void eliminaSala(String codSala) throws SQLException {
+		SalaRiunione sala = salaDAO.getSalaByCod(codSala);
+		salaDAO.deleteSala(sala);
+		aggiornaSaleFiltro();
+	}
+	
+	//Metodo che aggiorna una sala già esistente nel DB
+	public void aggiornaSala(String codSala, int cap, String indirizzo, int piano) throws SQLException {
+		SalaRiunione sala = salaDAO.getSalaByCod(codSala);
+		sala.setCap(cap);
+		sala.setIndirizzo(indirizzo);
+		sala.setPiano(piano);
+		salaDAO.updateSala(sala);
+		aggiornaSaleFiltro();
 	}
 }

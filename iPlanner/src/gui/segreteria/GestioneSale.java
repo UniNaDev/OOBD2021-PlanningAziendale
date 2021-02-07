@@ -20,10 +20,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 
-import controller.ControllerMeetingSegreteria;
 import entita.SalaRiunione;
 
 import java.awt.Color;
+import java.awt.Cursor;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -31,9 +32,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import javax.swing.event.ListSelectionListener;
+
+import controller.segreteria.ControllerMeetingSegreteria;
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ListSelectionModel;
 
 public class GestioneSale extends JFrame {
 
@@ -46,6 +53,10 @@ public class GestioneSale extends JFrame {
 	private JTextField capienzaTextField;
 	private JTextArea indirizzoTextArea;
 	private JTextField pianoTextField;
+	private DefaultListModel saleListModel;
+	private JList saleList;
+	
+	private String codSala;
 
 	//METODI
 	//-----------------------------------------------------------------
@@ -129,14 +140,71 @@ public class GestioneSale extends JFrame {
 		
 		//Label per pulizia campi
 		JLabel resetCampiLabel = new JLabel("");
+		//Click mouse
+		resetCampiLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pulisciCampi();	//pulisce i campi
+				saleList.setSelectedValue(null, rootPaneCheckingEnabled);
+			}
+			});
 		resetCampiLabel.setIcon(new ImageIcon(GestioneSale.class.getResource("/icone/refresh.png")));
 		resetCampiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		resetCampiLabel.setBounds(268, 11, 16, 16);
 		infoPanel.add(resetCampiLabel);
 		
+		//BUtton elimina sala
 		JButton eliminaSalaButton = new JButton("Elimina");
-		eliminaSalaButton.setBounds(213, 185, 81, 23);
+		//Click mouse
+		eliminaSalaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeSalaLabel.setForeground(Color.BLACK);
+				//elimina la sala selezionata
+				if (!nomeSalaTextField.getText().isBlank()) {
+					try {
+						controller.eliminaSala(nomeSalaTextField.getText());
+						//aggiorna GUI
+						pulisciCampi(); //pulisce i campi
+						saleListModel.clear(); //aggiorna la lista
+						saleListModel.addAll(controller.ottieniSale());
+						saleList.setModel(saleListModel);
+						if (saleListModel.isEmpty())
+							saleList.setSelectedValue(null, rootPaneCheckingEnabled);
+						else
+							saleList.setSelectedIndex(0);
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								e1.getMessage(),
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);
+						nomeSalaLabel.setForeground(Color.RED);
+					}
+				}
+				else {
+					nomeSalaLabel.setForeground(Color.RED);
+				}
+			}
+		});
+		eliminaSalaButton.setBounds(206, 185, 88, 23);
+		eliminaSalaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		eliminaSalaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		eliminaSalaButton.setBackground(Color.WHITE);
 		infoPanel.add(eliminaSalaButton);
+		//Eventi connessi al button
+		eliminaSalaButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				eliminaSalaButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
+			}
+			//mouse fuori dal pulsante
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				eliminaSalaButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}	
+		});
 		eliminaSalaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
 		//Scroll Panel per lista sale
@@ -145,8 +213,9 @@ public class GestioneSale extends JFrame {
 		contentPane.add(saleListScrollPanel);
 		
 		//List sale nel DB
-		DefaultListModel saleListModel = new DefaultListModel();
-		JList saleList = new JList();
+		saleListModel = new DefaultListModel();
+		saleList = new JList();
+		saleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		saleList.setFont(new Font("Consolas", Font.PLAIN, 13));
 		try {
 			saleListModel.addAll(controller.ottieniSale());
@@ -162,10 +231,15 @@ public class GestioneSale extends JFrame {
 				//Ottiene la sala selezionata
 				SalaRiunione salaSelezionata = (SalaRiunione) saleList.getSelectedValue();
 				//Aggiorna GUI
-				nomeSalaTextField.setText(salaSelezionata.getCodSala()); //codice sala
-				capienzaTextField.setText(Integer.toString(salaSelezionata.getCap())); //capienza
-				indirizzoTextArea.setText(salaSelezionata.getIndirizzo()); //indirizzo
-				pianoTextField.setText(Integer.toString(salaSelezionata.getPiano())); //piano
+				try {
+					nomeSalaTextField.setText(salaSelezionata.getCodSala()); //codice sala
+					capienzaTextField.setText(Integer.toString(salaSelezionata.getCap())); //capienza
+					indirizzoTextArea.setText(salaSelezionata.getIndirizzo()); //indirizzo
+					pianoTextField.setText(Integer.toString(salaSelezionata.getPiano())); //piano
+				}
+				catch(NullPointerException npe) {
+					pulisciCampi();
+				}
 			}
 		});
 		
@@ -202,6 +276,7 @@ public class GestioneSale extends JFrame {
 					try {
 						controller.creaSala(salaNuova);
 						saleListModel.addElement(salaNuova);
+						pulisciCampi();
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -225,13 +300,72 @@ public class GestioneSale extends JFrame {
 			}
 		});
 		creaSalaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		creaSalaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		creaSalaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		creaSalaButton.setBackground(Color.WHITE);
 		creaSalaButton.setBounds(560, 315, 77, 23);
+		//Eventi connessi al button
+		creaSalaButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				creaSalaButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
+			}
+			//mouse fuori dal pulsante
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				creaSalaButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}	
+		});
 		contentPane.add(creaSalaButton);
 		
 		//Button per salvare modifiche a una sala
 		JButton salvaModificheButton = new JButton("Salva Modifiche");
+		//Click mouse
+		salvaModificheButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO: update delle modifiche
+				try {
+					controller.aggiornaSala(nomeSalaTextField.getText(), Integer.parseInt(capienzaTextField.getText()), indirizzoTextArea.getText(), Integer.parseInt(pianoTextField.getText()));
+					saleListModel.removeAllElements();
+					saleListModel.addAll(controller.ottieniSale());
+					saleList.setModel(saleListModel);
+				} catch (SQLException e1) {
+					if (e1.getErrorCode() == 0)
+						JOptionPane.showMessageDialog(null,
+								"Nome della sala inesistente o errato.",
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);
+					else
+						JOptionPane.showMessageDialog(null,
+								e1.getMessage(),
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		salvaModificheButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		salvaModificheButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		salvaModificheButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		salvaModificheButton.setBackground(Color.WHITE);
 		salvaModificheButton.setBounds(410, 315, 139, 23);
+		//Eventi connessi al button
+		salvaModificheButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				salvaModificheButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
+			}
+			//mouse fuori dal pulsante
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				salvaModificheButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}	
+		});
 		contentPane.add(salvaModificheButton);
 		
 		//Button per uscire dalla finestra
@@ -244,7 +378,36 @@ public class GestioneSale extends JFrame {
 			}
 		});
 		esciButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		esciButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		esciButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		esciButton.setBackground(Color.WHITE);
 		esciButton.setBounds(25, 315, 71, 23);
+		//Eventi connessi al button
+		esciButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				esciButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
+			}
+			//mouse fuori dal pulsante
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				esciButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}	
+		});
 		contentPane.add(esciButton);
+	}
+	
+	//Altri metodi
+	//-----------------------------------------------------------------
+	
+	//Metodo che pulisce tutti i campi
+	private void pulisciCampi() {
+		nomeSalaTextField.setText(""); //codice sala
+		capienzaTextField.setText(""); //capienza
+		indirizzoTextArea.setText(""); //indirizzo
+		pianoTextField.setText(""); //piano
 	}
 }

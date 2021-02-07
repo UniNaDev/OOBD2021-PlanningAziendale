@@ -28,7 +28,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	public SalaRiunioneDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;
 		
-		getSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione");
+		getSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione ORDER BY CodSala");
 		addSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");	//? = codice sala, capienza, indirizzo, piano
 		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");	//?1 = nuovo codice, ?5 = vecchio codice
 		removeSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");	//? = codice sala da cancellare
@@ -85,7 +85,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 
 	//Metodo che rimuove una sala specifica dal DB
 	@Override
-	public boolean removeSala(SalaRiunione sala) throws SQLException {
+	public boolean deleteSala(SalaRiunione sala) throws SQLException {
 		removeSalaPS.setString(1, sala.getCodSala());	//inserisce il codice della sala da rimuovere nella delete
 		
 		int record = removeSalaPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato, 0=non eliminato)

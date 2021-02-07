@@ -30,9 +30,9 @@ import javax.swing.table.DefaultTableModel;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import controller.ControllerMeeting;
-import controller.ControllerPartecipantiMeeting;
-import controller.ControllerPartecipantiProgetto;
+import controller.dipendente.ControllerMeeting;
+import controller.dipendente.ControllerPartecipantiMeeting;
+import controller.dipendente.ControllerPartecipantiProgetto;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;

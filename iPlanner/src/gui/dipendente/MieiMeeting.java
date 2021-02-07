@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controller.ControllerMeeting;
 import entita.Meeting;
 import gui.cellRenderers.MeetingListRenderer;
 
@@ -45,6 +44,8 @@ import javax.swing.event.ListSelectionListener;
 import org.joda.time.Hours;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import controller.dipendente.ControllerMeeting;
 
 import javax.swing.event.ListSelectionEvent;
 

@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import controller.ControllerProgetto;
 import entita.AmbitoProgetto;
 import entita.Dipendente;
 import entita.Progetto;
@@ -54,6 +53,8 @@ import javax.swing.event.ListSelectionListener;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import controller.dipendente.ControllerProgetto;
 
 import javax.swing.event.ListSelectionEvent;
 
