@@ -26,6 +26,8 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
@@ -99,11 +101,13 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JButton eliminaButton;
 	private JButton modificaButton;
 	private JButton creaNuovoMeetingButton;
+	private JButton inserisciPartecipanteButton;
 	private JList invitatiList;
-	private int codiceMeeting;
 	private JList progettoDiscussoList;
 	private JLabel infoProgettoDiscussoLabel;
 	private JLabel progettoDiscussoLabel;
+	private int codiceMeeting;
+	private TableRowSorter<TableModel> sorterMeeting;
 
 	//Creazione frame
 	//---------------------------------------------
@@ -220,8 +224,12 @@ public class GestioneMeetingDipendente extends JFrame {
 						theController.rimuoviMeeting(meeting.getIdMeeting());
 						JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
 						
+						//Aggiorna i meeting nella tabella
 						dataModelMeeting.fireTableDataChanged();
-						dataModelMeeting.setMeetingTabella(theController.ottieniMeeting()); //Aggiorna i meeting nella tabella
+						dataModelMeeting.setMeetingTabella(theController.ottieniMeeting()); 
+						
+						 //Aggiorna il modello del sorterMeeting in seguito alle modifiche
+						sorterMeeting.setModel(dataModelMeeting);
 						
 					} catch (SQLException e1) {
 						
@@ -321,7 +329,12 @@ public class GestioneMeetingDipendente extends JFrame {
 				try {
 					theController.aggiornaMeeting(meetingAggiornato,nomeProgettoSelezionato);	//tenta di fare l'update nel DB del meeting
 					JOptionPane.showMessageDialog(null, "Meeting Modificato");
-					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//aggiorna i dati nella tabella con le modifiche fatte
+					
+					//Aggiorna i dati nella tabella con le modifiche effettuate
+					dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
+					
+					//Aggiorna il modello del sorterMeeting in seguito alle modifiche effettuate
+					sorterMeeting.setModel(dataModelMeeting);
 					
 					meetingScrollPane.setViewportView(meetingTable);
 				} catch (SQLException e1) {
@@ -872,38 +885,53 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingTable.setBackground(Color.WHITE);
 		meetingTable.setSelectionBackground(Color.LIGHT_GRAY);
+		
+		//Setta i meeting nella tabella
 		try {
-			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	//setta il modello di dati della tabella
+			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());	
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 		
-		//Click sulla tabella
+		//Sorter tabella meeting
+		sorterMeeting=new TableRowSorter<>(dataModelMeeting);
+		meetingTable.setRowSorter(sorterMeeting);
+		
+		
 		meetingTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int row= meetingTable.getSelectedRow();	//ottiene l'indice di riga selezionata
-				//ricava le info del meeting selezionato
 				
+				//Ottiene l'indice di riga selezionata
+				int row= meetingTable.getSelectedRow();	
+				
+				//Formatter Data e Ora
 				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 				DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 				
-				LocalDate dataInizio= formatDate.parseLocalDate(meetingTable.getValueAt(row, 0).toString());	//data inizio
+				//Data Inizio
+				LocalDate dataInizio= formatDate.parseLocalDate(meetingTable.getValueAt(row, 0).toString());
 				dataInizioAnnoComboBox.setSelectedItem(dataInizio.getYear());
 				dataInizioMeseComboBox.setSelectedIndex(dataInizio.getMonthOfYear()-1);
 				dataInizioGiornoComboBox.setSelectedIndex(dataInizio.getDayOfMonth()-1);
-				LocalDate dataFine=formatDate.parseLocalDate(meetingTable.getValueAt(row, 1).toString());	//data fine
+				
+				//Data fine
+				LocalDate dataFine=formatDate.parseLocalDate(meetingTable.getValueAt(row, 1).toString());	
 				dataFineAnnoComboBox.setSelectedItem(dataFine.getYear());
 				dataFineMeseComboBox.setSelectedIndex(dataFine.getMonthOfYear()-1);
 				dataFineGiornoComboBox.setSelectedIndex(dataFine.getDayOfMonth()-1);
 				
-				LocalTime oraInizio=formatHour.parseLocalTime(meetingTable.getValueAt(row, 2).toString());	//orario inizio
+				//Orario inizio
+				LocalTime oraInizio=formatHour.parseLocalTime(meetingTable.getValueAt(row, 2).toString());	
 				oraInizioComboBox.setSelectedIndex(oraInizio.getHourOfDay());
 				minutoInizioComboBox.setSelectedIndex(oraInizio.getMinuteOfHour());
-				LocalTime oraFine=formatHour.parseLocalTime(meetingTable.getValueAt(row, 3).toString());		//orario fine
+				
+				//Orario fine
+				LocalTime oraFine=formatHour.parseLocalTime(meetingTable.getValueAt(row, 3).toString());		
 				oraFineComboBox.setSelectedIndex(oraFine.getHourOfDay());
 				minutoFineComboBox.setSelectedIndex(oraFine.getMinuteOfHour());
-				//modalità online e piattaforma
+				
+				//Modalità
 				try {
 					if(theController.ottieniPiattaforme().toString().contains(meetingTable.getValueAt(row, 4).toString()))
 					{
@@ -930,13 +958,14 @@ public class GestioneMeetingDipendente extends JFrame {
 						}
 					}
 				} catch (HeadlessException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
 					
+					JOptionPane.showMessageDialog(null, e2.getMessage());
+				} catch (SQLException e2) {
+					
+					JOptionPane.showMessageDialog(null, e2.getMessage());
+				}
+				
+				//Progetto discusso
 				progettoDiscussoComboBox.setSelectedItem(meetingTable.getValueAt(row, 5)); //Setta come elemento selezionato il progetto relativo al meeting
 
 					DefaultListModel listmodel=new DefaultListModel();
@@ -965,11 +994,9 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingScrollPane.setViewportView(meetingTable);
 		
 		//Button "Inserisci partecipanti"
-				JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+				inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
 				inserisciPartecipanteButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						
-
 						
 						int row=meetingTable.getSelectedRow();
 						if(row==-1) {
@@ -1066,8 +1093,14 @@ public class GestioneMeetingDipendente extends JFrame {
 			Progetto progetto=theController.ottieniProgettoInserito(progettoDiscussoComboBox.getSelectedItem().toString());
 			theController.inserisciMeetingCompleto(meetingInserito,progetto);	//tenta di fare l'insert nel DB del meeting
 			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
+			
+			//Aggiorna i dati nella tabella in seguito all'inserimento effettuato
 			dataModelMeeting.fireTableDataChanged();
-			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting()); //aggiorna i dati nella tabella con le modifiche fatte
+			dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
+			
+			
+			//Aggiorna il modello del sorterMeeting in seguito all'inserimento effettuato
+			sorterMeeting.setModel(dataModelMeeting);
 		
 		
 		} catch (SQLException e1) {

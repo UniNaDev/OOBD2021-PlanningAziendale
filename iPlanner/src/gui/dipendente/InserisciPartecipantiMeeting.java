@@ -25,6 +25,8 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -40,6 +42,7 @@ import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
 import gui.cellRenderers.InvitatiListRenderer;
+import gui.tableModels.DipendentiTableModel;
 import gui.tableModels.PartecipantiTableModel;
 
 import javax.swing.JButton;
@@ -99,6 +102,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JTextField oraFineTextField;
 	private JList invitatiList;
 	private JLabel invitatiLabel;
+	private TableRowSorter<TableModel> sorterDipendente;
 
 	//Creazione frame
 	//---------------------------------------------
@@ -549,6 +553,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						dataModelDipendente.fireTableDataChanged();
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
 						
+						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
+						sorterDipendente.setModel(dataModelDipendente);
+						
 					} catch (SQLException e1) {
 						
 						e1.printStackTrace();
@@ -599,7 +606,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						//Aggiunge l'elemento inserito alla lista
 						listmodel.addElement(partecipazioneMeeting);  
 					
-						
+						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
+						sorterDipendente.setModel(dataModelDipendente);
 					
 					} catch (SQLException e1) {
 						
@@ -669,7 +677,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						listmodel.removeElementAt(invitatiList.getSelectedIndex()); //rimuove il vecchio elemento
 						listmodel.addElement(partecipazioneMeeting); //lo aggiorna con il nuovo
 						
+						 //Aggiorna il modello del sorterDipendente in seguito alle modifiche
+						sorterDipendente.setModel(dataModelDipendente);
+						
 					} catch (SQLException e1) {
+						
 						
 						e1.printStackTrace();
 					}
@@ -747,10 +759,18 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
+		
+		
+		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
+		dipendenteTable.setRowSorter(sorterDipendente);
+
+		
 		//Click sulla tabella
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
+				
 				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
 				//ricava le info del dipendente selezionato
 					
@@ -780,7 +800,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				try {
 					skillModel.addAll(controller.ottieniSkillDipendente(dipendenteTable.getValueAt(row, 0).toString()));
 				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
+					
 					e2.printStackTrace();
 				}
 				
@@ -811,10 +831,10 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						listmodel.addElement(partecipazioneMeeting);
 						dataModelDipendente.fireTableDataChanged();
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato)); //Per aggiornare tabella
-						
 					
-						
-					
+						 //Aggiorna il modello del sorterDipendente in seguito alle modifiche
+						sorterDipendente.setModel(dataModelDipendente);
+	
 		
 					} catch (SQLException e1) {
 						

@@ -123,7 +123,7 @@ public class MieiMeeting extends JFrame {
 		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label della piattaforma/della sala
-		JLabel valorePiattaformaSalaLabel = new JLabel("Microsoft Teams");
+		JLabel valorePiattaformaSalaLabel = new JLabel("N/A");
 		valorePiattaformaSalaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valorePiattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -135,7 +135,7 @@ public class MieiMeeting extends JFrame {
 		modalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per la modalità
-		JLabel valoreModalitaLabel = new JLabel("Telematico");
+		JLabel valoreModalitaLabel = new JLabel("N/A");
 		valoreModalitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreModalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -147,7 +147,7 @@ public class MieiMeeting extends JFrame {
 		orarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label dell'orario di inizio
-		JLabel valoreOrarioInizioLabel = new JLabel("14:30");
+		JLabel valoreOrarioInizioLabel = new JLabel("N/A");
 		valoreOrarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		valoreOrarioInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreOrarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
@@ -160,7 +160,7 @@ public class MieiMeeting extends JFrame {
 		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per orario di fine
-		JLabel valoreOrarioFineLabel = new JLabel("16:30");
+		JLabel valoreOrarioFineLabel = new JLabel("N/A");
 		valoreOrarioFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreOrarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -171,7 +171,7 @@ public class MieiMeeting extends JFrame {
 		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di inizio
-		JLabel valoreDataInzioLabel = new JLabel("10-01-2021");
+		JLabel valoreDataInzioLabel = new JLabel("N/A");
 		valoreDataInzioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreDataInzioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
@@ -182,7 +182,7 @@ public class MieiMeeting extends JFrame {
 		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di fine
-		JLabel valoreDataFineLabel = new JLabel("11-01-2021");
+		JLabel valoreDataFineLabel = new JLabel("N/A");
 		valoreDataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreDataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		

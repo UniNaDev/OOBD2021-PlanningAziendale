@@ -20,6 +20,12 @@ public class DipendentiTableModel extends AbstractTableModel {
 	public void setDipendenteTabella(ArrayList<Dipendente> dipendenteTabella) {
 		this.dipendenteTabella = dipendenteTabella;
 	}
+	
+
+	public ArrayList<Dipendente> getDipendenteTabella() {
+		return dipendenteTabella;
+	}
+
 
 	@Override
 	public int getRowCount() {
@@ -56,7 +62,8 @@ public class DipendentiTableModel extends AbstractTableModel {
 		case 4:
 			return dipendente.getSalario();
 		case 5:
-			return dipendente.getValutazione();
+			String s = String.format("%.2f",dipendente.getValutazione());
+			return s;
 		}
 		return null;
 	}

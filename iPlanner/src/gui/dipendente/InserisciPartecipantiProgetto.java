@@ -26,6 +26,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -99,6 +101,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
+	private TableRowSorter<TableModel> sorterDipendente;
 
 	//Creazione frame
 	//---------------------------------------------
@@ -130,13 +133,13 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -145,14 +148,14 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addGap(23)
 					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-					.addGap(26)
+					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JPanel comandiPanel2 = new JPanel();	//panel interno a quello dei comandi
+		JPanel comandiPanel2 = new JPanel();
 		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -522,6 +525,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						dataModelDipendente.fireTableDataChanged();
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
 						
+						//Aggiorna il modello del sorterDipendente in seguito all'eliminazione
+						sorterDipendente.setModel(dataModelDipendente);
 						
 					} catch (SQLException e1) {
 					
@@ -572,6 +577,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						//Aggiorna i dipendenti disponibili
 						dataModelDipendente.fireTableDataChanged();
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+						
+						//Aggiorna il modello del sorterDipendente in seguito all'inserimento
+						sorterDipendente.setModel(dataModelDipendente);
 						
 						//Aggiunge l'elemento inserito alla lista
 						listmodel.addElement(collaborazione);
@@ -626,8 +634,12 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
 						listmodel.removeElementAt(partecipantiList.getSelectedIndex()); //rimuove il vecchio elemento
 						listmodel.addElement(collaborazioneProgetto); //lo aggiorna con il nuovo
+						
+						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
+						sorterDipendente.setModel(dataModelDipendente);
 					} catch (SQLException e1) {
 					
+						ruoloComboBox.setSelectedItem(null);
 						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
 					
@@ -707,6 +719,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		//Table dei meeting
 		dataModelDipendente=new PartecipantiTableModel();
+		
 		dipendenteTable = new JTable(dataModelDipendente);
 		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -717,6 +730,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
+		
+		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
+		dipendenteTable.setRowSorter(sorterDipendente);
 		//Click sulla tabella
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -783,6 +799,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
 							
 								ruoloComboBox.setSelectedItem(null);
+								
+								//Aggiorna il modello del sorterDipendente in seguito all'inserimento
+								sorterDipendente.setModel(dataModelDipendente);
 				
 							} catch (SQLException e1) {
 								
