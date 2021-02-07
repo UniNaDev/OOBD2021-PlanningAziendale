@@ -230,26 +230,31 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		modalitàButtonGroup.add(donnaRadioButton);
 		
 		nomeTextField = new JTextField();
+		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nomeTextField.setEditable(false);
 		nomeTextField.setColumns(10);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		cognomeTextField = new JTextField();
+		cognomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		cognomeTextField.setEditable(false);
 		cognomeTextField.setColumns(10);
 		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		etàTextField = new JTextField();
+		etàTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		etàTextField.setEditable(false);
 		etàTextField.setColumns(10);
 		etàTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		valutazioneTextField = new JTextField();
+		valutazioneTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneTextField.setEditable(false);
 		valutazioneTextField.setColumns(10);
 		valutazioneTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		salarioTextField = new JTextField();
+		salarioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		salarioTextField.setEditable(false);
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -257,16 +262,19 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 
 		dataInizioTextField = new JTextField(meetingSelezionato.getDataInizio().toString(formatDate));
+		dataInizioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		dataInizioTextField.setEditable(false);
 		dataInizioTextField.setColumns(10);
 		dataInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		dataFineTextField = new JTextField(meetingSelezionato.getDataFine().toString(formatDate));
+		dataFineTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		dataFineTextField.setEditable(false);
 		dataFineTextField.setColumns(10);
 		dataFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		JSeparator separator = new JSeparator();
+		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		
 		JLabel dataInizioLabel = new JLabel("Data inizio");
@@ -279,11 +287,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 		oraInizioTextField = new JTextField(meetingSelezionato.getOraInizio().toString(formatHour));
+		oraInizioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		oraInizioTextField.setEditable(false);
 		oraInizioTextField.setColumns(10);
 		oraInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		oraFineTextField = new JTextField(meetingSelezionato.getOraFine().toString(formatHour));
+		oraFineTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		oraFineTextField.setEditable(false);
 		oraFineTextField.setColumns(10);
 		oraFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -568,7 +578,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		});
 		
 		//Button "Inserisci partecipanti"
-		inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+		inserisciPartecipanteButton = new JButton("Inserisci partecipante");
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -633,7 +643,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			}
 		});
 		
-		aggiornaPartecipantiButton = new JButton("Aggiorna partecipanti");
+		aggiornaPartecipantiButton = new JButton("Aggiorna partecipante");
 		aggiornaPartecipantiButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 

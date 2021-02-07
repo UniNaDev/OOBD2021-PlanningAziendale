@@ -113,7 +113,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	//---------------------------------------------
 	public GestioneMeetingDipendente(ControllerMeeting theController) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1150, 700));
+		setMinimumSize(new Dimension(1300, 700));
 		setLocationRelativeTo(null);
 		
 		setTitle("GestioneMeeting");
@@ -881,6 +881,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		//Table dei meeting
 		dataModelMeeting=new MeetingTableModel();
 		meetingTable = new JTable(dataModelMeeting);
+		meetingTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		meetingTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingTable.setBackground(Color.WHITE);

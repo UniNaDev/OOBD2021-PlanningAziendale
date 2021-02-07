@@ -107,7 +107,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	//---------------------------------------------
 	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1150, 700));
+		setMinimumSize(new Dimension(1300, 700));
 		setLocationRelativeTo(null);
 		
 		setTitle("Inserisci Partecipanti Progetto");
@@ -229,31 +229,37 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		modalitàButtonGroup.add(donnaRadioButton);
 		
 		nomeTextField = new JTextField();
+		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nomeTextField.setEditable(false);
 		nomeTextField.setColumns(10);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		cognomeTextField = new JTextField();
+		cognomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		cognomeTextField.setEditable(false);
 		cognomeTextField.setColumns(10);
 		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		etàTextField = new JTextField();
+		etàTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		etàTextField.setEditable(false);
 		etàTextField.setColumns(10);
 		etàTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		valutazioneTextField = new JTextField();
+		valutazioneTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneTextField.setEditable(false);
 		valutazioneTextField.setColumns(10);
 		valutazioneTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		salarioTextField = new JTextField();
+		salarioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		salarioTextField.setEditable(false);
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		JSeparator separator = new JSeparator();
+		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		
 		JScrollPane skillScrollPane_1 = new JScrollPane();
@@ -271,6 +277,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		textField = new JTextField(progettoSelezionato.getNomeProgetto());
+		textField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		textField.setEditable(false);
 		textField.setColumns(10);
 		textField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -280,6 +287,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		nomeLabel_1.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		textField_1 = new JTextField(progettoSelezionato.getTipoProgetto());
+		textField_1.setFont(new Font("Consolas", Font.PLAIN, 11));
 		textField_1.setEditable(false);
 		textField_1.setColumns(10);
 		textField_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -289,6 +297,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		nomeLabel_1_1.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		textField_2 = new JTextField(progettoSelezionato.getAmbiti().toString());
+		textField_2.setFont(new Font("Consolas", Font.PLAIN, 11));
 		textField_2.setEditable(false);
 		textField_2.setColumns(10);
 		textField_2.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -540,7 +549,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		});
 		
 		//Button "Inserisci partecipanti"
-		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipante");
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -721,6 +730,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		dataModelDipendente=new PartecipantiTableModel();
 		
 		dipendenteTable = new JTable(dataModelDipendente);
+		dipendenteTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteTable.setBackground(Color.WHITE);

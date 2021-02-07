@@ -106,7 +106,7 @@ public class GestioneProgettiDipendente extends JFrame {
 	
 	public GestioneProgettiDipendente(ControllerProgetto controller) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1150, 700));
+		setMinimumSize(new Dimension(1300, 700));
 		setLocationRelativeTo(null);
 		setTitle("iPlanner-Gestione progetto");
 		setBounds(100, 100, 1280, 720);
@@ -896,6 +896,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		//Tabella progetti
 		dataModelProgetti=new ProgettoTableModel();
 		progettoTable = new JTable(dataModelProgetti);
+		progettoTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettoTable.setBackground(Color.WHITE);
