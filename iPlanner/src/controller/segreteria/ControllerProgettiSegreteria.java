@@ -3,6 +3,8 @@ package controller.segreteria;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.joda.time.LocalDate;
+
 import controller.ControllerStart;
 import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
@@ -85,14 +87,81 @@ public class ControllerProgettiSegreteria {
 	//Metodo che ottiene tutti gli ambiti
 	public ArrayList<AmbitoProgetto> ottieniTuttiAmbiti() throws SQLException{
 		ArrayList<AmbitoProgetto> temp = ambitoDAO.getAmbiti();
-		temp.add(null);
+		temp.add(0,null);
 		return temp;
 	}
 	
 	//Metodo che ottiene tutte le tipologie
 	public ArrayList<String> ottieniTipologie() throws SQLException{
 		ArrayList<String> temp = projDAO.getTipologie();
-		temp.add(null);
+		temp.add(0,null);
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti
+	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{
+		//TODO: ambito = null non contemplato
+			ArrayList<Progetto> temp =projDAO.getProgettiFiltrati(nomeCercato, ambitoCercato, tipologiaCercata);	//ottiene i progetti filtrati per nome, ambito e tipologia
+		if (scaduto.equals("Si")) {
+			//filtra temp prendendo solo quelli scaduti
+			temp = filtraScaduti(temp);
+		}
+		else if (scaduto.equals("No")) {
+			//filtra temp prendendo solo quelli NON scaduti
+			temp = filtraNonScaduti(temp);
+		}
+		if (terminato.equals("Si")) {
+			//filtra temp prendendo solo quelli terminati
+			temp = filtraTerminati(temp);
+		}
+		else if (terminato.equals("No")) {
+			//filtra temp prendendo solo quelli NON terminati
+			temp = filtraNonTerminati(temp);
+		}
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti scaduti
+	private ArrayList<Progetto> filtraScaduti(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getScadenza().isBefore(LocalDate.now())) {
+				temp.add(proj);
+			}
+		}
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti NON scaduti
+	private ArrayList<Progetto> filtraNonScaduti(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getScadenza().isAfter(LocalDate.now())) {
+				temp.add(proj);
+			}
+		}
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti terminati
+	private ArrayList<Progetto> filtraTerminati(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getDataTerminazione() != null) {
+				temp.add(proj);
+			}
+		}
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti NON terminati
+	private ArrayList<Progetto> filtraNonTerminati(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getDataTerminazione() == null) {
+				temp.add(proj);
+			}
+		}
 		return temp;
 	}
 }

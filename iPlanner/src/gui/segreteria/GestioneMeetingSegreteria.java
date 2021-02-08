@@ -68,8 +68,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 	private JRadioButton fisicoRadioButton;
 	
 	//Altri attributi
-	private DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-	private DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+	private DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	//formato date
+	private DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");	//formato orari
 	
 	//METODI
 	//-----------------------------------------------------------------
@@ -179,7 +179,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 								"Errore Enumerazioni Filtri",
 								JOptionPane.ERROR_MESSAGE);
 						}
-						//altri errori non contemplati (es: ResultSet vuoto)
+						//altri errori non contemplati
 						else {
 							JOptionPane.showMessageDialog(null,
 								"Impossibile ottenere meeting fisici dal database.\nControllare che la connessione al database sia stabilita.",
@@ -192,9 +192,9 @@ public class GestioneMeetingSegreteria extends JFrame {
 					try {
 						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());	//ottiene tutti i meeting
 					} catch (SQLException e1) {
-						//errore select per tutti i meeting nel database (es: ResultSet vuoto)
+						//errore select per tutti i meeting nel database
 						JOptionPane.showMessageDialog(null,
-							"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti creare prima un meeting.",
+							"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita.",
 							"Errore Interrogazione Database",
 							JOptionPane.ERROR_MESSAGE);
 					}
@@ -222,7 +222,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 								"Errore Enumerazioni Filtri",
 								JOptionPane.ERROR_MESSAGE);
 						}
-						//altri errori non contemplati (es: ResultSet vuoto)
+						//altri errori non contemplati
 						else {
 							JOptionPane.showMessageDialog(null,
 								"Impossibile ottenere meeting fisici dal database.\nControllare che la connessione al database sia stabilita.",
@@ -236,9 +236,9 @@ public class GestioneMeetingSegreteria extends JFrame {
 					try {
 						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());	//ottiene tutti i meeting
 					} catch (SQLException e1) {
-						//errore select per tutti i meeting nel database (es: ResultSet vuoto)
+						//errore select per tutti i meeting nel database
 						JOptionPane.showMessageDialog(null,
-							"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti creare prima un meeting.",
+							"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita.",
 							"Errore Interrogazione Database",
 							JOptionPane.ERROR_MESSAGE);
 					}
@@ -264,7 +264,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 							dataModelTabella.fireTableDataChanged();	//aggiorna la tabella
 						}
 					} catch (SQLException e1) {
-						//errore select per tutti i meeting in una sala nel database (es: ResultSet vuoto)
+						//errore select per tutti i meeting in una sala nel database
 						JOptionPane.showMessageDialog(null,
 							"Impossibile ottenere tutti i meeting nella sala selezionata dal database.\nControllare che la connessione al database sia stabilita.",
 							"Errore Interrogazione Database",
@@ -276,9 +276,9 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroSaleComboBox.setBounds(308, 9, 108, 22);
 			comandiPanel.add(filtroSaleComboBox);
 		} catch (SQLException e2) {
-			//errore select per tutte le sale nel database (es: ResultSet vuoto)
+			//errore select per tutte le sale nel database
 			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutte le sale dal database.\nControllare che la connessione al database sia stabilita\noppure provare a crearne una nuova.",
+				"Impossibile ottenere tutte le sale dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}
@@ -306,7 +306,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 						}
 							
 					} catch (SQLException e1) {
-						//errore select per tutti i meeting su una piattaforma nel database (es: ResultSet vuoto)
+						//errore select per tutti i meeting su una piattaforma nel database
 						JOptionPane.showMessageDialog(null,
 							"Impossibile ottenere tutti i meeting sulla piattaforma selezionata dal database.\nControllare che la connessione al database sia stabilita.",
 							"Errore Interrogazione Database",
@@ -318,7 +318,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroPiattaformaComboBox.setBounds(517, 9, 151, 22);
 			comandiPanel.add(filtroPiattaformaComboBox);
 		} catch (SQLException e2) {
-			//errore select per tutte le piattaforme nel database (es: ResultSet vuoto)
+			//errore select per tutte le piattaforme nel database
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutte le piattaforme dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
@@ -390,9 +390,9 @@ public class GestioneMeetingSegreteria extends JFrame {
 						invitatiListModel.addAll(controller.ottieniPartecipanti(meeting)); //riempie la lista di partecipanti con quelli ottenuti dal DB
 						invitatiList.setModel(invitatiListModel);	//aggiorna la lista
 					} catch (SQLException e1) {
-						//errore select per tutti gli invitati a un meeting nel database (es: ResultSet vuoto)
+						//errore select per tutti gli invitati a un meeting nel database
 							JOptionPane.showMessageDialog(null,
-								"Impossibile ottenere invitati al meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti aggiungere prima un partecipante al meeting.",
+								"Impossibile ottenere invitati al meeting dal database.\nControllare che la connessione al database sia stabilita.",
 								"Errore Interrogazione Database",
 								JOptionPane.ERROR_MESSAGE);
 					}
@@ -400,9 +400,9 @@ public class GestioneMeetingSegreteria extends JFrame {
 			});
 			tabellaScrollPanel.setViewportView(tabellaMeeting);
 		} catch (SQLException e1) {
-			//errore select per tutti i meeting nel database (es: ResultSet vuoto)
+			//errore select per tutti i meeting nel database
 			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita\naltrimenti creare prima un meeting.",
+				"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}
@@ -509,9 +509,9 @@ public class GestioneMeetingSegreteria extends JFrame {
 			for (SalaRiunione sala: controller.ottieniSale())
 				filtroSaleComboBox.addItem(sala);	//aggiunge ogni sala del database
 		} catch (SQLException e) {
-			//errore select per tutte le sale nel database (es: ResultSet vuoto)
+			//errore select per tutte le sale nel database
 			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutte le sale dal database.\nControllare che la connessione al database sia stabilita\noppure provare a crearne una nuova.",
+				"Impossibile ottenere tutte le sale dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}

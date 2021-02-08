@@ -224,9 +224,9 @@ public class GestioneSale extends JFrame {
 			saleList.setModel(saleListModel);
 			saleListScrollPanel.setViewportView(saleList);
 		} catch (SQLException e1) {
-			//errore query per tutte le sale (es: ResultSet vuoto)
+			//errore query per tutte le sale
 			JOptionPane.showMessageDialog(null,
-					"Impossibile ottenere sale dal database.\nControllare che sia stabilita la connessione al database\noppure creare prima una sala.",
+					"Impossibile ottenere sale dal database.\nControllare che sia stabilita la connessione al database.",
 					"Errore Interrogazione Database",
 					JOptionPane.ERROR_MESSAGE);
 		}
@@ -285,7 +285,7 @@ public class GestioneSale extends JFrame {
 							saleListModel.addElement(salaNuova);
 							pulisciCampi();
 						} catch (SQLException e1) {
-							//violazione primary key
+							//violazione primary key/unique
 							if (e1.getSQLState().equals("23505")) {
 								JOptionPane.showMessageDialog(null,
 										"La sala di codice " + nomeSalaTextField.getText() + " esiste già.",
@@ -333,7 +333,7 @@ public class GestioneSale extends JFrame {
 							//altri errori non contemplati
 							else {
 								JOptionPane.showMessageDialog(null,
-										e1.getMessage(),
+										e1.getMessage() + "\nContattare uno sviluppatore.",
 										"Errore #" + e1.getErrorCode(),
 										JOptionPane.ERROR_MESSAGE);
 							}
@@ -360,7 +360,7 @@ public class GestioneSale extends JFrame {
 					
 					JOptionPane.showMessageDialog(null,
 							"Alcuni campi obbligatori sono vuoti",
-							"Errore campi vuoti",
+							"Errore Campi Obbligatori Vuoti",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -447,7 +447,7 @@ public class GestioneSale extends JFrame {
 						//altri errori non contemplati
 						else {
 							JOptionPane.showMessageDialog(null,
-									e1.getMessage(),
+									e1.getMessage() + "\nContatta uno sviluppatore.",
 									"Errore #" + e1.getErrorCode(),
 									JOptionPane.ERROR_MESSAGE);
 						}
@@ -473,7 +473,7 @@ public class GestioneSale extends JFrame {
 					
 					JOptionPane.showMessageDialog(null,
 							"Alcuni campi obbligatori sono vuoti",
-							"Errore campi vuoti",
+							"Errore Campi Obbligatori Vuoti",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}

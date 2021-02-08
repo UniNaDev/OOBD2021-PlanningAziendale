@@ -14,6 +14,7 @@ import entita.Progetto;
 public interface ProgettoDAO {
 
 	public ArrayList<Progetto> getProgetti() throws SQLException;	//metodo che restituisce tutti i progetti
+	public ArrayList<Progetto> getProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tiplogiaCercata) throws SQLException;	//metodo che restituisce tutti i progetti filtrati per nome, ambito, tipologia
 	public ArrayList<Meeting> getMeetingRelativi(int codProgettoSelezionato) throws SQLException;	//metodo che restituisce i meeting relativi ad un progetto
 	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti a cui partecipa un dipendente
 	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException;	//metodo che restituisce i progetti di un certo ambito

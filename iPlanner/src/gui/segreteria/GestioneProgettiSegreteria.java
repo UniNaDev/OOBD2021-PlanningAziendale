@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
@@ -34,6 +35,7 @@ import javax.swing.JComboBox;
 import javax.swing.JSeparator;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -75,12 +77,13 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private JComboBox tipologiaComboBox;
 	private JComboBox scadutoComboBox;
 	private JComboBox terminatoComboBox;
+	private ProgettoTableModel dataModelTabella;
 	
 	//Altri attributi
-	private String[] giorni = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
-	private String[] mesi = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
-	private ArrayList<String> anni = new ArrayList<String>();
-	private String[] siNoComboBox = {null, "Si", "No"};
+	private String[] giorni = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};	//giorni
+	private String[] mesi = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};	//mesi
+	private ArrayList<String> anni = new ArrayList<String>();	//anni
+	private String[] siNoComboBox = {null, "Si", "No"};	//filtri yes/no
 	
 	//METODI
 	//-----------------------------------------------------------------
@@ -248,10 +251,29 @@ public class GestioneProgettiSegreteria extends JFrame {
 				//crea l'ambito e lo inserisce nel DB
 				if (!ambitoNuovoTextField.getText().isBlank())
 					try {
-						controller.creaAmbitoProgetto(ambitoNuovoTextField.getText());
+						controller.creaAmbitoProgetto(ambitoNuovoTextField.getText()); //crea l'ambito inserito nella TextField
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//violazione vincolo primary key/unique
+						if (e1.getSQLState().equals("23505")) {
+							JOptionPane.showMessageDialog(null,
+									"Impossibile inserire il nuovo ambito perchè esiste già.",
+									"Errore Ambito Esistente",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						//violazione vincolo sui dati (es: troppo lungo il nome dell'ambito da creare)
+						else if (e1.getSQLState().equals("22001")) {
+							JOptionPane.showMessageDialog(null,
+									"Impossibile creare l'ambito inserito perchè il suo nome supera i 20 caratteri.",
+									"Errore Dati Non Validi",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						//errori non contemplati
+						else {
+							JOptionPane.showMessageDialog(null,
+									e1.getMessage() + "\nContattare uno sviluppatore.",
+									"Errore #" + e1.getErrorCode(),
+									JOptionPane.ERROR_MESSAGE);
+						}
 					}
 			}
 		});
@@ -302,7 +324,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO: Filtra
-				applicaFiltri();
+				applicaFiltri(controller);
 			}
 		});
 		filtraButton.addMouseListener(new MouseAdapter() {
@@ -334,8 +356,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 			ambitoComboBox.setSelectedItem(null);
 			comandiPanel.add(ambitoComboBox);
 		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			//errore query per tutti gli ambiti
+			JOptionPane.showMessageDialog(null,
+					"Impossibile ottenere tutti gli ambiti dal database.\nControllare che sia stabilita la connessione al database.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 		//ComboBox tipologie
@@ -346,8 +371,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 			tipologiaComboBox.setSelectedItem(null);
 			comandiPanel.add(tipologiaComboBox);
 		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			//errore query per tutte le tipologie
+			JOptionPane.showMessageDialog(null,
+					"Impossibile ottenere tutte le tipologie dal database.\nControllare che sia stabilita la connessione al database.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 		//Label "Ambito" in filtri
@@ -400,10 +428,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 		contentPane.add(tabellaScrollPanel);
 		
 		//Table progetti aziendali
-		ProgettoTableModel dataModelTabella = new ProgettoTableModel();
+		dataModelTabella = new ProgettoTableModel();
 		try {
 			dataModelTabella.setProgettiTabella(controller.ottieniProgetti());
 			tabellaProgetti = new JTable(dataModelTabella);
+			tabellaProgetti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			//scroller tabella
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaProgetti.getModel());	//sorter
 			tabellaProgetti.setRowSorter(sorter);
@@ -413,6 +442,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					int row = tabellaProgetti.getSelectedRow();	//ottiene la riga selezionata
+					row = tabellaProgetti.convertRowIndexToModel(row);	//converte la riga tenendo conto del sort
 					Progetto progettoSelezionato = dataModelTabella.getSelected(row);	//ottiene il progetto selezionato
 					
 					//Aggiorna GUI
@@ -441,8 +471,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 						ambitiModel.addAll(controller.ottieniAmbitiProgetto(progettoSelezionato));
 						ambitiList.setModel(ambitiModel);
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//errore query per tutti gli ambiti
+						JOptionPane.showMessageDialog(null,
+								"Impossibile ottenere tutti gli ambiti del progetto dal database.\nControllare che sia stabilita la connessione al database.",
+								"Errore Interrogazione Database",
+								JOptionPane.ERROR_MESSAGE);
 					}
 					//Meeting relativi
 					meetingRelativiModel.clear();
@@ -454,16 +487,22 @@ public class GestioneProgettiSegreteria extends JFrame {
 						partecipantiModel.addAll(controller.ottieniCollaborazioni(progettoSelezionato));
 						partecipantiList.setModel(partecipantiModel);
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//errore query per tutti i partecipanti
+						JOptionPane.showMessageDialog(null,
+								"Impossibile ottenere tutti i partecipanti al progetto dal database.\nControllare che sia stabilita la connessione al database.",
+								"Errore Interrogazione Database",
+								JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
 			tabellaProgetti.setFont(new Font("Consolas", Font.PLAIN, 11));
 			tabellaScrollPanel.setViewportView(tabellaProgetti);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//errore query per tutti i progetti
+			JOptionPane.showMessageDialog(null,
+					"Impossibile ottenere tutti i progetti dal database.\nControllare che sia stabilita la connessione al database.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
 		} 
 	}
 	
@@ -471,7 +510,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 	//-----------------------------------------------------------------
 	
 	//Metodo che applica tutti i filtri
-	private void applicaFiltri() {
+	private void applicaFiltri(ControllerProgettiSegreteria controller) {
 		//ottiene tutti gli elementi dei filtri
 		//nome progetto
 		String nomeCercato = "%";
@@ -500,5 +539,12 @@ public class GestioneProgettiSegreteria extends JFrame {
 			else
 				terminato = "No";
 		//richiama il controller
+		try {
+			dataModelTabella.setProgettiTabella(controller.ottieniProgettiFiltrati(nomeCercato,ambitoCercato,tipologiaCercata, scaduto, terminato));
+			dataModelTabella.fireTableDataChanged();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

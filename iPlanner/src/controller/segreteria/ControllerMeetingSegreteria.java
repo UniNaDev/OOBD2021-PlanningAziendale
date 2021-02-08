@@ -65,22 +65,22 @@ public class ControllerMeetingSegreteria {
 	
 	//Metodo che passa alla gestione delle sale
 	public void apriGestioneSale() {
-		gestioneMeetingSegreteria.setEnabled(false);
-		gestioneSale = new GestioneSale(this);
-		gestioneSale.setVisible(true);
-		gestioneSale.toFront();
+		gestioneMeetingSegreteria.setEnabled(false);	//disabilita gestione meeting
+		gestioneSale = new GestioneSale(this);	//crea la finestra gestione sale
+		gestioneSale.setVisible(true);	//visualizza la gestione sale
+		gestioneSale.toFront();	//gestione sale va in primo piano
 	}
 	
 	//Metodo che esce dalla gestione sale
 	public void chiudiGestioneSale() {
-		gestioneSale.setVisible(false);
-		gestioneMeetingSegreteria.setEnabled(true);
-		gestioneMeetingSegreteria.toFront();
+		gestioneSale.setVisible(false); //nasconde la finestra gestione sale
+		gestioneMeetingSegreteria.setEnabled(true);	//riabilita la finestra gestione meeting
+		gestioneMeetingSegreteria.toFront();	//gestione meeting va in primo piano
 	}
 	
 	//Metodo che aggiorna le sale nella combobox nei filtri
 	private void aggiornaSaleFiltro() {
-		gestioneMeetingSegreteria.aggiornaSale(this);
+		gestioneMeetingSegreteria.aggiornaSale(this); //aggiorna la combobox delle sale
 	}
 		
 	//Altri metodi
