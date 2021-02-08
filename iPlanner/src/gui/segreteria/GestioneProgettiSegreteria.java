@@ -57,6 +57,8 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class GestioneProgettiSegreteria extends JFrame {
 
@@ -80,9 +82,6 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private ProgettoTableModel dataModelTabella;
 	
 	//Altri attributi
-	private String[] giorni = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};	//giorni
-	private String[] mesi = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};	//mesi
-	private ArrayList<String> anni = new ArrayList<String>();	//anni
 	private String[] siNoComboBox = {null, "Si", "No"};	//filtri yes/no
 	
 	//METODI
@@ -104,6 +103,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		//Viene visualizzata al centro dello schermo
+		setLocationRelativeTo(null);
 		
 		//Info Panel
 		JPanel infoPanel = new JPanel();
@@ -198,6 +199,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//List ambiti del progetto
 		ambitiModel = new DefaultListModel();
 		JList <AmbitoProgetto> ambitiList = new JList();
+		ambitiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ambitiList.setSelectionBackground(Color.WHITE);
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		ambitiScrollPanel.setViewportView(ambitiList);
@@ -215,6 +217,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//List partecipanti al progetto
 		partecipantiModel = new DefaultListModel();
 		JList partecipantiList = new JList();
+		partecipantiList.setSelectionBackground(Color.WHITE);
+		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		PartecipantiListRenderer partecipantiRenderer = new PartecipantiListRenderer();
 		partecipantiList.setCellRenderer(partecipantiRenderer);
 		partecipantiScrollPanel.setViewportView(partecipantiList);
@@ -232,6 +236,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//List di meeting relativi al progetto
 		meetingRelativiModel = new DefaultListModel();
 		JList <Meeting> meetingRelativiList = new JList();
+		meetingRelativiList.setSelectionBackground(Color.WHITE);
+		meetingRelativiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		MeetingListRenderer meetingRenderer = new MeetingListRenderer();
 		meetingRelativiList.setCellRenderer(meetingRenderer);
 		meetingScrollPanel.setViewportView(meetingRelativiList);
@@ -323,7 +329,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		JButton filtraButton = new JButton("Filtra");
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: Filtra
+				//Filtra
 				applicaFiltri(controller);
 			}
 		});
@@ -417,10 +423,6 @@ public class GestioneProgettiSegreteria extends JFrame {
 		terminatoComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		terminatoComboBox.setBounds(1163, 9, 49, 22);
 		comandiPanel.add(terminatoComboBox);
-		
-		//Inizializza lista anni per filtri
-		for (int i = 1900; i < LocalDate.now().getYear(); i++)
-			anni.add(Integer.toString(i));
 		
 		//Scroll Panel per tabella progetti
 		JScrollPane tabellaScrollPanel = new JScrollPane();

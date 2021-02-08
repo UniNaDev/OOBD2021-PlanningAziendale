@@ -97,16 +97,15 @@ public class GestioneDipendenti extends JFrame {
 	private JLabel campiObbligatoriLabel;
 	private JLabel premereCtrlLabel;
 	private JLabel inserireSkillLabel;
-	
 	private JTextField nomeTextField;
 	private JTextField cognomeTextField;
 	private JTextField emailTextField;
 	private JRadioButton uomoRadioButton;
 	private JRadioButton donnaRadioButton;
-	private JComboBox<?> giornoComboBox;
-	private JComboBox<?> meseComboBox;
+	private JComboBox giornoComboBox;
+	private JComboBox meseComboBox;
 	private JComboBox<String> annoComboBox;
-	private JComboBox<?> provinciaComboBox;
+	private JComboBox provinciaComboBox;
 	private JComboBox<String> cittaComboBox;
 	private JTextField indirizzoTextField;
 	private JTextField cellulareTextField;
@@ -115,17 +114,12 @@ public class GestioneDipendenti extends JFrame {
 	private JPasswordField confermaPasswordField;
 	private JTextField nuovaSkillTextField;
 	private JTextField salarioTextField;
-
 	private JScrollPane skillsScrollPane;
 	private JList skillsList;
-
 	private JButton nuovaSkillButton;
 	private JButton creaAccountButton;
 	private JButton esciButton;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	
-	//Altri attributi	
-	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
 	private JPanel comandiPanel;
 	private JScrollPane tableScrollPanel;
 	private JTextField cercaTextField;
@@ -141,6 +135,9 @@ public class GestioneDipendenti extends JFrame {
 	private JButton salvaModificheButton;
 	private DipendentiTableModel dataModelDipendente;
 	private JTable dipendentiTable;
+	
+	//Altri attributi	
+	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
 
 	
 	//Creazione del frame
@@ -161,7 +158,6 @@ public class GestioneDipendenti extends JFrame {
 		setBounds(100, 100, 1161, 944);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
-		
 		//Viene visualizzata al centro dello schermo
 		setLocationRelativeTo(null);
 		
@@ -187,7 +183,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per il nome
 		nomeTextField = new JTextField();
-		nomeTextField.setEnabled(false);
 		nomeTextField.setBounds(97, 128, 130, 20);
 		infoPanel.add(nomeTextField);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -196,7 +191,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per il cognome
 		cognomeTextField = new JTextField();
-		cognomeTextField.setEnabled(false);
 		cognomeTextField.setBounds(234, 128, 130, 20);
 		infoPanel.add(cognomeTextField);
 		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -225,7 +219,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per l'email
 		emailTextField = new JTextField();
-		emailTextField.setEnabled(false);
 		emailTextField.setBounds(97, 169, 267, 20);
 		infoPanel.add(emailTextField);
 		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -247,7 +240,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Radio Button per uomo
 		uomoRadioButton = new JRadioButton("Uomo");
-		uomoRadioButton.setEnabled(false);
 		uomoRadioButton.setBounds(161, 242, 61, 23);
 		infoPanel.add(uomoRadioButton);
 		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -257,7 +249,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Radio Button per donna
 		donnaRadioButton = new JRadioButton("Donna");
-		donnaRadioButton.setEnabled(false);
 		donnaRadioButton.setBounds(233, 242, 66, 23);
 		infoPanel.add(donnaRadioButton);
 		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -280,7 +271,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Combo Box giorni del mese
 		giornoComboBox = new JComboBox<Object>();
-		giornoComboBox.setEnabled(false);
 		giornoComboBox.setUI(new BasicComboBoxUI());
 		giornoComboBox.setBackground(Color.WHITE);
 		giornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -293,7 +283,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Combo Box mesi dell'anno
 		meseComboBox = new JComboBox<Object>();
-		meseComboBox.setEnabled(false);
 		meseComboBox.setBounds(282, 276, 44, 22);
 		meseComboBox.setUI(new BasicComboBoxUI());
 		meseComboBox.setBackground(Color.WHITE);
@@ -307,7 +296,6 @@ public class GestioneDipendenti extends JFrame {
 		for (int i = 1900; i < LocalDate.now().getYear(); i++)
 			anni.add(String.valueOf(i));
 		annoComboBox = new JComboBox(anni.toArray());
-		annoComboBox.setEnabled(false);
 		annoComboBox.setBounds(336, 276, 66, 22);
 		annoComboBox.setUI(new BasicComboBoxUI());
 		annoComboBox.setBackground(Color.WHITE);
@@ -326,7 +314,6 @@ public class GestioneDipendenti extends JFrame {
 		//Combo Box province
 		try {
 			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
-			provinciaComboBox.setEnabled(false);
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -361,7 +348,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//ComboBox comuni
 		cittaComboBox = new JComboBox();
-		cittaComboBox.setEnabled(false);
 		cittaComboBox.setBounds(229, 340, 210, 22);
 		infoPanel.add(cittaComboBox);
 		
@@ -398,7 +384,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field cellulare
 		cellulareTextField = new JTextField();
-		cellulareTextField.setEnabled(false);
 		cellulareTextField.setBounds(209, 457, 86, 20);
 		infoPanel.add(cellulareTextField);
 		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -412,7 +397,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field telefono di casa
 		telefonoFissoTextField = new JTextField();
-		telefonoFissoTextField.setEnabled(false);
 		telefonoFissoTextField.setBounds(209, 488, 86, 20);
 		infoPanel.add(telefonoFissoTextField);
 		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -433,7 +417,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Password Field per la password
 		passwordField = new JPasswordField();
-		passwordField.setEnabled(false);
 		passwordField.setBounds(239, 530, 125, 20);
 		infoPanel.add(passwordField);
 		passwordField.setEchoChar('*');
@@ -449,7 +432,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Password Field per conferma password
 		confermaPasswordField = new JPasswordField();
-		confermaPasswordField.setEnabled(false);
 		confermaPasswordField.setBounds(239, 561, 125, 20);
 		infoPanel.add(confermaPasswordField);
 		confermaPasswordField.setEchoChar('*');
@@ -458,7 +440,6 @@ public class GestioneDipendenti extends JFrame {
 				
 		//Text Field indirizzo
 		indirizzoTextField = new JTextField();
-		indirizzoTextField.setEnabled(false);
 		indirizzoTextField.setBounds(97, 395, 267, 20);
 		infoPanel.add(indirizzoTextField);
 		indirizzoTextField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -472,7 +453,6 @@ public class GestioneDipendenti extends JFrame {
 		skillsScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		try {
 			skillsList = new JList(controller.ottieniSkill().toArray());
-			skillsList.setEnabled(false);
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -535,7 +515,6 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field per il salario
 		salarioTextField = new JTextField("0.00");
-		salarioTextField.setEnabled(false);
 		salarioTextField.setBounds(701, 489, 141, 22);
 		infoPanel.add(salarioTextField);
 		salarioTextField.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -676,43 +655,10 @@ public class GestioneDipendenti extends JFrame {
 		contentPane.add(comandiPanel);
 		comandiPanel.setLayout(null);
 		
-		//Button inizia a modificare info account
-		JButton modificaAccountButton = new JButton("<html> <center> Modifica <br> Account <html>");
-		modificaAccountButton.setEnabled(false);
-		modificaAccountButton.setToolTipText("<html>Clicca per cominciare a modificare <br>le informazioni del dipendente<html>");
-		modificaAccountButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				attivaCampi();	//attiva i campi per far modificare le info
-				modificaAccountButton.setEnabled(false);	//disabilita il pulsante per cominciare le modifiche
-				salvaModificheButton.setEnabled(true); //attiva il pulsante per salvare le modifiche
-				dipendentiTable.setEnabled(false);	//disabilita la tabella
-			}
-		});
-		modificaAccountButton.setBounds(918, 2, 89, 34);
-		comandiPanel.add(modificaAccountButton);
-		modificaAccountButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-		modificaAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		modificaAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		modificaAccountButton.setBackground(Color.WHITE);
-		modificaAccountButton.addMouseListener(new MouseAdapter() {
-			//mouse sopra il pulsante
-			@Override
-			public void mouseEntered(MouseEvent e) 
-			{
-				modificaAccountButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
-			}
-			//mouse fuori dal pulsante
-			@Override
-			public void mouseExited(MouseEvent e) 
-			{
-				modificaAccountButton.setBackground(Color.WHITE);	//smette di evidenziarlo
-			}
-		});
-		
 		//Button "Crea Account"
 		creaAccountButton = new JButton("Crea");
 		creaAccountButton.setToolTipText("Crea un nuovo dipendente");
-		creaAccountButton.setBounds(1017, 7, 67, 23);
+		creaAccountButton.setBounds(1006, 7, 67, 23);
 		comandiPanel.add(creaAccountButton);
 		creaAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		creaAccountButton.setBackground(Color.WHITE);
@@ -740,7 +686,7 @@ public class GestioneDipendenti extends JFrame {
 						//aggiorna tabella dipendenti
 						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 						dipendentiTable.setModel(dataModelDipendente);
-						aggiornaTabella();
+						dataModelDipendente.fireTableDataChanged();
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null,
 								e1.getMessage(),
@@ -802,7 +748,7 @@ public class GestioneDipendenti extends JFrame {
 		//Text Field ricerca per nome/cognome/email
 		cercaTextField = new JTextField();
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		cercaTextField.setBounds(109, 9, 152, 20);
+		cercaTextField.setBounds(119, 9, 162, 20);
 		comandiPanel.add(cercaTextField);
 		cercaTextField.setColumns(10);
 		
@@ -818,7 +764,7 @@ public class GestioneDipendenti extends JFrame {
 		filtraButton.setBackground(Color.WHITE);
 		filtraButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtraButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-		filtraButton.setBounds(10, 9, 89, 20);
+		filtraButton.setBounds(20, 9, 89, 20);
 		filtraButton.addMouseListener(new MouseAdapter() {
 			//mouse sopra il pulsante
 			@Override
@@ -840,14 +786,14 @@ public class GestioneDipendenti extends JFrame {
 		etàMinimaTextField.setText("min");
 		etàMinimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		etàMinimaTextField.setHorizontalAlignment(SwingConstants.RIGHT);
-		etàMinimaTextField.setBounds(271, 9, 39, 20);
+		etàMinimaTextField.setBounds(317, 8, 39, 20);
 		comandiPanel.add(etàMinimaTextField);
 		etàMinimaTextField.setColumns(10);
 		
 		//Label "Età"
 		etàFiltroLabel = new JLabel("Età");
 		etàFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		etàFiltroLabel.setBounds(318, 12, 28, 14);
+		etàFiltroLabel.setBounds(360, 12, 28, 14);
 		comandiPanel.add(etàFiltroLabel);
 		
 		//Text Field età massima filtro
@@ -856,7 +802,7 @@ public class GestioneDipendenti extends JFrame {
 		etàMassimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		etàMassimaTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		etàMassimaTextField.setColumns(10);
-		etàMassimaTextField.setBounds(346, 9, 39, 20);
+		etàMassimaTextField.setBounds(387, 8, 39, 20);
 		comandiPanel.add(etàMassimaTextField);
 		
 		//Text Field salario minimo filtro
@@ -865,13 +811,13 @@ public class GestioneDipendenti extends JFrame {
 		salarioMinimoTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		salarioMinimoTextField.setHorizontalAlignment(SwingConstants.RIGHT);
 		salarioMinimoTextField.setColumns(10);
-		salarioMinimoTextField.setBounds(412, 9, 46, 20);
+		salarioMinimoTextField.setBounds(461, 8, 67, 20);
 		comandiPanel.add(salarioMinimoTextField);
 		
 		//Label "Salario"
 		salarioFiltroLabel = new JLabel("Salario");
 		salarioFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		salarioFiltroLabel.setBounds(468, 12, 57, 14);
+		salarioFiltroLabel.setBounds(533, 12, 57, 14);
 		comandiPanel.add(salarioFiltroLabel);
 		
 		//Text Field salario massimo filtro
@@ -880,7 +826,7 @@ public class GestioneDipendenti extends JFrame {
 		salarioMassimoTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		salarioMassimoTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		salarioMassimoTextField.setColumns(10);
-		salarioMassimoTextField.setBounds(525, 9, 46, 20);
+		salarioMassimoTextField.setBounds(586, 8, 80, 20);
 		comandiPanel.add(salarioMassimoTextField);
 		
 		//Text Field valutazione minima
@@ -889,13 +835,13 @@ public class GestioneDipendenti extends JFrame {
 		valutazioneMinimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneMinimaTextField.setHorizontalAlignment(SwingConstants.RIGHT);
 		valutazioneMinimaTextField.setColumns(10);
-		valutazioneMinimaTextField.setBounds(604, 9, 39, 20);
+		valutazioneMinimaTextField.setBounds(690, 8, 39, 20);
 		comandiPanel.add(valutazioneMinimaTextField);
 		
 		//Label "Valutazione"
 		valutazioneFiltroLabel = new JLabel("Valutazione");
 		valutazioneFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		valutazioneFiltroLabel.setBounds(653, 12, 77, 14);
+		valutazioneFiltroLabel.setBounds(735, 12, 77, 14);
 		comandiPanel.add(valutazioneFiltroLabel);
 		
 		//Text Field valutazione massima filtro
@@ -904,33 +850,29 @@ public class GestioneDipendenti extends JFrame {
 		valutazioneMassimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneMassimaTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		valutazioneMassimaTextField.setColumns(10);
-		valutazioneMassimaTextField.setBounds(740, 9, 39, 20);
+		valutazioneMassimaTextField.setBounds(817, 8, 39, 20);
 		comandiPanel.add(valutazioneMassimaTextField);
 		
 		//Button salva le modifiche fatte
 		salvaModificheButton = new JButton("<html> <center> Salva <br> Modifiche <html>");
-		salvaModificheButton.setEnabled(false);
 		salvaModificheButton.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//salva le modifiche effettuate nel DB
 				try {
 					salvaModifiche(controller, dataModelDipendente.getSelected(dipendentiTable.getSelectedRow()));
+					dataModelDipendente.fireTableDataChanged();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				disattivaCampi();	//disattiva tutti i campi
-				salvaModificheButton.setEnabled(false);	//disattiva il pulsante per salvare le modifiche
-				modificaAccountButton.setEnabled(true);	//riattiva il pulsante per modificare un account
-				dipendentiTable.setEnabled(true);	//riattiva la tabella dei dipendenti
 			}
 		});
 		salvaModificheButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		salvaModificheButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		salvaModificheButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		salvaModificheButton.setBackground(Color.WHITE);
-		salvaModificheButton.setBounds(809, 2, 95, 34);
+		salvaModificheButton.setBounds(891, 2, 95, 34);
 		salvaModificheButton.addMouseListener(new MouseAdapter() {
 			//mouse sopra il pulsante
 			@Override
@@ -1000,10 +942,7 @@ public class GestioneDipendenti extends JFrame {
 					for (Skill skill : selectedDip.getSkills()) {
 						skillsList.setSelectedValue(skill, rootPaneCheckingEnabled);
 					}
-					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione());//valutazione
-					
-					//rende possibile modificare i campi
-					modificaAccountButton.setEnabled(true);
+					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione()); //valutazione
 					}	
 				}
 			});
@@ -1112,7 +1051,7 @@ public class GestioneDipendenti extends JFrame {
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.filtraDipendenti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima));
 			dipendentiTable.setModel(dataModelDipendente);
-			aggiornaTabella();
+			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					"Filtro fallito.",
@@ -1140,38 +1079,6 @@ public class GestioneDipendenti extends JFrame {
 		catch(NumberFormatException e) {
 			return valoreDefault;
 		}
-	}
-	
-	//Metodo che aggiorna la tabella
-	private void aggiornaTabella() {
-		dataModelDipendente.fireTableDataChanged();
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());	//sorter
-		dipendentiTable.setRowSorter(sorter);
-		dipendentiTable.getRowSorter().toggleSortOrder(0);
-	}
-	
-	//Metodo che rende editabili tutti i campi
-	private void attivaCampi() {
-		nomeTextField.setEnabled(true);	//nome
-		cognomeTextField.setEnabled(true);	//cognome
-		emailTextField.setEnabled(true);	//email
-		//sesso
-		uomoRadioButton.setEnabled(true);
-		donnaRadioButton.setEnabled(true);
-		//data di nascita
-		giornoComboBox.setEnabled(true);
-		meseComboBox.setEnabled(true);
-		annoComboBox.setEnabled(true);
-		//luogo di nascita
-		provinciaComboBox.setEnabled(true);
-		cittaComboBox.setEnabled(true);
-		indirizzoTextField.setEnabled(true); //indirizzo
-		cellulareTextField.setEnabled(true); //cellulare
-		telefonoFissoTextField.setEnabled(true); //telefono casa
-		passwordField.setEnabled(true); //password
-		confermaPasswordField.setEnabled(true); //conferma password
-		skillsList.setEnabled(true); //lista skill
-		salarioTextField.setEnabled(true); //salario
 	}
 	
 	//Metodo che salva le modifiche svolte
