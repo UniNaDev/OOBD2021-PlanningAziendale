@@ -104,7 +104,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataTerminazione")));
 			
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
-			projTemp.setDiscussoIn(getMeetingRelativi(projTemp.getIdProgettto()));
+			projTemp.setMeetingsRelativi(getMeetingRelativi(projTemp.getIdProgettto()));
 			projTemp.setAmbiti(ambiti);
 			
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -228,13 +228,12 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			projTemp.setCollaborazioni(getPartecipanti(risultato.getInt("CodProgetto")));
 			projTemp.setComprende(getPartecipantiSenzaRuolo(risultato.getInt("CodProgetto")));
 			
-			
 			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			
 			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(projTemp,dip,risultato.getString("RuoloDipendente"));
 			
-
+			
 			
 			temp.add(tempPartecipazione);	//aggiunge il progetto alla lista
 		}

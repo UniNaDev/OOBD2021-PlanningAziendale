@@ -32,7 +32,7 @@ public class Progetto {
 	//Attributi per associazioni
 	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
 	private ArrayList<Dipendente> comprende=new ArrayList<Dipendente>(); //Associazione progetto-dipendente
-	private ArrayList<Meeting> discussoIn = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
+	private ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista di collaborazioni del progetto
 
 	//METODI
@@ -74,7 +74,7 @@ public class Progetto {
 	
 	public Progetto(String nomeProgetto, String tipoProgetto, String descrizioneProgetto, LocalDate dataCreazione,
 			LocalDate scadenza, LocalDate dataTerminazione, ArrayList<AmbitoProgetto> ambiti,
-			ArrayList<Meeting> discussoIn) {
+			ArrayList<Meeting> meetingsRelativi) {
 		super();
 		this.nomeProgetto = nomeProgetto;
 		this.tipoProgetto = tipoProgetto;
@@ -83,7 +83,7 @@ public class Progetto {
 		this.scadenza = scadenza;
 		this.dataTerminazione = dataTerminazione;
 		this.ambiti = ambiti;
-		this.discussoIn = discussoIn;
+		this.meetingsRelativi = meetingsRelativi;
 	}
 
 	//Getter e Setter
@@ -147,10 +147,7 @@ public class Progetto {
 	public void setAmbiti(ArrayList<AmbitoProgetto> ambiti) {
 		this.ambiti = ambiti;
 	}
-	
-	public void setMeetingsRelativi(ArrayList<Meeting> meetingsRelativi) {
-		this.discussoIn = meetingsRelativi;
-	}
+
 
 	public ArrayList<CollaborazioneProgetto> getCollaborazioni() {
 		return collaborazioni;
@@ -172,13 +169,16 @@ public class Progetto {
 		this.comprende = comprende;
 	}
 
-	public ArrayList<Meeting> getDiscussoIn() {
-		return discussoIn;
+	public ArrayList<Meeting> getMeetingsRelativi() {
+		return meetingsRelativi;
+	}
+	
+	
+	public void setMeetingsRelativi(ArrayList<Meeting> meetingsRelativi) {
+		this.meetingsRelativi = meetingsRelativi;
 	}
 
-	public void setDiscussoIn(ArrayList<Meeting> discussoIn) {
-		this.discussoIn = discussoIn;
-	}
+
 	
 
 //	@Override
@@ -203,69 +203,7 @@ public class Progetto {
 		return temp;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Progetto other = (Progetto) obj;
-		if (ambiti == null) {
-			if (other.ambiti != null)
-				return false;
-		} else if (!ambiti.equals(other.ambiti))
-			return false;
-		if (collaborazioni == null) {
-			if (other.collaborazioni != null)
-				return false;
-		} else if (!collaborazioni.equals(other.collaborazioni))
-			return false;
-		if (comprende == null) {
-			if (other.comprende != null)
-				return false;
-		} else if (!comprende.equals(other.comprende))
-			return false;
-		if (dataCreazione == null) {
-			if (other.dataCreazione != null)
-				return false;
-		} else if (!dataCreazione.equals(other.dataCreazione))
-			return false;
-		if (dataTerminazione == null) {
-			if (other.dataTerminazione != null)
-				return false;
-		} else if (!dataTerminazione.equals(other.dataTerminazione))
-			return false;
-		if (descrizioneProgetto == null) {
-			if (other.descrizioneProgetto != null)
-				return false;
-		} else if (!descrizioneProgetto.equals(other.descrizioneProgetto))
-			return false;
-		if (discussoIn == null) {
-			if (other.discussoIn != null)
-				return false;
-		} else if (!discussoIn.equals(other.discussoIn))
-			return false;
-		if (idProgettto != other.idProgettto)
-			return false;
-		if (nomeProgetto == null) {
-			if (other.nomeProgetto != null)
-				return false;
-		} else if (!nomeProgetto.equals(other.nomeProgetto))
-			return false;
-		if (scadenza == null) {
-			if (other.scadenza != null)
-				return false;
-		} else if (!scadenza.equals(other.scadenza))
-			return false;
-		if (tipoProgetto == null) {
-			if (other.tipoProgetto != null)
-				return false;
-		} else if (!tipoProgetto.equals(other.tipoProgetto))
-			return false;
-		return true;
-	}
+	
 	
 	
 	

@@ -23,14 +23,14 @@ public class ProgettoTableModel extends AbstractTableModel {
 
 	//metodo che ritorna la lista di progetti contenuti nella tabella
 	
-	public ArrayList<Progetto> getProgettiTabella()
-	{
-		return this.progettiTabella;
+	public ArrayList<Progetto> getProgettiTabella() {
+		return progettiTabella;
 	}
 	
 	public void setProgettiTabella(ArrayList<Progetto> progettiTabella) {
 		this.progettiTabella = progettiTabella;
 	}
+	
 	
 
 	@Override
@@ -47,16 +47,16 @@ public class ProgettoTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		// TODO Auto-generated method stub
+		
 		return colnames[columnIndex];
 	}
 
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		Progetto proj =progettiTabella.get(rowIndex);
 		
+		Progetto proj =progettiTabella.get(rowIndex);
+
 		switch(columnIndex) {
 		case 0:
 			return proj.getNomeProgetto();

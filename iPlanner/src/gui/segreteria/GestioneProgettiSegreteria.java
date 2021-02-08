@@ -479,7 +479,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 					}
 					//Meeting relativi
 					meetingRelativiModel.clear();
-					meetingRelativiModel.addAll(progettoSelezionato.getDiscussoIn());
+					meetingRelativiModel.addAll(progettoSelezionato.getMeetingsRelativi());
 					meetingRelativiList.setModel(meetingRelativiModel);
 					//Partecipanti
 					partecipantiModel.clear();

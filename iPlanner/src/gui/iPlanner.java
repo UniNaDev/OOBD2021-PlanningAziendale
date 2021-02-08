@@ -30,8 +30,14 @@ public class iPlanner extends JFrame {
 	
 	//Attrubuti GUI
 	private JPanel contentPane;
-	private JLabel loginLabel;	//label clickabile per effettuare login
-	private JLabel gestisciDipendentiLabel;	//label clickabile per creare nuovi dipendenti
+	private JLabel loginLabel;	
+	private JLabel gestisciDipendentiLabel;
+	private JLabel benvenutoLabel;
+	private JLabel iconaDipendenteLabel;
+	private JLabel creatoDaLabel;
+	private JLabel versioneLabel;
+	private JLabel gestisciMeetingLabel;
+	private JLabel gestisciProgettiLabel;
  
 	//Altri attributi
 	private final String devs = "UninaDevs";	//stringa sviluppatori
@@ -41,6 +47,7 @@ public class iPlanner extends JFrame {
 	//-----------------------------------------------------------------
 	
 	public iPlanner(ControllerStart controller, boolean segreteria) {
+		
 		setMinimumSize(new Dimension(850, 500));
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));
@@ -52,22 +59,23 @@ public class iPlanner extends JFrame {
 		setContentPane(contentPane);
 		
 		//Label "Welcome to iPlanner"
-		JLabel benvenutoLabel = new JLabel("Benvenuto su iPlanner");
+		benvenutoLabel = new JLabel("Benvenuto su iPlanner");
 		benvenutoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		benvenutoLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/planner_128.png")));
 		benvenutoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		//Icona Label Welcome
-		JLabel iconaDipendenteLabel = new JLabel("");
+		iconaDipendenteLabel = new JLabel("");
 		iconaDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		iconaDipendenteLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/employee_64.png")));
 		
 		//Label "Created by"
-		JLabel creatoDaLabel = new JLabel("Creato da: " + devs);
+		creatoDaLabel = new JLabel("Creato da: " + devs);
 		creatoDaLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
+	
 		
 		//Label versione del software
-		JLabel versioneLabel = new JLabel("v " + versione);
+		versioneLabel = new JLabel("v " + versione);
 		versioneLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
 		versioneLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		
@@ -118,7 +126,7 @@ public class iPlanner extends JFrame {
 					.addComponent(iconaDipendenteLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(360))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(creatoDaLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+					.addComponent(creatoDaLabel, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, 1090, Short.MAX_VALUE)
 					.addComponent(versioneLabel))
 		);
@@ -167,7 +175,7 @@ public class iPlanner extends JFrame {
 		});
 		
 		//Label Gestisci Meeting
-		JLabel gestisciMeetingLabel = new JLabel("Gestisci meeting");
+		gestisciMeetingLabel = new JLabel("Gestisci meeting");
 		gestisciMeetingLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		gestisciMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		gestisciMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
@@ -193,7 +201,7 @@ public class iPlanner extends JFrame {
 	});
 		
 		//Label Gestisci Progetti
-		JLabel gestisciProgettiLabel = new JLabel("Gestisci progetti");
+		gestisciProgettiLabel = new JLabel("Gestisci progetti");
 		gestisciProgettiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		gestisciProgettiLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		gestisciProgettiLabel.setFont(new Font("Consolas", Font.PLAIN, 20));

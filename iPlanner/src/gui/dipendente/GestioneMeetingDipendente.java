@@ -108,13 +108,16 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JLabel progettoDiscussoLabel;
 	private int codiceMeeting;
 	private TableRowSorter<TableModel> sorterMeeting;
+	
+	//ricava l'ora e la data attuali
+	LocalDate dataAttuale = LocalDate.now();
+	LocalTime oraAttuale = LocalTime.now();
 
 	//Creazione frame
 	//---------------------------------------------
 	public GestioneMeetingDipendente(ControllerMeeting theController) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1300, 700));
-		setLocationRelativeTo(null);
 		
 		setTitle("GestioneMeeting");
 		setBounds(100, 100, 1280, 720);
@@ -122,6 +125,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
 		
 		JPanel panel = new JPanel();	//main panel
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -160,9 +164,7 @@ public class GestioneMeetingDipendente extends JFrame {
 			public void actionPerformed(ActionEvent e) 
 			{
 				
-				//ricava l'ora e la data attuali
-				LocalDate dataAttuale = LocalDate.now();
-				LocalTime oraAttuale = LocalTime.now();
+
 				//Imposta data di inizio a oggi
 				dataInizioGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1); //-1 perche gli indici iniziano da 0
 				dataInizioMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
@@ -471,7 +473,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		dataInizioGiornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataInizioGiornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataInizioGiornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		dataInizioGiornoComboBox.setSelectedIndex(0);
+		dataInizioGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
 		dataInizioGiornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		dataInizioGiornoComboBox.setBackground(Color.WHITE);
 		
@@ -481,7 +483,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		dataInizioMeseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataInizioMeseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataInizioMeseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-		dataInizioMeseComboBox.setSelectedIndex(0);
+		dataInizioMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
 		dataInizioMeseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		dataInizioMeseComboBox.setBackground(Color.WHITE);
 		
@@ -497,7 +499,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		dataInizioAnnoComboBox.setModel(myModel);
 		for(int i=1900;i<= 2021;i++)
 			myModel.addElement(i);
-		dataInizioAnnoComboBox.setSelectedIndex((int) myModel.getSize()/2); //mette di default l'anno a metà della lista
+		dataInizioAnnoComboBox.setSelectedIndex(dataAttuale.getYear() -1900);
 		infoPanel2.add(dataInizioAnnoComboBox);
 		
 		//Label "Data fine"
@@ -511,7 +513,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		dataFineGiornoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataFineGiornoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataFineGiornoComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		dataFineGiornoComboBox.setSelectedIndex(0);
+		dataFineGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
 		dataFineGiornoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		dataFineGiornoComboBox.setBackground(Color.WHITE);
 		
@@ -521,7 +523,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		dataFineMeseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dataFineMeseComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dataFineMeseComboBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-		dataFineMeseComboBox.setSelectedIndex(0);
+		dataFineMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
 		dataFineMeseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		dataFineMeseComboBox.setBackground(Color.WHITE);
 		
@@ -537,7 +539,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		dataFineAnnoComboBox.setModel(myModel2);
 		for(int i=1900;i<= 2021;i++)
 			myModel2.addElement(i);
-		dataFineAnnoComboBox.setSelectedIndex((int) myModel.getSize()/2); //mette di default il 100esimo indice cioè l'anno 2000
+		dataFineAnnoComboBox.setSelectedIndex(dataAttuale.getYear() -1900);
 		infoPanel2.add(dataFineAnnoComboBox);
 		
 		//Label "Ora inizio"
@@ -553,6 +555,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		oraInizioComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		oraInizioComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		oraInizioComboBox.setModel(new DefaultComboBoxModel(new String[] {"00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
+		oraInizioComboBox.setSelectedIndex(oraAttuale.getHourOfDay());
 		
 		//Label ":"
 		JLabel lblNewLabel = new JLabel(":");
@@ -566,7 +569,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		minutoInizioComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		minutoInizioComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		minutoInizioComboBox.setModel(new DefaultComboBoxModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"}));
-		
+		minutoInizioComboBox.setSelectedIndex(oraAttuale.getMinuteOfHour());
 		
 		//Label "Ora fine"
 		JLabel oraFineLabel = new JLabel("Ora fine");
@@ -581,6 +584,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		oraFineComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		oraFineComboBox.setModel(new DefaultComboBoxModel(new String[] {"00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
 		oraFineComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		oraFineComboBox.setSelectedIndex(oraAttuale.getHourOfDay() +2);
 		
 		//Label ":"
 		JLabel lblNewLabel_1 = new JLabel(":");
@@ -594,7 +598,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		minutoFineComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		minutoFineComboBox.setModel(new DefaultComboBoxModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"}));
 		minutoFineComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		
+		minutoFineComboBox.setSelectedIndex(oraAttuale.getMinuteOfHour());
 		
 		//Label "Modalità"
 		modalitaLabel = new JLabel("Modalità");
@@ -722,59 +726,63 @@ public class GestioneMeetingDipendente extends JFrame {
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+							.addComponent(progettoDiscussoLabel, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 							.addGroup(gl_infoPanel2.createSequentialGroup()
 								.addContainerGap()
-								.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
-							.addGroup(gl_infoPanel2.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
-							.addGroup(gl_infoPanel2.createSequentialGroup()
-								.addGap(43)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-									.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))
-							.addGroup(gl_infoPanel2.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(oraInizioLabel, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
-							.addComponent(progettoDiscussoLabel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(43)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+										.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(oraInizioLabel, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)))))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-							.addGroup(gl_infoPanel2.createSequentialGroup()
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-										.addGroup(gl_infoPanel2.createSequentialGroup()
-											.addComponent(oraFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 5, GroupLayout.PREFERRED_SIZE))
-										.addComponent(onlineRadioButton, Alignment.LEADING))
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_infoPanel2.createSequentialGroup()
-											.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(lblNewLabel))
-										.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
 									.addGroup(gl_infoPanel2.createSequentialGroup()
-										.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+										.addComponent(oraFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-									.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-									.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 5, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+									.addGroup(Alignment.LEADING, gl_infoPanel2.createSequentialGroup()
+										.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(lblNewLabel)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(onlineRadioButton)
+									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(fisicoRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(gl_infoPanel2.createSequentialGroup()
-								.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
 							.addComponent(piattaformaSalaComboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(progettoDiscussoComboBox, Alignment.LEADING, 0, 132, Short.MAX_VALUE)))
-					.addGap(101)
+					.addGap(112)
 					.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 277, GroupLayout.PREFERRED_SIZE)
 					.addGap(53)
 					.addComponent(progettoDiscussoScrollPane, GroupLayout.PREFERRED_SIZE, 293, GroupLayout.PREFERRED_SIZE)
@@ -793,33 +801,35 @@ public class GestioneMeetingDipendente extends JFrame {
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+										.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
 										.addComponent(dataInizioMeseComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-										.addComponent(dataInizioGiornoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+										.addComponent(dataInizioAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
 									.addGap(16))
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(dataFineGiornoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+								.addComponent(dataFineMeseComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataFineAnnoComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGap(36)
+									.addGap(11)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+										.addComponent(lblNewLabel)
+										.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 										.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 										.addComponent(oraFineComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 										.addComponent(minutoFineComboBox, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)))
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblNewLabel)
-										.addComponent(minutoInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(oraInizioComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(modalitaLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
@@ -831,8 +841,8 @@ public class GestioneMeetingDipendente extends JFrame {
 								.addComponent(piattaformaSalaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(progettoDiscussoLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-								.addComponent(progettoDiscussoComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(progettoDiscussoComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(progettoDiscussoLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))))
 					.addGap(36))
 		);
 		
