@@ -543,8 +543,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 			dataModelTabella.setProgettiTabella(controller.ottieniProgettiFiltrati(nomeCercato,ambitoCercato,tipologiaCercata, scaduto, terminato));
 			dataModelTabella.fireTableDataChanged();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//errore query per tutti i progetti filtrati
+			JOptionPane.showMessageDialog(null,
+					"Impossibile filtrare i progetti dal database.\nControllare che sia stabilita la connessione al database.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
