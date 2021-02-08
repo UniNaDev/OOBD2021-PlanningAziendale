@@ -68,14 +68,14 @@ public class ControllerMeetingSegreteria {
 		gestioneMeetingSegreteria.setEnabled(false);
 		gestioneSale = new GestioneSale(this);
 		gestioneSale.setVisible(true);
-		gestioneMeetingSegreteria.setAlwaysOnTop(false);
+		gestioneSale.toFront();
 	}
 	
 	//Metodo che esce dalla gestione sale
 	public void chiudiGestioneSale() {
 		gestioneSale.setVisible(false);
 		gestioneMeetingSegreteria.setEnabled(true);
-		gestioneMeetingSegreteria.setAlwaysOnTop(true);
+		gestioneMeetingSegreteria.toFront();
 	}
 	
 	//Metodo che aggiorna le sale nella combobox nei filtri
