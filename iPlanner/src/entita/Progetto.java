@@ -202,16 +202,6 @@ public class Progetto {
 				
 		return temp;
 	}
-<<<<<<< Updated upstream
-
-	
-	
-	
-	
-	
-	
-	
-=======
 	
 	//equals
 	@Override
@@ -227,7 +217,4 @@ public class Progetto {
 			return false;
 		return true;
 	}
-
-		
->>>>>>> Stashed changes
 }
