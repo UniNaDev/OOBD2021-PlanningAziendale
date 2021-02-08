@@ -100,25 +100,33 @@ public class ControllerProgettiSegreteria {
 	
 	//Metodo che filtra i progetti
 	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{
-		//TODO: ambito = null non contemplato
-			ArrayList<Progetto> temp =projDAO.getProgettiFiltrati(nomeCercato, ambitoCercato, tipologiaCercata);	//ottiene i progetti filtrati per nome, ambito e tipologia
+		ArrayList<Progetto> risultato = projDAO.getProgettiByNome(nomeCercato);	//ottiene i progetti filtrati per nome
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		if (tipologiaCercata != null) {
+			temp = projDAO.getProgettiByTipo(tipologiaCercata);	//ottiene i progetti filtrati per tipologia
+			risultato.retainAll(temp);	//interseca i progetti precedenti con quelli filtrati ora per tipologia
+		}
+		if (ambitoCercato != null) {
+			temp = projDAO.getProgettiByAmbito(ambitoCercato); //ottiene i progetti filtrati per ambito
+			risultato.retainAll(temp);
+		}
 		if (scaduto.equals("Si")) {
 			//filtra temp prendendo solo quelli scaduti
-			temp = filtraScaduti(temp);
+			risultato.retainAll(filtraScaduti(risultato));
 		}
 		else if (scaduto.equals("No")) {
 			//filtra temp prendendo solo quelli NON scaduti
-			temp = filtraNonScaduti(temp);
+			risultato.retainAll(filtraNonScaduti(risultato));
 		}
 		if (terminato.equals("Si")) {
 			//filtra temp prendendo solo quelli terminati
-			temp = filtraTerminati(temp);
+			risultato.retainAll(filtraTerminati(risultato));
 		}
 		else if (terminato.equals("No")) {
 			//filtra temp prendendo solo quelli NON terminati
-			temp = filtraNonTerminati(temp);
+			risultato.retainAll(filtraNonTerminati(risultato));
 		}
-		return temp;
+		return risultato;
 	}
 	
 	//Metodo che filtra i progetti scaduti

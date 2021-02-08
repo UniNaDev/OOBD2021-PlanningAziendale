@@ -534,7 +534,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//terminato
 		String terminato = "Entrambi";
 		if (terminatoComboBox.getSelectedItem() != null)
-			if (scadutoComboBox.getSelectedItem().toString().equals("Si"))
+			if (terminatoComboBox.getSelectedItem().toString().equals("Si"))
 				terminato = "Si";
 			else
 				terminato = "No";

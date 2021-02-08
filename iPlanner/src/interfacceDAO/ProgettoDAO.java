@@ -14,11 +14,11 @@ import entita.Progetto;
 public interface ProgettoDAO {
 
 	public ArrayList<Progetto> getProgetti() throws SQLException;	//metodo che restituisce tutti i progetti
-	public ArrayList<Progetto> getProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tiplogiaCercata) throws SQLException;	//metodo che restituisce tutti i progetti filtrati per nome, ambito, tipologia
-	public ArrayList<Meeting> getMeetingRelativi(int codProgettoSelezionato) throws SQLException;	//metodo che restituisce i meeting relativi ad un progetto
-	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti a cui partecipa un dipendente
+	public ArrayList<Progetto> getProgettiByNome(String nomeCercato) throws SQLException; //metodo che restituisce i progetti con un certo nome
 	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException;	//metodo che restituisce i progetti di un certo ambito
 	public ArrayList<Progetto> getProgettiByTipo(String tipologia) throws SQLException;	//metodo che restituisce i progetti di un certo tipo
+	public ArrayList<Meeting> getMeetingRelativi(int codProgettoSelezionato) throws SQLException;	//metodo che restituisce i meeting relativi ad un progetto
+	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti a cui partecipa un dipendente
 	public boolean addProgetto(Progetto proj) throws SQLException;	//metodo che inserisce un nuovo progetto nel DB
 	public boolean removeProgetto(Progetto proj) throws SQLException;	//metodo che rimuove un progetto dal DB
 	public boolean addPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;	//metodo che aggiunge un dipendente ai partecipanti a un progetto

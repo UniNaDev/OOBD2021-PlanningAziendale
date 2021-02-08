@@ -202,6 +202,7 @@ public class Progetto {
 				
 		return temp;
 	}
+<<<<<<< Updated upstream
 
 	
 	
@@ -210,4 +211,23 @@ public class Progetto {
 	
 	
 	
+=======
+	
+	//equals
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Progetto other = (Progetto) obj;
+		if (idProgettto != other.idProgettto)
+			return false;
+		return true;
+	}
+
+		
+>>>>>>> Stashed changes
 }

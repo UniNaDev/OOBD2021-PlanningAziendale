@@ -72,7 +72,7 @@ public class ProgettoTableModel extends AbstractTableModel {
 			if(proj.getDataTerminazione()==null)
 				return null;
 			else 
-			return proj.getDataTerminazione().toString(formatDate);
+				return proj.getDataTerminazione().toString(formatDate);
 		case 6:
 			return proj.getScadenza().toString(formatDate);
 		}
