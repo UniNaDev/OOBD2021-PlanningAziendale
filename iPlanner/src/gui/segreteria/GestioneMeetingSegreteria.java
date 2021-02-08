@@ -444,6 +444,35 @@ public class GestioneMeetingSegreteria extends JFrame {
 		gestisciSaleButton.setBackground(Color.WHITE);
 		gestisciSaleButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(gestisciSaleButton);
+		
+		//Button per tornare alla schermata principale
+		JButton esciButton = new JButton("Esci");
+		//Click pulsante
+		esciButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.tornaAiPlanner(); //torna alla schermata principale
+			}
+		});
+		//Eventi connessi al button
+		esciButton.addMouseListener(new MouseAdapter() {
+			//mouse sopra il pulsante
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				esciButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
+			}
+			//mouse fuori dal pulsante
+			@Override
+			public void mouseExited(MouseEvent e) {
+				esciButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+			}	
+		});
+		esciButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		esciButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		esciButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		esciButton.setBackground(Color.WHITE);
+		
+		esciButton.setBounds(38, 702, 66, 23);
+		contentPane.add(esciButton);
 	}
 	
 	//Altri metodi
