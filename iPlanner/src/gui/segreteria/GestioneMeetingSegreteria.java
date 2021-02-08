@@ -77,6 +77,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 	public GestioneMeetingSegreteria(ControllerMeetingSegreteria controller) {
 		setResizable(false);
 		setTitle("Gestione Meeting");
+		//Chiusura finestra
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -99,21 +100,21 @@ public class GestioneMeetingSegreteria extends JFrame {
 		infoPanel.setLayout(null);
 		
 		//Label inizio meeting
-		JLabel inizioLabel = new JLabel("Inizio: 16/12/1018 12:33");
+		JLabel inizioLabel = new JLabel("Inizio: N/A");
 		inizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		inizioLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		inizioLabel.setBounds(29, 10, 219, 23);
 		infoPanel.add(inizioLabel);
 		
 		//Label fine meeting
-		JLabel fineLabel = new JLabel("Fine: 16/12/2018 13:00");
+		JLabel fineLabel = new JLabel("Fine: N/A");
 		fineLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		fineLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		fineLabel.setBounds(29, 43, 219, 23);
 		infoPanel.add(fineLabel);
 		
 		//Label modalità del progetto (sala o piattaforma)
-		JLabel modalitàLabel = new JLabel("Sala: Sala 109 (200)");
+		JLabel modalitàLabel = new JLabel("Sala: N/A");
 		modalitàLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		modalitàLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		modalitàLabel.setBounds(29, 76, 219, 23);
@@ -148,7 +149,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		JTextArea progettoDiscussoTextArea = new JTextArea();
 		progettoDiscussoTextArea.setLineWrap(true);
 		progettoDiscussoTextArea.setEditable(false);
-		progettoDiscussoTextArea.setText("Progetto Discusso: Progetto Abstergo");
+		progettoDiscussoTextArea.setText("Progetto Discusso: N/A");
 		progettoDiscussoTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
 		progettoDiscussoTextArea.setBounds(29, 109, 277, 45);
 		infoPanel.add(progettoDiscussoTextArea);
@@ -165,12 +166,13 @@ public class GestioneMeetingSegreteria extends JFrame {
 		//RadioButton selezionato/non selezionato
 		telematicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//telematico radio button = true
 				if (telematicoRadioButton.isSelected())
 					try {
-						fisicoRadioButton.setSelected(false);
-						applicaFiltroTelematico(controller);
+						fisicoRadioButton.setSelected(false);	//fisico radio button = false
+						applicaFiltroTelematico(controller);	//applica il filtro e ottiene la lista di meeting solo telematici
 					} catch (SQLException e2) {
-						//errore enumerazione modalità (valori diversi da Fisico o Telematico)
+						//errore enumerazione modalità (valori diversi da "Fisico" o "Telematico")
 						if (e2.getSQLState().equals("22P02")) {
 							JOptionPane.showMessageDialog(null,
 								"Errore applicazione filtro. Contattare uno sviluppatore.",
@@ -185,9 +187,10 @@ public class GestioneMeetingSegreteria extends JFrame {
 								JOptionPane.ERROR_MESSAGE);
 						}
 					}
+				//telematico radio button = false
 				else
 					try {
-						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
+						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());	//ottiene tutti i meeting
 					} catch (SQLException e1) {
 						//errore select per tutti i meeting nel database (es: ResultSet vuoto)
 						JOptionPane.showMessageDialog(null,
@@ -206,10 +209,11 @@ public class GestioneMeetingSegreteria extends JFrame {
 		//RadioButton selezionato/non selezionato
 		fisicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (telematicoRadioButton.isSelected()) {
+				//fisico radio button = true
+				if (fisicoRadioButton.isSelected()) {
 					try {
-						telematicoRadioButton.setSelected(false);
-						applicaFiltroFisico(controller);
+						fisicoRadioButton.setSelected(false); //telematico radio button = false
+						applicaFiltroFisico(controller);	//applica il filtro e ottiene tutti i meeting fisici
 					} catch (SQLException e1) {
 						//errore enumerazione modalità (valori diversi da Fisico o Telematico)
 						if (e1.getSQLState().equals("22P02")) {
@@ -227,9 +231,10 @@ public class GestioneMeetingSegreteria extends JFrame {
 						}
 					}
 				}
+				//fisico radio button = false
 				else
 					try {
-						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
+						dataModelTabella.setMeetingTabella(controller.ottieniMeeting());	//ottiene tutti i meeting
 					} catch (SQLException e1) {
 						//errore select per tutti i meeting nel database (es: ResultSet vuoto)
 						JOptionPane.showMessageDialog(null,
@@ -245,20 +250,25 @@ public class GestioneMeetingSegreteria extends JFrame {
 		
 		//ComboBox per filtro sale
 		try {
-			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());
+			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());	//ottiene tutte le sale per il filtro
 			//Selezione combo box
 			filtroSaleComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
+						//se l'oggetto selezionato è una sala esistente
 						if (!(filtroSaleComboBox.getSelectedItem() == null))
-							applicaFiltroSala(controller, (SalaRiunione) filtroSaleComboBox.getSelectedItem());
+							applicaFiltroSala(controller, (SalaRiunione) filtroSaleComboBox.getSelectedItem());	//applica il filtro e ottiene i meeting in quella sala
+						//se l'oggetto selezionato è null
 						else {
-							dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
-							dataModelTabella.fireTableDataChanged();
+							dataModelTabella.setMeetingTabella(controller.ottieniMeeting());	//ottiene tutti i meeting senza filtri
+							dataModelTabella.fireTableDataChanged();	//aggiorna la tabella
 						}
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//errore select per tutti i meeting in una sala nel database (es: ResultSet vuoto)
+						JOptionPane.showMessageDialog(null,
+							"Impossibile ottenere tutti i meeting nella sala selezionata dal database.\nControllare che la connessione al database sia stabilita.",
+							"Errore Interrogazione Database",
+							JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
@@ -266,8 +276,11 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroSaleComboBox.setBounds(308, 9, 108, 22);
 			comandiPanel.add(filtroSaleComboBox);
 		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			//errore select per tutte le sale nel database (es: ResultSet vuoto)
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutte le sale dal database.\nControllare che la connessione al database sia stabilita\noppure provare a crearne una nuova.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 		
 		//Label "Sala:" in filtri
@@ -278,21 +291,26 @@ public class GestioneMeetingSegreteria extends JFrame {
 		
 		//ComboBox per filtro piattaforma
 		try {
-			filtroPiattaformaComboBox = new JComboBox(controller.ottieniPiattaforme().toArray());
+			filtroPiattaformaComboBox = new JComboBox(controller.ottieniPiattaforme().toArray());	//ottiene tutte le piattaforme per il filtro
 			//Selezione nella combobox
 			filtroPiattaformaComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
+						//se la piattaforma selezionata esiste
 						if (!(filtroPiattaformaComboBox.getSelectedItem() == null))
-							applicaFiltroPiattaforma(controller, filtroPiattaformaComboBox.getSelectedItem().toString());
+							applicaFiltroPiattaforma(controller, filtroPiattaformaComboBox.getSelectedItem().toString());	//applica il filtro e ottiene i meeting su quella piattaforma
+						//se la piattaforma selezionata è null
 						else {
-							dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
-							dataModelTabella.fireTableDataChanged();
+							dataModelTabella.setMeetingTabella(controller.ottieniMeeting());	//ottiene tutti i meeting
+							dataModelTabella.fireTableDataChanged();	//aggiorna la tabella
 						}
 							
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//errore select per tutti i meeting su una piattaforma nel database (es: ResultSet vuoto)
+						JOptionPane.showMessageDialog(null,
+							"Impossibile ottenere tutti i meeting sulla piattaforma selezionata dal database.\nControllare che la connessione al database sia stabilita.",
+							"Errore Interrogazione Database",
+							JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
@@ -300,8 +318,11 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroPiattaformaComboBox.setBounds(517, 9, 151, 22);
 			comandiPanel.add(filtroPiattaformaComboBox);
 		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			//errore select per tutte le piattaforme nel database (es: ResultSet vuoto)
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutte le piattaforme dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 
 		//Label "Piattaforma:" in filtri
@@ -317,6 +338,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		refreshFiltriLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				//setta tutti i filtri a null/false
 				telematicoRadioButton.setSelected(false);
 				fisicoRadioButton.setSelected(false);
 				filtroSaleComboBox.setSelectedItem(null);
@@ -336,18 +358,18 @@ public class GestioneMeetingSegreteria extends JFrame {
 		//Tabella del meeting
 		dataModelTabella = new MeetingTableModel();
 		try {
-			dataModelTabella.setMeetingTabella(controller.ottieniMeeting());
-			tabellaMeeting = new JTable(dataModelTabella);
+			dataModelTabella.setMeetingTabella(controller.ottieniMeeting());	//ottiene tutti i meeting
+			tabellaMeeting = new JTable(dataModelTabella);	//crea la tabella
 			tabellaMeeting.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tabellaMeeting.setFont(new Font("Consolas", Font.PLAIN, 11));
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaMeeting.getModel());	//sorter
 			tabellaMeeting.setRowSorter(sorter);
-			tabellaMeeting.getRowSorter().toggleSortOrder(0);
+			tabellaMeeting.getRowSorter().toggleSortOrder(0);	//sort by data inizio di default
 			//Click mouse sinistro
 			tabellaMeeting.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					int row = tabellaMeeting.getSelectedRow();
+					int row = tabellaMeeting.getSelectedRow();	//ottiene la riga selezionata
 					row = tabellaMeeting.convertRowIndexToModel(row);	//converte la riga correttamente in caso di sorting
 					Meeting meeting = dataModelTabella.getSelected(row);	//prende il meeting selezionato in base alla riga
 					
@@ -356,18 +378,17 @@ public class GestioneMeetingSegreteria extends JFrame {
 					fineLabel.setText("Fine: " + meeting.getDataFine().toString(formatDate) + " " + meeting.getOraFine().toString(formatHour));	//fine meeting
 					//sala o piattaforma
 					if (meeting.getModalita().equals("Telematico")) {
-						modalitàLabel.setText("Piattaforma: " + meeting.getPiattaforma());
+						modalitàLabel.setText("Piattaforma: " + meeting.getPiattaforma());	//piattaforma
 					}
 					else {
-						modalitàLabel.setText("Sala: " + meeting.getSala().toString());
+						modalitàLabel.setText("Sala: " + meeting.getSala().toString());	//sala
 					}
-					//progetto discusso
-					progettoDiscussoTextArea.setText("Progetto Discusso: " + meeting.getProgettoDiscusso().getNomeProgetto());
+					progettoDiscussoTextArea.setText("Progetto Discusso: " + meeting.getProgettoDiscusso().getNomeProgetto()); 	//progetto discusso
 					//partecipanti
 					try {
-						invitatiListModel.clear();
-						invitatiListModel.addAll(controller.ottieniPartecipanti(meeting));
-						invitatiList.setModel(invitatiListModel);
+						invitatiListModel.clear();	//pulisce la lista di partecipanti
+						invitatiListModel.addAll(controller.ottieniPartecipanti(meeting)); //riempie la lista di partecipanti con quelli ottenuti dal DB
+						invitatiList.setModel(invitatiListModel);	//aggiorna la lista
 					} catch (SQLException e1) {
 						//errore select per tutti gli invitati a un meeting nel database (es: ResultSet vuoto)
 							JOptionPane.showMessageDialog(null,
@@ -454,13 +475,16 @@ public class GestioneMeetingSegreteria extends JFrame {
 	
 	//Metodo che aggiorna le sale nella combobox
 	public void aggiornaSale(ControllerMeetingSegreteria controller) {
-		filtroSaleComboBox.removeAllItems();
+		filtroSaleComboBox.removeAllItems();	//rimuove tutte le sale dalla combobox
 		try {
 			for (SalaRiunione sala: controller.ottieniSale())
-				filtroSaleComboBox.addItem(sala);
+				filtroSaleComboBox.addItem(sala);	//aggiunge ogni sala del database
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//errore select per tutte le sale nel database (es: ResultSet vuoto)
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutte le sale dal database.\nControllare che la connessione al database sia stabilita\noppure provare a crearne una nuova.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
