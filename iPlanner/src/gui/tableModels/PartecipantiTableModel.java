@@ -66,6 +66,7 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		case 5:
 			return dipendente.getEmail();
 		case 6:
+			
 			return dipendente.getSalario();
 		case 7:
 			String s = String.format("%.2f",dipendente.getValutazione());
@@ -82,13 +83,23 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		return dipendente;
 	}
 	
-	@Override
-	public Class<?> getColumnClass(int columnIndex){
-		return getValueAt(0, columnIndex).getClass();
+	//Per sorting corretto
+	public Class getColumnClass(int column) {
+        switch (column) {
+            case 4:
+                return Integer.class;
+            case 6:
+                return Float.class;
+            case 3:
+                return Character.class;
+            default:
+                return String.class;
+        }
 	}
 
+}
 
-	}
+	
 
 
 

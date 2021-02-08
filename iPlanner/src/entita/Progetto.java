@@ -177,33 +177,13 @@ public class Progetto {
 	public void setMeetingsRelativi(ArrayList<Meeting> meetingsRelativi) {
 		this.meetingsRelativi = meetingsRelativi;
 	}
-
-
-	
-
-//	@Override
-//	public String toString() {
-//		return "Progetto [idProgettto=" + idProgettto + ", nomeProgetto=" + nomeProgetto + ", tipoProgetto="
-//				+ tipoProgetto + ", descrizioneProgetto=" + descrizioneProgetto + ", dataCreazione=" + dataCreazione
-//				+ ", scadenza=" + scadenza + ", dataTerminazione=" + dataTerminazione + ", ambiti=" + ambiti
-//				+ ", comprende=" + comprende + ", discussoIn=" + discussoIn + ", collaborazioni=" + collaborazioni
-//				+ "]";
-//	}
-
-
-
-	//toString
 	@Override
 	public String toString() {
-		String temp = getNomeProgetto();
-		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-		if (!scadenza.equals(null))
-			temp += " " + scadenza.toString(formatDate);
-				
-		return temp;
+		return nomeProgetto;
 	}
+
 	
-	//equals
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -215,6 +195,35 @@ public class Progetto {
 		Progetto other = (Progetto) obj;
 		if (idProgettto != other.idProgettto)
 			return false;
+		if (meetingsRelativi == null) {
+			if (other.meetingsRelativi != null)
+				return false;
+		} else if (!meetingsRelativi.equals(other.meetingsRelativi))
+			return false;
+		if (nomeProgetto == null) {
+			if (other.nomeProgetto != null)
+				return false;
+		} else if (!nomeProgetto.equals(other.nomeProgetto))
+			return false;
 		return true;
 	}
+
+	
+	
+//	@Override
+//	public String toString() {
+//		String temp ="Nome progetto:"+nomeProgetto;
+//		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+//		
+//		temp += "\nData creazione:" + dataCreazione.toString(formatDate) + " Data scadenza:" +scadenza.toString(formatDate)+" Data terminazione:";
+//		if (dataTerminazione !=null)
+//			temp += dataTerminazione.toString(formatDate);
+//		else
+//			temp += "In corso";
+//		return temp;
+//	}
+	
+	
+	
+
 }

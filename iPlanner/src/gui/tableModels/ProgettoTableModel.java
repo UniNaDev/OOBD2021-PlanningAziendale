@@ -5,6 +5,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -83,6 +84,19 @@ public class ProgettoTableModel extends AbstractTableModel {
 		return progettiTabella.get(rowIndex);
 	}
 
+	//Per sorting corretto
+		public Class getColumnClass(int column) {
+	        switch (column) {
+	            case 4:
+	                return LocalDate.class;
+	            case 5:
+	                return LocalDate.class;
+	            case 6:
+	                return LocalDate.class;
+	            default:
+	                return String.class;
+	        }
+		}
 
 	
 	

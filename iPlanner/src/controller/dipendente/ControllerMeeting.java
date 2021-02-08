@@ -86,12 +86,12 @@ public class ControllerMeeting {
 	}
 	
 	//Ottiene i progetti del dipendente
-	public ArrayList<String> ottieniNomiProgetti() throws SQLException {
+	public ArrayList<Progetto> ottieniNomiProgetti() throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
 		
-		ArrayList<String> temp = new ArrayList<String>();
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)
-			temp.add(collaborazione.getProgetto().getNomeProgetto());
+			temp.add(collaborazione.getProgetto());
 		
 		return temp;
 	}
@@ -149,9 +149,9 @@ public class ControllerMeeting {
 		meetDAO.addOrganizzatore(dipendente.getCf()); 
 	}
 
-	public Progetto ottieniProgettoInserito(String progettoInserito) throws SQLException {
+	public Progetto ottieniProgettoInserito(Progetto progetto) throws SQLException {
 		
-		return projDAO.getProgettoInserito(progettoInserito);
+		return projDAO.getProgettoByCod(progetto.getIdProgettto());
 	}
 
 	

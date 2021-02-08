@@ -6,10 +6,13 @@ import javax.swing.table.AbstractTableModel;
 
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import entita.Meeting;
+import entita.Progetto;
+import entita.SalaRiunione;
 
 public class MeetingTableModel extends AbstractTableModel {
 	
@@ -77,13 +80,31 @@ public class MeetingTableModel extends AbstractTableModel {
 			else
 				return meeting.getSala();
 		case 5:
-			return meeting.getProgettoDiscusso().getNomeProgetto();	
+			return meeting.getProgettoDiscusso();	
 		}
 		return null;	
 	}
 	
 	public Meeting getSelected(int rowIndex) {
 		return meetingTabella.get(rowIndex);
+	}
+	
+	//Per sorting corretto
+	public Class getColumnClass(int column) {
+        switch (column) {
+            case 0:
+                return LocalDate.class;
+            case 1:
+                return LocalDate.class;
+            case 2:
+                return LocalTime.class;
+            case 3:
+            	return LocalTime.class;
+            case 4:
+            	return SalaRiunione.class;
+            default:
+                return String.class;
+        }
 	}
 
 

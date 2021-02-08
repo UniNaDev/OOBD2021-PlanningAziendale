@@ -166,8 +166,6 @@ public class Meeting {
 	}
 
 	public void setProgettoDiscusso(Progetto progetto) {
-		
-		
 		this.releativoA = progetto;
 	}
 
@@ -180,15 +178,6 @@ public class Meeting {
 	}
 
 
-//	@Override
-//	public String toString() {
-//		return "Meeting [ dataInizio=" + dataInizio + ", dataFine=" + dataFine
-//				+ ", oraInizio=" + oraInizio + ", oraFine=" + oraFine + ", modalita=" + modalita + ", piattaforma="
-//				+ piattaforma + ", sala=" + sala + ", partecipazioniDipendenti="
-//				+ partecipazioniDipendenti + "]";
-//	}
-
-	
 	public ArrayList<PartecipazioneMeeting> getPartecipantiAlMeeting() {
 		return partecipantiAlMeeting;
 	}
@@ -199,6 +188,9 @@ public class Meeting {
 	}
 
 	
+	
+	
+
 	//toString:
 	//Nome Progetto
 	//01/12/2020 13:00 - 01/12/2020 17:00
@@ -215,4 +207,26 @@ public class Meeting {
 			temp += "\n" + sala.getCodSala();
 		return temp;
 	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Meeting other = (Meeting) obj;
+		if (idMeeting != other.idMeeting)
+			return false;
+		if (releativoA == null) {
+			if (other.releativoA != null)
+				return false;
+		} else if (!releativoA.equals(other.releativoA))
+			return false;
+		return true;
+	}
+	
 }

@@ -221,14 +221,10 @@ public class Dipendente {
 	public void setCollaborazioni(ArrayList<CollaborazioneProgetto> collaborazioni) {
 		this.collaborazioni = collaborazioni;
 	}
-
-	//toString
-	
 	
 	public ArrayList<Meeting> getPartecipa() {
 		return partecipa;
 	}
-
 
 
 	public void setPartecipa(ArrayList<Meeting> partecipa) {

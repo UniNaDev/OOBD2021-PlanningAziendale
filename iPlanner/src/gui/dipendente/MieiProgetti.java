@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import entita.AmbitoProgetto;
 import entita.Dipendente;
 import entita.Progetto;
+import gui.cellRenderers.ProgettoListRenderer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -340,8 +341,11 @@ public class MieiProgetti extends JFrame {
 		
 		//List di progetti
 		JList <Progetto> progettiList;
+		ProgettoListRenderer progettoCellRenderer = new ProgettoListRenderer();
+		
 		try {
 			progettiList = new JList(controller.ottieniProgetti().toArray());
+			progettiList.setCellRenderer(progettoCellRenderer);
 			//Selezione nella lista
 			progettiList.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {

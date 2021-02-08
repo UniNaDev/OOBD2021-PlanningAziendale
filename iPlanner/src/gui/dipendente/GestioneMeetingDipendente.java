@@ -42,6 +42,8 @@ import entita.Meeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import gui.cellRenderers.InvitatiListRenderer;
+import gui.cellRenderers.ProgettoDiscussoListRenderer;
+import gui.cellRenderers.ProgettoListRenderer;
 import gui.tableModels.MeetingTableModel;
 
 import javax.swing.JButton;
@@ -684,7 +686,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		        if(progettoDiscussoComboBox.getSelectedItem()!=null)
 		        {
 		            try {
-						Progetto progetto=theController.ottieniProgettoInserito(progettoDiscussoComboBox.getSelectedItem().toString());
+						Progetto progetto=theController.ottieniProgettoInserito((Progetto)progettoDiscussoComboBox.getSelectedItem());
 						listmodelProgetti=new DefaultListModel();
 						progettoDiscussoList.setModel(listmodelProgetti);
 						listmodelProgetti.removeAllElements();
@@ -847,10 +849,12 @@ public class GestioneMeetingDipendente extends JFrame {
 		);
 		
 		progettoDiscussoList = new JList();
+		ProgettoDiscussoListRenderer progettoDiscussoCellRenderer = new ProgettoDiscussoListRenderer();
 		progettoDiscussoList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		progettoDiscussoList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		progettoDiscussoList.setSelectionBackground(Color.WHITE);
 		progettoDiscussoScrollPane.setViewportView(progettoDiscussoList);
+		progettoDiscussoList.setCellRenderer(progettoDiscussoCellRenderer);
 		
 		infoProgettoDiscussoLabel = new JLabel("Info progetto discusso");
 		infoProgettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -907,6 +911,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		//Sorter tabella meeting
 		sorterMeeting=new TableRowSorter<>(dataModelMeeting);
 		meetingTable.setRowSorter(sorterMeeting);
+		
 		
 		
 		meetingTable.addMouseListener(new MouseAdapter() {
@@ -976,8 +981,13 @@ public class GestioneMeetingDipendente extends JFrame {
 					JOptionPane.showMessageDialog(null, e2.getMessage());
 				}
 				
+				
+				Meeting meetingRiga=dataModelMeeting.getMeetingTabella().get(row);
+				
+				
 				//Progetto discusso
-				progettoDiscussoComboBox.setSelectedItem(meetingTable.getValueAt(row, 5)); //Setta come elemento selezionato il progetto relativo al meeting
+				
+				progettoDiscussoComboBox.setSelectedItem(meetingRiga.toString()); //Setta come elemento selezionato il progetto relativo al meeting
 
 					DefaultListModel listmodel=new DefaultListModel();
 					invitatiList.setModel(listmodel);
@@ -1101,7 +1111,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		}
 		Meeting meetingInserito = new Meeting(dataInizio,dataFine,oraInizio,oraFine,modalita,piattaforma,sala);	//crea il meeting inserito
 		try {
-			Progetto progetto=theController.ottieniProgettoInserito(progettoDiscussoComboBox.getSelectedItem().toString());
+			Progetto progetto=theController.ottieniProgettoInserito((Progetto)progettoDiscussoComboBox.getSelectedItem());
 			theController.inserisciMeetingCompleto(meetingInserito,progetto);	//tenta di fare l'insert nel DB del meeting
 			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
 			

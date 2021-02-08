@@ -19,12 +19,13 @@ import org.joda.time.format.DateTimeFormatter;
 import entita.Meeting;
 import entita.Progetto;
 
-public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
+public class ProgettoDiscussoListRenderer implements ListCellRenderer<Progetto> {
 
 	  	private JPanel panel;
 	    private JTextArea textArea;
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	
-	public ProgettoListRenderer() {
+	public ProgettoDiscussoListRenderer() {
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
@@ -43,14 +44,14 @@ public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
 	public Component getListCellRendererComponent(JList<? extends Progetto> list, Progetto progetto, int index,
 			boolean isSelected, boolean cellHasFocus) {
 		
-		String temp ="Nome:"+progetto.getNomeProgetto();
-		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		String temp="Nome:"+progetto.getNomeProgetto()
+				+"\n Data creazione:"+progetto.getDataCreazione().toString(formatDate)
+				+"\n Data scadenza:"+progetto.getScadenza().toString(formatDate)+"\n Data terminazione:";
 		
-		temp += "\nData creazione:" + progetto.getDataCreazione().toString(formatDate) + " Data scadenza:" +progetto.getScadenza().toString(formatDate)+" Data terminazione:";
-		if (progetto.getDataTerminazione() !=null)
-			temp += progetto.getDataTerminazione().toString(formatDate);
+		if(progetto.getDataTerminazione()!=null)
+			temp+=progetto.getDataTerminazione().toString(formatDate);
 		else
-			temp += "In corso";
+			temp+="In corso";
 		
 		textArea.setText(temp);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
