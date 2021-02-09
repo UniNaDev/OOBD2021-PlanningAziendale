@@ -60,9 +60,8 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		case 3:
 			return dipendente.getSesso();
 		case 4:
-			Period period = new Period(dipendente.getDataNascita(), LocalDate.now(), PeriodType.yearMonthDay());
-			int age = period.getYears();
-			return age;
+			
+			return dipendente.getEtà();
 		case 5:
 			return dipendente.getEmail();
 		case 6:

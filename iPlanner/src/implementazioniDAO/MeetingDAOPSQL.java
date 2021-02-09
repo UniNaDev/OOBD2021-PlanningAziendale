@@ -303,7 +303,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 	//Metodo che aggiorna un meeting.
 	@Override
-	public boolean updateMeeting(Meeting meeting,String nomeProgettoSelezionato) throws SQLException {
+	public boolean updateMeeting(Meeting meeting,Progetto progettoSelezionato) throws SQLException {
 		updateMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));//data inizio
 		updateMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));//data fine
 		updateMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(),meeting.getOraInizio().getSecondOfMinute()));//ora inizio
@@ -319,11 +319,8 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			updateMeetingPS.setNull(7, Types.CHAR);
 		updateMeetingPS.setInt(9, meeting.getIdMeeting());//idMeeting da modificare
 		
-		getIdProgettoDiscussoPS.setString(1,nomeProgettoSelezionato);
-		ResultSet risultato=getIdProgettoDiscussoPS.executeQuery();
-		risultato.next();
 		
-		updateMeetingPS.setInt(8, risultato.getInt("CodProgetto"));
+		updateMeetingPS.setInt(8, progettoSelezionato.getIdProgettto());
 		
 		int record = updateMeetingPS.executeUpdate();	//esegue l'update e salva il numero di record modificati
 		

@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import entita.AmbitoProgetto;
 import entita.Progetto;
 
 
@@ -87,6 +88,8 @@ public class ProgettoTableModel extends AbstractTableModel {
 	//Per sorting corretto
 		public Class getColumnClass(int column) {
 	        switch (column) {
+	        	case 2:
+	        		return AmbitoProgetto.class;
 	            case 4:
 	                return LocalDate.class;
 	            case 5:

@@ -177,13 +177,14 @@ public class Progetto {
 	public void setMeetingsRelativi(ArrayList<Meeting> meetingsRelativi) {
 		this.meetingsRelativi = meetingsRelativi;
 	}
+	
 	@Override
 	public String toString() {
 		return nomeProgetto;
 	}
 
 	
-	
+	//Serve a distinguere i progetti con nome uguale(GUI gestione meeting)
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -193,35 +194,48 @@ public class Progetto {
 		if (getClass() != obj.getClass())
 			return false;
 		Progetto other = (Progetto) obj;
-		if (idProgettto != other.idProgettto)
-			return false;
-		if (meetingsRelativi == null) {
-			if (other.meetingsRelativi != null)
+		if (ambiti == null) {
+			if (other.ambiti != null)
 				return false;
-		} else if (!meetingsRelativi.equals(other.meetingsRelativi))
+		} else if (!ambiti.equals(other.ambiti))
+			return false;
+		if (dataCreazione == null) {
+			if (other.dataCreazione != null)
+				return false;
+		} else if (!dataCreazione.equals(other.dataCreazione))
+			return false;
+		if (dataTerminazione == null) {
+			if (other.dataTerminazione != null)
+				return false;
+		} else if (!dataTerminazione.equals(other.dataTerminazione))
+			return false;
+		if (descrizioneProgetto == null) {
+			if (other.descrizioneProgetto != null)
+				return false;
+		} else if (!descrizioneProgetto.equals(other.descrizioneProgetto))
+			return false;
+		if (idProgettto != other.idProgettto)
 			return false;
 		if (nomeProgetto == null) {
 			if (other.nomeProgetto != null)
 				return false;
 		} else if (!nomeProgetto.equals(other.nomeProgetto))
 			return false;
+		if (scadenza == null) {
+			if (other.scadenza != null)
+				return false;
+		} else if (!scadenza.equals(other.scadenza))
+			return false;
+		if (tipoProgetto == null) {
+			if (other.tipoProgetto != null)
+				return false;
+		} else if (!tipoProgetto.equals(other.tipoProgetto))
+			return false;
 		return true;
 	}
+	
+	
 
-	
-	
-//	@Override
-//	public String toString() {
-//		String temp ="Nome progetto:"+nomeProgetto;
-//		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-//		
-//		temp += "\nData creazione:" + dataCreazione.toString(formatDate) + " Data scadenza:" +scadenza.toString(formatDate)+" Data terminazione:";
-//		if (dataTerminazione !=null)
-//			temp += dataTerminazione.toString(formatDate);
-//		else
-//			temp += "In corso";
-//		return temp;
-//	}
 	
 	
 	

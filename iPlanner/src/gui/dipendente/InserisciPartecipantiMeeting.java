@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableModel;
@@ -488,6 +489,19 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						presenzaCheckBox.setSelected(true);
 						else
 							presenzaCheckBox.setSelected(false);
+					
+					
+					nomeTextField.setText(partecipaz.getPartecipante().getNome());
+					cognomeTextField.setText(partecipaz.getPartecipante().getCognome());
+					etàTextField.setText(String.valueOf(partecipaz.getPartecipante().getEtà()));
+					valutazioneTextField.setText(String.format("%.2f", partecipaz.getPartecipante().getValutazione()));
+					salarioTextField.setText(String.format("%.2f", partecipaz.getPartecipante().getSalario()));
+					if(partecipaz.getPartecipante().getSesso()=='M')
+						uomoRadioButton.setSelected(true);
+					else 
+						donnaRadioButton.setSelected(true);
+					
+					dipendenteTable.clearSelection();
 				}
 					
 					
@@ -611,6 +625,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
 						if(dipendenteTable.getRowCount()!=0)
 						sorterDipendente.setModel(dataModelDipendente);
+						
+						//Svuota i campi
+						svuotaCampi();
 					
 					} catch (SQLException e1) {
 						
@@ -683,6 +700,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						 //Aggiorna il modello del sorterDipendente in seguito alle modifiche
 						if(dipendenteTable.getRowCount()!=0)
 						sorterDipendente.setModel(dataModelDipendente);
+						
+						//Svuota i campi
+						svuotaCampi();
 						
 					} catch (SQLException e1) {
 						
@@ -765,10 +785,15 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 		
-		
+		//Sorter tabella
 		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
 		dipendenteTable.setRowSorter(sorterDipendente);
 		
+		//Seleziona singola
+		dipendenteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		//Le colonne non possono essere riordinate
+		dipendenteTable.getTableHeader().setReorderingAllowed(false);
 	
 
 		
@@ -777,6 +802,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				invitatiList.clearSelection();
 				
 				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
 				//ricava le info del dipendente selezionato
@@ -842,6 +868,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						 //Aggiorna il modello del sorterDipendente in seguito alle modifiche
 					
 						sorterDipendente.setModel(dataModelDipendente);
+						
+						//Svuota i campi
+						svuotaCampi();
 	
 		
 					} catch (SQLException e1) {
@@ -860,6 +889,25 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		DipendenteScrollPane.setViewportView(dipendenteTable);
 
+		
+	}
+	
+	private void svuotaCampi() {
+		
+		nomeTextField.setText(null);
+		cognomeTextField.setText(null);
+		etàTextField.setText(null);
+		valutazioneTextField.setText(null);
+		salarioTextField.setText(null);
+		
+		if(uomoRadioButton.isSelected()) 
+			uomoRadioButton.setSelected(false);
+		else
+			donnaRadioButton.setSelected(false);
+		
+			
+		
+		
 		
 	}
 }

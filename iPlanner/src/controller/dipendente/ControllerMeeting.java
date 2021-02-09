@@ -107,8 +107,8 @@ public class ControllerMeeting {
 	}
 	
 	//Metodo che aggiorna le info di un meeting nel DB
-	public void aggiornaMeeting(Meeting meeting, String nomeProgettoSelezionato) throws SQLException {
-		meetDAO.updateMeeting(meeting,nomeProgettoSelezionato);
+	public void aggiornaMeeting(Meeting meeting, Progetto progettoSelezionato) throws SQLException {
+		meetDAO.updateMeeting(meeting,progettoSelezionato);
 	}
 
 	//Metodo che ottiene gli invitati al meeting selezionato

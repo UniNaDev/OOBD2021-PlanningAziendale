@@ -187,7 +187,8 @@ public class MieiMeeting extends JFrame {
 		valoreDataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		
 		//Label del progetto discusso nel meeting
-		JLabel progettoDiscussoLabel = new JLabel("Meeting Progetto");
+		JLabel progettoDiscussoLabel = new JLabel("N/A");
+		progettoDiscussoLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
 		
@@ -203,66 +204,47 @@ public class MieiMeeting extends JFrame {
 			gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(551, Short.MAX_VALUE))
+					.addContainerGap(35, Short.MAX_VALUE))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(162)
-					.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(valorePiattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(159))
-				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(151)
+					.addGap(92)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-							.addComponent(orarioInizioLabel, GroupLayout.PREFERRED_SIZE, 227, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(valoreOrarioInizioLabel, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-							.addGap(101))
-						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-							.addComponent(orarioFineLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(valoreOrarioFineLabel, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-							.addGap(127))))
-				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(180)
-					.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 136, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(valoreDataFineLabel, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-					.addGap(169))
-				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(173)
-					.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-					.addGap(161))
-				.addGroup(Alignment.LEADING, gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(61)
-					.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+						.addComponent(orarioInizioLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+						.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+						.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
+						.addComponent(orarioFineLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+						.addComponent(modalitaLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+						.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(valoreModalitaLabel, GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
-					.addGap(41))
-				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(19)
-					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
-					.addGap(56))
+					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(valorePiattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+						.addComponent(valoreModalitaLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+						.addComponent(valoreOrarioFineLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+						.addComponent(valoreOrarioInizioLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+						.addComponent(valoreDataFineLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+						.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
+					.addGap(83))
+				.addGroup(Alignment.LEADING, gl_infoMeetingPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+					.addGap(35))
 		);
 		gl_infoMeetingPanel.setVerticalGroup(
 			gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(44)
-					.addComponent(progettoDiscussoLabel)
-					.addGap(48)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
 						.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreDataFineLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+						.addComponent(valoreDataFineLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+						.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
 					.addGap(42)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(orarioInizioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+						.addComponent(orarioInizioLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
 						.addComponent(valoreOrarioInizioLabel, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
@@ -276,7 +258,7 @@ public class MieiMeeting extends JFrame {
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(valorePiattaformaSalaLabel, GroupLayout.PREFERRED_SIZE, 26, Short.MAX_VALUE)
 						.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(38))
+					.addGap(68))
 		);
 		infoMeetingPanel.setLayout(gl_infoMeetingPanel);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -286,7 +268,7 @@ public class MieiMeeting extends JFrame {
 					.addGap(44)
 					.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
 					.addGap(116)
-					.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 648, Short.MAX_VALUE)
+					.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 648, GroupLayout.PREFERRED_SIZE)
 					.addGap(51))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
@@ -321,7 +303,7 @@ public class MieiMeeting extends JFrame {
 				public void valueChanged(ListSelectionEvent e) {
 					Meeting meetingSelezionato = meetingList.getSelectedValue();	//ottiene il meeting selezionato
 					
-					progettoDiscussoLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"</html>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
+					progettoDiscussoLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"<br>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
 					valoreModalitaLabel.setText(meetingSelezionato.getModalita());	//modalità
 					
 					if (meetingSelezionato.getModalita().equals("Fisico")) {

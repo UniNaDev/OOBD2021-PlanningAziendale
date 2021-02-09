@@ -10,6 +10,8 @@ package entita;
 import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 
 public class Dipendente {
 
@@ -597,5 +599,14 @@ public class Dipendente {
 			temp ='Z';
 		
 		return temp;
+	}
+
+
+
+	public int getEtà() {
+		Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
+		int età = period.getYears();
+		
+		return età;
 	}
 }

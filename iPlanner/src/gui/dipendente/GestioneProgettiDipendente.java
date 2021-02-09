@@ -1047,18 +1047,14 @@ public class GestioneProgettiDipendente extends JFrame {
 					e1.printStackTrace();
 				}
 			
-				
-	
 
 				//ripulisce le liste ogni volta che si preme su una riga della tabella , in modo che non vengano aggiunti elementi ad ogni click
 				listaPartecipantiModel.clear();
 				listaMeetingRelativiModel.clear();
 				
-//				//ottiene i partecipanti al progetto selezionato
-//				Progetto partecipanti =dataModelProgetti.getProgettiTabella().get(row);
 					
 					
-//				ottiene i meeting relativi al progetto selezionato
+//				ottiene i meeting e i partecipanti relativi al progetto selezionato
 				Progetto progetto=dataModelProgetti.getProgettiTabella().get(row);
 										
 				//aggiunge meeting e partecipanti alle rispettive liste

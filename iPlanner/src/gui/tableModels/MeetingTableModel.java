@@ -102,10 +102,15 @@ public class MeetingTableModel extends AbstractTableModel {
             	return LocalTime.class;
             case 4:
             	return SalaRiunione.class;
-            default:
-                return String.class;
+            case 5:
+                return Progetto.class;
         }
+		return null;
 	}
+
+
+
+	
 
 
 }
