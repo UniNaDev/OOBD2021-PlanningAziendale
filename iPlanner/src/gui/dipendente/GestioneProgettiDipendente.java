@@ -92,7 +92,6 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JLabel meetingRelativiLabel;
 	private JLabel gestioneProgettoLabel;
 	private JLabel scadenzaProgettoLabel;
-	private JTextField nomeTextField;
 	private JTable progettoTable;
 	private JTextField cercaTextField;
 	private JTextArea descrizioneTextArea;
@@ -113,16 +112,17 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JList meetingRelativiList;
 	
 	LocalDate dataAttuale = LocalDate.now();
+	private JTextArea nomeTextArea;
 
 	//Creazione frame
 	//-----------------------------------------------------------------
 	
 	public GestioneProgettiDipendente(ControllerProgetto controller) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1300, 700));
+		setMinimumSize(new Dimension(1440, 900));
 	
 		setTitle("iPlanner-Gestione progetto");
-		setBounds(100, 100, 1280, 720);
+		setBounds(100, 100, 1440, 900);
 		contentPane = new JPanel();		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -147,19 +147,19 @@ public class GestioneProgettiDipendente extends JFrame {
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(tabellaScrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
+						.addComponent(tabellaScrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
+						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(23)
-					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
+					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 359, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-					.addGap(26)
+					.addGap(18)
 					.addComponent(tabellaScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 					.addContainerGap())
 		);
@@ -373,17 +373,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		JPanel infoPanel2 = new JPanel();
 		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		
-		//Label "Nome"
-		nomeProgettoLabel = new JLabel("Nome");
-		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		//TextField nome progetto
-		nomeTextField = new JTextField();
-		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
-		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		nomeTextField.setColumns(10);
-		
 		//ScrollPane meeting
 		JScrollPane meetingScrollPane = new JScrollPane();
 		meetingScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
@@ -435,9 +424,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		int annoAttuale = LocalDate.now().getYear();
 		for(int i= annoAttuale;i<= annoAttuale + 20;i++)	//inserisce nella combobox gli anni da ora a 20 anni
 			annoModel.addElement(i);
-		
-		
-		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		infoPanel2.add(annoScadenzaComboBox);
 		
 		//Label "Descrizione"
@@ -554,46 +540,52 @@ public class GestioneProgettiDipendente extends JFrame {
 		tipologiaComboBox.setUI(new BasicComboBoxUI());
 		tipologiaComboBox.setSelectedItem(null);
 		
+		nomeTextArea = new JTextArea();
+		nomeTextArea.setWrapStyleWord(true);
+		nomeTextArea.setLineWrap(true);
+		nomeTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
+		nomeTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		nomeProgettoLabel = new JLabel("Nome");
+		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
 		gl_infoPanel2.setHorizontalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGap(45)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+					.addGap(10)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(scadenzaProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataTerminazioneLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+						.addComponent(progettoTerminatoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tipologiaProgettoLabel, Alignment.TRAILING)
+						.addComponent(descrizioneProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+						.addComponent(nomeProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tipologiaProgettoLabel)
-								.addComponent(progettoTerminatoLabel, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(descrizioneTextArea, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-								.addComponent(progettoTerminatoCheckBox)
-								.addComponent(tipologiaComboBox, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
-							.addGap(66))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(descrizioneTextArea, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-								.addComponent(nomeTextField, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
-							.addGap(62)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(ambitiScrollPane, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
+									.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
+								.addComponent(tipologiaComboBox, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeTextArea, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
+							.addGap(66)
+							.addComponent(ambitiScrollPane, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE))
+						.addComponent(progettoTerminatoCheckBox))
 					.addGap(18)
 					.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
 					.addGap(33)
@@ -605,43 +597,64 @@ public class GestioneProgettiDipendente extends JFrame {
 				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addGap(25)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE, false)
+							.addComponent(meetingScrollPane, GroupLayout.PREFERRED_SIZE, 306, GroupLayout.PREFERRED_SIZE)
+							.addComponent(ambitiScrollPane, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 283, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(nomeTextArea, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(descrizioneTextArea, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-										.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-									.addGap(15)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-										.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(descrizioneTextArea, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE))
-									.addGap(96)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+									.addGap(7)
+									.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(11)
+									.addComponent(tipologiaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+									.addGroup(gl_infoPanel2.createSequentialGroup()
+										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+											.addGroup(gl_infoPanel2.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addComponent(progettoTerminatoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+											.addGroup(gl_infoPanel2.createSequentialGroup()
+												.addGap(14)
+												.addComponent(progettoTerminatoCheckBox)))
+										.addPreferredGap(ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+											.addGroup(gl_infoPanel2.createSequentialGroup()
+												.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED))
+											.addGroup(gl_infoPanel2.createSequentialGroup()
+												.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+												.addGap(9))))
+									.addGroup(gl_infoPanel2.createSequentialGroup()
+										.addPreferredGap(ComponentPlacement.RELATED)
 										.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-										.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-										.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-									.addComponent(meetingScrollPane, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-									.addComponent(ambitiScrollPane, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
-									.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 283, GroupLayout.PREFERRED_SIZE)))
-							.addContainerGap())
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(120)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tipologiaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
+										.addGap(9)))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+									.addGap(9)))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(progettoTerminatoCheckBox)
-								.addComponent(progettoTerminatoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addGap(41)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(33))))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(4)
+									.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(4)
+									.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(4)
+									.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addGap(33)))
+					.addContainerGap())
 		);
 		
 		//Label "Ambito/i"
@@ -662,7 +675,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		try 
 		{
 			ambitoModel.addAll(controller.ottieniAmbiti());
-			ambitiList.setModel(ambitoModel);
+			
 		}
 		catch (SQLException e2) 
 		{
@@ -677,6 +690,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		//List partecipanti
 		listaPartecipantiModel = new DefaultListModel<>();
 		PartecipantiListRenderer partecipantiListRenderer=new PartecipantiListRenderer();
+		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		partecipantiList = new JList();
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		partecipantiList.setSelectionBackground(Color.WHITE);
@@ -700,7 +714,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		listaMeetingRelativiModel = new DefaultListModel<>();
 		MeetingListRenderer renderer = new MeetingListRenderer();
 		meetingRelativiList = new JList();
-		meetingRelativiList.setFixedCellHeight(60);
+		meetingRelativiList.setFixedCellHeight(80);
 		meetingRelativiList.setSelectionBackground(Color.WHITE);
 		meetingRelativiList.setModel(listaMeetingRelativiModel);
 		meetingRelativiList.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -722,13 +736,13 @@ public class GestioneProgettiDipendente extends JFrame {
 				//se l'utente conferma allora vengono effettivamente fatte le modifiche
 				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
 				{
-					if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
+					if(nomeTextArea.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
 					{
 											
 						//fa diventare rossi i campi obbligatori che non sono stati inseriti
-						if(nomeTextField.getText().isBlank())					
+						if(nomeTextArea.getText().isBlank())					
 								nomeProgettoLabel.setForeground(Color.RED);
-						else if(!nomeTextField.getText().isBlank())
+						else if(!nomeTextArea.getText().isBlank())
 							nomeProgettoLabel.setForeground(Color.BLACK);
 						
 						if(tipologiaComboBox.getSelectedItem()== null)
@@ -777,7 +791,7 @@ public class GestioneProgettiDipendente extends JFrame {
 						{
 							//prende tutti i campi e fa l'update del progetto
 							Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
-							controller.updateProgetto(progetto.getIdProgettto(), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
+							controller.updateProgetto(progetto.getIdProgettto(), nomeTextArea.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
 							JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
 							
 							//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
@@ -819,13 +833,13 @@ public class GestioneProgettiDipendente extends JFrame {
 					public void actionPerformed(ActionEvent e) 
 					{
 						//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
-						if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
+						if(nomeTextArea.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
 						{
 												
 							//fa diventare rossi i campi obbligatori che non sono stati inseriti
-							if(nomeTextField.getText().isBlank())					
+							if(nomeTextArea.getText().isBlank())					
 									nomeProgettoLabel.setForeground(Color.RED);
-							else if(!nomeTextField.getText().isBlank())
+							else if(!nomeTextArea.getText().isBlank())
 								nomeProgettoLabel.setForeground(Color.BLACK);
 							
 							if(tipologiaComboBox.getSelectedItem()== null)
@@ -863,7 +877,7 @@ public class GestioneProgettiDipendente extends JFrame {
 						
 							try 
 								{
-								controller.addProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
+								controller.addProgetto(nomeTextArea.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
 								JOptionPane.showMessageDialog(null, "Progetto creato con successo");
 								
 								dataModelProgetti.fireTableDataChanged();
@@ -908,21 +922,22 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(14)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-					.addGap(4))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addContainerGap()
 					.addComponent(gestioneProgettoLabel)
-					.addContainerGap(1208, Short.MAX_VALUE))
+					.addContainerGap(907, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1271, Short.MAX_VALUE)
+					.addGap(3))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
 					.addComponent(gestioneProgettoLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+					.addGap(11)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
@@ -935,6 +950,15 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettoTable.setBackground(Color.WHITE);
 		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
+		
+		//Modello delle colonne personalizzato
+		progettoTable.getColumnModel().getColumn(0).setMinWidth(380);
+		progettoTable.getColumnModel().getColumn(1).setMinWidth(380);
+		progettoTable.getColumnModel().getColumn(2).setMinWidth(280);
+		progettoTable.getColumnModel().getColumn(3).setMinWidth(140);
+		progettoTable.getColumnModel().getColumn(4).setMinWidth(70);
+		progettoTable.getColumnModel().getColumn(5).setMinWidth(80);
+		progettoTable.getColumnModel().getColumn(6).setMinWidth(70);
 		
 		//Setta i progetti nella tabella
 		try {
@@ -949,11 +973,16 @@ public class GestioneProgettiDipendente extends JFrame {
 		sorterProgetti=new TableRowSorter<>(dataModelProgetti);
 		progettoTable.setRowSorter(sorterProgetti);
 		
+		//Seleziona singola
+		progettoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
+		//Le colonne non possono essere riordinate
+		progettoTable.getTableHeader().setReorderingAllowed(false);
 		//Selezione riga
 		progettoTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				
 				//ottiene l'indice della riga selezionata
 				int row= progettoTable.getSelectedRow();	
@@ -963,7 +992,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				
 				
 				//Nome progetto
-				nomeTextField.setText(progettoTable.getValueAt(row, 0).toString());
+				nomeTextArea.setText(progettoTable.getValueAt(row, 0).toString());
 				
 				//descrizione progetto
 				descrizioneTextArea.setText(progettoTable.getValueAt(row, 1).toString());	
@@ -1009,7 +1038,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				
 				try 
 				{
-					Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
+					Progetto progetto=dataModelProgetti.getProgettiTabella().get(row);
 					ambiti = controller.getAmbitiProgettoByCod(progetto.getIdProgettto());					
 				} 
 				catch (SQLException e2) 
@@ -1017,6 +1046,9 @@ public class GestioneProgettiDipendente extends JFrame {
 					
 					e2.printStackTrace();
 				}
+				
+				
+				
 					ArrayList<Integer> selezionati = new ArrayList<Integer>();
 				    
 					//scorre tutti gli ambiti presenti nella lista degli ambiti e li confronta con ogni ambito del progetto per ottenere gli indici degli ambiti da selezionare
@@ -1054,7 +1086,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				
 					
 					
-//				ottiene i meeting e i partecipanti relativi al progetto selezionato
+				//ottiene i meeting e i partecipanti relativi al progetto selezionato
 				Progetto progetto=dataModelProgetti.getProgettiTabella().get(row);
 										
 				//aggiunge meeting e partecipanti alle rispettive liste
@@ -1080,7 +1112,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		dataTerminazioneLabel.setForeground(Color.BLACK);
 		
 		
-		nomeTextField.setText("");
+		nomeTextArea.setText("");
 		descrizioneTextArea.setText("");
 			
 		progettoTerminatoCheckBox.setSelected(false);
@@ -1109,5 +1141,4 @@ public class GestioneProgettiDipendente extends JFrame {
 		listaMeetingRelativiModel.clear();
 		
 	}
-	
 }

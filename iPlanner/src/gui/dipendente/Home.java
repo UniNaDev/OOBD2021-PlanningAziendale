@@ -282,7 +282,7 @@ public class Home extends JFrame {
 			progettiList = new JList(progetti.toArray());
 			progettiList.setSelectionBackground(Color.WHITE);
 			progettiList.setCellRenderer(progettoCellRenderer);
-			progettiList.setFixedCellHeight(40);
+			progettiList.setFixedCellHeight(60);
 			progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			
 			progettiScrollPanel.setViewportView(progettiList);
@@ -306,12 +306,11 @@ public class Home extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
 									.addComponent(iconaEmailLabel)
 									.addGap(18)
 									.addComponent(emailUtenteLabel))
 								.addComponent(nomeUtenteLabel))
-							.addPreferredGap(ComponentPlacement.RELATED, 1171, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 1042, Short.MAX_VALUE)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addComponent(dataAttualeLabel)
 								.addGroup(gl_contentPane.createSequentialGroup()
@@ -347,8 +346,8 @@ public class Home extends JFrame {
 							.addComponent(oraAttualeLabel)))
 					.addGap(55)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
-						.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE))
+						.addComponent(progettiScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+						.addComponent(meetingScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE))
 					.addGap(32)
 					.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
