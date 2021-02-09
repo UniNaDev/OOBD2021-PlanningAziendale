@@ -201,16 +201,16 @@ public class MieiMeeting extends JFrame {
 		
 		GroupLayout gl_infoMeetingPanel = new GroupLayout(infoMeetingPanel);
 		gl_infoMeetingPanel.setHorizontalGroup(
-			gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
+			gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(35, Short.MAX_VALUE))
+					.addContainerGap(551, Short.MAX_VALUE))
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addGap(92)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(orarioInizioLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
 						.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-						.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
 						.addComponent(orarioFineLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
 						.addComponent(modalitaLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
 						.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
@@ -223,9 +223,9 @@ public class MieiMeeting extends JFrame {
 						.addComponent(valoreDataFineLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
 						.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
 					.addGap(83))
-				.addGroup(Alignment.LEADING, gl_infoMeetingPanel.createSequentialGroup()
+				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addGap(40)
-					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
 					.addGap(35))
 		);
 		gl_infoMeetingPanel.setVerticalGroup(
@@ -268,7 +268,7 @@ public class MieiMeeting extends JFrame {
 					.addGap(44)
 					.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
 					.addGap(116)
-					.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 648, GroupLayout.PREFERRED_SIZE)
+					.addComponent(infoMeetingPanel, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
 					.addGap(51))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
@@ -303,7 +303,8 @@ public class MieiMeeting extends JFrame {
 				public void valueChanged(ListSelectionEvent e) {
 					Meeting meetingSelezionato = meetingList.getSelectedValue();	//ottiene il meeting selezionato
 					
-					progettoDiscussoLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"<br>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
+					progettoDiscussoLabel.setText("<html><p style=\"width:400px\">"+meetingSelezionato.getProgettoDiscusso().getNomeProgetto()+"</p></html>");
+//					progettoDiscussoLabel.setText("<html>"+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() +"<br>"); //convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
 					valoreModalitaLabel.setText(meetingSelezionato.getModalita());	//modalità
 					
 					if (meetingSelezionato.getModalita().equals("Fisico")) {

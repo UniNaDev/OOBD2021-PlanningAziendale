@@ -167,12 +167,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		//Click sul pulsante
 		pulisciButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
-			{
-				
+			{	
 				svuotaCampiMeeting();
-				
-			
-				
 			}
 
 			
@@ -866,6 +862,15 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingTable.setBackground(Color.WHITE);
 		meetingTable.setSelectionBackground(Color.LIGHT_GRAY);
+		
+		//Modello delle colonne personalizzato
+		meetingTable.getColumnModel().getColumn(0).setMinWidth(100);
+		meetingTable.getColumnModel().getColumn(1).setMinWidth(100);
+		meetingTable.getColumnModel().getColumn(2).setMinWidth(100);
+		meetingTable.getColumnModel().getColumn(3).setMinWidth(100);
+		meetingTable.getColumnModel().getColumn(4).setMinWidth(150);
+		meetingTable.getColumnModel().getColumn(5).setMinWidth(500);
+		
 		
 		//Setta i meeting nella tabella
 		try {
