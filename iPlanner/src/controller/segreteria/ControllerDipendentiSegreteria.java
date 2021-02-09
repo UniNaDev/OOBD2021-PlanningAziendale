@@ -1,5 +1,6 @@
 package controller.segreteria;
 
+import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -84,40 +85,33 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	//Metodo che crea un nuovo account per il dipendente
-	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo, ArrayList<Skill> skills, float salario) {
+	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo, ArrayList<Skill> skills, float salario) throws SQLException {
 		//crea un dipendente temporaneo con i parametri in input
 		Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
-		try {
-			//se l'insert nel database ha successo
-			if (dipDAO.addDipendente(temp)) {
-				temp.setSkills(skills);	//setta la skill del dipendente
-				for (Skill skill: skills)	//aggiunge tutte le sue skill nel db in associazione con lui
-					if (!skillDAO.addSkillDipendente(skill, temp)) {
-						JOptionPane.showMessageDialog(null,
-								"Errore inserimento delle skill nel database.",
-								"Errore skill",
-								JOptionPane.ERROR_MESSAGE);	
-					}
-				//chiedi se vuoi creare un altro account o uscire
-				int yesNo = JOptionPane.showConfirmDialog(null,
-						"Creazione riuscita.\nVuoi crearne un altro?",
-						"Creazione riuscita",
-						JOptionPane.YES_NO_OPTION);
-				//se risponde "No" chiude il programma
-				if (yesNo == 1)
-					tornaAiPlanner();
-				//altrimenti apre una nuova finestra per la creazione account
-				else {
-					gestioneDipendentiFrame.dispose(); //chiude la finestra di creazione e ne apre un'altra
-					gestioneDipendentiFrame=new GestioneDipendenti(this);	//inizializza la prima finestra di creazione account
-					gestioneDipendentiFrame.setVisible(true);	//mostra la finestra inizializzata
-					}
+		//se l'insert nel database ha successo
+		if (dipDAO.addDipendente(temp)) {
+			temp.setSkills(skills);	//setta la skill del dipendente
+			for (Skill skill: skills)	//aggiunge tutte le sue skill nel db in associazione con lui
+				if (!skillDAO.addSkillDipendente(skill, temp)) {
+					JOptionPane.showMessageDialog(null,
+							"Errore inserimento delle skill nel database.",
+							"Errore skill",
+							JOptionPane.ERROR_MESSAGE);	
+				}
+			//chiedi se vuoi creare un altro account o uscire
+			int yesNo = JOptionPane.showConfirmDialog(null,
+					"Creazione riuscita.\nVuoi crearne un altro?",
+					"Creazione riuscita",
+					JOptionPane.YES_NO_OPTION);
+			//se risponde "No" chiude il programma
+			if (yesNo == 1)
+				tornaAiPlanner();
+			//altrimenti apre una nuova finestra per la creazione account
+			else {
+				gestioneDipendentiFrame.dispose(); //chiude la finestra di creazione e ne apre un'altra
+				gestioneDipendentiFrame=new GestioneDipendenti(this);	//inizializza la prima finestra di creazione account
+				gestioneDipendentiFrame.setVisible(true);	//mostra la finestra inizializzata
 			}
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage(),
-					"Errore creazione account #" + e.getErrorCode(),
-					JOptionPane.ERROR_MESSAGE);	//errore nella creazione account
 		}
 	}
 	
@@ -143,7 +137,6 @@ public class ControllerDipendentiSegreteria {
 		try {
 			return dipDAO.getMaxStipendio();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return 100000000f;
 		}
 	}
