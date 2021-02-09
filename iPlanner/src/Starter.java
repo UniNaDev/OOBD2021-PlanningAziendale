@@ -41,7 +41,7 @@ public class Starter {
 				costruttoreDB.creaTabelle();	//crea tutte le tabelle del DB
 				costruttoreDB.creaFunzioniTrigger(); 	//crea tutte le funzioni esterne e i trigger del DB
 				costruttoreDB.importaLuoghi();	//import dei luoghi italiani
-				costruttoreDB.inserisciPrimoDipendente(); //inserisce un primo dipendente nel DB
+				costruttoreDB.inserisciDatiIniziali(); //inserisce dei dati iniziali per poter utilizzare subito il software
 			}
 			catch (SQLException e){
 				System.out.println(e.getMessage());

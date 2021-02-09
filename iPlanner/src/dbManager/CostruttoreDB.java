@@ -1134,7 +1134,7 @@ public class CostruttoreDB {
             		+ "--Controlla che non ci siano altri record in Partecipazione con stesso progetto e ruolo project manager\r\n"
             		+ "IF (EXISTS (SELECT p.CF\r\n"
             		+ "			FROM Partecipazione AS p\r\n"
-            		+ "			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager')) THEN\r\n"
+            		+ "			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente = NEW.ruoloDipendente)) THEN\r\n"
             		+ "				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto;\r\n"
             		+ "				RETURN OLD;\r\n"
             		+ "END IF;\r\n"
@@ -1203,7 +1203,7 @@ public class CostruttoreDB {
     }
     
     //metodo che crea il primo dipendente nel db
-    public int inserisciPrimoDipendente() throws SQLException
+    private int inserisciPrimoDipendente() throws SQLException
     {
     	int result =-1;
     	if(connectionExists())
@@ -1218,6 +1218,37 @@ public class CostruttoreDB {
     		stmt.close();
     	}
     	return result;
+    }
+    
+    //metodo che crea degli ambiti predefiniti da cui partire (poi la segreteria volendo ne aggiungerà altri)
+    private int creaAmbitiPredefiniti() throws SQLException
+    {
+    	int result =-1;
+    	
+    	if(connectionExists()) 
+    	{
+    		Statement stmt = connection.createStatement();
+    		
+    		//inserisci degli ambiti iniziali predefiniti
+    		String sql ="INSERT INTO AmbitoProgetto(NomeAmbito) VALUES\r\n"
+    				+ "	('Economia'),\r\n"
+    				+ "	('Medicina'),\r\n"
+    				+ "	('Militare'),\r\n"
+    				+ "	('Scientifico'),\r\n"
+    				+ "	('Altro')";
+    		
+    		result = stmt.executeUpdate(sql);
+    		stmt.close();
+    	}
+    	return result;
+    }
+    
+    //Metodo che inserisce dai dati da cui partire per poter utilizzare subito il software
+    public void inserisciDatiIniziali() throws SQLException
+    {
+    	inserisciPrimoDipendente(); //inserisce un primo dipendente Mario Rossi
+    	
+    	creaAmbitiPredefiniti(); // inserisce degli ambiti di partenza
     }
     
     //INSERIMENTO LUOGHI DI NASCITA DA AGENZIA DELLE ENTRATE
