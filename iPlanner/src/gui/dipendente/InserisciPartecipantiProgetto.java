@@ -107,7 +107,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	//---------------------------------------------
 	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1300, 700));
+		setMinimumSize(new Dimension(1350, 700));
 		setLocationRelativeTo(null);
 		
 		setTitle("Inserisci Partecipanti Progetto");
@@ -133,20 +133,20 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
+						.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
+						.addComponent(DipendenteScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(23)
-					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
+					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -358,9 +358,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								.addComponent(cognomeTextField, 102, 102, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
 							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(73)
 							.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addGap(53)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
@@ -372,15 +372,14 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)))
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE))
-							.addGap(61)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+								.addComponent(textField_1)
+								.addComponent(textField))
+							.addGap(18)
 							.addComponent(skillScrollPane_1, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
 							.addGap(30))
-						.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
 							.addGap(235))))
 		);
@@ -401,8 +400,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 										.addComponent(textField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-										.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+										.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 									.addGap(9)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
 										.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
