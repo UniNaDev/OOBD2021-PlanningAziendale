@@ -234,11 +234,8 @@ public class Dipendente {
 
 
 	@Override
-	public String toString() {
-		
-//		String temp=getCollaborazioni().toString();
+	public String toString() {	
 		return nome + " " +cognome+"";
-//		return temp;
 	}
 	
 	

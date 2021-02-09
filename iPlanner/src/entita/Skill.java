@@ -15,10 +15,6 @@ public class Skill {
 	//----------------------------------------
 	
 	//Costruttore parziale
-	public Skill(String nomeSkill) {
-		this.nomeSkill = nomeSkill;
-	}
-	
 	public Skill(int idSKill, String nomeSkill) {
 		this.idSkill = idSKill;
 		this.nomeSkill = nomeSkill;
@@ -35,6 +31,10 @@ public class Skill {
 	
 	public int getIdSkill() {
 		return idSkill;
+	}
+	
+	public void setIdSkill(int idSkill) {
+		this.idSkill = idSkill;
 	}
 
 	//toString

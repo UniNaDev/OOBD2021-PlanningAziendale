@@ -103,7 +103,7 @@ public class SkillDAOPSQL implements SkillDAO {
 		ResultSet risultato = getSkillDipendentePS.executeQuery();	//esegue la query e ottiene il ResultSet
 		
 		while (risultato.next()) {
-			Skill tempSkill = new Skill(risultato.getString(2));	//crea la skill temporanea
+			Skill tempSkill = new Skill(risultato.getInt(1), risultato.getString(2));	//crea la skill temporanea
 			temp.add(tempSkill);
 		}
 		risultato.close(); //chiude il ResultSet

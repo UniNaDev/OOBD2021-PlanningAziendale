@@ -123,7 +123,7 @@ public class ControllerDipendentiSegreteria {
 	
 	//Metodo che crea una nuova skill e la inserisce nel database tramite il DAO
 	public void creaNuovaSkill(String nomeSkill) throws SQLException {
-		Skill temp = new Skill(nomeSkill);	//crea la skill temporanea
+		Skill temp = new Skill(0, nomeSkill);	//crea la skill temporanea
 		skillDAO.addSkill(temp);	//aggiunge la skill al database
 	}
 	

@@ -59,6 +59,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 public class GestioneDipendenti extends JFrame {
@@ -116,7 +118,7 @@ public class GestioneDipendenti extends JFrame {
 	private JTextField nuovaSkillTextField;
 	private JTextField salarioTextField;
 	private JScrollPane skillsScrollPane;
-	private JList skillsList;
+	private JList<Skill> skillsList;
 	private JButton nuovaSkillButton;
 	private JButton creaAccountButton;
 	private JButton esciButton;
@@ -960,10 +962,11 @@ public class GestioneDipendenti extends JFrame {
 			dipendentiTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if (dipendentiTable.isEnabled()) {
 					int row = dipendentiTable.getSelectedRow();	//ottiene la riga selezionata
 					row = dipendentiTable.convertRowIndexToModel(row);	//converte la riga correttamente in caso di sorting
 					selectedDip = dataModelDipendente.getSelected(row);	//ottiene il dipendente selezionato
+					
+					pulisciCampi();	//pulisce i campi prima di riaggiornarli
 					
 					//Aggiorna la GUI
 					nomeTextField.setText(selectedDip.getNome());	//nome
@@ -993,11 +996,20 @@ public class GestioneDipendenti extends JFrame {
 					confermaPasswordField.setText(selectedDip.getPassword()); //conferma password
 					salarioTextField.setText(Float.toString(selectedDip.getSalario()));	//salario
 					//skills
-					for (Skill skill : selectedDip.getSkills()) {
-						skillsList.setSelectedValue(skill, false);
+					ArrayList<Skill> skills = selectedDip.getSkills();
+					int[] indici = new int[skills.size()];
+					int i = 0;
+					for (Skill skill: skills) {
+						try {
+							indici[i] = controller.ottieniSkill().indexOf(skill);
+							i++;
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
-					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione()); //valutazione
-					}	
+					skillsList.setSelectedIndices(indici);
+					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione()); //valutazione	
 				}
 			});
 			dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
