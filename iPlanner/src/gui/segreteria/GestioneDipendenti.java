@@ -1145,17 +1145,47 @@ public class GestioneDipendenti extends JFrame {
 	
 	//Metodo che crea una nuova skill e aggiorna la lista delle skill disponibili
 	private void creaSkill(ControllerDipendentiSegreteria controller) {
-		if (!nuovaSkillTextField.getText().isBlank()) {
-			try {
-				controller.creaNuovaSkill(nuovaSkillTextField.getText());	//inserisce la nuova skill nel database
-				DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();	//aggiorna la lista delle skill
-				skillModel.addAll(controller.ottieniSkill());
-				skillsList.setModel(skillModel);
-				nuovaSkillTextField.setText(""); //svuota il campo
-			} catch (SQLException e) {
+		try {
+			controller.creaNuovaSkill(nuovaSkillTextField.getText());	//inserisce la nuova skill nel database
+			DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();	//aggiorna la lista delle skill
+			skillModel.addAll(controller.ottieniSkill());
+			skillsList.setModel(skillModel);
+			nuovaSkillTextField.setText(""); //svuota il campo
+			} 
+		catch (SQLException e1) {
+			//violazione primary key/unique
+			if (e1.getSQLState().equals("23505")) {
 				JOptionPane.showMessageDialog(null,
-						"Sono stati inseriti caratteri non corretti",
-						"Errore #"+e.getErrorCode(),
+						"La skill " + nuovaSkillTextField.getText() + " esiste già.",
+						"Errore Skill Esistente",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			//violazione not null
+			else if (e1.getSQLState().equals("23502")) {
+				JOptionPane.showMessageDialog(null,
+						"Per favore inserici il nome della skill.",
+						"Errore Nome Skill",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			//violazione vincolo tabella
+			else if(e1.getSQLState().equals("23514")) {
+				JOptionPane.showMessageDialog(null,
+						"Il formato del nome della skill non è corretto\noppure il nome è vuoto.",
+						"Errore Nome Skill",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			//violazione definizione dati
+			else if(e1.getSQLState().equals("22001")) {
+				JOptionPane.showMessageDialog(null,
+						"Il nome della skill è troppo lungo./nControlla che non superi i 50 caratteri.",
+						"Errore Skill Lunga",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			//altri errori non contemplati
+			else {
+				JOptionPane.showMessageDialog(null,
+						e1.getMessage() + "\nContattare uno sviluppatore.",
+						"Errore #" + e1.getErrorCode(),
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
