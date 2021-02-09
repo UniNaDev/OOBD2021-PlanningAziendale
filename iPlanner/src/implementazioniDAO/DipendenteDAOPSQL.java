@@ -26,6 +26,7 @@ import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SkillDAO;
 
 public class DipendenteDAOPSQL implements DipendenteDAO {
 
@@ -50,6 +51,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	private LuogoNascitaDAOPSQL luogoDAO = null;
 	private MeetingDAO meetDAO=null;
 	private ProgettoDAO projDAO=null;
+	private SkillDAO skillDAO = null;
 	
 	
 	//METODI
@@ -60,13 +62,13 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		this.connection = connection;	//ottiene la connessione dal ManagerConnessioneDB
 		this.meetDAO=new MeetingDAOPSQL(connection);
 		this.luogoDAO = new LuogoNascitaDAOPSQL(connection);
+		this.skillDAO = new SkillDAOPSQL(connection);
 		
-		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
+		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
 		getDipendenti2PS=connection.prepareStatement("SELECT * FROM Dipendente"); //Deve selezionare i dipendenti che non partecipano già al meeting che si sta inserendo.
 		getDipendentiNonPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )");
 		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
 		getDipendentiNonInvitatiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
-		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
 		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
@@ -107,6 +109,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
+			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
 			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
@@ -143,6 +146,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
+			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
 			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}

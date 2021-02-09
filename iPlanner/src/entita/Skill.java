@@ -61,7 +61,5 @@ public class Skill {
 		} else if (!nomeSkill.equals(other.nomeSkill))
 			return false;
 		return true;
-	}
-	
-	
+	}	
 }

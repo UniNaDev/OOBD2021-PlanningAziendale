@@ -41,6 +41,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.awt.Toolkit;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
@@ -138,6 +139,7 @@ public class GestioneDipendenti extends JFrame {
 	
 	//Altri attributi	
 	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
+	private Dipendente selectedDip; //dipendente selezionato nella tabella
 
 	
 	//Creazione del frame
@@ -858,13 +860,65 @@ public class GestioneDipendenti extends JFrame {
 		salvaModificheButton.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//salva le modifiche effettuate nel DB
-				try {
-					salvaModifiche(controller, dataModelDipendente.getSelected(dipendentiTable.getSelectedRow()));
-					dataModelDipendente.fireTableDataChanged();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				//resetta i colori delle label per i valori not null
+				nomeLabel.setForeground(Color.BLACK);
+				cognomeLabel.setForeground(Color.BLACK);
+				emailLabel.setForeground(Color.BLACK);
+				passwordLabel.setForeground(Color.BLACK);
+				sessoLabel.setForeground(Color.BLACK);
+				confermaPasswordLabel.setForeground(Color.BLACK);
+				cittàDiNascitaLabel.setForeground(Color.BLACK);
+				provNascitaLabel.setForeground(Color.BLACK);
+				
+				
+				if ((!nomeTextField.getText().isBlank() && !cognomeTextField.getText().isBlank() && !emailTextField.getText().isBlank() && !passwordField.getText().isBlank()) && confermaPasswordField.getText().equals(passwordField.getText()))
+					try {
+						salvaModifiche(controller, selectedDip);	//crea il nuovo account con i valori inseriti
+						pulisciCampi();	//azzera tutti i campi
+						//aggiorna tabella dipendenti
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						dipendentiTable.setModel(dataModelDipendente);
+						dataModelDipendente.fireTableDataChanged();
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								e1.getMessage(),
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
+					}
+				//se le password inserite sono diverse
+				else if(!passwordField.getText().equals(confermaPasswordField.getText()))
+				{	
+					JOptionPane.showMessageDialog(null,"Le password inserite sono diverse","Errore",JOptionPane.ERROR_MESSAGE);	//errore password non confermata
+					
+					passwordLabel.setForeground(Color.RED);	//rende rossi i campi
+					confermaPasswordLabel.setForeground(Color.RED);
+					
+				}
+				//se uno dei campi obbligatori è vuoto colora la rispettiva label di rosso
+				else if ((nomeTextField.getText().isBlank() || cognomeTextField.getText().isBlank() || emailTextField.getText().isBlank() || passwordField.getText().isBlank()) || confermaPasswordField.getText().equals(passwordField.getText()) || !cittaComboBox.isEnabled()) {
+					
+					JOptionPane.showMessageDialog(null,
+							"Compilare i campi vuoti",
+							"Errore",
+							JOptionPane.ERROR_MESSAGE);	//errore campi obbligatori vuoti
+					
+					if (nomeTextField.getText().isBlank())
+						nomeLabel.setForeground(Color.RED);
+					if (cognomeTextField.getText().isBlank())
+						cognomeLabel.setForeground(Color.RED);
+					if (emailTextField.getText().isBlank())
+						emailLabel.setForeground(Color.RED);
+					if (passwordField.getText().isBlank())
+						passwordLabel.setForeground(Color.RED);
+					if(!cittaComboBox.isEnabled()) {
+						cittàDiNascitaLabel.setForeground(Color.RED);
+						provNascitaLabel.setForeground(Color.RED);
+					}
+					if(!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+						sessoLabel.setForeground(Color.RED);
+					if (confermaPasswordField.getText().isBlank())
+						confermaPasswordLabel.setForeground(Color.RED);
+				
 				}
 			}
 		});
@@ -909,7 +963,7 @@ public class GestioneDipendenti extends JFrame {
 					if (dipendentiTable.isEnabled()) {
 					int row = dipendentiTable.getSelectedRow();	//ottiene la riga selezionata
 					row = dipendentiTable.convertRowIndexToModel(row);	//converte la riga correttamente in caso di sorting
-					Dipendente selectedDip = dataModelDipendente.getSelected(row);	//ottiene il dipendente selezionato
+					selectedDip = dataModelDipendente.getSelected(row);	//ottiene il dipendente selezionato
 					
 					//Aggiorna la GUI
 					nomeTextField.setText(selectedDip.getNome());	//nome
@@ -940,7 +994,7 @@ public class GestioneDipendenti extends JFrame {
 					salarioTextField.setText(Float.toString(selectedDip.getSalario()));	//salario
 					//skills
 					for (Skill skill : selectedDip.getSkills()) {
-						skillsList.setSelectedValue(skill, rootPaneCheckingEnabled);
+						skillsList.setSelectedValue(skill, false);
 					}
 					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione()); //valutazione
 					}	
@@ -989,13 +1043,11 @@ public class GestioneDipendenti extends JFrame {
 			telefono = telefonoFissoTextField.getText();	//telefono
 		if (!cellulareTextField.getText().isBlank())
 			cellulare = cellulareTextField.getText();    //cellulare
-		else cellulare=null;
-		
 		indirizzo = indirizzoTextField.getText();	//indirizzo
 		//ottiene le skill selezionate
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		skills.addAll(skillsList.getSelectedValuesList());
-		float salario = Float.valueOf(salarioTextField.getText());	//ottieni il salario
+		float salario = parseFloat(salarioTextField.getText(), 0f);	//ottieni il salario
 		controller.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo, skills, salario);	//mandali al controller che prova a creare il nuovo dipendente con il dao
 	}
 	
@@ -1082,64 +1134,32 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che salva le modifiche svolte
-	private void salvaModifiche(ControllerDipendentiSegreteria controller, Dipendente dipendente) throws SQLException {		
-		//prende i dati dagli input della GUI
-		dipendente.setNome(nomeTextField.getText());	//nome
-		dipendente.setCognome(cognomeTextField.getText()); //cognome
+	private void salvaModifiche(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) throws SQLException {
+		//setta le nuove proprietà al dipendente
+		dipendenteModificato.setNome(nomeTextField.getText());	//nome
+		dipendenteModificato.setCognome(cognomeTextField.getText()); //cognome
 		//sesso
 		if (uomoRadioButton.isSelected())
-			dipendente.setSesso('M');
+			dipendenteModificato.setSesso('M');
 		else
-			dipendente.setSesso('F');
+			dipendenteModificato.setSesso('F');
 		//data di nascita
-		LocalDate dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
-		dipendente.setDataNascita(dataNascita);
+		dipendenteModificato.setDataNascita(new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1));
 		//luogo di nascita
-		LuogoNascita luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
-		dipendente.setLuogoNascita(luogoNascita);
-		dipendente.setEmail(emailTextField.getText());; //email
-		dipendente.setPassword(passwordField.getText());;	//password
+		dipendenteModificato.setLuogoNascita(controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex()));
+		dipendenteModificato.setEmail(emailTextField.getText()); //email
+		dipendenteModificato.setPassword(passwordField.getText());	//password
 		if (!telefonoFissoTextField.getText().equals(""))
-			dipendente.setTelefonoCasa(telefonoFissoTextField.getText());	//telefono
+			dipendenteModificato.setTelefonoCasa(telefonoFissoTextField.getText());	//telefono
 		if (!cellulareTextField.getText().isBlank())
-			dipendente.setCellulare(cellulareTextField.getText());    //cellulare
-		
-		dipendente.setIndirizzo(indirizzoTextField.getText()); //indirizzo
+			dipendenteModificato.setCellulare(cellulareTextField.getText());    //cellulare
+		dipendenteModificato.setIndirizzo(indirizzoTextField.getText());	//indirizzo
 		//ottiene le skill selezionate
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		skills.addAll(skillsList.getSelectedValuesList());
-		dipendente.setSkills(skills);
-		dipendente.setSalario(Float.valueOf(salarioTextField.getText()));	//ottieni il salario
-		try {
-			controller.aggiornaDipendente(dipendente);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	//Metodo che disattiva tutti i campi
-	private void disattivaCampi() {
-		nomeTextField.setEnabled(false);	//nome
-		cognomeTextField.setEnabled(false);	//cognome
-		emailTextField.setEnabled(false);	//email
-		//sesso
-		uomoRadioButton.setEnabled(false);
-		donnaRadioButton.setEnabled(false);
-		//data di nascita
-		giornoComboBox.setEnabled(false);
-		meseComboBox.setEnabled(false);
-		annoComboBox.setEnabled(false);
-		//luogo di nascita
-		provinciaComboBox.setEnabled(false);
-		cittaComboBox.setEnabled(false);
-		indirizzoTextField.setEnabled(false); //indirizzo
-		cellulareTextField.setEnabled(false); //cellulare
-		telefonoFissoTextField.setEnabled(false); //telefono casa
-		passwordField.setEnabled(false); //password
-		confermaPasswordField.setEnabled(false); //conferma password
-		skillsList.setEnabled(false); //lista skill
-		salarioTextField.setEnabled(false); //salario
+		dipendenteModificato.setSkills(skills);
+		dipendenteModificato.setSalario(parseFloat(salarioTextField.getText(), 0f));	//ottieni il salario
+		controller.aggiornaDipendente(dipendenteModificato); //aggiorna le info nel DB
 	}
 	
 	//Metodo che pulisce tutti i campi
@@ -1162,5 +1182,6 @@ public class GestioneDipendenti extends JFrame {
 		passwordField.setText(""); //password
 		confermaPasswordField.setText(""); //conferma password
 		salarioTextField.setText(""); //salario
+		skillsList.clearSelection(); //skills
 	}
 }

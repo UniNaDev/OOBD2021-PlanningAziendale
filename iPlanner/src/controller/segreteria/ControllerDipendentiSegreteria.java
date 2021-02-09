@@ -87,7 +87,6 @@ public class ControllerDipendentiSegreteria {
 	public void creaAccount(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo, ArrayList<Skill> skills, float salario) {
 		//crea un dipendente temporaneo con i parametri in input
 		Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
-		temp.setCf(temp.generaCF()); 	//setta il suo codice fiscale appena generato
 		try {
 			//se l'insert nel database ha successo
 			if (dipDAO.addDipendente(temp)) {
@@ -157,5 +156,13 @@ public class ControllerDipendentiSegreteria {
 	//Metodo che aggiorna le informazioni di un dipendente
 	public void aggiornaDipendente(Dipendente dipendente) throws SQLException {
 		dipDAO.updateDipendente(dipendente);
+		for (Skill skill: dipendente.getSkills()) {
+			try {
+				skillDAO.addSkillDipendente(skill, dipendente);
+			}
+			catch (SQLException e) {
+				continue;
+			}
+		}
 	}
 }
