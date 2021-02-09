@@ -17,7 +17,8 @@ public class CostruttoreDB {
 	//------------------------------------------------
     private Connection connection;	//connessione al DB
     
-    private final String pathCSVLuoghi = "D:\\Development\\Github\\OOBD2021-PlanningAziendale\\Risorse esterne\\Comuni.csv";	//path del file csv con tutti i luoghi italiani
+    //private final String pathCSVLuoghi = "D:\\Development\\Github\\OOBD2021-PlanningAziendale\\Risorse esterne\\Comuni.csv";	//path del file csv con tutti i luoghi italiani
+    private final String pathCSVLuoghi = "lib/Comuni.csv";	//path del file csv con tutti i luoghi italiani
 
     //METODI
 	//------------------------------------------------
@@ -1199,6 +1200,24 @@ public class CostruttoreDB {
     	
     	creaFunzioneCheckProjectManager();	//unicità del project manager per ogni progetto
     	creaTriggerUnicitaProjectManager();
+    }
+    
+    //metodo che crea il primo dipendente nel db
+    public int inserisciPrimoDipendente() throws SQLException
+    {
+    	int result =-1;
+    	if(connectionExists())
+    	{
+    		Statement stmt = connection.createStatement();
+    		
+    		//inserisce il dipendente Mario Rossi
+    		String sql = "INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES\r\n"
+    				+ "	('RSSMRA91C06F839S','Mario','Rossi','06/03/1991','M','via sdff,28','m.rossi@unina.it','0817589891','3878998999',100,'pass','F839')";
+    		
+    		result = stmt.executeUpdate(sql);
+    		stmt.close();
+    	}
+    	return result;
     }
     
     //INSERIMENTO LUOGHI DI NASCITA DA AGENZIA DELLE ENTRATE
