@@ -36,6 +36,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
 import controller.dipendente.ControllerPartecipantiMeeting;
+import customUI.CustomScrollBarUI;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
@@ -311,6 +312,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		JScrollPane invitatiScrollPane = new JScrollPane();
+		invitatiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		invitatiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		JLabel lblNewLabel = new JLabel("Info Meeting");
@@ -322,6 +325,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		lblInfoDipendente.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
 		JScrollPane skillScrollPane = new JScrollPane();
+		skillScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		skillScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		JLabel lblPresenza = new JLabel("Presenza");

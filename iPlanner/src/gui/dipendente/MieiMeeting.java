@@ -46,6 +46,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
+import customUI.CustomScrollBarUI;
 
 import javax.swing.event.ListSelectionEvent;
 import java.awt.Component;
@@ -108,6 +109,8 @@ public class MieiMeeting extends JFrame {
 		
 		//ScrollPane per lista meeting
 		JScrollPane mieiMeetingPanel = new JScrollPane();
+		mieiMeetingPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		mieiMeetingPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		mieiMeetingPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		//Panel info del meeting

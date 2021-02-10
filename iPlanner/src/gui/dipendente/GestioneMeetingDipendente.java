@@ -37,6 +37,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
+import customUI.CustomScrollBarUI;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -639,6 +640,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 		//scroll pane invitati
 		JScrollPane invitatiScrollPane = new JScrollPane();
+		invitatiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		invitatiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		invitatiList=new JList();
 		listModelInvitati=new DefaultListModel<>();
 		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -697,6 +700,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		JScrollPane progettoDiscussoScrollPane = new JScrollPane();
+		progettoDiscussoScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		progettoDiscussoScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		progettoDiscussoScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);

@@ -25,6 +25,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.segreteria.ControllerMeetingSegreteria;
+import customUI.CustomScrollBarUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -130,6 +131,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 		
 		//Scroll Panel per gli invitati
 		JScrollPane partecipantiScrollPanel = new JScrollPane();
+		partecipantiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		partecipantiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.setBounds(404, 9, 277, 146);
 		infoPanel.add(partecipantiScrollPanel);
 		

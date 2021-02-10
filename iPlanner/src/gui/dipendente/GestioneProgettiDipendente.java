@@ -77,6 +77,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerProgetto;
+import customUI.CustomScrollBarUI;
 
 import javax.swing.JCheckBox;
 import java.awt.Toolkit;
@@ -380,6 +381,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//ScrollPane meeting
 		JScrollPane meetingScrollPane = new JScrollPane();
+		meetingScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		meetingScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		//Label "Tipologia"
@@ -477,6 +480,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//ScrollPane per lista partecipanti
 		JScrollPane partecipantiScrollPane = new JScrollPane();
+		partecipantiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		partecipantiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 	
 		
@@ -524,6 +529,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTerminatoCheckBox.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		JScrollPane ambitiScrollPane = new JScrollPane();
+		ambitiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		ambitiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		//ComboBox per tipologia progetti
@@ -550,6 +557,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		descrizioneProgettoScrollPane = new JScrollPane();
+		descrizioneProgettoScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		descrizioneProgettoScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		descrizioneProgettoScrollPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);

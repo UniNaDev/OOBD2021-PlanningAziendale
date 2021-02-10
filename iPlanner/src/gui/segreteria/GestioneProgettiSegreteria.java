@@ -49,6 +49,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.segreteria.ControllerProgettiSegreteria;
+import customUI.CustomScrollBarUI;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -188,6 +189,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Scroll Panel per lista ambiti
 		JScrollPane ambitiScrollPanel = new JScrollPane();
+		ambitiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		ambitiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPanel.setBounds(434, 36, 197, 151);
 		infoPanel.add(ambitiScrollPanel);
 		
@@ -206,6 +209,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Scroll Panel dei partecipanti
 		JScrollPane partecipantiScrollPanel = new JScrollPane();
+		partecipantiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		partecipantiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.setBounds(681, 36, 244, 235);
 		infoPanel.add(partecipantiScrollPanel);
 		
@@ -225,6 +230,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Scroll Panel meeting relativi al progetto
 		JScrollPane meetingScrollPanel = new JScrollPane();
+		meetingScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		meetingScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPanel.setBounds(972, 36, 288, 235);
 		infoPanel.add(meetingScrollPanel);
 		

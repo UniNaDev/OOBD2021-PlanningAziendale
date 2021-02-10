@@ -56,6 +56,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerProgetto;
+import customUI.CustomScrollBarUI;
 
 import javax.swing.event.ListSelectionEvent;
 import java.awt.Component;
@@ -109,6 +110,8 @@ public class MieiProgetti extends JFrame {
 		
 		//ScrollPane progetti
 		JScrollPane mieiProgettiScrollPane = new JScrollPane();
+		mieiProgettiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		mieiProgettiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		mieiProgettiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 
 		//Label "Miei Progetti"

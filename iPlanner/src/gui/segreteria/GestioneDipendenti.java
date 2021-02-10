@@ -1,6 +1,7 @@
 package gui.segreteria;
 import controller.*;
 import controller.segreteria.ControllerDipendentiSegreteria;
+import customUI.CustomScrollBarUI;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -461,6 +462,8 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Skills
 		skillsScrollPane = new JScrollPane();
+		skillsScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		skillsScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		skillsScrollPane.setBounds(680, 128, 318, 268);
 		infoPanel.add(skillsScrollPane);
 		skillsScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));

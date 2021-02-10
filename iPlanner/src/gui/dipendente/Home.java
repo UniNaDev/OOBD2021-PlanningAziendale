@@ -33,6 +33,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import controller.dipendente.ControllerGestioneProfilo;
+import customUI.CustomScrollBarUI;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;
@@ -48,6 +49,8 @@ import java.awt.Cursor;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.plaf.basic.BasicScrollPaneUI;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -67,6 +70,7 @@ public class Home extends JFrame {
 	private JButton mioAccountButton;
 	private JButton mieiProgettiButton;
 	private JButton mieiMeetingButton;
+	
 
 	//Crezione frame
 	//-----------------------------------------------------------------
@@ -187,9 +191,14 @@ public class Home extends JFrame {
 		});
 		
 		JScrollPane progettiScrollPanel = new JScrollPane();
+		progettiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		progettiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+
 		progettiScrollPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		
 		JScrollPane meetingScrollPanel = new JScrollPane();
+		meetingScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		meetingScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPanel.setBorder(new LineBorder(Color.GRAY, 2));
 		
 		//Label nome dell'utente

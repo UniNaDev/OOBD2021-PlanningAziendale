@@ -35,6 +35,7 @@ import org.joda.time.LocalTime;
 import controller.dipendente.ControllerMeeting;
 import controller.dipendente.ControllerPartecipantiMeeting;
 import controller.dipendente.ControllerPartecipantiProgetto;
+import customUI.CustomScrollBarUI;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
@@ -266,6 +267,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		separator.setOrientation(SwingConstants.VERTICAL);
 		
 		JScrollPane partecipantiScrollPane = new JScrollPane();
+		partecipantiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		partecipantiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		JLabel lblNewLabel = new JLabel("Info progetto");
@@ -277,6 +280,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		lblInfoDipendente.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
 		JScrollPane skillScrollPane = new JScrollPane();
+		skillScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		skillScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		textField = new JTextField(progettoSelezionato.getNomeProgetto());

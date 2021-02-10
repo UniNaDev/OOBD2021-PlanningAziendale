@@ -36,6 +36,7 @@ import javax.swing.event.ListSelectionListener;
 import org.postgresql.util.PSQLException;
 
 import controller.segreteria.ControllerMeetingSegreteria;
+import customUI.CustomScrollBarUI;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JTextArea;
@@ -211,6 +212,8 @@ public class GestioneSale extends JFrame {
 		
 		//Scroll Panel per lista sale
 		JScrollPane saleListScrollPanel = new JScrollPane();
+		saleListScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		saleListScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		saleListScrollPanel.setBounds(410, 85, 225, 219);
 		contentPane.add(saleListScrollPanel);
 		
