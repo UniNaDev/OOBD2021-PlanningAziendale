@@ -59,6 +59,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.event.ListSelectionEvent;
 
 public class GestioneProgettiSegreteria extends JFrame {
@@ -109,7 +110,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Info Panel
 		JPanel infoPanel = new JPanel();
-		infoPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		infoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		infoPanel.setBounds(59, 91, 1283, 306);
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
@@ -123,6 +124,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//TextField del nome del progetto
 		nomeTextField = new JTextField();
+		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nomeTextField.setEditable(false);
 		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		nomeTextField.setBounds(103, 33, 176, 20);
@@ -138,7 +140,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//TextArea descrizione del progetto
 		JTextArea descrizioneTextArea = new JTextArea();
-		descrizioneTextArea.setBorder(UIManager.getBorder("TextField.border"));
+		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		descrizioneTextArea.setLineWrap(true);
 		descrizioneTextArea.setEditable(false);
 		descrizioneTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -154,6 +156,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//TextField tipologia del progetto
 		tipologiaTextField = new JTextField();
+		tipologiaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaTextField.setEditable(false);
 		tipologiaTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		tipologiaTextField.setColumns(10);
@@ -183,12 +186,14 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Separator
 		JSeparator separator = new JSeparator();
+		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(373, 34, 12, 235);
+		separator.setBounds(381, 34, 2, 235);
 		infoPanel.add(separator);
 		
 		//Scroll Panel per lista ambiti
 		JScrollPane ambitiScrollPanel = new JScrollPane();
+		ambitiScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		ambitiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPanel.setBounds(434, 36, 197, 151);
@@ -202,6 +207,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//List ambiti del progetto
 		ambitiModel = new DefaultListModel();
 		JList <AmbitoProgetto> ambitiList = new JList();
+		ambitiList.setBorder(null);
 		ambitiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ambitiList.setSelectionBackground(Color.WHITE);
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -209,6 +215,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Scroll Panel dei partecipanti
 		JScrollPane partecipantiScrollPanel = new JScrollPane();
+		partecipantiScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		partecipantiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.setBounds(681, 36, 244, 235);
@@ -230,6 +237,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Scroll Panel meeting relativi al progetto
 		JScrollPane meetingScrollPanel = new JScrollPane();
+		meetingScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		meetingScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPanel.setBounds(972, 36, 288, 235);
@@ -251,6 +259,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Text Field per nuovi ambiti
 		ambitoNuovoTextField = new JTextField();
+		ambitoNuovoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		ambitoNuovoTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		ambitoNuovoTextField.setColumns(10);
 		ambitoNuovoTextField.setBounds(434, 198, 197, 20);
@@ -320,13 +329,14 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//Panel Comandi
 		JPanel comandiPanel = new JPanel();
-		comandiPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		comandiPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		comandiPanel.setBounds(59, 412, 1283, 45);
 		contentPane.add(comandiPanel);
 		comandiPanel.setLayout(null);
 		
 		//TextField per nome progetti in filtri
 		filtroNomeTextField = new JTextField();
+		filtroNomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtroNomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		filtroNomeTextField.setBounds(133, 12, 185, 20);
 		comandiPanel.add(filtroNomeTextField);
@@ -364,6 +374,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//ComboBox ambiti
 		try {
 			ambitoComboBox = new JComboBox(controller.ottieniTuttiAmbiti().toArray());
+			ambitoComboBox.setUI(new BasicComboBoxUI());
+			ambitoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 			ambitoComboBox.setFont(new Font("Consolas", Font.PLAIN, 11));
 			ambitoComboBox.setBounds(414, 11, 168, 22);
 			ambitoComboBox.setSelectedItem(null);
@@ -379,6 +391,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//ComboBox tipologie
 		try {
 			tipologiaComboBox = new JComboBox(controller.ottieniTipologie().toArray());
+			tipologiaComboBox.setUI(new BasicComboBoxUI());
+			tipologiaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 			tipologiaComboBox.setFont(new Font("Consolas", Font.PLAIN, 11));
 			tipologiaComboBox.setBounds(696, 11, 197, 23);
 			tipologiaComboBox.setSelectedItem(null);
@@ -421,18 +435,23 @@ public class GestioneProgettiSegreteria extends JFrame {
 		
 		//ComboBox scaduto si/no/entrambi per filtri
 		scadutoComboBox = new JComboBox(siNoComboBox);
+		scadutoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		scadutoComboBox.setUI(new BasicComboBoxUI());
 		scadutoComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		scadutoComboBox.setBounds(982, 9, 49, 22);
 		comandiPanel.add(scadutoComboBox);
 		
 		//ComboBox terminato si/no/entrambi per filtri
 		terminatoComboBox = new JComboBox(siNoComboBox);
+		terminatoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		terminatoComboBox.setUI(new BasicComboBoxUI());
 		terminatoComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		terminatoComboBox.setBounds(1163, 9, 49, 22);
 		comandiPanel.add(terminatoComboBox);
 		
 		//Scroll Panel per tabella progetti
 		JScrollPane tabellaScrollPanel = new JScrollPane();
+		tabellaScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		tabellaScrollPanel.setBounds(59, 468, 1283, 268);
 		contentPane.add(tabellaScrollPanel);
 		

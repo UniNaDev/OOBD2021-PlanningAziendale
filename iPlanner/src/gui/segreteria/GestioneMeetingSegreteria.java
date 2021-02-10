@@ -47,12 +47,14 @@ import javax.swing.JTextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.LineBorder;
 
 public class GestioneMeetingSegreteria extends JFrame {
 
@@ -97,7 +99,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		
 		//Info Panel
 		JPanel infoPanel = new JPanel();
-		infoPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		infoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		infoPanel.setBounds(38, 94, 702, 164);
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
@@ -125,12 +127,14 @@ public class GestioneMeetingSegreteria extends JFrame {
 		
 		//Separatore
 		JSeparator separator = new JSeparator();
+		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(345, 9, 12, 146);
+		separator.setBounds(352, 10, 2, 146);
 		infoPanel.add(separator);
 		
 		//Scroll Panel per gli invitati
 		JScrollPane partecipantiScrollPanel = new JScrollPane();
+		partecipantiScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		partecipantiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.setBounds(404, 9, 277, 146);
@@ -161,7 +165,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		
 		//Panel per comandi e filtri
 		JPanel comandiPanel = new JPanel();
-		comandiPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		comandiPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		comandiPanel.setBounds(38, 291, 702, 41);
 		contentPane.add(comandiPanel);
 		comandiPanel.setLayout(null);
@@ -256,6 +260,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		//ComboBox per filtro sale
 		try {
 			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());	//ottiene tutte le sale per il filtro
+			filtroSaleComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 			//Selezione combo box
 			filtroSaleComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -279,6 +284,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 			});
 			filtroSaleComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 			filtroSaleComboBox.setBounds(308, 9, 108, 22);
+			filtroSaleComboBox.setUI(new BasicComboBoxUI());
 			comandiPanel.add(filtroSaleComboBox);
 		} catch (SQLException e2) {
 			//errore select per tutte le sale nel database
@@ -297,6 +303,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		//ComboBox per filtro piattaforma
 		try {
 			filtroPiattaformaComboBox = new JComboBox(controller.ottieniPiattaforme().toArray());	//ottiene tutte le piattaforme per il filtro
+			filtroPiattaformaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 			//Selezione nella combobox
 			filtroPiattaformaComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -321,6 +328,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 			});
 			filtroPiattaformaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 			filtroPiattaformaComboBox.setBounds(517, 9, 151, 22);
+			filtroPiattaformaComboBox.setUI(new BasicComboBoxUI());
 			comandiPanel.add(filtroPiattaformaComboBox);
 		} catch (SQLException e2) {
 			//errore select per tutte le piattaforme nel database
@@ -357,6 +365,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		
 		//Scroll Panel per la tabella del meeting
 		JScrollPane tabellaScrollPanel = new JScrollPane();
+		tabellaScrollPanel.setBorder(new LineBorder(new Color(192, 192, 192), 2));
 		tabellaScrollPanel.setBounds(38, 343, 702, 348);
 		contentPane.add(tabellaScrollPanel);
 		

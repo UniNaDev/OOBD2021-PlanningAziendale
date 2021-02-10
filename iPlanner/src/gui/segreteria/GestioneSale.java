@@ -44,6 +44,7 @@ import javax.swing.UIManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.LineBorder;
 
 public class GestioneSale extends JFrame {
 
@@ -80,7 +81,7 @@ public class GestioneSale extends JFrame {
 		
 		//Info Panel
 		JPanel infoPanel = new JPanel();
-		infoPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		infoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		infoPanel.setBounds(25, 85, 304, 219);
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
@@ -93,6 +94,7 @@ public class GestioneSale extends JFrame {
 		
 		//TextField codice sala
 		nomeSalaTextField = new JTextField();
+		nomeSalaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nomeSalaTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		nomeSalaTextField.setBounds(48, 27, 129, 20);
 		infoPanel.add(nomeSalaTextField);
@@ -106,6 +108,7 @@ public class GestioneSale extends JFrame {
 		
 		//TextField capienza
 		capienzaTextField = new JTextField();
+		capienzaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		capienzaTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		capienzaTextField.setColumns(10);
 		capienzaTextField.setBounds(70, 76, 56, 20);
@@ -120,7 +123,7 @@ public class GestioneSale extends JFrame {
 		//TextArea indirizzo della sala
 		indirizzoTextArea = new JTextArea();
 		indirizzoTextArea.setLineWrap(true);
-		indirizzoTextArea.setBorder(UIManager.getBorder("TextField.border"));
+		indirizzoTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		indirizzoTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
 		indirizzoTextArea.setColumns(10);
 		indirizzoTextArea.setBounds(80, 123, 187, 34);
@@ -134,6 +137,7 @@ public class GestioneSale extends JFrame {
 		
 		//TextField piano della sala
 		pianoTextField = new JTextField();
+		pianoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		pianoTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		pianoTextField.setColumns(10);
 		pianoTextField.setBounds(48, 168, 35, 20);
@@ -212,6 +216,7 @@ public class GestioneSale extends JFrame {
 		
 		//Scroll Panel per lista sale
 		JScrollPane saleListScrollPanel = new JScrollPane();
+		saleListScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		saleListScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		saleListScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		saleListScrollPanel.setBounds(410, 85, 225, 219);
@@ -266,8 +271,9 @@ public class GestioneSale extends JFrame {
 		
 		//Separator
 		JSeparator separator = new JSeparator();
+		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(368, 85, 17, 219);
+		separator.setBounds(370, 85, 2, 219);
 		contentPane.add(separator);
 		
 		//Button per creare sale nuove

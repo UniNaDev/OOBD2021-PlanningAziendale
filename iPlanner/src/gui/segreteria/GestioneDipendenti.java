@@ -172,7 +172,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		contentPane.setLayout(null);
 		JPanel infoPanel = new JPanel();
-		infoPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		infoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		infoPanel.setBounds(25, 11, 1094, 668);
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
@@ -629,8 +629,9 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Separatore verticale
 		JSeparator separator = new JSeparator();
+		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(543, 98, 8, 527);
+		separator.setBounds(543, 98, 2, 527);
 		infoPanel.add(separator);
 		
 		//Label Valutazione
@@ -672,7 +673,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Panel dei comandi
 		comandiPanel = new JPanel();
-		comandiPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		comandiPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		comandiPanel.setBounds(25, 690, 1094, 38);
 		contentPane.add(comandiPanel);
 		comandiPanel.setLayout(null);
@@ -764,6 +765,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field ricerca per nome/cognome/email
 		cercaTextField = new JTextField();
+		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		cercaTextField.setBounds(119, 9, 162, 20);
 		comandiPanel.add(cercaTextField);
@@ -800,6 +802,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field età minima filtro
 		etàMinimaTextField = new JTextField();
+		etàMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		etàMinimaTextField.setText("min");
 		etàMinimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		etàMinimaTextField.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -815,6 +818,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field età massima filtro
 		etàMassimaTextField = new JTextField();
+		etàMassimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		etàMassimaTextField.setText("max");
 		etàMassimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		etàMassimaTextField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -824,6 +828,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field salario minimo filtro
 		salarioMinimoTextField = new JTextField();
+		salarioMinimoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		salarioMinimoTextField.setText("min");
 		salarioMinimoTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		salarioMinimoTextField.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -839,6 +844,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field salario massimo filtro
 		salarioMassimoTextField = new JTextField();
+		salarioMassimoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		salarioMassimoTextField.setText("max");
 		salarioMassimoTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		salarioMassimoTextField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -848,6 +854,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field valutazione minima
 		valutazioneMinimaTextField = new JTextField();
+		valutazioneMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		valutazioneMinimaTextField.setText("min");
 		valutazioneMinimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneMinimaTextField.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -863,6 +870,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Text Field valutazione massima filtro
 		valutazioneMassimaTextField = new JTextField();
+		valutazioneMassimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		valutazioneMassimaTextField.setText("max");
 		valutazioneMassimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneMassimaTextField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -923,6 +931,7 @@ public class GestioneDipendenti extends JFrame {
 		
 		//Scroll Panel per tabella dipendenti
 		tableScrollPanel = new JScrollPane();
+		tableScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		tableScrollPanel.setBounds(25, 743, 1094, 117);
 		contentPane.add(tableScrollPanel);
 		
@@ -931,6 +940,7 @@ public class GestioneDipendenti extends JFrame {
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 			dipendentiTable = new JTable(dataModelDipendente);
+			dipendentiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());	//sorter
 			dipendentiTable.setRowSorter(sorter);
 			
