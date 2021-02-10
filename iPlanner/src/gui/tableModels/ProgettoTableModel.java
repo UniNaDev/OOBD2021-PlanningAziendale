@@ -85,7 +85,25 @@ public class ProgettoTableModel extends AbstractTableModel {
 		return progettiTabella.get(rowIndex);
 	}
 
-	//Per sorting corretto
+	@Override
+	public void addTableModelListener(TableModelListener l) {
+		// TODO Auto-generated method stub
+		super.addTableModelListener(l);
+	}
+
+	@Override
+	public void fireTableStructureChanged() {
+		// TODO Auto-generated method stub
+		super.fireTableStructureChanged();
+	}
+
+	@Override
+	public void fireTableRowsUpdated(int firstRow, int lastRow) {
+		// TODO Auto-generated method stub
+		super.fireTableRowsUpdated(firstRow, lastRow);
+	}
+
+		//Per sorting corretto
 		public Class getColumnClass(int column) {
 	        switch (column) {
 	        	case 2:

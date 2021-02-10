@@ -17,7 +17,7 @@ public class PartecipantiTableModel extends AbstractTableModel {
 	private ArrayList<Dipendente> dipendenteTabella=new ArrayList<Dipendente>();
 	
 	
-	String[] colnames= {"CF", "Nome", "Cognome","Sesso", "Età", "Email", "Salario", "Valutazione"};
+	String[] colnames= {"CF","Nome","Cognome","Sesso","Età","Email","Salario","Valutazione","Skill","Tipologia progetto"};
 
 	public void setDipendenteTabella(ArrayList<Dipendente> dipendenteTabella) {
 		this.dipendenteTabella = dipendenteTabella;
@@ -60,17 +60,19 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		case 3:
 			return dipendente.getSesso();
 		case 4:
-			
 			return dipendente.getEtà();
 		case 5:
 			return dipendente.getEmail();
 		case 6:
-			
 			return dipendente.getSalario();
 		case 7:
 			String s = String.format("%.2f",dipendente.getValutazione());
 			return s;
-
+		case 8:
+			return dipendente.getSkills();
+		case 9:
+			return dipendente.getCollaborazioni();
+			
 		}
 		return null;
 	}
@@ -83,7 +85,7 @@ public class PartecipantiTableModel extends AbstractTableModel {
 	}
 	
 	//Per sorting corretto
-	public Class getColumnClass(int column) {
+	public Class<?> getColumnClass(int column) {
         switch (column) {
             case 4:
                 return Integer.class;

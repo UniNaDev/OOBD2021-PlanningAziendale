@@ -33,7 +33,7 @@ public class ControllerPartecipantiMeeting {
 		private Meeting meetingSelezionato;
 		private int codiceMeeting;
 		//Costruttore
-		public ControllerPartecipantiMeeting(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, Dipendente dipendente, Meeting meetingSelezionato, int codiceMeeting) {
+		public ControllerPartecipantiMeeting(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, Dipendente dipendente, Meeting meetingSelezionato) {
 			//Ottiene i dao
 			this.luogoDAO = luogoDAO;
 			this.dipDAO = dipDAO;
@@ -44,7 +44,7 @@ public class ControllerPartecipantiMeeting {
 			this.dipendente = dipendente;	//ottiene il dipendente che ha fatto l'accesso
 			this.meetingSelezionato=meetingSelezionato;
 			this.codiceMeeting=codiceMeeting;
-			inserisciPartecipantiMeeting= new InserisciPartecipantiMeeting(this,meetingSelezionato,codiceMeeting);
+			inserisciPartecipantiMeeting= new InserisciPartecipantiMeeting(this,meetingSelezionato);
 			inserisciPartecipantiMeeting.setVisible(true);
 	
 		}

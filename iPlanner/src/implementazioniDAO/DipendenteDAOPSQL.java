@@ -386,6 +386,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
 			tempDip.setCollaborazioni(projDAO.getPartecipanti(progettoSelezionato.getIdProgettto())); //facoltativo
+			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
 			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}

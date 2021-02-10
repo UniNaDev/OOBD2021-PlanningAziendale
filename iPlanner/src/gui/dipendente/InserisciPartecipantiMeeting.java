@@ -109,7 +109,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 
 	//Creazione frame
 	//---------------------------------------------
-	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato,int codiceMeeting) {
+	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1150, 700));
 		
@@ -619,7 +619,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						
 						
 						boolean presenza;
-						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						Dipendente dipendenteSelezionato=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
 						if(presenzaCheckBox.isSelected())
 						{
 							presenza=true;
@@ -628,7 +628,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 							presenza=false;
 						
 						//Crea la partecipazione al meeting
-						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);
+						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendenteSelezionato, presenza, false);
 					
 						//Prova a fare l'inserimento del partecipante al meeting
 						controller.inserisciPartecipante(partecipazioneMeeting);
@@ -834,6 +834,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				//quando viene cliccata una riga della tabella,viene deselezionata elemento selezionato della lista
 				invitatiList.clearSelection();
 				
 				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
@@ -883,7 +884,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 							presenza=false;
 						
 						//Riceve il dipendente selezionato
-						Dipendente dipendente=dataModelDipendente.getDipendenteTabella().get(row);
+						Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
 						
 						//Creo la partecipazione al meeting
 						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);

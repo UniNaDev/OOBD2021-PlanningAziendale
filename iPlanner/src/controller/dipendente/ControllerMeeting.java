@@ -73,9 +73,9 @@ public class ControllerMeeting {
 		
 		mieiMeeting.setVisible(false);
 	}
-	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato,int codiceMeeting) {
+	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato) {
 		
-		ControllerPartecipantiMeeting controller=new ControllerPartecipantiMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendente,meetingSelezionato,codiceMeeting);
+		ControllerPartecipantiMeeting controller=new ControllerPartecipantiMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendente,meetingSelezionato);
 		
 	}
 	

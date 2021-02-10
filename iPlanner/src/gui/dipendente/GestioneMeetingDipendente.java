@@ -961,7 +961,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				progettoDiscussoComboBox.setSelectedItem(meetingTable.getValueAt(row, 5)); 
 			
 
-				
+				//Aggiorna la tabella
 					try {
 						dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
 					} catch (SQLException e1) {
@@ -970,10 +970,9 @@ public class GestioneMeetingDipendente extends JFrame {
 					}
 					
 					//Prende una riga della tabella
-					Meeting meeting=dataModelMeeting.getMeetingTabella().get(row); 
+					Meeting meeting=dataModelMeeting.getSelected(meetingTable.convertRowIndexToModel(meetingTable.getSelectedRow()));
 					
 					//Aggiunge alla lista i partecipanti al meeting selezionato
-					
 					invitatiList.setModel(listModelInvitati);
 					listModelInvitati.removeAllElements();
 					listModelInvitati.addAll(meeting.getPartecipantiAlMeeting()); 
@@ -995,8 +994,8 @@ public class GestioneMeetingDipendente extends JFrame {
 						}
 						else {
 							//Prende il meeting selezionato e lo passa al controller
-							Meeting meeting=dataModelMeeting.getMeetingTabella().get(row);
-							theController.apriInserisciPartecipantiMeeting(meeting,codiceMeeting);
+							Meeting meetingSelezionato=dataModelMeeting.getSelected(meetingTable.convertRowIndexToModel(meetingTable.getSelectedRow()));
+							theController.apriInserisciPartecipantiMeeting(meetingSelezionato);
 						}
 						
 					}
