@@ -44,6 +44,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		addDipendentePS,
 		updateDipendentePS,
 		loginCheckPS,
+		organizzatoreCheckPS,
 		getDipendenteByCFPS,
 		getMaxSalarioPS,
 		getDipendentiFiltratiPS;
@@ -72,7 +73,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
 		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
-		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email = ? AND Password = ?");
+		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email ILIKE ? AND Password = ?");
+		organizzatoreCheckPS=connection.prepareStatement("SELECT cf FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=? AND organizzatore=true");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
 		getDipendentiPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=?");
 		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
@@ -393,6 +395,25 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		risultato.close();	//chiude il ResultSet
 		
 		return temp;
+	}
+
+
+
+
+	@Override
+	public String organizzatoreCheck(Meeting meeting) throws SQLException {
+		
+		String cf;
+		organizzatoreCheckPS.setInt(1, meeting.getIdMeeting());
+		
+		ResultSet risultato=organizzatoreCheckPS.executeQuery();
+		
+		risultato.next();
+		
+		cf = risultato.getString(1);
+		risultato.close();
+		
+		return cf;
 	}
 
 }

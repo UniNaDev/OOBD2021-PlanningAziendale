@@ -34,6 +34,7 @@ public interface ProgettoDAO {
 	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException;
 	public boolean addProjectManager(String cf, Progetto tmp, String string) throws SQLException;
 	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
+	public String ottieniProjectManager(Progetto progetto) throws SQLException;
 	
 
 }

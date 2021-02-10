@@ -120,7 +120,7 @@ public class GestioneMeetingDipendente extends JFrame {
 
 	//Creazione frame
 	//---------------------------------------------
-	public GestioneMeetingDipendente(ControllerMeeting theController) {
+	public GestioneMeetingDipendente(ControllerMeeting theController, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1300, 700));
 		
@@ -977,6 +977,28 @@ public class GestioneMeetingDipendente extends JFrame {
 					listModelInvitati.removeAllElements();
 					listModelInvitati.addAll(meeting.getPartecipantiAlMeeting()); 
 					
+					
+					try {
+						String cf=theController.organizzatoreCheck(meeting);
+						
+						if(dipendente.getCf().equals(cf)) {
+							
+							inserisciPartecipanteButton.setEnabled(true);
+							eliminaButton.setEnabled(true);
+							modificaButton.setEnabled(true);
+							
+						}
+					
+						else {
+							inserisciPartecipanteButton.setEnabled(false);
+							eliminaButton.setEnabled(false);
+							modificaButton.setEnabled(false);
+						}
+	
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 			}		
 		});
 	

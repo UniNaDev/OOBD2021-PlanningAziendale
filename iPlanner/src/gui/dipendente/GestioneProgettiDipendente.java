@@ -14,6 +14,7 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.JScrollPane;
@@ -21,6 +22,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JTextArea;
 import java.awt.FlowLayout;
@@ -28,7 +30,10 @@ import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.ScrollBarUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.plaf.basic.BasicScrollPaneUI;
 
 import java.awt.Insets;
 import java.awt.event.ActionListener;
@@ -94,7 +99,7 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JLabel scadenzaProgettoLabel;
 	private JTable progettoTable;
 	private JTextField cercaTextField;
-	private JTextArea descrizioneTextArea;
+	private JScrollPane descrizioneProgettoScrollPane;
 	private JComboBox giornoScadenzaComboBox;
 	private JComboBox meseScadenzaComboBox;
 	private JComboBox annoScadenzaComboBox;
@@ -113,16 +118,17 @@ public class GestioneProgettiDipendente extends JFrame {
 	
 	LocalDate dataAttuale = LocalDate.now();
 	private JTextArea nomeTextArea;
+	private JTextArea descrizioneTextArea;
 
 	//Creazione frame
 	//-----------------------------------------------------------------
 	
-	public GestioneProgettiDipendente(ControllerProgetto controller) {
+	public GestioneProgettiDipendente(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1440, 900));
+		setMinimumSize(new Dimension(1600, 900));
 	
 		setTitle("iPlanner-Gestione progetto");
-		setBounds(100, 100, 1440, 900);
+		setBounds(100, 100, 1600, 900);
 		contentPane = new JPanel();		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -430,13 +436,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		descrizioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		descrizioneProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//TextArea descrizione progetto
-		descrizioneTextArea = new JTextArea();
-		descrizioneTextArea.setWrapStyleWord(true);
-		descrizioneTextArea.setLineWrap(true);
-		descrizioneTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
-		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
 		//Label "Data Terminazione"
 		dataTerminazioneLabel = new JLabel("Data Terminazione");
 		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -479,6 +478,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		//ScrollPane per lista partecipanti
 		JScrollPane partecipantiScrollPane = new JScrollPane();
 		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+	
 		
 		//Label "Progetto Terminato"
 		progettoTerminatoLabel = new JLabel("Progetto Terminato");
@@ -549,6 +549,9 @@ public class GestioneProgettiDipendente extends JFrame {
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
+		descrizioneProgettoScrollPane = new JScrollPane();
+		descrizioneProgettoScrollPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
 		gl_infoPanel2.setHorizontalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
@@ -557,9 +560,6 @@ public class GestioneProgettiDipendente extends JFrame {
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(176)
 							.addComponent(nomeTextArea, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(176)
-							.addComponent(descrizioneTextArea, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(176)
 							.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
@@ -576,25 +576,28 @@ public class GestioneProgettiDipendente extends JFrame {
 								.addComponent(tipologiaProgettoLabel, Alignment.TRAILING)
 								.addComponent(descrizioneProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
 								.addComponent(nomeProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+							.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGap(18)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 										.addComponent(progettoTerminatoCheckBox)
-										.addComponent(tipologiaComboBox, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
+										.addComponent(tipologiaComboBox, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(descrizioneProgettoScrollPane, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)))
 									.addGap(66)
 									.addComponent(ambitiScrollPane, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
 									.addGap(18))
-								.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addComponent(giornoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(meseScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(annoScadenzaComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 									.addGap(242)))
-							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
-							.addGap(33)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
 							.addComponent(meetingScrollPane, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)))
 					.addGap(20))
 		);
@@ -609,8 +612,9 @@ public class GestioneProgettiDipendente extends JFrame {
 								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(descrizioneTextArea, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+								.addComponent(descrizioneProgettoScrollPane, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
 								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addGap(7)
@@ -651,6 +655,13 @@ public class GestioneProgettiDipendente extends JFrame {
 							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 283, GroupLayout.PREFERRED_SIZE)))
 					.addGap(11))
 		);
+		
+		descrizioneTextArea = new JTextArea();
+		descrizioneTextArea.setWrapStyleWord(true);
+		descrizioneTextArea.setLineWrap(true);
+		descrizioneTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
+		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		descrizioneProgettoScrollPane.setViewportView(descrizioneTextArea);
 		
 		//Label "Ambito/i"
 		ambitoProgettoLabel = new JLabel("Ambito/i");
@@ -949,12 +960,12 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Modello delle colonne personalizzato
 		progettoTable.getColumnModel().getColumn(0).setMinWidth(370);
-		progettoTable.getColumnModel().getColumn(1).setMinWidth(370);
+		progettoTable.getColumnModel().getColumn(1).setMinWidth(360);
 		progettoTable.getColumnModel().getColumn(2).setMinWidth(280);
-		progettoTable.getColumnModel().getColumn(3).setMinWidth(140);
-		progettoTable.getColumnModel().getColumn(4).setMinWidth(70);
-		progettoTable.getColumnModel().getColumn(5).setMinWidth(80);
-		progettoTable.getColumnModel().getColumn(6).setMinWidth(70);
+		progettoTable.getColumnModel().getColumn(3).setMinWidth(135);
+		progettoTable.getColumnModel().getColumn(4).setMinWidth(80);
+		progettoTable.getColumnModel().getColumn(5).setMinWidth(85);
+		progettoTable.getColumnModel().getColumn(6).setMinWidth(80);
 		
 		//Setta i progetti nella tabella
 		try {
@@ -1096,7 +1107,31 @@ public class GestioneProgettiDipendente extends JFrame {
 				listaMeetingRelativiModel.addAll(progetto.getMeetingsRelativi()); //Riempe la lista con i meeting relativi al progetto
 				listaPartecipantiModel.addAll(progetto.getCollaborazioni());  //Riempe la lista con i partecipanti al progetto
 				
-			}	
+				//Controllo ProjectManager
+				try {
+					String cf=controller.ottieniProjectManager(progetto);
+					
+					if(dipendente.getCf().equals(cf)) {
+						
+						inserisciPartecipanteButton.setEnabled(true);
+						eliminaButton.setEnabled(true);
+						confermaModificheButton.setEnabled(true);
+						
+					}
+				
+					else {
+						inserisciPartecipanteButton.setEnabled(false);
+						eliminaButton.setEnabled(false);
+						confermaModificheButton.setEnabled(false);
+					}
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+				
 		});
 	
 		
@@ -1142,6 +1177,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		listaPartecipantiModel.clear();
 		if(listaMeetingRelativiModel !=null)
 		listaMeetingRelativiModel.clear();
+		
+		progettoTable.clearSelection();
 		
 	}
 }

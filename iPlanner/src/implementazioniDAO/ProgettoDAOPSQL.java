@@ -41,6 +41,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	deleteProgettoPS,
 	addPartecipantePS,
 	deletePartecipantePS,
+	projectManagerPS,
 	aggiornaRuoloCollaboratorePS,
 	updateProgettoPS,
 	getMeetingRelativiPS,
@@ -67,6 +68,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		deleteProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?"); //? = codice del progetto da eliminare
 		addPartecipantePS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)"); //? = codice del progetto, ? = codice fiscale del partecipante, ? = ruolo
 		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?"); //? = codice fiscale del dipendente da rimuovere dalla partecipazione, ? = codice progetto da cui rimuoverlo
+		projectManagerPS=connection.prepareStatement("SELECT cf FROM Dipendente NATURAL JOIN Partecipazione WHERE codProgetto=? AND ruolodipendente='Project Manager'");
 		aggiornaRuoloCollaboratorePS=connection.prepareStatement("UPDATE Partecipazione SET RuoloDipendente=? WHERE CF=? AND CodProgetto=?");
 		updateProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i meeting
@@ -578,6 +580,22 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		risultato.close();	//chiude il ResulSet
 		
 		return temp;
+	}
+
+	@Override
+	public String ottieniProjectManager(Progetto progetto) throws SQLException {
+		String cf;
+		
+		projectManagerPS.setInt(1, progetto.getIdProgettto());
+		
+		ResultSet risultato=projectManagerPS.executeQuery();
+		risultato.next();
+		
+		cf=risultato.getString("cf");
+		
+		risultato.close();
+		
+		return cf;
 	}
 }
 

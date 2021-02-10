@@ -72,7 +72,7 @@ public class ControllerProgetto {
 	
 	//Metodo che apre la finestra di gestione dei progetti
 	public void apriGestioneProgetti() {
-		gestioneProgetti=new GestioneProgettiDipendente(this);
+		gestioneProgetti=new GestioneProgettiDipendente(this,dipendente);
 		gestioneProgetti.setVisible(true);
 		
 		mieiProgetti.setVisible(false);
@@ -187,6 +187,11 @@ public class ControllerProgetto {
 		progetto.setAmbiti(progetto.getAmbiti());
 		ambitoDAO.addAmbitiProgetto(progetto);
 		
+	}
+
+	public String ottieniProjectManager(Progetto progetto) throws SQLException {
+		
+		return projDAO.ottieniProjectManager(progetto);
 	}
 
 

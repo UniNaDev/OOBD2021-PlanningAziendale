@@ -31,7 +31,7 @@ public class ProgettoDiscussoListRenderer implements ListCellRenderer<Progetto> 
         
         // text
         textArea = new JTextArea();
-        textArea.setLineWrap(false);
+        textArea.setLineWrap(true);
         textArea.setWrapStyleWord(false);
         textArea.setFont(new Font("Consolas", Font.PLAIN, 15));
         textArea.setAlignmentX(Component.CENTER_ALIGNMENT);

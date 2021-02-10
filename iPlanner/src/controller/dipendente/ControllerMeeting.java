@@ -68,7 +68,7 @@ public class ControllerMeeting {
 	
 	//Metodo che apre la finestra di gestione dei meeting
 	public void apriGestioneMeeting() {
-		gestioneMeeting= new GestioneMeetingDipendente(this);
+		gestioneMeeting= new GestioneMeetingDipendente(this,dipendente);
 		gestioneMeeting.setVisible(true);
 		
 		mieiMeeting.setVisible(false);
@@ -152,6 +152,12 @@ public class ControllerMeeting {
 	public Progetto ottieniProgettoInserito(Progetto progetto) throws SQLException {
 		
 		return projDAO.getProgettoByCod(progetto.getIdProgettto());
+	}
+
+	public String organizzatoreCheck(Meeting meeting) throws SQLException {
+		
+		return dipDAO.organizzatoreCheck(meeting);
+		
 	}
 
 	

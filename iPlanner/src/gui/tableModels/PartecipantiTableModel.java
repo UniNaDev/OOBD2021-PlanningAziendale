@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
+import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Skill;
@@ -71,6 +72,9 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		case 8:
 			return dipendente.getSkills();
 		case 9:
+			ArrayList<CollaborazioneProgetto> progetto=dipendente.getCollaborazioni();
+			
+			
 			return dipendente.getCollaborazioni();
 			
 		}
