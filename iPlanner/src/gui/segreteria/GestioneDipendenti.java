@@ -697,18 +697,51 @@ public class GestioneDipendenti extends JFrame {
 				cittàDiNascitaLabel.setForeground(Color.BLACK);
 				provNascitaLabel.setForeground(Color.BLACK);
 				
-				//se la password è confermata correttamente
-				if (confermaPasswordField.getText().equals(passwordField.getText()))
-						creaDipendente(controller);	//crea il nuovo account con i valori inseriti
-				//se le password inserite sono diverse -> errore password non confermata
-				else if(!passwordField.getText().equals(confermaPasswordField.getText())) {	
-					JOptionPane.showMessageDialog(null,
-							"Le password inserite sono diverse",
-							"Errore Conferma Password",
-							JOptionPane.ERROR_MESSAGE);
-					passwordLabel.setForeground(Color.RED);	//rende rossi i campi
-					confermaPasswordLabel.setForeground(Color.RED);
+		
+				if(nomeTextField.getText().isBlank() || 
+						cognomeTextField.getText().isBlank() || 
+						emailTextField.getText().isBlank() ||
+						cittaComboBox.getSelectedItem()==null ||
+						confermaPasswordField.getText().isBlank()||
+						passwordField.getText().isBlank() ||
+						!uomoRadioButton.isSelected() &&
+						!donnaRadioButton.isSelected()) {
+					
+					JOptionPane.showMessageDialog(null, "Controllare i campi inseriti. (I campi obbligatori devono essere inseriti per procedere alla registrazione)");
+					
+					if(nomeTextField.getText().isBlank())
+						nomeLabel.setForeground(Color.RED);
+					if(cognomeTextField.getText().isBlank())
+						cognomeLabel.setForeground(Color.RED);
+					if(!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+						sessoLabel.setForeground(Color.RED);
+					if(emailTextField.getText().isBlank())
+						emailLabel.setForeground(Color.RED);
+					if(cittaComboBox.getSelectedItem()==null)
+						cittàDiNascitaLabel.setForeground(Color.RED);
+					if(confermaPasswordField.getText().isBlank())
+						confermaPasswordLabel.setForeground(Color.RED);
+					if(passwordField.getText().isBlank())
+						passwordLabel.setForeground(Color.RED);
+					
 				}
+				else if(!passwordField.getText().equals(confermaPasswordField.getText())) {	
+			
+				
+				JOptionPane.showMessageDialog(null,
+						"Le password inserite sono diverse",
+						"Errore Conferma Password",
+						JOptionPane.ERROR_MESSAGE);
+				passwordLabel.setForeground(Color.RED);	//rende rossi i campi
+				confermaPasswordLabel.setForeground(Color.RED);
+		
+			}
+				//se tutto è inserito correttamente
+				else if (confermaPasswordField.getText().equals(passwordField.getText()) && !confermaPasswordField.getText().isBlank() && !passwordField.getText().isBlank() )
+						creaDipendente(controller);	//crea il nuovo account con i valori inseriti
+					
+
+				
 			}
 		});
 		creaAccountButton.addMouseListener(new MouseAdapter() {
@@ -897,7 +930,7 @@ public class GestioneDipendenti extends JFrame {
 			dipendentiTable = new JTable(dataModelDipendente);
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());	//sorter
 			dipendentiTable.setRowSorter(sorter);
-			dipendentiTable.getRowSorter().toggleSortOrder(0);
+			
 			//Click con mouse
 			dipendentiTable.addMouseListener(new MouseAdapter() {
 				@Override
@@ -1004,16 +1037,21 @@ public class GestioneDipendenti extends JFrame {
 		//data di nascita
 		dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
 		//luogo di nascita
-		try {
-			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
-		}
-		catch (SQLException e1) {
-			//errore select per comuni
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
-		}
+		
+		 
+			
+			try {
+				luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
+			}
+			catch (SQLException e1) {
+				//errore select per comuni
+				JOptionPane.showMessageDialog(null,
+					"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
+			}
+		
+	
 		email = emailTextField.getText(); //email
 		password = passwordField.getText();	//password
 		if (!telefonoFissoTextField.getText().equals(""))
@@ -1099,8 +1137,12 @@ public class GestioneDipendenti extends JFrame {
 				if (età < 18)
 					dataNascitaLabel.setForeground(Color.RED);
 				//caso 3
-				if (Float.parseFloat(salarioTextField.getText()) < 0)
+				if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
 					salarioLabel.setForeground(Color.RED);
+				if (telefonoFissoTextField.getText().length() < 10 && telefonoFissoTextField.getText().length() > 0)
+					telefonoFissoLabel.setForeground(Color.RED);
+				if (cellulareTextField.getText().length() < 10 && cellulareTextField.getText().length() > 0)
+					cellulareLabel.setForeground(Color.RED);
 			}
 			//violazione definizione dati
 			else if(e1.getSQLState().equals("22001")) {
@@ -1125,9 +1167,9 @@ public class GestioneDipendenti extends JFrame {
 				if (indirizzoTextField.getText().length() > 100)
 					indirizzoLabel.setForeground(Color.RED);
 				//caso 3
-				if (telefonoFissoTextField.getText().length() != 10 && telefonoFissoTextField.getText().length() != 0)
+				if (telefonoFissoTextField.getText().length() < 10 && telefonoFissoTextField.getText().length() > 0)
 					telefonoFissoLabel.setForeground(Color.RED);
-				if (cellulareTextField.getText().length() != 10 && cellulareTextField.getText().length() != 0)
+				if (cellulareTextField.getText().length() < 10 && cellulareTextField.getText().length() > 0)
 					cellulareLabel.setForeground(Color.RED);
 				//caso 4
 				if (passwordField.getText().length() > 40)
@@ -1351,6 +1393,10 @@ public class GestioneDipendenti extends JFrame {
 				//caso 3
 				if (Float.parseFloat(salarioTextField.getText()) < 0)
 					salarioLabel.setForeground(Color.RED);
+				if (telefonoFissoTextField.getText().length() < 10 && telefonoFissoTextField.getText().length() > 0)
+					telefonoFissoLabel.setForeground(Color.RED);
+				if (cellulareTextField.getText().length() < 10 && cellulareTextField.getText().length() > 0)
+					cellulareLabel.setForeground(Color.RED);
 			}
 			//violazione definizione dati
 			else if(e1.getSQLState().equals("22001")) {
