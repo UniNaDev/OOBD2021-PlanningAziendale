@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -100,9 +101,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private DefaultListModel listaSkillModel;
 	private JLabel partecipantiLabel;
 	private JComboBox ruoloComboBox;
-	private JTextField textField;
+	private JTextArea nomeProgettotextArea;
 	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextArea ambitiTextArea;
 	private TableRowSorter<TableModel> sorterDipendente;
 
 	//Creazione frame
@@ -137,13 +138,13 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-						.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE))
+						.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+						.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+						.addComponent(DipendenteScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -154,7 +155,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -284,11 +285,12 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		skillScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		textField = new JTextField(progettoSelezionato.getNomeProgetto());
-		textField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		textField.setEditable(false);
-		textField.setColumns(10);
-		textField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		nomeProgettotextArea = new JTextArea(progettoSelezionato.getNomeProgetto());
+		nomeProgettotextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
+		nomeProgettotextArea.setEditable(false);
+		nomeProgettotextArea.setLineWrap(true);
+
+		nomeProgettotextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		JLabel nomeLabel_1 = new JLabel("Nome");
 		nomeLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -304,11 +306,11 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		nomeLabel_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		nomeLabel_1_1.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		textField_2 = new JTextField(progettoSelezionato.getAmbiti().toString());
-		textField_2.setFont(new Font("Consolas", Font.PLAIN, 11));
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
-		textField_2.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		ambitiTextArea = new JTextArea(progettoSelezionato.getAmbiti().toString());
+		ambitiTextArea.setEditable(false);
+		ambitiTextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
+		ambitiTextArea.setLineWrap(true);
+		ambitiTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
 		JLabel nomeLabel_1_1_1 = new JLabel("Ambito/i");
 		nomeLabel_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -369,8 +371,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(7)
 							.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(53)
+							.addGap(46)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
@@ -380,10 +383,10 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								.addGroup(gl_infoPanel2.createSequentialGroup()
 									.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)))
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-								.addComponent(textField_1)
-								.addComponent(textField))
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+								.addComponent(nomeProgettotextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+								.addComponent(ambitiTextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
 							.addGap(18)
 							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
 							.addGap(30))
@@ -395,63 +398,67 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addContainerGap()
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+							.addGap(29)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(nomeLabel_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeProgettotextArea, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGap(29)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(nomeLabel_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(textField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-										.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-									.addGap(9)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-										.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+									.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGap(18)
+									.addGap(8)
+									.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+							.addGap(9)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(ambitiTextArea, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(18)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+										.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_infoPanel2.createSequentialGroup()
-											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-												.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-												.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-												.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-												.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_infoPanel2.createSequentialGroup()
-													.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(ComponentPlacement.RELATED)
-													.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-														.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-														.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-													.addPreferredGap(ComponentPlacement.RELATED)
-													.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-														.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-														.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-												.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-													.addComponent(uomoRadioButton)
-													.addComponent(donnaRadioButton)))
+											.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-												.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-												.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+												.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-												.addComponent(ruoloComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(lblRuolo, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-										.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
-										.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)))))
-						.addComponent(separator, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))
-					.addGap(67))
+											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+												.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+											.addComponent(uomoRadioButton)
+											.addComponent(donnaRadioButton)))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+										.addComponent(ruoloComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblRuolo, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
+								.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(67, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
+					.addContainerGap(68, Short.MAX_VALUE)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
+					.addGap(65))
 		);
 		
 		listaSkillModel = new DefaultListModel<>();
@@ -787,6 +794,21 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		dipendenteTable.getColumnModel().getColumn(6).setMinWidth(100);
 		dipendenteTable.getColumnModel().getColumn(7).setMinWidth(300);
 		dipendenteTable.getColumnModel().getColumn(8).setMinWidth(300);
+		
+		//Modello delle colonne personalizzato(Testo allineato al centro)
+		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
+        renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabella.setVerticalAlignment(SwingConstants.CENTER);
+        
+        dipendenteTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(6).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(7).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(8).setCellRenderer(renderTabella);
 		
 		//setta il modello di dati della tabella
 		try {

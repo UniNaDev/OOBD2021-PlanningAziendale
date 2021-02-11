@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -84,7 +85,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JTextField cercaTextField;
 	private JLabel modalitaLabel;
 	private JLabel piattaformaSalaLabel;
-	private final ButtonGroup modalitàButtonGroup = new ButtonGroup();
+	private ButtonGroup modalitàButtonGroup = new ButtonGroup();
 	private JComboBox dataInizioGiornoComboBox;
 	private JComboBox dataInizioMeseComboBox;
 	private JComboBox dataInizioAnnoComboBox;
@@ -876,6 +877,18 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingTable.getColumnModel().getColumn(4).setMinWidth(150);
 		meetingTable.getColumnModel().getColumn(5).setMinWidth(500);
 		
+		
+		//Modello delle colonne personalizzato(Testo allineato al centro)
+		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
+        renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabella.setVerticalAlignment(SwingConstants.CENTER);
+        
+        meetingTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
+        meetingTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
+        meetingTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
+        meetingTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
+        meetingTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
+        meetingTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
 		
 		//Setta i meeting nella tabella
 		try {

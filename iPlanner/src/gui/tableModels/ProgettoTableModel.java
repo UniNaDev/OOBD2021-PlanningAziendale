@@ -1,5 +1,9 @@
 package gui.tableModels;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -21,7 +25,7 @@ public class ProgettoTableModel extends AbstractTableModel {
 
 	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	
-	String[] colnames= {"Nome", "Descrizione","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
+	String[] colnames= {"Nome","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
 
 	//metodo che ritorna la lista di progetti contenuti nella tabella
 	
@@ -63,19 +67,17 @@ public class ProgettoTableModel extends AbstractTableModel {
 		case 0:
 			return proj.getNomeProgetto();
 		case 1:
-			return proj.getDescrizioneProgetto();
-		case 2:
 			return proj.getAmbiti();
-		case 3:
+		case 2:
 			return proj.getTipoProgetto();
-		case 4:
+		case 3:
 			return proj.getDataCreazione().toString(formatDate);
-		case 5:
+		case 4:
 			if(proj.getDataTerminazione()==null)
 				return null;
 			else 
 				return proj.getDataTerminazione().toString(formatDate);
-		case 6:
+		case 5:
 			return proj.getScadenza().toString(formatDate);
 		}
 		return null;
@@ -86,21 +88,27 @@ public class ProgettoTableModel extends AbstractTableModel {
 	}
 
 
+
+
 		//Per sorting corretto
-		public Class getColumnClass(int column) {
+		public Class<?> getColumnClass(int column) {
 	        switch (column) {
-	        	case 2:
+	        	case 1:
 	        		return AmbitoProgetto.class;
+	            case 3:
+	                return getValueAt(0, column).getClass();
 	            case 4:
-	                return LocalDate.class;
+	                return getValueAt(0, column).getClass();
 	            case 5:
-	                return LocalDate.class;
-	            case 6:
-	                return LocalDate.class;
+	                return getValueAt(0, column).getClass();
 	            default:
 	                return String.class;
 	        }
 		}
+	
+	
+		
+		
 
 	
 	
