@@ -734,8 +734,15 @@ public class GestioneDipendenti extends JFrame {
 					confermaPasswordLabel.setForeground(Color.RED);
 				}
 				//se le password coincidono
-				else if (confermaPasswordField.getText().equals(passwordField.getText()))
+				else if (confermaPasswordField.getText().equals(passwordField.getText()) && !passwordField.getText().isBlank())
 					creaDipendente(controller);	//crea il nuovo account con i valori inseriti
+				else {
+					JOptionPane.showMessageDialog(null,
+							"Impossibile applicare le modifiche poichè la password è vuota.",
+							"Errore Password Errata",
+							JOptionPane.ERROR_MESSAGE);
+					passwordLabel.setForeground(Color.RED);
+				}
 			}
 		});
 		creaAccountButton.addMouseListener(new MouseAdapter() {
@@ -875,7 +882,7 @@ public class GestioneDipendenti extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				campiObbligatoriNeri();	//resetta il colore dei campi
 				
-				if (confermaPasswordField.getText().equals(passwordField.getText())) {
+				if (confermaPasswordField.getText().equals(passwordField.getText()) && !passwordField.getText().isBlank()) {
 					salvaModifiche(controller, selectedDip);	//crea il nuovo account con i valori inseriti
 				}
 				//se le password inserite sono diverse -> errore conferma password
@@ -887,6 +894,13 @@ public class GestioneDipendenti extends JFrame {
 							JOptionPane.ERROR_MESSAGE);
 					passwordLabel.setForeground(Color.RED);	//rende rossi i campi
 					confermaPasswordLabel.setForeground(Color.RED);
+				}
+				else {
+					JOptionPane.showMessageDialog(null,
+							"Impossibile applicare le modifiche poichè la password è vuota.",
+							"Errore Password Errata",
+							JOptionPane.ERROR_MESSAGE);
+					passwordLabel.setForeground(Color.RED);
 				}
 			}
 		});
@@ -1129,11 +1143,11 @@ public class GestioneDipendenti extends JFrame {
 	
 	//Metodo che colora i campi obbligatori vuoti di rosso
 	private void campiObbligatoriRossi() {
-		if (nomeTextField.getText() == null)	//nome
+		if (nomeTextField.getText().isBlank())	//nome
 			nomeLabel.setForeground(Color.RED);
-		if (cognomeTextField.getText() == null)	//cognome
+		if (cognomeTextField.getText().isBlank())	//cognome
 			cognomeLabel.setForeground(Color.RED);
-		if (emailTextField.getText() == null)	//email
+		if (emailTextField.getText().isBlank())	//email
 			emailLabel.setForeground(Color.RED);
 		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())	//sesso
 			sessoLabel.setForeground(Color.RED);
@@ -1190,7 +1204,6 @@ public class GestioneDipendenti extends JFrame {
 						"Alcuni campi obbligatori per la creazione sono vuoti.",
 						"Errore Campi Obbligatori Vuoti",
 						JOptionPane.ERROR_MESSAGE);
-				e1.printStackTrace();
 				campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
 			}
 			//violazione primary key/unique
@@ -1208,7 +1221,7 @@ public class GestioneDipendenti extends JFrame {
 						+ "1)Il formato dell'email sia corretto\n"
 						+ "2)Il dipendente sia maggiorenne e la sua data di nascita sia corretta\n"
 						+ "3)Il salario previsto per lui sia positivo\n"
-						+ "4)Nome e Cognome non sono del formato corretto o vuoto\n"
+						+ "4)Nome e Cognome non siano del formato corretto o vuoti\n"
 						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
 						"Errore Vincoli",
 						JOptionPane.ERROR_MESSAGE);	
@@ -1456,7 +1469,7 @@ public class GestioneDipendenti extends JFrame {
 						+ "1)Il formato dell'email sia corretto\n"
 						+ "2)Il dipendente sia maggiorenne e la sua data di nascita sia corretta\n"
 						+ "3)Il salario previsto per lui sia positivo\n"
-						+ "4)Nome e Cognome non sono del formato corretto o vuoto\n"
+						+ "4)Nome e Cognome non siano del formato corretto o vuoti\n"
 						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
 						"Errore Vincoli",
 						JOptionPane.ERROR_MESSAGE);	

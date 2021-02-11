@@ -70,6 +70,7 @@ public class Login extends JFrame {
 		
 		//Text Field per l'email
 		emailTextField = new JTextField();
+		emailTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		emailTextField.setBounds(285, 133, 173, 26);
 		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -86,6 +87,7 @@ public class Login extends JFrame {
 		
 		//Password Field per la password
 		passwordField = new JPasswordField();
+		passwordField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		passwordField.setEchoChar('*');
 		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setBounds(285, 193, 173, 26);
@@ -101,16 +103,18 @@ public class Login extends JFrame {
 		});
 		
 		
-		//Icone
+		//Icona login
 		JLabel iconaLoginLabel = new JLabel("Login");
 		iconaLoginLabel.setBounds(289, 5, 165, 88);
 		iconaLoginLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		iconaLoginLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/employee_64.png")));
 		
+		//Icona email
 		JLabel iconaEmailLabel = new JLabel("");
 		iconaEmailLabel.setBounds(286, 108, 16, 26);
 		iconaEmailLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/username_16.png")));
 		
+		//Icona password
 		JLabel iconaPasswordLabel = new JLabel("");
 		iconaPasswordLabel.setBounds(286, 170, 16, 26);
 		iconaPasswordLabel.setIcon(new ImageIcon(Login.class.getResource("/Icone/password_16.png")));

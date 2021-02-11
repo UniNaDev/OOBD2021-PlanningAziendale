@@ -44,8 +44,8 @@ public class Starter {
 				costruttoreDB.inserisciDatiIniziali(); //inserisce dei dati iniziali per poter utilizzare subito il software
 			}
 			catch (SQLException e){
-				//se l'eccezione non è in merito all'esistenza delle tabelle che tenta di creare
-				if (!e.getSQLState().equals("42P07"))
+				////errori non contemplati (che non sono tabelle già esistenti o trigger già esistenti)
+				if (!e.getSQLState().equals("42P07") && !e.getSQLState().equals("42710"))
 					JOptionPane.showMessageDialog(null,
 							e.getMessage() + "\nContattare uno sviluppatore.",
 							"Errore #" + e.getErrorCode(),
@@ -82,8 +82,8 @@ public class Starter {
 			}
 			catch (ArrayIndexOutOfBoundsException e) {
 				JOptionPane.showMessageDialog(null,
-						"Mancano argomenti di autorizzazione in input.",
-						"Errore argomenti iniziali",
+						"Mancano argomenti di autorizzazione in input.\nContattare uno sviluppatore.",
+						"Errore Argomenti Iniziali",
 						JOptionPane.ERROR_MESSAGE);	//errore argomenti a linea di comando mancanti
 			}
 			catch (SQLException e) {

@@ -18,6 +18,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import java.awt.Font;
@@ -32,6 +34,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 
 import controller.dipendente.ControllerGestioneProfilo;
 
@@ -66,6 +70,17 @@ public class MioAccount extends JFrame {
 	private JTextField indirizzoTextField;
 	private JPasswordField passwordField;
 	private JTextField emailTextField;
+	private JLabel nomeLabel, 
+	cognomeLabel,
+	sessoLabel,
+	dataNascitaLabel,
+	provinciaNascitaLabel,
+	comuneNascitaLabel,
+	indirizzoLabel,
+	cellulareLabel,
+	telefonoFissoLabel,
+	emailLabel,
+	passwordLabel;
 	
 	//Altri attributi
 	private String nome;	//nome nuovo dipendente
@@ -84,6 +99,20 @@ public class MioAccount extends JFrame {
 	//-----------------------------------------------------------------
 	
 	public MioAccount(ControllerGestioneProfilo controller, Dipendente dipendente) {
+		addWindowListener(new WindowAdapter() {
+			//Quando si vuole uscire chiede all'utente quale scelta vuole effettuare
+			public void windowClosing(WindowEvent evt) {
+                int res=JOptionPane.showConfirmDialog(null,
+                        "Sei sicuro di uscire? Le modifiche non verranno salvate");
+                if(res==JOptionPane.YES_OPTION){
+                      controller.chiudiMioAccount();	//chiude la finestra
+                }
+                if(res==JOptionPane.NO_OPTION) {
+                	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);	//non la chiude
+                	
+                }
+			}                               
+        });
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MioAccount.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - Il mio Account");
@@ -116,11 +145,100 @@ public class MioAccount extends JFrame {
 		//Click sul pulsante
 		confermaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				campiObbligatoriNeri();	//resetta i colori dei campi
 				try {
-					updateAccount(controller); //Aggiorna info account
+					if (!passwordField.getText().isBlank())
+						updateAccount(controller); //aggiorna info account
+					else {
+						JOptionPane.showMessageDialog(null,
+								"Impossibile applicare le modifiche poichè la password è vuota.",
+								"Errore Password Errata",
+								JOptionPane.ERROR_MESSAGE);
+						passwordLabel.setForeground(Color.RED);
+					}
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null, e1.getMessage());
+					//violazione not null
+					if (e1.getSQLState().equals("23502")) {
+						JOptionPane.showMessageDialog(null,
+								"Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
+								"Errore Campi Obbligatori Vuoti",
+								JOptionPane.ERROR_MESSAGE);
+						campiObbligatoriRossi();	//colora di rosso i campi vuoti
+						}
+					//violazione primary key/unique
+					else if (e1.getSQLState().equals("23505")) {
+						JOptionPane.showMessageDialog(null,
+								"Il dipendente che intendi aggiornare è uguale a uno già esistente.\nControllare email o codice fiscale.",
+								"Errore Dipendente Esistente",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					//violazione vincolo tabella
+					else if(e1.getSQLState().equals("23514")) {
+						JOptionPane.showMessageDialog(null,
+								"I valori inseriti sono errati.\n"
+								+ "Controlla che:\n"
+								+ "1)Il formato dell'email sia corretto\n"
+								+ "2)Il dipendente sia maggiorenne e la sua data di nascita sia corretta\n"
+								+ "3)Nome e Cognome non siano del formato corretto o vuoti\n"
+								+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
+								"Errore Vincoli",
+								JOptionPane.ERROR_MESSAGE);	
+						//caso 1
+						Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+						Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
+						if (!matcher.find())
+							emailLabel.setForeground(Color.RED);
+						//caso 2
+						if (dipendente.getEtà() < 18)
+							dataNascitaLabel.setForeground(Color.RED);
+						campiObbligatoriRossi();
+					}
+					//violazione definizione dati
+					else if(e1.getSQLState().equals("22001")) {
+						JOptionPane.showMessageDialog(null,
+								"I dati inseriti sono errati.\n"
+								+ "Controlla che:\n"
+								+ "1)Nome e Cognome abbiano meno di 30 caratteri\n"
+								+ "2)Email e Indirizzo abbiano meno di 100 caratteri\n"
+								+ "3)Numero di telefono e Cellulare abbiano esattamente 10 caratteri\n"
+								+ "4)La Password non superi i 50 caratteri o non sia vuota\n"
+								+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
+								"Errore Dati Inseriti",
+								JOptionPane.ERROR_MESSAGE);
+						//caso 1
+						if (nomeTextField.getText().length() > 30)
+							nomeLabel.setForeground(Color.RED);
+						if (cognomeTextField.getText().length() > 30)
+							cognomeLabel.setForeground(Color.RED);
+						//caso 2
+						if (emailTextField.getText().length() > 100)
+							emailLabel.setForeground(Color.RED);
+						if (indirizzoTextField.getText().length() > 100)
+							indirizzoLabel.setForeground(Color.RED);
+						//caso 3
+						if (telefonoFissoTextField.getText().length() != 10)
+							telefonoFissoLabel.setForeground(Color.RED);
+						if (cellulareTextField.getText().length() != 10)
+							cellulareLabel.setForeground(Color.RED);
+						//caso 4
+						if (passwordField.getText().length() > 50 || passwordField.getText().isBlank()) {
+							passwordLabel.setForeground(Color.RED);
+						}
+					}
+					//dipendente inesistente/errato
+					else if (e1.getErrorCode() == 0) {
+						JOptionPane.showMessageDialog(null,
+								"Fallito nel modificare il dipendente.\nImpossibile trovarlo nel database.",
+								"Errore Dipendente Non Trovato",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					//altri errori non contemplati
+					else {
+						JOptionPane.showMessageDialog(null,
+								e1.getMessage() + "\nContattare uno sviluppatore.",
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 
 			}
@@ -132,7 +250,7 @@ public class MioAccount extends JFrame {
 		informazioniPersonaliLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		//Label "Nome"
-		JLabel nomeLabel = new JLabel("Nome");
+		nomeLabel = new JLabel("Nome");
 		nomeLabel.setBounds(167, 123, 62, 19);
 		nomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		nomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -140,7 +258,7 @@ public class MioAccount extends JFrame {
 		//TextField del nome
 		nomeTextField = new JTextField();
 		nomeTextField.setHorizontalAlignment(SwingConstants.LEFT);
-		nomeTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		nomeTextField.setText(dipendente.getNome());
 		nomeTextField.setEditable(false);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -157,14 +275,14 @@ public class MioAccount extends JFrame {
 		cfTextField = new JTextField();
 		cfTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		cfTextField.setText(dipendente.getCf());
-		cfTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		cfTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		cfTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cfTextField.setEditable(false);
 		cfTextField.setBounds(239, 83, 187, 24);
 		cfTextField.setColumns(10);
 		
 		//Label "Cognome"
-		JLabel cognomeLabel = new JLabel("Cognome");
+		cognomeLabel = new JLabel("Cognome");
 		cognomeLabel.setBounds(167, 154, 62, 19);
 		cognomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -173,14 +291,14 @@ public class MioAccount extends JFrame {
 		cognomeTextField = new JTextField();
 		cognomeTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		cognomeTextField.setText(dipendente.getCognome());
-		cognomeTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		cognomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		cognomeTextField.setEditable(false);
 		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cognomeTextField.setBounds(239, 150, 187, 24);
 		cognomeTextField.setColumns(10);
 		
 		//Label "Sesso"
-		JLabel sessoLabel = new JLabel("Sesso");
+		sessoLabel = new JLabel("Sesso");
 		sessoLabel.setBounds(167, 198, 62, 19);
 		sessoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -212,7 +330,7 @@ public class MioAccount extends JFrame {
 		}
 		
 		//Label "Data di nascita"
-		JLabel dataNascitaLabel = new JLabel("Data di nascita");
+		dataNascitaLabel = new JLabel("Data di nascita");
 		dataNascitaLabel.setBounds(103, 236, 126, 21);
 		dataNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dataNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -252,11 +370,11 @@ public class MioAccount extends JFrame {
 		annoComboBox.setBackground(Color.WHITE);
 		annoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		annoComboBox.setBounds(353, 236, 62, 22);
-		DefaultComboBoxModel myModel = new DefaultComboBoxModel();
-		annoComboBox.setModel(myModel);
+		DefaultComboBoxModel anniComboBoxModel = new DefaultComboBoxModel();
+		annoComboBox.setModel(anniComboBoxModel);
 		//Genera e aggiunge alla combobox gli anni dal 1900 a oggi
 		for(int i = 1900;i <= LocalDate.now().getYear(); i++)
-			myModel.addElement(i);
+			anniComboBoxModel.addElement(i);
 		annoComboBox.setSelectedIndex(dipendente.getDataNascita().getYear() - 1900); //mette di default il 100esimo indice cioè l'anno 2000	
 		contentPane.add(annoComboBox);
 		
@@ -299,22 +417,6 @@ public class MioAccount extends JFrame {
 			}
 		});
 		
-		
-		addWindowListener(new WindowAdapter() {
-			//Quando si vuole uscire chiede all'utente quale scelta vuole effettuare
-			public void windowClosing(WindowEvent evt) {
-                int res=JOptionPane.showConfirmDialog(null,
-                        "Sei sicuro di uscire? Le modifiche non verranno salvate");
-                if(res==JOptionPane.YES_OPTION){
-                      controller.chiudiMioAccount();	//chiude la finestra
-                }
-                if(res==JOptionPane.NO_OPTION) {
-                	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);	//non la chiude
-                	
-                }
-			}                               
-        });
-		
 		contentPane.setLayout(null);
 		contentPane.add(modificaButton);
 		contentPane.add(confermaButton);
@@ -337,14 +439,14 @@ public class MioAccount extends JFrame {
 		contentPane.add(separator);
 		
 		//Label "Prov. di nascita"
-		JLabel provinciaNascitaLabel = new JLabel("Prov. di nascita");
+		provinciaNascitaLabel = new JLabel("Prov. di nascita");
 		provinciaNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		provinciaNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		provinciaNascitaLabel.setBounds(85, 269, 144, 21);
 		contentPane.add(provinciaNascitaLabel);
 		
 		//Label "Comune di nascita"
-		JLabel comuneNascitaLabel = new JLabel("Comune di nascita");
+		comuneNascitaLabel = new JLabel("Comune di nascita");
 		comuneNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		comuneNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		comuneNascitaLabel.setBounds(85, 299, 144, 24);
@@ -378,20 +480,21 @@ public class MioAccount extends JFrame {
 							comuneComboBox.setModel(new DefaultComboBoxModel(controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()).toArray()));
 						} 
 						catch (SQLException e1) {
+							//errore select
 							JOptionPane.showMessageDialog(null,
-									e1.getMessage(),
-									"Errore #" + e1.getErrorCode(),
+									"Impossibile ottenere tutti i comuni della provincia selezionata dal database.\nControllare che la connessione al database sia stabilita.",
+									"Errore Interrogazione Database",
 									JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});
 			} catch (SQLException e1) {
+				//errore select
 				JOptionPane.showMessageDialog(null,
-						e1.getMessage(),
-						"Errore #" + e1.getErrorCode(),
+						"Impossibile ottenere tutte le province dal database.\nControllare che la connessione al database sia stabilita.",
+						"Errore Interrogazione Database",
 						JOptionPane.ERROR_MESSAGE);
 			}
-		
 		provinciaComboBox.setUI(new BasicComboBoxUI());
 		provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		provinciaComboBox.setEnabled(false);
@@ -403,7 +506,7 @@ public class MioAccount extends JFrame {
 		contentPane.add(provinciaComboBox);
 		
 		//Label "Indirizzo"
-		JLabel indirizzoLabel = new JLabel("Indirizzo");
+		indirizzoLabel = new JLabel("Indirizzo");
 		indirizzoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		indirizzoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		indirizzoLabel.setBounds(85, 337, 144, 20);
@@ -412,7 +515,7 @@ public class MioAccount extends JFrame {
 		//TextField indirizzo
 		indirizzoTextField = new JTextField(dipendente.getIndirizzo());
 		indirizzoTextField.setHorizontalAlignment(SwingConstants.LEFT);
-		indirizzoTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		indirizzoTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		indirizzoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		indirizzoTextField.setEditable(false);
 		indirizzoTextField.setBounds(239, 334, 201, 24);
@@ -420,7 +523,7 @@ public class MioAccount extends JFrame {
 		indirizzoTextField.setColumns(10);
 		
 		//Label "Cellulare"
-		JLabel cellulareLabel = new JLabel("Cellulare");
+		cellulareLabel = new JLabel("Cellulare");
 		cellulareLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		cellulareLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		cellulareLabel.setBounds(85, 447, 144, 19);
@@ -430,7 +533,7 @@ public class MioAccount extends JFrame {
 		cellulareTextField = new JTextField();
 		cellulareTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		cellulareTextField.setText(dipendente.getCellulare());
-		cellulareTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		cellulareTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		cellulareTextField.setEditable(false);
 		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cellulareTextField.setColumns(10);
@@ -438,7 +541,7 @@ public class MioAccount extends JFrame {
 		contentPane.add(cellulareTextField);
 		
 		//Label "Telefono fisso"
-		JLabel telefonoFissoLabel = new JLabel("Telefono Fisso");
+		telefonoFissoLabel = new JLabel("Telefono Fisso");
 		telefonoFissoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		telefonoFissoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		telefonoFissoLabel.setBounds(85, 484, 144, 19);
@@ -448,7 +551,7 @@ public class MioAccount extends JFrame {
 		telefonoFissoTextField = new JTextField();
 		telefonoFissoTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		telefonoFissoTextField.setText(dipendente.getTelefonoCasa());
-		telefonoFissoTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		telefonoFissoTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		telefonoFissoTextField.setEditable(false);
 		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		telefonoFissoTextField.setColumns(10);
@@ -523,7 +626,7 @@ public class MioAccount extends JFrame {
 		contentPane.add(iconaSkillsLabel);
 		
 		//Label "Email"
-		JLabel emailLabel = new JLabel("Email");
+		emailLabel = new JLabel("Email");
 		emailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		emailLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		emailLabel.setBounds(85, 376, 144, 19);
@@ -532,7 +635,7 @@ public class MioAccount extends JFrame {
 		//TextField email
 		emailTextField = new JTextField(dipendente.getEmail());
 		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
-		emailTextField.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		emailTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		emailTextField.setEditable(false);
 		emailTextField.setColumns(10);
 		emailTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -540,7 +643,7 @@ public class MioAccount extends JFrame {
 		contentPane.add(emailTextField);
 		
 		//Label "Password"
-		JLabel passwordLabel = new JLabel("Password");
+		passwordLabel = new JLabel("Password");
 		passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		passwordLabel.setBounds(85, 414, 144, 19);
@@ -548,6 +651,7 @@ public class MioAccount extends JFrame {
 		
 		//PasswordField della password
 		passwordField = new JPasswordField(dipendente.getPassword());
+		passwordField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		passwordField.setBounds(239, 409, 187, 24);
@@ -603,5 +707,42 @@ public class MioAccount extends JFrame {
 		indirizzo = indirizzoTextField.getText();	//indirizzo
 	
 		controller.aggiornaInfoDipendente(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo);	//mandali al controller che prova a creare il nuovo dipendente con il dao
+	}
+	
+	//Metodo che colora i campi obbligatori vuoti di rosso
+	private void campiObbligatoriRossi() {
+		if (nomeTextField.getText().isBlank())	//nome
+			nomeLabel.setForeground(Color.RED);
+		if (cognomeTextField.getText().isBlank())	//cognome
+			cognomeLabel.setForeground(Color.RED);
+		if (emailTextField.getText().isBlank())	//email
+			emailLabel.setForeground(Color.RED);
+		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())	//sesso
+			sessoLabel.setForeground(Color.RED);
+		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)	//data di nascita
+			dataNascitaLabel.setForeground(Color.RED);
+		if (indirizzoTextField.getText() == null)	//indirizzo	
+			indirizzoLabel.setForeground(Color.RED);
+		if (provinciaComboBox.getSelectedItem() == null || comuneComboBox.getSelectedItem() == null) { //luogo di nascita
+			provinciaNascitaLabel.setForeground(Color.RED);
+			comuneNascitaLabel.setForeground(Color.RED);
+		}
+		//password
+		if (passwordField.getText().isBlank()) {
+			passwordLabel.setForeground(Color.RED);
+		}
+	}
+	
+	//Metodo che colora di nero i campi
+	private void campiObbligatoriNeri() {
+		nomeLabel.setForeground(Color.BLACK);
+		cognomeLabel.setForeground(Color.BLACK);
+		emailLabel.setForeground(Color.BLACK);
+		passwordLabel.setForeground(Color.BLACK);
+		sessoLabel.setForeground(Color.BLACK);
+		indirizzoLabel.setForeground(Color.BLACK);
+		dataNascitaLabel.setForeground(Color.BLACK);
+		comuneNascitaLabel.setForeground(Color.BLACK);
+		provinciaNascitaLabel.setForeground(Color.BLACK);
 	}
 }

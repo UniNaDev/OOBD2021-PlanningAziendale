@@ -110,15 +110,12 @@ public class ControllerGestioneProfilo {
 	
 	//Metodo che ottiene i meeting a cui partecipa il dipendente
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		
 		return meetDAO.getMeetingsByInvitato(dipendente);
 	}
 	
 	//Metodo che aggiorna le informazioni del dipendente
 	public void aggiornaInfoDipendente(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) throws SQLException {
-		
 		//setta le nuove informazioni del dipendente
-		
 		dipendente.setNome(nome);
 		dipendente.setCognome(cognome);
 		dipendente.setSesso(sesso);
@@ -130,16 +127,11 @@ public class ControllerGestioneProfilo {
 		dipendente.setTelefonoCasa(telefono);
 		dipendente.setCellulare(cellulare);
 		dipendente.setIndirizzo(indirizzo);
-		
-
-
+	
 		dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB	
 		JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
 		chiudiMioAccount();
 		tornaAHome();
-
-		
-	
 		}
 	
 	

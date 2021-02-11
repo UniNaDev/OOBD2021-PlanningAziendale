@@ -370,6 +370,4 @@ public class Home extends JFrame {
 		
 		contentPane.setLayout(gl_contentPane);
 	}
-
-
 }
