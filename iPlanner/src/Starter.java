@@ -44,7 +44,12 @@ public class Starter {
 				costruttoreDB.inserisciDatiIniziali(); //inserisce dei dati iniziali per poter utilizzare subito il software
 			}
 			catch (SQLException e){
-				System.out.println(e.getMessage());
+				//se l'eccezione non è in merito all'esistenza delle tabelle che tenta di creare
+				if (!e.getSQLState().equals("42P07"))
+					JOptionPane.showMessageDialog(null,
+							e.getMessage() + "\nContattare uno sviluppatore.",
+							"Errore #" + e.getErrorCode(),
+							JOptionPane.ERROR_MESSAGE);
 			}
 			
 			//inizializza i DAO

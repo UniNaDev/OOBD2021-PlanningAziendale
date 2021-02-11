@@ -41,6 +41,7 @@ import entita.Meeting;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -166,7 +167,7 @@ public class Home extends JFrame {
 		});
 		
 		//Button "Esci"
-		JButton logoutButton = new JButton("Esci");
+		JButton logoutButton = new JButton("Logout");
 		logoutButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -181,7 +182,7 @@ public class Home extends JFrame {
 		});
 		logoutButton.setBackground(Color.WHITE);
 		logoutButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		logoutButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		logoutButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		logoutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		//Click pulsante
 		logoutButton.addActionListener(new ActionListener() {
@@ -190,12 +191,13 @@ public class Home extends JFrame {
 			}
 		});
 		
+		//ScrollPanel lista progetti
 		JScrollPane progettiScrollPanel = new JScrollPane();
 		progettiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		progettiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
-
 		progettiScrollPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		
+		//ScrollPanel lista meeting
 		JScrollPane meetingScrollPanel = new JScrollPane();
 		meetingScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -218,12 +220,10 @@ public class Home extends JFrame {
 		
 		//Calcolo della data
 		LocalDate dataAttuale = LocalDate.now();	//prende la data attuale
-		
 		String giornoAttuale = dataAttuale.dayOfWeek().getAsText();	//seleziona il giorno della settimana
 		int giornoAttualeInt = dataAttuale.getDayOfMonth();	//seleziona il giorno del mese
 		String meseAttuale = dataAttuale.monthOfYear().getAsText();	//seleziona il mese
 		int annoAttuale = dataAttuale.getYear();	//seleziona l'anno
-		
 		//Crea la stringa della data completa
 		String dataInStringa = giornoAttuale + " " + String.valueOf(giornoAttualeInt) + " " + meseAttuale + " " + String.valueOf(annoAttuale);
 		
@@ -249,7 +249,7 @@ public class Home extends JFrame {
 		});
 		t.start(); // fa partire il timer
 		
-		//Label "Meeting Programmati"
+		//Label "Meeting"
 		JLabel meetingLabel = new JLabel("Meeting");
 		meetingLabel.setForeground(Color.DARK_GRAY);
 		meetingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
@@ -270,8 +270,11 @@ public class Home extends JFrame {
 			meetingScrollPanel.setViewportView(meetingList);
 			meetingList.setCellRenderer(renderer);
 		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			//errore select per tutti i meeting nel database
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 		
 		//Progetti Label
@@ -296,8 +299,11 @@ public class Home extends JFrame {
 			
 			progettiScrollPanel.setViewportView(progettiList);
 		} catch (SQLException e1) {
-			
-			e1.printStackTrace();
+			//errore select per tutti i progetti nel database
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutti i progetti dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);

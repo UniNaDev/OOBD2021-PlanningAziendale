@@ -39,34 +39,31 @@ public class Login extends JFrame {
 	private JButton accessoButton;	//pulsante di login
 	private JButton annullaButton;	//pulsante annulla
 	private JLabel mostraPasswordLabel;	//label clickabile per mostrare la password
+	private JLabel emailLabel, passwordLabel;	//label emai e password
 
 	//Creazione frame
 	//-----------------------------------------------------------------
 	
 	public Login(ControllerAccesso controller) {
 		setResizable(false);
-		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Icone/WindowIcon_16.png")));
-		
 		setLocationRelativeTo(null);
 		setTitle("iPlanner - Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(650, 150, 750, 440);
-		
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
-		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		//Label "Email"
-		JLabel emailLabel = new JLabel("Email");
+		emailLabel = new JLabel("Email");
 		emailLabel.setBounds(300, 120, 57, 14);
 		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		//Label "Password"
-		JLabel passwordLabel = new JLabel("Password");
+		passwordLabel = new JLabel("Password");
 		passwordLabel.setBounds(301, 182, 70, 14);
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,7 +80,7 @@ public class Login extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					login(controller, emailLabel, passwordLabel);	//tenta il login
+					login(controller);	//tenta il login
 			}
 		});
 		
@@ -99,7 +96,7 @@ public class Login extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					login(controller, emailLabel, passwordLabel);	//tenta il login
+					login(controller);	//tenta il login
 			}
 		});
 		
@@ -176,7 +173,7 @@ public class Login extends JFrame {
 		//click del pulsante
 		accessoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				login(controller, emailLabel, passwordLabel);	//tenta di eseguire il login con le credenziali inserite
+				login(controller);	//tenta di eseguire il login con le credenziali inserite
 			}
 		});
 		accessoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -210,7 +207,7 @@ public class Login extends JFrame {
 	//-----------------------------------------------------------------
 	
 	//Metodo che tenta di fare il login richiamando il controller
-	private void login(ControllerAccesso controller, JLabel emailLabel, JLabel passwordLabel) {
+	private void login(ControllerAccesso controller) {
 		//resetta i colori delle label
 		emailLabel.setForeground(Color.BLACK);
 		passwordLabel.setForeground(Color.BLACK);
@@ -227,10 +224,9 @@ public class Login extends JFrame {
 				passwordLabel.setForeground(Color.RED);	//rende rossa la label
 				svuotaCampi();	//svuota i campi
 			}
-			
 			JOptionPane.showMessageDialog(null,
 					"Inserire Email e Password per login.",
-					"Credenziali vuote",
+					"Credenziali Vuote",
 					JOptionPane.OK_OPTION);	//mostra un errore
 		}
 		//se invece i campi sono pieni
@@ -244,21 +240,17 @@ public class Login extends JFrame {
 				controller.verificaCredenziali(emailTextField.getText(),passwordField.getText());
 			} catch (SQLException e1) {
 				JOptionPane.showMessageDialog(null,
-						"Credenziali Errate",
-						"Errore #" + e1.getErrorCode(),
+						"Credenziali errate oppure connessione fallita al database.",
+						"Errore Interrogazione Database",
 						JOptionPane.ERROR_MESSAGE);	//finestra di errore
 				svuotaCampi();
 			}
 		}
 	}
 	
-
 	//Metodo che svuota i campi di email e password
 	private void svuotaCampi() {
 		emailTextField.setText("");
 		passwordField.setText("");
 	}
-	
-
-	
 }

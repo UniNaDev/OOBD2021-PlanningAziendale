@@ -12,6 +12,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
+
+import org.postgresql.util.PSQLException;
+
 public class ManagerConnessioneDB {
 	
 	//ATTRIBUTI
@@ -43,8 +47,12 @@ public class ManagerConnessioneDB {
 		}
 		catch(ClassNotFoundException ex) 
 		{
-			System.out.println("Connessione al database fallita: " + ex.getMessage());	//messaggio di errore in caso di fallimento
-		}
+           	//errore classe driver not found
+        	JOptionPane.showMessageDialog(null,
+        			"Impossibile stabilire una connessione al database a causa dei driver.\nContattare uno sviluppatore.",
+        			"Errore Connessione Database",
+        			JOptionPane.ERROR_MESSAGE);
+        }
 	}
 	
 	//Metodo getter della connessione GetConnection(): Connection
@@ -70,23 +78,20 @@ public class ManagerConnessioneDB {
 	}
 	
 	//Metodo che crea il database nel caso non esista già
-    private void creaDatabase(String nomeDB)
-    {
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate("CREATE DATABASE " + nomeDB);
-            statement.close();
-        }
-        catch (SQLException sqlException) {
-        	//Errore database già esistente
-            if (sqlException.getErrorCode() == 1007) {
-                System.out.println("Database " + nomeDB + " già esiste.");
-            } 
-            //altri errori
-            else {
-                System.out.println(sqlException.getMessage());
-            }
+    private void creaDatabase(String nomeDB) throws SQLException {
+    	try {
+	        Statement statement = null;
+	        statement = connection.createStatement();
+	        statement.executeUpdate("CREATE DATABASE " + nomeDB);
+	        statement.close();
+    	}
+        catch (SQLException e) {
+        	//errori non contemplati (diversi da database già esistente)
+        	if (!e.getSQLState().equals("42P04"))
+        		JOptionPane.showMessageDialog(null,
+        				e.getMessage() + "\nContattare uno sviluppatore.",
+        				"Errore #" + e.getErrorCode(),
+        				JOptionPane.ERROR_MESSAGE);
         }
     }
 }

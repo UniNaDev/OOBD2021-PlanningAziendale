@@ -2,6 +2,8 @@ package controller.dipendente;
 
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import controller.ControllerStart;
 import entita.Dipendente;
 import gui.*;
@@ -60,7 +62,14 @@ public class ControllerAccesso {
 	//Metodo che verifica le credenziali per l'accesso e se sono corrette passa alla finestra principale dopo aver salvato l'utente che ha fatto il login
 	public void verificaCredenziali(String user, String pass) throws SQLException {
 		dipendente = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
-		dipendente.setSkills(skillDAO.getSkillDipendente(dipendente.getCf())); 	//ottiene le skill del dipendente che ha fatto login
+		try {
+			dipendente.setSkills(skillDAO.getSkillDipendente(dipendente.getCf())); 	//ottiene le skill del dipendente che ha fatto login
+		} catch(SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Impossibile ottenere le skill del dipendente dal database.\nControllare che la connessione al database sia stabilita.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
+		}
 		loginFrame.setVisible(false);	//chiude la finestra di login
 		ControllerGestioneProfilo controller=new ControllerGestioneProfilo(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO,dipendente);	//inizializza il controller di gestione profilo che mostra la finestra principale del profilo utente
 	}

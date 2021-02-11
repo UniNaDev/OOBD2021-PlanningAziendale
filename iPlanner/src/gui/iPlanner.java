@@ -47,7 +47,6 @@ public class iPlanner extends JFrame {
 	//-----------------------------------------------------------------
 	
 	public iPlanner(ControllerStart controller, boolean segreteria) {
-		
 		setMinimumSize(new Dimension(850, 500));
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(iPlanner.class.getResource("/Icone/WindowIcon_16.png")));
@@ -58,18 +57,18 @@ public class iPlanner extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		//Label "Welcome to iPlanner"
+		//Label "Benvenuto su iPlanner"
 		benvenutoLabel = new JLabel("Benvenuto su iPlanner");
 		benvenutoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		benvenutoLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/planner_128.png")));
 		benvenutoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-		//Icona Label Welcome
+		//Icona Label Benvenuto
 		iconaDipendenteLabel = new JLabel("");
 		iconaDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		iconaDipendenteLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/employee_64.png")));
 		
-		//Label "Created by"
+		//Label "Creato da"
 		creatoDaLabel = new JLabel("Creato da: " + devs);
 		creatoDaLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
 	

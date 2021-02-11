@@ -7,6 +7,7 @@ import java.awt.Font;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
@@ -21,9 +22,9 @@ import entita.Progetto;
 
 public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
 
-	  	private JPanel panel;
-	    private JTextArea textArea;
-	
+  	private JPanel panel;
+    private JTextArea textArea;
+    
 	public ProgettoListRenderer() {
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -46,11 +47,7 @@ public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
 		String temp ="Nome:"+progetto.getNomeProgetto();
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 		
-		temp += "\nData creazione:" + progetto.getDataCreazione().toString(formatDate) + " Data scadenza:" +progetto.getScadenza().toString(formatDate)+" Data terminazione:";
-		if (progetto.getDataTerminazione() !=null)
-			temp += progetto.getDataTerminazione().toString(formatDate);
-		else
-			temp += "In corso";
+		temp += "\nScade:" +progetto.getScadenza().toString(formatDate);
 		
 		textArea.setText(temp);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

@@ -233,11 +233,4 @@ public class Progetto {
 			return false;
 		return true;
 	}
-	
-	
-
-	
-	
-	
-
 }
