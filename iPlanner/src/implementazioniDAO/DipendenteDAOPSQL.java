@@ -33,16 +33,13 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;	//connessione al DB
-	private PreparedStatement getDipendentiPartecipantiPS,
-		getDipendentiNonInvitatiPS,
+	private PreparedStatement getDipendentiNonInvitatiPS,
 		getDipendentiPS,
-		getDipendenti2PS,
 		getDipendentiNonPartecipantiPS,
-		getDipendentiByEtaPS,
-
 		getValutazionePS,
 		addDipendentePS,
 		updateDipendentePS,
+		deleteDipendentePS,
 		loginCheckPS,
 		organizzatoreCheckPS,
 		getDipendenteByCFPS,
@@ -66,17 +63,18 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		this.skillDAO = new SkillDAOPSQL(connection);
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
-		getDipendenti2PS=connection.prepareStatement("SELECT * FROM Dipendente"); //Deve selezionare i dipendenti che non partecipano già al meeting che si sta inserendo.
+		connection.prepareStatement("SELECT * FROM Dipendente");
 		getDipendentiNonPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )");
-		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
+		connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
 		getDipendentiNonInvitatiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
 		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
+		deleteDipendentePS = connection.prepareStatement("DELETE FROM Dipendente WHERE CF = ?");
 		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email ILIKE ? AND Password = ?");
 		organizzatoreCheckPS=connection.prepareStatement("SELECT cf FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=? AND organizzatore=true");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
-		getDipendentiPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=?");
+		connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=?");
 		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
 		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome LIKE '%' || ? || '%' OR d.Cognome LIKE '%' || ? || '%' OR d.Email LIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
 	}
@@ -397,9 +395,6 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		return temp;
 	}
 
-
-
-
 	@Override
 	public String organizzatoreCheck(Meeting meeting) throws SQLException {
 		
@@ -414,6 +409,21 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		risultato.close();
 		
 		return cf;
+	}
+	
+	//Metodo che elimina un dipendente
+	@Override
+	public boolean deleteDipendente(Dipendente dipendente) throws SQLException {
+		//inserisce tutti i parametri nello statement DELETE
+		deleteDipendentePS.setString(1, dipendente.getCf());
+		
+		int record = deleteDipendentePS.executeUpdate();	//esegue il delete e salva il numero di record inseriti in record
+		
+		//se record = 1 allora il delete è avvenuto correttamente, altrimenti no
+		if (record == 1)
+			return true;
+		else
+			return false;
 	}
 
 }

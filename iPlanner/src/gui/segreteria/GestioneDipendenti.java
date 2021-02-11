@@ -904,6 +904,81 @@ public class GestioneDipendenti extends JFrame {
 		eliminaAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO: elimina account
+				String nome;	//nome nuovo dipendente
+				String cognome;	//cognome nuovo dipendente
+				char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
+				LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
+				LuogoNascita luogoNascita = null;	//luogo di nascita del nuovo dipendente
+				String email;	//email del dipendente
+				String password = null;	//password del dipendente
+				String telefono = null;	//numero di telefono di casa
+				String cellulare = null;	//cellulare
+				String indirizzo;	//indirizzo
+				//prende i dati dagli input della GUI
+				nome = nomeTextField.getText();	//nome
+				cognome = cognomeTextField.getText();	//cognome
+				//sesso
+				if (uomoRadioButton.isSelected())
+					sesso = 'M';
+				else
+					sesso = 'F';
+				//data di nascita
+				dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
+				//luogo di nascita	
+				try {
+					luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
+				}
+				catch (SQLException e1) {
+					//errore select per comuni
+					JOptionPane.showMessageDialog(null,
+						"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
+						"Errore Interrogazione Database",
+						JOptionPane.ERROR_MESSAGE);
+				}
+				catch (IndexOutOfBoundsException e2) {
+					JOptionPane.showMessageDialog(null,
+							"Non è stata selezionata alcuna città di nascita.",
+							"Errore Luogo di Nascita",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				email = emailTextField.getText(); //email
+				if (!passwordField.getText().isBlank())
+					password = passwordField.getText();	//password
+				if (!telefonoFissoTextField.getText().equals(""))
+					telefono = telefonoFissoTextField.getText();	//telefono
+				if (!cellulareTextField.getText().isBlank())
+					cellulare = cellulareTextField.getText();    //cellulare
+				indirizzo = indirizzoTextField.getText();	//indirizzo
+				try {
+					Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,0f,password, 0f);
+					temp.setCf(temp.generaCF());
+					//elimina
+					controller.eliminaDipendente(temp);
+					
+					pulisciCampi();	//azzera tutti i campi
+					
+					//aggiorna tabella dipendenti
+					try {
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+						dipendentiTable.setModel(dataModelDipendente);
+						dataModelDipendente.fireTableDataChanged();
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								e1.getMessage(),
+								"Errore #" + e1.getErrorCode(),
+								JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
+					}
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(null,
+							e1.getMessage(),
+							"Errore #" + e1.getErrorCode(),
+							JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
+				} catch (NullPointerException npe) {
+					JOptionPane.showMessageDialog(null,
+							"Il dipendente selezionato è vuoto.",
+							"Errore Dipendente Nullo",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		eliminaAccountButton.setToolTipText("Elimina il dipendente");

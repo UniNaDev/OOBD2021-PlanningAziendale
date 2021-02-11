@@ -1,5 +1,6 @@
 package controller.segreteria;
 
+import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -155,5 +156,16 @@ public class ControllerDipendentiSegreteria {
 				continue;
 			}
 		}
+	}
+	
+	//Metodo che elimina un dipendente dal DB
+	public void eliminaDipendente(Dipendente dipendente) throws SQLException {
+		if (dipDAO.deleteDipendente(dipendente))
+			return;
+		else
+			JOptionPane.showMessageDialog(null,
+					"Impossibile trovare il dipendente da eliminare.",
+					"Dipendente Non Trovato",
+					JOptionPane.ERROR_MESSAGE);
 	}
 }

@@ -19,6 +19,7 @@ public interface DipendenteDAO {
 	public float getValutazione(String cf) throws SQLException;	//metodo che restituisce la valutazione di un dipendente
 	public boolean addDipendente(Dipendente dipendente) throws SQLException;	//metodo che aggiunge un nuovo dipendente al DB
 	public boolean updateDipendente(Dipendente dipendente) throws SQLException;	//metodo che aggiorna le informazioni di un dipendente
+	public boolean deleteDipendente(Dipendente dipendente) throws SQLException;	//metodo che elimina un dipendente dal database
 	public Dipendente loginCheck(String email, String password) throws SQLException;	//metodo che controlla se le credenziali per il login sono corrette e restituisce nel caso il dipendente che ha fatto accesso
 	public Dipendente getDipendenteByCF(String cf) throws SQLException;	//metodo che ottiene il dipendente con codice fiscale uguale a quello del parametro in input
 	public float getMaxStipendio() throws SQLException;	//metodo che ottiene il massimo stipendio presente nel DB
