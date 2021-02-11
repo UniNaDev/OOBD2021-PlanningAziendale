@@ -653,7 +653,7 @@ public class GestioneDipendenti extends JFrame {
 		JLabel valutazioneLabel = new JLabel("Valutazione");
 		valutazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		valutazioneLabel.setBounds(832, 545, 128, 14);
+		valutazioneLabel.setBounds(832, 545, 185, 14);
 		infoPanel.add(valutazioneLabel);
 		
 		//Label per pulire campi
@@ -970,7 +970,9 @@ public class GestioneDipendenti extends JFrame {
 		
 		//ComboBox skill per filtri
 		try {
-			skillFiltroComboBox = new JComboBox(controller.ottieniSkill().toArray());
+			ArrayList<Skill> skills = controller.ottieniSkill();
+			skills.add(0,null);
+			skillFiltroComboBox = new JComboBox(skills.toArray());
 			skillFiltroComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 			skillFiltroComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 			skillFiltroComboBox.setBackground(Color.WHITE);
@@ -1055,7 +1057,7 @@ public class GestioneDipendenti extends JFrame {
 								JOptionPane.ERROR_MESSAGE);
 						}
 					}
-					valutazioneLabel.setText("Valutazione: " + selectedDip.getValutazione()); //valutazione	
+					valutazioneLabel.setText("Valutazione: " + String.format("%.2f",selectedDip.getValutazione())); //valutazione	
 				}
 			});
 			dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1355,9 +1357,12 @@ public class GestioneDipendenti extends JFrame {
 		float valutazioneMassima = 10f;
 		if (!valutazioneMassimaTextField.getText().isBlank())
 			parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
+		//skill posseduta
+		Skill skillCercata = null;
+		skillCercata = (Skill) skillFiltroComboBox.getSelectedItem();
 		//filtra dipendenti e aggiorna la tabella
 		try {
-			dataModelDipendente.setDipendenteTabella(controller.filtraDipendenti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima));
+			dataModelDipendente.setDipendenteTabella(controller.filtraDipendenti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata));
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {

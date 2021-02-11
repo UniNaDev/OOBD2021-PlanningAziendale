@@ -243,15 +243,30 @@ public class Dipendente {
 	public void setPartecipa(ArrayList<Meeting> partecipa) {
 		this.partecipa = partecipa;
 	}
-
-
-
+	
+	//toString
 	@Override
 	public String toString() {	
 		return nome + " " +cognome+"";
 	}
-	
-	
+
+	//equals (cf)
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dipendente other = (Dipendente) obj;
+		if (cf == null) {
+			if (other.cf != null)
+				return false;
+		} else if (!cf.equals(other.cf))
+			return false;
+		return true;
+	}
 
 	//Metodo che calcola la stringa di caratteri del codice fiscale corrispondente a cognome e nome
 	private String cfNomeCognome() {

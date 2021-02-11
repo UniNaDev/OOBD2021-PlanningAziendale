@@ -27,4 +27,5 @@ public interface DipendenteDAO {
 	public ArrayList<Dipendente> getDipendenti() throws SQLException;
 	public ArrayList<Dipendente> getDipendentiNonPartecipanti(Progetto progettoSelezionato) throws SQLException;
 	public String organizzatoreCheck(Meeting meeting) throws SQLException;
+	public ArrayList<Dipendente> getDipendenteBySkill(Skill skill) throws SQLException;	//metodo che restituisce i dipendenti che hanno una specifica skill
 }

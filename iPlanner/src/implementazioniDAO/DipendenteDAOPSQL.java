@@ -47,7 +47,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		organizzatoreCheckPS,
 		getDipendenteByCFPS,
 		getMaxSalarioPS,
-		getDipendentiFiltratiPS;
+		getDipendentiFiltratiPS,
+		getDipendenteBySkillPS;
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
 	private MeetingDAO meetDAO=null;
@@ -81,6 +82,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
 		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
 		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome ILIKE '%' || ? || '%' OR d.Cognome ILIKE '%' || ? || '%' OR d.Email ILIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
+		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome LIKE '%' || ? || '%' OR d.Cognome LIKE '%' || ? || '%' OR d.Email LIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
+		getDipendenteBySkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT a.CF FROM Abilità AS a WHERE a.IDSkill = ?)");
 	}
 	
 	
@@ -455,6 +458,44 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 			return true;
 		else
 			return false;
+	}
+
+
+
+
+	@Override
+	public ArrayList<Dipendente> getDipendenteBySkill(Skill skill) throws SQLException {
+		getDipendenteBySkillPS.setInt(1, skill.getIdSkill());	//setta l'id della skill nella select
+		
+		ResultSet risultato = getDipendenteBySkillPS.executeQuery();	//esegue la query per ottenere il ResultSet
+		ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista di dipendenti da restituire in seguito
+		
+		//finchè esistono dipendenti nel ResultSet
+		while(risultato.next()) {
+			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));	//ottiene il luogo di nascita
+			
+			
+			Dipendente tempDip = new Dipendente(risultato.getString("CF"),
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
+			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
+			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
+			
+			temp.add(tempDip);	//lo aggiunge alla lista
+		}
+		risultato.close();	//chiude il ResultSet
+		
+		return temp;
 	}
 
 }
