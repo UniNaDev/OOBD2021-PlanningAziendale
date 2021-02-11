@@ -100,7 +100,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		setResizable(false);
 		setTitle("Gestione Progetti");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 1415, 836);
+		setBounds(100, 100, 1384, 822);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -111,7 +111,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//Info Panel
 		JPanel infoPanel = new JPanel();
 		infoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		infoPanel.setBounds(59, 91, 1283, 306);
+		infoPanel.setBounds(42, 91, 1283, 306);
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
 		
@@ -324,13 +324,13 @@ public class GestioneProgettiSegreteria extends JFrame {
 		JLabel titoloLabel = new JLabel("Gestione Progetti");
 		titoloLabel.setIcon(new ImageIcon(GestioneProgettiSegreteria.class.getResource("/icone/progetto_64.png")));
 		titoloLabel.setFont(new Font("Consolas", Font.PLAIN, 21));
-		titoloLabel.setBounds(59, 11, 290, 64);
+		titoloLabel.setBounds(42, 11, 290, 64);
 		contentPane.add(titoloLabel);
 		
 		//Panel Comandi
 		JPanel comandiPanel = new JPanel();
 		comandiPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		comandiPanel.setBounds(59, 412, 1283, 45);
+		comandiPanel.setBounds(42, 412, 1283, 45);
 		contentPane.add(comandiPanel);
 		comandiPanel.setLayout(null);
 		
@@ -452,7 +452,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//Scroll Panel per tabella progetti
 		JScrollPane tabellaScrollPanel = new JScrollPane();
 		tabellaScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		tabellaScrollPanel.setBounds(59, 468, 1283, 268);
+		tabellaScrollPanel.setBounds(42, 468, 1283, 268);
 		contentPane.add(tabellaScrollPanel);
 		
 		//Table progetti aziendali
@@ -525,6 +525,35 @@ public class GestioneProgettiSegreteria extends JFrame {
 			});
 			tabellaProgetti.setFont(new Font("Consolas", Font.PLAIN, 11));
 			tabellaScrollPanel.setViewportView(tabellaProgetti);
+			
+			//Button per uscire
+			JButton esciButton = new JButton("Esci");
+			//click mouse
+			esciButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					controller.tornaAiPlanner();	//torna alla finestra principale
+				}
+			});
+			esciButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+			esciButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			esciButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+			esciButton.setBackground(Color.WHITE);
+			esciButton.addMouseListener(new MouseAdapter() {
+				//mouse sopra il pulsante
+				@Override
+				public void mouseEntered(MouseEvent e) 
+				{
+					esciButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
+				}
+				//mouse fuori dal pulsante
+				@Override
+				public void mouseExited(MouseEvent e) 
+				{
+					esciButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+				}
+			});
+			esciButton.setBounds(42, 747, 69, 29);
+			contentPane.add(esciButton);
 		} catch (SQLException e) {
 			//errore query per tutti i progetti
 			JOptionPane.showMessageDialog(null,

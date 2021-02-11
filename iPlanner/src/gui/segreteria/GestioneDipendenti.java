@@ -930,7 +930,7 @@ public class GestioneDipendenti extends JFrame {
 					aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null,
-							e1.getMessage() + " Contattare uno sviluppatore",
+							e1.getMessage() + "\nContattare uno sviluppatore",
 							"Errore #" + e1.getErrorCode(),
 							JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
 				} catch (NullPointerException npe) {
@@ -1363,10 +1363,9 @@ public class GestioneDipendenti extends JFrame {
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
-					"Filtro fallito.",
-					"Errore #"+e.getErrorCode(),
+					"Filtro fallito.\nControllare che la connessione al database sia stabilita",
+					"Errore #" + e.getErrorCode(),
 					JOptionPane.ERROR_MESSAGE);
-			dataModelDipendente.fireTableDataChanged();;	//se fallisce il filtro allora non cambia nulla
 		}
 	}
 	

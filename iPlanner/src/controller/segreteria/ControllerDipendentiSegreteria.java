@@ -153,7 +153,15 @@ public class ControllerDipendentiSegreteria {
 				skillDAO.addSkillDipendente(skill, dipendente);
 			}
 			catch (SQLException e) {
-				continue;
+				//violazione duplicati
+				if (e.getSQLState().equals("23505"))
+					continue;
+				else
+					//altri errori non contemplati
+					JOptionPane.showMessageDialog(null,
+							e.getMessage() + "\nContattare uno sviluppatore",
+							"Errore #" + e.getErrorCode(),
+							JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
