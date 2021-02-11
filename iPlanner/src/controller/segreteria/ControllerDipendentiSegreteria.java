@@ -84,11 +84,10 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	//Metodo che crea un nuovo account per il dipendente
-	public void creaAccount(Dipendente dipendente, ArrayList<Skill> skills) throws SQLException {
+	public void creaAccount(Dipendente dipendente) throws SQLException {
 		//se l'insert nel database ha successo
 		if (dipDAO.addDipendente(dipendente)) {
-			dipendente.setSkills(skills);	//setta la skill del dipendente
-			for (Skill skill: skills)	//aggiunge tutte le sue skill nel db in associazione con lui
+			for (Skill skill: dipendente.getSkills())	//aggiunge tutte le sue skill nel db in associazione con lui
 				if (!skillDAO.addSkillDipendente(skill, dipendente)) {
 					JOptionPane.showMessageDialog(null,
 							"Errore inserimento delle skill nel database.",

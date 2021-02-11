@@ -193,8 +193,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		int record = addDipendentePS.executeUpdate();	//esegue l'insert e salva il numero di record inseriti in record
 		
 		//se record = 1 allora l'insert è avvenuto correttamente, altrimenti no
-		if (record == 1)
+		if (record == 1) {
+			dipendente.setCf(dipendente.generaCF());
 			return true;
+		}
 		else
 			return false;
 	}

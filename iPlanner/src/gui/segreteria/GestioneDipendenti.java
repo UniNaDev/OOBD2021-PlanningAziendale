@@ -161,6 +161,7 @@ public class GestioneDipendenti extends JFrame {
 	private float salario; //salario
 	
 	private Dipendente selectedDip; //dipendente selezionato nella tabella
+	private JLabel pulisciCampiLabel;
 	
 	//Creazione del frame
 	//-----------------------------------------------------------------
@@ -654,6 +655,21 @@ public class GestioneDipendenti extends JFrame {
 		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		valutazioneLabel.setBounds(832, 545, 128, 14);
 		infoPanel.add(valutazioneLabel);
+		
+		//Label per pulire campi
+		pulisciCampiLabel = new JLabel("");
+		//Click mouse
+		pulisciCampiLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pulisciCampi();	//pulisce i campi
+			}
+		});
+		pulisciCampiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		pulisciCampiLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/refresh.png")));
+		pulisciCampiLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		pulisciCampiLabel.setBounds(41, 100, 16, 14);
+		infoPanel.add(pulisciCampiLabel);
 		
 		//Button "Esci"
 		esciButton = new JButton("Esci");
@@ -1156,8 +1172,9 @@ public class GestioneDipendenti extends JFrame {
 		skills.addAll(skillsList.getSelectedValuesList());
 		//crea un dipendente temporaneo con i parametri in input
 		Dipendente dipendente = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
+		dipendente.setSkills(skills);
 		try {
-			controller.creaAccount(dipendente, skills);	//prova a creare il nuovo dipendente
+			controller.creaAccount(dipendente);	//prova a creare il nuovo dipendente
 			
 			pulisciCampi();	//azzera tutti i campi
 			
@@ -1170,6 +1187,7 @@ public class GestioneDipendenti extends JFrame {
 						"Alcuni campi obbligatori per la creazione sono vuoti.",
 						"Errore Campi Obbligatori Vuoti",
 						JOptionPane.ERROR_MESSAGE);
+				e1.printStackTrace();
 				campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
 			}
 			//violazione primary key/unique
