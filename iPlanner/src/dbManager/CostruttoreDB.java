@@ -207,7 +207,8 @@ public class CostruttoreDB {
                 		+ "	DataTerminazione DATE,\r\n"
                 		+ "	\r\n"
                 		+ "	PRIMARY KEY(CodProgetto),\r\n"
-                		+ "	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione)\r\n"
+                		+ "	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione),"
+                		+ " CONSTRAINT DataTerminazioneCorretta CHECK(DataTerminazione<= current_date)\r\n"
                 		+ ");";
                 result = st.executeUpdate(sql);
                 st.close();	//chiudi statement
@@ -245,6 +246,8 @@ public class CostruttoreDB {
                 		+ "	CONSTRAINT EmailLegit CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),\r\n"
                 		+ "	CONSTRAINT NomeLegit CHECK(Nome ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$'),\r\n"
                 		+ "	CONSTRAINT CognomeLegit CHECK(Cognome ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$'),\r\n"
+                		+ " CONSTRAINT TelefonoCasaLegit CHECK(TelefonoCasa ~* '(0{1}[1-9]{1,3})[\\s|\\.|\\-]?(\\d{4,})'),\r\n"
+                		+ " CONSTRAINT CellulareLegit CHECK (Cellulare ~* '(0{1}[1-9]{1,3})[\\s|\\.|\\-]?(\\d{4,})'),\r\n"
                 		+ "	CONSTRAINT SessoLegit CHECK(Sesso='M' OR Sesso='F'),\r\n"
                 		+ "	CONSTRAINT SalarioPositivo CHECK (Salario>=0),\r\n"
                 		+ "	CONSTRAINT DataNascitaValida CHECK (EXTRACT( YEAR FROM AGE(DataNascita)) >= 18),\r\n"
@@ -1246,8 +1249,6 @@ public class CostruttoreDB {
     //Metodo che inserisce dai dati da cui partire per poter utilizzare subito il software
     public void inserisciDatiIniziali() throws SQLException
     {
-    	inserisciPrimoDipendente(); //inserisce un primo dipendente Mario Rossi
-    	
     	creaAmbitiPredefiniti(); // inserisce degli ambiti di partenza
     }
     
