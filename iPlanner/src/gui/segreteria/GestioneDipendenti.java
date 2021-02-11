@@ -143,12 +143,24 @@ public class GestioneDipendenti extends JFrame {
 	private JButton salvaModificheButton;
 	private DipendentiTableModel dataModelDipendente;
 	private JTable dipendentiTable;
+	private JComboBox skillFiltroComboBox;
 	
 	//Altri attributi	
 	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
+	
+	private String nome;	//nome dipendente
+	private String cognome;	//cognome dipendente
+	private char sesso = 'M';	//sesso del dipendente (default = maschio)
+	private LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del dipendente
+	private LuogoNascita luogoNascita = null;	//luogo di nascita del dipendente
+	private String email;	//email del dipendente
+	private String password = null;	//password del dipendente
+	private String telefono = null;	//numero di telefono di casa
+	private String cellulare = null;	//cellulare
+	private String indirizzo;	//indirizzo
+	private float salario; //salario
+	
 	private Dipendente selectedDip; //dipendente selezionato nella tabella
-	private JComboBox skillFiltroComboBox;
-
 	
 	//Creazione del frame
 	//-----------------------------------------------------------------
@@ -693,15 +705,7 @@ public class GestioneDipendenti extends JFrame {
 		creaAccountButton.addActionListener(new ActionListener() {
 			//click del pulsante
 			public void actionPerformed(ActionEvent e) {
-				//resetta i colori delle label per i valori not null
-				nomeLabel.setForeground(Color.BLACK);
-				cognomeLabel.setForeground(Color.BLACK);
-				emailLabel.setForeground(Color.BLACK);
-				passwordLabel.setForeground(Color.BLACK);
-				sessoLabel.setForeground(Color.BLACK);
-				confermaPasswordLabel.setForeground(Color.BLACK);
-				cittàDiNascitaLabel.setForeground(Color.BLACK);
-				provNascitaLabel.setForeground(Color.BLACK);
+				campiObbligatoriNeri();	//resetta il colore dei campi
 				
 				//se le password non coincidono
 				if(!passwordField.getText().equals(confermaPasswordField.getText())) {	
@@ -852,19 +856,11 @@ public class GestioneDipendenti extends JFrame {
 		salvaModificheButton.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//resetta i colori delle label per i valori not null
-				nomeLabel.setForeground(Color.BLACK);
-				cognomeLabel.setForeground(Color.BLACK);
-				emailLabel.setForeground(Color.BLACK);
-				passwordLabel.setForeground(Color.BLACK);
-				sessoLabel.setForeground(Color.BLACK);
-				confermaPasswordLabel.setForeground(Color.BLACK);
-				cittàDiNascitaLabel.setForeground(Color.BLACK);
-				provNascitaLabel.setForeground(Color.BLACK);
+				campiObbligatoriNeri();	//resetta il colore dei campi
 				
-				
-				if (confermaPasswordField.getText().equals(passwordField.getText()))
+				if (confermaPasswordField.getText().equals(passwordField.getText())) {
 					salvaModifiche(controller, selectedDip);	//crea il nuovo account con i valori inseriti
+				}
 				//se le password inserite sono diverse -> errore conferma password
 				else if(!passwordField.getText().equals(confermaPasswordField.getText()))
 				{	
@@ -903,71 +899,18 @@ public class GestioneDipendenti extends JFrame {
 		//Click mouse
 		eliminaAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: elimina account
-				String nome;	//nome nuovo dipendente
-				String cognome;	//cognome nuovo dipendente
-				char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
-				LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
-				LuogoNascita luogoNascita = null;	//luogo di nascita del nuovo dipendente
-				String email;	//email del dipendente
-				String password = null;	//password del dipendente
-				String telefono = null;	//numero di telefono di casa
-				String cellulare = null;	//cellulare
-				String indirizzo;	//indirizzo
-				//prende i dati dagli input della GUI
-				nome = nomeTextField.getText();	//nome
-				cognome = cognomeTextField.getText();	//cognome
-				//sesso
-				if (uomoRadioButton.isSelected())
-					sesso = 'M';
-				else
-					sesso = 'F';
-				//data di nascita
-				dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
-				//luogo di nascita	
+				ricavaInfoDipendente(controller);	//ricava tutte le principali informazioni per il dipendente
+				
 				try {
-					luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
-				}
-				catch (SQLException e1) {
-					//errore select per comuni
-					JOptionPane.showMessageDialog(null,
-						"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
-						"Errore Interrogazione Database",
-						JOptionPane.ERROR_MESSAGE);
-				}
-				catch (IndexOutOfBoundsException e2) {
-					JOptionPane.showMessageDialog(null,
-							"Non è stata selezionata alcuna città di nascita.",
-							"Errore Luogo di Nascita",
-							JOptionPane.ERROR_MESSAGE);
-				}
-				email = emailTextField.getText(); //email
-				if (!passwordField.getText().isBlank())
-					password = passwordField.getText();	//password
-				if (!telefonoFissoTextField.getText().equals(""))
-					telefono = telefonoFissoTextField.getText();	//telefono
-				if (!cellulareTextField.getText().isBlank())
-					cellulare = cellulareTextField.getText();    //cellulare
-				indirizzo = indirizzoTextField.getText();	//indirizzo
-				try {
-					Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,0f,password, 0f);
+					//crea il dipendente temporaneo da eliminare in base ai dati ricavati
+					Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
 					temp.setCf(temp.generaCF());
 					//elimina
 					controller.eliminaDipendente(temp);
 					
 					pulisciCampi();	//azzera tutti i campi
 					
-					//aggiorna tabella dipendenti
-					try {
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-						dipendentiTable.setModel(dataModelDipendente);
-						dataModelDipendente.fireTableDataChanged();
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null,
-								e1.getMessage(),
-								"Errore #" + e1.getErrorCode(),
-								JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
-					}
+					aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null,
 							e1.getMessage(),
@@ -1044,15 +987,7 @@ public class GestioneDipendenti extends JFrame {
 			dipendentiTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					//resetta i colori delle label per i valori not null
-					nomeLabel.setForeground(Color.BLACK);
-					cognomeLabel.setForeground(Color.BLACK);
-					emailLabel.setForeground(Color.BLACK);
-					passwordLabel.setForeground(Color.BLACK);
-					sessoLabel.setForeground(Color.BLACK);
-					confermaPasswordLabel.setForeground(Color.BLACK);
-					cittàDiNascitaLabel.setForeground(Color.BLACK);
-					provNascitaLabel.setForeground(Color.BLACK);
+					campiObbligatoriNeri();	//resetta il colore dei campi
 					
 					int row = dipendentiTable.getSelectedRow();	//ottiene la riga selezionata
 					row = dipendentiTable.convertRowIndexToModel(row);	//converte la riga correttamente in caso di sorting
@@ -1122,19 +1057,8 @@ public class GestioneDipendenti extends JFrame {
 	//Altri metodi
 	//-----------------------------------------------------------------
 	
-	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
-	private void creaDipendente(ControllerDipendentiSegreteria controller) {
-		String nome;	//nome nuovo dipendente
-		String cognome;	//cognome nuovo dipendente
-		char sesso = 'M';	//sesso del nuovo dipendente (default = maschio)
-		LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del nuovo dipendente
-		LuogoNascita luogoNascita = null;	//luogo di nascita del nuovo dipendente
-		String email;	//email del dipendente
-		String password = null;	//password del dipendente
-		String telefono = null;	//numero di telefono di casa
-		String cellulare = null;	//cellulare
-		String indirizzo;	//indirizzo
-		
+	//Metodo che ricava le informazioni essenziali per la creazione di un dipendente temporaneo
+	private void ricavaInfoDipendente(ControllerDipendentiSegreteria controller) {
 		//prende i dati dagli input della GUI
 		nome = nomeTextField.getText();	//nome
 		cognome = cognomeTextField.getText();	//cognome
@@ -1164,28 +1088,80 @@ public class GestioneDipendenti extends JFrame {
 		if (!cellulareTextField.getText().isBlank())
 			cellulare = cellulareTextField.getText();    //cellulare
 		indirizzo = indirizzoTextField.getText();	//indirizzo
+		salario = parseFloat(salarioTextField.getText(), 0f);	//salario
+	}
+	
+	//Metodo che aggiorna la tabella dei dipendenti
+	private void aggiornaTabella(ControllerDipendentiSegreteria controller) {
+		//aggiorna tabella dipendenti
+		try {
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+			dipendentiTable.setModel(dataModelDipendente);
+			dataModelDipendente.fireTableDataChanged();
+		} 
+		catch (SQLException e1) {
+			//errore select per tutti i dipendenti
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutti i dipendenti dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	//Metodo che colora i campi obbligatori vuoti di rosso
+	private void campiObbligatoriRossi() {
+		if (nomeTextField.getText() == null)	//nome
+			nomeLabel.setForeground(Color.RED);
+		if (cognomeTextField.getText() == null)	//cognome
+			cognomeLabel.setForeground(Color.RED);
+		if (emailTextField.getText() == null)	//email
+			emailLabel.setForeground(Color.RED);
+		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())	//sesso
+			sessoLabel.setForeground(Color.RED);
+		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)	//data di nascita
+			dataNascitaLabel.setForeground(Color.RED);
+		if (indirizzoTextField.getText() == null)	//indirizzo	
+			indirizzoLabel.setForeground(Color.RED);
+		if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null) //luogo di nascita
+			cittàDiNascitaLabel.setForeground(Color.RED);
+		if (salarioTextField.getText() == null)	//salario
+			salarioLabel.setForeground(Color.RED);
+		//password
+		if (passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
+			passwordLabel.setForeground(Color.RED);
+			confermaPasswordLabel.setForeground(Color.RED);
+		}
+	}
+	
+	//Metodo che colora di nero i campi
+	private void campiObbligatoriNeri() {
+		nomeLabel.setForeground(Color.BLACK);
+		cognomeLabel.setForeground(Color.BLACK);
+		emailLabel.setForeground(Color.BLACK);
+		passwordLabel.setForeground(Color.BLACK);
+		confermaPasswordLabel.setForeground(Color.BLACK);
+		sessoLabel.setForeground(Color.BLACK);
+		indirizzoLabel.setForeground(Color.BLACK);
+		dataNascitaLabel.setForeground(Color.BLACK);
+		cittàDiNascitaLabel.setForeground(Color.BLACK);
+		provNascitaLabel.setForeground(Color.BLACK);
+		salarioLabel.setForeground(Color.BLACK);
+	}
+	
+	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
+	private void creaDipendente(ControllerDipendentiSegreteria controller) {
+		ricavaInfoDipendente(controller);	//ricava tutte le principali informazioni per il dipendente
 		//ottiene le skill selezionate
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		skills.addAll(skillsList.getSelectedValuesList());
-		float salario = parseFloat(salarioTextField.getText(), 0f);	//ottieni il salario
+		//crea un dipendente temporaneo con i parametri in input
+		Dipendente dipendente = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
 		try {
-			controller.creaAccount(nome, cognome, sesso, dataNascita, luogoNascita, email, password, telefono, cellulare, indirizzo, skills, salario);	//mandali al controller che prova a creare il nuovo dipendente con il dao
+			controller.creaAccount(dipendente, skills);	//prova a creare il nuovo dipendente
 			
 			pulisciCampi();	//azzera tutti i campi
 			
-			//aggiorna tabella dipendenti
-			try {
-				dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-				dipendentiTable.setModel(dataModelDipendente);
-				dataModelDipendente.fireTableDataChanged();
-			} 
-			catch (SQLException e1) {
-				//errore select per tutti i dipendenti
-				JOptionPane.showMessageDialog(null,
-					"Impossibile ottenere tutti i dipendenti dal database.\nControllare che la connessione al database sia stabilita.",
-					"Errore Interrogazione Database",
-					JOptionPane.ERROR_MESSAGE);
-			}
+			aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
 		}
 		catch(SQLException e1) {
 			//violazione not null
@@ -1194,27 +1170,7 @@ public class GestioneDipendenti extends JFrame {
 						"Alcuni campi obbligatori per la creazione sono vuoti.",
 						"Errore Campi Obbligatori Vuoti",
 						JOptionPane.ERROR_MESSAGE);
-				if (nomeTextField.getText() == null)	//nome
-					nomeLabel.setForeground(Color.RED);
-				if (cognomeTextField.getText() == null)	//cognome
-					cognomeLabel.setForeground(Color.RED);
-				if (emailTextField.getText() == null)	//email
-					emailLabel.setForeground(Color.RED);
-				if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())	//sesso
-					sessoLabel.setForeground(Color.RED);
-				if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)	//data di nascita
-					dataNascitaLabel.setForeground(Color.RED);
-				if (indirizzoTextField.getText() == null)	//indirizzo	
-					indirizzoLabel.setForeground(Color.RED);
-				if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null) //luogo di nascita
-					cittàDiNascitaLabel.setForeground(Color.RED);
-				if (salarioTextField.getText() == null)	//salario
-					salarioLabel.setForeground(Color.RED);
-				//password
-				if (passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
-					passwordLabel.setForeground(Color.RED);
-					confermaPasswordLabel.setForeground(Color.RED);
-				}
+				campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
 			}
 			//violazione primary key/unique
 			else if (e1.getSQLState().equals("23505")) {
@@ -1443,6 +1399,10 @@ public class GestioneDipendenti extends JFrame {
 		
 		try {
 			controller.aggiornaDipendente(dipendenteModificato); //aggiorna le info nel DB
+			
+			pulisciCampi();	//pulisce i campi
+			
+			aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
 		}
 		catch(SQLException e1) {
 			//violazione not null
@@ -1451,28 +1411,8 @@ public class GestioneDipendenti extends JFrame {
 						"Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
 						"Errore Campi Obbligatori Vuoti",
 						JOptionPane.ERROR_MESSAGE);
-				if (nomeTextField.getText() == null)	//nome
-					nomeLabel.setForeground(Color.RED);
-				if (cognomeTextField.getText() == null)	//cognome
-					cognomeLabel.setForeground(Color.RED);
-				if (emailTextField.getText() == null)	//email
-					emailLabel.setForeground(Color.RED);
-				if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())	//sesso
-					sessoLabel.setForeground(Color.RED);
-				if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)	//data di nascita
-					dataNascitaLabel.setForeground(Color.RED);
-				if (indirizzoTextField.getText() == null)	//indirizzo	
-					indirizzoLabel.setForeground(Color.RED);
-				if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null) //luogo di nascita
-					cittàDiNascitaLabel.setForeground(Color.RED);
-				if (salarioTextField.getText() == null)	//salario
-					salarioLabel.setForeground(Color.RED);
-				//password
-				if (passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
-					passwordLabel.setForeground(Color.RED);
-					confermaPasswordLabel.setForeground(Color.RED);
+				campiObbligatoriRossi();	//colora di rosso i campi vuoti
 				}
-			}
 			//violazione primary key/unique
 			else if (e1.getSQLState().equals("23505")) {
 				JOptionPane.showMessageDialog(null,
@@ -1554,20 +1494,6 @@ public class GestioneDipendenti extends JFrame {
 						"Errore #" + e1.getErrorCode(),
 						JOptionPane.ERROR_MESSAGE);
 			}
-		}
-		
-		pulisciCampi();	//azzera tutti i campi
-		
-		//aggiorna tabella dipendenti
-		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-			dipendentiTable.setModel(dataModelDipendente);
-			dataModelDipendente.fireTableDataChanged();
-		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null,
-					e1.getMessage(),
-					"Errore #" + e1.getErrorCode(),
-					JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
 		}
 	}
 	
