@@ -13,6 +13,7 @@ import entita.Progetto;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.PartecipantiListRenderer;
 import gui.customUI.CustomScrollBarUI;
+import gui.tableModels.DataComparator;
 import gui.tableModels.ProgettoTableModel;
 
 import javax.swing.border.MatteBorder;
@@ -464,20 +465,10 @@ public class GestioneProgettiSegreteria extends JFrame {
 			tabellaProgetti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			//scroller tabella
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaProgetti.getModel());	//sorter
-			DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-			sorter.setComparator(5, new Comparator<String>() {
-			       @Override
-			       public int compare(String data1, String data2) {
-			           LocalDate date1 = LocalDate.parse(data1,formatDate);
-			           LocalDate date2= LocalDate.parse(data2,formatDate);
-			           if (date1.equals(date2))
-			            return 0;
-			           else if (date1.isBefore(date2))
-			            return -1;
-			           else
-			            return 1;
-			       }
-			   });
+			DataComparator comparatorDate = new DataComparator();	//comparator date
+			sorter.setComparator(3, comparatorDate);	//data creazione
+			sorter.setComparator(4, comparatorDate);	//data terminazione
+			sorter.setComparator(5, comparatorDate);	//data scadenza
 			tabellaProgetti.setRowSorter(sorter);
 			tabellaProgetti.getRowSorter().toggleSortOrder(0);
 			tabellaProgetti.addMouseListener(new MouseAdapter() {

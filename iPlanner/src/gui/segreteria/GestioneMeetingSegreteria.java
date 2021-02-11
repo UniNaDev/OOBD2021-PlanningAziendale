@@ -12,7 +12,9 @@ import entita.PartecipazioneMeeting;
 import entita.SalaRiunione;
 import gui.cellRenderers.InvitatiListRenderer;
 import gui.customUI.CustomScrollBarUI;
+import gui.tableModels.DataComparator;
 import gui.tableModels.MeetingTableModel;
+import gui.tableModels.OrarioComparator;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -377,6 +379,12 @@ public class GestioneMeetingSegreteria extends JFrame {
 			tabellaMeeting.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tabellaMeeting.setFont(new Font("Consolas", Font.PLAIN, 11));
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaMeeting.getModel());	//sorter
+			DataComparator comparatorDate = new DataComparator();	//comparator date per sorter
+			OrarioComparator comparatorOrari = new OrarioComparator();
+			sorter.setComparator(0,comparatorDate);	//data inizio
+			sorter.setComparator(1,comparatorDate);	//data fine
+			sorter.setComparator(2, comparatorOrari); //orario inizio
+			sorter.setComparator(3, comparatorOrari); //orario fine
 			tabellaMeeting.setRowSorter(sorter);
 			tabellaMeeting.getRowSorter().toggleSortOrder(0);	//sort by data inizio di default
 			//Click mouse sinistro
