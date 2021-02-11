@@ -92,7 +92,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JButton eliminaPartecipanteButton;
 	private JButton aggiornaPartecipantiButton;
 	private JButton inserisciPartecipanteButton;
-	private PartecipantiTableModel dataModelDipendente;
+	private DipendentiTableModel dataModelDipendente;
 	private JTextField nomeTextField;
 	private JTextField cognomeTextField;
 	private JTextField etàTextField;
@@ -112,7 +112,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	//---------------------------------------------
 	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1150, 700));
+		setMinimumSize(new Dimension(1280, 720));
 		
 		
 		setTitle("iPlanner-Gestione invitati meeting");
@@ -796,7 +796,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		
 		//Table dei meeting
-		dataModelDipendente=new PartecipantiTableModel();
+		dataModelDipendente=new DipendentiTableModel();
 		dipendenteTable = new JTable(dataModelDipendente);
 		dipendenteTable.setFont(new Font("Consolas", Font.PLAIN, 12));
 		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -804,19 +804,15 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		dipendenteTable.setBackground(Color.WHITE);
 		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
 		
-		
 		//Modello delle colonne personalizzato
 		dipendenteTable.getColumnModel().getColumn(0).setMinWidth(150);
-		dipendenteTable.getColumnModel().getColumn(1).setMinWidth(200);
-		dipendenteTable.getColumnModel().getColumn(2).setMinWidth(200);
+		dipendenteTable.getColumnModel().getColumn(1).setMinWidth(150);
+		dipendenteTable.getColumnModel().getColumn(2).setMinWidth(300);
 		dipendenteTable.getColumnModel().getColumn(3).setMinWidth(50);
-		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(50);
-		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(300);
-		dipendenteTable.getColumnModel().getColumn(6).setMinWidth(100);
-		dipendenteTable.getColumnModel().getColumn(7).setMinWidth(100);
-		
-		
-		
+		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(100);
+		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(100);
+
+		//Setta i dati nella tabella
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));	//setta il modello di dati della tabella
 		} catch (SQLException e1) {
@@ -841,35 +837,37 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				
 				//quando viene cliccata una riga della tabella,viene deselezionata elemento selezionato della lista
 				invitatiList.clearSelection();
-				
+
 				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
-				//ricava le info del dipendente selezionato
-					
-				nomeTextField.setText(dipendenteTable.getValueAt(row, 1).toString());
-				cognomeTextField.setText(dipendenteTable.getValueAt(row, 2).toString());
 				
-				if(dipendenteTable.getValueAt(row, 3).toString().equals("M")) {
+				
+				//Riceve il dipendente selezionato
+				Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(row));
+					
+				//ricava le info del dipendente selezionato
+				nomeTextField.setText(dipendente.getNome());
+				cognomeTextField.setText(dipendente.getCognome());
+				
+				if(dipendente.getSesso()=='M') {
 					
 					uomoRadioButton.setSelected(true);
 					donnaRadioButton.setSelected(false);
 				}
-				else if(dipendenteTable.getValueAt(row, 3).toString().equals("F"))
+				else
 				{
 					uomoRadioButton.setSelected(false);
-					donnaRadioButton.setSelected(true);
-					
+					donnaRadioButton.setSelected(true);	
 				}
 				
-				etàTextField.setText(dipendenteTable.getValueAt(row, 4).toString());
-				salarioTextField.setText(dipendenteTable.getValueAt(row, 6).toString());
-				valutazioneTextField.setText(dipendenteTable.getValueAt(row, 7).toString());
+				etàTextField.setText(String.valueOf(dipendente.getEtà()));
+				salarioTextField.setText(String.valueOf(dipendente.getSalario()));
+				valutazioneTextField.setText(String.format("%.2f",dipendente.getValutazione()));
 				
-			
-				
+
 				skillList.setModel(skillModel);
 				skillModel.removeAllElements();
 				try {
-					skillModel.addAll(controller.ottieniSkillDipendente(dipendenteTable.getValueAt(row, 0).toString()));
+					skillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
 				} catch (SQLException e2) {
 					
 					e2.printStackTrace();
@@ -887,9 +885,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						}
 						else
 							presenza=false;
-						
-						//Riceve il dipendente selezionato
-						Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
 						
 						//Creo la partecipazione al meeting
 						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);

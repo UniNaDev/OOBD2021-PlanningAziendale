@@ -109,11 +109,11 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	//---------------------------------------------
 	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1350, 700));
+		setMinimumSize(new Dimension(1600, 900));
 		
 		
 		setTitle("Inserisci Partecipanti Progetto");
-		setBounds(100, 100, 1280, 720);
+		setBounds(100, 100, 1600, 900);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -776,49 +776,72 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteTable.setBackground(Color.WHITE);
 		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
+		
+		//Modello delle colonne personalizzato
+		dipendenteTable.getColumnModel().getColumn(0).setMinWidth(150);
+		dipendenteTable.getColumnModel().getColumn(1).setMinWidth(150);
+		dipendenteTable.getColumnModel().getColumn(2).setMinWidth(50);
+		dipendenteTable.getColumnModel().getColumn(3).setMinWidth(50);
+		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(300);
+		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(100);
+		dipendenteTable.getColumnModel().getColumn(6).setMinWidth(100);
+		dipendenteTable.getColumnModel().getColumn(7).setMinWidth(300);
+		dipendenteTable.getColumnModel().getColumn(8).setMinWidth(300);
+		
+		//setta il modello di dati della tabella
 		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));	//setta il modello di dati della tabella
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));	
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 		
+		//Sorter tabella
 		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
 		dipendenteTable.setRowSorter(sorterDipendente);
+		
+		//Seleziona singola
+		dipendenteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		//Le colonne non possono essere riordinate
+		dipendenteTable.getTableHeader().setReorderingAllowed(false);
 		//Click sulla tabella
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				
 				//Quando viene selezionata una riga della tabella,deseleziona elemento selezionato della lista
 				partecipantiList.clearSelection();
 				
 				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
 				
-				//ricava le info del dipendente seleziona
-				nomeTextField.setText(dipendenteTable.getValueAt(row, 1).toString());
-				cognomeTextField.setText(dipendenteTable.getValueAt(row, 2).toString());
+				//Riceve il dipendente selezionato
+				Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(row));
 				
-				if(dipendenteTable.getValueAt(row, 3).toString().equals("M")) {
+				
+				//ricava le info del dipendente seleziona
+				nomeTextField.setText(dipendente.getNome());
+				cognomeTextField.setText(dipendente.getCognome());
+				
+				if(dipendente.getSesso()=='M') {
 					
 					uomoRadioButton.setSelected(true);
 					donnaRadioButton.setSelected(false);
 				}
-				else if(dipendenteTable.getValueAt(row, 3).toString().equals("F"))
+				else
 				{
 					uomoRadioButton.setSelected(false);
-					donnaRadioButton.setSelected(true);
-					
+					donnaRadioButton.setSelected(true);	
 				}
 				
-				etàTextField.setText(dipendenteTable.getValueAt(row, 4).toString());
-				salarioTextField.setText(dipendenteTable.getValueAt(row, 6).toString());
-				valutazioneTextField.setText(dipendenteTable.getValueAt(row, 7).toString());
+				etàTextField.setText(String.valueOf(dipendente.getEtà()));
+				salarioTextField.setText(String.valueOf(dipendente.getSalario()));
+				valutazioneTextField.setText(String.format("%.2f",dipendente.getValutazione()));
 				
-			
-				
-				
+
 				try {
-					listaSkillModel.addAll(controller.ottieniSkillDipendente(dipendenteTable.getValueAt(row, 0).toString()));
+					listaSkillModel.removeAllElements();
+					listaSkillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
 				} catch (SQLException e2) {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
@@ -837,8 +860,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								//riceve il ruolo selezionato nella combo box
 								String ruolo=ruoloComboBox.getSelectedItem().toString();
 								
-								//Riceve il dipendente selezionato
-								Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
+								
+//								Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
 								
 								//Creo la collaborazione al progetto
 								CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);

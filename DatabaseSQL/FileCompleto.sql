@@ -38,6 +38,7 @@ CREATE TABLE Progetto (
 	
 	PRIMARY KEY(CodProgetto),
 	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione)
+	CONSTRAINT DataTerminazioneCorretta CHECK(DataTerminazione<=SYSDATE)
 );
 
 CREATE TABLE AmbitoProgetto(

@@ -37,13 +37,13 @@ public class ProgettoTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
+	
 		return progettiTabella.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
+	
 		return colnames.length;
 	}
 
@@ -85,23 +85,6 @@ public class ProgettoTableModel extends AbstractTableModel {
 		return progettiTabella.get(rowIndex);
 	}
 
-	@Override
-	public void addTableModelListener(TableModelListener l) {
-		// TODO Auto-generated method stub
-		super.addTableModelListener(l);
-	}
-
-	@Override
-	public void fireTableStructureChanged() {
-		// TODO Auto-generated method stub
-		super.fireTableStructureChanged();
-	}
-
-	@Override
-	public void fireTableRowsUpdated(int firstRow, int lastRow) {
-		// TODO Auto-generated method stub
-		super.fireTableRowsUpdated(firstRow, lastRow);
-	}
 
 		//Per sorting corretto
 		public Class getColumnClass(int column) {

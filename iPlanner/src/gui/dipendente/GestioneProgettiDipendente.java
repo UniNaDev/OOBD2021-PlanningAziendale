@@ -968,13 +968,13 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
 		
 		//Modello delle colonne personalizzato
-		progettoTable.getColumnModel().getColumn(0).setMinWidth(370);
-		progettoTable.getColumnModel().getColumn(1).setMinWidth(360);
-		progettoTable.getColumnModel().getColumn(2).setMinWidth(280);
-		progettoTable.getColumnModel().getColumn(3).setMinWidth(135);
-		progettoTable.getColumnModel().getColumn(4).setMinWidth(80);
-		progettoTable.getColumnModel().getColumn(5).setMinWidth(85);
-		progettoTable.getColumnModel().getColumn(6).setMinWidth(80);
+		progettoTable.getColumnModel().getColumn(0).setMinWidth(400);
+		progettoTable.getColumnModel().getColumn(1).setMinWidth(400);
+		progettoTable.getColumnModel().getColumn(2).setMinWidth(300);
+		progettoTable.getColumnModel().getColumn(3).setMinWidth(150);
+		progettoTable.getColumnModel().getColumn(4).setMinWidth(100);
+		progettoTable.getColumnModel().getColumn(5).setMinWidth(100);
+		progettoTable.getColumnModel().getColumn(6).setMinWidth(100);
 		
 		//Setta i progetti nella tabella
 		try {
@@ -1092,7 +1092,7 @@ public class GestioneProgettiDipendente extends JFrame {
 
 				try {
 					tipologiaComboBox.setModel(new DefaultComboBoxModel(controller.ottieniTipologie()));
-					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 4));
+					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 3));
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

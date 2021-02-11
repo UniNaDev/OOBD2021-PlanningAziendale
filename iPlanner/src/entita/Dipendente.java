@@ -32,6 +32,7 @@ public class Dipendente {
 	private float salario;	//salario attuale del dipendente
 	private String password;	//password del dipendente con cui può accedere al servizio
 	private float valutazione;	//valutazione in decimi del dipendente in azienda
+	private String tipologieProgetto;
 	
 	//Altri attributi
 	private String[] vocali = {"A","E","I","O","U"};
@@ -178,6 +179,16 @@ public class Dipendente {
 
 	public float getSalario() {
 		return salario;
+	}
+
+	public String getTipologieProgetto() {
+		return tipologieProgetto;
+	}
+
+
+
+	public void setTipologieProgetto(String tipologieProgetto) {
+		this.tipologieProgetto = tipologieProgetto;
 	}
 
 	public void setSalario(float salario) {

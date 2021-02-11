@@ -18,7 +18,7 @@ public class PartecipantiTableModel extends AbstractTableModel {
 	private ArrayList<Dipendente> dipendenteTabella=new ArrayList<Dipendente>();
 	
 	
-	String[] colnames= {"CF","Nome","Cognome","Sesso","Età","Email","Salario","Valutazione","Skill","Tipologia progetto"};
+	String[] colnames= {"Nome","Cognome","Sesso","Età","Email","Salario","Valutazione","Skill","Tipologia progetto"};
 
 	public void setDipendenteTabella(ArrayList<Dipendente> dipendenteTabella) {
 		this.dipendenteTabella = dipendenteTabella;
@@ -53,29 +53,24 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		
 		switch(columnIndex) {
 		case 0:
-			return dipendente.getCf();
-		case 1:
 			return dipendente.getNome();
-		case 2:
+		case 1:
 			return dipendente.getCognome();
-		case 3:
+		case 2:
 			return dipendente.getSesso();
-		case 4:
+		case 3:
 			return dipendente.getEtà();
-		case 5:
+		case 4:
 			return dipendente.getEmail();
-		case 6:
+		case 5:
 			return dipendente.getSalario();
-		case 7:
+		case 6:
 			String s = String.format("%.2f",dipendente.getValutazione());
 			return s;
-		case 8:
+		case 7:
 			return dipendente.getSkills();
-		case 9:
-			ArrayList<CollaborazioneProgetto> progetto=dipendente.getCollaborazioni();
-			
-			
-			return dipendente.getCollaborazioni();
+		case 8:
+			return dipendente.getTipologieProgetto();
 			
 		}
 		return null;
@@ -91,12 +86,14 @@ public class PartecipantiTableModel extends AbstractTableModel {
 	//Per sorting corretto
 	public Class<?> getColumnClass(int column) {
         switch (column) {
-            case 4:
-                return Integer.class;
-            case 6:
-                return Float.class;
             case 3:
+                return Integer.class;
+            case 5:
+                return Float.class;
+            case 2:
                 return Character.class;
+            case 7:
+            	return Skill.class;
             default:
                 return String.class;
         }

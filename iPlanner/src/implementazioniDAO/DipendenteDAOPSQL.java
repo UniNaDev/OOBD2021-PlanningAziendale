@@ -33,9 +33,12 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	//ATTRIBUTI
 	//----------------------------------------
 	private Connection connection;	//connessione al DB
-	private PreparedStatement getDipendentiNonInvitatiPS,
+	private PreparedStatement 
+		getDipendentiNonInvitatiPS,
 		getDipendentiPS,
 		getDipendentiNonPartecipantiPS,
+		getDipendentiByEtaPS,
+		getTipologieProgettoDipendentePS,
 		getValutazionePS,
 		addDipendentePS,
 		updateDipendentePS,
@@ -63,9 +66,11 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		this.skillDAO = new SkillDAOPSQL(connection);
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
-		connection.prepareStatement("SELECT * FROM Dipendente");
+		
 		getDipendentiNonPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )");
-		connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
+		getTipologieProgettoDipendentePS=connection.prepareStatement("SELECT DISTINCT tipoprogetto FROM Progetto NATURAL JOIN Partecipazione WHERE CF ILIKE ?");
+		getDipendentiByEtaPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?");
+
 		getDipendentiNonInvitatiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
 		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");	//? = CF del Dipendente
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
@@ -74,9 +79,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email ILIKE ? AND Password = ?");
 		organizzatoreCheckPS=connection.prepareStatement("SELECT cf FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=? AND organizzatore=true");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
-		connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=?");
 		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
-		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome LIKE '%' || ? || '%' OR d.Cognome LIKE '%' || ? || '%' OR d.Email LIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
+		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome ILIKE '%' || ? || '%' OR d.Cognome ILIKE '%' || ? || '%' OR d.Email ILIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
 	}
 	
 	
@@ -389,6 +393,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
 			tempDip.setCollaborazioni(projDAO.getPartecipanti(progettoSelezionato.getIdProgettto())); //facoltativo
 			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
+			tempDip.setTipologieProgetto(getTipologieProgettoDipendente(tempDip.getCf()));
+			
 			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
@@ -396,6 +402,29 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		return temp;
 	}
+
+
+
+	private String getTipologieProgettoDipendente(String cf) throws SQLException {
+		
+		String tipologie="";
+		
+		getTipologieProgettoDipendentePS.setString(1,cf);
+		
+		ResultSet risultato=getTipologieProgettoDipendentePS.executeQuery();
+		
+		while(risultato.next())
+		{
+			
+			tipologie=tipologie.concat(","+risultato.getString("tipoProgetto"));
+			
+		}
+		
+		if(tipologie.length()>0)
+		return tipologie.substring(1, tipologie.length());
+		else return null;
+	}
+
 
 	@Override
 	public String organizzatoreCheck(Meeting meeting) throws SQLException {

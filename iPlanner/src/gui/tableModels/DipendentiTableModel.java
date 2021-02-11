@@ -9,6 +9,7 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
 import entita.Dipendente;
+import entita.Skill;
 
 public class DipendentiTableModel extends AbstractTableModel {
 	
@@ -56,9 +57,7 @@ public class DipendentiTableModel extends AbstractTableModel {
 		case 2:
 			return dipendente.getEmail();
 		case 3:
-			Period period = new Period(dipendente.getDataNascita(), LocalDate.now(), PeriodType.yearMonthDay());
-			int age = period.getYears();
-			return age;
+			return dipendente.getEtà();
 		case 4:
 			return dipendente.getSalario();
 		case 5:
@@ -73,8 +72,15 @@ public class DipendentiTableModel extends AbstractTableModel {
 		return dipendente;
 	}
 	
-	@Override
-	public Class<?> getColumnClass(int columnIndex){
-		return getValueAt(0, columnIndex).getClass();
-	}
+	//Per sorting corretto
+		public Class<?> getColumnClass(int column) {
+	        switch (column) {
+	            case 3:
+	                return Integer.class;
+	            case 4:
+	                return Float.class;
+	            default:
+	                return String.class;
+	        }
+		}
 }
