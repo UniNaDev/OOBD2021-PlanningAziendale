@@ -1276,6 +1276,11 @@ public class GestioneDipendenti extends JFrame {
 			DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();	//aggiorna la lista delle skill
 			skillModel.addAll(controller.ottieniSkill());
 			skillsList.setModel(skillModel);
+			//aggiorna la combobox dei filtri
+			skillFiltroComboBox.removeAllItems();
+			skillFiltroComboBox.addItem(null);
+			for (Skill skill: controller.ottieniSkill())
+				skillFiltroComboBox.addItem(skill);
 			nuovaSkillTextField.setText(""); //svuota il campo
 			} 
 		catch (SQLException e1) {
