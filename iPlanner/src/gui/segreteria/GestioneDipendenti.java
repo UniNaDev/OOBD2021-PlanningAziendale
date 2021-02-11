@@ -1075,10 +1075,6 @@ public class GestioneDipendenti extends JFrame {
 	//Altri metodi
 	//-----------------------------------------------------------------
 	
-	//Metodo che ricava le info del dipendente dalla GUI
-	//Altri metodi
-	//-----------------------------------------------------------------
-	
 	//Metodo che ricava le informazioni essenziali per la creazione di un dipendente temporaneo
 	private void ricavaInfoDipendente(ControllerDipendentiSegreteria controller) {
 		//prende i dati dagli input della GUI
@@ -1114,7 +1110,6 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che aggiorna la tabella dei dipendenti
-	//Metodo che aggiorna la tabella dei dipendenti
 	private void aggiornaTabella(ControllerDipendentiSegreteria controller) {
 		//aggiorna tabella dipendenti
 		try {
@@ -1131,7 +1126,6 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che rende rossi i campi obbligatori vuoti
 	//Metodo che colora i campi obbligatori vuoti di rosso
 	private void campiObbligatoriRossi() {
 		if (nomeTextField.getText() == null)	//nome
@@ -1157,7 +1151,6 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che rende neri i campi
 	//Metodo che colora di nero i campi
 	private void campiObbligatoriNeri() {
 		nomeLabel.setForeground(Color.BLACK);
@@ -1174,7 +1167,6 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che crea un dipendente nel DB
-	//Metodo che salva i dati del nuovo account e li manda al controller per creare il nuovo account nel DB
 	private void creaDipendente(ControllerDipendentiSegreteria controller) {
 		ricavaInfoDipendente(controller);	//ricava tutte le principali informazioni per il dipendente
 		//ottiene le skill selezionate
@@ -1277,7 +1269,6 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che crea una nuova skill nel DB
 	//Metodo che crea una nuova skill e aggiorna la lista delle skill disponibili
 	private void creaSkill(ControllerDipendentiSegreteria controller) {
 		try {
@@ -1327,7 +1318,6 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che applica i filtri alla tabella
-	//Metodo che applica i filtri
 	private void applicaFiltri(ControllerDipendentiSegreteria controller) {
 		//stringa per cercare in nome, cognome ed email
 		String nomeCognomeEmail = "%";
@@ -1375,7 +1365,6 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che esegue un parseInteger con valore di default in caso di eccezione
-	//Metodo parse intero usato nei filtri
 	private int parseInteger(String numero, int valoreDefault) {
 		try {
 			return Integer.parseInt(numero);
@@ -1386,7 +1375,6 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che esegue un parseFloat con valore di default in caso di eccezione
-	//Metodo parse float usato nei filtri
 	private float parseFloat(String numero, float valoreDefault) {
 		try {
 			return Float.parseFloat(numero);
@@ -1397,7 +1385,6 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che esegue l'update di un dipendente nel DB
-	//Metodo che salva le modifiche svolte
 	private void salvaModifiche(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) {
 		//setta le nuove proprietà al dipendente
 		dipendenteModificato.setNome(nomeTextField.getText());	//nome
@@ -1534,7 +1521,6 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	//Metodo che pulsice tutti i campi
-	//Metodo che pulisce tutti i campi
 	private void pulisciCampi() {
 		nomeTextField.setText(""); //nome
 		cognomeTextField.setText("");	//cognome
