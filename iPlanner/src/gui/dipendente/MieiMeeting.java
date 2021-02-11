@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import entita.Meeting;
 import gui.cellRenderers.MeetingListRenderer;
+import gui.customUI.CustomScrollBarUI;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -46,7 +47,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
-import customUI.CustomScrollBarUI;
 
 import javax.swing.event.ListSelectionEvent;
 import java.awt.Component;

@@ -11,6 +11,7 @@ import entita.Meeting;
 import entita.PartecipazioneMeeting;
 import entita.SalaRiunione;
 import gui.cellRenderers.InvitatiListRenderer;
+import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.MeetingTableModel;
 
 import java.awt.event.WindowAdapter;
@@ -25,7 +26,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.segreteria.ControllerMeetingSegreteria;
-import customUI.CustomScrollBarUI;
 
 import java.awt.Color;
 import java.awt.Cursor;

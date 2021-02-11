@@ -35,7 +35,6 @@ import org.joda.time.LocalTime;
 import controller.dipendente.ControllerMeeting;
 import controller.dipendente.ControllerPartecipantiMeeting;
 import controller.dipendente.ControllerPartecipantiProgetto;
-import customUI.CustomScrollBarUI;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
@@ -43,6 +42,7 @@ import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
 import gui.cellRenderers.PartecipantiListRenderer;
+import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.PartecipantiTableModel;
 
 import javax.swing.JButton;

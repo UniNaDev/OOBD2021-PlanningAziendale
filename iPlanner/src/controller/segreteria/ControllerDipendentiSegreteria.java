@@ -1,6 +1,5 @@
 package controller.segreteria;
 
-import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -12,7 +11,6 @@ import controller.ControllerStart;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
-import gui.iPlanner;
 import gui.segreteria.GestioneDipendenti;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;

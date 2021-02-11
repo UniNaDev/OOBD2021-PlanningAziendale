@@ -12,6 +12,7 @@ import entita.AmbitoProgetto;
 import entita.Dipendente;
 import entita.Progetto;
 import gui.cellRenderers.ProgettoListRenderer;
+import gui.customUI.CustomScrollBarUI;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -56,7 +57,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerProgetto;
-import customUI.CustomScrollBarUI;
 
 import javax.swing.event.ListSelectionEvent;
 import java.awt.Component;

@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import entita.Progetto;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.ProgettoListRenderer;
+import gui.customUI.CustomScrollBarUI;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -33,7 +34,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import controller.dipendente.ControllerGestioneProfilo;
-import customUI.CustomScrollBarUI;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;

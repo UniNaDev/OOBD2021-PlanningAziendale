@@ -12,6 +12,7 @@ import entita.Meeting;
 import entita.Progetto;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.PartecipantiListRenderer;
+import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.ProgettoTableModel;
 
 import javax.swing.border.MatteBorder;
@@ -49,7 +50,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.segreteria.ControllerProgettiSegreteria;
-import customUI.CustomScrollBarUI;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

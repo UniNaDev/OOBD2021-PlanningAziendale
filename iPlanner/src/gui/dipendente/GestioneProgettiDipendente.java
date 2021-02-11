@@ -52,6 +52,7 @@ import entita.Progetto;
 import entita.Skill;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.PartecipantiListRenderer;
+import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.ProgettoTableModel;
 
 import javax.swing.ComboBoxModel;
@@ -77,7 +78,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerProgetto;
-import customUI.CustomScrollBarUI;
 
 import javax.swing.JCheckBox;
 import java.awt.Toolkit;

@@ -37,7 +37,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
-import customUI.CustomScrollBarUI;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -45,6 +44,7 @@ import entita.SalaRiunione;
 import gui.cellRenderers.InvitatiListRenderer;
 import gui.cellRenderers.ProgettoDiscussoListRenderer;
 import gui.cellRenderers.ProgettoListRenderer;
+import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.MeetingTableModel;
 
 import javax.swing.JButton;

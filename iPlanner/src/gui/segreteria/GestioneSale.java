@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 
 import entita.SalaRiunione;
+import gui.customUI.CustomScrollBarUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -36,7 +37,6 @@ import javax.swing.event.ListSelectionListener;
 import org.postgresql.util.PSQLException;
 
 import controller.segreteria.ControllerMeetingSegreteria;
-import customUI.CustomScrollBarUI;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JTextArea;
