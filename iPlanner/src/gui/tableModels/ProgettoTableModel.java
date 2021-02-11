@@ -97,8 +97,6 @@ public class ProgettoTableModel extends AbstractTableModel {
 	        		return AmbitoProgetto.class;
 	            case 3:
 	                return getValueAt(0, column).getClass();
-	            case 4:
-	                return getValueAt(0, column).getClass();
 	            case 5:
 	                return getValueAt(0, column).getClass();
 	            default:
