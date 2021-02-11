@@ -35,7 +35,6 @@ public class DipendentiTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-
 		return colnames.length;
 	}
 
@@ -47,29 +46,37 @@ public class DipendentiTableModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Dipendente dipendente = dipendenteTabella.get(rowIndex);
+		if (rowIndex >= 0) {
+			Dipendente dipendente = dipendenteTabella.get(rowIndex);
 		
-		switch(columnIndex) {
-		case 0:
-			return dipendente.getNome();
-		case 1:
-			return dipendente.getCognome();
-		case 2:
-			return dipendente.getEmail();
-		case 3:
-			return dipendente.getEtà();
-		case 4:
-			return dipendente.getSalario();
-		case 5:
-			String s = String.format("%.2f",dipendente.getValutazione());
-			return s;
+			switch(columnIndex) {
+			case 0:
+				return dipendente.getNome();
+			case 1:
+				return dipendente.getCognome();
+			case 2:
+				return dipendente.getEmail();
+			case 3:
+				return dipendente.getEtà();
+			case 4:
+				return dipendente.getSalario();
+			case 5:
+				String s = String.format("%.2f",dipendente.getValutazione());
+				return s;
+			}
+			return null;
 		}
-		return null;
+		else
+			return null;
 	}
 	
 	public Dipendente getSelected(int rowIndex) {
-		Dipendente dipendente = dipendenteTabella.get(rowIndex);
-		return dipendente;
+		if (rowIndex >= 0) {
+			Dipendente dipendente = dipendenteTabella.get(rowIndex);
+			return dipendente;
+		}
+		else
+			return null;
 	}
 	
 	//Per sorting corretto

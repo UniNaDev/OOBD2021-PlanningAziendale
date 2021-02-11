@@ -143,7 +143,7 @@ public class GestioneDipendenti extends JFrame {
 	private JButton salvaModificheButton;
 	private DipendentiTableModel dataModelDipendente;
 	private JTable dipendentiTable;
-	private JComboBox skillFiltroComboBox;
+	private JComboBox<Skill> skillFiltroComboBox;
 	
 	//Altri attributi	
 	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
@@ -235,6 +235,7 @@ public class GestioneDipendenti extends JFrame {
 		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		cognomeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
+		//Icona Email
 		iconaEmailLabel = new JLabel("");
 		iconaEmailLabel.setBounds(41, 172, 46, 14);
 		infoPanel.add(iconaEmailLabel);
@@ -929,7 +930,7 @@ public class GestioneDipendenti extends JFrame {
 					aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null,
-							e1.getMessage(),
+							e1.getMessage() + " Contattare uno sviluppatore",
 							"Errore #" + e1.getErrorCode(),
 							JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
 				} catch (NullPointerException npe) {
