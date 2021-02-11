@@ -1,75 +1,47 @@
 package gui.dipendente;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GraphicsEnvironment;
-
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JTextArea;
-import java.awt.FlowLayout;
 import java.awt.Component;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.border.MatteBorder;
-import javax.swing.plaf.ScrollBarUI;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-import javax.swing.plaf.basic.BasicScrollPaneUI;
-
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
-import entita.AmbitoProgetto;
-import entita.CollaborazioneProgetto;
-import entita.Dipendente;
-import entita.Meeting;
-import entita.Progetto;
-import entita.Skill;
-import gui.cellRenderers.MeetingListRenderer;
-import gui.cellRenderers.PartecipantiListRenderer;
-import gui.customUI.CustomScrollBarUI;
-import gui.tableModels.ProgettoTableModel;
-
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 
-import javax.swing.table.DefaultTableModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -78,9 +50,13 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerProgetto;
-
-import javax.swing.JCheckBox;
-import java.awt.Toolkit;
+import entita.AmbitoProgetto;
+import entita.Dipendente;
+import entita.Progetto;
+import gui.cellRenderers.MeetingListRenderer;
+import gui.cellRenderers.PartecipantiListRenderer;
+import gui.customUI.CustomScrollBarUI;
+import gui.tableModels.ProgettoTableModel;
 
 public class GestioneProgettiDipendente extends JFrame {
 
@@ -801,7 +777,7 @@ public class GestioneProgettiDipendente extends JFrame {
 							nuovaDataTerminazione = null;
 						
 						DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-						LocalDate dataCreazione=formatDate.parseLocalDate(progettoTable.getValueAt(progettoTable.getSelectedRow(), 4).toString());
+						LocalDate dataCreazione=formatDate.parseLocalDate(progettoTable.getValueAt(progettoTable.getSelectedRow(), 3).toString());
 						
 						try 
 						{
@@ -967,14 +943,25 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTable.setBackground(Color.WHITE);
 		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
 		
-		//Modello delle colonne personalizzato
-		progettoTable.getColumnModel().getColumn(0).setMinWidth(400);
+		//Modello delle colonne personalizzato(Larghezza minima)
+		progettoTable.getColumnModel().getColumn(0).setMinWidth(500);
 		progettoTable.getColumnModel().getColumn(1).setMinWidth(400);
-		progettoTable.getColumnModel().getColumn(2).setMinWidth(300);
+		progettoTable.getColumnModel().getColumn(2).setMinWidth(200);
 		progettoTable.getColumnModel().getColumn(3).setMinWidth(150);
-		progettoTable.getColumnModel().getColumn(4).setMinWidth(100);
-		progettoTable.getColumnModel().getColumn(5).setMinWidth(100);
-		progettoTable.getColumnModel().getColumn(6).setMinWidth(100);
+		progettoTable.getColumnModel().getColumn(4).setMinWidth(150);
+		progettoTable.getColumnModel().getColumn(5).setMinWidth(145);
+		
+		//Modello delle colonne personalizzato(Testo allineato al centro)
+		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
+        renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabella.setVerticalAlignment(SwingConstants.CENTER);
+        
+		progettoTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
+		progettoTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
+		progettoTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
+		progettoTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
+		progettoTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
+		progettoTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
 		
 		//Setta i progetti nella tabella
 		try {
@@ -995,6 +982,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Le colonne non possono essere riordinate
 		progettoTable.getTableHeader().setReorderingAllowed(false);
+		
 		//Selezione riga
 		progettoTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1011,24 +999,28 @@ public class GestioneProgettiDipendente extends JFrame {
 				
 				
 				//Nome progetto
-				nomeTextArea.setText(progettoTable.getValueAt(row, 0).toString());
+				nomeTextArea.setText(progetto.getNomeProgetto());
 				
 				//descrizione progetto
-				descrizioneTextArea.setText(progettoTable.getValueAt(row, 1).toString());	
+				descrizioneTextArea.setText(progetto.getDescrizioneProgetto());	
 				
-				String valoreTabella=(String)progettoTable.getValueAt(row, 5);
+				String valoreTabella=(String)progettoTable.getValueAt(row, 4);
 			
 				//Data terminazione
 				LocalDate dataTerminazione=null;
 				if(valoreTabella != null)	
-				dataTerminazione=formatDate.parseLocalDate((String) progettoTable.getValueAt(row, 5));
+				dataTerminazione=formatDate.parseLocalDate((String) progettoTable.getValueAt(row, 4));
 				if (dataTerminazione != null) {
 					
-					dataTerminazione=formatDate.parseLocalDate(progettoTable.getValueAt(row, 5).toString());
+					dataTerminazione=formatDate.parseLocalDate(progettoTable.getValueAt(row, 4).toString());
 					annoTerminazioneComboBox.setSelectedItem(dataTerminazione.getYear());
 					meseTerminazioneComboBox.setSelectedIndex(dataTerminazione.getMonthOfYear()-1);
 					giornoTerminazioneComboBox.setSelectedIndex(dataTerminazione.getDayOfMonth()-1);
 					progettoTerminatoCheckBox.setSelected(true);
+					
+					annoTerminazioneComboBox.setEnabled(false);
+					meseTerminazioneComboBox.setEnabled(false);
+					giornoTerminazioneComboBox.setEnabled(false);
 				}
 				else {
 					//pulisci i campi della data di terminazione
@@ -1039,7 +1031,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				}
 				
 				//Data scadenza
-				LocalDate dataScadenza=formatDate.parseLocalDate(progettoTable.getValueAt(row, 6).toString());	//data scadenza
+				LocalDate dataScadenza=formatDate.parseLocalDate(progettoTable.getValueAt(row, 5).toString());	//data scadenza
 				if (dataScadenza != null) {
 					annoScadenzaComboBox.setSelectedItem(dataScadenza.getYear());
 					meseScadenzaComboBox.setSelectedIndex(dataScadenza.getMonthOfYear()-1);
@@ -1092,7 +1084,7 @@ public class GestioneProgettiDipendente extends JFrame {
 
 				try {
 					tipologiaComboBox.setModel(new DefaultComboBoxModel(controller.ottieniTipologie()));
-					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 3));
+					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 2));
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

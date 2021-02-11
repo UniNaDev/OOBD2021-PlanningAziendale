@@ -25,8 +25,8 @@ public class ManagerConnessioneDB {
 	private Connection connection = null;	//connessione al DB
 	
 	private final String username = "postgres";	//username per accesso al DB
-	private final String password = "160995"; //password per accesso al DB
-	private final String nomeDB = "iplanner";	//nome del database
+	private final String password = "michele"; //password per accesso al DB
+	private final String nomeDB = "MikeDB2";	//nome del database
 	private final String url = "jdbc:postgresql://localhost:5432/";	//url per accedere al DB su AWS
 	
 	//METODI

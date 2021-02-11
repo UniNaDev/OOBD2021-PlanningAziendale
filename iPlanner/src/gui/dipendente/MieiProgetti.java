@@ -75,7 +75,7 @@ public class MieiProgetti extends JFrame {
 	
 	public MieiProgetti(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiProgetti.class.getResource("/Icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1200, 900));
+		setMinimumSize(new Dimension(1440, 900));
 		setTitle("iPlanner - I miei Progetti");
 		setBounds(100, 100, 1440, 900);
 		setLocationRelativeTo(null);
@@ -183,19 +183,6 @@ public class MieiProgetti extends JFrame {
 		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
-		//Label "Project Manager:"
-		JLabel projectManagerLabel = new JLabel("Project Manager:");
-		projectManagerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		projectManagerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		projectManagerLabel.setForeground(Color.DARK_GRAY);
-		projectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
-		
-		//Label per project manager
-		JLabel valoreProjectManagerLabel = new JLabel("N/A");
-		valoreProjectManagerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		valoreProjectManagerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreProjectManagerLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
 		//Label "Data Creazione:"
 		JLabel dataCreazioneLabel = new JLabel("Data Creazione:");
 		dataCreazioneLabel.setIconTextGap(40);
@@ -254,7 +241,6 @@ public class MieiProgetti extends JFrame {
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.TRAILING)
 						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
 						.addComponent(tipologiaLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(projectManagerLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
 						.addComponent(dataCreazioneLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
 						.addComponent(dataScadenzaLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
 						.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
@@ -264,7 +250,6 @@ public class MieiProgetti extends JFrame {
 							.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 								.addComponent(valoreAmbitiLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
 								.addComponent(valoreTipologiaLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-								.addComponent(valoreProjectManagerLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
 								.addComponent(valoreDataCreazioneLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
 								.addComponent(valoreDataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 224, Short.MAX_VALUE)))
 						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
@@ -290,11 +275,7 @@ public class MieiProgetti extends JFrame {
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(tipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
 						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(projectManagerLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(valoreProjectManagerLabel, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(62)
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(valoreDataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
 						.addComponent(dataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
@@ -350,7 +331,7 @@ public class MieiProgetti extends JFrame {
 					
 					valoreTipologiaLabel.setText(progettoSelezionato.getTipoProgetto());	//tipologia del progetto
 					
-					valoreProjectManagerLabel.setText(dipendente.getNome() + " " + dipendente.getCognome());	//project manager
+					
 					
 					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	//data creazione
 					valoreDataCreazioneLabel.setText(progettoSelezionato.getDataCreazione().toString(formatDate));

@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -436,44 +437,42 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
 					.addGap(59))
 				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGap(70)
-					.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
-					.addGap(65))
-				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addGap(25)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(13)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(37)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-								.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(presenzaCheckBox)
-								.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(13)
-							.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(skillScrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+						.addComponent(invitatiScrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(64, Short.MAX_VALUE))
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addGap(91)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(presenzaCheckBox)
+						.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addGap(87))
 		);
+		gl_infoPanel2.linkSize(SwingConstants.VERTICAL, new Component[] {invitatiScrollPane, skillScrollPane});
 		gl_infoPanel2.linkSize(SwingConstants.VERTICAL, new Component[] {dataInizioLabel, dataFineLabel, oraInizioLabel, oraFineLabel, lblPresenza});
-		gl_infoPanel2.linkSize(SwingConstants.HORIZONTAL, new Component[] {dataInizioTextField, dataFineTextField, dataInizioLabel, dataFineLabel});
 		gl_infoPanel2.linkSize(SwingConstants.HORIZONTAL, new Component[] {oraInizioTextField, oraFineTextField, oraInizioLabel, oraFineLabel});
+		gl_infoPanel2.linkSize(SwingConstants.HORIZONTAL, new Component[] {dataInizioTextField, dataFineTextField, dataInizioLabel, dataFineLabel});
 		
 		skillList = new JList();
 		skillModel=new DefaultListModel();
@@ -811,6 +810,19 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		dipendenteTable.getColumnModel().getColumn(3).setMinWidth(50);
 		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(100);
 		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(100);
+		
+		
+		
+		//Modello delle colonne personalizzato(Testo allineato al centro)
+		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
+        renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabella.setVerticalAlignment(SwingConstants.CENTER);
+		dipendenteTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
+		dipendenteTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
+		dipendenteTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
+		dipendenteTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
+		dipendenteTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
+		dipendenteTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
 
 		//Setta i dati nella tabella
 		try {
