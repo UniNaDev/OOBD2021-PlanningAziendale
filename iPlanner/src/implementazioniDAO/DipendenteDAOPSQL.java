@@ -118,6 +118,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
 			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
 			
+			
+			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
 		risultato.close();	//chiude il ResultSet
