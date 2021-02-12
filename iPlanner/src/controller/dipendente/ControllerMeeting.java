@@ -65,6 +65,7 @@ public class ControllerMeeting {
 	}
 
 	//Metodi per la gestione delle GUI
+	//----------------------------------------------------
 	
 	//Metodo che apre la finestra di gestione dei meeting
 	public void apriGestioneMeeting() {
@@ -73,13 +74,15 @@ public class ControllerMeeting {
 		
 		mieiMeeting.setVisible(false);
 	}
+	
+	//Metodo che apre la finestra per inserire partecipanti al meeting
 	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato) {
-		
 		ControllerPartecipantiMeeting controller=new ControllerPartecipantiMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendente,meetingSelezionato);
-		
 	}
 	
 	//Altri metodi
+	//----------------------------------------------------
+	
 	//Metodo che ottiene tutti i meeting a cui deve partecipare/ha partecipato il dipendente
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
 		return meetDAO.getMeetingsByInvitato(dipendente);
@@ -88,11 +91,9 @@ public class ControllerMeeting {
 	//Ottiene i progetti del dipendente
 	public ArrayList<Progetto> ottieniNomiProgetti() throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
-		
 		ArrayList<Progetto> temp = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)
 			temp.add(collaborazione.getProgetto());
-		
 		return temp;
 	}
 	
@@ -123,46 +124,32 @@ public class ControllerMeeting {
 
 	//Metodo che inserisce il meeting del progetto da discutere
 	public void inserisciMeeting(Meeting meetingInserito,String nomeProgettoDisusso) throws SQLException{
-
 			//Prova ad inserire il meeting e del progetto da discutere
 			meetDAO.addMeeting(meetingInserito,nomeProgettoDisusso);
 			
-			
 			//Viene inserito come organizzatore la persona che crea il meeting
 			meetDAO.addOrganizzatore(dipendente.getCf()); 
-			
-
-	
 	}
 
-	//Metodo che rimuove i meeting
+	//Metodo che rimuove un meeting
 	public void rimuoviMeeting(int idMeeting) throws SQLException {
-
 		//Rimuove il meeting selezionato
 		meetDAO.removeMeeting(idMeeting);
-
 	}
 
+	//TODO: ???
 	public void inserisciMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException {
-		
 		meetDAO.addMeetingCompleto(meetingInserito, progetto);
 		meetDAO.addOrganizzatore(dipendente.getCf()); 
 	}
 
+	//Metodo che ottiene il progetto inserito
 	public Progetto ottieniProgettoInserito(Progetto progetto) throws SQLException {
-		
 		return projDAO.getProgettoByCod(progetto.getIdProgettto());
 	}
 
+	//Metodo che prende l'organizzatore del meeting
 	public String organizzatoreCheck(Meeting meeting) throws SQLException {
-		
 		return dipDAO.organizzatoreCheck(meeting);
-		
 	}
-
-	
-
-
-
-
 }
