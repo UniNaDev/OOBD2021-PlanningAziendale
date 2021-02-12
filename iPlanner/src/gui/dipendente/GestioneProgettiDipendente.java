@@ -110,9 +110,9 @@ public class GestioneProgettiDipendente extends JFrame {
 	
 	public GestioneProgettiDipendente(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
-//		setMinimumSize(new Dimension(1600, 900));
+		setMinimumSize(new Dimension(1235,900));
 		setTitle("iPlanner-Gestione progetto");
-		setBounds(100, 100, 1236, 900);
+		setBounds(100, 100, 1235, 900);
 		contentPane = new JPanel();		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -1004,13 +1004,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettoTable.setBackground(Color.WHITE);
 		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
-		//Modello delle colonne personalizzato(Larghezza minima)
-		progettoTable.getColumnModel().getColumn(0).setMinWidth(500);
-		progettoTable.getColumnModel().getColumn(1).setMinWidth(400);
-		progettoTable.getColumnModel().getColumn(2).setMinWidth(200);
-		progettoTable.getColumnModel().getColumn(3).setMinWidth(150);
-		progettoTable.getColumnModel().getColumn(4).setMinWidth(150);
-		progettoTable.getColumnModel().getColumn(5).setMinWidth(145);
 		//Modello delle colonne personalizzato(Testo allineato al centro)
 		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
         renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
