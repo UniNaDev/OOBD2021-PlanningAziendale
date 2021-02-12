@@ -92,10 +92,11 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JList ambitiList;
 	private JList partecipantiList;
 	private JList meetingRelativiList;
-	
-	LocalDate dataAttuale = LocalDate.now();
-	private JTextArea nomeTextArea;
+	private JTextField nomeTextField;
 	private JTextArea descrizioneTextArea;
+	
+	//Altri attributi
+	LocalDate dataAttuale = LocalDate.now();
 
 	//Creazione frame
 	//-----------------------------------------------------------------
@@ -103,7 +104,6 @@ public class GestioneProgettiDipendente extends JFrame {
 	public GestioneProgettiDipendente(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1600, 900));
-	
 		setTitle("iPlanner-Gestione progetto");
 		setBounds(100, 100, 1600, 900);
 		contentPane = new JPanel();		
@@ -111,16 +111,21 @@ public class GestioneProgettiDipendente extends JFrame {
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
 		
+		//Panel generale
 		JPanel panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
+		//Panel delle info
 		JPanel infoPanel = new JPanel();	//panel delle info
 		
+		//Panel esterno dei comandi
 		JPanel comandiPanel = new JPanel();	//panel dei comandi
 		comandiPanel.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		comandiPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JScrollPane tabellaScrollPane = new JScrollPane();	//scroll pane della tabella
+		//ScrollPanel per la tabella dei progetti
+		JScrollPane tabellaScrollPane = new JScrollPane();
 		tabellaScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
 		tabellaScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabellaScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
@@ -147,9 +152,6 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addContainerGap())
 		);
 		
-		
-		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
 		//panel interno dei comandi
 		JPanel comandiPanel2 = new JPanel();
 		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
@@ -168,7 +170,6 @@ public class GestioneProgettiDipendente extends JFrame {
 				pulisciCampiButton.setBackground(Color.WHITE);
 			}
 		});
-		
 		pulisciCampiButton.setPreferredSize(new Dimension(150, 30));
 		pulisciCampiButton.setMaximumSize(new Dimension(150, 150));
 		pulisciCampiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -180,7 +181,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Button "Elimina"
 		JButton eliminaButton = new JButton("Elimina");
-		
 		eliminaButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -201,7 +201,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		eliminaButton.setMargin(new Insets(2, 20, 2, 20));
 		eliminaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		eliminaButton.setAlignmentX(0.5f);
-		
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -211,8 +210,6 @@ public class GestioneProgettiDipendente extends JFrame {
 				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
 				{
 					//ricava il codice del progetto selezionato dalla tabella
-				
-				
 					try 
 					{
 						
@@ -229,14 +226,11 @@ public class GestioneProgettiDipendente extends JFrame {
 					
 						svuotaCampi();
 						
-					} catch (SQLException e1) 
-					{
+					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());
-					
 					}
 				}
 				else if(progettoTable.getSelectedRow()==-1) {
-					
 					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
 				}
 			}
@@ -246,20 +240,15 @@ public class GestioneProgettiDipendente extends JFrame {
 		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
 				int row=progettoTable.getSelectedRow();
 				
 				if(row==-1) {
-					JOptionPane.showMessageDialog(null, "Seleziona un progetto dalla tabella");
-					
+					JOptionPane.showMessageDialog(null, "Seleziona un progetto dalla tabella");	
 				}
 				else {
-					
 					Progetto progettoSelezionato=dataModelProgetti.getSelected(progettoTable.convertRowIndexToModel(progettoTable.getSelectedRow()));
 					controller.apriInserisciPartecipantiProgetto(progettoSelezionato);
-				}
-				
+				}	
 			}
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -283,11 +272,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
-		
-		
 		//Button "Conferma Modifiche"
 		JButton confermaModificheButton = new JButton("Conferma Modifiche");
-
 		confermaModificheButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -311,7 +297,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Button "Crea Nuovo"
 		JButton creaNuovoButton = new JButton("Crea Nuovo");
-
 		creaNuovoButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -335,15 +320,16 @@ public class GestioneProgettiDipendente extends JFrame {
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		//Label "Cerca"
-		JLabel cercaLbel = new JLabel("Cerca");
-		cercaLbel.setFont(new Font("Consolas", Font.PLAIN, 18));
-		comandiPanel2.add(cercaLbel);
+		JLabel cercaLabel = new JLabel("Cerca");
+		cercaLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
+		comandiPanel2.add(cercaLabel);
 		
 		//TextField per cercare progetti
 		cercaTextField = new JTextField();
 		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		comandiPanel2.add(cercaTextField);
 		cercaTextField.setColumns(10);
+		
 		comandiPanel2.add(inserisciPartecipanteButton);
 		comandiPanel2.add(confermaModificheButton);
 		comandiPanel2.add(creaNuovoButton);
@@ -351,11 +337,11 @@ public class GestioneProgettiDipendente extends JFrame {
 		comandiPanel2.add(pulisciCampiButton);
 		comandiPanel.add(comandiPanel2);
 		
-		//panel interno al panel info del progetto
+		//Panel interno al panel info del progetto
 		JPanel infoPanel2 = new JPanel();
 		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		
-		//ScrollPane meeting
+		//ScrollPanel lista meeting relativi
 		JScrollPane meetingScrollPane = new JScrollPane();
 		meetingScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -406,7 +392,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		DefaultComboBoxModel annoModel = new DefaultComboBoxModel();
 		annoScadenzaComboBox.setModel(annoModel);
 		int annoAttuale = LocalDate.now().getYear();
-		for(int i= annoAttuale;i<= annoAttuale + 20;i++)	//inserisce nella combobox gli anni da ora a 20 anni
+		for(int i= annoAttuale;i<= annoAttuale + 20; i++)	//inserisce nella combobox gli anni da ora a 20 anni
 			annoModel.addElement(i);
 		infoPanel2.add(annoScadenzaComboBox);
 		
@@ -446,7 +432,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 		
 		DefaultComboBoxModel annoTerminazioneModel = new DefaultComboBoxModel();
-		for(int i = annoAttuale; i<=annoAttuale+20; i++ )	
+		for(int i = annoAttuale; i <= annoAttuale + 50; i++)	
 			annoTerminazioneModel.addElement(i);
 		annoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		annoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -472,11 +458,9 @@ public class GestioneProgettiDipendente extends JFrame {
 		//si disattivano
 		//checkbox modificata
 		progettoTerminatoCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
+			public void actionPerformed(ActionEvent e) {
 				//se il checkbox è selezionato
-				if(progettoTerminatoCheckBox.isSelected())
-					{
+				if(progettoTerminatoCheckBox.isSelected()){
 					//abilita i campi della data di terminazione
 					giornoTerminazioneComboBox.setEnabled(true);
 					meseTerminazioneComboBox.setEnabled(true);	
@@ -485,11 +469,9 @@ public class GestioneProgettiDipendente extends JFrame {
 					giornoTerminazioneComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
 					meseTerminazioneComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
 					annoTerminazioneComboBox.setSelectedIndex(0);
-					}
-				
+				}
 				//se il checkbox non è selezionato
-				else 
-					{	
+				else {	
 					//disabilita i campi della data di terminazione
 					giornoTerminazioneComboBox.setSelectedItem(null);
 					meseTerminazioneComboBox.setSelectedItem(null);
@@ -498,12 +480,13 @@ public class GestioneProgettiDipendente extends JFrame {
 					giornoTerminazioneComboBox.setEnabled(false);
 					meseTerminazioneComboBox.setEnabled(false);
 					annoTerminazioneComboBox.setEnabled(false);
-					}				
+				}				
 			}
 		});
 		
 		progettoTerminatoCheckBox.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
+		//ScrollPanel ambiti
 		JScrollPane ambitiScrollPane = new JScrollPane();
 		ambitiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -522,16 +505,17 @@ public class GestioneProgettiDipendente extends JFrame {
 		tipologiaComboBox.setUI(new BasicComboBoxUI());
 		tipologiaComboBox.setSelectedItem(null);
 		
-		nomeTextArea = new JTextArea();
-		nomeTextArea.setWrapStyleWord(true);
-		nomeTextArea.setLineWrap(true);
-		nomeTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
-		nomeTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		//TextField nome del progetto
+		nomeTextField = new JTextField();
+		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
+		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
+		//Label "Nome"
 		nomeProgettoLabel = new JLabel("Nome");
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
+		//ScrollPanel per la descrizione del progetto
 		descrizioneProgettoScrollPane = new JScrollPane();
 		descrizioneProgettoScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		descrizioneProgettoScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -544,9 +528,6 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(176)
-							.addComponent(nomeTextArea, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(176)
 							.addComponent(giornoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(meseTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
@@ -554,13 +535,13 @@ public class GestioneProgettiDipendente extends JFrame {
 							.addComponent(annoTerminazioneComboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(10)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataTerminazioneLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scadenzaProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addComponent(progettoTerminatoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tipologiaProgettoLabel, Alignment.TRAILING)
-								.addComponent(descrizioneProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-								.addComponent(nomeProgettoLabel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scadenzaProgettoLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addComponent(progettoTerminatoLabel, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tipologiaProgettoLabel)
+								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
@@ -569,7 +550,10 @@ public class GestioneProgettiDipendente extends JFrame {
 										.addComponent(tipologiaComboBox, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
 										.addGroup(gl_infoPanel2.createSequentialGroup()
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(descrizioneProgettoScrollPane, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)))
+											.addComponent(descrizioneProgettoScrollPane, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)))
 									.addGap(66)
 									.addComponent(ambitiScrollPane, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
 									.addGap(18))
@@ -592,12 +576,12 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGap(25)
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(nomeTextField)
+								.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
+							.addGap(18)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(nomeTextArea, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(descrizioneProgettoScrollPane, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+								.addComponent(descrizioneProgettoScrollPane, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
 								.addComponent(descrizioneProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
@@ -641,6 +625,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGap(11))
 		);
 		
+		//TextArea della descrizione del progetto
 		descrizioneTextArea = new JTextArea();
 		descrizioneTextArea.setWrapStyleWord(true);
 		descrizioneTextArea.setLineWrap(true);
@@ -654,22 +639,16 @@ public class GestioneProgettiDipendente extends JFrame {
 		ambitoProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		
 		//List ambiti
-		
 		ambitiList=new JList<AmbitoProgetto>();
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill			
 		ambitiList.setModel(ambitoModel);	
 		ambitiScrollPane.setViewportView(ambitiList);		
-		
-		try 
-		{
+		try {
 			ambitoModel.addAll(controller.ottieniAmbiti());
 			
-		}
-		catch (SQLException e2) 
-		{
+		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 		
@@ -688,11 +667,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		partecipantiList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		partecipantiList.setModel(listaPartecipantiModel);
 		partecipantiList.setCellRenderer(partecipantiListRenderer);
-		
-		
 		partecipantiScrollPane.setViewportView(partecipantiList);
-				
-				
 		
 		//Label "Meeting Relativi"
 		meetingRelativiLabel = new JLabel("Meeting Relativi");
@@ -716,44 +691,31 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//CLICK SUL PULSANTE "CONFERMA MODIFICHE" 
 		confermaModificheButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
+			public void actionPerformed(ActionEvent e) {
 				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
 				// NELLA JTABLE (colonna 0 della riga selezionata)
 				//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
-	
-		
 				
 				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
 				//se l'utente conferma allora vengono effettivamente fatte le modifiche
-				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
-				{
-					if(nomeTextArea.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
-					{
-											
+				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1) {
+					if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty()) {					
 						//fa diventare rossi i campi obbligatori che non sono stati inseriti
-						if(nomeTextArea.getText().isBlank())					
+						if(nomeTextField.getText().isBlank())					
 								nomeProgettoLabel.setForeground(Color.RED);
-						else if(!nomeTextArea.getText().isBlank())
+						else if(!nomeTextField.getText().isBlank())
 							nomeProgettoLabel.setForeground(Color.BLACK);
-						
 						if(tipologiaComboBox.getSelectedItem()== null)
 							tipologiaProgettoLabel.setForeground(Color.RED);
 						else if(tipologiaComboBox.getSelectedItem()!= null)
 							tipologiaProgettoLabel.setForeground(Color.BLACK);
-						
 						if(ambitiList.isSelectionEmpty())
 							ambitoProgettoLabel.setForeground(Color.RED);
 						else if(!ambitiList.isSelectionEmpty())
 							ambitoProgettoLabel.setForeground(Color.BLACK);
-						
-						
-						
 						JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
 					}
-					
 					else {
-						
 						int rigaSelezionata = progettoTable.getSelectedRow();
 						
 						//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
@@ -779,11 +741,10 @@ public class GestioneProgettiDipendente extends JFrame {
 						DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 						LocalDate dataCreazione=formatDate.parseLocalDate(progettoTable.getValueAt(progettoTable.getSelectedRow(), 3).toString());
 						
-						try 
-						{
+						try {
 							//prende tutti i campi e fa l'update del progetto
 							Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
-							controller.updateProgetto(progetto.getIdProgettto(), nomeTextArea.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
+							controller.updateProgetto(progetto.getIdProgettto(), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
 							JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
 							
 							//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
@@ -801,37 +762,24 @@ public class GestioneProgettiDipendente extends JFrame {
 							ambitoProgettoLabel.setForeground(Color.BLACK);
 							nomeProgettoLabel.setForeground(Color.BLACK);
 
-						} catch (SQLException e1) 
-						{
-							
+						} catch (SQLException e1) {
 							JOptionPane.showMessageDialog(null, e1.getMessage());
 						}
-						
 					}
-					
-
-					
 				}
 				else if(progettoTable.getSelectedRow()==-1)
 					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
 			}
-				
-						
-			
 		});
-		
 		//CLICK SUL PULSANTE "CREA NUOVO"
 				creaNuovoButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) 
-					{
+					public void actionPerformed(ActionEvent e) {
 						//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
-						if(nomeTextArea.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty())
-						{
-												
+						if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty()) {
 							//fa diventare rossi i campi obbligatori che non sono stati inseriti
-							if(nomeTextArea.getText().isBlank())					
+							if(nomeTextField.getText().isBlank())					
 									nomeProgettoLabel.setForeground(Color.RED);
-							else if(!nomeTextArea.getText().isBlank())
+							else if(!nomeTextField.getText().isBlank())
 								nomeProgettoLabel.setForeground(Color.BLACK);
 							
 							if(tipologiaComboBox.getSelectedItem()== null)
@@ -845,16 +793,13 @@ public class GestioneProgettiDipendente extends JFrame {
 								ambitoProgettoLabel.setForeground(Color.BLACK);
 							
 							JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
-						
 						}
-						
 						else {
 						//chiede all utente la conferma della creazione
 						int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?");
 						
 						//se l'utente conferma di voler creare un nuovo progetto viene fatto l'insert
-						if (conferma == JOptionPane.YES_OPTION)
-							{
+						if (conferma == JOptionPane.YES_OPTION) {
 							LocalDate dataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
 						
 							ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
@@ -867,9 +812,8 @@ public class GestioneProgettiDipendente extends JFrame {
 							for(int i : selezionati)
 							ambiti.add(ambitoModel.getElementAt(i));				 
 						
-							try 
-								{
-								controller.addProgetto(nomeTextArea.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
+							try {
+								controller.addProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
 								JOptionPane.showMessageDialog(null, "Progetto creato con successo");
 								
 								dataModelProgetti.fireTableDataChanged();
@@ -885,26 +829,19 @@ public class GestioneProgettiDipendente extends JFrame {
 								ambitoProgettoLabel.setForeground(Color.BLACK);
 								nomeProgettoLabel.setForeground(Color.BLACK);
 								
-								} 
-							catch (SQLException e1) 
-								{
-								
+							} catch (SQLException e1) {
 								JOptionPane.showMessageDialog(null, e1.getMessage());
 								}
 							}
-							}
 						}
+					}
 				});
-		
+
 		//Click sul pulsante "Pulisci Campi"
 		pulisciCampiButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-				{
+			public void actionPerformed(ActionEvent e) {
 					svuotaCampi();
-						
-				}
-
-			
+			}
 		});
 		
 		//Label "Gestione Progetto"
@@ -935,14 +872,13 @@ public class GestioneProgettiDipendente extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		
 		//Tabella progetti
-		dataModelProgetti=new ProgettoTableModel();
+		dataModelProgetti = new ProgettoTableModel();
 		progettoTable = new JTable(dataModelProgetti);
 		progettoTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettoTable.setBackground(Color.WHITE);
 		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
-		
 		//Modello delle colonne personalizzato(Larghezza minima)
 		progettoTable.getColumnModel().getColumn(0).setMinWidth(500);
 		progettoTable.getColumnModel().getColumn(1).setMinWidth(400);
@@ -950,56 +886,44 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTable.getColumnModel().getColumn(3).setMinWidth(150);
 		progettoTable.getColumnModel().getColumn(4).setMinWidth(150);
 		progettoTable.getColumnModel().getColumn(5).setMinWidth(145);
-		
 		//Modello delle colonne personalizzato(Testo allineato al centro)
 		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
         renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
         renderTabella.setVerticalAlignment(SwingConstants.CENTER);
-        
 		progettoTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
 		progettoTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
 		progettoTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
 		progettoTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
 		progettoTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
 		progettoTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
-		
 		//Setta i progetti nella tabella
 		try {
 			dataModelProgetti.fireTableDataChanged();
 			dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
 		} catch (SQLException e1) {
-			
 			e1.printStackTrace();
 		}
-		
 		//Sorter tabella progetto
 		sorterProgetti=new TableRowSorter<>(dataModelProgetti);
 		progettoTable.setRowSorter(sorterProgetti);
-		
-		
 		//Seleziona singola
 		progettoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
 		//Le colonne non possono essere riordinate
 		progettoTable.getTableHeader().setReorderingAllowed(false);
-		
 		//Selezione riga
 		progettoTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				
 				//ottiene il progetto alla riga selezionata
 				Progetto progetto=dataModelProgetti.getSelected(progettoTable.convertRowIndexToModel(progettoTable.getSelectedRow()));
 				
 				int row= progettoTable.getSelectedRow();	
-				
+	
 				//Formatter date
 				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 				
-				
 				//Nome progetto
-				nomeTextArea.setText(progetto.getNomeProgetto());
+				nomeTextField.setText(progetto.getNomeProgetto());
 				
 				//descrizione progetto
 				descrizioneTextArea.setText(progetto.getDescrizioneProgetto());	
@@ -1011,13 +935,11 @@ public class GestioneProgettiDipendente extends JFrame {
 				if(valoreTabella != null)	
 				dataTerminazione=formatDate.parseLocalDate((String) progettoTable.getValueAt(row, 4));
 				if (dataTerminazione != null) {
-					
 					dataTerminazione=formatDate.parseLocalDate(progettoTable.getValueAt(row, 4).toString());
 					annoTerminazioneComboBox.setSelectedItem(dataTerminazione.getYear());
 					meseTerminazioneComboBox.setSelectedIndex(dataTerminazione.getMonthOfYear()-1);
 					giornoTerminazioneComboBox.setSelectedIndex(dataTerminazione.getDayOfMonth()-1);
 					progettoTerminatoCheckBox.setSelected(true);
-					
 					annoTerminazioneComboBox.setEnabled(false);
 					meseTerminazioneComboBox.setEnabled(false);
 					giornoTerminazioneComboBox.setEnabled(false);
@@ -1046,42 +968,29 @@ public class GestioneProgettiDipendente extends JFrame {
 								
 				//RICAVA GLI AMBITI DEL PROGETTO E LI SELEZIONA NELLA LISTA
 				ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
-				
-				try 
-				{
-
+				try {
 					ambiti = controller.getAmbitiProgettoByCod(progetto.getIdProgettto());					
-				} 
-				catch (SQLException e2) 
-				{
-					
+				} catch (SQLException e2) {
 					e2.printStackTrace();
 				}
 				
-				
-				
-					ArrayList<Integer> selezionati = new ArrayList<Integer>();
-				    
-					//scorre tutti gli ambiti presenti nella lista degli ambiti e li confronta con ogni ambito del progetto per ottenere gli indici degli ambiti da selezionare
-					for(int i = 0 ;i < ambitoModel.size() ; i++) 
-					{
-						for(int j = 0 ; j< ambiti.size() ; j++) 
-						{
-							if(ambiti.get(j).getNome().equals(ambitoModel.getElementAt(i).getNome())) //confonta i nomi degli ambiti
-							{								
-								selezionati.add(i);	 //aggiunge tutti gli indici ottenuti in una lista
-							}
-						}	
-					}
-						
-					// converte l'arraylist di integer in int[]
-					int[] array = selezionati.stream().mapToInt(i -> i).toArray();
+				ArrayList<Integer> selezionati = new ArrayList<Integer>();
+			    
+				//scorre tutti gli ambiti presenti nella lista degli ambiti e li confronta con ogni ambito del progetto per ottenere gli indici degli ambiti da selezionare
+				for(int i = 0 ;i < ambitoModel.size() ; i++) {
+					for(int j = 0 ; j< ambiti.size() ; j++) {
+						if(ambiti.get(j).getNome().equals(ambitoModel.getElementAt(i).getNome())) {	//confonta i nomi degli ambiti								
+							selezionati.add(i);	 //aggiunge tutti gli indici ottenuti in una lista
+						}
+					}	
+				}
 					
-								
-					ambitiList.setSelectedIndices(array); //seleziona gli indici recuperati nella lista degli ambiti
+				// converte l'arraylist di integer in int[]
+				int[] array = selezionati.stream().mapToInt(i -> i).toArray();
+							
+				ambitiList.setSelectedIndices(array); //seleziona gli indici recuperati nella lista degli ambiti
 					
 				//Tipologia progetto
-
 				try {
 					tipologiaComboBox.setModel(new DefaultComboBoxModel(controller.ottieniTipologie()));
 					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 2));
@@ -1094,13 +1003,11 @@ public class GestioneProgettiDipendente extends JFrame {
 				//ripulisce le liste ogni volta che si preme su una riga della tabella , in modo che non vengano aggiunti elementi ad ogni click
 				listaPartecipantiModel.clear();
 				listaMeetingRelativiModel.clear();
-				
 					
 				//Aggiorna la tabella in seguito all'inserimento di partecipanti
 				try {
 					dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
-				} catch (SQLException e1) {
-					
+				} catch (SQLException e1) {	
 					e1.printStackTrace();
 				}
 				
@@ -1112,46 +1019,38 @@ public class GestioneProgettiDipendente extends JFrame {
 				try {
 					String cf=controller.ottieniProjectManager(progetto);
 					
-					if(dipendente.getCf().equals(cf)) {
-						
+					if (dipendente.getCf().equals(cf)) {
 						inserisciPartecipanteButton.setEnabled(true);
 						eliminaButton.setEnabled(true);
-						confermaModificheButton.setEnabled(true);
-						
+						confermaModificheButton.setEnabled(true);	
 					}
-				
 					else {
 						inserisciPartecipanteButton.setEnabled(false);
 						eliminaButton.setEnabled(false);
 						confermaModificheButton.setEnabled(false);
 					}
-
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
 			}
-				
 		});
-	
-		
-		
 		tabellaScrollPane.setViewportView(progettoTable);
 	}
 	
+	//Altri metodi
+	//-----------------------------------------------------------------
+	
+	//Metodo che svuota i campi
 	private void svuotaCampi() {
-		//svuota i campi
-		
 		nomeProgettoLabel.setForeground(Color.BLACK);
 		descrizioneProgettoLabel.setForeground(Color.BLACK);
 		tipologiaProgettoLabel.setForeground(Color.BLACK);
 		ambitoProgettoLabel.setForeground(Color.BLACK);
 		progettoTerminatoLabel.setForeground(Color.BLACK);
 		dataTerminazioneLabel.setForeground(Color.BLACK);
-		
-		
-		nomeTextArea.setText("");
+
+		nomeTextField.setText("");
 		descrizioneTextArea.setText("");
 			
 		progettoTerminatoCheckBox.setSelected(false);
@@ -1160,7 +1059,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//ricava la data attuale
 		LocalDate dataAttuale = LocalDate.now();
-			
 		annoTerminazioneComboBox.setSelectedItem(null);
 		meseTerminazioneComboBox.setSelectedItem(null);
 		giornoTerminazioneComboBox.setSelectedItem(null);
