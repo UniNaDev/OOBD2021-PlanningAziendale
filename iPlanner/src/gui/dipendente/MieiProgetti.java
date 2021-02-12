@@ -31,6 +31,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.AbstractListModel;
@@ -299,15 +300,17 @@ public class MieiProgetti extends JFrame {
 					descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());	//descrizione del progetto
 				}
 			});
-			
 			progettiList.setSelectedIndex(0);
 			progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 			progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			progettiList.setFixedCellHeight(40);
 			mieiProgettiScrollPane.setViewportView(progettiList);
 		} catch (SQLException e1) {
-			
-			e1.printStackTrace();
+			//errore select per tutti i progetti nel database
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutti i progetti dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 
 

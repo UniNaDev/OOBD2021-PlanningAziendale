@@ -39,6 +39,7 @@ public class ControllerProgetto {
 	private MeetingDAO meetDAO = null;	//dao meeting
 	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
 	private SkillDAO skillDAO=null;
+	
 	//Altri attributi
 	private Dipendente dipendente = null;
 	
@@ -64,17 +65,15 @@ public class ControllerProgetto {
 	//Metodi di gestione delle GUI
 	//-----------------------------------------------------------------
 	
+	//Metodo che apre la finestra per inserire partecipanti a un progetto
 	public void apriInserisciPartecipantiProgetto(Progetto progettoSelezionato) {
-		
 		ControllerPartecipantiProgetto controller=new ControllerPartecipantiProgetto(luogoDAO, dipDAO, projDAO, meetDAO, dipendente,skillDAO,progettoSelezionato);
-		
 	}
 	
 	//Metodo che apre la finestra di gestione dei progetti
 	public void apriGestioneProgetti() {
-		gestioneProgetti=new GestioneProgettiDipendente(this,dipendente);
+		gestioneProgetti = new GestioneProgettiDipendente(this,dipendente);
 		gestioneProgetti.setVisible(true);
-		
 		mieiProgetti.setVisible(false);
 	}
 
@@ -84,13 +83,9 @@ public class ControllerProgetto {
 	//Ottiene i progetti del dipendente
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
-		
-		
 		ArrayList<Progetto> temp = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)
 			temp.add(collaborazione.getProgetto());
-		
-		
 		return temp;
 	}
 	
@@ -108,20 +103,17 @@ public class ControllerProgetto {
 	}
 
 	//Ottiene tutti i partecipanti relativi ad un progetto
-	public ArrayList<Dipendente> getPartecipantiProgetto (int codiceProgetto) throws SQLException
-	{
+	public ArrayList<Dipendente> getPartecipantiProgetto (int codiceProgetto) throws SQLException {
 		return projDAO.getPartecipantiSenzaRuolo(codiceProgetto);
 	}
 
 	//Ottiene tutti i meeting relativi ad un progetto
-	public ArrayList<Meeting> getMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException
-	{
+	public ArrayList<Meeting> getMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException {
 		return projDAO.getMeetingRelativi(codProgettoSelezionato);
 	}
 
 	//metodo fa l'update del progetto con i nuovi campi inseriti
-	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione,LocalDate dataCreazione, LocalDate nuovaDataTerminazione , LocalDate nuovaDataScadenza, ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException 
-	{
+	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione,LocalDate dataCreazione, LocalDate nuovaDataTerminazione , LocalDate nuovaDataScadenza, ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException {
 		//crea un progetto temporaneo con i dati del progetto aggiorati
 		Progetto tmp = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione ,dataCreazione, nuovaDataScadenza, nuovaDataTerminazione);
 		
@@ -132,16 +124,11 @@ public class ControllerProgetto {
 		
 		//setta i nuovi ambiti del progetto e li aggiunge 
 		tmp.setAmbiti(nuoviAmbiti);
-		ambitoDAO.addAmbitiProgetto(tmp);
-		
-		
-
-								
+		ambitoDAO.addAmbitiProgetto(tmp);								
 	}
 	
 	//metodo che fa l'insert di un nuovo progetto con i campi inseriti
-	public void addProgetto(String nomeProgetto , String tipologia , String descrizioneProgetto , LocalDate dataCreazione , LocalDate dataScadenza,ArrayList<AmbitoProgetto> ambiti) throws SQLException 
-	{
+	public void addProgetto(String nomeProgetto , String tipologia , String descrizioneProgetto , LocalDate dataCreazione , LocalDate dataScadenza,ArrayList<AmbitoProgetto> ambiti) throws SQLException {
 		Progetto tmp = new Progetto(nomeProgetto, tipologia, descrizioneProgetto , dataCreazione , dataScadenza);
 
 		//aggiunge prima il progetto senza ambiti in modo che la sequence nel db crei un CodProgetto
@@ -157,25 +144,22 @@ public class ControllerProgetto {
 		ambitoDAO.addAmbitiProgetto(tmp);
 		
 		//imposta il dipendente che ha creato il progetto come project Manager
-		projDAO.addProjectManager(dipendente.getCf(), tmp, "Project Manager");
-	
-		
+		projDAO.addProjectManager(dipendente.getCf(), tmp, "Project Manager");	
 	}
 	
 	//metodo che prende in input il codprogetto e restituisce gli ambiti
-	public ArrayList<AmbitoProgetto> getAmbitiProgettoByCod(int codProgetto) throws SQLException
-	{
+	public ArrayList<AmbitoProgetto> getAmbitiProgettoByCod(int codProgetto) throws SQLException {
 		return ambitoDAO.getAmbitiProgettoByCodice(codProgetto);
 	}
 	
 	//metodo che prende in input il codProgetto e lo elimina dal db
-	public boolean rimuoviProgetto (Progetto progetto) throws SQLException
-	{
+	public boolean rimuoviProgetto (Progetto progetto) throws SQLException {
 		boolean risultato = projDAO.removeProgetto(progetto);
 		
 		return risultato;
 	}
 
+	//Metodo che aggiorna un progetto nel DB
 	public void updateProgetto(Progetto progetto) throws SQLException {
 		
 		projDAO.updateProgetto(progetto);
@@ -188,9 +172,9 @@ public class ControllerProgetto {
 		ambitoDAO.addAmbitiProgetto(progetto);
 		
 	}
-
+	
+	//Metodo che ottiene il project manager di un progetto
 	public String ottieniProjectManager(Progetto progetto) throws SQLException {
-		
 		return projDAO.ottieniProjectManager(progetto);
 	}
 
