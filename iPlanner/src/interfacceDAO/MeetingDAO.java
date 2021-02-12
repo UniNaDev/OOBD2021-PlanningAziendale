@@ -43,6 +43,12 @@ public interface MeetingDAO {
 	public boolean updatePresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
 	
 	public boolean deletePartecipanteMeeting(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
+
+	public ArrayList<Meeting> getMeetingDipendenteByModalità(String string, Dipendente dipendente) throws SQLException;
+
+	public ArrayList<Meeting> getMeetingsDipendenteBySala(SalaRiunione sala, Dipendente dipendente) throws SQLException;
+
+	public ArrayList<Meeting> getMeetingsDipendenteByPiattaforma(String piattaforma, Dipendente dipendente) throws SQLException;
 	
 
 }

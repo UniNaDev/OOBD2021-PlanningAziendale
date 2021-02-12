@@ -39,6 +39,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
+import controller.segreteria.ControllerMeetingSegreteria;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -85,7 +86,6 @@ public class GestioneMeetingDipendente extends JFrame {
 	//Attributi GUI
 	private JPanel contentPane;
 	private JTable progettoTable;
-	private JTextField cercaTextField;
 	private JLabel modalitaLabel;
 	private JLabel piattaformaSalaLabel;
 	private ButtonGroup modalitàButtonGroup = new ButtonGroup();
@@ -122,6 +122,14 @@ public class GestioneMeetingDipendente extends JFrame {
 	//ricava l'ora e la data attuali
 	LocalDate dataAttuale = LocalDate.now();
 	LocalTime oraAttuale = LocalTime.now();
+	private JPanel comandiPanel_1;
+	private JRadioButton filtroMeetingTelematicoRadioButton;
+	private JRadioButton filtroMeetingFisicoRadioButton;
+	private JComboBox filtroSaleComboBox;
+	private JLabel filtroSalaLabel;
+	private JComboBox filtroPiattaformaComboBox;
+	private JLabel filtroPiattaformaLabel;
+	private JLabel refreshFiltriLabel;
 
 	//Creazione frame
 	//---------------------------------------------
@@ -150,10 +158,9 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
 		meetingScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JPanel comandiPanel2 = new JPanel();	//panel interno a quello dei comandi
-		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
+		JPanel comandiPanel2 = new JPanel();
+		comandiPanel2.setBorder(null);
 		
 		//Button "Pulisci Campi"
 		pulisciButton = new JButton("Pulisci Campi");
@@ -212,6 +219,8 @@ public class GestioneMeetingDipendente extends JFrame {
 						sorterMeeting.setModel(dataModelMeeting);
 						
 						svuotaCampiMeeting();
+						
+						ripristinaFiltri();
 					} catch (SQLException e1) {
 						
 						JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -319,6 +328,8 @@ public class GestioneMeetingDipendente extends JFrame {
 					
 					svuotaCampiMeeting();
 					
+					ripristinaFiltri();
+					
 					meetingScrollPane.setViewportView(meetingTable);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -367,6 +378,8 @@ public class GestioneMeetingDipendente extends JFrame {
 						insertMeeting(theController);
 						
 						svuotaCampiMeeting();
+						
+						ripristinaFiltri();
 						
 					} catch (SQLException e1) {
 						
@@ -424,22 +437,10 @@ public class GestioneMeetingDipendente extends JFrame {
 		creaNuovoMeetingButton.setAlignmentX(0.5f);
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		//Label "Cerca"
-		JLabel cercaLabel = new JLabel("Cerca");
-		cercaLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
-		comandiPanel2.add(cercaLabel);
-		
-		//TextField per cercare un meeting
-		cercaTextField = new JTextField();
-		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		comandiPanel2.add(cercaTextField);
-		cercaTextField.setColumns(10);
-		
 		comandiPanel2.add(modificaButton);
 		comandiPanel2.add(creaNuovoMeetingButton);
 		comandiPanel2.add(eliminaButton);
 		comandiPanel2.add(pulisciButton);
-		comandiPanel.add(comandiPanel2);
 		
 		//panel interno a quello delle info
 		JPanel infoPanel2 = new JPanel();
@@ -846,12 +847,12 @@ public class GestioneMeetingDipendente extends JFrame {
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(14)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-					.addGap(4))
-				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(gestioneMeetingLabel)
-					.addContainerGap(914, Short.MAX_VALUE))
+					.addContainerGap(934, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addGap(8)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 1256, Short.MAX_VALUE)
+					.addGap(6))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -1074,31 +1075,257 @@ public class GestioneMeetingDipendente extends JFrame {
 				comandiPanel2.add(inserisciPartecipanteButton);
 				GroupLayout gl_panel = new GroupLayout(panel);
 				gl_panel.setHorizontalGroup(
-					gl_panel.createParallelGroup(Alignment.LEADING)
+					gl_panel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(10)
-							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-								.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-								.addComponent(meetingScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
-							.addGap(10))
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(comandiPanel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 1248, Short.MAX_VALUE)
+								.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1248, Short.MAX_VALUE)
+								.addComponent(meetingScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1248, Short.MAX_VALUE))
+							.addGap(2))
 				);
 				gl_panel.setVerticalGroup(
 					gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(23)
 							.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(28)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(meetingScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 							.addGap(11))
 				);
+				
+				comandiPanel_1 = new JPanel();
+				comandiPanel_1.setBorder(null);
+				comandiPanel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+				
+			
+				
+				filtroMeetingTelematicoRadioButton = new JRadioButton("Telematico");
+				filtroMeetingTelematicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+				filtroMeetingTelematicoRadioButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//telematico radio button = true
+						if (filtroMeetingTelematicoRadioButton.isSelected())
+							try {
+								filtroMeetingFisicoRadioButton.setSelected(false);	//fisico radio button = false
+								dataModelMeeting.setMeetingTabella(theController.filtraMeetingTelematiciDipendenti());
+								dataModelMeeting.fireTableDataChanged();	//applica il filtro e ottiene la lista di meeting solo telematici
+								
+								filtroSaleComboBox.setSelectedItem(null);
+
+							} catch (SQLException e2) {
+								//errore enumerazione modalità (valori diversi da "Fisico" o "Telematico")
+								if (e2.getSQLState().equals("22P02")) {
+									JOptionPane.showMessageDialog(null,
+										"Errore applicazione filtro. Contattare uno sviluppatore.",
+										"Errore Enumerazioni Filtri",
+										JOptionPane.ERROR_MESSAGE);
+								}
+								//altri errori non contemplati
+								else {
+									
+									
+									
+									JOptionPane.showMessageDialog(null,
+										"Impossibile ottenere meeting telematici dal database.\nControllare che la connessione al database sia stabilita.",
+										"Errore Interrogazione Database",
+										JOptionPane.ERROR_MESSAGE);
+								}
+							}
+
+					}
+				});
+				
+				refreshFiltriLabel = new JLabel("");
+				refreshFiltriLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/icone/refresh.png")));
+				refreshFiltriLabel.setToolTipText("Reset dei filtri");
+				refreshFiltriLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+				refreshFiltriLabel.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						
+						ripristinaFiltri();
+						
+						
+						try {
+							dataModelMeeting.setMeetingTabella(theController.ottieniMeeting());
+							dataModelMeeting.fireTableDataChanged();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						
+					}
+
+				
+				});
+				comandiPanel_1.add(refreshFiltriLabel);
+				comandiPanel_1.add(filtroMeetingTelematicoRadioButton);
+				
+				filtroMeetingFisicoRadioButton = new JRadioButton("Fisico");
+				filtroMeetingFisicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+				//RadioButton selezionato/non selezionato
+				filtroMeetingFisicoRadioButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//fisico radio button = true
+						if (filtroMeetingFisicoRadioButton.isSelected()) {
+							try {
+								filtroMeetingTelematicoRadioButton.setSelected(false); //telematico radio button = false
+								
+								dataModelMeeting.setMeetingTabella(theController.filtraMeetingFisiciDipendenti());
+								dataModelMeeting.fireTableDataChanged();
+							
+								filtroPiattaformaComboBox.setSelectedItem(null);
+									
+							} catch (SQLException e1) {
+								//errore enumerazione modalità (valori diversi da Fisico o Telematico)
+								if (e1.getSQLState().equals("22P02")) {
+									JOptionPane.showMessageDialog(null,
+										"Errore applicazione filtro. Contattare uno sviluppatore.",
+										"Errore Enumerazioni Filtri",
+										JOptionPane.ERROR_MESSAGE);
+								}
+								//altri errori non contemplati
+								else {
+									JOptionPane.showMessageDialog(null,
+										"Impossibile ottenere meeting fisici dal database.\nControllare che la connessione al database sia stabilita.",
+										"Errore Interrogazione Database",
+										JOptionPane.ERROR_MESSAGE);
+								}
+							}
+						}
+
+						}
+				});
+				comandiPanel_1.add(filtroMeetingFisicoRadioButton);
+				
+				filtroSalaLabel = new JLabel("Sala:");
+				filtroSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+				comandiPanel_1.add(filtroSalaLabel);
+				
+				
+				//ComboBox per filtro sale
+				try {
+					filtroSaleComboBox = new JComboBox(theController.ottieniSale().toArray());	//ottiene tutte le sale per il filtro
+					filtroSaleComboBox.setSelectedItem(null);
+					
+					filtroSaleComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+					//Selezione combo box
+					filtroSaleComboBox.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							try {
+								//se l'oggetto selezionato è una sala esistente
+								if (!(filtroSaleComboBox.getSelectedItem() == null)) {
+									applicaFiltroSala(theController, (SalaRiunione) filtroSaleComboBox.getSelectedItem());
+									filtroMeetingFisicoRadioButton.setSelected(true);
+									
+									filtroMeetingTelematicoRadioButton.setSelected(false);
+									filtroPiattaformaComboBox.setSelectedItem(null);
+								}
+										//applica il filtro e ottiene i meeting in quella sala
+
+							} catch (SQLException e1) {
+								//errore select per tutti i meeting in una sala nel database
+								e1.printStackTrace();
+								
+								JOptionPane.showMessageDialog(null,
+									"Impossibile ottenere tutti i meeting nella sala selezionata dal database.\nControllare che la connessione al database sia stabilita.",
+									"Errore Interrogazione Database",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
+					});
+					filtroSaleComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
+					filtroSaleComboBox.setBounds(308, 9, 108, 22);
+					filtroSaleComboBox.setUI(new BasicComboBoxUI());
+					
+				} catch (SQLException e2) {
+					//errore select per tutte le sale nel database
+					JOptionPane.showMessageDialog(null,
+						"Impossibile ottenere tutte le sale dal database.\nControllare che la connessione al database sia stabilita.",
+						"Errore Interrogazione Database",
+						JOptionPane.ERROR_MESSAGE);
+				}
+				
+				comandiPanel_1.add(filtroSaleComboBox);
+				
+				filtroPiattaformaLabel = new JLabel("Piattaforma:");
+				filtroPiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+				comandiPanel_1.add(filtroPiattaformaLabel);
+				
+				filtroPiattaformaComboBox = new JComboBox(new Object[]{});
+				filtroPiattaformaComboBox.setModel(new DefaultComboBoxModel(new String[] {"                "}));
+				//ComboBox per filtro piattaforma
+				try {
+					filtroPiattaformaComboBox = new JComboBox(theController.ottieniPiattaforme().toArray());	//ottiene tutte le piattaforme per il filtro
+					filtroPiattaformaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+					filtroPiattaformaComboBox.setSelectedItem(null);
+					//Selezione nella combobox
+					filtroPiattaformaComboBox.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							try {
+								//se la piattaforma selezionata esiste
+								if (!(filtroPiattaformaComboBox.getSelectedItem() == null))
+								{
+									applicaFiltroPiattaforma(theController, filtroPiattaformaComboBox.getSelectedItem().toString());	//applica il filtro e ottiene i meeting su quella piattaforma
+									filtroMeetingTelematicoRadioButton.setSelected(true);
+									
+									filtroMeetingFisicoRadioButton.setSelected(false);
+									filtroSaleComboBox.setSelectedItem(null);
+								}
+
+									
+							} catch (SQLException e1) {
+								//errore select per tutti i meeting su una piattaforma nel database
+								JOptionPane.showMessageDialog(null,
+									"Impossibile ottenere tutti i meeting sulla piattaforma selezionata dal database.\nControllare che la connessione al database sia stabilita.",
+									"Errore Interrogazione Database",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
+					});
+					filtroPiattaformaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
+					filtroPiattaformaComboBox.setBounds(517, 9, 151, 22);
+					filtroPiattaformaComboBox.setUI(new BasicComboBoxUI());
+					
+				} catch (SQLException e2) {
+					//errore select per tutte le piattaforme nel database
+					JOptionPane.showMessageDialog(null,
+						"Impossibile ottenere tutte le piattaforme dal database.\nControllare che la connessione al database sia stabilita.",
+						"Errore Interrogazione Database",
+						JOptionPane.ERROR_MESSAGE);
+				}
+				comandiPanel_1.add(filtroPiattaformaComboBox);
+				GroupLayout gl_comandiPanel = new GroupLayout(comandiPanel);
+				gl_comandiPanel.setHorizontalGroup(
+					gl_comandiPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_comandiPanel.createSequentialGroup()
+							.addGap(126)
+							.addGroup(gl_comandiPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(comandiPanel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
+								.addComponent(comandiPanel2, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 904, Short.MAX_VALUE))
+							.addGap(126))
+				);
+				gl_comandiPanel.setVerticalGroup(
+					gl_comandiPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_comandiPanel.createSequentialGroup()
+							.addGap(5)
+							.addComponent(comandiPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(comandiPanel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(1))
+				);
+				comandiPanel.setLayout(gl_comandiPanel);
 				panel.setLayout(gl_panel);
+				
+	}
 				
 	
 		
-	}
+	
 	public void insertMeeting(ControllerMeeting theController) throws SQLException {
 	
 		infoProgettoDiscussoLabel.setBackground(Color.BLACK);
@@ -1152,6 +1379,27 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 	}
 	
+	//Metodo che filtra i meeting prendendo solo quelli in una certa sala
+	private void applicaFiltroSala(ControllerMeeting controller, SalaRiunione sala) throws SQLException {
+		dataModelMeeting.setMeetingTabella(controller.filtraMeetingDipendentiSala(sala));
+		dataModelMeeting.fireTableDataChanged();
+	}
+	
+	//Metodo che filtra i meeting prendendo solo quelli di una certa piattaforma
+	private void applicaFiltroPiattaforma(ControllerMeeting controller, String piattaforma) throws SQLException {
+		dataModelMeeting.setMeetingTabella(controller.filtraMeetingDipendentePiattaforma(piattaforma));
+		dataModelMeeting.fireTableDataChanged();
+	}
+	
+	private void ripristinaFiltri() {
+		
+		//setta tutti i filtri a null/false
+		filtroMeetingFisicoRadioButton.setSelected(false);
+		filtroMeetingTelematicoRadioButton.setSelected(false);
+		filtroSaleComboBox.setSelectedItem(null);
+		filtroPiattaformaComboBox.setSelectedItem(null);
+		
+	}
 	private void svuotaCampiMeeting() {
 		
 		piattaformaSalaLabel.setForeground(Color.BLACK);
@@ -1181,13 +1429,17 @@ public class GestioneMeetingDipendente extends JFrame {
 		progettoDiscussoComboBox.setSelectedItem(null);
 		
 		//Rimuove tutti gli elementi dalla lista progetto discusso
+		if(listModelInvitati!=null)
 		listModelInvitati.removeAllElements();
 		
 		//Rimuove tutti gli elementi dalla lista progetto discusso
+		if(listmodelProgetti!=null)
 		listmodelProgetti.removeAllElements();
 	
 		//Deseleziona le righe
 		meetingTable.clearSelection();
+		
+		ripristinaFiltri();
 		
 	}
 }

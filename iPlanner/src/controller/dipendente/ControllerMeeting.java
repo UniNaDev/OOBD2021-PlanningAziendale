@@ -82,6 +82,8 @@ public class ControllerMeeting {
 	public void aggiornaMeeting(Meeting meeting, Progetto progettoSelezionato) throws SQLException {
 		meetDAO.updateMeeting(meeting,progettoSelezionato);
 	}
+	
+	
 
 	public void creaMeeting(Meeting meetingInserito,String nomeProgettoDisusso) throws SQLException{
 			meetDAO.insertMeeting(meetingInserito,nomeProgettoDisusso);
@@ -98,6 +100,20 @@ public class ControllerMeeting {
 		meetDAO.insertOrganizzatore(dipendenteLogged.getCf()); 
 	}
 
+
+	
+	//Metodo che ottiene i meeting filtrati per modalità
+	public ArrayList<Meeting> filtraMeetingTelematiciDipendenti() throws SQLException{
+		return meetDAO.getMeetingDipendenteByModalità("Telematico",dipendenteLogged);
+	}
+	
+	public ArrayList<Meeting> filtraMeetingFisiciDipendenti() throws SQLException {
+		// TODO Auto-generated method stub
+		return meetDAO.getMeetingDipendenteByModalità("Fisico", dipendenteLogged);
+	}
+	
+	//Metodo che ottiene il progetto inserito
+
 	public Progetto ottieniProgettoInserito(Progetto progetto) throws SQLException {
 		return projDAO.getProgettoByCod(progetto.getIdProgettto());
 	}
@@ -105,4 +121,16 @@ public class ControllerMeeting {
 	public String organizzatoreCheck(Meeting meeting) throws SQLException {
 		return dipDAO.organizzatoreCheck(meeting);
 	}
+
+	public ArrayList<Meeting> filtraMeetingDipendentiSala(SalaRiunione sala) throws SQLException {
+		
+		return meetDAO.getMeetingsDipendenteBySala(sala,dipendenteLogged);
+	}
+
+	public ArrayList<Meeting> filtraMeetingDipendentePiattaforma(String piattaforma) throws SQLException {
+		
+		return meetDAO.getMeetingsDipendenteByPiattaforma(piattaforma,dipendenteLogged);
+	}
+
+
 }
