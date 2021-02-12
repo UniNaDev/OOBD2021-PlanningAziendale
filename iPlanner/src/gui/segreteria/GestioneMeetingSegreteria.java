@@ -223,7 +223,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 				//fisico radio button = true
 				if (fisicoRadioButton.isSelected()) {
 					try {
-						fisicoRadioButton.setSelected(false); //telematico radio button = false
+						telematicoRadioButton.setSelected(false); //telematico radio button = false
 						applicaFiltroFisico(controller);	//applica il filtro e ottiene tutti i meeting fisici
 					} catch (SQLException e1) {
 						//errore enumerazione modalità (valori diversi da Fisico o Telematico)

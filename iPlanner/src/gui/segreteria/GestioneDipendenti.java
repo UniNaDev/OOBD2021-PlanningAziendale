@@ -1159,11 +1159,11 @@ public class GestioneDipendenti extends JFrame {
 			sessoLabel.setForeground(Color.RED);
 		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)	//data di nascita
 			dataNascitaLabel.setForeground(Color.RED);
-		if (indirizzoTextField.getText() == null)	//indirizzo	
+		if (indirizzoTextField.getText().isBlank())	//indirizzo	
 			indirizzoLabel.setForeground(Color.RED);
 		if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null) //luogo di nascita
 			cittàDiNascitaLabel.setForeground(Color.RED);
-		if (salarioTextField.getText() == null)	//salario
+		if (salarioTextField.getText().isBlank())	//salario
 			salarioLabel.setForeground(Color.RED);
 		//password
 		if (passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {

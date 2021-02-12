@@ -178,6 +178,82 @@ public class ControllerProgetto {
 		return projDAO.getProjectManager(progetto);
 	}
 
+	//Metodo che filtra i progetti
+	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{
+		ArrayList<Progetto> risultato = projDAO.getProgettiDipendenteByNome(nomeCercato,dipendente);	//ottiene i progetti filtrati per nome
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		if (tipologiaCercata != null) {
+			temp = projDAO.getProgettiByTipo(tipologiaCercata);	//ottiene i progetti filtrati per tipologia
+			risultato.retainAll(temp);	//interseca i progetti precedenti con quelli filtrati ora per tipologia
+		}
+		if (ambitoCercato != null) {
+			temp = projDAO.getProgettiByAmbito(ambitoCercato); //ottiene i progetti filtrati per ambito
+			risultato.retainAll(temp);
+		}
+		if (scaduto.equals("Si")) {
+			//filtra temp prendendo solo quelli scaduti
+			risultato.retainAll(filtraScaduti(risultato));
+		}
+		else if (scaduto.equals("No")) {
+			//filtra temp prendendo solo quelli NON scaduti
+			risultato.retainAll(filtraNonScaduti(risultato));
+		}
+		if (terminato.equals("Si")) {
+			//filtra temp prendendo solo quelli terminati
+			risultato.retainAll(filtraTerminati(risultato));
+		}
+		else if (terminato.equals("No")) {
+			//filtra temp prendendo solo quelli NON terminati
+			risultato.retainAll(filtraNonTerminati(risultato));
+		}
+		return risultato;
+	}
+	
+	//Metodo che filtra i progetti scaduti
+	private ArrayList<Progetto> filtraScaduti(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getScadenza().isBefore(LocalDate.now())) {
+				temp.add(proj);
+			}
+		}
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti NON scaduti
+	private ArrayList<Progetto> filtraNonScaduti(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getScadenza().isAfter(LocalDate.now())) {
+				temp.add(proj);
+			}
+		}
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti terminati
+	private ArrayList<Progetto> filtraTerminati(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getDataTerminazione() != null) {
+				temp.add(proj);
+			}
+		}
+		return temp;
+	}
+	
+	//Metodo che filtra i progetti NON terminati
+	private ArrayList<Progetto> filtraNonTerminati(ArrayList<Progetto> progetti){
+		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		for (Progetto proj: progetti) {
+			if (proj.getDataTerminazione() == null) {
+				temp.add(proj);
+			}
+		}
+		return temp;
+	}
+}
+
 
 	
-}
+

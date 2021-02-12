@@ -50,6 +50,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerProgetto;
+import controller.segreteria.ControllerProgettiSegreteria;
 import entita.AmbitoProgetto;
 import entita.Dipendente;
 import entita.Progetto;
@@ -104,15 +105,17 @@ public class GestioneProgettiDipendente extends JFrame {
 	//Altri attributi
 	LocalDate dataAttuale = LocalDate.now();	//data attuale
 	String[] siNoOpzioni = {null, "Si", "No"};	//array di opzioni per combobox dove le opzioni sono si/no
+	private JComboBox filtroAmbitiComboBox_1;
+	private JComboBox filtroTipologieComboBox_1;
 
 	//Creazione frame
 	//-----------------------------------------------------------------
 	
 	public GestioneProgettiDipendente(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1235,900));
+		setMinimumSize(new Dimension(1600,900));
 		setTitle("iPlanner-Gestione progetto");
-		setBounds(100, 100, 1235, 900);
+		setBounds(100, 100, 1600, 900);
 		contentPane = new JPanel();		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -341,6 +344,11 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Button "Filtra"
 		JButton filtraButton = new JButton("Filtra");
+		filtraButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				applicaFiltri(controller);
+			}
+		});
 		filtraButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		filtraButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		filtraButton.setBackground(Color.WHITE);
@@ -370,10 +378,21 @@ public class GestioneProgettiDipendente extends JFrame {
 		filtroTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		//ComboBox filtro per tipologia
-		JComboBox filtroTipologieComboBox = new JComboBox(new Object[]{});
-		filtroTipologieComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		filtroTipologieComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		filtroTipologieComboBox.setBackground(Color.WHITE);
+		JComboBox filtroTipologieComboBox = null;
+		try {
+			filtroTipologieComboBox_1 = new JComboBox(controller.ottieniTipologie());
+		} catch (SQLException e5) {
+			// TODO Auto-generated catch block
+			e5.printStackTrace();
+		}
+		filtroTipologieComboBox_1.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroTipologieComboBox_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroTipologieComboBox_1.setBackground(Color.WHITE);
+		filtroTipologieComboBox_1.setUI(new BasicComboBoxUI());
+		filtroTipologieComboBox_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filtroTipologieComboBox_1.setBackground(Color.WHITE);
+		filtroTipologieComboBox_1.setSelectedItem(null);
+
 		
 		//Label "Ambito" in filtri
 		JLabel filtroAmbitoLabel = new JLabel("Ambito");
@@ -381,10 +400,19 @@ public class GestioneProgettiDipendente extends JFrame {
 		filtroAmbitoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		//ComboBox filtro per ambito
-		JComboBox filtroAmbitiComboBox = new JComboBox(new Object[]{});
-		filtroAmbitiComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-		filtroAmbitiComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		filtroAmbitiComboBox.setBackground(Color.WHITE);
+		
+		try {
+			filtroAmbitiComboBox_1 = new JComboBox(controller.ottieniAmbiti().toArray());
+		} catch (SQLException e4) {
+			// TODO Auto-generated catch block
+			e4.printStackTrace();
+		}
+		filtroAmbitiComboBox_1.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroAmbitiComboBox_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroAmbitiComboBox_1.setBackground(Color.WHITE);
+		filtroAmbitiComboBox_1.setUI(new BasicComboBoxUI());
+		filtroAmbitiComboBox_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filtroAmbitiComboBox_1.setSelectedItem(null);
 		
 		//Label "Scaduto" in filtri
 		filtroScadutoLabel = new JLabel("Scaduto");
@@ -396,6 +424,9 @@ public class GestioneProgettiDipendente extends JFrame {
 		filtroScadutoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroScadutoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtroScadutoComboBox.setBackground(Color.WHITE);
+		filtroScadutoComboBox.setUI(new BasicComboBoxUI());
+		filtroScadutoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filtroScadutoComboBox.setSelectedItem(null);
 		
 		//Label "Terminato" in filtri
 		filtroTerminatoLabel = new JLabel("Terminato");
@@ -407,58 +438,107 @@ public class GestioneProgettiDipendente extends JFrame {
 		filtroTerminatoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroTerminatoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtroTerminatoComboBox.setBackground(Color.WHITE);
+		filtroTerminatoComboBox.setUI(new BasicComboBoxUI());
+		filtroTerminatoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filtroTerminatoComboBox.setSelectedItem(null);
+		
+		JLabel resetCampiLabel = new JLabel("");
+		resetCampiLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		resetCampiLabel.setIcon(new ImageIcon(GestioneProgettiDipendente.class.getResource("/icone/refresh.png")));
+		resetCampiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		resetCampiLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				filtroAmbitiComboBox_1.setSelectedItem(null);
+				filtroTipologieComboBox_1.setSelectedItem(null);
+				filtroTerminatoComboBox.setSelectedItem(null);
+				filtroScadutoComboBox.setSelectedItem(null);
+				
+				try {
+					dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				dataModelProgetti.fireTableDataChanged();
+			}
+			});
+		
 		GroupLayout gl_filtriPanel = new GroupLayout(filtriPanel);
 		gl_filtriPanel.setHorizontalGroup(
 			gl_filtriPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addContainerGap()
+					.addComponent(resetCampiLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+					.addGap(31)
 					.addComponent(filtraButton, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(cercaTextField, GroupLayout.PREFERRED_SIZE, 498, GroupLayout.PREFERRED_SIZE)
+					.addGap(26)
+					.addComponent(filtroTipologiaLabel, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
 					.addGap(18)
-					.addComponent(cercaTextField, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-					.addGap(18)
-					.addComponent(filtroTipologiaLabel)
-					.addGap(18)
-					.addComponent(filtroTipologieComboBox, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
-					.addGap(49)
-					.addComponent(filtroAmbitoLabel)
-					.addGap(18)
-					.addComponent(filtroAmbitiComboBox, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+					.addComponent(filtroTipologieComboBox_1, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
 					.addGap(44)
-					.addComponent(filtroScadutoLabel)
+					.addComponent(filtroAmbitoLabel, GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
 					.addGap(18)
-					.addComponent(filtroScadutoComboBox, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-					.addGap(88)
-					.addComponent(filtroTerminatoLabel, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+					.addComponent(filtroAmbitiComboBox_1, 0, 129, Short.MAX_VALUE)
+					.addGap(43)
+					.addComponent(filtroScadutoLabel, GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
 					.addGap(18)
-					.addComponent(filtroTerminatoComboBox, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addComponent(filtroScadutoComboBox, 0, 45, Short.MAX_VALUE)
+					.addGap(37)
+					.addComponent(filtroTerminatoLabel, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+					.addGap(10)
+					.addComponent(filtroTerminatoComboBox, 0, 44, Short.MAX_VALUE)
+					.addGap(44))
 		);
 		gl_filtriPanel.setVerticalGroup(
-			gl_filtriPanel.createParallelGroup(Alignment.TRAILING)
+			gl_filtriPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(17)
+					.addComponent(filtraButton, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+					.addGap(18))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(21)
+					.addComponent(cercaTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(22, Short.MAX_VALUE))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(17)
+					.addComponent(resetCampiLabel, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+					.addGap(18))
+				.addGroup(Alignment.TRAILING, gl_filtriPanel.createSequentialGroup()
 					.addGap(19)
-					.addGroup(gl_filtriPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(filtraButton, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-						.addComponent(cercaTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addComponent(filtroTerminatoComboBox, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+					.addGap(20))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(16)
+					.addComponent(filtroScadutoLabel, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
 					.addGap(16))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
-					.addContainerGap(25, Short.MAX_VALUE)
-					.addComponent(filtroTipologiaLabel)
-					.addGap(19))
+					.addGap(21)
+					.addComponent(filtroScadutoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(21, Short.MAX_VALUE))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addGap(22)
-					.addComponent(filtroTipologieComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(filtroTerminatoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(22))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(21)
+					.addComponent(filtroAmbitiComboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(21, Short.MAX_VALUE))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(15)
+					.addComponent(filtroAmbitoLabel, GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
 					.addGap(16))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_filtriPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(filtroTerminatoComboBox, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
-						.addComponent(filtroScadutoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(filtroScadutoLabel, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
-						.addComponent(filtroTerminatoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(filtroAmbitiComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(filtroAmbitoLabel, GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-					.addGap(17))
+					.addGap(21)
+					.addComponent(filtroTipologieComboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(21, Short.MAX_VALUE))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(22)
+					.addComponent(filtroTipologiaLabel)
+					.addContainerGap(22, Short.MAX_VALUE))
 		);
 		filtriPanel.setLayout(gl_filtriPanel);
 		
@@ -1004,6 +1084,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettoTable.setBackground(Color.WHITE);
 		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
+		
 		//Modello delle colonne personalizzato(Testo allineato al centro)
 		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
         renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1014,6 +1095,16 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
 		progettoTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
 		progettoTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
+		
+		
+		//Modello delle colonne personalizzato(Larghezza minima)
+		progettoTable.getColumnModel().getColumn(0).setMinWidth(500);
+		progettoTable.getColumnModel().getColumn(1).setMinWidth(400);
+		progettoTable.getColumnModel().getColumn(2).setMinWidth(200);
+		progettoTable.getColumnModel().getColumn(3).setMinWidth(150);
+		progettoTable.getColumnModel().getColumn(4).setMinWidth(150);
+		progettoTable.getColumnModel().getColumn(5).setMinWidth(145);
+		
 		//Setta i progetti nella tabella
 		try {
 			dataModelProgetti.fireTableDataChanged();
@@ -1202,5 +1293,46 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		progettoTable.clearSelection();
 		
+	}
+	//Metodo che applica tutti i filtri
+	private void applicaFiltri(ControllerProgetto controller) {
+		//ottiene tutti gli elementi dei filtri
+		//nome progetto
+		String nomeCercato = "%";
+		if (!cercaTextField.getText().isBlank())
+			nomeCercato = cercaTextField.getText();
+		//ambito progetto
+		AmbitoProgetto ambitoCercato = null;
+		if (filtroAmbitiComboBox_1.getSelectedItem() != null)
+			ambitoCercato= (AmbitoProgetto) filtroAmbitiComboBox_1.getSelectedItem();
+		//tipologia progetto
+		String tipologiaCercata = null;
+		if (filtroTipologieComboBox_1.getSelectedItem() != null)
+			tipologiaCercata=  filtroTipologieComboBox_1.getSelectedItem().toString();
+		//scaduto
+		String scaduto = "Entrambi";
+		if (filtroScadutoComboBox.getSelectedItem() != null)
+			if (filtroScadutoComboBox.getSelectedItem().toString().equals("Si"))
+				scaduto = "Si";
+			else
+				scaduto = "No";
+		//terminato
+		String terminato = "Entrambi";
+		if (filtroTerminatoComboBox.getSelectedItem() != null)
+			if (filtroTerminatoComboBox.getSelectedItem().toString().equals("Si"))
+				terminato = "Si";
+			else
+				terminato = "No";
+		//richiama il controller
+		try {
+			dataModelProgetti.setProgettiTabella(controller.ottieniProgettiFiltrati(nomeCercato,ambitoCercato,tipologiaCercata, scaduto, terminato));
+			dataModelProgetti.fireTableDataChanged();
+		} catch (SQLException e) {
+			//errore query per tutti i progetti filtrati
+			JOptionPane.showMessageDialog(null,
+					"Impossibile filtrare i progetti dal database.\nControllare che sia stabilita la connessione al database.",
+					"Errore Interrogazione Database",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

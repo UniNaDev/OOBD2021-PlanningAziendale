@@ -33,6 +33,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	//PreparedStatement per ogni query
 	private PreparedStatement getProgettiPS,
 	getProgettiByNomePS,
+	getProgettiDipendenteByNomePS,
 	getPartecipantiPS,
 	getProgettiByDipendentePS,
 	getProgettiByAmbitoPS,
@@ -59,7 +60,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		this.connection = connection;
 		//inizializza i PreparedStatement
 		getProgettiPS = connection.prepareStatement("SELECT * FROM Progetto");
-		getProgettiByNomePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.NomeProgetto LIKE '%' || ? || '%'");
+		getProgettiByNomePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.NomeProgetto ILIKE '%' || ? || '%'");
+		getProgettiDipendenteByNomePS=connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ? AND p.NomeProgetto ILIKE '%' || ? || '%'");
 		getPartecipantiPS = connection.prepareStatement("SELECT * FROM Partecipazione AS p WHERE p.CodProgetto = ?"); //? = codice del progetto di cui si vogliono i partecipanti 
 		getProgettiByDipendentePS = connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ?"); //? = codice fiscale del dipendente di cui si vogliono i progetti a cui partecipa
 		getProgettiByAmbitoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT a.CodProgetto FROM AmbitoProgettoLink AS a WHERE a.IDAmbito = ?)");	//? = nome dell'ambito con cui filtrare i progetti
@@ -596,6 +598,67 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		risultato.close();
 		
 		return cf;
+	}
+
+	@Override
+	public ArrayList<Progetto> getProgettiDipendenteByNome(String nomeCercato,Dipendente dipendente) throws SQLException {
+		
+ArrayList<Progetto> temp = new ArrayList<Progetto>();	//lista temporanea da restituire alla fine
+		
+		getProgettiDipendenteByNomePS.setString(1, dipendente.getCf());
+		getProgettiDipendenteByNomePS.setString(2, nomeCercato); //nome progetto
+
+		ResultSet risultato = getProgettiDipendenteByNomePS.executeQuery();	//esegue la query e ottiene il ResultSet
+		
+		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
+		
+		//finchè il ResultSet contiene record
+		while (risultato.next()) {
+			LocalDate dataTerminazione = null;
+			if (risultato.getDate("DataTerminazione") != null)
+				dataTerminazione = new LocalDate(risultato.getDate("DataTerminazione"));
+			//crea l'oggetto progetto
+			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),
+					risultato.getString("NomeProgetto"),
+					risultato.getString("TipoProgetto"),
+					risultato.getString("DescrizioneProgetto"),
+					new LocalDate(risultato.getDate("DataCreazione")),
+					new LocalDate(risultato.getDate("DataScadenza")),
+					dataTerminazione);
+			
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);	//ottiene gli ambiti del progetto
+			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(projTemp.getIdProgettto()));
+			projTemp.setAmbiti(ambiti);
+			
+			temp.add(projTemp);	//aggiunge il progetto alla lista
+		}
+		risultato.close();	//chiude il ResulSet
+		
+		return temp;
+	}
+
+	@Override
+	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addProjectManager(String cf, Progetto tmp, String string) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String ottieniProjectManager(Progetto progetto) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 
