@@ -1,4 +1,5 @@
-//Classe costruttore del DB. Contiene la definizione delle tabelle, dei vincoli, dei trigger e di tutto ciò che è necessario per inizializzare il database prima dell'utilizzo del software.
+//Classe costruttore del DB. 
+//Contiene la definizione delle tabelle, dei vincoli, dei trigger e di tutto ciò che è necessario per inizializzare il database prima dell'utilizzo del software.
 
 package dbManager;
 
@@ -12,79 +13,61 @@ import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 
 public class CostruttoreDB {
-	
-	//ATTRIBUTI
-	//------------------------------------------------
-    private Connection connection;	//connessione al DB
+    private Connection connection;
     
-    //private final String pathCSVLuoghi = "D:\\Development\\Github\\OOBD2021-PlanningAziendale\\Risorse esterne\\Comuni.csv";	//path del file csv con tutti i luoghi italiani
-    private final String pathCSVLuoghi = "lib/Comuni.csv";	//path del file csv con tutti i luoghi italiani
+    private final String pathCSVLuoghi = "lib/Comuni.csv";
 
-    //METODI
-	//------------------------------------------------
-    
-    //Costruttore con connessione
-    public CostruttoreDB(Connection connection)
-    {
+    public CostruttoreDB(Connection connection) {
         this.connection = connection;
     }
 
-    //Costruttore privo di connessione
-    public CostruttoreDB()
-    {
+    public CostruttoreDB() {
         connection = null;
     }
 
-    //Metodo che afferma se la connessione esiste o meno con il db
-    private boolean connectionExists() {
+    private boolean connessioneEsiste() {
         return !(connection == null);
     }
 
-    //Metodo che afferma se una certa tabella esiste già nel db
     private boolean esisteTabella(String nomeTabella) throws SQLException{
-        DatabaseMetaData metadati = connection.getMetaData();	//ottiene i metadati
-        ResultSet tabelle = metadati.getTables(null, null, nomeTabella, null);	//cerca tabelle con quel nome
+        DatabaseMetaData metadati = connection.getMetaData();
+        ResultSet tabelle = metadati.getTables(null, null, nomeTabella, null);
         if (tabelle.next())
             return true;
         return false;
     }
     
-    //Metodo che afferma se un enum type esiste o meno nel DB
     private boolean esisteEnum(String nomeEnum) throws SQLException{
-    	if (connectionExists()) {
-    		Statement st = connection.createStatement();
-    		String sql = "SELECT typname FROM pg_type WHERE typname = '" + nomeEnum + "'" ;
-        	ResultSet risultato = st.executeQuery(sql);
+    	if (connessioneEsiste()) {
+    		Statement statement = connection.createStatement();
+    		String query = "SELECT typname FROM pg_type WHERE typname = '" + nomeEnum + "'" ;
+        	ResultSet risultato = statement.executeQuery(query);
         	if(risultato.next())
         		return true;
     	}
     	return false;
     }
     
-    //Metodo che afferma se un trigger esiste o meno nel DB
     private boolean esisteTrigger(String nomeTrigger) throws SQLException{
-    	if (connectionExists()) {
-    		Statement st = connection.createStatement();
-    		String sql = "SELECT tgname FROM pg_trigger WHERE tgname = '" + nomeTrigger + "'" ;
-        	ResultSet risultato = st.executeQuery(sql);
+    	if (connessioneEsiste()) {
+    		Statement statement = connection.createStatement();
+    		String query = "SELECT tgname FROM pg_trigger WHERE tgname = '" + nomeTrigger + "'" ;
+        	ResultSet risultato = statement.executeQuery(query);
         	if(risultato.next())
         		return true;
     	}
     	return false;
     }
 
-    //CREAZIONE TABELLE
+    //CREAZIONE TABELLE - ENUMERAZIONI
 	//------------------------------------------------
     
-    //Metodo che crea la tabella Skill
     private int creaTabellaSkill() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("Skill")) {
-                String sql = "CREATE TABLE Skill(\r\n"
+                String createTable = "CREATE TABLE Skill(\r\n"
                 		+ "	IDSkill SERIAL,\r\n"
                 		+ "	NomeSkill varchar(50) NOT NULL,\r\n"
                 		+ "	\r\n"
@@ -92,22 +75,19 @@ public class CostruttoreDB {
                 		+ "	UNIQUE (NomeSkill),\r\n"
                 		+ "    CONSTRAINT NomeSkillLegit CHECK (NomeSkill ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$')\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);              
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);              
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+	    return risultato;
     }
     
-    //Metodo che crea la tabella LuogoNascita
     private int creaTabellaLuogoNascita() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("LuogoNascita")) {
-                String sql = "CREATE TABLE LuogoNascita(\r\n"
+                String createTable = "CREATE TABLE LuogoNascita(\r\n"
                 		+ "	NomeComune varchar(50) NOT NULL,\r\n"
                 		+ "	NomeProvincia varchar(50) NOT NULL,\r\n"
                 		+ "	CodComune char(4),\r\n"
@@ -115,22 +95,19 @@ public class CostruttoreDB {
                 		+ "	PRIMARY KEY(CodComune),\r\n"
                 		+ "	CONSTRAINT LuogoNascitaEsistente UNIQUE(NomeComune,NomeProvincia,CodComune)\r\n"
                 		+ ")";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+	    return risultato;
     }
     
-    //Metodo che crea la tabella SalaRiunione
     private int creaTabellaSalaRiunione() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("SalaRiunione")) {
-                String sql = "CREATE TABLE SalaRiunione(\r\n"
+                String createTable = "CREATE TABLE SalaRiunione(\r\n"
                 		+ "	CodSala varchar(10) ,\r\n"
                 		+ "	Capienza integer NOT NULL,\r\n"
                 		+ "	Indirizzo varchar(50) NOT NULL,\r\n"
@@ -140,22 +117,19 @@ public class CostruttoreDB {
                 		+ "	CONSTRAINT CapienzaEsistente CHECK (Capienza>0),\r\n"
                 		+ "	CONSTRAINT PianoEsistente CHECK (Piano>=0)\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);               
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);               
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+	    return risultato;
     }
     
-    //Metodo che crea la tabella AmbitoProgetto
     private int creaTabellaAmbitoProgetto() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("AmbitoProgetto")) {
-                String sql = "CREATE TABLE AmbitoProgetto(\r\n"
+                String createTable = "CREATE TABLE AmbitoProgetto(\r\n"
                 		+ "	IDAmbito SERIAL,\r\n"
                 		+ "	NomeAmbito VARCHAR(20) NOT NULL,\r\n"
                 		+ "	\r\n"
@@ -163,69 +137,62 @@ public class CostruttoreDB {
                 		+ "	UNIQUE (NomeAmbito),\r\n"
                 		+ "    CONSTRAINT AmbitoLegit CHECK(NomeAmbito ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$')\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    	return risultato;
     }
     
-    //Metodo che crea il type enum tipologia di un progetto nel DB (necessario per definire la tabella Progetto)
     private int creaEnumTipologia() throws SQLException{
-    	int result = -1;
-    	if (connectionExists()) {
-    		Statement st = connection.createStatement();
+    	int risultato = -1;
+    	if (connessioneEsiste()) {
+    		Statement statement = connection.createStatement();
     		if (!esisteEnum("tipologia")) {
-    			String sql = "CREATE TYPE tipologia AS ENUM('Ricerca base',"
+    			String createEnum = "CREATE TYPE tipologia AS ENUM('Ricerca base',"
     					+ "'Ricerca industriale',"
     					+ "'Ricerca sperimentale',"
     					+ "'Sviluppo sperimentale',"
     					+ "'Altro');";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createEnum);
+                statement.close();
     		}
     	}
-    	return result;
+    	return risultato;
     }
     
-    //Metodo che crea la tabella Progetto
     private int creaTabellaProgetto() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-    		creaEnumTipologia();	//crea enum necessaria
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            if (!esisteTabella("Progetto")) {
-                String sql = "CREATE TABLE Progetto (\r\n"
-                		+ "	CodProgetto SERIAL,\r\n"
-                		+ "	NomeProgetto varchar(100) NOT NULL,\r\n"
-                		+ "	TipoProgetto tipologia NOT NULL ,\r\n"
-                		+ "	DescrizioneProgetto varchar (500),\r\n"
-                		+ "	DataCreazione DATE NOT NULL DEFAULT CURRENT_DATE,\r\n"
-                		+ "	DataScadenza DATE,\r\n"
-                		+ "	DataTerminazione DATE,\r\n"
-                		+ "	\r\n"
-                		+ "	PRIMARY KEY(CodProgetto),\r\n"
-                		+ "	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione),"
-                		+ " CONSTRAINT DataTerminazioneCorretta CHECK(DataTerminazione<= current_date)\r\n"
-                		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
-                }
-            }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+			creaEnumTipologia();
+	        Statement statement = connection.createStatement();
+	        if (!esisteTabella("Progetto")) {
+	            String createTable = "CREATE TABLE Progetto (\r\n"
+	            		+ "	CodProgetto SERIAL,\r\n"
+	            		+ "	NomeProgetto varchar(100) NOT NULL,\r\n"
+	            		+ "	TipoProgetto tipologia NOT NULL ,\r\n"
+	            		+ "	DescrizioneProgetto varchar (500),\r\n"
+	            		+ "	DataCreazione DATE NOT NULL DEFAULT CURRENT_DATE,\r\n"
+	            		+ "	DataScadenza DATE,\r\n"
+	            		+ "	DataTerminazione DATE,\r\n"
+	            		+ "	\r\n"
+	            		+ "	PRIMARY KEY(CodProgetto),\r\n"
+	            		+ "	CONSTRAINT DataCreazioneValida CHECK(DataCreazione <= DataScadenza AND DataCreazione <= DataTerminazione),"
+	            		+ " CONSTRAINT DataTerminazioneCorretta CHECK(DataTerminazione<= current_date)\r\n"
+	            		+ ");";
+	            risultato = statement.executeUpdate(createTable);
+	            statement.close();
+	            }
+	        }
+	    return risultato;
     }
     
-    //Metodo che crea la tabella Dipendente
     private int creaTabellaDipendente() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("Dipendente")) {
-                String sql = "CREATE TABLE Dipendente(\r\n"
+                String createTable = "CREATE TABLE Dipendente(\r\n"
                 		+ "	CF char(16),\r\n"
                 		+ "	Nome varchar(30) NOT NULL,\r\n"
                 		+ "	Cognome varchar(30) NOT NULL,\r\n"
@@ -255,58 +222,53 @@ public class CostruttoreDB {
                 		+ "	--Associazione 1 a Molti(LuogoNascita,Dipendente)\r\n"
                 		+ "	FOREIGN KEY (CodComune) REFERENCES LuogoNascita(CodComune) ON UPDATE CASCADE\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+	    return risultato;
     }
     
-    //Metodo che crea il type enum modalità di un meeting nel DB (necessario per definire la tabella Meeting)
     private int creaEnumModalita() throws SQLException{
-    	int result = -1;
-    	if (connectionExists()) {
-    		Statement st = connection.createStatement();
+    	int risultato = -1;
+    	if (connessioneEsiste()) {
+    		Statement statement = connection.createStatement();
     		if (!esisteEnum("modalità")) {
-    			String sql = "CREATE TYPE modalità AS ENUM ('Telematico','Fisico');";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+    			String createEnum = "CREATE TYPE modalità AS ENUM ('Telematico','Fisico');";
+                risultato = statement.executeUpdate(createEnum);
+                statement.close();
     		}
     	}
-    	return result;
+    	return risultato;
     }
     
-    //Metodo che crea il type enum piattaforma di un meeting nel DB (necessario per definire la tabella Meeting)
     private int creaEnumPiattaforma() throws SQLException{
-    	int result = -1;
-    	if (connectionExists()) {
-    		Statement st = connection.createStatement();
+    	int risultato = -1;
+    	if (connessioneEsiste()) {
+    		Statement statement = connection.createStatement();
     		if (!esisteEnum("piattaforma")) {
-    			String sql = "CREATE TYPE piattaforma AS ENUM('Microsoft Teams',"
+    			String createEnum = "CREATE TYPE piattaforma AS ENUM('Microsoft Teams',"
     					+ "'Discord',"
     					+ "'Google Meet',"
     					+ "'Zoom',"
     					+ "'Cisco Webex',"
     					+ "'Skype',"
     					+ "'Altro');";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createEnum);
+                statement.close();
     		}
     	}
-    	return result;
+    	return risultato;
     }
     
-    //Metodo che crea la tabella Meeting
     private int creaTabellaMeeting() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-    	creaEnumModalita();	//crea enum necessaria
-    	creaEnumPiattaforma();	//crea enum necessaria
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	    	creaEnumModalita();
+	    	creaEnumPiattaforma();
+            Statement statement = connection.createStatement();
             if (!esisteTabella("Meeting")) {
-                String sql = "CREATE TABLE Meeting(\r\n"
+                String createTable = "CREATE TABLE Meeting(\r\n"
                 		+ "	IDMeeting SERIAL,\r\n"
                 		+ "	DataInizio DATE NOT NULL,\r\n"
                 		+ "	DataFine DATE NOT NULL ,\r\n"
@@ -329,22 +291,19 @@ public class CostruttoreDB {
                 		+ "	--Associazione 1 a Molti (Progetto,Meeting)\r\n"
                 		+ "	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE --ON UPDATE CASCADE--\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la tabella AmbitoProgettoLink (associazione AmbitoProgetto <-> Progetto)
     private int creaTabellaAmbitoProgettoLink() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("AmbitoProgettoLink")) {
-                String sql = "CREATE TABLE AmbitoProgettoLink(\r\n"
+                String createTable = "CREATE TABLE AmbitoProgettoLink(\r\n"
                 		+ "	IDAmbito integer NOT NULL,\r\n"
                 		+ "	CodProgetto integer NOT NULL,\r\n"
                 		+ "	\r\n"
@@ -352,40 +311,36 @@ public class CostruttoreDB {
                 		+ "	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE,\r\n"
                 		+ "	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito)\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+	    return risultato;
     }
     
-    //Metodo che crea il type enum ruolo di un dipendente in un progetto nel DB (necessario per definire la tabella Partecipazione)
     private int creaEnumRuolo() throws SQLException{
-    	int result = -1;
-    	if (connectionExists()) {
-    		Statement st = connection.createStatement();
+    	int risultato = -1;
+    	if (connessioneEsiste()) {
+    		Statement statement = connection.createStatement();
     		if (!esisteEnum("ruolo")) {
-    			String sql = "CREATE TYPE ruolo AS ENUM('Project Manager',"
+    			String createEnum = "CREATE TYPE ruolo AS ENUM('Project Manager',"
     					+ "'Team Member',"
     					+ "'Team Leader',"
     					+ "'Chief Financial Officer');";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createEnum);
+                statement.close();
     		}
     	}
-    	return result;
+    	return risultato;
     }
     
-    //Metodo che crea la tabella Partecipazione (associazione Progetto <-> Dipendente)
     private int creaTabellaPartecipazione() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-    	creaEnumRuolo();	//crea enum necessaria
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	    	creaEnumRuolo();
+            Statement statement = connection.createStatement();
             if (!esisteTabella("Partecipazione")) {
-                String sql = "CREATE TABLE Partecipazione(\r\n"
+                String createTable = "CREATE TABLE Partecipazione(\r\n"
                 		+ "	CodProgetto integer NOT NULL,\r\n"
                 		+ "	CF char(16) NOT NULL,\r\n"
                 		+ "	RuoloDipendente ruolo NOT NULL, --Project Manager = Creatore\r\n"
@@ -395,22 +350,19 @@ public class CostruttoreDB {
                 		+ "	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE,\r\n"
                 		+ "	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la tabella Abilità (associazione Skill <-> Dipendente)
     private int creaTabellaAbilita() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("Abilità")) {
-                String sql = "CREATE TABLE Abilità(\r\n"
+                String createTable = "CREATE TABLE Abilità(\r\n"
                 		+ "	IDSkill integer,\r\n"
                 		+ "	CF char(16) NOT NULL,\r\n"
                 		+ "	\r\n"
@@ -419,22 +371,19 @@ public class CostruttoreDB {
                 		+ "	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill),\r\n"
                 		+ "	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+	    return risultato;
     }
     
-    //Metodo che crea la tabella Presenza (associazione Meeting <-> Dipendente)
     private int creaTabellaPresenza() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTabella("Presenza")) {
-                String sql = "CREATE TABLE Presenza(\r\n"
+                String createTable = "CREATE TABLE Presenza(\r\n"
                 		+ "	CF char(16) NOT NULL,\r\n"
                 		+ "	IDMeeting integer NOT NULL ,\r\n"
                 		+ "	Presente BOOLEAN NOT NULL DEFAULT FALSE,\r\n"
@@ -445,16 +394,15 @@ public class CostruttoreDB {
                 		+ "	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE,\r\n"
                 		+ "	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE --ON UPDATE CASCADE--\r\n"
                 		+ ");";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTable);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea tutte le tabelle di sopra
     public void creaTabelle() throws SQLException{
-    	creaTabellaSkill();	//crea la tabella skill
+    	creaTabellaSkill();
     	creaTabellaAmbitoProgetto();
     	creaTabellaLuogoNascita();
     	creaTabellaSalaRiunione();
@@ -470,14 +418,11 @@ public class CostruttoreDB {
     //CREAZIONE FUNZIONI ESTERNE E TRIGGER
 	//------------------------------------------------
     
-    //Metodo che crea la funzione esterna accavallamento per controllare che due eventi non si accavallino temporalmente
     private int creaFunzioneAccavallamento() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION accavallamento(DataInizioOLD DATE, DataFineOLD DATE, DataInizioNEW DATE, DataFineNEW DATE, OraInizioOLD TIME, OraFineOLD TIME, OraInizioNEW TIME, OraFineNEW TIME )\r\n"
+		int risultato = -1;
+		if(connessioneEsiste()) {
+			Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION accavallamento(DataInizioOLD DATE, DataFineOLD DATE, DataInizioNEW DATE, DataFineNEW DATE, OraInizioOLD TIME, OraFineOLD TIME, OraInizioNEW TIME, OraFineNEW TIME )\r\n"
             		+ "RETURNS BOOLEAN\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
@@ -498,20 +443,17 @@ public class CostruttoreDB {
             		+ "RETURN FALSE;	--accavallamento non avvenuto\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna valutazioneMeeting che calcola la valutazione di un dipendente in base alle sue presenze ai meeting
     private int creaFunzioneValutazioneMeeting() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION ValutazioneMeeting(dip Dipendente.CF%TYPE) RETURNS FLOAT\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION ValutazioneMeeting(dip Dipendente.CF%TYPE) RETURNS FLOAT\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "DECLARE\r\n"
@@ -542,20 +484,17 @@ public class CostruttoreDB {
             		+ "RETURN ValutazioneMeeting;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna valutazioneProgetti che calcola la valutazione di un dipendente in base alle sue partecipazioni ai progetti
     private int creaFunzioneValutazioneProgetti() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION ValutazioneProgetti(dip Dipendente.CF%TYPE) RETURNS FLOAT\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION ValutazioneProgetti(dip Dipendente.CF%TYPE) RETURNS FLOAT\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "DECLARE\r\n"
@@ -578,20 +517,17 @@ public class CostruttoreDB {
             		+ "RETURN ValutazioneProgetti;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna valutazione che calcola la valutazione media di un dipendente partendo dalle due precedenti
     private int creaFunzioneValutazione() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION Valutazione(dip Dipendente.CF%TYPE) RETURNS FLOAT\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION Valutazione(dip Dipendente.CF%TYPE) RETURNS FLOAT\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "DECLARE\r\n"
@@ -608,20 +544,17 @@ public class CostruttoreDB {
             		+ "RETURN ValutazioneFinale;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna check_accavallamenti_sale che controlla se avvengono accavallamenti di meeting nella stessa sala
     private int creaFunzioneCheckAccavallamentiSale() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION check_accavallamenti_sale() RETURNS TRIGGER\r\n"
+    int risultato = -1;
+    if(connessioneEsiste()) {
+        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_accavallamenti_sale() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "DECLARE\r\n"
@@ -648,39 +581,33 @@ public class CostruttoreDB {
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger no_accavallamenti che controlla gli accavallamenti dei meeting nella stessa sala
     private int creaTriggerNoAccavallamenti() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("no_accavallamenti")) {
-                String sql = "CREATE TRIGGER no_accavallamenti BEFORE INSERT OR UPDATE ON Meeting\r\n"
+                String createTrigger = "CREATE TRIGGER no_accavallamenti BEFORE INSERT OR UPDATE ON Meeting\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "WHEN (NEW.Modalità='Fisico')\r\n"
                 		+ "EXECUTE PROCEDURE check_accavallamenti_sale();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna check_capienza_presenza per controllare che la capienza delle sale sia rispettata
     private int creaFunzioneCheckCapienzaPresenza() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION check_capienza_presenza() RETURNS TRIGGER\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_capienza_presenza() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "DECLARE\r\n"
@@ -707,38 +634,32 @@ public class CostruttoreDB {
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger capienza_rispettata_presenza per controllare che la capienza sia rispettata sempre
     private int creaTriggerCapienzaRispettataPresenza() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("capienza_rispettata_presenza")) {
-                String sql = "CREATE TRIGGER capienza_rispettata_presenza BEFORE INSERT OR UPDATE ON Presenza\r\n"
+                String createTrigger = "CREATE TRIGGER capienza_rispettata_presenza BEFORE INSERT OR UPDATE ON Presenza\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_capienza_presenza();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna check_capienza_meeting per controllare che la capienza delle sale sia rispettata
     private int creaFunzioneCheckCapienzaMeeting() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION check_capienza_meeting() RETURNS TRIGGER\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_capienza_meeting() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "DECLARE\r\n"
@@ -760,38 +681,32 @@ public class CostruttoreDB {
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger capienza_rispettata_meeting per controllare che la capienza sia rispettata sempre
     private int creaTriggerCapienzaRispettataMeeting() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("capienza_rispettata_meeting")) {
-                String sql = "CREATE TRIGGER capienza_rispettata_meeting AFTER UPDATE OF CodSala ON Meeting\r\n"
+                String createTrigger = "CREATE TRIGGER capienza_rispettata_meeting AFTER UPDATE OF CodSala ON Meeting\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_capienza_meeting();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna check_skill_existence per eliminare skill non più utilizzate da nessuno nel DB
-    private int creaFunzioneCheckSkillExistence() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION check_skill_existence() RETURNS TRIGGER\r\n"
+	    private int creaFunzioneCheckSkillExistence() throws SQLException{
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_skill_existence() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "BEGIN\r\n"
@@ -806,38 +721,32 @@ public class CostruttoreDB {
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger composizione_skill per eliminare le skill inutilizzate
     private int creaTriggerComposizioneSkill() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("composizione_skill")) {
-                String sql = "CREATE TRIGGER composizione_skill AFTER DELETE ON Abilità\r\n"
+                String createTrigger = "CREATE TRIGGER composizione_skill AFTER DELETE ON Abilità\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_skill_existence();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna check_onnipresenza_presenza per controllare eventuali casi di onnipresenza dei dipendenti
     private int creaFunzioneCheckOnnipresenzaPresenza() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION check_onnipresenza_presenza()\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_onnipresenza_presenza()\r\n"
             		+ "RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
@@ -873,38 +782,32 @@ public class CostruttoreDB {
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger no_onnipresenza_presenza che controlla per le onnipresenze dei dipendenti
     private int creaTriggerNoOnnipresenzaPresenza() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("no_onnipresenza_presenza")) {
-                String sql = "CREATE TRIGGER no_onnipresenza_presenza BEFORE INSERT OR UPDATE ON Presenza\r\n"
+                String createTrigger = "CREATE TRIGGER no_onnipresenza_presenza BEFORE INSERT OR UPDATE ON Presenza\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_onnipresenza_presenza();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna check_onnipresenza_meeting per controllare eventuali casi di onnipresenza dei dipendenti
     private int creaFunzioneCheckOnnipresenzaMeeting() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION check_onnipresenza_meeting()\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_onnipresenza_meeting()\r\n"
             		+ "RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
@@ -935,38 +838,32 @@ public class CostruttoreDB {
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger no_onnipresenza_meeting che controlla per le onnipresenze dei dipendenti
     private int creaTriggerNoOnnipresenzaMeeting() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+    int risultato = -1;
+    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("no_onnipresenza_meeting")) {
-                String sql = "CREATE TRIGGER no_onnipresenza_meeting BEFORE UPDATE ON Meeting\r\n"
+                String createTrigger = "CREATE TRIGGER no_onnipresenza_meeting BEFORE UPDATE ON Meeting\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_onnipresenza_meeting();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna Abilità_uppercase per inserire solo cf con caratteri maiuscoli in Abilità
     private int creaFunzioneAbilitaUppercase() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION Abilità_uppercase() RETURNS TRIGGER\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	    	Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION Abilità_uppercase() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL \r\n"
             		+ "AS $$\r\n"
             		+ "BEGIN\r\n"
@@ -974,40 +871,34 @@ public class CostruttoreDB {
             		+ "  RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger CF_uppercase_Abilità
     private int creaTriggerCFUppercaseAbilita() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("CF_uppercase_Abilità")) {
-                String sql = "CREATE TRIGGER CF_uppercase_Abilità\r\n"
+                String createTrigger = "CREATE TRIGGER CF_uppercase_Abilità\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Abilità\r\n"
                 		+ "  FOR EACH ROW\r\n"
                 		+ "  EXECUTE PROCEDURE Abilità_uppercase();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna Dipendente_uppercase per inserire sempre codici fiscali in maiuscolo
     private int creaFunzioneDipendenteUppercase() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION Dipendente_uppercase() RETURNS TRIGGER\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION Dipendente_uppercase() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL \r\n"
             		+ "AS $$\r\n"
             		+ "BEGIN\r\n"
@@ -1015,40 +906,34 @@ public class CostruttoreDB {
             		+ "  RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger CF_uppercase_Dipendente per inserire codici fiscali in maiuscolo in Dipendente
     private int creaTriggerCFUppercaseDipendente() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("CF_uppercase_Dipendente")) {
-                String sql = "CREATE TRIGGER CF_uppercase_Dipendente\r\n"
+                String createTrigger = "CREATE TRIGGER CF_uppercase_Dipendente\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Dipendente\r\n"
                 		+ "  FOR EACH ROW\r\n"
                 		+ "  EXECUTE PROCEDURE Dipendente_uppercase();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna Presenza_uppercase per inserire sempre codici fiscali in maiuscolo
     private int creaFunzionePresenzaUppercase() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION Presenza_uppercase() RETURNS TRIGGER\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION Presenza_uppercase() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL \r\n"
             		+ "AS $$\r\n"
             		+ "BEGIN\r\n"
@@ -1056,40 +941,34 @@ public class CostruttoreDB {
             		+ "  RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger CF_uppercase_Presenza per inserire codici fiscali in maiuscolo in Presenza
     private int creaTriggerCFUppercasePresenza() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("CF_uppercase_Presenza")) {
-                String sql = "CREATE TRIGGER CF_uppercase_Presenza\r\n"
+                String createTrigger = "CREATE TRIGGER CF_uppercase_Presenza\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Presenza\r\n"
                 		+ "  FOR EACH ROW\r\n"
                 		+ "  EXECUTE PROCEDURE Presenza_uppercase();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna Partecipazione_uppercase per inserire sempre codici fiscali in maiuscolo
     private int creaFunzionePartecipazioneUppercase() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-        //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
-            String sql = "CREATE OR REPLACE FUNCTION Partecipazione_uppercase() RETURNS TRIGGER\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	    	Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION Partecipazione_uppercase() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL \r\n"
             		+ "AS $$\r\n"
             		+ "BEGIN\r\n"
@@ -1097,40 +976,34 @@ public class CostruttoreDB {
             		+ "  RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger CF_uppercase_Partecipazione per inserire codici fiscali in maiuscolo in Partecipazione
     private int creaTriggerCFUppercasePartecipazione() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione della tabella
-            //se la tabella non esiste scrivi la definizione della tabella ed esegui la sua creazione
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("CF_uppercase_Partecipazione")) {
-                String sql = "CREATE TRIGGER CF_uppercase_Partecipazione\r\n"
+                String createTrigger = "CREATE TRIGGER CF_uppercase_Partecipazione\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Partecipazione\r\n"
                 		+ "  FOR EACH ROW\r\n"
                 		+ "  EXECUTE PROCEDURE Partecipazione_uppercase();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea la funzione esterna check_projectmanager che controlla che ci sia sempre un solo project manager per progetto
     private int creaFunzioneCheckProjectManager() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-        Statement st = connection.createStatement();	//crea uno statement per la creazione della funzione
-        //se la funzione non esiste
-            String sql = "CREATE OR REPLACE FUNCTION check_projectmanager() RETURNS TRIGGER\r\n"
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_projectmanager() RETURNS TRIGGER\r\n"
             		+ "LANGUAGE PLPGSQL\r\n"
             		+ "AS $$\r\n"
             		+ "BEGIN\r\n"
@@ -1144,55 +1017,51 @@ public class CostruttoreDB {
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
             		+ "$$;";
-            result = st.executeUpdate(sql);
-            st.close();	//chiudi statement
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea il trigger unicità_projectmanager che controlla che esista sempre solo un project manager per progetto
     private int creaTriggerUnicitaProjectManager() throws SQLException{
-    int result = -1;	//risultato pari a -1 per ora
-    //se la connessione con il db esiste
-    if(connectionExists()) {
-            Statement st = connection.createStatement();	//crea uno statement per la creazione del trigger
-            //se il trigger non esiste
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
             if (!esisteTrigger("unicità_projectmanager")) {
-                String sql = "CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione\r\n"
+                String createTrigger = "CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_projectmanager();";
-                result = st.executeUpdate(sql);
-                st.close();	//chiudi statement
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
                 }
             }
-    return result;	//restituisce il risultato per sapere se la creazione ha avuto o meno luogo
+    return risultato;
     }
     
-    //Metodo che crea tutte le funzioni esterne
     public void creaFunzioniTrigger() throws SQLException{
-    	creaFunzioneAccavallamento();	//accavallamento temporale
+    	creaFunzioneAccavallamento();
     	
-    	creaFunzioneValutazioneMeeting();	//funzioni per valutazione dipendente
+    	creaFunzioneValutazioneMeeting();
     	creaFunzioneValutazioneProgetti();
     	creaFunzioneValutazione();
     	
-    	creaFunzioneCheckAccavallamentiSale();	//accavallamento nella stessa sala
+    	creaFunzioneCheckAccavallamentiSale();
     	creaTriggerNoAccavallamenti();
     	
-    	creaFunzioneCheckCapienzaPresenza();	//capienza rispettata nelle sale
+    	creaFunzioneCheckCapienzaPresenza();
     	creaTriggerCapienzaRispettataPresenza();
     	creaFunzioneCheckCapienzaMeeting();
     	creaTriggerCapienzaRispettataMeeting();
     	
-    	creaFunzioneCheckSkillExistence();	//rimozione skill non più utilizzate
+    	creaFunzioneCheckSkillExistence();
     	creaTriggerComposizioneSkill();
     	
-    	creaFunzioneCheckOnnipresenzaPresenza();	//onnipresenza dei dipendenti in più meeting e luoghi
+    	creaFunzioneCheckOnnipresenzaPresenza();
     	creaTriggerNoOnnipresenzaPresenza();
     	creaFunzioneCheckOnnipresenzaMeeting();
     	creaTriggerNoOnnipresenzaMeeting();
     	
-    	creaFunzioneAbilitaUppercase();	//uppercase di codice fiscale
+    	creaFunzioneAbilitaUppercase();
     	creaTriggerCFUppercaseAbilita();
     	creaFunzioneDipendenteUppercase();
     	creaTriggerCFUppercaseDipendente();
@@ -1201,55 +1070,8 @@ public class CostruttoreDB {
     	creaFunzionePartecipazioneUppercase();
     	creaTriggerCFUppercasePartecipazione();
     	
-    	creaFunzioneCheckProjectManager();	//unicità del project manager per ogni progetto
+    	creaFunzioneCheckProjectManager();
     	creaTriggerUnicitaProjectManager();
-    }
-    
-    //metodo che crea il primo dipendente nel db
-    private int inserisciPrimoDipendente() throws SQLException
-    {
-    	int result =-1;
-    	if(connectionExists())
-    	{
-    		Statement stmt = connection.createStatement();
-    		
-    		//inserisce il dipendente Mario Rossi
-    		String sql = "INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES\r\n"
-    				+ "	('RSSMRA91C06F839S','Mario','Rossi','06/03/1991','M','via sdff,28','m.rossi@unina.it','0817589891','3878998999',100,'pass','F839')";
-    		
-    		result = stmt.executeUpdate(sql);
-    		stmt.close();
-    	}
-    	return result;
-    }
-    
-    //metodo che crea degli ambiti predefiniti da cui partire (poi la segreteria volendo ne aggiungerà altri)
-    private int creaAmbitiPredefiniti() throws SQLException
-    {
-    	int result =-1;
-    	
-    	if(connectionExists()) 
-    	{
-    		Statement stmt = connection.createStatement();
-    		
-    		//inserisci degli ambiti iniziali predefiniti
-    		String sql ="INSERT INTO AmbitoProgetto(NomeAmbito) VALUES\r\n"
-    				+ "	('Economia'),\r\n"
-    				+ "	('Medicina'),\r\n"
-    				+ "	('Militare'),\r\n"
-    				+ "	('Scientifico'),\r\n"
-    				+ "	('Altro')";
-    		
-    		result = stmt.executeUpdate(sql);
-    		stmt.close();
-    	}
-    	return result;
-    }
-    
-    //Metodo che inserisce dai dati da cui partire per poter utilizzare subito il software
-    public void inserisciDatiIniziali() throws SQLException
-    {
-    	creaAmbitiPredefiniti(); // inserisce degli ambiti di partenza
     }
     
     //INSERIMENTO LUOGHI DI NASCITA DA AGENZIA DELLE ENTRATE

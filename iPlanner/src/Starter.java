@@ -34,7 +34,6 @@ public class Starter {
 				costruttoreDB.creaTabelle();
 				costruttoreDB.creaFunzioniTrigger();
 				costruttoreDB.importaLuoghi();
-				costruttoreDB.inserisciDatiIniziali();
 			} catch (SQLException e){
 				//errori non contemplati (che non sono tabelle già esistenti o trigger già esistenti)
 				if (!e.getSQLState().equals("42P07") && !e.getSQLState().equals("42710"))
