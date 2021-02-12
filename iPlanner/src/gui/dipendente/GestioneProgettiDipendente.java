@@ -58,6 +58,7 @@ import gui.cellRenderers.PartecipantiListRenderer;
 import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.DataComparator;
 import gui.tableModels.ProgettoTableModel;
+import java.awt.BorderLayout;
 
 public class GestioneProgettiDipendente extends JFrame {
 
@@ -95,9 +96,14 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JList meetingRelativiList;
 	private JTextField nomeTextField;
 	private JTextArea descrizioneTextArea;
+	private JLabel filtroScadutoLabel;
+	private JComboBox filtroScadutoComboBox;
+	private JLabel filtroTerminatoLabel;
+	private JComboBox filtroTerminatoComboBox;
 	
 	//Altri attributi
-	LocalDate dataAttuale = LocalDate.now();
+	LocalDate dataAttuale = LocalDate.now();	//data attuale
+	String[] siNoOpzioni = {null, "Si", "No"};	//array di opzioni per combobox dove le opzioni sono si/no
 
 	//Creazione frame
 	//-----------------------------------------------------------------
@@ -123,7 +129,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		JPanel comandiPanel = new JPanel();	//panel dei comandi
 		comandiPanel.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		comandiPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		//ScrollPanel per la tabella dei progetti
 		JScrollPane tabellaScrollPane = new JScrollPane();
@@ -136,9 +141,9 @@ public class GestioneProgettiDipendente extends JFrame {
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-						.addComponent(tabellaScrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE))
+						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1551, Short.MAX_VALUE)
+						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1551, Short.MAX_VALUE)
+						.addComponent(tabellaScrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1551, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -147,9 +152,9 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGap(23)
 					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 359, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(tabellaScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(3)
+					.addComponent(tabellaScrollPane, GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
@@ -310,6 +315,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				creaNuovoButton.setBackground(Color.WHITE);
 			}
 		});
+		comandiPanel.setLayout(new BorderLayout(0, 0));
 		creaNuovoButton.setPreferredSize(new Dimension(130, 30));
 		creaNuovoButton.setMaximumSize(new Dimension(150, 150));
 		creaNuovoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -320,23 +326,82 @@ public class GestioneProgettiDipendente extends JFrame {
 		creaNuovoButton.setAlignmentX(0.5f);
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		//Label "Cerca"
-		JLabel cercaLabel = new JLabel("Cerca");
-		cercaLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
-		comandiPanel2.add(cercaLabel);
-		
-		//TextField per cercare progetti
-		cercaTextField = new JTextField();
-		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		comandiPanel2.add(cercaTextField);
-		cercaTextField.setColumns(10);
-		
 		comandiPanel2.add(inserisciPartecipanteButton);
 		comandiPanel2.add(confermaModificheButton);
 		comandiPanel2.add(creaNuovoButton);
 		comandiPanel2.add(eliminaButton);
 		comandiPanel2.add(pulisciCampiButton);
-		comandiPanel.add(comandiPanel2);
+		comandiPanel.add(comandiPanel2, BorderLayout.NORTH);
+		
+		//Panel per i filtri
+		JPanel filtriPanel = new JPanel();
+		filtriPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		comandiPanel.add(filtriPanel, BorderLayout.SOUTH);
+		filtriPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		//Button "Filtra"
+		JButton filtraButton = new JButton("Filtra");
+		filtraButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		filtriPanel.add(filtraButton);
+		
+		//TextField per cercare progetti
+		cercaTextField = new JTextField();
+		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
+		filtriPanel.add(cercaTextField);
+		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		cercaTextField.setColumns(10);
+		
+		//Label "Tipologia" in filtri
+		JLabel filtroTipologiaLabel = new JLabel("Tipologia");
+		filtroTipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		filtroTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		filtriPanel.add(filtroTipologiaLabel);
+		
+		//ComboBox filtro per tipologia
+		JComboBox filtroTipologieComboBox = new JComboBox(new Object[]{});
+		filtroTipologieComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroTipologieComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroTipologieComboBox.setBackground(Color.WHITE);
+		filtriPanel.add(filtroTipologieComboBox);
+		
+		//Label "Ambito" in filtri
+		JLabel filtroAmbitoLabel = new JLabel("Ambito");
+		filtroAmbitoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		filtroAmbitoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		filtriPanel.add(filtroAmbitoLabel);
+		
+		//ComboBox filtro per ambito
+		JComboBox filtroAmbitiComboBox = new JComboBox(new Object[]{});
+		filtroAmbitiComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroAmbitiComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroAmbitiComboBox.setBackground(Color.WHITE);
+		filtriPanel.add(filtroAmbitiComboBox);
+		
+		//Label "Scaduto" in filtri
+		filtroScadutoLabel = new JLabel("Scaduto");
+		filtroScadutoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		filtroScadutoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		filtriPanel.add(filtroScadutoLabel);
+		
+		//ComboBox filtro per scaduto
+		filtroScadutoComboBox = new JComboBox(siNoOpzioni);
+		filtroScadutoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroScadutoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroScadutoComboBox.setBackground(Color.WHITE);
+		filtriPanel.add(filtroScadutoComboBox);
+		
+		//Label "Terminato" in filtri
+		filtroTerminatoLabel = new JLabel("Terminato");
+		filtroTerminatoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		filtroTerminatoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		filtriPanel.add(filtroTerminatoLabel);
+		
+		//ComboBox filtro per terminato
+		filtroTerminatoComboBox = new JComboBox(siNoOpzioni);
+		filtroTerminatoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroTerminatoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroTerminatoComboBox.setBackground(Color.WHITE);
+		filtriPanel.add(filtroTerminatoComboBox);
 		
 		//Panel interno al panel info del progetto
 		JPanel infoPanel2 = new JPanel();
