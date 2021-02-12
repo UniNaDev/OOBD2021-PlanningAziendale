@@ -2,9 +2,6 @@
 *Contiene le definizioni dei metodi già presenti nell'interfaccia per operare sulla tabella
 *LuogoNascita del DB, i relativi PreparedStatement per operare più rapidamente sul DB e
 *il costruttore del DAO.
-*Struttura tabella LuogoNascita:
-*|(1) NomeComune:String|(2) NomeProvincia:String|(3) CodComune:String|
-*|_____________________|________________________|____________________|
 ******************************************************************************************/
 package implementazioniDAO;
 
@@ -14,78 +11,56 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.joda.time.LocalDate;
-
-import entita.Dipendente;
 import entita.LuogoNascita;
-import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 
 public class LuogoNascitaDAOPSQL implements LuogoNascitaDAO {
-
-	//ATTRIBUTI
-	//----------------------------------------
-	private Connection connection;	//connessione al DB necessaria per operare
-	private PreparedStatement getProvincePS,getLuoghiByProvinciaPS, getLuogoByCodPS;	//PreparedStatemtn delle operazioni più comuni da compiere nel DB
+	private Connection connection;
+	private PreparedStatement getProvincePS,getLuoghiByProvinciaPS, getLuogoByCodPS;
 	
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore
 	public LuogoNascitaDAOPSQL(Connection connection) throws SQLException {
-		this.connection = connection;	//ottiene la connessione al DB dal manager
+		this.connection = connection;
 		
-		getProvincePS = connection.prepareStatement("SELECT DISTINCT l.NomeProvincia FROM LuogoNascita AS l ORDER BY l.NomeProvincia");	//inizializza PreparedStatement per ottenere le province
-		getLuoghiByProvinciaPS = connection.prepareStatement("SELECT * FROM LuogoNascita AS l WHERE l.NomeProvincia LIKE ?");	//inizializza PreparedStatement per ottenere i luoghi di una specifica provincia
-		getLuogoByCodPS = connection.prepareStatement("SELECT * FROM LuogoNascita AS l WHERE l.CodComune = ?");	//inizializza PreparedStatement per ottenere un luogo tramite il codice del comune
+		getProvincePS = connection.prepareStatement("SELECT DISTINCT l.NomeProvincia FROM LuogoNascita AS l ORDER BY l.NomeProvincia");
+		getLuoghiByProvinciaPS = connection.prepareStatement("SELECT * FROM LuogoNascita AS l WHERE l.NomeProvincia LIKE ?");
+		getLuogoByCodPS = connection.prepareStatement("SELECT * FROM LuogoNascita AS l WHERE l.CodComune = ?");
 	}
 	
-	//Metodo GetProvince.
-	/*Metodo che interroga il DB per ottenere tutte le province presenti.
-	*Restituisce un ArrayList<String> di province se tutto va a buon fine.*/
 	@Override
 	public ArrayList<String> getProvince() throws SQLException {
-		ResultSet risultato = getProvincePS.executeQuery();	//esegue la query per ottenere un ResultSet
-		ArrayList<String> temp = new ArrayList<String>();	//inizializza la lista temporanea da restituire alla fine
+		ResultSet risultato = getProvincePS.executeQuery();
+		ArrayList<String> province = new ArrayList<String>();
 		
-		//finchè ci sono ancora province nel ResultSet le aggiunge alla lista
 		while(risultato.next()) {
-			temp.add(risultato.getString(1));
+			province.add(risultato.getString(1));
 		}
-		risultato.close();	//chiude il ResultSet
+		risultato.close();
 		
-		return temp;
+		return province;
 	}
 
-	//MetodoGetLuoghiByProvincia.
-	/*Metodo che interroga il DB per ottenere tutti i luoghi di una specifica provincia.
-	Restituisce un ArrayList<LuogoNascita> di luoghi che appartengono a quella specifica provincia.*/
 	@Override
 	public ArrayList<LuogoNascita> getLuoghiByProvincia(String provincia) throws SQLException {
-		getLuoghiByProvinciaPS.setString(1, provincia);	//inserisce la provincia richiesta nello statement
-		ResultSet risultato = getLuoghiByProvinciaPS.executeQuery();	//esegue la query
-		ArrayList<LuogoNascita> temp = new ArrayList<LuogoNascita>();	//inizializza la lista dei luoghi da restituire
+		getLuoghiByProvinciaPS.setString(1, provincia);
+		ResultSet risultato = getLuoghiByProvinciaPS.executeQuery();
+		ArrayList<LuogoNascita> luoghi = new ArrayList<LuogoNascita>();
 		
-		//finchè il ResultSet contiene ancora luoghi di quella provincia li aggiunge alla lista
 		while (risultato.next()) {
 			LuogoNascita tempLuogo = new LuogoNascita(risultato.getString(3),risultato.getString(1),risultato.getString(2));
-			temp.add(tempLuogo);
+			luoghi.add(tempLuogo);
 		}
-		risultato.close();	//chiude il ResultSet
+		risultato.close();
 		
-		return temp;
+		return luoghi;
 	}
 
-	//Metodo GetLuogoByCod.
-	/*Metodo che interroga il DB per ottenere il LuogoNascita con CodComune uguale a quello inserito come parametro.
-	Restituisce un oggetto LuogoNascita con codice comune pari alla stringa in input.*/
 	@Override
 	public LuogoNascita getLuogoByCod(String codComune) throws SQLException {
-		getLuogoByCodPS.setString(1, codComune.toUpperCase());	//inserisce il parametro nella query
-		ResultSet risultato = getLuogoByCodPS.executeQuery();	//esegue la query per ottenere il ResultSet
+		getLuogoByCodPS.setString(1, codComune.toUpperCase());
+		ResultSet risultato = getLuogoByCodPS.executeQuery();
 		risultato.next();
-		LuogoNascita temp = new LuogoNascita(risultato.getString("CodComune").toUpperCase(), risultato.getString("NomeComune"), risultato.getString("NomeProvincia"));	//crea il luogonascita temporaneo
-		risultato.close(); //chiude il ResultSet
-		return temp;
+		LuogoNascita luogo = new LuogoNascita(risultato.getString("CodComune").toUpperCase(), risultato.getString("NomeComune"), risultato.getString("NomeProvincia"));	//crea il luogonascita temporaneo
+		risultato.close();
+		return luogo;
 	}
 }
