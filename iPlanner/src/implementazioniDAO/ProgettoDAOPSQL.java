@@ -102,8 +102,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
 			
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
-			projTemp.setMeetingsRelativi(getMeetingRelativi(projTemp.getIdProgettto()));
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);	//ottiene gli ambiti del progetto
+			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(projTemp.getIdProgettto()));
 			projTemp.setAmbiti(ambiti);
 			
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -116,7 +116,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	//METODO DI PROVA
 	//Metodo che restituisce i dipendenti partecipanti a un progetto senza specificare il ruolo.
 		@Override
-		public ArrayList<Dipendente> getPartecipantiSenzaRuolo(int codiceProgetto) throws SQLException {
+		public ArrayList<Dipendente> getPartecipantiProgettoSenzaRuolo(int codiceProgetto) throws SQLException {
 			ArrayList<Dipendente> temp = new ArrayList<Dipendente>();	//inizializza la lista da restituire
 			
 			dipDAO = new DipendenteDAOPSQL(connection);
@@ -137,7 +137,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	
 	//Metodo che restituisce i dipendenti partecipanti a un progetto.
 	@Override
-	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException {
+	public ArrayList<CollaborazioneProgetto> getPartecipantiProgetto(int codiceProgetto) throws SQLException {
 		ArrayList<CollaborazioneProgetto> temp = new ArrayList<CollaborazioneProgetto>();	//inizializza la lista da restituire
 		
 		dipDAO = new DipendenteDAOPSQL(connection);
@@ -159,7 +159,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che restituisce i meeting relativi a un progetto.
 	@Override
-	public ArrayList<Meeting> getMeetingRelativi(int codiceProgettoSelezionato) throws SQLException {
+	public ArrayList<Meeting> getMeetingRelativiProgetto(int codiceProgettoSelezionato) throws SQLException {
 		ArrayList<Meeting> temp = new ArrayList<Meeting>();	//inizializza la lista da restituire
 		
 		getMeetingRelativiPS.setInt(1, codiceProgettoSelezionato); //codice del progetto di cui si vogliono i meeting nella query
@@ -223,11 +223,11 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			}
 			
 			
-			projTemp.setMeetingsRelativi(getMeetingRelativi(risultato.getInt("CodProgetto")));
-			projTemp.setCollaborazioni(getPartecipanti(risultato.getInt("CodProgetto")));
-			projTemp.setComprende(getPartecipantiSenzaRuolo(risultato.getInt("CodProgetto")));
+			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(risultato.getInt("CodProgetto")));
+			projTemp.setCollaborazioni(getPartecipantiProgetto(risultato.getInt("CodProgetto")));
+			projTemp.setComprende(getPartecipantiProgettoSenzaRuolo(risultato.getInt("CodProgetto")));
 			
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			
 			CollaborazioneProgetto tempPartecipazione = new CollaborazioneProgetto(projTemp,dip,risultato.getString("RuoloDipendente"));
@@ -267,7 +267,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataCreazione")),
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			temp.add(projTemp);	//aggiunge il progetto alla lista
 		}
@@ -302,7 +302,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataCreazione")),
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);	//ottiene gli ambiti del progetto
 			projTemp.setAmbiti(ambiti);
 			temp.add(projTemp);	//aggiunge il progetto alla lista
 		}
@@ -313,7 +313,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che aggiunge un progetto al DB.
 	@Override
-	public boolean addProgetto(Progetto proj) throws SQLException {
+	public boolean insertProgetto(Progetto proj) throws SQLException {
 		addProgettoPS.setString(1, proj.getNomeProgetto()); 	//nome del progetto
 		addProgettoPS.setObject(2, proj.getTipoProgetto(), Types.OTHER); 	//tipologia del progetto
 		addProgettoPS.setString(3, proj.getDescrizioneProgetto()); 	//descrizione del progetto
@@ -333,7 +333,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		if (!proj.getAmbiti().isEmpty()) {
 			ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
 			
-			ambitoDAO.addAmbitiProgetto(proj);
+			ambitoDAO.insertAmbitiOfProgetto(proj);
 		}
 		
 		int record = addProgettoPS.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1=aggiunto,0=non aggiunto)
@@ -346,7 +346,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che rimuove un progetto dal DB.
 	@Override
-	public boolean removeProgetto(Progetto proj) throws SQLException {
+	public boolean deleteProgetto(Progetto proj) throws SQLException {
 		deleteProgettoPS.setInt(1, proj.getIdProgettto()); 	//inserisce il codice del progetto da eliminare nella delete
 		
 		int record = deleteProgettoPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
@@ -359,7 +359,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che inserisce un partecipante al progetto nel DB.
 	@Override
-	public boolean addPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+	public boolean insertPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		addPartecipantePS.setInt(1, collaborazioneProgetto.getProgetto().getIdProgettto()); 	//codice del progetto
 		addPartecipantePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf()); 	//codice fiscale del partecipante
 		addPartecipantePS.setObject(3, collaborazioneProgetto.getRuolo(),Types.OTHER); 	//ruolo del partecipante
@@ -374,7 +374,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 
 	//Metodo che rimuove un partecipante da un progetto.
 	@Override
-	public boolean deletePartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+	public boolean deletePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		//TODO: farlo solo se il dipendente non è project manager oppure controllare i trigger
 		deletePartecipantePS.setString(1, collaborazioneProgetto.getCollaboratore().getCf()); 	//codice fiscale del dipendente
 		deletePartecipantePS.setInt(2, collaborazioneProgetto.getProgetto().getIdProgettto()); 	//codice del progetto
@@ -436,7 +436,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 				new LocalDate(risultato.getDate("DataCreazione")),
 				new LocalDate(risultato.getDate("DataScadenza")),
 				dataTerminazione);
-		ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
+		ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);	//ottiene gli ambiti del progetto
 		projTemp.setAmbiti(ambiti);
 		
 		risultato.close(); //chiude il ResultSet
@@ -515,7 +515,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public boolean addProjectManager(String cf, Progetto tmp, String ruolo) throws SQLException {
+	public boolean insertProjectManager(String cf, Progetto tmp, String ruolo) throws SQLException {
 		
 		addPartecipantePS.setInt(1, tmp.getIdProgettto()); 	//codice del progetto
 		addPartecipantePS.setString(2, cf); 	//codice fiscale del partecipante
@@ -531,7 +531,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+	public boolean updatePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		
 		aggiornaRuoloCollaboratorePS.setObject(1, collaborazioneProgetto.getRuolo(),Types.OTHER);
 		aggiornaRuoloCollaboratorePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf());
@@ -571,8 +571,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
 			
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiProgetto(projTemp);	//ottiene gli ambiti del progetto
-			projTemp.setMeetingsRelativi(getMeetingRelativi(projTemp.getIdProgettto()));
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);	//ottiene gli ambiti del progetto
+			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(projTemp.getIdProgettto()));
 			projTemp.setAmbiti(ambiti);
 			
 			temp.add(projTemp);	//aggiunge il progetto alla lista
@@ -583,7 +583,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public String ottieniProjectManager(Progetto progetto) throws SQLException {
+	public String getProjectManager(Progetto progetto) throws SQLException {
 		String cf;
 		
 		projectManagerPS.setInt(1, progetto.getIdProgettto());

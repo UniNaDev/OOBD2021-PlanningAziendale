@@ -71,17 +71,17 @@ public class ControllerProgettiSegreteria {
 	//Metodo che crea un nuovo ambito per progetti
 	public void creaAmbitoProgetto(String nomeAmbito) throws SQLException {
 		AmbitoProgetto temp = new AmbitoProgetto(nomeAmbito);
-		ambitoDAO.addAmbito(temp);
+		ambitoDAO.insertAmbito(temp);
 	}
 	
 	//Metodo che ottiene gli ambiti di un progetto
 	public ArrayList<AmbitoProgetto> ottieniAmbitiProgetto(Progetto progetto) throws SQLException {
-		return ambitoDAO.getAmbitiProgetto(progetto);
+		return ambitoDAO.getAmbitiOfProgetto(progetto);
 	}
 	
 	//Metodo che ottiene tutte le collaborazioni a un progetto
 	public ArrayList<CollaborazioneProgetto> ottieniCollaborazioni(Progetto progetto) throws SQLException{
-		return projDAO.getPartecipanti(progetto.getIdProgettto());
+		return projDAO.getPartecipantiProgetto(progetto.getIdProgettto());
 	}
 	
 	//Metodo che ottiene tutti gli ambiti

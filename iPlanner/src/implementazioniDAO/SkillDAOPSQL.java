@@ -66,7 +66,7 @@ public class SkillDAOPSQL implements SkillDAO {
 	/*Inserisce nel DB una nuova Skill attraverso addSkill:PreparedStatement.
 	*Restituisce true se l'insert ha avuto successo, altrimenti restituisce false.*/
 	@Override
-	public boolean addSkill(Skill skill) throws SQLException {
+	public boolean insertSkill(Skill skill) throws SQLException {
 		addSkillPS.setString(1, skill.getNomeSkill());	//inserisce il nome della nuova skill nello statement
 		
 		int record = addSkillPS.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1)
@@ -80,7 +80,7 @@ public class SkillDAOPSQL implements SkillDAO {
 
 	//Metodo che aggiunge l'associazione tra un dipendente e una sua skill
 	@Override
-	public boolean addSkillDipendente(Skill skill, Dipendente dip) throws SQLException {
+	public boolean insertSkillDipendente(Skill skill, Dipendente dip) throws SQLException {
 		addSkillDipendentePS.setInt(1, skill.getIdSkill());	//inserisce l'id della skill nell'insert
 		addSkillDipendentePS.setString(2, dip.getCf());	//inserisce il codice fiscale del dipendente nell'insert
 		
@@ -95,7 +95,7 @@ public class SkillDAOPSQL implements SkillDAO {
 
 	//Metodo che restituisce le skill di un dipendente
 	@Override
-	public ArrayList<Skill> getSkillDipendente(String cfDipendente) throws SQLException {
+	public ArrayList<Skill> getSkillsDipendente(String cfDipendente) throws SQLException {
 		ArrayList<Skill> temp = new ArrayList<Skill>();	//inizializza la lista da restituire
 		
 		getSkillDipendentePS.setString(1, cfDipendente); //inserisce il codice fiscale del dipendente nella query

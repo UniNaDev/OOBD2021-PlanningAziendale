@@ -1024,14 +1024,11 @@ public class GestioneProgettiDipendente extends JFrame {
 		//Sorter tabella progetto
 		sorterProgetti=new TableRowSorter<>(dataModelProgetti);
 		progettoTable.setRowSorter(sorterProgetti);
-		
 		//Comparatore date per sorter
 		DataComparator comparatorDate = new DataComparator();	//comparator date
 		sorterProgetti.setComparator(3, comparatorDate);	//data creazione
 		sorterProgetti.setComparator(4, comparatorDate);	//data terminazione
 		sorterProgetti.setComparator(5, comparatorDate);	//data scadenza
-		
-		
 		//Seleziona singola
 		progettoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		//Le colonne non possono essere riordinate

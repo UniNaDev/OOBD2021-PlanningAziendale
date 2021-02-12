@@ -53,7 +53,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 
 	//Metodo che aggiunge una sala alla tabella SalaRiunione nel DB
 	@Override
-	public boolean addSala(SalaRiunione sala) throws SQLException {
+	public boolean insertSala(SalaRiunione sala) throws SQLException {
 		addSalaPS.setString(1, sala.getCodSala());	//inserisce il codice sala nell'insert
 		addSalaPS.setInt(2, sala.getCap());	//inserisce la capienza della sala nell'insert
 		addSalaPS.setString(3, sala.getIndirizzo()); 	//inserisce l'indirizzo nell'insert

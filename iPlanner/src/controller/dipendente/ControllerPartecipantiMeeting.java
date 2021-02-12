@@ -66,7 +66,7 @@ public class ControllerPartecipantiMeeting {
 		//Metodo che ottiene le skill del dipendente
 		public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
 		
-			return skillDAO.getSkillDipendente(cfDipendente);
+			return skillDAO.getSkillsDipendente(cfDipendente);
 		}
 
 		//Metodo che inserisce i partecipanti ad un meeting
@@ -76,18 +76,18 @@ public class ControllerPartecipantiMeeting {
 
 		public void eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 			
-			meetDAO.eliminaPartecipanteMeeting(partecipazioneMeeting);
+			meetDAO.deletePartecipanteMeeting(partecipazioneMeeting);
 		}
 
 		public void inserisciPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 			
-			meetDAO.aggiungiPartecipanteMeeting(partecipazioneMeeting);
+			meetDAO.insertPartecipanteMeeting(partecipazioneMeeting);
 			
 		}
 
 		public void aggiornaPresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 			
-			meetDAO.aggiornaPresenza(partecipazioneMeeting);
+			meetDAO.updatePresenzaPartecipante(partecipazioneMeeting);
 			
 		}
 

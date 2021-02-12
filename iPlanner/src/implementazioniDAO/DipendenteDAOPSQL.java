@@ -116,7 +116,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
-			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
+			tempDip.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			
 			
 			
@@ -155,7 +155,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
-			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
+			tempDip.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}
@@ -184,7 +184,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	*prendendo le informazioni dall'oggetto dipendente inserito come parametro in input. 
 	Restituisce true se l'operazione ha successo e false se fallisce.*/
 	@Override
-	public boolean addDipendente(Dipendente dipendente) throws SQLException {
+	public boolean insertDipendente(Dipendente dipendente) throws SQLException {
 		//inserisce tutti i parametri nello statement INSERT
 		addDipendentePS.setString(1, dipendente.generaCF());
 		addDipendentePS.setString(2, dipendente.getNome());
@@ -249,7 +249,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	/*Metodo che interroga il DB per ottenere (se esiste) il dipendente
 	*con le credenziali inserite in input come parametri.*/
 	@Override
-	public Dipendente loginCheck(String email, String password) throws SQLException {
+	public Dipendente getLoggedDipendente(String email, String password) throws SQLException {
 		loginCheckPS.setString(1, email);	//inserisce i parametri nella query
 		loginCheckPS.setString(2, password);
 		ResultSet risultato = loginCheckPS.executeQuery();	//esegue la query e ottiene il ResultSet
@@ -396,8 +396,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
-			tempDip.setCollaborazioni(projDAO.getPartecipanti(progettoSelezionato.getIdProgettto())); //facoltativo
-			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
+			tempDip.setCollaborazioni(projDAO.getPartecipantiProgetto(progettoSelezionato.getIdProgettto())); //facoltativo
+			tempDip.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			tempDip.setTipologieProgetto(getTipologieProgettoDipendente(tempDip.getCf()));
 			
 			
@@ -491,7 +491,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));	//crea il dipendente temporaneo
 			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
-			tempDip.setSkills(skillDAO.getSkillDipendente(risultato.getString("CF")));
+			tempDip.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			
 			temp.add(tempDip);	//lo aggiunge alla lista
 		}

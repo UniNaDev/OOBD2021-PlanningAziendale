@@ -86,9 +86,9 @@ public class ControllerDipendentiSegreteria {
 	//Metodo che crea un nuovo account per il dipendente
 	public void creaAccount(Dipendente dipendente) throws SQLException {
 		//se l'insert nel database ha successo
-		if (dipDAO.addDipendente(dipendente)) {
+		if (dipDAO.insertDipendente(dipendente)) {
 			for (Skill skill: dipendente.getSkills())	//aggiunge tutte le sue skill nel db in associazione con lui
-				if (!skillDAO.addSkillDipendente(skill, dipendente)) {
+				if (!skillDAO.insertSkillDipendente(skill, dipendente)) {
 					JOptionPane.showMessageDialog(null,
 							"Errore inserimento delle skill nel database.",
 							"Errore skill",
@@ -114,7 +114,7 @@ public class ControllerDipendentiSegreteria {
 	//Metodo che crea una nuova skill e la inserisce nel database tramite il DAO
 	public void creaNuovaSkill(String nomeSkill) throws SQLException {
 		Skill temp = new Skill(0, nomeSkill);	//crea la skill temporanea
-		skillDAO.addSkill(temp);	//aggiunge la skill al database
+		skillDAO.insertSkill(temp);	//aggiunge la skill al database
 	}
 	
 	//Metodo che restituisce le skill del database
@@ -150,7 +150,7 @@ public class ControllerDipendentiSegreteria {
 		dipDAO.updateDipendente(dipendente);
 		for (Skill skill: dipendente.getSkills()) {
 			try {
-				skillDAO.addSkillDipendente(skill, dipendente);
+				skillDAO.insertSkillDipendente(skill, dipendente);
 			}
 			catch (SQLException e) {
 				//violazione duplicati

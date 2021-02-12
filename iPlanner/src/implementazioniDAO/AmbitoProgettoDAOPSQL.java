@@ -54,7 +54,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 
 	//Metodo che inserisce un nuovo ambito nel DB
 	@Override
-	public boolean addAmbito(AmbitoProgetto ambito) throws SQLException {
+	public boolean insertAmbito(AmbitoProgetto ambito) throws SQLException {
 		addAmbitoPS.setString(1, ambito.getNome()); 	//inserisce il nome dell'ambito nuovo nell'insert
 		
 		int record = addAmbitoPS.executeUpdate();	//esegue l'insert e salva il numero di record modificati (1=aggiunto, 0=non aggiunto)
@@ -67,7 +67,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 
 	//Metodo che restituisce gli ambiti di un progetto
 	@Override
-	public ArrayList<AmbitoProgetto> getAmbitiProgetto(Progetto proj) throws SQLException {
+	public ArrayList<AmbitoProgetto> getAmbitiOfProgetto(Progetto proj) throws SQLException {
 		getAmbitiProgettoPS.setInt(1, proj.getIdProgettto());	//inserisce il codice del progetto nella query
 		ArrayList<AmbitoProgetto> temp = new ArrayList<AmbitoProgetto>();	//inizializza la lista da restituire
 		
@@ -85,7 +85,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 
 	//Metodo che inserisce gli ambiti di un progetto
 	@Override
-	public boolean addAmbitiProgetto(Progetto proj) throws SQLException {
+	public boolean insertAmbitiOfProgetto(Progetto proj) throws SQLException {
 		int record = 0;
 		
 		//per ogni ambito del progetto
@@ -123,7 +123,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 
 	//Metodo che rimuove tutti gli ambiti di un progetto
 	@Override
-	public boolean removeAmbitiProgetto (Progetto proj) throws SQLException
+	public boolean deleteAmbitiProgetto (Progetto proj) throws SQLException
 	{
 		removeAmbitiProgettoPS.setInt(1, proj.getIdProgettto());
 		

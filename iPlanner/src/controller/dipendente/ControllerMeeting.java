@@ -125,22 +125,22 @@ public class ControllerMeeting {
 	//Metodo che inserisce il meeting del progetto da discutere
 	public void inserisciMeeting(Meeting meetingInserito,String nomeProgettoDisusso) throws SQLException{
 			//Prova ad inserire il meeting e del progetto da discutere
-			meetDAO.addMeeting(meetingInserito,nomeProgettoDisusso);
+			meetDAO.insertMeeting(meetingInserito,nomeProgettoDisusso);
 			
 			//Viene inserito come organizzatore la persona che crea il meeting
-			meetDAO.addOrganizzatore(dipendente.getCf()); 
+			meetDAO.insertOrganizzatore(dipendente.getCf()); 
 	}
 
 	//Metodo che rimuove un meeting
 	public void rimuoviMeeting(int idMeeting) throws SQLException {
 		//Rimuove il meeting selezionato
-		meetDAO.removeMeeting(idMeeting);
+		meetDAO.deleteMeeting(idMeeting);
 	}
 
 	//TODO: ???
 	public void inserisciMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException {
-		meetDAO.addMeetingCompleto(meetingInserito, progetto);
-		meetDAO.addOrganizzatore(dipendente.getCf()); 
+		meetDAO.insertMeetingCompleto(meetingInserito, progetto);
+		meetDAO.insertOrganizzatore(dipendente.getCf()); 
 	}
 
 	//Metodo che ottiene il progetto inserito

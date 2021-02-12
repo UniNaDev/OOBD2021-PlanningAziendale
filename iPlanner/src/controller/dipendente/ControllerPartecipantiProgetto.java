@@ -57,25 +57,25 @@ private InserisciPartecipantiProgetto inserisciPartecipantiProgetto;
 		//Metodo che ottiene le skill del dipendente
 		public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
 		
-			return skillDAO.getSkillDipendente(cfDipendente);
+			return skillDAO.getSkillsDipendente(cfDipendente);
 		}
 		
 		public ArrayList<Dipendente> ottieniPartecipanti(int codiceProgetto) throws SQLException{
 			
 			
-			return projDAO.getPartecipantiSenzaRuolo(codiceProgetto);
+			return projDAO.getPartecipantiProgettoSenzaRuolo(codiceProgetto);
 		}
 
 
 		public void inserisciPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-		projDAO.addPartecipante(collaborazioneProgetto);
+		projDAO.insertPartecipanteProgetto(collaborazioneProgetto);
 			
 		}
 
 
 		public void eliminaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		
-			projDAO.deletePartecipante(collaborazioneProgetto);
+			projDAO.deletePartecipanteProgetto(collaborazioneProgetto);
 		}
 
 
@@ -93,7 +93,7 @@ private InserisciPartecipantiProgetto inserisciPartecipantiProgetto;
 
 
 		public void aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-			projDAO.aggiornaPartecipante(collaborazioneProgetto);
+			projDAO.updatePartecipanteProgetto(collaborazioneProgetto);
 			
 		}
 }

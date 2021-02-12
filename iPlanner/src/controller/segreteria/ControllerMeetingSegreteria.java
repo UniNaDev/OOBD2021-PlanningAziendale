@@ -132,7 +132,7 @@ public class ControllerMeetingSegreteria {
 	
 	//Metodo che aggiunge una nuova sala al DB
 	public void creaSala(SalaRiunione sala) throws SQLException {
-		salaDAO.addSala(sala);
+		salaDAO.insertSala(sala);
 		aggiornaSaleFiltro();
 	}
 	

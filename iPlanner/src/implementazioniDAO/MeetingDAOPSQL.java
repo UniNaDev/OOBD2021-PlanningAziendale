@@ -226,7 +226,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//Metodo addMeeting.
 	/*Metodo che inserisce un nuovo meeting  nel DB.*/
 	@Override
-	public boolean addMeeting(Meeting meeting,String nomeProgettoDiscusso) throws SQLException {
+	public boolean insertMeeting(Meeting meeting,String nomeProgettoDiscusso) throws SQLException {
 		addMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));	//data inizio
 		addMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));	//data fine
 		addMeetingPS.setTime(3, new Time(meeting.getOraInizio().getHourOfDay(),meeting.getOraInizio().getMinuteOfHour(), 0));	//ora inizio
@@ -254,7 +254,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 	
 	@Override //---Prova---
-	public boolean addMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException {
+	public boolean insertMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException {
 		
 		addMeetingPS.setDate(1, new Date(meetingInserito.getDataInizio().toDateTimeAtStartOfDay().getMillis()));	//data inizio
 		addMeetingPS.setDate(2, new Date(meetingInserito.getDataFine().toDateTimeAtStartOfDay().getMillis()));	//data fine
@@ -287,7 +287,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//Metodo removeMeeting.
 	/*Metodo che rimuove un meeting specifico dal DB usando il suo ID.*/
 	@Override
-	public boolean removeMeeting(int idMeeting) throws SQLException {
+	public boolean deleteMeeting(int idMeeting) throws SQLException {
 		removeMeetingPS.setInt(1, idMeeting); 	//inserisce l'id nella delete
 		
 		int record = removeMeetingPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato,0=non eliminato)
@@ -405,7 +405,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 	
 	@Override
-	public boolean addOrganizzatore(String CF) throws SQLException {
+	public boolean insertOrganizzatore(String CF) throws SQLException {
 		
 		ResultSet risultato=lastIdMeetingPS.executeQuery();
 		risultato.next();
@@ -423,7 +423,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 	
 	@Override
-	public boolean aggiungiPartecipanteMeeting(PartecipazioneMeeting partecipante) throws SQLException {
+	public boolean insertPartecipanteMeeting(PartecipazioneMeeting partecipante) throws SQLException {
 		
 		aggiungiPartecipanteMeetingPS.setString(1, partecipante.getPartecipante().getCf());
 		aggiungiPartecipanteMeetingPS.setInt(2, partecipante.getMeeting().getIdMeeting());
@@ -439,7 +439,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 
 	@Override
-	public boolean eliminaPartecipanteMeeting(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
+	public boolean deletePartecipanteMeeting(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 		
 		eliminaPartecipanteMeetingPS.setString(1, partecipazioneMeeting.getPartecipante().getCf());
 		eliminaPartecipanteMeetingPS.setInt(2, partecipazioneMeeting.getMeeting().getIdMeeting());
@@ -454,7 +454,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 
 	@Override
-	public boolean aggiornaPresenza(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
+	public boolean updatePresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 		
 		aggiornaPresenzaMeetingPS.setBoolean(1, partecipazioneMeeting.isPresenza());
 		aggiornaPresenzaMeetingPS.setString(2, partecipazioneMeeting.getPartecipante().getCf());

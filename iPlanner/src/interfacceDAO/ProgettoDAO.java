@@ -12,29 +12,52 @@ import entita.Meeting;
 import entita.Progetto;
 
 public interface ProgettoDAO {
-
-	public ArrayList<Progetto> getProgetti() throws SQLException;	//metodo che restituisce tutti i progetti
-	public ArrayList<Progetto> getProgettiByNome(String nomeCercato) throws SQLException; //metodo che restituisce i progetti con un certo nome
-	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException;	//metodo che restituisce i progetti di un certo ambito
-	public ArrayList<Progetto> getProgettiByTipo(String tipologia) throws SQLException;	//metodo che restituisce i progetti di un certo tipo
-	public ArrayList<Meeting> getMeetingRelativi(int codProgettoSelezionato) throws SQLException;	//metodo che restituisce i meeting relativi ad un progetto
-	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;	//metodo che restituisce i progetti a cui partecipa un dipendente
-	public boolean addProgetto(Progetto proj) throws SQLException;	//metodo che inserisce un nuovo progetto nel DB
-	public boolean removeProgetto(Progetto proj) throws SQLException;	//metodo che rimuove un progetto dal DB
-	public boolean addPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;	//metodo che aggiunge un dipendente ai partecipanti a un progetto
-	public boolean deletePartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;	//metodo che rimuove un partecipante a un progetto
-	public boolean updateProgetto(Progetto proj) throws SQLException; //metodo che aggiorna un progetto nel DB
-	public Progetto getProgettoByCod(int codProgetto) throws SQLException;	//metodo che recupera un progetto partendo dal suo codice nel DB
-	public ArrayList<String> getTipologie() throws SQLException;	//metodo che ottiene le tipologie possibili di un progetto
-	public ArrayList<Dipendente> getPartecipantiSenzaRuolo(int codiceProgetto) throws SQLException; //metodo che restituisce tutti i partecipanti ad un progetto senza specificare il ruolo
-	public int getCodProgetto(Progetto proj) throws SQLException; //metodo che ottiene il codice di un progetto
-
-	public ArrayList<String> getRuoliDipendenti() throws SQLException; //Metodo che ritorna tutti i ruoli presenti nel DB
+	public ArrayList<Progetto> getProgetti() throws SQLException;
+	
+	public ArrayList<Progetto> getProgettiByNome(String nomeCercato) throws SQLException;
+	
+	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException;
+	
+	public ArrayList<Progetto> getProgettiByTipo(String tipologia) throws SQLException;
+	
+	public ArrayList<Meeting> getMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException;
+	
+	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;
+	
+	public boolean insertProgetto(Progetto proj) throws SQLException;
+	
+	public boolean deleteProgetto(Progetto proj) throws SQLException;
+	
+	public boolean insertPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
+	
+	public boolean updatePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
+	
+	public boolean deletePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
+	
+	public boolean updateProgetto(Progetto proj) throws SQLException;
+	
+	public Progetto getProgettoByCod(int codProgetto) throws SQLException;
+	
+	public ArrayList<String> getTipologie() throws SQLException;
+	
+	//TODO: probabilmente inutile
+	public ArrayList<Dipendente> getPartecipantiProgettoSenzaRuolo(int codiceProgetto) throws SQLException;
+	
+	//TODO: probabilmente inutile
+	public int getCodProgetto(Progetto proj) throws SQLException;
+	
+	public ArrayList<String> getRuoliDipendenti() throws SQLException;
+	
+	//TODO: probabilmente inutile
 	public Progetto getProgettoInserito(String nomeProgetto) throws SQLException;
-	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException;
-	public boolean addProjectManager(String cf, Progetto tmp, String string) throws SQLException;
-	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
-	public String ottieniProjectManager(Progetto progetto) throws SQLException;
+	
+	public ArrayList<CollaborazioneProgetto> getPartecipantiProgetto(int codiceProgetto) throws SQLException;
+	
+	//TODO: probabilmente inutile
+	public boolean insertProjectManager(String cf, Progetto tmp, String string) throws SQLException;
+	
+	//TODO: probabilmente inutile
+	public String getProjectManager(Progetto progetto) throws SQLException;
 	
 
 }

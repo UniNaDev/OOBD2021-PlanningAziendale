@@ -61,9 +61,9 @@ public class ControllerAccesso {
 
 	//Metodo che verifica le credenziali per l'accesso e se sono corrette passa alla finestra principale dopo aver salvato l'utente che ha fatto il login
 	public void verificaCredenziali(String user, String pass) throws SQLException {
-		dipendente = dipDAO.loginCheck(user, pass);	//salva il dipendente che fa il login
+		dipendente = dipDAO.getLoggedDipendente(user, pass);	//salva il dipendente che fa il login
 		try {
-			dipendente.setSkills(skillDAO.getSkillDipendente(dipendente.getCf())); 	//ottiene le skill del dipendente che ha fatto login
+			dipendente.setSkills(skillDAO.getSkillsDipendente(dipendente.getCf())); 	//ottiene le skill del dipendente che ha fatto login
 		} catch(SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					"Impossibile ottenere le skill del dipendente dal database.\nControllare che la connessione al database sia stabilita.",
