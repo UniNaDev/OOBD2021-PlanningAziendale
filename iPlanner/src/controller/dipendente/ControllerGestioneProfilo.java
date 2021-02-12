@@ -1,9 +1,10 @@
+//Controller relativo alle finestre di Home e Mio Account del programma.
+//Contiene tutti i metodi per far funzionare correttamente le finestre e per viaggiare tra esse.
+
 package controller.dipendente;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 
 import org.joda.time.LocalDate;
 
@@ -22,32 +23,20 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerGestioneProfilo {
+	private Home homeFrame;
+	private MioAccount accountFrame;
 
-	//ATTRIBUTI
-	//-----------------------------------------------------------------
-	
-	//Attributi GUI
-	private Home homeFrame;	//finestra principale
-	private MioAccount accountFrame;	//finestra con dettagli del proprio profilo
-	
-	//DAO
-	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
-	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;	//dao progetto
-	private MeetingDAO meetDAO = null;	//dao meeting
-	private SkillDAO skillDAO = null;	//dao delle skill
-	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
-	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
-	
-	//Altri attributi
-	private Dipendente dipendente = null;
+	private LuogoNascitaDAO luogoDAO = null;
+	private DipendenteDAO dipDAO = null;
+	private ProgettoDAO projDAO = null;
+	private MeetingDAO meetDAO = null;
+	private SkillDAO skillDAO = null;
+	private SalaRiunioneDAO salaDAO = null;
+	private AmbitoProgettoDAO ambitoDAO = null;
 
-	//METODI
-	//-----------------------------------------------------------------
-	
-	//Costruttore
-	public ControllerGestioneProfilo(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, Dipendente dipendente) {
-		//ottiene tutti i dao
+	private Dipendente dipendenteLogged = null;
+
+	public ControllerGestioneProfilo(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, Dipendente dipendenteLogged) {
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
@@ -56,88 +45,68 @@ public class ControllerGestioneProfilo {
 		this.salaDAO = salaDAO;
 		this.ambitoDAO = ambitoDAO;
 		
-		this.dipendente = dipendente;	//ottiene il dipendente che ha effettuato il login
+		this.dipendenteLogged = dipendenteLogged;
 		
-		//apre la finestra principale
-		homeFrame=new Home(this, dipendente);
+		homeFrame = new Home(this, dipendenteLogged);
 		homeFrame.setVisible(true);
 		
 	}
 	
-	//Metodi per gestione GUI
-	//-----------------------------------------------------------------
-	
-	//Metodo che apre la finestra dei dettagli del proprio profilo
 	public void apriMioAccount() {
-		accountFrame=new MioAccount(this, dipendente);
+		accountFrame=new MioAccount(this, dipendenteLogged);
 		accountFrame.setVisible(true);
 	}
 	
-	//Metodo che chiude la finestra dei dettagli dell'account
 	public void chiudiMioAccount() {
 		accountFrame.setVisible(false);
 	}
 
-	//Metodo per il logout
 	public void logout() {
 		System.exit(0);
 	}
 
-	//Metodo che apre la gestione progetti del dipendente
 	public void apriMieiProgetti() {
-		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,ambitoDAO,skillDAO, dipendente);
+		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,ambitoDAO,skillDAO, dipendenteLogged);
 	}
 	
-	//Metodo che apre la gestione dei meeting del dipendente
 	public void apriMieiMeeting() {
-		ControllerMeeting controller= new ControllerMeeting(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,dipendente);
+		ControllerMeeting controller= new ControllerMeeting(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,dipendenteLogged);
 	}
 	
-	//Metodo che torna alla home
 	public void tornaAHome() {
 		homeFrame.setVisible(false);
-		homeFrame=new Home(this, dipendente);
+		homeFrame=new Home(this, dipendenteLogged);
 		homeFrame.setVisible(true);
 	}
-	
-	//Altri metodi
-	//-----------------------------------------------------------------
-	
-	//Metodo che ottiene i progetti a cui partecipa il dipendente
+
 	public ArrayList<CollaborazioneProgetto> ottieniProgetti() throws SQLException {
-		return projDAO.getProgettiByDipendente(dipendente);
+		return projDAO.getProgettiByDipendente(dipendenteLogged);
 	}
 	
-	//Metodo che ottiene i meeting a cui partecipa il dipendente
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		return meetDAO.getMeetingsByInvitato(dipendente);
+		return meetDAO.getMeetingsByInvitato(dipendenteLogged);
 	}
 	
-	//Metodo che aggiorna le informazioni del dipendente
 	public void aggiornaInfoDipendente(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) throws SQLException {
-		//setta le nuove informazioni del dipendente
-		dipendente.setNome(nome);
-		dipendente.setCognome(cognome);
-		dipendente.setSesso(sesso);
-		dipendente.setDataNascita(dataNascita);
-		dipendente.setLuogoNascita(luogoNascita);
-		if(!dipendente.getEmail().equals(email))
-			dipendente.setEmail(email);
-		dipendente.setPassword(password);
-		dipendente.setTelefonoCasa(telefono);
-		dipendente.setCellulare(cellulare);
-		dipendente.setIndirizzo(indirizzo);
+		dipendenteLogged.setNome(nome);
+		dipendenteLogged.setCognome(cognome);
+		dipendenteLogged.setSesso(sesso);
+		dipendenteLogged.setDataNascita(dataNascita);
+		dipendenteLogged.setLuogoNascita(luogoNascita);
+		if(!dipendenteLogged.getEmail().equals(email))
+			dipendenteLogged.setEmail(email);
+		dipendenteLogged.setPassword(password);
+		dipendenteLogged.setTelefonoCasa(telefono);
+		dipendenteLogged.setCellulare(cellulare);
+		dipendenteLogged.setIndirizzo(indirizzo);
 	
-		dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB
+		dipDAO.updateDipendente(dipendenteLogged);
 		}
 	
-	
-	//Metodo che restituisce tutte le province del database
 	public ArrayList<String> ottieniProvince() throws SQLException{
 		return luogoDAO.getProvince();
 	}
 	
-	//Metodo che prende i comuni di una provincia per il menù di creazione account
 	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException{
 		return luogoDAO.getLuoghiByProvincia(provincia);
 	}	

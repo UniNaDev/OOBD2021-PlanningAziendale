@@ -1,9 +1,10 @@
+//Controller relativo alle finestre Miei Progetti e Gestione Progetti lato dipendente.
+//Contiene tutti i metodi necessari per il corretto funzionamento delle finestre.
+
 package controller.dipendente;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import javax.swing.table.TableModel;
 
 import org.joda.time.LocalDate;
 
@@ -24,77 +25,53 @@ import interfacceDAO.SkillDAO;
 
 
 public class ControllerProgetto {
-
-	//ATTRIBUTI
-	//-----------------------------------------------------------------
+	private MieiProgetti mieiProgettiFrame;
+	private GestioneProgettiDipendente gestioneProgettiFrame;
 	
-	//Attributi GUI
-	private MieiProgetti mieiProgetti;
-	private GestioneProgettiDipendente gestioneProgetti;
-
-	//DAO
-	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
-	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;	//dao progetti
-	private MeetingDAO meetDAO = null;	//dao meeting
-	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
+	private LuogoNascitaDAO luogoDAO = null;
+	private DipendenteDAO dipDAO = null;
+	private ProgettoDAO projDAO = null;
+	private MeetingDAO meetDAO = null;
+	private AmbitoProgettoDAO ambitoDAO = null;
 	private SkillDAO skillDAO=null;
 	
-	//Altri attributi
-	private Dipendente dipendente = null;
-	
-	//METODI
-	//-----------------------------------------------------------------
-	
-	//Costruttore
-	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, AmbitoProgettoDAO ambitoDAO,SkillDAO skillDAO, Dipendente dipendente) {
-		//ottiene i dao
+	private Dipendente dipendenteLogged = null;
+
+	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, AmbitoProgettoDAO ambitoDAO,SkillDAO skillDAO, Dipendente dipendenteLogged) {
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.ambitoDAO = ambitoDAO;
 		this.skillDAO=skillDAO;
-		this.dipendente = dipendente;	//ottiene il dipendente che ha avuto accesso
+		this.dipendenteLogged = dipendenteLogged;
 		
-		//apre la finestra Miei Progetti
-		mieiProgetti=new MieiProgetti(this, this.dipendente);
-		mieiProgetti.setVisible(true);
+		mieiProgettiFrame=new MieiProgetti(this, this.dipendenteLogged);
+		mieiProgettiFrame.setVisible(true);
 	}
 
-	//Metodi di gestione delle GUI
-	//-----------------------------------------------------------------
-	
-	//Metodo che apre la finestra per inserire partecipanti a un progetto
 	public void apriInserisciPartecipantiProgetto(Progetto progettoSelezionato) {
-		ControllerPartecipantiProgetto controller=new ControllerPartecipantiProgetto(luogoDAO, dipDAO, projDAO, meetDAO, dipendente,skillDAO,progettoSelezionato);
+		ControllerPartecipantiProgetto controller = new ControllerPartecipantiProgetto(luogoDAO, dipDAO, projDAO, meetDAO, dipendenteLogged, skillDAO, progettoSelezionato);
 	}
 	
-	//Metodo che apre la finestra di gestione dei progetti
 	public void apriGestioneProgetti() {
-		gestioneProgetti = new GestioneProgettiDipendente(this,dipendente);
-		gestioneProgetti.setVisible(true);
-		mieiProgetti.setVisible(false);
+		gestioneProgettiFrame = new GestioneProgettiDipendente(this,dipendenteLogged);
+		gestioneProgettiFrame.setVisible(true);
+		mieiProgettiFrame.setVisible(false);
 	}
 
-	//Altri metodi
-	//-----------------------------------------------------------------
-	
-	//Ottiene i progetti del dipendente
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
-		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendente);
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendenteLogged);
+		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)
-			temp.add(collaborazione.getProgetto());
-		return temp;
+			progetti.add(collaborazione.getProgetto());
+		return progetti;
 	}
 	
-	//Ottiene tutti gli ambiti progetto del database
 	public ArrayList<AmbitoProgetto> ottieniAmbiti() throws SQLException{
 		return ambitoDAO.getAmbiti();
 	}
 	
-	//Ottiene tutte le tipologie possibili nel database
 	public String [] ottieniTipologie() throws SQLException{
 		String [] temp = new String [projDAO.getTipologie().size()];
 		for (int i = 0; i < projDAO.getTipologie().size(); i++)
@@ -102,155 +79,120 @@ public class ControllerProgetto {
 		return temp;
 	}
 
-	//Ottiene tutti i partecipanti relativi ad un progetto
-	public ArrayList<Dipendente> getPartecipantiProgetto (int codiceProgetto) throws SQLException {
+	//TODO: eliminabile probabilmente
+	public ArrayList<Dipendente> ottieniPartecipantiProgetto (int codiceProgetto) throws SQLException {
 		return projDAO.getPartecipantiProgettoSenzaRuolo(codiceProgetto);
 	}
 
-	//Ottiene tutti i meeting relativi ad un progetto
-	public ArrayList<Meeting> getMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException {
+	//TODO: eliminabile probabilmente
+	public ArrayList<Meeting> ottieniMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException {
 		return projDAO.getMeetingRelativiProgetto(codProgettoSelezionato);
 	}
 
-	//metodo fa l'update del progetto con i nuovi campi inseriti
-	public void updateProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione,LocalDate dataCreazione, LocalDate nuovaDataTerminazione , LocalDate nuovaDataScadenza, ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException {
-		//crea un progetto temporaneo con i dati del progetto aggiorati
-		Progetto tmp = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione ,dataCreazione, nuovaDataScadenza, nuovaDataTerminazione);
-		
-		projDAO.updateProgetto(tmp);
-		
-		//rimuove i vecchi ambiti che aveva il progetto
-		ambitoDAO.deleteAmbitiProgetto(tmp);
-		
-		//setta i nuovi ambiti del progetto e li aggiunge 
-		tmp.setAmbiti(nuoviAmbiti);
-		ambitoDAO.insertAmbitiOfProgetto(tmp);								
+	public void aggiornaProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione,LocalDate dataCreazione, LocalDate nuovaDataTerminazione , LocalDate nuovaDataScadenza, ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException {
+		Progetto progetto = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione ,dataCreazione, nuovaDataScadenza, nuovaDataTerminazione);
+		projDAO.updateProgetto(progetto);
+		ambitoDAO.deleteAmbitiProgetto(progetto);
+		progetto.setAmbiti(nuoviAmbiti);
+		ambitoDAO.insertAmbitiOfProgetto(progetto);								
 	}
 	
-	//metodo che fa l'insert di un nuovo progetto con i campi inseriti
-	public void addProgetto(String nomeProgetto , String tipologia , String descrizioneProgetto , LocalDate dataCreazione , LocalDate dataScadenza,ArrayList<AmbitoProgetto> ambiti) throws SQLException {
-		Progetto tmp = new Progetto(nomeProgetto, tipologia, descrizioneProgetto , dataCreazione , dataScadenza);
-
-		//aggiunge prima il progetto senza ambiti in modo che la sequence nel db crei un CodProgetto
-		projDAO.insertProgetto(tmp);
-		
-		//ricava il codProgetto del progetto appena inserto e lo setta
-		tmp.setIdProgettto(projDAO.getCodProgetto(tmp));
-		
-		//aggiunge gli ambiti presi dalle righe seleziionate al progetto
-		tmp.setAmbiti(ambiti);
-
-		//fa un insert in ambitoProgettoLink nel db
-		ambitoDAO.insertAmbitiOfProgetto(tmp);
-		
-		//imposta il dipendente che ha creato il progetto come project Manager
-		projDAO.insertProjectManager(dipendente.getCf(), tmp, "Project Manager");	
+	public void creaProgetto(String nomeProgetto , String tipologia , String descrizioneProgetto , LocalDate dataCreazione , LocalDate dataScadenza,ArrayList<AmbitoProgetto> ambiti) throws SQLException {
+		Progetto progetto = new Progetto(nomeProgetto, tipologia, descrizioneProgetto , dataCreazione , dataScadenza);
+		projDAO.insertProgetto(progetto);
+		progetto.setIdProgettto(projDAO.getCodProgetto(progetto));
+		progetto.setAmbiti(ambiti);
+		ambitoDAO.insertAmbitiOfProgetto(progetto);
+		projDAO.insertProjectManager(dipendenteLogged.getCf(), progetto, "Project Manager");	
 	}
 	
-	//metodo che prende in input il codprogetto e restituisce gli ambiti
-	public ArrayList<AmbitoProgetto> getAmbitiProgettoByCod(int codProgetto) throws SQLException {
+	//TODO: eliminabile probabilmente
+	public ArrayList<AmbitoProgetto> ottieniAmbitiProgettoByCod(int codProgetto) throws SQLException {
 		return ambitoDAO.getAmbitiProgettoByCodice(codProgetto);
 	}
 	
-	//metodo che prende in input il codProgetto e lo elimina dal db
+	//TODO: potrebbe diventare void
 	public boolean rimuoviProgetto (Progetto progetto) throws SQLException {
 		boolean risultato = projDAO.deleteProgetto(progetto);
-		
 		return risultato;
 	}
 
-	//Metodo che aggiorna un progetto nel DB
 	public void updateProgetto(Progetto progetto) throws SQLException {
-		
 		projDAO.updateProgetto(progetto);
-		
-		//rimuove i vecchi ambiti che aveva il progetto
 		ambitoDAO.deleteAmbitiProgetto(progetto);
-		
-		//setta i nuovi ambiti del progetto e li aggiunge 
 		progetto.setAmbiti(progetto.getAmbiti());
 		ambitoDAO.insertAmbitiOfProgetto(progetto);
-		
 	}
 	
-	//Metodo che ottiene il project manager di un progetto
+	//TODO: eliminabile probabilmente
 	public String ottieniProjectManager(Progetto progetto) throws SQLException {
 		return projDAO.getProjectManager(progetto);
 	}
 
-	//Metodo che filtra i progetti
 	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{
-		ArrayList<Progetto> risultato = projDAO.getProgettiDipendenteByNome(nomeCercato,dipendente);	//ottiene i progetti filtrati per nome
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiFiltrati = projDAO.getProgettiDipendenteByNome(nomeCercato,dipendenteLogged);
+		ArrayList<Progetto> progettiConFiltro = new ArrayList<Progetto>();
 		if (tipologiaCercata != null) {
-			temp = projDAO.getProgettiByTipo(tipologiaCercata);	//ottiene i progetti filtrati per tipologia
-			risultato.retainAll(temp);	//interseca i progetti precedenti con quelli filtrati ora per tipologia
+			progettiConFiltro = projDAO.getProgettiByTipo(tipologiaCercata);
+			progettiFiltrati.retainAll(progettiConFiltro);
 		}
 		if (ambitoCercato != null) {
-			temp = projDAO.getProgettiByAmbito(ambitoCercato); //ottiene i progetti filtrati per ambito
-			risultato.retainAll(temp);
+			progettiConFiltro = projDAO.getProgettiByAmbito(ambitoCercato);
+			progettiFiltrati.retainAll(progettiConFiltro);
 		}
 		if (scaduto.equals("Si")) {
-			//filtra temp prendendo solo quelli scaduti
-			risultato.retainAll(filtraScaduti(risultato));
+			progettiFiltrati.retainAll(filtraScaduti(progettiFiltrati));
 		}
 		else if (scaduto.equals("No")) {
-			//filtra temp prendendo solo quelli NON scaduti
-			risultato.retainAll(filtraNonScaduti(risultato));
+			progettiFiltrati.retainAll(filtraNonScaduti(progettiFiltrati));
 		}
 		if (terminato.equals("Si")) {
-			//filtra temp prendendo solo quelli terminati
-			risultato.retainAll(filtraTerminati(risultato));
+			progettiFiltrati.retainAll(filtraTerminati(progettiFiltrati));
 		}
 		else if (terminato.equals("No")) {
-			//filtra temp prendendo solo quelli NON terminati
-			risultato.retainAll(filtraNonTerminati(risultato));
+			progettiFiltrati.retainAll(filtraNonTerminati(progettiFiltrati));
 		}
-		return risultato;
+		return progettiFiltrati;
 	}
 	
-	//Metodo che filtra i progetti scaduti
 	private ArrayList<Progetto> filtraScaduti(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiScaduti = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getScadenza().isBefore(LocalDate.now())) {
-				temp.add(proj);
+				progettiScaduti.add(proj);
 			}
 		}
-		return temp;
+		return progettiScaduti;
 	}
 	
-	//Metodo che filtra i progetti NON scaduti
 	private ArrayList<Progetto> filtraNonScaduti(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiNonScaduti = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getScadenza().isAfter(LocalDate.now())) {
-				temp.add(proj);
+				progettiNonScaduti.add(proj);
 			}
 		}
-		return temp;
+		return progettiNonScaduti;
 	}
 	
-	//Metodo che filtra i progetti terminati
 	private ArrayList<Progetto> filtraTerminati(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiTerminati = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getDataTerminazione() != null) {
-				temp.add(proj);
+				progettiTerminati.add(proj);
 			}
 		}
-		return temp;
+		return progettiTerminati;
 	}
 	
-	//Metodo che filtra i progetti NON terminati
 	private ArrayList<Progetto> filtraNonTerminati(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiNonTerminati = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getDataTerminazione() == null) {
-				temp.add(proj);
+				progettiNonTerminati.add(proj);
 			}
 		}
-		return temp;
+		return progettiNonTerminati;
 	}
 }
 

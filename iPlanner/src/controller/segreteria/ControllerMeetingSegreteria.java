@@ -1,10 +1,13 @@
+//Controller relativo alla finestra della gestione dei meeting lato segreteria.
+//Contiene i metodi necessari al corretto funzionamento della finestra e ai passaggi
+//da quest'ultima alle altre finestre raggiungibili nel programma.
+
 package controller.segreteria;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import controller.ControllerStart;
-import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
 import entita.SalaRiunione;
@@ -19,29 +22,18 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerMeetingSegreteria {
+	private GestioneMeetingSegreteria gestioneMeetingSegreteriaFrame;
+	private GestioneSale gestioneSaleFrame;
+	
+	private LuogoNascitaDAO luogoDAO = null;
+	private DipendenteDAO dipDAO = null;
+	private ProgettoDAO projDAO = null;
+	private MeetingDAO meetDAO = null;
+	private SkillDAO skillDAO = null;
+	private SalaRiunioneDAO salaDAO = null;
+	private AmbitoProgettoDAO ambitoDAO = null;
 
-	//ATTRIBUTI
-	//-----------------------------------------------------------------
-	
-	//Attributi GUI
-	private GestioneMeetingSegreteria gestioneMeetingSegreteria;
-	private GestioneSale gestioneSale;
-	
-	//DAO
-	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
-	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;	//dao progetto
-	private MeetingDAO meetDAO = null;	//dao meeting
-	private SkillDAO skillDAO = null;	//dao delle skill
-	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
-	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
-	
-	//METODI
-	//-----------------------------------------------------------------
-	
-	//Costruttore
 	public ControllerMeetingSegreteria (LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO) {
-		//Ottiene le implementazioni dei DAO inizializzate nel main Starter
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
@@ -50,100 +42,78 @@ public class ControllerMeetingSegreteria {
 		this.salaDAO = salaDAO;
 		this.ambitoDAO = ambitoDAO;
 		
-		gestioneMeetingSegreteria = new GestioneMeetingSegreteria(this);
-		gestioneMeetingSegreteria.setVisible(true);
+		gestioneMeetingSegreteriaFrame = new GestioneMeetingSegreteria(this);
+		gestioneMeetingSegreteriaFrame.setVisible(true);
 	}
-	
-	//Metodi gestione GUI
-	//-----------------------------------------------------------------
-		
-	//Metodo che reindirizza al frame di scelta iniziale quando viene annullata la creazione dell'account
 	public void tornaAiPlanner() {
-		gestioneMeetingSegreteria.setVisible(false);	//chiude la finestra di creazione account
-		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);	//torna ad iPlanner in modalità segreteria
+		gestioneMeetingSegreteriaFrame.setVisible(false);
+		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);
 	}
 	
-	//Metodo che passa alla gestione delle sale
 	public void apriGestioneSale() {
-		gestioneMeetingSegreteria.setEnabled(false);	//disabilita gestione meeting
-		gestioneSale = new GestioneSale(this);	//crea la finestra gestione sale
-		gestioneSale.setVisible(true);	//visualizza la gestione sale
-		gestioneSale.toFront();	//gestione sale va in primo piano
+		gestioneMeetingSegreteriaFrame.setEnabled(false);
+		gestioneSaleFrame = new GestioneSale(this);
+		gestioneSaleFrame.setVisible(true);
+		gestioneSaleFrame.toFront();
 	}
 	
-	//Metodo che esce dalla gestione sale
 	public void chiudiGestioneSale() {
-		gestioneSale.setVisible(false); //nasconde la finestra gestione sale
-		gestioneMeetingSegreteria.setEnabled(true);	//riabilita la finestra gestione meeting
-		gestioneMeetingSegreteria.toFront();	//gestione meeting va in primo piano
+		gestioneSaleFrame.setVisible(false);
+		gestioneMeetingSegreteriaFrame.setEnabled(true);
+		gestioneMeetingSegreteriaFrame.toFront();
 	}
 	
-	//Metodo che aggiorna le sale nella combobox nei filtri
 	private void aggiornaSaleFiltro() {
-		gestioneMeetingSegreteria.aggiornaSale(this); //aggiorna la combobox delle sale
+		gestioneMeetingSegreteriaFrame.aggiornaSale(this);
 	}
-		
-	//Altri metodi
-	//-----------------------------------------------------------------
-	
-	//Metodo che ottiene tutti i meeting
+
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
 		return meetDAO.getMeetings();
 	}
 	
-	//Metodo che ottiene tutte le partecipazioni ai meeting
 	public ArrayList<PartecipazioneMeeting> ottieniPartecipanti(Meeting meeting) throws SQLException{
 		return meetDAO.getInvitatiPartecipazioneMeeting(meeting.getIdMeeting());
 	}
-	
-	//Metodo che ottiene tutte le sale
+
 	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
-		ArrayList<SalaRiunione> temp = salaDAO.getSale();
-		temp.add(0, null);
-		return temp;
+		ArrayList<SalaRiunione> sale = salaDAO.getSale();
+		sale.add(0, null);
+		return sale;
 	}
 	
-	//Metodo che ottiene tutte le piattaforme
 	public ArrayList<String> ottieniPiattaforme() throws SQLException{
-		ArrayList<String> temp = meetDAO.getPiattaforme();
-		temp.add(0, null);
-		return temp;
+		ArrayList<String> piattaforme = meetDAO.getPiattaforme();
+		piattaforme.add(0, null);
+		return piattaforme;
 	}
 	
-	//Metodo che ottiene i meeting filtrati per modalità
 	public ArrayList<Meeting> filtraMeetingTelematici() throws SQLException{
 		return meetDAO.getMeetingsByModalità("Telematico");
 	}
 	
-	//Metodo che ottiene i meeting filtrati per modalità
 	public ArrayList<Meeting> filtraMeetingFisici() throws SQLException{
 		return meetDAO.getMeetingsByModalità("Fisico");
 	}
 	
-	//Metodo che ottiene i meeting filtrati per piattaforma
 	public ArrayList<Meeting> filtraMeetingPiattaforma(String piattaforma) throws SQLException{
 		return meetDAO.getMeetingsByPiattaforma(piattaforma);
 	}
 	
-	//Metodo che ottiene i meeting filtrati per sala
 	public ArrayList<Meeting> filtraMeetingSala(SalaRiunione sala) throws SQLException{
 		return meetDAO.getMeetingsBySala(sala);
 	}
 	
-	//Metodo che aggiunge una nuova sala al DB
 	public void creaSala(SalaRiunione sala) throws SQLException {
 		salaDAO.insertSala(sala);
 		aggiornaSaleFiltro();
 	}
 	
-	//Metodo che elimina una sala esistente dal DB
 	public void eliminaSala(String codSala) throws SQLException {
 		SalaRiunione sala = salaDAO.getSalaByCod(codSala);
 		salaDAO.deleteSala(sala);
 		aggiornaSaleFiltro();
 	}
 	
-	//Metodo che aggiorna una sala già esistente nel DB
 	public void aggiornaSala(String codSala, int cap, String indirizzo, int piano) throws SQLException {
 		SalaRiunione sala = salaDAO.getSalaByCod(codSala);
 		sala.setCapienza(cap);

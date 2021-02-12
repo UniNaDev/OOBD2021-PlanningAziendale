@@ -1,19 +1,14 @@
+//Controller che si occupa dell'inizializzazione della finestra principale del programma
+//e dei relativi passaggi alle finestre di login o di segreteria
+
 package controller;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
-import org.joda.time.LocalDate;
 
 import controller.dipendente.ControllerAccesso;
 import controller.segreteria.ControllerDipendentiSegreteria;
 import controller.segreteria.ControllerMeetingSegreteria;
 import controller.segreteria.ControllerProgettiSegreteria;
-import entita.Dipendente;
-import entita.LuogoNascita;
-import entita.Skill;
 import gui.*;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
@@ -24,31 +19,19 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerStart {
-
-	//ATTRIBUTI
-	//-----------------------------------------------------------------
+	private iPlanner iPlannerFrame;
 	
-	//Attributi GUI
-	private iPlanner iPlannerFrame;	//frame della finestra di scelta iniziale
+	private LuogoNascitaDAO luogoDAO = null;
+	private DipendenteDAO dipDAO = null;
+	private ProgettoDAO projDAO = null;
+	private MeetingDAO meetDAO = null;
+	private SkillDAO skillDAO = null;
+	private SalaRiunioneDAO salaDAO = null;
+	private AmbitoProgettoDAO ambitoDAO = null;
 	
-	//DAO
-	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
-	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;	//dao progetto
-	private MeetingDAO meetDAO = null;	//dao meeting
-	private SkillDAO skillDAO = null;	//dao delle skill
-	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
-	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
+	private boolean isSegreteria = false;
 	
-	//Altri attributi
-	private boolean segreteria = false;	//autorizzazione (true = segreteria, false = dipendente)
-	
-	//METODI
-	//-----------------------------------------------------------------
-	
-	//Costruttore del controllee di scelta che mostra la prima finestra di scelta
-	public ControllerStart(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, boolean segreteria) {
-		//Ottiene le implementazioni dei DAO inizializzate nel main Starter
+	public ControllerStart(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, boolean isSegreteria) {
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
@@ -57,37 +40,30 @@ public class ControllerStart {
 		this.salaDAO = salaDAO;
 		this.ambitoDAO = ambitoDAO;
 		
-		this.segreteria = segreteria;	//ottiene l'autorizzazione presa nel main dagli argomenti a linea di comando
+		this.isSegreteria = isSegreteria;
 		
-		iPlannerFrame=new iPlanner(this, segreteria);	//inizializza la prima finestra di scelta
-		iPlannerFrame.setVisible(true);	//mostra la finestra inizializzata
-		
+		iPlannerFrame=new iPlanner(this, isSegreteria);
+		iPlannerFrame.setVisible(true);		
 	}
 	
-	//Metodi gestione GUI
-	//-----------------------------------------------------------------
-	
-	//Metodo che indirizza al Login
 	public void apriLogin() {
-		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerAccesso controller=new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO, segreteria);	//inizializza il controller di accesso che si occupa del login e che mostrerà la finestra di login
+		iPlannerFrame.setVisible(false);
+		ControllerAccesso controller=new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO, isSegreteria);
 	}
 	
-	//Metodo che indirizza al controller gestione dipendenti della segreteria
 	public void vaiAGestioneDipendenti() {
-		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerDipendentiSegreteria controller = new ControllerDipendentiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller della segreteria
+		iPlannerFrame.setVisible(false);
+		ControllerDipendentiSegreteria controller = new ControllerDipendentiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}
 	
-	//Metodo che indirizza al controller gestione progetti della segreteria
 	public void vaiAGestioneProgetti() {
-		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller
+		iPlannerFrame.setVisible(false);
+		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}
 	
 	//Metodo che indirizza al controller gestione meeting della segreteria
 	public void vaiAGestioneMeeting() {
 		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
-		ControllerMeetingSegreteria controller = new ControllerMeetingSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);	//inizializza il controller
+		ControllerMeetingSegreteria controller = new ControllerMeetingSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}
 }

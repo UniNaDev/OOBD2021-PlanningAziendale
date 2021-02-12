@@ -1,3 +1,7 @@
+//Controller relativo alla finestra per la gestione dei progetti lato segreteria.
+//Contiene metodi necessari per il corretto funzionamento della finestra e per il
+//corretto comportamento rispetto alle altre finestre raggiungibili del programma.
+
 package controller.segreteria;
 
 import java.sql.SQLException;
@@ -19,25 +23,16 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerProgettiSegreteria {
-	
-	//ATTRIBUTI
-	//-----------------------------------------------------------------
-	
 	private GestioneProgettiSegreteria gestioneProgettiFrame;
 
-	//DAO
-	private LuogoNascitaDAO luogoDAO = null;	//dao luogo di nascita
-	private DipendenteDAO dipDAO = null;	//dao del dipendente
-	private ProgettoDAO projDAO = null;	//dao progetto
-	private MeetingDAO meetDAO = null;	//dao meeting
-	private SkillDAO skillDAO = null;	//dao delle skill
-	private SalaRiunioneDAO salaDAO = null;	//dao delle sale
-	private AmbitoProgettoDAO ambitoDAO = null;	//dao ambiti progetti
+	private LuogoNascitaDAO luogoDAO = null;
+	private DipendenteDAO dipDAO = null;
+	private ProgettoDAO projDAO = null;
+	private MeetingDAO meetDAO = null;
+	private SkillDAO skillDAO = null;
+	private SalaRiunioneDAO salaDAO = null;
+	private AmbitoProgettoDAO ambitoDAO = null;
 	
-	//METODI
-	//-----------------------------------------------------------------
-	
-	//Costruttore
 	public ControllerProgettiSegreteria(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO) {
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
@@ -51,125 +46,103 @@ public class ControllerProgettiSegreteria {
 		gestioneProgettiFrame.setVisible(true);
 	}
 	
-	//Metodi gestione GUI
-	//-----------------------------------------------------------------
-	
-	//Metodo che reindirizza al frame di scelta iniziale quando viene annullata la creazione dell'account
 	public void tornaAiPlanner() {
-		gestioneProgettiFrame.setVisible(false);	//chiude la finestra di creazione account
-		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);	//torna ad iPlanner in modalità segreteria
+		gestioneProgettiFrame.setVisible(false);
+		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);
 	}
 	
-	//Altri metodi
-	//-----------------------------------------------------------------
-	
-	//Metodo che ottiene tutti i progetti
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException{
 		return projDAO.getProgetti();
 	}
 	
-	//Metodo che crea un nuovo ambito per progetti
 	public void creaAmbitoProgetto(String nomeAmbito) throws SQLException {
 		AmbitoProgetto temp = new AmbitoProgetto(nomeAmbito);
 		ambitoDAO.insertAmbito(temp);
 	}
 	
-	//Metodo che ottiene gli ambiti di un progetto
 	public ArrayList<AmbitoProgetto> ottieniAmbitiProgetto(Progetto progetto) throws SQLException {
 		return ambitoDAO.getAmbitiOfProgetto(progetto);
 	}
 	
-	//Metodo che ottiene tutte le collaborazioni a un progetto
 	public ArrayList<CollaborazioneProgetto> ottieniCollaborazioni(Progetto progetto) throws SQLException{
 		return projDAO.getPartecipantiProgetto(progetto.getIdProgettto());
 	}
 	
-	//Metodo che ottiene tutti gli ambiti
 	public ArrayList<AmbitoProgetto> ottieniTuttiAmbiti() throws SQLException{
 		ArrayList<AmbitoProgetto> temp = ambitoDAO.getAmbiti();
 		temp.add(0,null);
 		return temp;
 	}
 	
-	//Metodo che ottiene tutte le tipologie
 	public ArrayList<String> ottieniTipologie() throws SQLException{
 		ArrayList<String> temp = projDAO.getTipologie();
 		temp.add(0,null);
 		return temp;
 	}
 	
-	//Metodo che filtra i progetti
 	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{
-		ArrayList<Progetto> risultato = projDAO.getProgettiByNome(nomeCercato);	//ottiene i progetti filtrati per nome
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progetti = projDAO.getProgettiByNome(nomeCercato);
+		ArrayList<Progetto> progettiConFiltro = new ArrayList<Progetto>();
 		if (tipologiaCercata != null) {
-			temp = projDAO.getProgettiByTipo(tipologiaCercata);	//ottiene i progetti filtrati per tipologia
-			risultato.retainAll(temp);	//interseca i progetti precedenti con quelli filtrati ora per tipologia
+			progettiConFiltro = projDAO.getProgettiByTipo(tipologiaCercata);
+			progetti.retainAll(progettiConFiltro);
 		}
 		if (ambitoCercato != null) {
-			temp = projDAO.getProgettiByAmbito(ambitoCercato); //ottiene i progetti filtrati per ambito
-			risultato.retainAll(temp);
+			progettiConFiltro = projDAO.getProgettiByAmbito(ambitoCercato);
+			progetti.retainAll(progettiConFiltro);
 		}
 		if (scaduto.equals("Si")) {
-			//filtra temp prendendo solo quelli scaduti
-			risultato.retainAll(filtraScaduti(risultato));
+			progetti.retainAll(filtraScaduti(progetti));
 		}
 		else if (scaduto.equals("No")) {
-			//filtra temp prendendo solo quelli NON scaduti
-			risultato.retainAll(filtraNonScaduti(risultato));
+			progetti.retainAll(filtraNonScaduti(progetti));
 		}
 		if (terminato.equals("Si")) {
-			//filtra temp prendendo solo quelli terminati
-			risultato.retainAll(filtraTerminati(risultato));
+			progetti.retainAll(filtraTerminati(progetti));
 		}
 		else if (terminato.equals("No")) {
-			//filtra temp prendendo solo quelli NON terminati
-			risultato.retainAll(filtraNonTerminati(risultato));
+			progetti.retainAll(filtraNonTerminati(progetti));
 		}
-		return risultato;
+		return progetti;
 	}
 	
-	//Metodo che filtra i progetti scaduti
 	private ArrayList<Progetto> filtraScaduti(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiScaduti = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getScadenza().isBefore(LocalDate.now())) {
-				temp.add(proj);
+				progettiScaduti.add(proj);
 			}
 		}
-		return temp;
+		return progettiScaduti;
 	}
-	
-	//Metodo che filtra i progetti NON scaduti
+
 	private ArrayList<Progetto> filtraNonScaduti(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiNonScaduti = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getScadenza().isAfter(LocalDate.now())) {
-				temp.add(proj);
+				progettiNonScaduti.add(proj);
 			}
 		}
-		return temp;
+		return progettiNonScaduti;
 	}
 	
-	//Metodo che filtra i progetti terminati
 	private ArrayList<Progetto> filtraTerminati(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiTerminati = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getDataTerminazione() != null) {
-				temp.add(proj);
+				progettiTerminati.add(proj);
 			}
 		}
-		return temp;
+		return progettiTerminati;
 	}
 	
-	//Metodo che filtra i progetti NON terminati
 	private ArrayList<Progetto> filtraNonTerminati(ArrayList<Progetto> progetti){
-		ArrayList<Progetto> temp = new ArrayList<Progetto>();
+		ArrayList<Progetto> progettiNonTerminati = new ArrayList<Progetto>();
 		for (Progetto proj: progetti) {
 			if (proj.getDataTerminazione() == null) {
-				temp.add(proj);
+				progettiNonTerminati.add(proj);
 			}
 		}
-		return temp;
+		return progettiNonTerminati;
 	}
 }

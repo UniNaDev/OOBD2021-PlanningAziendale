@@ -1197,7 +1197,7 @@ public class GestioneDipendenti extends JFrame {
 		Dipendente dipendente = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
 		dipendente.setSkills(skills);
 		try {
-			controller.creaAccount(dipendente);	//prova a creare il nuovo dipendente
+			controller.creaDipendente(dipendente);	//prova a creare il nuovo dipendente
 			
 			pulisciCampi();	//azzera tutti i campi
 			

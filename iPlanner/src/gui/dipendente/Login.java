@@ -147,7 +147,7 @@ public class Login extends JFrame {
 		annullaButton.addActionListener(new ActionListener() {
 			//click del pulsante
 			public void actionPerformed(ActionEvent e) {
-				controller.annulla();	//annulla tutto e torna alla finestra iniziale di scelta
+				controller.tornaAIPlanner();	//annulla tutto e torna alla finestra iniziale di scelta
 			}
 		});
 		annullaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -241,7 +241,7 @@ public class Login extends JFrame {
 			
 			try {
 				//verifica le credenziali e tenta di effettuare il login
-				controller.verificaCredenziali(emailTextField.getText(),passwordField.getText());
+				controller.eseguiLogin(emailTextField.getText(),passwordField.getText());
 			} catch (SQLException e1) {
 				JOptionPane.showMessageDialog(null,
 						"Credenziali errate oppure connessione fallita al database.",

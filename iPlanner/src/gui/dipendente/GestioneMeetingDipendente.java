@@ -690,7 +690,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 		try {
 			
-			progettoDiscussoComboBox.setModel(new DefaultComboBoxModel(theController.ottieniNomiProgetti().toArray()));
+			progettoDiscussoComboBox.setModel(new DefaultComboBoxModel(theController.ottieniProgetti().toArray()));
 			progettoDiscussoComboBox.setSelectedItem(null);
 		} catch (SQLException e2) {
 			

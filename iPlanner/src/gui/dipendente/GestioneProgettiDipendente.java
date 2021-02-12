@@ -949,7 +949,7 @@ public class GestioneProgettiDipendente extends JFrame {
 						try {
 							//prende tutti i campi e fa l'update del progetto
 							Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
-							controller.updateProgetto(progetto.getIdProgettto(), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
+							controller.aggiornaProgetto(progetto.getIdProgettto(), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
 							JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
 							
 							//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
@@ -1018,7 +1018,7 @@ public class GestioneProgettiDipendente extends JFrame {
 							ambiti.add(ambitoModel.getElementAt(i));				 
 						
 							try {
-								controller.addProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
+								controller.creaProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
 								JOptionPane.showMessageDialog(null, "Progetto creato con successo");
 								
 								dataModelProgetti.fireTableDataChanged();
@@ -1183,7 +1183,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				//RICAVA GLI AMBITI DEL PROGETTO E LI SELEZIONA NELLA LISTA
 				ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
 				try {
-					ambiti = controller.getAmbitiProgettoByCod(progetto.getIdProgettto());					
+					ambiti = controller.ottieniAmbitiProgettoByCod(progetto.getIdProgettto());					
 				} catch (SQLException e2) {
 					e2.printStackTrace();
 				}
