@@ -127,6 +127,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Panel esterno dei comandi
 		JPanel comandiPanel = new JPanel();	//panel dei comandi
+		comandiPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		comandiPanel.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		comandiPanel.setAlignmentY(Component.TOP_ALIGNMENT);
 		
@@ -160,7 +161,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//panel interno dei comandi
 		JPanel comandiPanel2 = new JPanel();
-		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
+		comandiPanel2.setBorder(null);
 		
 		//Button "Pulisci Campi"
 		JButton pulisciCampiButton = new JButton("Pulisci Campi");
@@ -335,13 +336,28 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		//Panel per i filtri
 		JPanel filtriPanel = new JPanel();
-		filtriPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		filtriPanel.setBorder(null);
 		comandiPanel.add(filtriPanel, BorderLayout.SOUTH);
 		filtriPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		//Button "Filtra"
 		JButton filtraButton = new JButton("Filtra");
 		filtraButton.setFont(new Font("Consolas", Font.PLAIN, 17));
+		filtraButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filtraButton.setBackground(Color.WHITE);
+		filtraButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtraButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) 
+			{
+				filtraButton.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) 
+			{
+				filtraButton.setBackground(Color.WHITE);
+			}
+		});
 		filtriPanel.add(filtraButton);
 		
 		//TextField per cercare progetti
