@@ -54,9 +54,9 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	//Metodo che aggiunge una sala alla tabella SalaRiunione nel DB
 	@Override
 	public boolean insertSala(SalaRiunione sala) throws SQLException {
-		addSalaPS.setString(1, sala.getCodSala());	//inserisce il codice sala nell'insert
-		addSalaPS.setInt(2, sala.getCap());	//inserisce la capienza della sala nell'insert
-		addSalaPS.setString(3, sala.getIndirizzo()); 	//inserisce l'indirizzo nell'insert
+		addSalaPS.setString(1, sala.getCodiceSala());	//inserisce il codice sala nell'insert
+		addSalaPS.setInt(2, sala.getCapienza());	//inserisce la capienza della sala nell'insert
+		addSalaPS.setString(3, sala.getIndirizzoSede()); 	//inserisce l'indirizzo nell'insert
 		addSalaPS.setInt(4, sala.getPiano()); //inserisce il piano nell'insert
 		
 		int record = addSalaPS.executeUpdate();	//esegue l'insert e salva il numero di record aggiunti (1=inserito, 0=non inserito)
@@ -70,9 +70,9 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	//Metodo che modifica una sala nel DB
 	@Override
 	public boolean updateSala(SalaRiunione sala) throws SQLException {
-		updateSalaPS.setString(4, sala.getCodSala());	//inserisce il codice della sala da modificare
-		updateSalaPS.setInt(1, sala.getCap());	//inserisce la nuova capienza della sala nell'update
-		updateSalaPS.setString(2, sala.getIndirizzo()); 	//inserisce il nuovo indirizzo nell'update
+		updateSalaPS.setString(4, sala.getCodiceSala());	//inserisce il codice della sala da modificare
+		updateSalaPS.setInt(1, sala.getCapienza());	//inserisce la nuova capienza della sala nell'update
+		updateSalaPS.setString(2, sala.getIndirizzoSede()); 	//inserisce il nuovo indirizzo nell'update
 		updateSalaPS.setInt(3, sala.getPiano()); //inserisce il nuovo piano nell'update
 		
 		int record = updateSalaPS.executeUpdate();	//esegue l'update e salva il numero di record modificati (1=modificato, 0=non modificato)
@@ -86,7 +86,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	//Metodo che rimuove una sala specifica dal DB
 	@Override
 	public boolean deleteSala(SalaRiunione sala) throws SQLException {
-		removeSalaPS.setString(1, sala.getCodSala());	//inserisce il codice della sala da rimuovere nella delete
+		removeSalaPS.setString(1, sala.getCodiceSala());	//inserisce il codice della sala da rimuovere nella delete
 		
 		int record = removeSalaPS.executeUpdate();	//esegue la delete e salva il numero di record eliminati (1=eliminato, 0=non eliminato)
 		

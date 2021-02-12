@@ -1,41 +1,27 @@
 //Classe AmbitoProgetto.
 //Rappresenta gli ambiti possibili di un progetto. Sono caratterizzati da un id per distinguerli nel DB e da un nome.
+
 package entita;
 
-import java.util.ArrayList;
-
 public class AmbitoProgetto {
+	private int idAmbito;
+	private String nomeAmbito;
 	
-	//ATTRIBUTI
-	//----------------------------------------
-	//Attributi caratteristici
-	private int idAmbito;	//id dell'ambito
-	private String nome;	//nome dell'ambito
-	
-	//Attributi per associazioni
-	private ArrayList<Progetto> progetti = new ArrayList<Progetto>();	//lista di progetti di un certo ambito
-	
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore con gli attributi essenziali per un nuovo oggetto
 	public AmbitoProgetto(String nome) {
-		this.nome = nome;
+		this.nomeAmbito = nome;
 	}
 	
-	//Costruttore con tutti gli attributi per le query
 	public AmbitoProgetto(int idAmbito, String nome) {
 		this.idAmbito = idAmbito;
-		this.nome = nome;
+		this.nomeAmbito = nome;
 	}
 
-	//Getter e setter
-	public String getNome() {
-		return nome;
+	public String getNomeAmbito() {
+		return nomeAmbito;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNomeAmbito(String nomeAmbito) {
+		this.nomeAmbito = nomeAmbito;
 	}
 	
 	public int getIdAmbito() {
@@ -46,12 +32,10 @@ public class AmbitoProgetto {
 		this.idAmbito = idAmbito;
 	}
 
-	//toString
 	@Override
 	public String toString() {
-		return nome;
+		return nomeAmbito;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -64,15 +48,10 @@ public class AmbitoProgetto {
 		AmbitoProgetto other = (AmbitoProgetto) obj;
 		if (idAmbito != other.idAmbito)
 			return false;
-		if (nome == null) {
-			if (other.nome != null)
+		if (nomeAmbito == null) {
+			if (other.nomeAmbito != null)
 				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (progetti == null) {
-			if (other.progetti != null)
-				return false;
-		} else if (!progetti.equals(other.progetti))
+		} else if (!nomeAmbito.equals(other.nomeAmbito))
 			return false;
 		return true;
 	}

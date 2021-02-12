@@ -13,39 +13,19 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class Meeting {
+	private int idMeeting;
+	private LocalDate dataInizio;
+	private LocalDate dataFine;
+	private LocalTime oraInizio;
+	private LocalTime oraFine;
+	private String modalita;
+	private String piattaforma;
+	private SalaRiunione sala;
 	
-	//ATTRIBUTI
-	//----------------------------------------
-	//Attributi caratteristici
-	private int idMeeting;	//id nel DB che distingue il meeting
-	private LocalDate dataInizio;	//data di inizio del meeting
-	private LocalDate dataFine;	//data di fine del meeting
-	private LocalTime oraInizio;	//orario di inizio del meeting
-	private LocalTime oraFine;	//orario di fine del meeting
-	private String modalita;	//modalità del meeting ("Fisico" oppure "Telematico")
-	private String piattaforma;	//piattaforma su cui eventualmente verrà tenuto il meeting
-
-	//Attributi per associazioni
-	private SalaRiunione sala;	//sala in cui si può tenere il meeting
-	private Progetto releativoA;	//progetto discusso nel meeting
-	private ArrayList<Dipendente> partecipazioniDipendenti = new ArrayList<Dipendente>();	//partecipazioni dei dipendenti al meeting
+	private Progetto releativoA;
+	private ArrayList<Dipendente> partecipazioniDipendenti = new ArrayList<Dipendente>();
 	private ArrayList<PartecipazioneMeeting>partecipantiAlMeeting= new ArrayList<PartecipazioneMeeting>();
-	
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore con tutti gli attributi eccetto la piattaforma che può essere NULL nel caso dei meeting fisici
-	public Meeting(int idMeeting, LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalita) {
-		this.idMeeting =idMeeting;
-		this.dataInizio = dataInizio;
-		this.dataFine = dataFine;
-		this.oraInizio = oraInizio;
-		this.oraFine = oraFine;
-		this.modalita = modalita;
-	}
 
-	//Costruttore con tutti gli attributi, compresa piattaforma
 	public Meeting(int idMeeting, LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
 			String modalita, String piattaforma, SalaRiunione sala) {
 		this.idMeeting = idMeeting;
@@ -58,6 +38,7 @@ public class Meeting {
 		this.sala = sala;
 	}
 
+	//TODO: probabilmente inutile (basta usare l'altro e porre l'id = null)
 	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
 			String modalita, String piattaforma, SalaRiunione sala) {
 		this.dataInizio = dataInizio;
@@ -69,35 +50,6 @@ public class Meeting {
 		this.sala = sala;
 	}
 
-
-	public Meeting(int idMeeting,LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalita, String piattaforma, SalaRiunione sala, Progetto releativoA) {
-		super();
-		this.idMeeting=idMeeting;
-		this.dataInizio = dataInizio;
-		this.dataFine = dataFine;
-		this.oraInizio = oraInizio;
-		this.oraFine = oraFine;
-		this.modalita = modalita;
-		this.piattaforma = piattaforma;
-		this.sala = sala;
-		this.releativoA = releativoA;
-	}
-
-
-	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalita, String piattaforma, SalaRiunione sala, Progetto releativoA) {
-		super();
-		this.dataInizio = dataInizio;
-		this.dataFine = dataFine;
-		this.oraInizio = oraInizio;
-		this.oraFine = oraFine;
-		this.modalita = modalita;
-		this.piattaforma = piattaforma;
-		this.sala = sala;
-		this.releativoA = releativoA;
-	}
-	//Getter e Setter
 	public LocalDate getDataInizio() {
 		return dataInizio;
 	}
@@ -187,23 +139,21 @@ public class Meeting {
 		this.partecipantiAlMeeting = partecipantiAlMeeting;
 	}
 
-	
-	
-	//toString:
-	//Nome Progetto
-	//01/12/2020 13:00 - 01/12/2020 17:00
-	//Sala 1 (oppure Microsoft Teams)
+//	Formato toString:
+//	Nome Progetto
+//	DataInizio (dd/MM/yyyy) OraInizio (HH:mm) - DataFine (dd/MM/yyyy) OraFine (HH:mm)
+//	Sala/Piattaforma
 	@Override
 	public String toString() {
-		String temp =getProgettoDiscusso().getNomeProgetto();
+		String meeting = getProgettoDiscusso().getNomeProgetto();
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
-		temp += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
+		meeting += "\n" + dataInizio.toString(formatDate) + " " + oraInizio.toString(formatHour) + " - " + dataFine.toString(formatDate) + " " + oraFine.toString(formatHour);
 		if (modalita.equals("Telematico"))
-			temp += "\n" + piattaforma;
+			meeting += "\n" + piattaforma;
 		else
-			temp += "\n" + sala.getCodSala();
-		return temp;
+			meeting += "\n" + sala.getCodiceSala();
+		return meeting;
 	}
 	
 	

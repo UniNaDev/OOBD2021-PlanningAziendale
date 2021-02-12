@@ -49,7 +49,7 @@ public InvitatiListRenderer() {
 	    	ta.setText(value.getPartecipante().toString());
 	    }
 	    
-	    if (value.isPresenza()) {
+	    if (value.isPresente()) {
 	    	cb.setSelected(true);
 	    }
 	    else cb.setSelected(false);

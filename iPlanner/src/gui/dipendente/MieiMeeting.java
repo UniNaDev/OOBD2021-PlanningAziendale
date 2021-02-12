@@ -247,7 +247,7 @@ public class MieiMeeting extends JFrame {
 					modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());	//modalità
 					
 					if (meetingSelezionato.getModalita().equals("Fisico"))
-						piattaformaSalaLabel.setText("Sala: " + meetingSelezionato.getSala().getCodSala());	//modalità fisica con sala
+						piattaformaSalaLabel.setText("Sala: " + meetingSelezionato.getSala().getCodiceSala());	//modalità fisica con sala
 					else
 						piattaformaSalaLabel.setText("Piattaforma: " + meetingSelezionato.getPiattaforma());	//modalità telematica con piattaforma
 					

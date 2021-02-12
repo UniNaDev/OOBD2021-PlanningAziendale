@@ -55,7 +55,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 	//Metodo che inserisce un nuovo ambito nel DB
 	@Override
 	public boolean insertAmbito(AmbitoProgetto ambito) throws SQLException {
-		addAmbitoPS.setString(1, ambito.getNome()); 	//inserisce il nome dell'ambito nuovo nell'insert
+		addAmbitoPS.setString(1, ambito.getNomeAmbito()); 	//inserisce il nome dell'ambito nuovo nell'insert
 		
 		int record = addAmbitoPS.executeUpdate();	//esegue l'insert e salva il numero di record modificati (1=aggiunto, 0=non aggiunto)
 		

@@ -14,40 +14,29 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
 public class Dipendente {
-
-	//ATTRIBUTI
-	//----------------------------------------
+	private String cf;
+	private String nome;
+	private String cognome;
+	private char sesso; //(M = maschio | F = femmina)
+	private LocalDate dataNascita;
+	private LuogoNascita luogoNascita;
+	private String indirizzo;
+	private String email;
+	private String telefonoCasa;
+	private String cellulare;
+	private float salario;
+	private String password;
+	private float valutazione;
 	
-	//Attributi caratteristici
-	private String cf;	//codice fiscale del dipendente
-	private String nome;	//nome del dipendente
-	private String cognome;	//cognome del dipendente
-	private char sesso;	//sesso del dipendente (M=maschio, F=femmmina)
-	private LocalDate dataNascita;	//data di nascita del dipendente
-	private LuogoNascita luogoNascita;	//luogo di nascita del dipendente
-	private String indirizzo;	//indirizzo del dipendente
-	private String email;	//email del dipendente per accedere al servizio
-	private String telefonoCasa;	//telefono di casa del dipendente
-	private String cellulare;	//numero di cellulare del dipendente
-	private float salario;	//salario attuale del dipendente
-	private String password;	//password del dipendente con cui può accedere al servizio
-	private float valutazione;	//valutazione in decimi del dipendente in azienda
+	private ArrayList<Skill> skills = new ArrayList<Skill>();
+	private ArrayList<PartecipazioneMeeting> partecipazioniMeeting = new ArrayList<PartecipazioneMeeting>();
+	private ArrayList<Meeting> partecipa =new ArrayList<Meeting>(); //TODO: probabilmente inutile (basta partecipazioneMeeting)
+	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();
 	private String tipologieProgetto;
 	
-	//Altri attributi
 	private String[] vocali = {"A","E","I","O","U"};
-	private String[] simboliNonRichiesti = {" ", "À","Á","È","É","Ì","Ò","Ù","Ä","Ë","Ï","Ö","Ü"};
+	private String[] simboliNonAccettati = {" ", "À","Á","È","É","Ì","Ò","Ù","Ä","Ë","Ï","Ö","Ü"};
 	
-	//Attributi per associazioni
-	private ArrayList<Skill> skills = new ArrayList<Skill>();	//skill del dipendente
-	private ArrayList<PartecipazioneMeeting> partecipazioniMeeting = new ArrayList<PartecipazioneMeeting>();	//lista di partecipazione del dipendente ai meeting
-	private ArrayList<Meeting> partecipa=new ArrayList<Meeting>();
-	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista delle collaborazioni del dipendente
-	
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore
 	public Dipendente(String cf, String nome, String cognome, char sesso, LocalDate dataNascita,
 			LuogoNascita luogoNascita, String indirizzo, String email, String telefonoCasa, String cellulare,
 			float salario, String password, float valutazione) {
@@ -66,37 +55,365 @@ public class Dipendente {
 		this.valutazione = valutazione;
 	}
 	
-	
-	
-	//Metodo che genera il codice fiscale di un dipendente partendo dai suoi dati anagrafici
 	public String generaCF() {
-		String temp = cfNomeCognome();	//genera i primi 6 caratteri per nome e cognome (es: LMMNDR)
-		
-		temp += String.valueOf(dataNascita.getYear()).substring(2);	//aggiunge l'anno al CF nei 2 caratteri successivi (es: LMMNDR95)
-		
-		temp += convertiMese(String.valueOf(dataNascita.getMonthOfYear()));	//aggiunge il mese al CF nel carattere successivo (es: LMMNDR95P)
-		
-		//aggiunge il giorno della data di nascita nei due caratteri successivi e aggiunge 40 al se è femmina (es: LMMNDR95P16)
-		String giorno = "";
+		String cf = calcolaCaratteriNomeCognome();
+		cf += String.valueOf(dataNascita.getYear()).substring(2);
+		cf += calcolaCarattereMeseNascita(String.valueOf(dataNascita.getMonthOfYear()));
+		String caratteriGiornoNascita = "";
 		if (this.sesso == 'M')
 			if (dataNascita.getDayOfMonth() < 10) {
-				giorno = "0"+String.valueOf(dataNascita.getDayOfMonth());
+				caratteriGiornoNascita = "0"+String.valueOf(dataNascita.getDayOfMonth());
 			}
 			else {
-				giorno = String.valueOf(dataNascita.getDayOfMonth());
+				caratteriGiornoNascita = String.valueOf(dataNascita.getDayOfMonth());
 			}
 		else
-			temp += String.valueOf(dataNascita.getDayOfMonth()+40);
-		temp += giorno;
+			cf += String.valueOf(dataNascita.getDayOfMonth()+40);
+		cf += caratteriGiornoNascita;
+		cf += luogoNascita.getCodiceComune();
+		cf += calcolaCarattereControllo(cf);
+		return cf;
+	}
+
+	private String calcolaCaratteriNomeCognome() {
+		String nomeMaiuscolo = this.nome.toUpperCase();
+		String cognomeMaiuscolo = this.cognome.toUpperCase();
+		String nomeSenzaVocali = nomeMaiuscolo, cognomeSenzaVocali=cognomeMaiuscolo;
+		for (String c: vocali) {
+			nomeSenzaVocali = nomeSenzaVocali.replace(c, "");
+			cognomeSenzaVocali = cognomeSenzaVocali.replace(c, "");
+		}
+		for (String c: simboliNonAccettati) {
+			nomeSenzaVocali = nomeSenzaVocali.replace(c,"");
+			cognomeSenzaVocali = cognomeSenzaVocali.replace(c, "");
+		}
+		String caratteriCognomeCF = "";
+		if (cognomeSenzaVocali.length() >= 3) {
+			caratteriCognomeCF = caratteriCognomeCF + cognomeSenzaVocali.substring(0,3);
+		}
+		else {
+			caratteriCognomeCF = caratteriCognomeCF+cognomeSenzaVocali;
+			int j = 0;
+			while (j < vocali.length && caratteriCognomeCF.length() < 3) {
+				for (int i = 0; i < cognomeMaiuscolo.length(); i++) {
+					if (String.valueOf(cognomeMaiuscolo.charAt(i)).equals(vocali[j])) {
+						caratteriCognomeCF += cognomeMaiuscolo.charAt(i);
+					}
+					if (caratteriCognomeCF.length() == 3)
+						break;
+				}	
+				j++;
+			}
+		}
+		while (caratteriCognomeCF.length() < 3) {
+			caratteriCognomeCF += "X";
+		}
+		String caratteriNomeCF = "";
+		if (nomeSenzaVocali.length() > 3) {
+			caratteriNomeCF = caratteriNomeCF + nomeSenzaVocali.charAt(0) + nomeSenzaVocali.charAt(2) + nomeSenzaVocali.charAt(3);
+		}
+		else if (nomeSenzaVocali.length() == 3) {
+			caratteriNomeCF = caratteriNomeCF + nomeSenzaVocali.substring(0,3);
+		}
+		else {
+			caratteriNomeCF = caratteriNomeCF+nomeSenzaVocali;
+			int k = 0;
+			while (k < vocali.length && caratteriNomeCF.length() < 3) {
+				for (int i = 0; i < nomeMaiuscolo.length(); i++) {
+					if (String.valueOf(nomeMaiuscolo.charAt(i)).equals(vocali[k])) {
+						caratteriNomeCF += nomeMaiuscolo.charAt(i);
+					}
+					if (caratteriNomeCF.length() == 3)
+						break;
+				}	
+				k++;
+			}
+		}
+		while (caratteriNomeCF.length() < 3) {
+			caratteriNomeCF += "X";
+		}
+		return caratteriCognomeCF+caratteriNomeCF;
+	}
+	
+
+	private String calcolaCarattereMeseNascita(String numeroMese) {
+		String temp = "";
 		
-		temp += luogoNascita.getCodiceComune();	//aggiunge il codice del comune in cui è nato (es: LMMNDR95P16F839)
-		
-		temp += carattereControllo(temp);	//aggiunge il carattere di controllo (es: LMMNDR95P16F839I)
+		switch(numeroMese) {
+		case "1":
+			temp = "A";	//Gennaio = A
+			break;
+		case "2":
+			temp = "B";	//Febbraio = B
+			break;
+		case "3":
+			temp = "C";	//Marzo = C
+			break;
+		case "4":
+			temp = "D";	//Aprile = D
+			break;
+		case "5":
+			temp = "E"; //Maggio = E
+			break;
+		case "6":
+			temp = "H";	//Giugno = H
+			break;
+		case "7":
+			temp = "L";	//Luglio = L
+			break;
+		case "8":
+			temp = "M";	//Agoisto = M
+			break;
+		case "9":
+			temp = "P";	//Settembre = P
+			break;
+		case "10":
+			temp = "R";	//Ottobre = R
+			break;
+		case "11":
+			temp = "S";	//Novembre = S
+			break;
+		case "12":
+			temp = "T";	//Dicembre = T
+			break;
+		}
 		
 		return temp;
 	}
+	
+	private char calcolaCarattereControllo(String tempCF) {
+		char carattereControllo = ' ';
+		int sommaDispari = 0, sommaPari = 0;
+		
+		for (int i = 0; i < tempCF.length(); i++) {
+			if (i%2 == 1) {
+				sommaDispari += convertiCaratteriPostoDispari(tempCF.charAt(i));
+			}
+			else {
+				sommaPari += convertiCaratteriPostoPari(tempCF.charAt(i));
+			}
+		}
+		
+		int risultatoParziale = (sommaDispari+sommaPari)%26;
+		
+		if (risultatoParziale == 0)
+			carattereControllo = 'A';
+		else if(risultatoParziale == 1)
+			carattereControllo ='B';
+		else if(risultatoParziale == 2)
+			carattereControllo ='C';
+		else if(risultatoParziale == 3)
+			carattereControllo ='D';
+		else if(risultatoParziale == 4)
+			carattereControllo ='E';
+		else if(risultatoParziale == 5)
+			carattereControllo ='F';
+		else if(risultatoParziale == 6)
+			carattereControllo ='G';
+		else if(risultatoParziale == 7)
+			carattereControllo ='H';
+		else if(risultatoParziale == 8)
+			carattereControllo ='I';
+		else if(risultatoParziale == 9)
+			carattereControllo ='J';
+		else if(risultatoParziale == 10)
+			carattereControllo ='K';
+		else if(risultatoParziale == 11)
+			carattereControllo ='L';
+		else if(risultatoParziale == 12)
+			carattereControllo ='M';
+		else if(risultatoParziale == 13)
+			carattereControllo ='N';
+		else if(risultatoParziale == 14)
+			carattereControllo ='O';
+		else if(risultatoParziale == 15)
+			carattereControllo ='P';
+		else if(risultatoParziale == 16)
+			carattereControllo ='Q';
+		else if(risultatoParziale == 17)
+			carattereControllo ='R';
+		else if(risultatoParziale == 18)
+			carattereControllo ='S';
+		else if(risultatoParziale == 19)
+			carattereControllo ='T';
+		else if(risultatoParziale == 20)
+			carattereControllo ='U';
+		else if(risultatoParziale == 21)
+			carattereControllo ='V';
+		else if(risultatoParziale == 22)
+			carattereControllo ='W';
+		else if(risultatoParziale == 23)
+			carattereControllo ='X';
+		else if(risultatoParziale == 24)
+			carattereControllo ='Y';
+		else if(risultatoParziale == 25)
+			carattereControllo ='Z';
+		return carattereControllo;
+	}
+	
+	private int convertiCaratteriPostoPari(char c) {
+		int carattereConvertito = 0;
+		
+		if(c == '0')
+			carattereConvertito = 1;
+		else if(c == '1')
+			carattereConvertito = 0;
+		else if(c == '2')
+			carattereConvertito = 5;
+		else if(c == '3')
+			carattereConvertito = 7;
+		else if(c == '4')
+			carattereConvertito = 9;
+		else if(c == '5')
+			carattereConvertito = 13;
+		else if(c == '6')
+			carattereConvertito = 15;
+		else if(c == '7')
+			carattereConvertito = 17;
+		else if(c == '8')
+			carattereConvertito = 19;
+		else if(c == '9')
+			carattereConvertito = 21;
+		else if(c == 'A')
+			carattereConvertito = 1;
+		else if(c == 'B')
+			carattereConvertito = 0;
+		else if(c == 'C')
+			carattereConvertito = 5;
+		else if(c == 'D')
+			carattereConvertito = 7;
+		else if(c == 'E')
+			carattereConvertito = 9;
+		else if(c == 'F')
+			carattereConvertito = 13;
+		else if(c == 'G')
+			carattereConvertito = 15;
+		else if(c == 'H')
+			carattereConvertito = 17;
+		else if(c == 'I')
+			carattereConvertito = 19;
+		else if(c == 'J')
+			carattereConvertito = 21;
+		else if(c == 'K')
+			carattereConvertito = 2;
+		else if(c == 'L')
+			carattereConvertito = 4;
+		else if(c == 'M')
+			carattereConvertito = 18;
+		else if(c == 'N')
+			carattereConvertito = 20;
+		else if(c == 'O')
+			carattereConvertito = 11;
+		else if(c == 'P')
+			carattereConvertito = 3;
+		else if(c == 'Q')
+			carattereConvertito = 6;
+		else if(c == 'R')
+			carattereConvertito = 8;
+		else if(c == 'S')
+			carattereConvertito = 12;
+		else if(c == 'T')
+			carattereConvertito = 14;
+		else if(c == 'U')
+			carattereConvertito = 16;
+		else if(c == 'V')
+			carattereConvertito = 10;
+		else if(c == 'W')
+			carattereConvertito = 22;
+		else if(c == 'X')
+			carattereConvertito = 25;
+		else if(c == 'Y')
+			carattereConvertito = 24;
+		else if(c == 'Z')
+			carattereConvertito = 23;
+		return carattereConvertito;
+	}
+	
+	private int convertiCaratteriPostoDispari(char c) {
+		int carattereConvertito = 0;
+		
+		if(c == '0')
+			carattereConvertito = 0;
+		else if(c == '1')
+			carattereConvertito = 1;
+		else if(c == '2')
+			carattereConvertito = 2;
+		else if(c == '3')
+			carattereConvertito = 3;
+		else if(c == '4')
+			carattereConvertito = 4;
+		else if(c == '5')
+			carattereConvertito = 5;
+		else if(c == '6')
+			carattereConvertito = 6;
+		else if(c == '7')
+			carattereConvertito = 7;
+		else if(c == '8')
+			carattereConvertito = 8;
+		else if(c == '9')
+			carattereConvertito = 9;
+		else if(c == 'A')
+			carattereConvertito = 0;
+		else if(c == 'B')
+			carattereConvertito = 1;
+		else if(c == 'C')
+			carattereConvertito = 2;
+		else if(c == 'D')
+			carattereConvertito = 3;
+		else if(c == 'E')
+			carattereConvertito = 4;
+		else if(c == 'F')
+			carattereConvertito = 5;
+		else if(c == 'G')
+			carattereConvertito = 6;
+		else if(c == 'H')
+			carattereConvertito = 7;
+		else if(c == 'I')
+			carattereConvertito = 8;
+		else if(c == 'J')
+			carattereConvertito = 9;
+		else if(c == 'K')
+			carattereConvertito = 10;
+		else if(c == 'L')
+			carattereConvertito = 11;
+		else if(c == 'M')
+			carattereConvertito = 12;
+		else if(c == 'N')
+			carattereConvertito = 13;
+		else if(c == 'O')
+			carattereConvertito = 14;
+		else if(c == 'P')
+			carattereConvertito = 15;
+		else if(c == 'Q')
+			carattereConvertito = 16;
+		else if(c == 'R')
+			carattereConvertito = 17;
+		else if(c == 'S')
+			carattereConvertito = 18;
+		else if(c == 'T')
+			carattereConvertito = 19;
+		else if(c == 'U')
+			carattereConvertito = 20;
+		else if(c == 'V')
+			carattereConvertito = 21;
+		else if(c == 'W')
+			carattereConvertito = 22;
+		else if(c == 'X')
+			carattereConvertito = 23;
+		else if(c == 'Y')
+			carattereConvertito = 24;
+		else if(c == 'Z')
+			carattereConvertito = 25;
+		return carattereConvertito;
+	}
 
-	//Getter e setter per quasi ogni attributo
+	public int getEtà() {
+		Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
+		int età = period.getYears();
+		
+		return età;
+	}
+	
 	public String getCf() {
 		return cf;
 	}
@@ -185,8 +502,6 @@ public class Dipendente {
 		return tipologieProgetto;
 	}
 
-
-
 	public void setTipologieProgetto(String tipologieProgetto) {
 		this.tipologieProgetto = tipologieProgetto;
 	}
@@ -244,13 +559,11 @@ public class Dipendente {
 		this.partecipa = partecipa;
 	}
 	
-	//toString
 	@Override
 	public String toString() {	
-		return nome + " " +cognome+"";
+		return nome + " " +cognome;
 	}
 
-	//equals (cf)
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -266,373 +579,5 @@ public class Dipendente {
 		} else if (!cf.equals(other.cf))
 			return false;
 		return true;
-	}
-
-	//Metodo che calcola la stringa di caratteri del codice fiscale corrispondente a cognome e nome
-	private String cfNomeCognome() {
-		//setta in maiuscolo nome e cognome del dipendente
-		String nomeUp = this.nome.toUpperCase();
-		String cognomeUp = this.cognome.toUpperCase();
-		
-		//elimina vocali e caratteri accentati da nome e cognome
-		String nomeSenzaVocali = nomeUp, cognomeSenzaVocali=cognomeUp;
-		for (String c: vocali) {
-			nomeSenzaVocali = nomeSenzaVocali.replace(c, "");
-			cognomeSenzaVocali = cognomeSenzaVocali.replace(c, "");
-		}
-		for (String c: simboliNonRichiesti) {
-			nomeSenzaVocali = nomeSenzaVocali.replace(c,"");
-			cognomeSenzaVocali = cognomeSenzaVocali.replace(c, "");
-		}
-		
-		String risultato1 = "";
-		//controlla che ci siano almeno 3 caratteri nel cognome risultante e nel caso li prende
-		if (cognomeSenzaVocali.length() >= 3) {
-			risultato1 = risultato1 + cognomeSenzaVocali.substring(0,3);
-		}
-		//altrimenti cerca delle vocali nel cognome originale e le aggiunge
-		else {
-			risultato1 = risultato1+cognomeSenzaVocali;
-			int j = 0;
-			while (j < vocali.length && risultato1.length() < 3) {
-				for (int i = 0; i < cognomeUp.length(); i++) {
-					if (String.valueOf(cognomeUp.charAt(i)).equals(vocali[j])) {
-						risultato1 += cognomeUp.charAt(i);
-					}
-					if (risultato1.length() == 3)
-						break;
-				}	
-				j++;
-			}
-		}
-		//se non ci sono nemmeno vocali sufficienti aggiunge delle X alla fine
-		while (risultato1.length() < 3) {
-			risultato1 += "X";
-		}
-		
-		String risultato2 = "";
-		//controlla che ci siano almeno 3 caratteri nel nome risultante e nel caso li prende
-		if (nomeSenzaVocali.length() > 3) {
-			risultato2 = risultato2 + nomeSenzaVocali.charAt(0) + nomeSenzaVocali.charAt(2) + nomeSenzaVocali.charAt(3);	//prima, terza e quarta consonante
-		}
-		else if (nomeSenzaVocali.length() == 3) {
-			risultato2 = risultato2 + nomeSenzaVocali.substring(0,3);	//uniche tre consonanti
-		}
-		//altrimenti cerca delle vocali nel nome originale e le aggiunge
-		else {
-			risultato2 = risultato2+nomeSenzaVocali;
-			int k = 0;
-			while (k < vocali.length && risultato2.length() < 3) {
-				for (int i = 0; i < nomeUp.length(); i++) {
-					if (String.valueOf(nomeUp.charAt(i)).equals(vocali[k])) {
-						risultato2 += nomeUp.charAt(i);
-					}
-					if (risultato2.length() == 3)
-						break;
-				}	
-				k++;
-			}
-		}
-		//se non ci sono nemmeno vocali sufficienti aggiunge delle X alla fine
-		while (risultato2.length() < 3) {
-			risultato2 += "X";
-		}
-		
-		//unisce i due risultati per nome e cognome e lo restituisce
-		return risultato1+risultato2;
-	}
-	
-
-
-
-	//Metodo che converte il mese di nascita nel carattere corrispondente per il codice fiscale
-	private String convertiMese(String numeroMese) {
-		String temp = "";
-		
-		switch(numeroMese) {
-		case "1":
-			temp = "A";	//Gennaio = A
-			break;
-		case "2":
-			temp = "B";	//Febbraio = B
-			break;
-		case "3":
-			temp = "C";	//Marzo = C
-			break;
-		case "4":
-			temp = "D";	//Aprile = D
-			break;
-		case "5":
-			temp = "E"; //Maggio = E
-			break;
-		case "6":
-			temp = "H";	//Giugno = H
-			break;
-		case "7":
-			temp = "L";	//Luglio = L
-			break;
-		case "8":
-			temp = "M";	//Agoisto = M
-			break;
-		case "9":
-			temp = "P";	//Settembre = P
-			break;
-		case "10":
-			temp = "R";	//Ottobre = R
-			break;
-		case "11":
-			temp = "S";	//Novembre = S
-			break;
-		case "12":
-			temp = "T";	//Dicembre = T
-			break;
-		}
-		
-		return temp;
-	}
-	
-	//Metodo che converte i caratteri di posto pari del codice fiscale secondo una specifica tabella
-	private int convertiDispari(char c) {
-		int carattereConvertito = 0;
-		
-		if(c == '0')
-			carattereConvertito = 1;
-		else if(c == '1')
-			carattereConvertito = 0;
-		else if(c == '2')
-			carattereConvertito = 5;
-		else if(c == '3')
-			carattereConvertito = 7;
-		else if(c == '4')
-			carattereConvertito = 9;
-		else if(c == '5')
-			carattereConvertito = 13;
-		else if(c == '6')
-			carattereConvertito = 15;
-		else if(c == '7')
-			carattereConvertito = 17;
-		else if(c == '8')
-			carattereConvertito = 19;
-		else if(c == '9')
-			carattereConvertito = 21;
-		else if(c == 'A')
-			carattereConvertito = 1;
-		else if(c == 'B')
-			carattereConvertito = 0;
-		else if(c == 'C')
-			carattereConvertito = 5;
-		else if(c == 'D')
-			carattereConvertito = 7;
-		else if(c == 'E')
-			carattereConvertito = 9;
-		else if(c == 'F')
-			carattereConvertito = 13;
-		else if(c == 'G')
-			carattereConvertito = 15;
-		else if(c == 'H')
-			carattereConvertito = 17;
-		else if(c == 'I')
-			carattereConvertito = 19;
-		else if(c == 'J')
-			carattereConvertito = 21;
-		else if(c == 'K')
-			carattereConvertito = 2;
-		else if(c == 'L')
-			carattereConvertito = 4;
-		else if(c == 'M')
-			carattereConvertito = 18;
-		else if(c == 'N')
-			carattereConvertito = 20;
-		else if(c == 'O')
-			carattereConvertito = 11;
-		else if(c == 'P')
-			carattereConvertito = 3;
-		else if(c == 'Q')
-			carattereConvertito = 6;
-		else if(c == 'R')
-			carattereConvertito = 8;
-		else if(c == 'S')
-			carattereConvertito = 12;
-		else if(c == 'T')
-			carattereConvertito = 14;
-		else if(c == 'U')
-			carattereConvertito = 16;
-		else if(c == 'V')
-			carattereConvertito = 10;
-		else if(c == 'W')
-			carattereConvertito = 22;
-		else if(c == 'X')
-			carattereConvertito = 25;
-		else if(c == 'Y')
-			carattereConvertito = 24;
-		else if(c == 'Z')
-			carattereConvertito = 23;
-	
-		return carattereConvertito;
-	}
-	
-	//Metodo che converte i caratteri di posto dispari del codice fiscale secondo una specifica tabella
-	private int convertiPari(char c) {
-		int carattereConvertito = 0;
-		
-		if(c == '0')
-			carattereConvertito = 0;
-		else if(c == '1')
-			carattereConvertito = 1;
-		else if(c == '2')
-			carattereConvertito = 2;
-		else if(c == '3')
-			carattereConvertito = 3;
-		else if(c == '4')
-			carattereConvertito = 4;
-		else if(c == '5')
-			carattereConvertito = 5;
-		else if(c == '6')
-			carattereConvertito = 6;
-		else if(c == '7')
-			carattereConvertito = 7;
-		else if(c == '8')
-			carattereConvertito = 8;
-		else if(c == '9')
-			carattereConvertito = 9;
-		else if(c == 'A')
-			carattereConvertito = 0;
-		else if(c == 'B')
-			carattereConvertito = 1;
-		else if(c == 'C')
-			carattereConvertito = 2;
-		else if(c == 'D')
-			carattereConvertito = 3;
-		else if(c == 'E')
-			carattereConvertito = 4;
-		else if(c == 'F')
-			carattereConvertito = 5;
-		else if(c == 'G')
-			carattereConvertito = 6;
-		else if(c == 'H')
-			carattereConvertito = 7;
-		else if(c == 'I')
-			carattereConvertito = 8;
-		else if(c == 'J')
-			carattereConvertito = 9;
-		else if(c == 'K')
-			carattereConvertito = 10;
-		else if(c == 'L')
-			carattereConvertito = 11;
-		else if(c == 'M')
-			carattereConvertito = 12;
-		else if(c == 'N')
-			carattereConvertito = 13;
-		else if(c == 'O')
-			carattereConvertito = 14;
-		else if(c == 'P')
-			carattereConvertito = 15;
-		else if(c == 'Q')
-			carattereConvertito = 16;
-		else if(c == 'R')
-			carattereConvertito = 17;
-		else if(c == 'S')
-			carattereConvertito = 18;
-		else if(c == 'T')
-			carattereConvertito = 19;
-		else if(c == 'U')
-			carattereConvertito = 20;
-		else if(c == 'V')
-			carattereConvertito = 21;
-		else if(c == 'W')
-			carattereConvertito = 22;
-		else if(c == 'X')
-			carattereConvertito = 23;
-		else if(c == 'Y')
-			carattereConvertito = 24;
-		else if(c == 'Z')
-			carattereConvertito = 25;
-	
-		return carattereConvertito;
-	}
-	
-	//Metodo che calcola il carattere di controllo del codice fiscale
-	private char carattereControllo(String tempCF) {
-		char temp = ' ';	//inizializza il carattere di controllo
-		
-		int sommaDispari = 0, sommaPari = 0;	//inizializza le somme dei valori dei caratteri di posto pari/dispari
-		
-		//per ogni carattere che compone il codice fiscale privo di carattere di controllo (i primi 15 caratteri in pratica)
-		for (int i = 0; i < tempCF.length(); i++) {
-			//controlla se il suo posto è pari o dispari
-			if (i%2 == 1) {
-				sommaPari += convertiPari(tempCF.charAt(i)); //conversione di un carattere dispari e aggiornamento della somma dei caratteri dispari
-			}
-			else {
-				sommaDispari += convertiDispari(tempCF.charAt(i)); //conversione di un carattere pari e aggiornamento della somma dei caratteri pari
-			}
-		}
-		
-		int risultatoParziale = (sommaDispari+sommaPari)%26;	//calcola il risultato parziale seguendo l'algoritmo di generazione del carattere di controllo
-		
-		//converte il risultato parziale sempre seguendo le tabelle per la generazione di codici fiscali
-		if (risultatoParziale == 0)
-			temp = 'A';
-		else if(risultatoParziale == 1)
-			temp ='B';
-		else if(risultatoParziale == 2)
-			temp ='C';
-		else if(risultatoParziale == 3)
-			temp ='D';
-		else if(risultatoParziale == 4)
-			temp ='E';
-		else if(risultatoParziale == 5)
-			temp ='F';
-		else if(risultatoParziale == 6)
-			temp ='G';
-		else if(risultatoParziale == 7)
-			temp ='H';
-		else if(risultatoParziale == 8)
-			temp ='I';
-		else if(risultatoParziale == 9)
-			temp ='J';
-		else if(risultatoParziale == 10)
-			temp ='K';
-		else if(risultatoParziale == 11)
-			temp ='L';
-		else if(risultatoParziale == 12)
-			temp ='M';
-		else if(risultatoParziale == 13)
-			temp ='N';
-		else if(risultatoParziale == 14)
-			temp ='O';
-		else if(risultatoParziale == 15)
-			temp ='P';
-		else if(risultatoParziale == 16)
-			temp ='Q';
-		else if(risultatoParziale == 17)
-			temp ='R';
-		else if(risultatoParziale == 18)
-			temp ='S';
-		else if(risultatoParziale == 19)
-			temp ='T';
-		else if(risultatoParziale == 20)
-			temp ='U';
-		else if(risultatoParziale == 21)
-			temp ='V';
-		else if(risultatoParziale == 22)
-			temp ='W';
-		else if(risultatoParziale == 23)
-			temp ='X';
-		else if(risultatoParziale == 24)
-			temp ='Y';
-		else if(risultatoParziale == 25)
-			temp ='Z';
-		
-		return temp;
-	}
-
-
-
-	public int getEtà() {
-		Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
-		int età = period.getYears();
-		
-		return età;
 	}
 }

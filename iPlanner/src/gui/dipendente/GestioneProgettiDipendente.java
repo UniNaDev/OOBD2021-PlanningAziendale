@@ -1193,7 +1193,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				//scorre tutti gli ambiti presenti nella lista degli ambiti e li confronta con ogni ambito del progetto per ottenere gli indici degli ambiti da selezionare
 				for(int i = 0 ;i < ambitoModel.size() ; i++) {
 					for(int j = 0 ; j< ambiti.size() ; j++) {
-						if(ambiti.get(j).getNome().equals(ambitoModel.getElementAt(i).getNome())) {	//confonta i nomi degli ambiti								
+						if(ambiti.get(j).getNomeAmbito().equals(ambitoModel.getElementAt(i).getNomeAmbito())) {	//confonta i nomi degli ambiti								
 							selezionati.add(i);	 //aggiunge tutti gli indici ottenuti in una lista
 						}
 					}	

@@ -497,7 +497,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) invitatiList.getSelectedValue();
 				if(partecipaz!=null) {
 					
-					if(partecipaz.isPresenza()==true)
+					if(partecipaz.isPresente()==true)
 						presenzaCheckBox.setSelected(true);
 						else
 							presenzaCheckBox.setSelected(false);

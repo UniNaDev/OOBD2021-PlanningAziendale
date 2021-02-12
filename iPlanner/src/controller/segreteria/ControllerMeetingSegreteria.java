@@ -146,8 +146,8 @@ public class ControllerMeetingSegreteria {
 	//Metodo che aggiorna una sala già esistente nel DB
 	public void aggiornaSala(String codSala, int cap, String indirizzo, int piano) throws SQLException {
 		SalaRiunione sala = salaDAO.getSalaByCod(codSala);
-		sala.setCap(cap);
-		sala.setIndirizzo(indirizzo);
+		sala.setCapienza(cap);
+		sala.setIndirizzoSede(indirizzo);
 		sala.setPiano(piano);
 		salaDAO.updateSala(sala);
 		aggiornaSaleFiltro();

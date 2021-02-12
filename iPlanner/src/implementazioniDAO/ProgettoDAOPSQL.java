@@ -364,7 +364,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	public boolean insertPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		addPartecipantePS.setInt(1, collaborazioneProgetto.getProgetto().getIdProgettto()); 	//codice del progetto
 		addPartecipantePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf()); 	//codice fiscale del partecipante
-		addPartecipantePS.setObject(3, collaborazioneProgetto.getRuolo(),Types.OTHER); 	//ruolo del partecipante
+		addPartecipantePS.setObject(3, collaborazioneProgetto.getRuoloCollaboratore(),Types.OTHER); 	//ruolo del partecipante
 		
 		int record = addPartecipantePS.executeUpdate();	//esegue l'insert e salva il numero di record inseriti (1=inserito,0=non inserito)
 		
@@ -535,7 +535,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	@Override
 	public boolean updatePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		
-		aggiornaRuoloCollaboratorePS.setObject(1, collaborazioneProgetto.getRuolo(),Types.OTHER);
+		aggiornaRuoloCollaboratorePS.setObject(1, collaborazioneProgetto.getRuoloCollaboratore(),Types.OTHER);
 		aggiornaRuoloCollaboratorePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf());
 		aggiornaRuoloCollaboratorePS.setInt(3, collaborazioneProgetto.getProgetto().getIdProgettto());
 		

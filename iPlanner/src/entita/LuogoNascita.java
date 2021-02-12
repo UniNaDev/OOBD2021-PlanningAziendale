@@ -7,24 +7,16 @@
 package entita;
 
 public class LuogoNascita {
-
-	//ATTRIBUTI
-	//----------------------------------------
-	private String codiceComune;	//codice di 4 caratteri del comune (es: F839)
-	private String nomeComune;		//nome del comune (es: Napoli)
-	private String nomeProvincia;	//nome della provincia di appartenenza (es: Napoli)
+	private String codiceComune;
+	private String nomeComune;
+	private String nomeProvincia;
 	
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore totale
 	public LuogoNascita(String codiceComune, String nomeComune, String nomeProvincia) {
 		this.codiceComune = codiceComune;
 		this.nomeComune = nomeComune;
 		this.nomeProvincia = nomeProvincia;
 	}
 
-	//Getters banali per ogni attributo
 	public String getCodiceComune() {
 		return codiceComune;
 	}
@@ -37,13 +29,12 @@ public class LuogoNascita {
 		return nomeProvincia;
 	}
 	
-	//Metodo toString
+	
 	@Override
 	public String toString() {
 		return nomeComune + ", " + nomeProvincia;
 	}
 
-	//Override di equals solo su codiceComune
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -60,6 +51,4 @@ public class LuogoNascita {
 			return false;
 		return true;
 	}
-	
-	
 }

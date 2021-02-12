@@ -234,7 +234,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		addMeetingPS.setObject(5, meeting.getModalita(),Types.OTHER);	//modalità
 		addMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);	//piattaforma
 		if (meeting.getSala() != null)
-			addMeetingPS.setString(7, meeting.getSala().getCodSala());	//codice sala
+			addMeetingPS.setString(7, meeting.getSala().getCodiceSala());	//codice sala
 		else
 			addMeetingPS.setNull(7, Types.CHAR);	//codice sala null
 		
@@ -263,7 +263,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		addMeetingPS.setObject(5, meetingInserito.getModalita(),Types.OTHER);	//modalità
 		addMeetingPS.setObject(6, meetingInserito.getPiattaforma(), Types.OTHER);	//piattaforma
 		if (meetingInserito.getSala() != null)
-			addMeetingPS.setString(7, meetingInserito.getSala().getCodSala());	//codice sala
+			addMeetingPS.setString(7, meetingInserito.getSala().getCodiceSala());	//codice sala
 		else
 			addMeetingPS.setNull(7, Types.CHAR);	//codice sala null
 		
@@ -314,7 +314,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		else
 			updateMeetingPS.setNull(6, Types.OTHER);
 		if (meeting.getSala() != null)
-			updateMeetingPS.setString(7, meeting.getSala().getCodSala());//codSala
+			updateMeetingPS.setString(7, meeting.getSala().getCodiceSala());//codSala
 		else
 			updateMeetingPS.setNull(7, Types.CHAR);
 		updateMeetingPS.setInt(9, meeting.getIdMeeting());//idMeeting da modificare
@@ -333,7 +333,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	//Metodo che ottiene i meeting che avvengono in una specifica sala.
 	@Override
 	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException {
-		getMeetingsBySalaPS.setString(1, sala.getCodSala()); //inserisce il codice della sala di cui si vogliono i meeting
+		getMeetingsBySalaPS.setString(1, sala.getCodiceSala()); //inserisce il codice della sala di cui si vogliono i meeting
 		
 		ArrayList<Meeting> temp = new ArrayList<Meeting>();	//inizializza la lista da restituire dopo
 		
@@ -427,7 +427,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		
 		aggiungiPartecipanteMeetingPS.setString(1, partecipante.getPartecipante().getCf());
 		aggiungiPartecipanteMeetingPS.setInt(2, partecipante.getMeeting().getIdMeeting());
-		aggiungiPartecipanteMeetingPS.setBoolean(3, partecipante.isPresenza());
+		aggiungiPartecipanteMeetingPS.setBoolean(3, partecipante.isPresente());
 		
 		int record=aggiungiPartecipanteMeetingPS.executeUpdate();
 
@@ -456,7 +456,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	@Override
 	public boolean updatePresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 		
-		aggiornaPresenzaMeetingPS.setBoolean(1, partecipazioneMeeting.isPresenza());
+		aggiornaPresenzaMeetingPS.setBoolean(1, partecipazioneMeeting.isPresente());
 		aggiornaPresenzaMeetingPS.setString(2, partecipazioneMeeting.getPartecipante().getCf());
 		aggiornaPresenzaMeetingPS.setInt(3, partecipazioneMeeting.getMeeting().getIdMeeting());
 		

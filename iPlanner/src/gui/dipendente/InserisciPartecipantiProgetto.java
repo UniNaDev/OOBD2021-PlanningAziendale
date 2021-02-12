@@ -486,7 +486,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				
 				if(collaborazione!=null) {
 					
-					ruoloComboBox.setSelectedItem(collaborazione.getRuolo());
+					ruoloComboBox.setSelectedItem(collaborazione.getRuoloCollaboratore());
 					
 					nomeTextField.setText(collaborazione.getCollaboratore().getNome());
 					cognomeTextField.setText(collaborazione.getCollaboratore().getCognome());

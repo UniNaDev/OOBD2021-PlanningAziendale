@@ -1,29 +1,22 @@
 //Classe di associazione tra entità di tipo Dipendente e di tipo Meeting.
-//Contiene il meeting, il dipendente che deve partecipare e la sua presenza ad esso.
+//Contiene il meeting, il dipendente che deve partecipare, la sua presenza e
+//informazioni su se sia lui l'organizzatore del meeting oppure no.
 
 package entita;
 
 public class PartecipazioneMeeting {
+	private Meeting meeting;
+	private Dipendente partecipante;
+	private boolean presente = false;
+	private boolean organizzatore = false;
 	
-	//ATTRIBUTI
-	//----------------------------------------
-	private Meeting meeting;	//meeting
-	private Dipendente partecipante;	//dipendente che vi partecipa
-	private boolean presenza = false;	//presente/assente
-	private boolean organizzatore = false;	//organizzatore oppure no del meeting
-	
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore della classe con tutti gli attributi
-	public PartecipazioneMeeting(Meeting meeting, Dipendente partecipante, boolean presenza, boolean organizzatore) {
+	public PartecipazioneMeeting(Meeting meeting, Dipendente partecipante, boolean presente, boolean organizzatore) {
 		this.meeting = meeting;
 		this.partecipante = partecipante;
-		this.presenza = presenza;
+		this.presente = presente;
 		this.organizzatore = organizzatore;
 	}
 
-	//Getter e setter
 	public Meeting getMeeting() {
 		return meeting;
 	}
@@ -40,12 +33,12 @@ public class PartecipazioneMeeting {
 		this.partecipante = partecipante;
 	}
 
-	public boolean isPresenza() {
-		return presenza;
+	public boolean isPresente() {
+		return presente;
 	}
 
-	public void setPresenza(boolean presenza) {
-		this.presenza = presenza;
+	public void setPresente(boolean presente) {
+		this.presente = presente;
 	}
 	
 	public boolean isOrganizzatore() {
@@ -56,15 +49,18 @@ public class PartecipazioneMeeting {
 		this.organizzatore = organizzatore;
 	}
 
+	/*Formato toString:
+	 * Nome partecipante Cognome partecipante
+	 * true/false se presente o assente
+	 * Organizzatore se è organizzatore
+	 */
 	@Override
 	public String toString() {
-		String organizzatore =null;
+		String partecipazioneMeeting =null;
 		if(isOrganizzatore()==true)
-			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"\nPresenza: "+isPresenza()+"\nOrganizzatore";
-		else {
-			organizzatore=partecipante.getNome()+" "+partecipante.getCognome()+"\nPresenza: "+isPresenza();
-			
-		}
-		return organizzatore;
+			partecipazioneMeeting = partecipante.getNome()+" "+partecipante.getCognome()+"\nPresenza: "+isPresente()+"\nOrganizzatore";
+		else
+			partecipazioneMeeting = partecipante.getNome()+" "+partecipante.getCognome()+"\nPresenza: "+isPresente();
+		return partecipazioneMeeting;
 	}	
 }

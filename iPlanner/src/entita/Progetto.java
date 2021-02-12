@@ -1,44 +1,32 @@
 //Classe che rappresenta i progetti dell'azienda.
-/*Ogni progetto dell'azienda è composto da un suo codice identificativo idProgetto,
-*da un nome del progetto nomeProgetto, da uno o più ambiti, da un tipo di progetto tipoProgetto,
-*da una sua descrizione breve descrizioneProgetto, da una data di creazione dataCreazione,
-*da un'eventuale data di scadenza del progetto scadenza,
-*da una data in cui è terminato il progetto (se è terminato) dataTerminazione e da un dipendente
-*creatore del progetto creatore.
+/*Ogni progetto dell'azienda è composto da un suo codice identificativo,
+*da un nome del progetto, da uno o più ambiti, da un tipo di progetto,
+*da una sua descrizione breve, da una data di creazione,
+*da un'eventuale data di scadenza e
+*da una data in cui è terminato (se è terminato).
 *************************************************************************************************/
+
 package entita;
 
 import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 public class Progetto {
+	private int idProgettto;
+	private String nomeProgetto;
+	private String tipoProgetto;
+	private String descrizioneProgetto;
+	private LocalDate dataCreazione;
+	private LocalDate scadenza;
+	private LocalDate dataTerminazione;
 	
-	//ATTRIBUTI
-	//----------------------------------------
+	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
+	private ArrayList<Dipendente> comprende = new ArrayList<Dipendente>();
+	private ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();
+	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();
 	
-	//Attributi caratteristici
-	private int idProgettto;	//id del progetto (pk)
-	private String nomeProgetto;	//nome progetto (not null)
-	private String tipoProgetto;	//tipologia del progetto (not null)
-	private String descrizioneProgetto;	//descrizione del progetto
-	private LocalDate dataCreazione;	//data creazione del progetto (not null)
-	private LocalDate scadenza;	//eventuale scadenza del progetto
-	private LocalDate dataTerminazione;	//data in cui è terminato il progetto (se è terminato)
-	
-	
-	//Attributi per associazioni
-	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();	//lista di ambiti del progetto
-	private ArrayList<Dipendente> comprende=new ArrayList<Dipendente>(); //Associazione progetto-dipendente
-	private ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();	//lista di meeting relativi al progetto;
-	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();	//lista di collaborazioni del progetto
-
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore con tutti gli attributi essenziali per una query
+	//TODO: si può eliminare (basta cambiare nel DAO come si comporta rispetto a dataTerminazione)
 	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,
 			LocalDate dataCreazione, LocalDate scadenza) {
 		this.idProgettto = idProgettto;
@@ -49,6 +37,7 @@ public class Progetto {
 		this.scadenza = scadenza;
 
 	}
+	
 	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,
 			LocalDate dataCreazione, LocalDate scadenza,LocalDate dataTerminazione) {
 		this.idProgettto = idProgettto;
@@ -60,7 +49,7 @@ public class Progetto {
 		this.dataTerminazione=dataTerminazione;
 	}
 
-	//Costruttore con attributi per la creazione di nuovi progetti
+	//TODO: si può eliminare (basta usare l'altro costruttore e inserire null negli attributi non necessari)
 	public Progetto(String nomeProgetto, String tipoProgetto, String descrizioneProgetto, LocalDate dataCreazione,
 			LocalDate scadenza) {
 		this.nomeProgetto = nomeProgetto;
@@ -70,24 +59,6 @@ public class Progetto {
 		this.scadenza = scadenza;
 	}
 	
-	
-	
-	public Progetto(String nomeProgetto, String tipoProgetto, String descrizioneProgetto, LocalDate dataCreazione,
-			LocalDate scadenza, LocalDate dataTerminazione, ArrayList<AmbitoProgetto> ambiti,
-			ArrayList<Meeting> meetingsRelativi) {
-		super();
-		this.nomeProgetto = nomeProgetto;
-		this.tipoProgetto = tipoProgetto;
-		this.descrizioneProgetto = descrizioneProgetto;
-		this.dataCreazione = dataCreazione;
-		this.scadenza = scadenza;
-		this.dataTerminazione = dataTerminazione;
-		this.ambiti = ambiti;
-		this.meetingsRelativi = meetingsRelativi;
-	}
-
-	//Getter e Setter
-	//Manca setIdProgetto perchè non si vuole settare ma gestire con una sequence nel DBMS
 	public int getIdProgettto() {
 		return idProgettto;
 	}
@@ -183,8 +154,6 @@ public class Progetto {
 		return nomeProgetto;
 	}
 
-	
-	//Serve a distinguere i progetti con nome uguale(GUI gestione meeting)
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -194,42 +163,7 @@ public class Progetto {
 		if (getClass() != obj.getClass())
 			return false;
 		Progetto other = (Progetto) obj;
-		if (ambiti == null) {
-			if (other.ambiti != null)
-				return false;
-		} else if (!ambiti.equals(other.ambiti))
-			return false;
-		if (dataCreazione == null) {
-			if (other.dataCreazione != null)
-				return false;
-		} else if (!dataCreazione.equals(other.dataCreazione))
-			return false;
-		if (dataTerminazione == null) {
-			if (other.dataTerminazione != null)
-				return false;
-		} else if (!dataTerminazione.equals(other.dataTerminazione))
-			return false;
-		if (descrizioneProgetto == null) {
-			if (other.descrizioneProgetto != null)
-				return false;
-		} else if (!descrizioneProgetto.equals(other.descrizioneProgetto))
-			return false;
 		if (idProgettto != other.idProgettto)
-			return false;
-		if (nomeProgetto == null) {
-			if (other.nomeProgetto != null)
-				return false;
-		} else if (!nomeProgetto.equals(other.nomeProgetto))
-			return false;
-		if (scadenza == null) {
-			if (other.scadenza != null)
-				return false;
-		} else if (!scadenza.equals(other.scadenza))
-			return false;
-		if (tipoProgetto == null) {
-			if (other.tipoProgetto != null)
-				return false;
-		} else if (!tipoProgetto.equals(other.tipoProgetto))
 			return false;
 		return true;
 	}

@@ -1,26 +1,19 @@
 /*Classe Skill
 *Classe che rappresenta le skill lavorative dei dipendenti.
+*Si distinguono per un id interno al database e da un nome.
 ******************************************************************/
 
 package entita;
 
 public class Skill {
+	private int idSkill;
+	private String nomeSkill;
 
-	//ATTRIBUTI
-	//----------------------------------------
-	private int idSkill;	//id della skill
-	private String nomeSkill;	//nome della skill
-
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore parziale
 	public Skill(int idSKill, String nomeSkill) {
 		this.idSkill = idSKill;
 		this.nomeSkill = nomeSkill;
 	}
-	
-	//Getter e Setter
+
 	public String getNomeSkill() {
 		return nomeSkill;
 	}
@@ -37,13 +30,11 @@ public class Skill {
 		this.idSkill = idSkill;
 	}
 
-	//toString
 	@Override
 	public String toString() {
 		return nomeSkill;
 	}
-
-	//equals
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

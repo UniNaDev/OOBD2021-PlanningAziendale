@@ -9,53 +9,42 @@ package entita;
 import java.util.ArrayList;
 
 public class SalaRiunione {
+	private String codiceSala;
+	private int capienza;
+	private String indirizzoSede;
+	private int piano;
 	
-	//ATTRIBUTI
-	//----------------------------------------
-	
-	//Attributi caratteristici
-	private String codSala;	//codice sala
-	private int cap;	//capienza della sala
-	private String indirizzo;	//indirizzo della sede dove si trova
-	private int piano;	//piano in cui si trova la sala
-	
-	//Attributi per associazioni
-	private ArrayList<Meeting> meetings = new ArrayList<Meeting>();	//lista di meeting che avvengono nella sala
-	
-	//METODI
-	//----------------------------------------
-	
-	//Costruttore della sala con tutti gli attributi
-	public SalaRiunione(String codSala, int cap, String indirizzo, int piano) {
-		this.codSala = codSala;
-		this.cap = cap;
-		this.indirizzo = indirizzo;
+	private ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+
+	public SalaRiunione(String codiceSala, int capienza, String indirizzoSede, int piano) {
+		this.codiceSala = codiceSala;
+		this.capienza = capienza;
+		this.indirizzoSede = indirizzoSede;
 		this.piano = piano;
 	}
 
-	//Getter e setter di ogni attributo
-	public String getCodSala() {
-		return codSala;
+	public String getCodiceSala() {
+		return codiceSala;
 	}
 
-	public void setCodSala(String codSala) {
-		this.codSala = codSala;
+	public void setCodiceSala(String codiceSala) {
+		this.codiceSala = codiceSala;
 	}
 
-	public int getCap() {
-		return cap;
+	public int getCapienza() {
+		return capienza;
 	}
 
-	public void setCap(int cap) {
-		this.cap = cap;
+	public void setCapienza(int capienza) {
+		this.capienza = capienza;
 	}
 
-	public String getIndirizzo() {
-		return indirizzo;
+	public String getIndirizzoSede() {
+		return indirizzoSede;
 	}
 
-	public void setIndirizzo(String indirizzo) {
-		this.indirizzo = indirizzo;
+	public void setIndirizzoSede(String indirizzoSede) {
+		this.indirizzoSede = indirizzoSede;
 	}
 
 	public int getPiano() {
@@ -66,13 +55,13 @@ public class SalaRiunione {
 		this.piano = piano;
 	}
 
-	//Metodo ToString
+	//Formato toString:
+	//CodiceSala (Capienza)
 	@Override
 	public String toString() {
-		return codSala + " (" + cap + ")";
+		return codiceSala + " (" + capienza + ")";
 	}
 
-	//Override equals su codSala soltanto
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -82,14 +71,11 @@ public class SalaRiunione {
 		if (getClass() != obj.getClass())
 			return false;
 		SalaRiunione other = (SalaRiunione) obj;
-		if (codSala == null) {
-			if (other.codSala != null)
+		if (codiceSala == null) {
+			if (other.codiceSala != null)
 				return false;
-		} else if (!codSala.equals(other.codSala))
+		} else if (!codiceSala.equals(other.codiceSala))
 			return false;
 		return true;
 	}
-	
-	
-	
 }

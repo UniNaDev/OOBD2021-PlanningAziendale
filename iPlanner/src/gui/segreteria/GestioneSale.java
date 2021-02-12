@@ -245,9 +245,9 @@ public class GestioneSale extends JFrame {
 				SalaRiunione salaSelezionata = (SalaRiunione) saleList.getSelectedValue();
 				//Aggiorna GUI
 				try {
-					nomeSalaTextField.setText(salaSelezionata.getCodSala()); //codice sala
-					capienzaTextField.setText(Integer.toString(salaSelezionata.getCap())); //capienza
-					indirizzoTextArea.setText(salaSelezionata.getIndirizzo()); //indirizzo
+					nomeSalaTextField.setText(salaSelezionata.getCodiceSala()); //codice sala
+					capienzaTextField.setText(Integer.toString(salaSelezionata.getCapienza())); //capienza
+					indirizzoTextArea.setText(salaSelezionata.getIndirizzoSede()); //indirizzo
 					pianoTextField.setText(Integer.toString(salaSelezionata.getPiano())); //piano
 				}
 				//formato capienza/piano errati
