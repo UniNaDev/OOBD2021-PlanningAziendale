@@ -140,7 +140,7 @@ CREATE TABLE Meeting(
 	FOREIGN KEY (CodSala) REFERENCES SalaRiunione(CodSala) ON DELETE CASCADE ON UPDATE CASCADE,
 	
 	--Associazione 1 a Molti (Progetto,Meeting)
-	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE --ON UPDATE CASCADE--
+	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -150,8 +150,8 @@ CREATE TABLE AmbitoProgettoLink(
 	CodProgetto integer NOT NULL,
 	
 	CONSTRAINT AmbitoProgettoEsistente UNIQUE(IDAmbito,CodProgetto),
-	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE,
-	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito)
+	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -165,7 +165,7 @@ CREATE TABLE Partecipazione(
 	
 	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PartecipazioneEsistente UNIQUE(CF,CodProgetto),
-	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE,
+	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -177,7 +177,7 @@ CREATE TABLE Abilità(
 	
 	CONSTRAINT CfAbilità CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT SkillEsistente UNIQUE(IDSkill,CF),
-	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill),
+	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -192,7 +192,7 @@ CREATE TABLE Presenza(
 	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),
 	CONSTRAINT PresenzaEsistente UNIQUE(CF,IDMeeting),
 	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE --ON UPDATE CASCADE--
+	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -265,6 +265,10 @@ BEGIN
 --Calcola il numero totale di progetti dell'azienda
 SELECT COUNT(*) INTO TotaleProgetti
 FROM Progetto;
+--Se non ci sono progetti di default la sua valutazione a riguardo è 0
+IF (TotaleProgetti = 0) THEN
+	RETURN 0;
+END IF;
 --Calcola il numero di progetti a cui il dipendente partecipa
 SELECT COUNT(*) INTO Partecipazioni
 FROM Partecipazione AS p

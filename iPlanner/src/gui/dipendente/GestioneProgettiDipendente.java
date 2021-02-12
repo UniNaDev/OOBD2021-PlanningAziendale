@@ -56,6 +56,7 @@ import entita.Progetto;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.PartecipantiListRenderer;
 import gui.customUI.CustomScrollBarUI;
+import gui.tableModels.DataComparator;
 import gui.tableModels.ProgettoTableModel;
 
 public class GestioneProgettiDipendente extends JFrame {
@@ -975,6 +976,12 @@ public class GestioneProgettiDipendente extends JFrame {
 		//Sorter tabella progetto
 		sorterProgetti=new TableRowSorter<>(dataModelProgetti);
 		progettoTable.setRowSorter(sorterProgetti);
+		
+		//Comparatore date per sorter
+		DataComparator comparatorDate = new DataComparator();	//comparator date
+		sorterProgetti.setComparator(3, comparatorDate);	//data creazione
+		sorterProgetti.setComparator(4, comparatorDate);	//data terminazione
+		sorterProgetti.setComparator(5, comparatorDate);	//data scadenza
 		
 		
 		//Seleziona singola

@@ -30,6 +30,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.joda.time.DateTimeComparator;
 import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -46,7 +47,9 @@ import gui.cellRenderers.InvitatiListRenderer;
 import gui.cellRenderers.ProgettoDiscussoListRenderer;
 import gui.cellRenderers.ProgettoListRenderer;
 import gui.customUI.CustomScrollBarUI;
+import gui.tableModels.DataComparator;
 import gui.tableModels.MeetingTableModel;
+import gui.tableModels.OrarioComparator;
 
 import javax.swing.JButton;
 import java.awt.Insets;
@@ -900,6 +903,14 @@ public class GestioneMeetingDipendente extends JFrame {
 		//Sorter tabella meeting
 		sorterMeeting=new TableRowSorter<>(dataModelMeeting);
 		meetingTable.setRowSorter(sorterMeeting);
+		
+		//Comparatore date per sorter
+		DataComparator comparatorDate = new DataComparator();	//comparator date
+		OrarioComparator comparatorOrario=new OrarioComparator();
+		sorterMeeting.setComparator(0, comparatorDate);	//data inizio
+		sorterMeeting.setComparator(1, comparatorDate);	//data fine
+		sorterMeeting.setComparator(2, comparatorOrario); //Orario inizio
+		sorterMeeting.setComparator(3, comparatorOrario);//orario fine
 		
 		//Seleziona singola
 		meetingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

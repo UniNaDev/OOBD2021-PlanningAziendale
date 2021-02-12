@@ -1084,6 +1084,8 @@ public class GestioneDipendenti extends JFrame {
 			dipendentiTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 			tableScrollPanel.setViewportView(dipendentiTable);
 		} catch (SQLException e1) {
+			
+			System.out.println(e1.getMessage());
 			//errore select per tutti i dipendenti
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutti i dipendenti dal database.\nControllare che la connessione al database sia stabilita.",

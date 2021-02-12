@@ -92,20 +92,14 @@ public class MeetingTableModel extends AbstractTableModel {
 	//Per sorting corretto
 	public Class getColumnClass(int column) {
         switch (column) {
-            case 0:
-                return LocalDate.class;
-            case 1:
-                return LocalDate.class;
-            case 2:
-                return LocalTime.class;
-            case 3:
-            	return LocalTime.class;
             case 4:
             	return SalaRiunione.class;
             case 5:
                 return Progetto.class;
+                default:
+                return String.class;
         }
-		return null;
+		
 	}
 
 
