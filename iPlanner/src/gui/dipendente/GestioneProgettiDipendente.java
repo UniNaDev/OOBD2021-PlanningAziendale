@@ -452,7 +452,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_filtriPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(filtroTerminatoComboBox, GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)
+						.addComponent(filtroTerminatoComboBox, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
 						.addComponent(filtroScadutoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(filtroScadutoLabel, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
 						.addComponent(filtroTerminatoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
