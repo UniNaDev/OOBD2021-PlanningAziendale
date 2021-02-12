@@ -69,7 +69,7 @@ public class MieiMeeting extends JFrame {
 	//----------------------------------------------------
 	
 	public MieiMeeting(ControllerMeeting controller) {
-		setMinimumSize(new Dimension(1353, 706));
+		setMinimumSize(new Dimension(1440, 900));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiMeeting.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner -Meeting");
 		setBounds(650, 150, 1353, 708);
@@ -122,39 +122,39 @@ public class MieiMeeting extends JFrame {
 		
 		//Label della piattaforma/della sala
 		JLabel piattaformaSalaLabel = new JLabel("Piattaforma/Sala: N/A");
-		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per la modalità
 		JLabel modalitàLabel = new JLabel("Modalità: N/A");
-		modalitàLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		modalitàLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		modalitàLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label dell'orario di inizio
 		JLabel orarioInizioLabel = new JLabel("Orario Inizio: N/A");
 		orarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		orarioInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		orarioInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		orarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per orario di fine
 		JLabel orarioFineLabel = new JLabel("Orario Fine: N/A");
-		orarioFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		orarioFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di inizio
 		JLabel dataInizioLabel = new JLabel("Data Inizio: N/A");
-		dataInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		dataInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di fine
 		JLabel dataFineLabel = new JLabel("Data Fine: N/A");
-		dataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		dataFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label del progetto discusso nel meeting
 		JLabel progettoDiscussoLabel = new JLabel("N/A");
 		progettoDiscussoLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
 		
 		JPanel panel_1 = new JPanel();	//panel interno a quello delle info dove appare "Info" label
@@ -166,40 +166,42 @@ public class MieiMeeting extends JFrame {
 		
 		GroupLayout gl_infoMeetingPanel = new GroupLayout(infoMeetingPanel);
 		gl_infoMeetingPanel.setHorizontalGroup(
-			gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
+			gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-							.addGap(40)
-							.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(dataInizioLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(progettoDiscussoLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
-								.addComponent(orarioInizioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(dataFineLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(orarioFineLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(modalitàLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE))))
-					.addGap(42))
+					.addGap(28)
+					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(modalitàLabel, GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+						.addComponent(orarioFineLabel, GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+						.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+						.addComponent(orarioInizioLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+						.addComponent(dataInizioLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+						.addComponent(progettoDiscussoLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+						.addComponent(piattaformaSalaLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE))
+					.addGap(28))
+				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(514, Short.MAX_VALUE))
 		);
 		gl_infoMeetingPanel.setVerticalGroup(
 			gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
+					.addGap(7)
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(progettoDiscussoLabel)
+					.addGap(91)
+					.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(orarioInizioLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
 					.addGap(33)
-					.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+					.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(orarioFineLabel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(modalitàLabel, GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+					.addComponent(modalitàLabel, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
 					.addGap(18)
-					.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+					.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
 					.addGap(13))
 		);
 		infoMeetingPanel.setLayout(gl_infoMeetingPanel);
@@ -210,10 +212,10 @@ public class MieiMeeting extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(nuovoMeetingButton, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(mieiMeetingPanel, GroupLayout.PREFERRED_SIZE, 374, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 499, Short.MAX_VALUE)
-							.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 751, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+							.addGap(154)
+							.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 621, Short.MAX_VALUE))
 						.addComponent(mieiMeetingLabel, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
@@ -223,9 +225,9 @@ public class MieiMeeting extends JFrame {
 					.addContainerGap()
 					.addComponent(mieiMeetingLabel)
 					.addGap(31)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(mieiMeetingPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
-						.addComponent(infoMeetingPanel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 497, Short.MAX_VALUE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 688, Short.MAX_VALUE)
+						.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
 		);
@@ -240,7 +242,7 @@ public class MieiMeeting extends JFrame {
 					Meeting meetingSelezionato = meetingList.getSelectedValue();	//ottiene il meeting selezionato
 					
 					//convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
-					progettoDiscussoLabel.setText(meetingSelezionato.getProgettoDiscusso().getNomeProgetto());
+					progettoDiscussoLabel.setText("<html><center>"+meetingSelezionato.getProgettoDiscusso().getNomeProgetto()+"</html></center>");
  
 					modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());	//modalità
 					
