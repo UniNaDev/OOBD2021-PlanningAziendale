@@ -77,7 +77,7 @@ public class MieiProgetti extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiProgetti.class.getResource("/Icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1440, 900));
 		setTitle("iPlanner - I miei Progetti");
-		setBounds(100, 100, 1440, 900);
+		setBounds(100, 100, 1419, 900);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -129,19 +129,20 @@ public class MieiProgetti extends JFrame {
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(36)
-					.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
-					.addGap(80)
-					.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 604, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(mieiProgettiLabel)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(mieiProgettiScrollPane, GroupLayout.PREFERRED_SIZE, 437, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+									.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 728, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.RELATED)))
 					.addGap(38))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(1219, Short.MAX_VALUE)
-					.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(mieiProgettiLabel)
-					.addContainerGap(1125, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -150,77 +151,41 @@ public class MieiProgetti extends JFrame {
 					.addComponent(mieiProgettiLabel)
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
-						.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 690, Short.MAX_VALUE))
+						.addComponent(infoProgettoPanel, GroupLayout.PREFERRED_SIZE, 690, Short.MAX_VALUE)
+						.addComponent(mieiProgettiScrollPane, GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE))
 					.addGap(18)
 					.addComponent(nuovoProgettoBotton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
 		);
 		
 		//Label per nome del progetto
 		JLabel nomeProgettoLabel = new JLabel("N/A");
-		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 26));
 		
-		//Label "Ambiti:"
-		JLabel ambitiLabel = new JLabel("Ambiti:");
-		ambitiLabel.setForeground(Color.DARK_GRAY);
-		ambitiLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
-		
 		//Label per ambiti del progetto
-		JLabel valoreAmbitiLabel = new JLabel("N/A");
-		valoreAmbitiLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreAmbitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Tipologia:"
-		JLabel tipologiaLabel = new JLabel("Tipologia:");
-		tipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		tipologiaLabel.setForeground(Color.DARK_GRAY);
-		tipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel ambitiLabel = new JLabel("Ambiti: N/A");
+		ambitiLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per tipologia di progetto
-		JLabel valoreTipologiaLabel = new JLabel("N/A");
-		valoreTipologiaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Data Creazione:"
-		JLabel dataCreazioneLabel = new JLabel("Data Creazione:");
-		dataCreazioneLabel.setIconTextGap(40);
-		dataCreazioneLabel.setIcon(null);
-		dataCreazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataCreazioneLabel.setForeground(Color.DARK_GRAY);
-		dataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel tipologiaLabel = new JLabel("Tipologia: N/A");
+		tipologiaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		tipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di creazione
-		JLabel valoreDataCreazioneLabel = new JLabel("N/A");
-		valoreDataCreazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Data Terminazione"
-		JLabel dataTerminazioneLabel = new JLabel("Data Terminazione:");
-		dataTerminazioneLabel.setIconTextGap(40);
-		dataTerminazioneLabel.setIcon(null);
-		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataTerminazioneLabel.setForeground(Color.DARK_GRAY);
-		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel dataCreazioneLabel = new JLabel("Data Creazione: N/A");
+		dataCreazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		dataCreazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di terminazione
-		JLabel valoreDataTerminazioneLabel = new JLabel("N/A");
-		valoreDataTerminazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Data Scadenza"
-		JLabel dataScadenzaLabel = new JLabel("Data Scadenza:");
-		dataScadenzaLabel.setIconTextGap(40);
-		dataScadenzaLabel.setIcon(null);
-		dataScadenzaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataScadenzaLabel.setForeground(Color.DARK_GRAY);
-		dataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel dataTerminazioneLabel = new JLabel("Data Terminazione: N/A");
+		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data scadenza
-		JLabel valoreDataScadenzaLabel = new JLabel("N/A");
-		valoreDataScadenzaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel dataScadenzaLabel = new JLabel("Data Scadenza: N/A");
+		dataScadenzaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		dataScadenzaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		JPanel panel = new JPanel();
 		
@@ -228,73 +193,48 @@ public class MieiProgetti extends JFrame {
 		descrizioneScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		GroupLayout gl_infoProgettoPanel = new GroupLayout(infoProgettoPanel);
 		gl_infoProgettoPanel.setHorizontalGroup(
-			gl_infoProgettoPanel.createParallelGroup(Alignment.TRAILING)
+			gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(507, Short.MAX_VALUE))
-				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-					.addGap(31)
-					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
-					.addGap(26))
-				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-					.addGap(66)
-					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(tipologiaLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(dataCreazioneLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(dataScadenzaLabel, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
 					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGap(14)
 							.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(valoreAmbitiLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-								.addComponent(valoreTipologiaLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-								.addComponent(valoreDataCreazioneLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-								.addComponent(valoreDataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 224, Short.MAX_VALUE)))
+								.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+									.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.TRAILING)
+										.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
+										.addComponent(dataScadenzaLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
+										.addComponent(dataCreazioneLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
+										.addComponent(tipologiaLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
+										.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
+										.addComponent(dataTerminazioneLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE))
+									.addGap(103))
+								.addComponent(descrizioneScrollPane, GroupLayout.PREFERRED_SIZE, 700, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-							.addGap(6)
-							.addComponent(valoreDataTerminazioneLabel, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)))
-					.addGap(61))
-				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-					.addGap(86)
-					.addComponent(descrizioneScrollPane, GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
-					.addGap(81))
+							.addContainerGap()
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
 		);
 		gl_infoProgettoPanel.setVerticalGroup(
 			gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoProgettoPanel.createSequentialGroup()
+					.addGap(5)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(11)
-					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
-					.addGap(11)
-					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreAmbitiLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-						.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(tipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(valoreTipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
-					.addGap(62)
-					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(valoreDataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.BASELINE, false)
-						.addComponent(dataScadenzaLabel)
-						.addComponent(valoreDataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-					.addGroup(gl_infoProgettoPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-							.addGap(18)
-							.addComponent(dataTerminazioneLabel))
-						.addGroup(gl_infoProgettoPanel.createSequentialGroup()
-							.addGap(20)
-							.addComponent(valoreDataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))
-					.addGap(36)
-					.addComponent(descrizioneScrollPane, GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+					.addComponent(nomeProgettoLabel, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(ambitiLabel, GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+					.addGap(34)
+					.addComponent(tipologiaLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+					.addGap(32)
+					.addComponent(dataCreazioneLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(dataScadenzaLabel, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(dataTerminazioneLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+					.addGap(38)
+					.addComponent(descrizioneScrollPane, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
 					.addGap(23))
 		);
-		gl_infoProgettoPanel.linkSize(SwingConstants.VERTICAL, new Component[] {dataScadenzaLabel, valoreDataScadenzaLabel});
 		
 		//Label "Descrizione"
 		JLabel descrizioneLabel = new JLabel("Descrizione");
@@ -321,31 +261,40 @@ public class MieiProgetti extends JFrame {
 				public void valueChanged(ListSelectionEvent e) {
 					//Aggiorna le label delle info del progetto
 					Progetto progettoSelezionato = progettiList.getSelectedValue();
-					nomeProgettoLabel.setText("<html><p style=\"width:400px\">"+progettoSelezionato.getNomeProgetto()+"</p></html>");	//nome del progetto
+					
+					nomeProgettoLabel.setText(progettoSelezionato.getNomeProgetto());	//nome del progetto
+					nomeProgettoLabel.setToolTipText(progettoSelezionato.getNomeProgetto());
 					
 					//Ambiti
 					String ambiti = "";
 					for (AmbitoProgetto ambito : progettoSelezionato.getAmbiti())
 						ambiti += ambito.toString() + " ";
-					valoreAmbitiLabel.setText("<html><p style=\"width:200px\">"+ambiti+"</p></html>");
+					ambitiLabel.setText("Ambiti: " + ambiti);
+					ambitiLabel.setToolTipText(ambiti);
 					
-					valoreTipologiaLabel.setText(progettoSelezionato.getTipoProgetto());	//tipologia del progetto
+					tipologiaLabel.setText("Tipologia: " + progettoSelezionato.getTipoProgetto());	//tipologia del progetto
+					tipologiaLabel.setToolTipText(progettoSelezionato.getTipoProgetto());
 					
 					
 					
 					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	//data creazione
-					valoreDataCreazioneLabel.setText(progettoSelezionato.getDataCreazione().toString(formatDate));
+					dataCreazioneLabel.setText("Data Creazione: " + progettoSelezionato.getDataCreazione().toString(formatDate));
+					dataCreazioneLabel.setToolTipText(progettoSelezionato.getDataCreazione().toString(formatDate));
 					
 					
-					if (progettoSelezionato.getDataTerminazione() !=null)	//data terminazione
-						valoreDataTerminazioneLabel.setText(progettoSelezionato.getDataTerminazione().toString(formatDate));
+					if (progettoSelezionato.getDataTerminazione() !=null) {	//data terminazione
+						dataTerminazioneLabel.setText("Data Terminazione: " + progettoSelezionato.getDataTerminazione().toString(formatDate));
+						dataTerminazioneLabel.setToolTipText(progettoSelezionato.getDataTerminazione().toString(formatDate));
+					}
 					else
-						valoreDataTerminazioneLabel.setText("In corso.");
+						dataTerminazioneLabel.setText("Non terminato.");
 					
-					if (progettoSelezionato.getScadenza()!=null)	//data scadenza
-						valoreDataScadenzaLabel.setText(progettoSelezionato.getScadenza().toString(formatDate));
+					if (progettoSelezionato.getScadenza()!=null) {	//data scadenza
+						dataScadenzaLabel.setText("Data Scadenza: " + progettoSelezionato.getScadenza().toString(formatDate));
+						dataScadenzaLabel.setToolTipText(progettoSelezionato.getScadenza().toString(formatDate));
+					}
 					else
-						valoreDataScadenzaLabel.setText("Senza scadenza.");
+						dataScadenzaLabel.setText("Senza scadenza.");
 					
 					descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());	//descrizione del progetto
 				}
