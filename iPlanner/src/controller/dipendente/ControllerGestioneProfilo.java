@@ -129,7 +129,7 @@ public class ControllerGestioneProfilo {
 		dipendente.setIndirizzo(indirizzo);
 	
 		dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB	
-		JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
+			JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
 		chiudiMioAccount();
 		tornaAHome();
 		}

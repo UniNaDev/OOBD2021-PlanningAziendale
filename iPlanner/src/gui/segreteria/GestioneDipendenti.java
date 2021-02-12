@@ -665,6 +665,9 @@ public class GestioneDipendenti extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				pulisciCampi();	//pulisce i campi
+				
+				selectedDip = null;	//dipendente selezionato
+				dipendentiTable.clearSelection();
 			}
 		});
 		pulisciCampiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -725,8 +728,11 @@ public class GestioneDipendenti extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				campiObbligatoriNeri();	//resetta il colore dei campi
 				
+				//se le password coincidono
+				if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText()))
+					creaDipendente(controller);	//crea il nuovo account con i valori inseriti
 				//se le password non coincidono
-				if(!passwordField.getText().equals(confermaPasswordField.getText())) {	
+				else if(!passwordField.getText().equals(confermaPasswordField.getText())) {	
 					JOptionPane.showMessageDialog(null,
 							"Le password inserite sono diverse",
 							"Errore Conferma Password",
@@ -734,15 +740,12 @@ public class GestioneDipendenti extends JFrame {
 					passwordLabel.setForeground(Color.RED);	//rende rossi i campi
 					confermaPasswordLabel.setForeground(Color.RED);
 				}
-				//se le password coincidono
-				else if (confermaPasswordField.getText().equals(passwordField.getText()) && !passwordField.getText().isBlank())
-					creaDipendente(controller);	//crea il nuovo account con i valori inseriti
 				else {
 					JOptionPane.showMessageDialog(null,
-							"Impossibile applicare le modifiche poichè la password è vuota.",
-							"Errore Password Errata",
+							"Alcuni campi obbligatori sono vuoti.",
+							"Errore Campi Obbligatori Vuoti",
 							JOptionPane.ERROR_MESSAGE);
-					passwordLabel.setForeground(Color.RED);
+					campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
 				}
 			}
 		});
@@ -882,26 +885,27 @@ public class GestioneDipendenti extends JFrame {
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				campiObbligatoriNeri();	//resetta il colore dei campi
-				
-				if (confermaPasswordField.getText().equals(passwordField.getText()) && !passwordField.getText().isBlank()) {
-					salvaModifiche(controller, selectedDip);	//crea il nuovo account con i valori inseriti
-				}
-				//se le password inserite sono diverse -> errore conferma password
-				else if(!passwordField.getText().equals(confermaPasswordField.getText()))
-				{	
-					JOptionPane.showMessageDialog(null,
-							"Le password inserite sono diverse",
-							"Errore Conferma Password",
-							JOptionPane.ERROR_MESSAGE);
-					passwordLabel.setForeground(Color.RED);	//rende rossi i campi
-					confermaPasswordLabel.setForeground(Color.RED);
-				}
-				else {
-					JOptionPane.showMessageDialog(null,
-							"Impossibile applicare le modifiche poichè la password è vuota.",
-							"Errore Password Errata",
-							JOptionPane.ERROR_MESSAGE);
-					passwordLabel.setForeground(Color.RED);
+				if (selectedDip != null) {
+					if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText())) {
+						salvaModifiche(controller, selectedDip);	//crea il nuovo account con i valori inseriti
+					}
+					//se le password inserite sono diverse -> errore conferma password
+					else if(!passwordField.getText().equals(confermaPasswordField.getText()))
+					{	
+						JOptionPane.showMessageDialog(null,
+								"Le password inserite sono diverse",
+								"Errore Conferma Password",
+								JOptionPane.ERROR_MESSAGE);
+						passwordLabel.setForeground(Color.RED);	//rende rossi i campi
+						confermaPasswordLabel.setForeground(Color.RED);
+					}
+					else {
+						JOptionPane.showMessageDialog(null,
+								"Alcuni campi obbligatori sono vuoti.",
+								"Errore Campi Obbligatori Vuoti",
+								JOptionPane.ERROR_MESSAGE);
+						campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
+					}
 				}
 			}
 		});
@@ -1537,6 +1541,30 @@ public class GestioneDipendenti extends JFrame {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+	
+	//Metodo che verifica se i campi obbligatori sono vuoti (true = campo vuoto, false = campi pieni)
+	private boolean checkCampiObbligatoriVuoti() {
+		if (nomeTextField.getText().isBlank())
+			return true;
+		else if (cognomeTextField.getText().isBlank())
+			return true;
+		else if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+			return true;
+		else if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)
+			return true;
+		else if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null)
+			return true;
+		else if (indirizzoTextField.getText().isBlank())
+			return true;
+		else if (emailTextField.getText().isBlank())
+			return true;
+		else if (passwordField.getText().isBlank())
+			return true;
+		else if (confermaPasswordField.getText().isBlank())
+			return true;
+		else
+			return false;
 	}
 	
 	//Metodo che pulsice tutti i campi

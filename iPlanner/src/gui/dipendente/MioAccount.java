@@ -102,14 +102,13 @@ public class MioAccount extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			//Quando si vuole uscire chiede all'utente quale scelta vuole effettuare
 			public void windowClosing(WindowEvent evt) {
-                int res=JOptionPane.showConfirmDialog(null,
+                int res = JOptionPane.showConfirmDialog(null,
                         "Sei sicuro di uscire? Le modifiche non verranno salvate");
-                if(res==JOptionPane.YES_OPTION){
+                if(res == JOptionPane.YES_OPTION){
                       controller.chiudiMioAccount();	//chiude la finestra
                 }
-                if(res==JOptionPane.NO_OPTION) {
+                else if(res == JOptionPane.NO_OPTION || res == JOptionPane.CANCEL_OPTION) {
                 	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);	//non la chiude
-                	
                 }
 			}                               
         });
@@ -147,14 +146,14 @@ public class MioAccount extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				campiObbligatoriNeri();	//resetta i colori dei campi
 				try {
-					if (!passwordField.getText().isBlank())
+					if (!checkCampiObbligatoriVuoti())
 						updateAccount(controller); //aggiorna info account
 					else {
 						JOptionPane.showMessageDialog(null,
-								"Impossibile applicare le modifiche poichè la password è vuota.",
-								"Errore Password Errata",
+								"Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
+								"Errore Campi Obbligatori Vuoti",
 								JOptionPane.ERROR_MESSAGE);
-						passwordLabel.setForeground(Color.RED);
+						campiObbligatoriRossi();	//colora di rosso i campi vuoti
 					}
 				} catch (SQLException e1) {
 					//violazione not null
@@ -744,5 +743,27 @@ public class MioAccount extends JFrame {
 		dataNascitaLabel.setForeground(Color.BLACK);
 		comuneNascitaLabel.setForeground(Color.BLACK);
 		provinciaNascitaLabel.setForeground(Color.BLACK);
+	}
+	
+	//Metodo che verifica se i campi obbligatori sono vuoti (true = campo vuoto, false = campi pieni)
+	private boolean checkCampiObbligatoriVuoti() {
+		if (nomeTextField.getText().isBlank())
+			return true;
+		else if (cognomeTextField.getText().isBlank())
+			return true;
+		else if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+			return true;
+		else if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)
+			return true;
+		else if (provinciaComboBox.getSelectedItem() == null || comuneComboBox.getSelectedItem() == null)
+			return true;
+		else if (indirizzoTextField.getText().isBlank())
+			return true;
+		else if (emailTextField.getText().isBlank())
+			return true;
+		else if (passwordField.getText().isBlank())
+			return true;
+		else
+			return false;
 	}
 }
