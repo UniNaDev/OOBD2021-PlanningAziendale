@@ -24,6 +24,8 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Cursor;
 import javax.swing.AbstractListModel;
 import java.awt.Toolkit;
@@ -60,18 +62,17 @@ public class MieiMeeting extends JFrame {
 	//Attributi GUI
 	private JPanel contentPane;
 	private JLabel mieiMeetingLabel;
-
 	private JPanel panel;
 	private JList<Meeting> meetingList;
 	
 	//Creazione frame
 	//----------------------------------------------------
 	
-	public MieiMeeting(ControllerMeeting theController) {
-		setMinimumSize(new Dimension(1300, 800));
+	public MieiMeeting(ControllerMeeting controller) {
+		setMinimumSize(new Dimension(1353, 706));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiMeeting.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner -Meeting");
-		setBounds(650, 150, 1440, 900);
+		setBounds(650, 150, 1353, 708);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -98,7 +99,7 @@ public class MieiMeeting extends JFrame {
 		nuovoMeetingButton.addActionListener(new ActionListener() {
 			//Click sul pulsante
 			public void actionPerformed(ActionEvent e) {
-				theController.apriGestioneMeeting();	//apre la finestra per la gestione dei meeting
+				controller.apriGestioneMeeting();	//apre la finestra per la gestione dei meeting
 			}
 		});
 
@@ -119,81 +120,41 @@ public class MieiMeeting extends JFrame {
 		infoMeetingPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		infoMeetingPanel.setBackground(Color.WHITE);
 		
-		//Label "Piattaforma:"/"Sala:"
-		JLabel piattaformaSalaLabel = new JLabel("Piattaforma:");
-		piattaformaSalaLabel.setIconTextGap(40);
-		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		piattaformaSalaLabel.setForeground(Color.DARK_GRAY);
-		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
-		
 		//Label della piattaforma/della sala
-		JLabel valorePiattaformaSalaLabel = new JLabel("N/A");
-		valorePiattaformaSalaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valorePiattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Modalità:"
-		JLabel modalitaLabel = new JLabel("Modalità:");
-		modalitaLabel.setIconTextGap(40);
-		modalitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		modalitaLabel.setForeground(Color.DARK_GRAY);
-		modalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel piattaformaSalaLabel = new JLabel("Piattaforma/Sala: N/A");
+		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per la modalità
-		JLabel valoreModalitaLabel = new JLabel("N/A");
-		valoreModalitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreModalitaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Orario Inizio:"
-		JLabel orarioInizioLabel = new JLabel("Orario Inizio:");
-		orarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		orarioInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		orarioInizioLabel.setForeground(Color.DARK_GRAY);
-		orarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel modalitàLabel = new JLabel("Modalità: N/A");
+		modalitàLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		modalitàLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label dell'orario di inizio
-		JLabel valoreOrarioInizioLabel = new JLabel("N/A");
-		valoreOrarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		valoreOrarioInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreOrarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Orario Fine:"
-		JLabel orarioFineLabel = new JLabel("Orario Fine:");
-		orarioFineLabel.setIconTextGap(40);
-		orarioFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		orarioFineLabel.setForeground(Color.DARK_GRAY);
-		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel orarioInizioLabel = new JLabel("Orario Inizio: N/A");
+		orarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		orarioInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		orarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per orario di fine
-		JLabel valoreOrarioFineLabel = new JLabel("N/A");
-		valoreOrarioFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreOrarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Data Inizio:"
-		JLabel dataInizioLabel = new JLabel("Data Inizio:");
-		dataInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataInizioLabel.setForeground(Color.DARK_GRAY);
-		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel orarioFineLabel = new JLabel("Orario Fine: N/A");
+		orarioFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di inizio
-		JLabel valoreDataInzioLabel = new JLabel("N/A");
-		valoreDataInzioLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataInzioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-		
-		//Label "Data Fine:"
-		JLabel dataFineLabel = new JLabel("Data Fine:");
-		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataFineLabel.setForeground(Color.DARK_GRAY);
-		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 24));
+		JLabel dataInizioLabel = new JLabel("Data Inizio: N/A");
+		dataInizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label per data di fine
-		JLabel valoreDataFineLabel = new JLabel("N/A");
-		valoreDataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		valoreDataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+		JLabel dataFineLabel = new JLabel("Data Fine: N/A");
+		dataFineLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 		
 		//Label del progetto discusso nel meeting
 		JLabel progettoDiscussoLabel = new JLabel("N/A");
 		progettoDiscussoLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
 		
 		JPanel panel_1 = new JPanel();	//panel interno a quello delle info dove appare "Info" label
@@ -207,84 +168,54 @@ public class MieiMeeting extends JFrame {
 		gl_infoMeetingPanel.setHorizontalGroup(
 			gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(92)
 					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(orarioInizioLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-						.addComponent(orarioFineLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-						.addComponent(modalitaLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-						.addComponent(piattaformaSalaLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-						.addComponent(dataFineLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-						.addComponent(dataInizioLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
-					.addGap(10)
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(valoreOrarioFineLabel, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-						.addComponent(valoreOrarioInizioLabel, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-						.addComponent(valoreDataFineLabel, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-						.addComponent(valoreDataInzioLabel, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-						.addComponent(valoreModalitaLabel, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-						.addComponent(valorePiattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE))
-					.addGap(55))
-				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(551, Short.MAX_VALUE))
-				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
-					.addGap(35))
+						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
+							.addGap(40)
+							.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(dataInizioLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(progettoDiscussoLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+								.addComponent(orarioInizioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(dataFineLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(orarioFineLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(modalitàLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE))))
+					.addGap(42))
 		);
 		gl_infoMeetingPanel.setVerticalGroup(
 			gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_infoMeetingPanel.createSequentialGroup()
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+					.addComponent(progettoDiscussoLabel, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreDataInzioLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
+					.addComponent(dataInizioLabel, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(orarioInizioLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+					.addGap(33)
+					.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(valoreDataFineLabel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataFineLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
-					.addGap(42)
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(orarioInizioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-						.addComponent(valoreOrarioInizioLabel, GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-							.addGap(13)
-							.addComponent(orarioFineLabel, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-							.addGap(53))
-						.addGroup(gl_infoMeetingPanel.createSequentialGroup()
-							.addGap(15)
-							.addComponent(valoreOrarioFineLabel)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(modalitaLabel, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-						.addComponent(valoreModalitaLabel, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-						.addComponent(valorePiattaformaSalaLabel))
-					.addGap(65))
+					.addComponent(orarioFineLabel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(modalitàLabel, GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+					.addGap(18)
+					.addComponent(piattaformaSalaLabel, GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+					.addGap(13))
 		);
 		infoMeetingPanel.setLayout(gl_infoMeetingPanel);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(44)
-					.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
-					.addGap(116)
-					.addComponent(infoMeetingPanel, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
-					.addGap(51))
-				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(mieiMeetingLabel, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(1083, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(1238, Short.MAX_VALUE)
-					.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(nuovoMeetingButton, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(mieiMeetingPanel, GroupLayout.PREFERRED_SIZE, 374, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 499, Short.MAX_VALUE)
+							.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 751, GroupLayout.PREFERRED_SIZE))
+						.addComponent(mieiMeetingLabel, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -293,19 +224,15 @@ public class MieiMeeting extends JFrame {
 					.addComponent(mieiMeetingLabel)
 					.addGap(31)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
-							.addGap(37))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 581, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)))
+						.addComponent(mieiMeetingPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+						.addComponent(infoMeetingPanel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 497, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
 		);
-		
 
 		//List dei meeting
 		try {
-			meetingList = new JList(theController.ottieniMeeting().toArray());
+			meetingList = new JList(controller.ottieniMeeting().toArray());
 			//Selezione di un oggetto nella lista
 			meetingList.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
@@ -313,26 +240,22 @@ public class MieiMeeting extends JFrame {
 					Meeting meetingSelezionato = meetingList.getSelectedValue();	//ottiene il meeting selezionato
 					
 					//convertito in html in modo che il label vada a capo nel caso di un nome troppo lungo
-					progettoDiscussoLabel.setText("<html><p style=\"width:400px\">"+meetingSelezionato.getProgettoDiscusso().getNomeProgetto()+"</p></html>");
+					progettoDiscussoLabel.setText(meetingSelezionato.getProgettoDiscusso().getNomeProgetto());
  
-					valoreModalitaLabel.setText(meetingSelezionato.getModalita());	//modalità
+					modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());	//modalità
 					
-					if (meetingSelezionato.getModalita().equals("Fisico")) {
-						piattaformaSalaLabel.setText("Sala:");
-						valorePiattaformaSalaLabel.setText(meetingSelezionato.getSala().getCodSala());	//modalità fisica con sala
-					}
-					else {
-						piattaformaSalaLabel.setText("Piattaforma:");
-						valorePiattaformaSalaLabel.setText(meetingSelezionato.getPiattaforma());	//modalità telematica con piattaforma
-					}
+					if (meetingSelezionato.getModalita().equals("Fisico"))
+						piattaformaSalaLabel.setText("Sala: " + meetingSelezionato.getSala().getCodSala());	//modalità fisica con sala
+					else
+						piattaformaSalaLabel.setText("Piattaforma: " + meetingSelezionato.getPiattaforma());	//modalità telematica con piattaforma
 					
 					DateTimeFormatter formatTime = DateTimeFormat.forPattern("HH:mm");
-					valoreOrarioFineLabel.setText(meetingSelezionato.getOraFine().toString(formatTime));	//orario fine
-					valoreOrarioInizioLabel.setText(meetingSelezionato.getOraInizio().toString(formatTime));	//orario inizio
+					orarioFineLabel.setText("Orario Fine: " + meetingSelezionato.getOraFine().toString(formatTime));	//orario fine
+					orarioInizioLabel.setText("Orario Inizio: " + meetingSelezionato.getOraInizio().toString(formatTime));	//orario inizio
 					
 					DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");	
-					valoreDataFineLabel.setText(meetingSelezionato.getDataFine().toString(formatDate));	//data fine
-					valoreDataInzioLabel.setText(meetingSelezionato.getDataInizio().toString(formatDate));	//data inizio
+					dataFineLabel.setText("Data Fine: " + meetingSelezionato.getDataFine().toString(formatDate));	//data fine
+					dataInizioLabel.setText("Data Inizio: " + meetingSelezionato.getDataInizio().toString(formatDate));	//data inizio
 				}
 			});
 			MeetingListRenderer renderer = new MeetingListRenderer();	//applica renderer
@@ -344,8 +267,11 @@ public class MieiMeeting extends JFrame {
 			meetingList.setSelectedIndex(0);
 			mieiMeetingPanel.setViewportView(meetingList);
 		} catch (SQLException e1) {
-		
-			e1.printStackTrace();
+			//errore select per tutti i meeting nel database
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutti i meeting dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
 		}
 		contentPane.setLayout(gl_contentPane);
 	}
