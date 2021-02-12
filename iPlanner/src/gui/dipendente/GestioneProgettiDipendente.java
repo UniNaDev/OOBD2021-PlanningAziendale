@@ -110,9 +110,9 @@ public class GestioneProgettiDipendente extends JFrame {
 	
 	public GestioneProgettiDipendente(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
-		setMinimumSize(new Dimension(1600, 900));
+//		setMinimumSize(new Dimension(1600, 900));
 		setTitle("iPlanner-Gestione progetto");
-		setBounds(100, 100, 1600, 900);
+		setBounds(100, 100, 1236, 900);
 		contentPane = new JPanel();		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -338,7 +338,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		JPanel filtriPanel = new JPanel();
 		filtriPanel.setBorder(null);
 		comandiPanel.add(filtriPanel, BorderLayout.SOUTH);
-		filtriPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		//Button "Filtra"
 		JButton filtraButton = new JButton("Filtra");
@@ -358,12 +357,10 @@ public class GestioneProgettiDipendente extends JFrame {
 				filtraButton.setBackground(Color.WHITE);
 			}
 		});
-		filtriPanel.add(filtraButton);
 		
 		//TextField per cercare progetti
 		cercaTextField = new JTextField();
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
-		filtriPanel.add(cercaTextField);
 		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cercaTextField.setColumns(10);
 		
@@ -371,53 +368,99 @@ public class GestioneProgettiDipendente extends JFrame {
 		JLabel filtroTipologiaLabel = new JLabel("Tipologia");
 		filtroTipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		filtriPanel.add(filtroTipologiaLabel);
 		
 		//ComboBox filtro per tipologia
 		JComboBox filtroTipologieComboBox = new JComboBox(new Object[]{});
 		filtroTipologieComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroTipologieComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtroTipologieComboBox.setBackground(Color.WHITE);
-		filtriPanel.add(filtroTipologieComboBox);
 		
 		//Label "Ambito" in filtri
 		JLabel filtroAmbitoLabel = new JLabel("Ambito");
 		filtroAmbitoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroAmbitoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		filtriPanel.add(filtroAmbitoLabel);
 		
 		//ComboBox filtro per ambito
 		JComboBox filtroAmbitiComboBox = new JComboBox(new Object[]{});
 		filtroAmbitiComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroAmbitiComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtroAmbitiComboBox.setBackground(Color.WHITE);
-		filtriPanel.add(filtroAmbitiComboBox);
 		
 		//Label "Scaduto" in filtri
 		filtroScadutoLabel = new JLabel("Scaduto");
 		filtroScadutoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroScadutoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		filtriPanel.add(filtroScadutoLabel);
 		
 		//ComboBox filtro per scaduto
 		filtroScadutoComboBox = new JComboBox(siNoOpzioni);
 		filtroScadutoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroScadutoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtroScadutoComboBox.setBackground(Color.WHITE);
-		filtriPanel.add(filtroScadutoComboBox);
 		
 		//Label "Terminato" in filtri
 		filtroTerminatoLabel = new JLabel("Terminato");
 		filtroTerminatoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroTerminatoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		filtriPanel.add(filtroTerminatoLabel);
 		
 		//ComboBox filtro per terminato
 		filtroTerminatoComboBox = new JComboBox(siNoOpzioni);
 		filtroTerminatoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroTerminatoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtroTerminatoComboBox.setBackground(Color.WHITE);
-		filtriPanel.add(filtroTerminatoComboBox);
+		GroupLayout gl_filtriPanel = new GroupLayout(filtriPanel);
+		gl_filtriPanel.setHorizontalGroup(
+			gl_filtriPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(filtraButton, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(cercaTextField, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+					.addGap(18)
+					.addComponent(filtroTipologiaLabel)
+					.addGap(18)
+					.addComponent(filtroTipologieComboBox, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+					.addGap(49)
+					.addComponent(filtroAmbitoLabel)
+					.addGap(18)
+					.addComponent(filtroAmbitiComboBox, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+					.addGap(44)
+					.addComponent(filtroScadutoLabel)
+					.addGap(18)
+					.addComponent(filtroScadutoComboBox, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+					.addGap(88)
+					.addComponent(filtroTerminatoLabel, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(filtroTerminatoComboBox, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_filtriPanel.setVerticalGroup(
+			gl_filtriPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(19)
+					.addGroup(gl_filtriPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(filtraButton, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+						.addComponent(cercaTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(16))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addContainerGap(25, Short.MAX_VALUE)
+					.addComponent(filtroTipologiaLabel)
+					.addGap(19))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addGap(22)
+					.addComponent(filtroTipologieComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(16))
+				.addGroup(gl_filtriPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_filtriPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(filtroTerminatoComboBox, GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)
+						.addComponent(filtroScadutoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(filtroScadutoLabel, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+						.addComponent(filtroTerminatoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(filtroAmbitiComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(filtroAmbitoLabel, GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+					.addGap(17))
+		);
+		filtriPanel.setLayout(gl_filtriPanel);
 		
 		//Panel interno al panel info del progetto
 		JPanel infoPanel2 = new JPanel();
