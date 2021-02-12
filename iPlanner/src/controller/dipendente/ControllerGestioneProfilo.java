@@ -128,10 +128,7 @@ public class ControllerGestioneProfilo {
 		dipendente.setCellulare(cellulare);
 		dipendente.setIndirizzo(indirizzo);
 	
-		dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB	
-			JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
-		chiudiMioAccount();
-		tornaAHome();
+		dipDAO.updateDipendente(dipendente); //tenta di fare l'update nel DB
 		}
 	
 	

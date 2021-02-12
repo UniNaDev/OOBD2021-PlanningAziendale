@@ -93,6 +93,8 @@ public class MioAccount extends JFrame {
 	private String telefono;	//numero di telefono di casa
 	private String cellulare;	//cellulare
 	private String indirizzo;	//indirizzo
+	
+	private boolean modificheEffettuate = false;	//variabile per verificare se avvengono modifiche o meno durante l'esecuzione
 
 
 	//Creazione frame
@@ -102,14 +104,18 @@ public class MioAccount extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			//Quando si vuole uscire chiede all'utente quale scelta vuole effettuare
 			public void windowClosing(WindowEvent evt) {
-                int res = JOptionPane.showConfirmDialog(null,
-                        "Sei sicuro di uscire? Le modifiche non verranno salvate");
-                if(res == JOptionPane.YES_OPTION){
-                      controller.chiudiMioAccount();	//chiude la finestra
+                if (modificheEffettuate) {
+					int res = JOptionPane.showConfirmDialog(null,
+	                        "Sei sicuro di uscire? Le modifiche non verranno salvate");
+	                if(res == JOptionPane.YES_OPTION){
+	                      controller.chiudiMioAccount();	//chiude la finestra
+	                }
+	                else if(res == JOptionPane.NO_OPTION || res == JOptionPane.CANCEL_OPTION) {
+	                	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);	//non la chiude
+	                }
                 }
-                else if(res == JOptionPane.NO_OPTION || res == JOptionPane.CANCEL_OPTION) {
-                	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);	//non la chiude
-                }
+                else
+                	controller.chiudiMioAccount();
 			}                               
         });
 		setResizable(false);
@@ -146,8 +152,13 @@ public class MioAccount extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				campiObbligatoriNeri();	//resetta i colori dei campi
 				try {
-					if (!checkCampiObbligatoriVuoti())
+					if (!checkCampiObbligatoriVuoti()) {
 						updateAccount(controller); //aggiorna info account
+						if (modificheEffettuate)
+							JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo");
+						controller.chiudiMioAccount();
+						controller.tornaAHome();
+					}
 					else {
 						JOptionPane.showMessageDialog(null,
 								"Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
@@ -413,6 +424,8 @@ public class MioAccount extends JFrame {
 				indirizzoTextField.setEditable(true);
 				cellulareTextField.setEditable(true);
 				telefonoFissoTextField.setEditable(true);
+				modificaButton.setEnabled(false);
+				modificheEffettuate = true;
 			}
 		});
 		
