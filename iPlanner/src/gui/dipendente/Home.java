@@ -265,7 +265,7 @@ public class Home extends JFrame {
 			listmodel.addAll(controller.ottieniMeeting());
 			meetingList.setSelectionBackground(Color.WHITE);
 			meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-			meetingList.setFixedCellHeight(60);
+			meetingList.setFixedCellHeight(80);
 			meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			meetingScrollPanel.setViewportView(meetingList);
 			meetingList.setCellRenderer(renderer);
@@ -294,7 +294,7 @@ public class Home extends JFrame {
 			progettiList = new JList(progetti.toArray());
 			progettiList.setSelectionBackground(Color.WHITE);
 			progettiList.setCellRenderer(progettoCellRenderer);
-			progettiList.setFixedCellHeight(60);
+			progettiList.setFixedCellHeight(80);
 			progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			
 			progettiScrollPanel.setViewportView(progettiList);
