@@ -1,5 +1,7 @@
+//Frame per la gestione dei dipendenti lato segreteria.
+
 package gui.segreteria;
-import controller.*;
+
 import controller.segreteria.ControllerDipendentiSegreteria;
 
 import javax.swing.JFrame;
@@ -44,37 +46,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.Toolkit;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JList;
-import javax.swing.AbstractListModel;
-import javax.swing.JTextPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
 
 
 public class GestioneDipendenti extends JFrame {
-
-	//ATTRIBUTI
-	//-----------------------------------------------------------------
-	
-	//Attributi GUI
 	private JPanel contentPane;
 	
 	private JLabel dipendenteLabel;
@@ -145,30 +132,31 @@ public class GestioneDipendenti extends JFrame {
 	private DipendentiTableModel dataModelDipendente;
 	private JTable dipendentiTable;
 	private JComboBox<Skill> skillFiltroComboBox;
-	
-	//Altri attributi	
-	private ArrayList<String> anni = new ArrayList<String>();	//lista di anni per la data di nascita (1900-oggi)
-	
-	private String nome;	//nome dipendente
-	private String cognome;	//cognome dipendente
-	private char sesso = 'M';	//sesso del dipendente (default = maschio)
-	private LocalDate dataNascita = new LocalDate(1900,1,1);	//data di nascita del dipendente
-	private LuogoNascita luogoNascita = null;	//luogo di nascita del dipendente
-	private String email;	//email del dipendente
-	private String password = null;	//password del dipendente
-	private String telefono = null;	//numero di telefono di casa
-	private String cellulare = null;	//cellulare
-	private String indirizzo;	//indirizzo
-	private float salario; //salario
-	
-	private Dipendente selectedDip; //dipendente selezionato nella tabella
 	private JLabel pulisciCampiLabel;
 	
-	//Creazione del frame
-	//-----------------------------------------------------------------
+	private ArrayList<String> anni = new ArrayList<String>();
+	
+	private String nome;
+	private String cognome;
+	private char sesso = 'M';
+	private LocalDate dataNascita = new LocalDate(1900,1,1);
+	private LuogoNascita luogoNascita = null;
+	private String email;
+	private String password = null;
+	private String telefono = null;
+	private String cellulare = null;
+	private String indirizzo;
+	private float salario;
+	
+	private Dipendente dipendenteSelezionato;
+	
+	private final String VIOLAZIONE_NOT_NULL = "23502";
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
+	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
+	private final String VIOLAZIONE_DATA_INESISTENTE = "22008";
 	
 	public GestioneDipendenti(ControllerDipendentiSegreteria controller) {
-		//Evento finestra che si sta chiudendo
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -182,7 +170,6 @@ public class GestioneDipendenti extends JFrame {
 		setBounds(100, 100, 1358, 944);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
-		//Viene visualizzata al centro dello schermo
 		setLocationRelativeTo(null);
 		
 		contentPane.setLayout(null);
@@ -192,29 +179,25 @@ public class GestioneDipendenti extends JFrame {
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
 		
-		//Label Titolo
 		dipendenteLabel = new JLabel("Dipendente");
 		dipendenteLabel.setBounds(517, 11, 251, 75);
 		infoPanel.add(dipendenteLabel);
 		dipendenteLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/employee_64.png")));
 		dipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-		//Label Icona
 		iconaNomeLabel = new JLabel("");
 		iconaNomeLabel.setBounds(41, 128, 46, 14);
 		infoPanel.add(iconaNomeLabel);
 		iconaNomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		iconaNomeLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/nome_16.png")));
 		
-		//Text Field per il nome
 		nomeTextField = new JTextField();
 		nomeTextField.setBounds(97, 128, 162, 20);
 		infoPanel.add(nomeTextField);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nomeTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		nomeTextField.setColumns(10);
-		
-		//Text Field per il cognome
+
 		cognomeTextField = new JTextField();
 		cognomeTextField.setBounds(282, 128, 168, 20);
 		infoPanel.add(cognomeTextField);
@@ -222,28 +205,24 @@ public class GestioneDipendenti extends JFrame {
 		cognomeTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		cognomeTextField.setColumns(10);
 		
-		//Label "Nome*"
 		nomeLabel = new JLabel("Nome*");
 		nomeLabel.setBounds(97, 148, 66, 14);
 		infoPanel.add(nomeLabel);
 		nomeLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		nomeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Label "Cognome*"
 		cognomeLabel = new JLabel("Cognome*");
 		cognomeLabel.setBounds(282, 148, 84, 14);
 		infoPanel.add(cognomeLabel);
 		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		cognomeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Icona Email
 		iconaEmailLabel = new JLabel("");
 		iconaEmailLabel.setBounds(41, 172, 46, 14);
 		infoPanel.add(iconaEmailLabel);
 		iconaEmailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		iconaEmailLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/email_16.png")));
 		
-		//Text Field per l'email
 		emailTextField = new JTextField();
 		emailTextField.setBounds(97, 169, 267, 20);
 		infoPanel.add(emailTextField);
@@ -251,20 +230,17 @@ public class GestioneDipendenti extends JFrame {
 		emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
 		emailTextField.setColumns(10);
 		
-		//Label "Email*"
 		emailLabel = new JLabel("Email*");
 		emailLabel.setBounds(99, 193, 66, 14);
 		infoPanel.add(emailLabel);
 		emailLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		emailLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Label "Sesso*"
 		sessoLabel = new JLabel("Sesso*");
 		sessoLabel.setBounds(97, 236, 46, 14);
 		infoPanel.add(sessoLabel);
 		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		//Radio Button per uomo
 		uomoRadioButton = new JRadioButton("Uomo");
 		uomoRadioButton.setBounds(163, 232, 61, 23);
 		infoPanel.add(uomoRadioButton);
@@ -273,7 +249,6 @@ public class GestioneDipendenti extends JFrame {
 		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		buttonGroup.add(uomoRadioButton);
 		
-		//Radio Button per donna
 		donnaRadioButton = new JRadioButton("Donna");
 		donnaRadioButton.setBounds(235, 232, 66, 23);
 		infoPanel.add(donnaRadioButton);
@@ -282,21 +257,18 @@ public class GestioneDipendenti extends JFrame {
 		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		buttonGroup.add(donnaRadioButton);
 		
-		//Icona data di nascita
 		iconaDataNascitaLabel = new JLabel("");
 		iconaDataNascitaLabel.setBounds(41, 271, 46, 30);
 		infoPanel.add(iconaDataNascitaLabel);
 		iconaDataNascitaLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/dataNascita_16.png")));
 		iconaDataNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Label "Data di nascita*"
 		dataNascitaLabel = new JLabel("Data di nascita*");
 		dataNascitaLabel.setBounds(96, 284, 117, 14);
 		infoPanel.add(dataNascitaLabel);
 		dataNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		dataNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Combo Box giorni del mese
 		giornoComboBox = new JComboBox<Object>();
 		giornoComboBox.setUI(new BasicComboBoxUI());
 		giornoComboBox.setBackground(Color.WHITE);
@@ -308,7 +280,6 @@ public class GestioneDipendenti extends JFrame {
 		giornoComboBox.setBounds(228, 276, 44, 22);
 		infoPanel.add(giornoComboBox);
 		
-		//Combo Box mesi dell'anno
 		meseComboBox = new JComboBox<Object>();
 		meseComboBox.setBounds(282, 276, 44, 22);
 		meseComboBox.setUI(new BasicComboBoxUI());
@@ -319,7 +290,6 @@ public class GestioneDipendenti extends JFrame {
 		meseComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		infoPanel.add(meseComboBox);
 		
-		//ComboBox anni
 		for (int i = 1900; i < LocalDate.now().getYear(); i++)
 			anni.add(String.valueOf(i));
 		annoComboBox = new JComboBox(anni.toArray());
@@ -332,14 +302,12 @@ public class GestioneDipendenti extends JFrame {
 		annoComboBox.setSelectedIndex((int) annoComboBox.getItemCount()/2);
 		infoPanel.add(annoComboBox);
 		
-		//Label "Luogo di nascita*"
 		provNascitaLabel = new JLabel("Prov. di nascita*");
 		provNascitaLabel.setBounds(97, 327, 128, 14);
 		infoPanel.add(provNascitaLabel);
 		provNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		provNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Combo Box province
 		try {
 			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
 			provinciaComboBox.setUI(new BasicComboBoxUI());
@@ -350,17 +318,14 @@ public class GestioneDipendenti extends JFrame {
 			provinciaComboBox.setBounds(229, 319, 210, 22);
 			infoPanel.add(provinciaComboBox);
 			provinciaComboBox.addActionListener(new ActionListener() {
-				//Action performed selezione
 				public void actionPerformed(ActionEvent e) {
-					cittaComboBox.setEnabled(true); //attiva il menù dei comuni
-					cittaComboBox.removeAllItems();	//pulisce la lista del menù
+					cittaComboBox.setEnabled(true);
+					cittaComboBox.removeAllItems();
 					try {
-						//prova a ottenere i comune dal DB e inserirli nella corrispondente combo box
 						for(LuogoNascita comune: controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
 								cittaComboBox.addItem(comune.getNomeComune());
 					} 
 					catch (SQLException e1) {
-						//errore select per tutti i comuni
 						JOptionPane.showMessageDialog(null,
 							"Impossibile ottenere tutti i comuni di tale provincia dal database.\nControllare che la connessione al database sia stabilita.",
 							"Errore Interrogazione Database",
@@ -369,14 +334,12 @@ public class GestioneDipendenti extends JFrame {
 				}
 			});
 		} catch (SQLException e2) {
-			//errore select per tutte le province
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutte le province dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}
 		
-		//ComboBox comuni
 		cittaComboBox = new JComboBox();
 		cittaComboBox.setBounds(229, 350, 210, 22);
 		infoPanel.add(cittaComboBox);
@@ -386,67 +349,57 @@ public class GestioneDipendenti extends JFrame {
 		cittaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		cittaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		//Icona indirizzo
 		iconaIndirizzoLabel = new JLabel("");
 		iconaIndirizzoLabel.setBounds(41, 385, 46, 30);
 		infoPanel.add(iconaIndirizzoLabel);
 		iconaIndirizzoLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/indirizzo_16.png")));
 		iconaIndirizzoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Label "Indirizzo*"
 		indirizzoLabel = new JLabel("Indirizzo*");
 		indirizzoLabel.setBounds(97, 418, 84, 14);
 		infoPanel.add(indirizzoLabel);
 		indirizzoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		//Icona cellulare
 		iconaCellulareLabel = new JLabel("");
 		iconaCellulareLabel.setBounds(41, 452, 46, 30);
 		infoPanel.add(iconaCellulareLabel);
 		iconaCellulareLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/cellulare_16.png")));
 		iconaCellulareLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Label "Cellulare"
 		cellulareLabel = new JLabel("Cellulare");
 		cellulareLabel.setBounds(96, 462, 84, 14);
 		infoPanel.add(cellulareLabel);
 		cellulareLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		//Text Field cellulare
 		cellulareTextField = new JTextField();
 		cellulareTextField.setBounds(209, 457, 86, 20);
 		infoPanel.add(cellulareTextField);
 		cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cellulareTextField.setColumns(10);
 		
-		//Label "Telefono fisso"
 		telefonoFissoLabel = new JLabel("Telefono Fisso");
 		telefonoFissoLabel.setBounds(96, 493, 103, 14);
 		infoPanel.add(telefonoFissoLabel);
 		telefonoFissoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		//Text Field telefono di casa
 		telefonoFissoTextField = new JTextField();
 		telefonoFissoTextField.setBounds(209, 488, 86, 20);
 		infoPanel.add(telefonoFissoTextField);
 		telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		telefonoFissoTextField.setColumns(10);
 		
-		//Icona password
 		iconaPasswordLabel = new JLabel("");
 		iconaPasswordLabel.setBounds(43, 529, 46, 30);
 		infoPanel.add(iconaPasswordLabel);
 		iconaPasswordLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/password_16.png")));
 		iconaPasswordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Label "Password*"
 		passwordLabel = new JLabel("Password*");
 		passwordLabel.setBounds(99, 541, 66, 14);
 		infoPanel.add(passwordLabel);
 		passwordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Password Field per la password
 		passwordField = new JPasswordField();
 		passwordField.setBounds(239, 530, 185, 20);
 		infoPanel.add(passwordField);
@@ -454,14 +407,12 @@ public class GestioneDipendenti extends JFrame {
 		passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Label "Conferma Password*"
 		confermaPasswordLabel = new JLabel("Conferma Password*");
 		confermaPasswordLabel.setBounds(99, 566, 128, 14);
 		infoPanel.add(confermaPasswordLabel);
 		confermaPasswordLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		confermaPasswordLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Password Field per conferma password
 		confermaPasswordField = new JPasswordField();
 		confermaPasswordField.setBounds(239, 561, 185, 20);
 		infoPanel.add(confermaPasswordField);
@@ -469,7 +420,6 @@ public class GestioneDipendenti extends JFrame {
 		confermaPasswordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		confermaPasswordField.setHorizontalAlignment(SwingConstants.LEFT);
 				
-		//Text Field indirizzo
 		indirizzoTextField = new JTextField();
 		indirizzoTextField.setBounds(97, 395, 267, 20);
 		infoPanel.add(indirizzoTextField);
@@ -477,7 +427,6 @@ public class GestioneDipendenti extends JFrame {
 		indirizzoTextField.setColumns(10);
 		indirizzoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		//Skills
 		skillsScrollPane = new JScrollPane();
 		skillsScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		skillsScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -491,50 +440,42 @@ public class GestioneDipendenti extends JFrame {
 			skillsList.setFont(new Font("Consolas", Font.PLAIN, 12));
 			skillsScrollPane.setViewportView(skillsList);
 		} catch (SQLException e2) {
-			//errore select per tutte le skill
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}
 		
-		//Label "Skills"
 		skillsLabel = new JLabel("Skills");
 		skillsLabel.setBounds(745, 222, 47, 14);
 		infoPanel.add(skillsLabel);
 		skillsLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		skillsLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		//Icona delle skill
 		iconaSkillsLabel = new JLabel("");
 		iconaSkillsLabel.setBounds(750, 181, 31, 39);
 		infoPanel.add(iconaSkillsLabel);
 		iconaSkillsLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/skills_32.png")));
 		iconaSkillsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Button "Crea Nuova Skill"
 		nuovaSkillButton = new JButton("Crea Nuova Skill");
 		nuovaSkillButton.setBounds(989, 404, 139, 23);
 		infoPanel.add(nuovaSkillButton);
-		//Eventi connessi al button "Crea Nuova Skill"
 		nuovaSkillButton.addMouseListener(new MouseAdapter() {
-			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				nuovaSkillButton.setBackground(Color.LIGHT_GRAY);	//lo evidenzia
+				nuovaSkillButton.setBackground(Color.LIGHT_GRAY);
 			}
-			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				nuovaSkillButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+				nuovaSkillButton.setBackground(Color.WHITE);
 			}	
 		});
-		//click del pulsante
 		nuovaSkillButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				creaSkill(controller);	//aggiunge la nuova skill nel DB
+				creaSkill(controller);
 			}
 		});
 		nuovaSkillButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -542,14 +483,12 @@ public class GestioneDipendenti extends JFrame {
 		nuovaSkillButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		nuovaSkillButton.setBackground(Color.WHITE);
 		
-		//Text Field per il nome della nuova skill
 		nuovaSkillTextField = new JTextField();
 		nuovaSkillTextField.setBounds(811, 405, 168, 22);
 		infoPanel.add(nuovaSkillTextField);
 		nuovaSkillTextField.setColumns(10);
 		nuovaSkillTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		//Text Field per il salario
 		salarioTextField = new JTextField("0.00");
 		salarioTextField.setBounds(832, 489, 141, 22);
 		infoPanel.add(salarioTextField);
@@ -557,116 +496,101 @@ public class GestioneDipendenti extends JFrame {
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		//Label "€"
 		euroLabel = new JLabel("€");
 		euroLabel.setBounds(982, 483, 66, 36);
 		infoPanel.add(euroLabel);
 		euroLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 		
-		//Label "Salario"
 		salarioLabel = new JLabel("Salario");
 		salarioLabel.setBounds(832, 516, 66, 14);
 		infoPanel.add(salarioLabel);
 		salarioLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		//Icona salario
 		iconaSalarioLabel = new JLabel("");
 		iconaSalarioLabel.setBounds(774, 483, 46, 30);
 		infoPanel.add(iconaSalarioLabel);
 		iconaSalarioLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/salario_16.png")));
 		iconaSalarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Icona Mostra password interagibile
 		mostraPasswordLabel = new JLabel("");
 		mostraPasswordLabel.setBounds(448, 527, 46, 26);
 		infoPanel.add(mostraPasswordLabel);
 		mostraPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mostraPasswordLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/showpass_24.png")));
-		//Eventi legati all'icona
 		mostraPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) 
 			{
-				passwordField.setEchoChar((char)0); //quando si tiene premuto con il mouse sull icona mostra il testo non nascosto
+				passwordField.setEchoChar((char)0);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) 
 			{
-				passwordField.setEchoChar('*'); //quando si rilascia il mouse mostra di nuovo il testo nascosto
+				passwordField.setEchoChar('*');
 			}
 		});
 		
-		//Icona di mostra conferma password
 		mostraConfirmPasswordLabel = new JLabel("");
 		mostraConfirmPasswordLabel.setBounds(448, 557, 47, 29);
 		infoPanel.add(mostraConfirmPasswordLabel);
 		mostraConfirmPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mostraConfirmPasswordLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/showpass_24.png")));
-		//Eventi legati all'icona
 		mostraConfirmPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) 
 			{
-				confermaPasswordField.setEchoChar((char)0);	//quando si tiene premuto con il mouse sull icona mostra il testo non nascosto
+				confermaPasswordField.setEchoChar((char)0);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) 
 			{
-				confermaPasswordField.setEchoChar('*');	//quando si rilascia il mouse mostra di nuovo il testo nascosto
+				confermaPasswordField.setEchoChar('*');
 			}
 		});
 		
-		//Label tip per selezionare più skill
 		inserireSkillLabel = new JLabel("N.B. Per inserire più skill contemporanemante");
 		inserireSkillLabel.setBounds(838, 435, 290, 20);
 		infoPanel.add(inserireSkillLabel);
 		inserireSkillLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
 		inserireSkillLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//Label continuo tip per selezionare più skill
 		premereCtrlLabel = new JLabel("premere CTRL+clic tasto sx mouse sulla skill");
 		premereCtrlLabel.setBounds(838, 452, 290, 20);
 		infoPanel.add(premereCtrlLabel);
 		premereCtrlLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		premereCtrlLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
 		
-		//Label campi obbligatori
 		campiObbligatoriLabel = new JLabel("* Campi obbligatori");
 		campiObbligatoriLabel.setBounds(1119, 619, 128, 20);
 		infoPanel.add(campiObbligatoriLabel);
 		campiObbligatoriLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		campiObbligatoriLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
 		
-		//Label città di nascita
 		cittàDiNascitaLabel = new JLabel("Città di nascita*");
 		cittàDiNascitaLabel.setBounds(97, 354, 128, 14);
 		infoPanel.add(cittàDiNascitaLabel);
 		cittàDiNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		cittàDiNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		//Separatore verticale
 		JSeparator separator = new JSeparator();
 		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(601, 100, 2, 527);
 		infoPanel.add(separator);
 		
-		//Label Valutazione
 		JLabel valutazioneLabel = new JLabel("Valutazione");
 		valutazioneLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		valutazioneLabel.setBounds(832, 545, 185, 14);
 		infoPanel.add(valutazioneLabel);
 		
-		//Label per pulire campi
 		pulisciCampiLabel = new JLabel("");
-		//Click mouse
 		pulisciCampiLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pulisciCampi();	//pulisce i campi
+				pulisciCampi();
 				
-				selectedDip = null;	//dipendente selezionato
+				dipendenteSelezionato = null;
 				dipendentiTable.clearSelection();
 			}
 		});
@@ -676,7 +600,6 @@ public class GestioneDipendenti extends JFrame {
 		pulisciCampiLabel.setBounds(41, 100, 16, 14);
 		infoPanel.add(pulisciCampiLabel);
 		
-		//Button "Esci"
 		esciButton = new JButton("Esci");
 		esciButton.setBounds(25, 871, 97, 23);
 		contentPane.add(esciButton);
@@ -684,36 +607,30 @@ public class GestioneDipendenti extends JFrame {
 		esciButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		esciButton.setBackground(Color.WHITE);
 		esciButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-		//Eventi connessi al button "Esci"
 		esciButton.addActionListener(new ActionListener() {
-			//click sinistro del mouse
 			public void actionPerformed(ActionEvent e) {
-				controller.tornaAiPlanner();	//annulla tutto e torna alla schermata principale
+				controller.tornaAiPlanner();
 			}
 		});
 		esciButton.addMouseListener(new MouseAdapter() {
-			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				esciButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
+				esciButton.setBackground(Color.LIGHT_GRAY);
 			}
-			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				esciButton.setBackground(Color.WHITE);	//smette di evidenziare il pulsante
+				esciButton.setBackground(Color.WHITE);
 			}
 		});
 		
-		//Panel dei comandi
 		comandiPanel = new JPanel();
 		comandiPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		comandiPanel.setBounds(28, 672, 1289, 38);
 		contentPane.add(comandiPanel);
 		comandiPanel.setLayout(null);
 		
-		//Button "Crea Account"
 		creaAccountButton = new JButton("Crea");
 		creaAccountButton.setToolTipText("Crea un nuovo dipendente con le informazioni inserite");
 		creaAccountButton.setBounds(1204, 7, 67, 23);
@@ -722,22 +639,18 @@ public class GestioneDipendenti extends JFrame {
 		creaAccountButton.setBackground(Color.WHITE);
 		creaAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		creaAccountButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-		//Eventi connessi al pulsante "Crea Account"
 		creaAccountButton.addActionListener(new ActionListener() {
-			//click del pulsante
 			public void actionPerformed(ActionEvent e) {
-				campiObbligatoriNeri();	//resetta il colore dei campi
+				campiObbligatoriNeri();
 				
-				//se le password coincidono
 				if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText()))
-					creaDipendente(controller);	//crea il nuovo account con i valori inseriti
-				//se le password non coincidono
+					creaDipendente(controller);
 				else if(!passwordField.getText().equals(confermaPasswordField.getText())) {	
 					JOptionPane.showMessageDialog(null,
 							"Le password inserite sono diverse",
 							"Errore Conferma Password",
 							JOptionPane.ERROR_MESSAGE);
-					passwordLabel.setForeground(Color.RED);	//rende rossi i campi
+					passwordLabel.setForeground(Color.RED);
 					confermaPasswordLabel.setForeground(Color.RED);
 				}
 				else {
@@ -745,26 +658,22 @@ public class GestioneDipendenti extends JFrame {
 							"Alcuni campi obbligatori sono vuoti.",
 							"Errore Campi Obbligatori Vuoti",
 							JOptionPane.ERROR_MESSAGE);
-					campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
+					campiObbligatoriRossi();
 				}
 			}
 		});
 		creaAccountButton.addMouseListener(new MouseAdapter() {
-			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				creaAccountButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
+				creaAccountButton.setBackground(Color.LIGHT_GRAY);
 			}
-			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				creaAccountButton.setBackground(Color.WHITE);	//smette di evidenziarlo
-			}
+				creaAccountButton.setBackground(Color.WHITE);			}
 		});
 		
-		//Text Field ricerca per nome/cognome/email
 		cercaTextField = new JTextField();
 		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -772,12 +681,11 @@ public class GestioneDipendenti extends JFrame {
 		comandiPanel.add(cercaTextField);
 		cercaTextField.setColumns(10);
 		
-		//Button per filtrare la tabella di dipendenti
 		JButton filtraButton = new JButton("Filtra");
 		filtraButton.setToolTipText("Clicca per applicare i filtri");
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				applicaFiltri(controller);	//applica i filtri
+				applicaFiltri(controller);
 			}
 		});
 		filtraButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -786,22 +694,19 @@ public class GestioneDipendenti extends JFrame {
 		filtraButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtraButton.setBounds(10, 9, 67, 20);
 		filtraButton.addMouseListener(new MouseAdapter() {
-			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				filtraButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
+				filtraButton.setBackground(Color.LIGHT_GRAY);
 			}
-			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				filtraButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+				filtraButton.setBackground(Color.WHITE);
 			}
 		});
 		comandiPanel.add(filtraButton);
 		
-		//Text Field età minima filtro
 		etàMinimaTextField = new JTextField();
 		etàMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		etàMinimaTextField.setText("min");
@@ -811,13 +716,11 @@ public class GestioneDipendenti extends JFrame {
 		comandiPanel.add(etàMinimaTextField);
 		etàMinimaTextField.setColumns(10);
 		
-		//Label "Età"
 		etàFiltroLabel = new JLabel("Età");
 		etàFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		etàFiltroLabel.setBounds(308, 12, 28, 14);
 		comandiPanel.add(etàFiltroLabel);
 		
-		//Text Field età massima filtro
 		etàMassimaTextField = new JTextField();
 		etàMassimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		etàMassimaTextField.setText("max");
@@ -827,7 +730,6 @@ public class GestioneDipendenti extends JFrame {
 		etàMassimaTextField.setBounds(333, 9, 39, 20);
 		comandiPanel.add(etàMassimaTextField);
 		
-		//Text Field salario minimo filtro
 		salarioMinimoTextField = new JTextField();
 		salarioMinimoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		salarioMinimoTextField.setText("min");
@@ -837,13 +739,11 @@ public class GestioneDipendenti extends JFrame {
 		salarioMinimoTextField.setBounds(402, 9, 67, 20);
 		comandiPanel.add(salarioMinimoTextField);
 		
-		//Label "Salario"
 		salarioFiltroLabel = new JLabel("Salario");
 		salarioFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		salarioFiltroLabel.setBounds(472, 12, 57, 14);
 		comandiPanel.add(salarioFiltroLabel);
 		
-		//Text Field salario massimo filtro
 		salarioMassimoTextField = new JTextField();
 		salarioMassimoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		salarioMassimoTextField.setText("max");
@@ -853,7 +753,6 @@ public class GestioneDipendenti extends JFrame {
 		salarioMassimoTextField.setBounds(524, 9, 80, 20);
 		comandiPanel.add(salarioMassimoTextField);
 		
-		//Text Field valutazione minima
 		valutazioneMinimaTextField = new JTextField();
 		valutazioneMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		valutazioneMinimaTextField.setText("min");
@@ -863,13 +762,11 @@ public class GestioneDipendenti extends JFrame {
 		valutazioneMinimaTextField.setBounds(636, 9, 39, 20);
 		comandiPanel.add(valutazioneMinimaTextField);
 		
-		//Label "Valutazione"
 		valutazioneFiltroLabel = new JLabel("Valutazione");
 		valutazioneFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		valutazioneFiltroLabel.setBounds(678, 12, 77, 14);
 		comandiPanel.add(valutazioneFiltroLabel);
 		
-		//Text Field valutazione massima filtro
 		valutazioneMassimaTextField = new JTextField();
 		valutazioneMassimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		valutazioneMassimaTextField.setText("max");
@@ -879,24 +776,22 @@ public class GestioneDipendenti extends JFrame {
 		valutazioneMassimaTextField.setBounds(757, 9, 39, 20);
 		comandiPanel.add(valutazioneMassimaTextField);
 		
-		//Button salva le modifiche fatte
 		salvaModificheButton = new JButton("<html> <center> Salva <br> Modifiche <html>");
 		salvaModificheButton.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				campiObbligatoriNeri();	//resetta il colore dei campi
-				if (selectedDip != null) {
+				campiObbligatoriNeri();
+				if (dipendenteSelezionato != null) {
 					if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText())) {
-						salvaModifiche(controller, selectedDip);	//crea il nuovo account con i valori inseriti
+						salvaModifiche(controller, dipendenteSelezionato);
 					}
-					//se le password inserite sono diverse -> errore conferma password
 					else if(!passwordField.getText().equals(confermaPasswordField.getText()))
 					{	
 						JOptionPane.showMessageDialog(null,
 								"Le password inserite sono diverse",
 								"Errore Conferma Password",
 								JOptionPane.ERROR_MESSAGE);
-						passwordLabel.setForeground(Color.RED);	//rende rossi i campi
+						passwordLabel.setForeground(Color.RED);
 						confermaPasswordLabel.setForeground(Color.RED);
 					}
 					else {
@@ -904,7 +799,7 @@ public class GestioneDipendenti extends JFrame {
 								"Alcuni campi obbligatori sono vuoti.",
 								"Errore Campi Obbligatori Vuoti",
 								JOptionPane.ERROR_MESSAGE);
-						campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
+						campiObbligatoriRossi();
 					}
 				}
 			}
@@ -915,43 +810,37 @@ public class GestioneDipendenti extends JFrame {
 		salvaModificheButton.setBackground(Color.WHITE);
 		salvaModificheButton.setBounds(1099, 2, 95, 34);
 		salvaModificheButton.addMouseListener(new MouseAdapter() {
-			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				salvaModificheButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
+				salvaModificheButton.setBackground(Color.LIGHT_GRAY);
 			}
-			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				salvaModificheButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+				salvaModificheButton.setBackground(Color.WHITE);
 			}
 		});
 		comandiPanel.add(salvaModificheButton);
 		
-		//Button per eliminare gli account
 		JButton eliminaAccountButton = new JButton("Elimina");
-		//Click mouse
 		eliminaAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ricavaInfoDipendente(controller);	//ricava tutte le principali informazioni per il dipendente
+				ricavaInfoDipendente(controller);
 				
 				try {
-					//crea il dipendente temporaneo da eliminare in base ai dati ricavati
 					Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
 					temp.setCf(temp.generaCF());
-					//elimina
 					controller.eliminaDipendente(temp);
 					
-					pulisciCampi();	//azzera tutti i campi
+					pulisciCampi();
 					
-					aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
+					aggiornaTabella(controller);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null,
 							e1.getMessage() + "\nContattare uno sviluppatore",
 							"Errore #" + e1.getErrorCode(),
-							JOptionPane.ERROR_MESSAGE);	//errore durante la creazione account
+							JOptionPane.ERROR_MESSAGE);
 				} catch (NullPointerException npe) {
 					JOptionPane.showMessageDialog(null,
 							"Il dipendente selezionato è vuoto.",
@@ -967,28 +856,24 @@ public class GestioneDipendenti extends JFrame {
 		eliminaAccountButton.setBackground(Color.WHITE);
 		eliminaAccountButton.setBounds(1022, 7, 67, 23);
 		eliminaAccountButton.addMouseListener(new MouseAdapter() {
-			//mouse sopra il pulsante
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				eliminaAccountButton.setBackground(Color.LIGHT_GRAY);	//evidenzia il pulsante
+				eliminaAccountButton.setBackground(Color.LIGHT_GRAY);
 			}
-			//mouse fuori dal pulsante
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				eliminaAccountButton.setBackground(Color.WHITE);	//smette di evidenziarlo
+				eliminaAccountButton.setBackground(Color.WHITE);
 			}
 		});
 		comandiPanel.add(eliminaAccountButton);
 		
-		//Label "Skill" in filtri
 		JLabel skillFiltroLabel = new JLabel("Skill");
 		skillFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		skillFiltroLabel.setBounds(814, 12, 39, 14);
 		comandiPanel.add(skillFiltroLabel);
 		
-		//ComboBox skill per filtri
 		try {
 			ArrayList<Skill> skills = controller.ottieniSkill();
 			skills.add(0,null);
@@ -999,46 +884,40 @@ public class GestioneDipendenti extends JFrame {
 			skillFiltroComboBox.setBounds(856, 6, 157, 22);
 			comandiPanel.add(skillFiltroComboBox);
 		} catch (SQLException e2) {
-			//errore select per tutte le skill
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}
 		
-		//Scroll Panel per tabella dipendenti
 		tableScrollPanel = new JScrollPane();
 		tableScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		tableScrollPanel.setBounds(25, 721, 1289, 139);
 		contentPane.add(tableScrollPanel);
 		
-		//Tabella dipendenti
 		dataModelDipendente = new DipendentiTableModel();
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 			dipendentiTable = new JTable(dataModelDipendente);
 			dipendentiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());	//sorter
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());
 			dipendentiTable.setRowSorter(sorter);
 			
-			//Click con mouse
 			dipendentiTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					campiObbligatoriNeri();	//resetta il colore dei campi
+					campiObbligatoriNeri();
 					
-					int row = dipendentiTable.getSelectedRow();	//ottiene la riga selezionata
-					row = dipendentiTable.convertRowIndexToModel(row);	//converte la riga correttamente in caso di sorting
-					selectedDip = dataModelDipendente.getSelected(row);	//ottiene il dipendente selezionato
+					int row = dipendentiTable.getSelectedRow();
+					row = dipendentiTable.convertRowIndexToModel(row);
+					dipendenteSelezionato = dataModelDipendente.getSelected(row);
 					
-					pulisciCampi();	//pulisce i campi prima di riaggiornarli
+					pulisciCampi();
 					
-					//Aggiorna la GUI
-					nomeTextField.setText(selectedDip.getNome());	//nome
-					cognomeTextField.setText(selectedDip.getCognome());	//cognome
-					emailTextField.setText(selectedDip.getEmail()); 	//email
-					//sesso
-					if(selectedDip.getSesso() == 'M') {
+					nomeTextField.setText(dipendenteSelezionato.getNome());
+					cognomeTextField.setText(dipendenteSelezionato.getCognome());
+					emailTextField.setText(dipendenteSelezionato.getEmail());
+					if(dipendenteSelezionato.getSesso() == 'M') {
 						uomoRadioButton.setSelected(true);
 						donnaRadioButton.setSelected(false);
 					}
@@ -1046,22 +925,19 @@ public class GestioneDipendenti extends JFrame {
 						uomoRadioButton.setSelected(false);		
 						donnaRadioButton.setSelected(true);
 					}
-					//data nascita
-					giornoComboBox.setSelectedIndex(selectedDip.getDataNascita().getDayOfMonth()-1);
-					meseComboBox.setSelectedIndex(selectedDip.getDataNascita().getMonthOfYear()-1);
-					annoComboBox.setSelectedIndex(selectedDip.getDataNascita().getYear()-1900);
-					//luogo di nascita
-					provinciaComboBox.setSelectedItem(selectedDip.getLuogoNascita().getNomeProvincia());
-					cittaComboBox.setSelectedItem(selectedDip.getLuogoNascita().getNomeComune());
+					giornoComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getDayOfMonth()-1);
+					meseComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getMonthOfYear()-1);
+					annoComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getYear()-1900);
+					provinciaComboBox.setSelectedItem(dipendenteSelezionato.getLuogoNascita().getNomeProvincia());
+					cittaComboBox.setSelectedItem(dipendenteSelezionato.getLuogoNascita().getNomeComune());
 					cittaComboBox.setEnabled(false);
-					indirizzoTextField.setText(selectedDip.getIndirizzo());	//indirizzo
-					cellulareTextField.setText(selectedDip.getCellulare());	//cellulare
-					telefonoFissoTextField.setText(selectedDip.getTelefonoCasa()); //telefono casa
-					passwordField.setText(selectedDip.getPassword()); //password
-					confermaPasswordField.setText(selectedDip.getPassword()); //conferma password
-					salarioTextField.setText(Float.toString(selectedDip.getSalario()));	//salario
-					//skills
-					ArrayList<Skill> skills = selectedDip.getSkills();
+					indirizzoTextField.setText(dipendenteSelezionato.getIndirizzo());
+					cellulareTextField.setText(dipendenteSelezionato.getCellulare());
+					telefonoFissoTextField.setText(dipendenteSelezionato.getTelefonoCasa());
+					passwordField.setText(dipendenteSelezionato.getPassword());
+					confermaPasswordField.setText(dipendenteSelezionato.getPassword());
+					salarioTextField.setText(Float.toString(dipendenteSelezionato.getSalario()));
+					ArrayList<Skill> skills = dipendenteSelezionato.getSkills();
 					int[] indici = new int[skills.size()];
 					int i = 0;
 					for (Skill skill: skills) {
@@ -1070,23 +946,20 @@ public class GestioneDipendenti extends JFrame {
 							i++;
 							skillsList.setSelectedIndices(indici);
 						} catch (SQLException e1) {
-							//errore select per tutte le skill
 							JOptionPane.showMessageDialog(null,
 								"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
 								"Errore Interrogazione Database",
 								JOptionPane.ERROR_MESSAGE);
 						}
 					}
-					valutazioneLabel.setText("Valutazione: " + String.format("%.2f",selectedDip.getValutazione())); //valutazione	
+					valutazioneLabel.setText("Valutazione: " + String.format("%.2f",dipendenteSelezionato.getValutazione()));	
 				}
 			});
 			dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			dipendentiTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 			tableScrollPanel.setViewportView(dipendentiTable);
 		} catch (SQLException e1) {
-			
-			//errore select per tutti i dipendenti
-			JOptionPane.showMessageDialog(null,
+				JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutti i dipendenti dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
@@ -1096,50 +969,41 @@ public class GestioneDipendenti extends JFrame {
 	//Altri metodi
 	//-----------------------------------------------------------------
 	
-	//Metodo che ricava le informazioni essenziali per la creazione di un dipendente temporaneo
 	private void ricavaInfoDipendente(ControllerDipendentiSegreteria controller) {
-		//prende i dati dagli input della GUI
-		nome = nomeTextField.getText();	//nome
-		cognome = cognomeTextField.getText();	//cognome
-		//sesso
+		nome = nomeTextField.getText();
+		cognome = cognomeTextField.getText();
 		if (uomoRadioButton.isSelected())
 			sesso = 'M';
 		else
 			sesso = 'F';
-		//data di nascita
 		dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1);
-		//luogo di nascita	
 		try {
 			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
 		}
 		catch (SQLException e1) {
-			//errore select per comuni
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}
-		email = emailTextField.getText(); //email
+		email = emailTextField.getText();
 		if (!passwordField.getText().isBlank())
-			password = passwordField.getText();	//password
+			password = passwordField.getText();
 		if (!telefonoFissoTextField.getText().equals(""))
-			telefono = telefonoFissoTextField.getText();	//telefono
+			telefono = telefonoFissoTextField.getText();
 		if (!cellulareTextField.getText().isBlank())
-			cellulare = cellulareTextField.getText();    //cellulare
-		indirizzo = indirizzoTextField.getText();	//indirizzo
-		salario = parseFloat(salarioTextField.getText(), 0f);	//salario
+			cellulare = cellulareTextField.getText();
+		indirizzo = indirizzoTextField.getText();
+		salario = parseFloat(salarioTextField.getText(), 0f);
 	}
 	
-	//Metodo che aggiorna la tabella dei dipendenti
 	private void aggiornaTabella(ControllerDipendentiSegreteria controller) {
-		//aggiorna tabella dipendenti
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} 
 		catch (SQLException e1) {
-			//errore select per tutti i dipendenti
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutti i dipendenti dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
@@ -1147,32 +1011,29 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che colora i campi obbligatori vuoti di rosso
 	private void campiObbligatoriRossi() {
-		if (nomeTextField.getText().isBlank())	//nome
+		if (nomeTextField.getText().isBlank())
 			nomeLabel.setForeground(Color.RED);
-		if (cognomeTextField.getText().isBlank())	//cognome
+		if (cognomeTextField.getText().isBlank())
 			cognomeLabel.setForeground(Color.RED);
-		if (emailTextField.getText().isBlank())	//email
+		if (emailTextField.getText().isBlank())
 			emailLabel.setForeground(Color.RED);
-		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())	//sesso
+		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
 			sessoLabel.setForeground(Color.RED);
-		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)	//data di nascita
+		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)
 			dataNascitaLabel.setForeground(Color.RED);
-		if (indirizzoTextField.getText().isBlank())	//indirizzo	
+		if (indirizzoTextField.getText().isBlank())
 			indirizzoLabel.setForeground(Color.RED);
-		if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null) //luogo di nascita
+		if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null)
 			cittàDiNascitaLabel.setForeground(Color.RED);
-		if (salarioTextField.getText().isBlank())	//salario
+		if (salarioTextField.getText().isBlank())
 			salarioLabel.setForeground(Color.RED);
-		//password
 		if (passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
 			passwordLabel.setForeground(Color.RED);
 			confermaPasswordLabel.setForeground(Color.RED);
 		}
 	}
 	
-	//Metodo che colora di nero i campi
 	private void campiObbligatoriNeri() {
 		nomeLabel.setForeground(Color.BLACK);
 		cognomeLabel.setForeground(Color.BLACK);
@@ -1187,40 +1048,34 @@ public class GestioneDipendenti extends JFrame {
 		salarioLabel.setForeground(Color.BLACK);
 	}
 	
-	//Metodo che crea un dipendente nel DB
 	private void creaDipendente(ControllerDipendentiSegreteria controller) {
-		ricavaInfoDipendente(controller);	//ricava tutte le principali informazioni per il dipendente
-		//ottiene le skill selezionate
+		ricavaInfoDipendente(controller);
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		skills.addAll(skillsList.getSelectedValuesList());
-		//crea un dipendente temporaneo con i parametri in input
 		Dipendente dipendente = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
 		dipendente.setSkills(skills);
 		try {
-			controller.creaDipendente(dipendente);	//prova a creare il nuovo dipendente
+			controller.creaDipendente(dipendente);
 			
-			pulisciCampi();	//azzera tutti i campi
+			pulisciCampi();
 			
-			aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
+			aggiornaTabella(controller);
 		}
 		catch(SQLException e1) {
-			//violazione not null
-			if (e1.getSQLState().equals("23502")) {
+			if (e1.getSQLState().equals(VIOLAZIONE_NOT_NULL)) {
 				JOptionPane.showMessageDialog(null,
 						"Alcuni campi obbligatori per la creazione sono vuoti.",
 						"Errore Campi Obbligatori Vuoti",
 						JOptionPane.ERROR_MESSAGE);
-				campiObbligatoriRossi(); //colora di rosso i campi obbligatori vuoti
+				campiObbligatoriRossi();
 			}
-			//violazione primary key/unique
-			else if (e1.getSQLState().equals("23505")) {
+			else if (e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
 				JOptionPane.showMessageDialog(null,
 						"Il dipendente che intendi creare esiste già.",
 						"Errore Dipendente Esistente",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			//violazione vincolo tabella
-			else if(e1.getSQLState().equals("23514")) {
+			else if(e1.getSQLState().equals(VIOLAZIONE_VINCOLI_TABELLA)) {
 				JOptionPane.showMessageDialog(null,
 						"I valori inseriti sono errati.\n"
 						+ "Controlla che:\n"
@@ -1231,23 +1086,20 @@ public class GestioneDipendenti extends JFrame {
 						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
 						"Errore Vincoli",
 						JOptionPane.ERROR_MESSAGE);	
-				//caso 1
 				Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 				Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
 				if (!matcher.find())
 					emailLabel.setForeground(Color.RED);
-				//caso 2
 				dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() +1, giornoComboBox.getSelectedIndex() + 1);
 				Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
 				int età = period.getYears();
 				if (età < 18)
 					dataNascitaLabel.setForeground(Color.RED);
-				//caso 3
 				if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
 					salarioLabel.setForeground(Color.RED);
 			}
 			//violazione definizione dati
-			else if(e1.getSQLState().equals("22001")) {
+			else if(e1.getSQLState().equals(VIOLAZIONE_LUNGHEZZA_STRINGA)) {
 				JOptionPane.showMessageDialog(null,
 						"I dati inseriti sono errati.\n"
 						+ "Controlla che:\n"
@@ -1258,28 +1110,30 @@ public class GestioneDipendenti extends JFrame {
 						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
 						"Errore Dati Inseriti",
 						JOptionPane.ERROR_MESSAGE);
-				//caso 1
 				if (nomeTextField.getText().length() > 30)
 					nomeLabel.setForeground(Color.RED);
 				if (cognomeTextField.getText().length() > 30)
 					cognomeLabel.setForeground(Color.RED);
-				//caso 2
 				if (emailTextField.getText().length() > 100)
 					emailLabel.setForeground(Color.RED);
 				if (indirizzoTextField.getText().length() > 100)
 					indirizzoLabel.setForeground(Color.RED);
-				//caso 3
 				if (telefonoFissoTextField.getText().length() != 10)
 					telefonoFissoLabel.setForeground(Color.RED);
 				if (cellulareTextField.getText().length() != 10)
 					cellulareLabel.setForeground(Color.RED);
-				//caso 4
 				if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50 ||passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
 					passwordLabel.setForeground(Color.RED);
 					confermaPasswordLabel.setForeground(Color.RED);
 				}
 			}
-			//altri errori non contemplati
+			else if (e1.getSQLState().equals(VIOLAZIONE_DATA_INESISTENTE)){
+				JOptionPane.showMessageDialog(null,
+						"Accertarsi che la data di nascita esista davvero.",
+						"Data Inesistente",
+						JOptionPane.ERROR_MESSAGE);
+				dataNascitaLabel.setForeground(Color.RED);
+			}
 			else {
 				JOptionPane.showMessageDialog(null,
 						e1.getMessage() + "\nContattare uno sviluppatore.",
@@ -1289,50 +1143,43 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che crea una nuova skill e aggiorna la lista delle skill disponibili
 	private void creaSkill(ControllerDipendentiSegreteria controller) {
 		try {
-			controller.creaNuovaSkill(nuovaSkillTextField.getText());	//inserisce la nuova skill nel database
-			DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();	//aggiorna la lista delle skill
+			controller.creaNuovaSkill(nuovaSkillTextField.getText());
+			DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();
 			skillModel.addAll(controller.ottieniSkill());
 			skillsList.setModel(skillModel);
-			//aggiorna la combobox dei filtri
 			skillFiltroComboBox.removeAllItems();
 			skillFiltroComboBox.addItem(null);
 			for (Skill skill: controller.ottieniSkill())
 				skillFiltroComboBox.addItem(skill);
-			nuovaSkillTextField.setText(""); //svuota il campo
+			nuovaSkillTextField.setText("");
 			} 
 		catch (SQLException e1) {
-			//violazione primary key/unique
-			if (e1.getSQLState().equals("23505")) {
+			if (e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
 				JOptionPane.showMessageDialog(null,
 						"La skill " + nuovaSkillTextField.getText() + " esiste già.",
 						"Errore Skill Esistente",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			//violazione not null
-			else if (e1.getSQLState().equals("23502")) {
+			else if (e1.getSQLState().equals(VIOLAZIONE_NOT_NULL)) {
 				JOptionPane.showMessageDialog(null,
 						"Per favore inserici il nome della skill.",
 						"Errore Nome Skill",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			//violazione vincolo tabella
-			else if(e1.getSQLState().equals("23514")) {
+			else if(e1.getSQLState().equals(VIOLAZIONE_VINCOLI_TABELLA)) {
 				JOptionPane.showMessageDialog(null,
 						"Il formato del nome della skill non è corretto\noppure il nome è vuoto.",
 						"Errore Nome Skill",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			//violazione definizione dati
-			else if(e1.getSQLState().equals("22001")) {
+			else if(e1.getSQLState().equals(VIOLAZIONE_LUNGHEZZA_STRINGA)) {
 				JOptionPane.showMessageDialog(null,
 						"Il nome della skill è troppo lungo./nControlla che non superi i 50 caratteri.",
 						"Errore Skill Lunga",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			//altri errori non contemplati
 			else {
 				JOptionPane.showMessageDialog(null,
 						e1.getMessage() + "\nContattare uno sviluppatore.",
@@ -1342,40 +1189,30 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che applica i filtri alla tabella
 	private void applicaFiltri(ControllerDipendentiSegreteria controller) {
-		//stringa per cercare in nome, cognome ed email
 		String nomeCognomeEmail = "%";
 		if (!cercaTextField.getText().isBlank())
 			nomeCognomeEmail = cercaTextField.getText();
-		//età minima
 		int etàMinima = 0;
 		if (!etàMinimaTextField.getText().isBlank())
 			etàMinima = parseInteger(etàMinimaTextField.getText(), etàMinima);
-		//età massima
 		int etàMassima = LocalDate.now().getYear() - 1900;
 		if (!etàMassimaTextField.getText().isBlank())
 			etàMassima = parseInteger(etàMassimaTextField.getText(), etàMassima);
-		//salario minimo
 		float salarioMinimo = 0f;
 		if (!salarioMinimoTextField.getText().isBlank())
 			parseFloat(salarioMinimoTextField.getText(), salarioMinimo);
-		//salario massimo
 		float salarioMassimo = controller.ottieniMaxStipendio();
 		if (!salarioMassimoTextField.getText().isBlank())
 			parseFloat(salarioMassimoTextField.getText(), salarioMassimo);
-		//valutazione minima
 		float valutazioneMinima = 0f;
 		if (!valutazioneMinimaTextField.getText().isBlank())
 			parseFloat(valutazioneMinimaTextField.getText(), valutazioneMinima);
-		//valutazione massima
 		float valutazioneMassima = 10f;
 		if (!valutazioneMassimaTextField.getText().isBlank())
 			parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
-		//skill posseduta
 		Skill skillCercata = null;
 		skillCercata = (Skill) skillFiltroComboBox.getSelectedItem();
-		//filtra dipendenti e aggiorna la tabella
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.filtraDipendenti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata));
 			dipendentiTable.setModel(dataModelDipendente);
@@ -1388,7 +1225,6 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che esegue un parseInteger con valore di default in caso di eccezione
 	private int parseInteger(String numero, int valoreDefault) {
 		try {
 			return Integer.parseInt(numero);
@@ -1398,7 +1234,6 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che esegue un parseFloat con valore di default in caso di eccezione
 	private float parseFloat(String numero, float valoreDefault) {
 		try {
 			return Float.parseFloat(numero);
@@ -1408,67 +1243,57 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che esegue l'update di un dipendente nel DB
 	private void salvaModifiche(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) {
-		//setta le nuove proprietà al dipendente
-		dipendenteModificato.setNome(nomeTextField.getText());	//nome
-		dipendenteModificato.setCognome(cognomeTextField.getText()); //cognome
-		//sesso	
+		dipendenteModificato.setNome(nomeTextField.getText());
+		dipendenteModificato.setCognome(cognomeTextField.getText());
 		if (uomoRadioButton.isSelected())
 			dipendenteModificato.setSesso('M');
 		else
 			dipendenteModificato.setSesso('F');
-		//data di nascita
 		dipendenteModificato.setDataNascita(new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1));
-		//luogo di nascita
 		try {
 			dipendenteModificato.setLuogoNascita(controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex()));
 		}
 		catch(SQLException e1) {
-			//errore select per comuni
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
 				JOptionPane.ERROR_MESSAGE);
 		}
-		dipendenteModificato.setEmail(emailTextField.getText()); //email
-		dipendenteModificato.setPassword(passwordField.getText());	//password
+		dipendenteModificato.setEmail(emailTextField.getText());
+		dipendenteModificato.setPassword(passwordField.getText());
 		if (!telefonoFissoTextField.getText().equals(""))
-			dipendenteModificato.setTelefonoCasa(telefonoFissoTextField.getText());	//telefono
+			dipendenteModificato.setTelefonoCasa(telefonoFissoTextField.getText());
 		if (!cellulareTextField.getText().isBlank())
-			dipendenteModificato.setCellulare(cellulareTextField.getText());    //cellulare
-		dipendenteModificato.setIndirizzo(indirizzoTextField.getText());	//indirizzo
-		//ottiene le skill selezionate
+			dipendenteModificato.setCellulare(cellulareTextField.getText());
+		dipendenteModificato.setIndirizzo(indirizzoTextField.getText());
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		skills.addAll(skillsList.getSelectedValuesList());
 		dipendenteModificato.setSkills(skills);
-		dipendenteModificato.setSalario(parseFloat(salarioTextField.getText(), 0f));	//ottieni il salario
+		dipendenteModificato.setSalario(parseFloat(salarioTextField.getText(), 0f));
 		
 		try {
-			controller.aggiornaDipendente(dipendenteModificato); //aggiorna le info nel DB
+			controller.aggiornaDipendente(dipendenteModificato);
 			
-			pulisciCampi();	//pulisce i campi
+			pulisciCampi();
 			
-			aggiornaTabella(controller);	//aggiorna la tabella dei dipendenti
+			aggiornaTabella(controller);
 		}
 		catch(SQLException e1) {
-			//violazione not null
-			if (e1.getSQLState().equals("23502")) {
+			if (e1.getSQLState().equals(VIOLAZIONE_NOT_NULL)) {
 				JOptionPane.showMessageDialog(null,
 						"Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
 						"Errore Campi Obbligatori Vuoti",
 						JOptionPane.ERROR_MESSAGE);
-				campiObbligatoriRossi();	//colora di rosso i campi vuoti
+				campiObbligatoriRossi();
 				}
-			//violazione primary key/unique
-			else if (e1.getSQLState().equals("23505")) {
+			else if (e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
 				JOptionPane.showMessageDialog(null,
 						"Il dipendente che intendi aggiornare è uguale a uno già esistente.\nControllare email o codice fiscale.",
 						"Errore Dipendente Esistente",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			//violazione vincolo tabella
-			else if(e1.getSQLState().equals("23514")) {
+			else if(e1.getSQLState().equals(VIOLAZIONE_VINCOLI_TABELLA)) {
 				JOptionPane.showMessageDialog(null,
 						"I valori inseriti sono errati.\n"
 						+ "Controlla che:\n"
@@ -1479,23 +1304,19 @@ public class GestioneDipendenti extends JFrame {
 						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
 						"Errore Vincoli",
 						JOptionPane.ERROR_MESSAGE);	
-				//caso 1
 				Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 				Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
 				if (!matcher.find())
 					emailLabel.setForeground(Color.RED);
-				//caso 2
 				LocalDate dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() +1, giornoComboBox.getSelectedIndex() + 1);
 				Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
 				int età = period.getYears();
 				if (età < 18)
 					dataNascitaLabel.setForeground(Color.RED);
-				//caso 3
 				if (Float.parseFloat(salarioTextField.getText()) < 0)
 					salarioLabel.setForeground(Color.RED);
 			}
-			//violazione definizione dati
-			else if(e1.getSQLState().equals("22001")) {
+			else if(e1.getSQLState().equals(VIOLAZIONE_LUNGHEZZA_STRINGA)) {
 				JOptionPane.showMessageDialog(null,
 						"I dati inseriti sono errati.\n"
 						+ "Controlla che:\n"
@@ -1506,35 +1327,30 @@ public class GestioneDipendenti extends JFrame {
 						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
 						"Errore Dati Inseriti",
 						JOptionPane.ERROR_MESSAGE);
-				//caso 1
 				if (nomeTextField.getText().length() > 30)
 					nomeLabel.setForeground(Color.RED);
 				if (cognomeTextField.getText().length() > 30)
 					cognomeLabel.setForeground(Color.RED);
-				//caso 2
 				if (emailTextField.getText().length() > 100)
 					emailLabel.setForeground(Color.RED);
 				if (indirizzoTextField.getText().length() > 100)
 					indirizzoLabel.setForeground(Color.RED);
-				//caso 3
 				if (telefonoFissoTextField.getText().length() != 10)
 					telefonoFissoLabel.setForeground(Color.RED);
 				if (cellulareTextField.getText().length() != 10)
 					cellulareLabel.setForeground(Color.RED);
-				//caso 4
 				if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50 ||passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
 					passwordLabel.setForeground(Color.RED);
 					confermaPasswordLabel.setForeground(Color.RED);
 				}
 			}
-			//dipendente inesistente/errato
-			else if (e1.getErrorCode() == 0) {
+			else if (e1.getSQLState().equals(VIOLAZIONE_DATA_INESISTENTE)) {
 				JOptionPane.showMessageDialog(null,
-						"Fallito nel modificare il dipendente.\nImpossibile trovarlo nel database.",
-						"Errore Dipendente Non Trovato",
+						"Accertarsi che la data di nascita esista davvero.",
+						"Data Inesistente",
 						JOptionPane.ERROR_MESSAGE);
+				dataNascitaLabel.setForeground(Color.RED);
 			}
-			//altri errori non contemplati
 			else {
 				JOptionPane.showMessageDialog(null,
 						e1.getMessage() + "\nContattare uno sviluppatore.",
@@ -1544,7 +1360,6 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 	
-	//Metodo che verifica se i campi obbligatori sono vuoti (true = campo vuoto, false = campi pieni)
 	private boolean checkCampiObbligatoriVuoti() {
 		if (nomeTextField.getText().isBlank())
 			return true;
@@ -1568,26 +1383,22 @@ public class GestioneDipendenti extends JFrame {
 			return false;
 	}
 	
-	//Metodo che pulsice tutti i campi
 	private void pulisciCampi() {
-		nomeTextField.setText(""); //nome
-		cognomeTextField.setText("");	//cognome
-		emailTextField.setText("");	//email
-		//sesso
+		nomeTextField.setText("");
+		cognomeTextField.setText("");
+		emailTextField.setText("");
 		uomoRadioButton.setSelected(false);;
 		donnaRadioButton.setSelected(false);
-		//data di nascita
 		giornoComboBox.setSelectedIndex(0);
 		meseComboBox.setSelectedIndex(0);
 		annoComboBox.setSelectedIndex((int) annoComboBox.getItemCount()/2);;
-		//luogo di nascita
 		provinciaComboBox.setSelectedIndex(0);
-		indirizzoTextField.setText(""); //indirizzo
-		cellulareTextField.setText(""); //cellulare
-		telefonoFissoTextField.setText(""); //telefono casa
-		passwordField.setText(""); //password
-		confermaPasswordField.setText(""); //conferma password
-		salarioTextField.setText(""); //salario
-		skillsList.clearSelection(); //skills
+		indirizzoTextField.setText("");
+		cellulareTextField.setText("");
+		telefonoFissoTextField.setText("");
+		passwordField.setText("");
+		confermaPasswordField.setText("");
+		salarioTextField.setText("");
+		skillsList.clearSelection();
 	}
 }

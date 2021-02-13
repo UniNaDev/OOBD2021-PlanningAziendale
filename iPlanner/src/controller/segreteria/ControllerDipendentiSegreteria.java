@@ -32,6 +32,8 @@ public class ControllerDipendentiSegreteria {
 	private SalaRiunioneDAO salaDAO = null;
 	private AmbitoProgettoDAO ambitoDAO = null;
 	
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+	
 	public ControllerDipendentiSegreteria(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO,
 			SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO) {
 		this.luogoDAO = luogoDAO;
@@ -121,8 +123,7 @@ public class ControllerDipendentiSegreteria {
 				skillDAO.insertSkillDipendente(skill, dipendente);
 			}
 			catch (SQLException e) {
-				//violazione duplicati
-				if (e.getSQLState().equals("23505"))
+				if (e.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))
 					continue;
 				else
 					JOptionPane.showMessageDialog(null,
