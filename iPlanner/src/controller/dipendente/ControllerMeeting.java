@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Meeting;
+import entita.PartecipazioneMeeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import gui.dipendente.GestioneMeetingDipendente;
@@ -97,6 +98,8 @@ public class ControllerMeeting {
 	//TODO: ???
 	public void inserisciMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException {
 		meetDAO.insertMeetingCompleto(meetingInserito, progetto);
+		
+		
 		meetDAO.insertOrganizzatore(dipendenteLogged.getCf()); 
 	}
 

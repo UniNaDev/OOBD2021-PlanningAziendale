@@ -135,7 +135,6 @@ CREATE TABLE Meeting(
 	CONSTRAINT OrarioValidoMeeting CHECK(OrarioInizio < OrarioFine AND DataInizio = DataFine),
 	CONSTRAINT ModalitàRiunione CHECK ((Modalità='Telematico' AND Piattaforma IS NOT NULL AND CodSala IS NULL) OR (Modalità = 'Fisico' AND Piattaforma IS NULL AND CodSala IS NOT NULL)),
 	
-	
 	--Associazione 1 a Molti(Sala,Meeting)
 	FOREIGN KEY (CodSala) REFERENCES SalaRiunione(CodSala) ON DELETE CASCADE ON UPDATE CASCADE,
 	
@@ -345,6 +344,42 @@ WHEN (NEW.Modalità='Fisico')
 EXECUTE PROCEDURE check_accavallamenti_sale();
 --------------------------------------------------------------------
 
+--FUNCTION
+CREATE OR REPLACE FUNCTION check_accavallamenti_meeting_telematici() RETURNS TRIGGER
+LANGUAGE PLPGSQL
+AS $$
+DECLARE
+OLDMeeting RECORD;
+BEGIN
+	--Se esistono altri record di meeting fisici con la stessa sala del nuovo record
+	IF (EXISTS(SELECT m.IDMeeting
+		FROM Meeting AS m
+		WHERE m.Piattaforma=NEW.Piattaforma AND m.modalità='Telematico' AND m.CodProgetto=NEW.CodProgetto)) THEN
+		--Per ogni meeting con la stessa sala che non sia quello nuovo
+		FOR OLDMeeting IN
+			SELECT *
+			FROM Meeting AS m
+			WHERE m.Piattaforma=NEW.Piattaforma AND modalità = 'Telematico' AND m.IDMeeting <> NEW.IDMeeting
+		LOOP
+			--Controlla che non si accavallino gli orari
+			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
+				RAISE EXCEPTION 'ERRORE: Ci sono degli accavallamenti con il meeting di ID %', OLDMeeting.IDMeeting
+				USING ERRCODE = '71000';
+				RETURN OLD;
+			END IF;
+		END LOOP;
+	END IF;
+RETURN NEW;
+END;
+$$;
+------------------------------------------------------------------------------------------------------------------------
+
+--TRIGGER
+CREATE TRIGGER check_accavallamenti_meeting_telematici BEFORE INSERT OR Update ON Meeting
+FOR EACH ROW
+EXECUTE PROCEDURE check_accavallamenti_meeting_telematici();
+-------------------------------------------------------------------------
+
 /*TRIGGER PER CAPIENZA DELLE SALE RISPETTATE (PRESENZA)
 **Ad ogni insert/update in Presenza controlla che
 **il numero di invitati nel meeting fisico sia minore o uguale
@@ -373,8 +408,8 @@ IF ((SELECT m.Modalità
 			FROM Presenza AS p
 			WHERE p.IDMeeting = NEW.IDMeeting
 			GROUP BY p.IDMeeting) > Cap) THEN
-				RAISE WARNING 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap
-				USING HINT = 'Si consiglia di cambiare sala';
+				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap 
+				USING ERRCODE = '70000';
 				RETURN NEW;
 		END IF;
 END IF;
@@ -411,8 +446,8 @@ IF ((SELECT COUNT(p.CF)
 	FROM Presenza AS p 
 	WHERE p.IDMeeting = NEW.IDMeeting
 	GROUP BY p.IDMeeting) > Cap) THEN
-		RAISE WARNING 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
-		USING HINT = 'Si consiglia di cambiare sala';
+		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
+		 USING ERRCODE = '70000';
 		RETURN NEW;
 END IF;
 RETURN NEW;
@@ -548,7 +583,7 @@ $$;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_meeting BEFORE UPDATE ON Meeting
+CREATE TRIGGER no_onnipresenza_meeting BEFORE INSERT OR UPDATE ON Meeting
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_meeting();
 ----------------------------------------------------------------
@@ -651,11 +686,11 @@ EXECUTE PROCEDURE check_projectmanager();
 --LuogoNascita INSERT tramite file CSV
 
 --Dipendente
-INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Cellulare,Salario,Password,CodComune) VALUES
-	('RSSMRA91C06F839S','Mario','Rossi','06/03/1991','M','via sdff,28','m.rossi@unina.it','0817589891','3878998999',100,'pass','F839'),
-	('GNLGML63P10F839I','Grimaldi','Gianluca','10/09/1963','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550','3877199990',1000,'paddss','F839'),
-	('PRTGCM49T06F839W','Giacomo','Poretti','06/12/1949','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895','3448999000',12000,'passw','F839'),
-	('FRNGTN76A71F839G','Gastani','Frinzi','31/01/1976','F','Via Giuseppe Cosenza,27,Castellammare Di Stabia(NA)','Andr.caso@gmail.com','0817327550','3935689810',1000,'paddss','F839');
+INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Salario,Password,CodComune) VALUES
+	('RSSMRA91C06F839S','Mario','Rossi','06/03/1991','M','via sdff,28','m.rossi@unina.it','0817589891',100,'pass','F839'),
+	('GNLGML63P10F839I','Grimaldi','Gianluca','10/09/1963','M','Via Alessandro Rossi,27,Ercolano(NA)','giudelucia@outlook.it','0817327550',1000,'paddss','F839'),
+	('PRTGCM49T06F839W','Giacomo','Poretti','06/12/1949','M','Via Roma,38,Torre del Greco(NA)','a.esposito@gmail.com','0817589895',12000,'passw','F839'),
+	('FRNGTN76A71F839G','Gastani','Frinzi','31/01/1976','F','Via Giuseppe Cosenza,27,Castellammare Di Stabia(NA)','Andr.caso@gmail.com','0817327550',1000,'paddss','F839');
 
 
 --Progetto
@@ -687,9 +722,9 @@ INSERT INTO Skill(NomeSkill) VALUES
 
 --SalaRiunione
 INSERT INTO SalaRiunione(CodSala,Capienza,Indirizzo,Piano) VALUES
-	('Sala1',100,'Via Claudio, 21, 80143 Napoli(NA)',2),
-	('Sala2',200,'Via Nuova Poggioreale , 80143 Napoli(NA)',5),
-	('Sala3',75,'Via Foria, 272, 80139 Napoli (NA)',1),
+	('Sala1',1,'Via Claudio, 21, 80143 Napoli(NA)',2),
+	('Sala2',2,'Via Nuova Poggioreale , 80143 Napoli(NA)',5),
+	('Sala3',2,'Via Foria, 272, 80139 Napoli (NA)',1),
 	('Sala4',206,'Via Toledo, 343, 80134 Napoli (NA)',3),
 	('Sala5',297,'Riviera di Chiaia, 77, 80123 Napoli (NA)',1);
 

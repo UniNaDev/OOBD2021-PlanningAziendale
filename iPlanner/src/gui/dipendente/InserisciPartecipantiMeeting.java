@@ -654,7 +654,14 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					
 					} catch (SQLException e1) {
 						
-						JOptionPane.showMessageDialog(null, e1.getMessage());
+						
+						if(e1.getSQLState().equals("70000"))
+							JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
+						
+						if(e1.getSQLState().equals("P0001"))
+							JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
+						
+						
 					}
 					
 				}
@@ -730,7 +737,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					} catch (SQLException e1) {
 						
 						
-						e1.printStackTrace();
+						if(e1.getSQLState().equals("70000"))
+							JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
+						
+						if(e1.getSQLState().equals("P0001"))
+							JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
 					}
 				}
 				
@@ -920,7 +931,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 					} catch (SQLException e1) {
 						
-						JOptionPane.showMessageDialog(null, e1.getMessage());
+
+						if(e1.getSQLState().equals("70000"))
+							JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
+						
+						if(e1.getSQLState().equals("P0001"))
+							JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
+						
 					}
 				
 				}
