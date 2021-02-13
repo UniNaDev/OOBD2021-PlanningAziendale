@@ -263,7 +263,7 @@ public class MieiMeeting extends JFrame {
 			MeetingListRenderer renderer = new MeetingListRenderer();	//applica renderer
 			meetingList.setCellRenderer(renderer);
 			meetingList.setSelectionBackground(Color.LIGHT_GRAY);
-			meetingList.setFixedCellHeight(60);
+			meetingList.setFixedCellHeight(70);
 			meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
 			meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			meetingList.setSelectedIndex(0);

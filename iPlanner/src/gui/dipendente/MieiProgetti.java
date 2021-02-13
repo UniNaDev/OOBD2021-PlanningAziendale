@@ -308,7 +308,7 @@ public class MieiProgetti extends JFrame {
 			progettiList.setSelectedIndex(0);
 			progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 			progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
-			progettiList.setFixedCellHeight(40);
+			progettiList.setFixedCellHeight(60);
 			mieiProgettiScrollPane.setViewportView(progettiList);
 		} catch (SQLException e1) {
 			//errore select per tutti i progetti nel database
