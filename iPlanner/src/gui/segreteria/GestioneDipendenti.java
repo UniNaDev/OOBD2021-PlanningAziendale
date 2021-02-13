@@ -1098,7 +1098,6 @@ public class GestioneDipendenti extends JFrame {
 				if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
 					salarioLabel.setForeground(Color.RED);
 			}
-			//violazione definizione dati
 			else if(e1.getSQLState().equals(VIOLAZIONE_LUNGHEZZA_STRINGA)) {
 				JOptionPane.showMessageDialog(null,
 						"I dati inseriti sono errati.\n"
