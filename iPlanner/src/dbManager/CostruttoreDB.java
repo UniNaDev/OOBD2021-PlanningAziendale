@@ -309,7 +309,7 @@ public class CostruttoreDB {
                 		+ "	\r\n"
                 		+ "	CONSTRAINT AmbitoProgettoEsistente UNIQUE(IDAmbito,CodProgetto),\r\n"
                 		+ "	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE,\r\n"
-                		+ "	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito)\r\n"
+                		+ "	FOREIGN KEY (IDAmbito) REFERENCES AmbitoProgetto(IDAmbito) ON DELETE CASCADE\r\n"
                 		+ ");";
                 risultato = statement.executeUpdate(createTable);
                 statement.close();
@@ -368,7 +368,7 @@ public class CostruttoreDB {
                 		+ "	\r\n"
                 		+ "	CONSTRAINT CfAbilità CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),\r\n"
                 		+ "	CONSTRAINT SkillEsistente UNIQUE(IDSkill,CF),\r\n"
-                		+ "	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill),\r\n"
+                		+ "	FOREIGN KEY (IDSkill) REFERENCES Skill(IDSkill) ON DELETE CASCADE,\r\n"
                 		+ "	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
                 		+ ");";
                 risultato = statement.executeUpdate(createTable);
