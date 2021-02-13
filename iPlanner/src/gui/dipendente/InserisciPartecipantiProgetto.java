@@ -286,8 +286,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		nomeProgettotextArea = new JTextArea(progettoSelezionato.getNomeProgetto());
-		nomeProgettotextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nomeProgettotextArea.setEditable(false);
+		nomeProgettotextArea.setWrapStyleWord(true);
+		nomeProgettotextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nomeProgettotextArea.setLineWrap(true);
 
 		nomeProgettotextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -307,6 +308,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		nomeLabel_1_1.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		ambitiTextArea = new JTextArea(progettoSelezionato.getAmbiti().toString());
+		ambitiTextArea.setWrapStyleWord(true);
 		ambitiTextArea.setEditable(false);
 		ambitiTextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
 		ambitiTextArea.setLineWrap(true);
@@ -373,20 +375,24 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(7)
 							.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(46)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(nomeLabel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(nomeLabel_1_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-									.addGap(14))
+									.addGap(46)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(nomeLabel_1)
+											.addGap(14))
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+											.addGap(18))))
 								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(nomeLabel_1_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)))
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
 								.addComponent(nomeProgettotextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-								.addComponent(ambitiTextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
+								.addComponent(ambitiTextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+								.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
 							.addGap(18)
 							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
 							.addGap(30))
@@ -395,7 +401,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 							.addGap(235))))
 		);
 		gl_infoPanel2.setVerticalGroup(
-			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+			gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
@@ -406,17 +412,15 @@ public class InserisciPartecipantiProgetto extends JFrame {
 							.addGap(29)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addComponent(nomeLabel_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(nomeProgettotextArea, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(nomeProgettotextArea, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGap(8)
-									.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-							.addGap(9)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+										.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))))
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(ambitiTextArea, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+								.addComponent(ambitiTextArea, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
 								.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_infoPanel2.createSequentialGroup()
 							.addGap(18)
@@ -455,7 +459,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
 								.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(67, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, gl_infoPanel2.createSequentialGroup()
+				.addGroup(gl_infoPanel2.createSequentialGroup()
 					.addContainerGap(68, Short.MAX_VALUE)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
 					.addGap(65))
