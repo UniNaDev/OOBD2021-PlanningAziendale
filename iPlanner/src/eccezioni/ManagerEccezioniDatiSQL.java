@@ -1,3 +1,11 @@
+/*Interfaccia di un handler delle eccezioni SQL più comuni per
+ *le operazioni di INSERT, UPDATE e DELETE di un'entità nel database.
+ *Contiene tutti gli SQLState necessari e un metodo che mostri l'errore
+ *derivato dall'eccezione.
+ *Ogni sua implementazione è specifica di un'entità del sistema e permette
+ *così una customizzazione rapida dei messaggi di errore da mostrare all'utente.
+ ******************************************************************************/
+
 package eccezioni;
 
 public interface ManagerEccezioniDatiSQL {
