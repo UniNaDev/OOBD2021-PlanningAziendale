@@ -573,7 +573,9 @@ public class CostruttoreDB {
             		+ "			--Controlla che non si accavallino gli orari\r\n"
             		+ "			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN\r\n"
             		+ "				RAISE EXCEPTION 'ERRORE: Ci sono degli accavallamenti con il meeting di ID %', OLDMeeting.IDMeeting\r\n"
-            		+ "				USING HINT = 'Per favore controlla gli orari o cambia sala per questo meeting.';\r\n"
+            		+ "				USING \r\n"
+            		+ "					HINT = 'Per favore controlla gli orari o cambia sala per questo meeting.',\r\n"
+            		+ "					ERRCODE = 'P0001';\r\n"
             		+ "				RETURN OLD;\r\n"
             		+ "			END IF;\r\n"
             		+ "		END LOOP;\r\n"
@@ -626,8 +628,10 @@ public class CostruttoreDB {
             		+ "			FROM Presenza AS p\r\n"
             		+ "			WHERE p.IDMeeting = NEW.IDMeeting\r\n"
             		+ "			GROUP BY p.IDMeeting) > Cap) THEN\r\n"
-            		+ "				RAISE WARNING 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap\r\n"
-            		+ "				USING HINT = 'Si consiglia di cambiare sala';\r\n"
+            		+ "				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap \r\n"
+            		+ "					USING\r\n"
+            		+ "						HINT = 'Si consiglia di cambiare sala.',\r\n"
+            		+ "						ERRCODE = 'P0002';\r\n"
             		+ "				RETURN NEW;\r\n"
             		+ "		END IF;\r\n"
             		+ "END IF;\r\n"
@@ -645,7 +649,7 @@ public class CostruttoreDB {
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
             if (!esisteTrigger("capienza_rispettata_presenza")) {
-                String createTrigger = "CREATE TRIGGER capienza_rispettata_presenza BEFORE INSERT OR UPDATE ON Presenza\r\n"
+                String createTrigger = "CREATE TRIGGER capienza_rispettata_presenza AFTER INSERT OR UPDATE ON Presenza\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_capienza_presenza();";
                 risultato = statement.executeUpdate(createTrigger);
@@ -674,8 +678,10 @@ public class CostruttoreDB {
             		+ "	FROM Presenza AS p \r\n"
             		+ "	WHERE p.IDMeeting = NEW.IDMeeting\r\n"
             		+ "	GROUP BY p.IDMeeting) > Cap) THEN\r\n"
-            		+ "		RAISE WARNING 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala\r\n"
-            		+ "		USING HINT = 'Si consiglia di cambiare sala';\r\n"
+            		+ "		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala\r\n"
+            		+ "		 USING\r\n"
+            		+ "		 	HINT = 'Si consiglia di cambiare sala.',\r\n"
+            		+ "		 	ERRCODE = 'P0002';\r\n"
             		+ "		RETURN NEW;\r\n"
             		+ "END IF;\r\n"
             		+ "RETURN NEW;\r\n"
@@ -774,7 +780,9 @@ public class CostruttoreDB {
             		+ "		--Controlla che non si accavalli con quello nuovo\r\n"
             		+ "		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN\r\n"
             		+ "			RAISE EXCEPTION 'Il dipendente % ha il meeting % che si accavalla con questo',NEW.CF,OLDMeeting.IDMeeting\r\n"
-            		+ "			USING HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.';\r\n"
+            		+ "			USING \r\n"
+            		+ "				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',\r\n"
+            		+ "				ERRCODE = 'P0003';\r\n"
             		+ "			RETURN OLD;\r\n"
             		+ "		END IF;\r\n"
             		+ "	END LOOP;\r\n"
@@ -793,7 +801,7 @@ public class CostruttoreDB {
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
             if (!esisteTrigger("no_onnipresenza_presenza")) {
-                String createTrigger = "CREATE TRIGGER no_onnipresenza_presenza BEFORE INSERT OR UPDATE ON Presenza\r\n"
+                String createTrigger = "CREATE TRIGGER no_onnipresenza_presenza AFTER INSERT OR UPDATE ON Presenza\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_onnipresenza_presenza();";
                 risultato = statement.executeUpdate(createTrigger);
@@ -830,7 +838,9 @@ public class CostruttoreDB {
             		+ "		--Controlla se si accavalla con il meeting aggiornato\r\n"
             		+ "		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN\r\n"
             		+ "			RAISE EXCEPTION 'Il dipendente % potrebbe avere problemi di accavallamento con il meeting di ID %', dip, OLDMeeting.IDMeeting\r\n"
-            		+ "			USING HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.';\r\n"
+            		+ "			USING \r\n"
+            		+ "				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',\r\n"
+            		+ "				ERRCODE = 'P0003';\r\n"
             		+ "			RETURN OLD;\r\n"
             		+ "		END IF;\r\n"
             		+ "	END LOOP;\r\n"
@@ -849,7 +859,7 @@ public class CostruttoreDB {
     if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
             if (!esisteTrigger("no_onnipresenza_meeting")) {
-                String createTrigger = "CREATE TRIGGER no_onnipresenza_meeting BEFORE UPDATE ON Meeting\r\n"
+                String createTrigger = "CREATE TRIGGER no_onnipresenza_meeting AFTER UPDATE ON Meeting\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_onnipresenza_meeting();";
                 risultato = statement.executeUpdate(createTrigger);
@@ -1010,8 +1020,10 @@ public class CostruttoreDB {
             		+ "--Controlla che non ci siano altri record in Partecipazione con stesso progetto e ruolo project manager\r\n"
             		+ "IF (EXISTS (SELECT p.CF\r\n"
             		+ "			FROM Partecipazione AS p\r\n"
-            		+ "			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente = NEW.ruoloDipendente)) THEN\r\n"
-            		+ "				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto;\r\n"
+            		+ "			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente=NEW.ruolodipendente)) THEN\r\n"
+            		+ "				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto\r\n"
+            		+ "				USING\r\n"
+            		+ "					ERRCODE = 'P0004';\r\n"
             		+ "				RETURN OLD;\r\n"
             		+ "END IF;\r\n"
             		+ "RETURN NEW;\r\n"
@@ -1028,7 +1040,7 @@ public class CostruttoreDB {
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
             if (!esisteTrigger("unicità_projectmanager")) {
-                String createTrigger = "CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione\r\n"
+                String createTrigger = "CREATE TRIGGER unicità_projectmanager AFTER INSERT ON Partecipazione\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_projectmanager();";
                 risultato = statement.executeUpdate(createTrigger);
