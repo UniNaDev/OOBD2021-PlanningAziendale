@@ -26,8 +26,10 @@ IF ((SELECT m.Modalità
 			FROM Presenza AS p
 			WHERE p.IDMeeting = NEW.IDMeeting
 			GROUP BY p.IDMeeting) > Cap) THEN
-				RAISE WARNING 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap
-				USING HINT = 'Si consiglia di cambiare sala';
+				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap
+				USING 
+					HINT = 'Si consiglia di cambiare sala',
+					ERRCODE = 'P0002';
 				RETURN NEW;
 		END IF;
 END IF;
@@ -37,7 +39,7 @@ $$;
 ----------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER capienza_rispettata_presenza BEFORE INSERT OR UPDATE ON Presenza
+CREATE TRIGGER capienza_rispettata_presenza AFTER INSERT OR UPDATE ON Presenza
 FOR EACH ROW
 EXECUTE PROCEDURE check_capienza_presenza();
 --------------------------------------------------------------------------------
@@ -64,8 +66,10 @@ IF ((SELECT COUNT(p.CF)
 	FROM Presenza AS p 
 	WHERE p.IDMeeting = NEW.IDMeeting
 	GROUP BY p.IDMeeting) > Cap) THEN
-		RAISE WARNING 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
-		USING HINT = 'Si consiglia di cambiare sala';
+		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
+		USING 
+			HINT = 'Si consiglia di cambiare sala',
+			ERRCODE = 'P0002';
 		RETURN NEW;
 END IF;
 RETURN NEW;

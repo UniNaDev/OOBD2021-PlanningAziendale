@@ -33,7 +33,9 @@ IF (EXISTS(SELECT p.IDMeeting
 		--Controlla che non si accavalli con quello nuovo
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % ha il meeting % che si accavalla con questo',NEW.CF,OLDMeeting.IDMeeting
-			USING HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.';
+			USING 
+				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;
 	END LOOP;
@@ -44,7 +46,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_presenza BEFORE INSERT OR UPDATE ON Presenza
+CREATE TRIGGER no_onnipresenza_presenza AFTER INSERT OR UPDATE ON Presenza
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_presenza();
 --------------------------------------------------------------------------
@@ -80,7 +82,9 @@ LOOP
 		--Controlla se si accavalla con il meeting aggiornato
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % potrebbe avere problemi di accavallamento con il meeting di ID %', dip, OLDMeeting.IDMeeting
-			USING HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.';
+			USING 
+				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;
 	END LOOP;
@@ -91,7 +95,7 @@ $$;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_meeting BEFORE UPDATE ON Meeting
+CREATE TRIGGER no_onnipresenza_meeting AFTER UPDATE ON Meeting
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_meeting();
 ----------------------------------------------------------------

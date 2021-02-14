@@ -24,7 +24,9 @@ BEGIN
 			--Controlla che non si accavallino gli orari
 			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
 				RAISE EXCEPTION 'ERRORE: Ci sono degli accavallamenti con il meeting di ID %', OLDMeeting.IDMeeting
-				USING HINT = 'Per favore controlla gli orari o cambia sala per questo meeting.';
+				USING 
+					HINT = 'Per favore controlla gli orari o cambia sala per questo meeting.',
+					ERRCODE = 'P0001';
 				RETURN OLD;
 			END IF;
 		END LOOP;

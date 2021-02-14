@@ -326,7 +326,9 @@ BEGIN
 			--Controlla che non si accavallino gli orari
 			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
 				RAISE EXCEPTION 'ERRORE: Ci sono degli accavallamenti con il meeting di ID %', OLDMeeting.IDMeeting
-				USING HINT = 'Per favore controlla gli orari o cambia sala per questo meeting.';
+				USING 
+					HINT = 'Per favore controlla gli orari o cambia sala per questo meeting.',
+					ERRCODE = 'P0001';
 				RETURN OLD;
 			END IF;
 		END LOOP;
@@ -343,42 +345,6 @@ FOR EACH ROW
 WHEN (NEW.Modalità='Fisico')
 EXECUTE PROCEDURE check_accavallamenti_sale();
 --------------------------------------------------------------------
-
---FUNCTION
-CREATE OR REPLACE FUNCTION check_accavallamenti_meeting_telematici() RETURNS TRIGGER
-LANGUAGE PLPGSQL
-AS $$
-DECLARE
-OLDMeeting RECORD;
-BEGIN
-	--Se esistono altri record di meeting fisici con la stessa sala del nuovo record
-	IF (EXISTS(SELECT m.IDMeeting
-		FROM Meeting AS m
-		WHERE m.Piattaforma=NEW.Piattaforma AND m.modalità='Telematico' AND m.CodProgetto=NEW.CodProgetto)) THEN
-		--Per ogni meeting con la stessa sala che non sia quello nuovo
-		FOR OLDMeeting IN
-			SELECT *
-			FROM Meeting AS m
-			WHERE m.Piattaforma=NEW.Piattaforma AND modalità = 'Telematico' AND m.IDMeeting <> NEW.IDMeeting
-		LOOP
-			--Controlla che non si accavallino gli orari
-			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
-				RAISE EXCEPTION 'ERRORE: Ci sono degli accavallamenti con il meeting di ID %', OLDMeeting.IDMeeting
-				USING ERRCODE = '71000';
-				RETURN OLD;
-			END IF;
-		END LOOP;
-	END IF;
-RETURN NEW;
-END;
-$$;
-------------------------------------------------------------------------------------------------------------------------
-
---TRIGGER
-CREATE TRIGGER check_accavallamenti_meeting_telematici BEFORE INSERT OR Update ON Meeting
-FOR EACH ROW
-EXECUTE PROCEDURE check_accavallamenti_meeting_telematici();
--------------------------------------------------------------------------
 
 /*TRIGGER PER CAPIENZA DELLE SALE RISPETTATE (PRESENZA)
 **Ad ogni insert/update in Presenza controlla che
@@ -409,7 +375,9 @@ IF ((SELECT m.Modalità
 			WHERE p.IDMeeting = NEW.IDMeeting
 			GROUP BY p.IDMeeting) > Cap) THEN
 				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap 
-				USING ERRCODE = '70000';
+					USING
+						HINT = 'Si consiglia di cambiare sala.',
+						ERRCODE = 'P0002';
 				RETURN NEW;
 		END IF;
 END IF;
@@ -419,7 +387,7 @@ $$;
 ----------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER capienza_rispettata_presenza BEFORE INSERT OR UPDATE ON Presenza
+CREATE TRIGGER capienza_rispettata_presenza AFTER INSERT OR UPDATE ON Presenza
 FOR EACH ROW
 EXECUTE PROCEDURE check_capienza_presenza();
 --------------------------------------------------------------------------------
@@ -447,7 +415,9 @@ IF ((SELECT COUNT(p.CF)
 	WHERE p.IDMeeting = NEW.IDMeeting
 	GROUP BY p.IDMeeting) > Cap) THEN
 		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
-		 USING ERRCODE = '70000';
+		 USING
+		 	HINT = 'Si consiglia di cambiare sala.',
+		 	ERRCODE = 'P0002';
 		RETURN NEW;
 END IF;
 RETURN NEW;
@@ -525,7 +495,9 @@ IF (EXISTS(SELECT p.IDMeeting
 		--Controlla che non si accavalli con quello nuovo
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % ha il meeting % che si accavalla con questo',NEW.CF,OLDMeeting.IDMeeting
-			USING HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.';
+			USING 
+				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;
 	END LOOP;
@@ -536,7 +508,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_presenza BEFORE INSERT OR UPDATE ON Presenza
+CREATE TRIGGER no_onnipresenza_presenza AFTER INSERT OR UPDATE ON Presenza
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_presenza();
 --------------------------------------------------------------------------
@@ -572,7 +544,9 @@ LOOP
 		--Controlla se si accavalla con il meeting aggiornato
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % potrebbe avere problemi di accavallamento con il meeting di ID %', dip, OLDMeeting.IDMeeting
-			USING HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.';
+			USING 
+				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;
 	END LOOP;
@@ -583,7 +557,7 @@ $$;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_meeting BEFORE INSERT OR UPDATE ON Meeting
+CREATE TRIGGER no_onnipresenza_meeting AFTER INSERT OR UPDATE ON Meeting
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_meeting();
 ----------------------------------------------------------------
