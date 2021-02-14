@@ -641,7 +641,9 @@ BEGIN
 IF (EXISTS (SELECT p.CF
 			FROM Partecipazione AS p
 			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente=NEW.ruolodipendente)) THEN
-				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto;
+				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto
+				USING
+					ERRCODE = 'P0004';
 				RETURN OLD;
 END IF;
 RETURN NEW;
@@ -650,7 +652,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione
+CREATE TRIGGER unicità_projectmanager AFTER INSERT ON Partecipazione
 FOR EACH ROW
 EXECUTE PROCEDURE check_projectmanager();
 --------------------------------------------------------------------------------
