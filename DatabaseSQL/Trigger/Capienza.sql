@@ -1,9 +1,8 @@
 /*TRIGGER PER CAPIENZA DELLE SALE RISPETTATE (PRESENZA)
 **Ad ogni insert/update in Presenza controlla che
 **il numero di invitati nel meeting fisico sia minore o uguale
-**alla capienza della sala in cui avviene. Altrimenti invia
-**un avvertimento che avvisa del superamento della capienza massima e
-**consiglia di cambiare sala.
+**alla capienza della sala in cui avviene.
+**Nel caso evoca un'eccezione e non autorizza l'operazione.
 *********************************************************************/
 
 --FUNCTION
@@ -26,9 +25,9 @@ IF ((SELECT m.Modalità
 			FROM Presenza AS p
 			WHERE p.IDMeeting = NEW.IDMeeting
 			GROUP BY p.IDMeeting) > Cap) THEN
-				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap
+				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', Cap
 				USING 
-					HINT = 'Si consiglia di cambiare sala',
+					HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
 					ERRCODE = 'P0002';
 				RETURN NEW;
 		END IF;
@@ -47,7 +46,7 @@ EXECUTE PROCEDURE check_capienza_presenza();
 /*TRIGGER PER CAPIENZA RISPETTATA NELLE SALE (MEETING)
 **Ad ogni update nella tabella Meeting di un meeting fisico nella colonna codice sala controlla che
 **i partecipanti a quel meeting non superino la capienza della nuova sala scelta.
-**Altrimenti invia un warning.
+**Nel caso evoca un'eccezione e non autorizza l'operazione.
 ***************************************************************************************************/
 
 --FUNCTION
@@ -68,7 +67,7 @@ IF ((SELECT COUNT(p.CF)
 	GROUP BY p.IDMeeting) > Cap) THEN
 		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
 		USING 
-			HINT = 'Si consiglia di cambiare sala',
+			HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
 			ERRCODE = 'P0002';
 		RETURN NEW;
 END IF;

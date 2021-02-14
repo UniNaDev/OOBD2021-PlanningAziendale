@@ -349,9 +349,8 @@ EXECUTE PROCEDURE check_accavallamenti_sale();
 /*TRIGGER PER CAPIENZA DELLE SALE RISPETTATE (PRESENZA)
 **Ad ogni insert/update in Presenza controlla che
 **il numero di invitati nel meeting fisico sia minore o uguale
-**alla capienza della sala in cui avviene. Altrimenti invia
-**un avvertimento che avvisa del superamento della capienza massima e
-**consiglia di cambiare sala.
+**alla capienza della sala in cui avviene.
+**Nel caso evoca un'eccezione e non autorizza l'operazione.
 *********************************************************************/
 
 --FUNCTION
@@ -374,9 +373,9 @@ IF ((SELECT m.Modalità
 			FROM Presenza AS p
 			WHERE p.IDMeeting = NEW.IDMeeting
 			GROUP BY p.IDMeeting) > Cap) THEN
-				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap 
+				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', Cap 
 					USING
-						HINT = 'Si consiglia di cambiare sala.',
+						HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
 						ERRCODE = 'P0002';
 				RETURN NEW;
 		END IF;
@@ -395,7 +394,7 @@ EXECUTE PROCEDURE check_capienza_presenza();
 /*TRIGGER PER CAPIENZA RISPETTATA NELLE SALE (MEETING)
 **Ad ogni update nella tabella Meeting di un meeting fisico nella colonna codice sala controlla che
 **i partecipanti a quel meeting non superino la capienza della nuova sala scelta.
-**Altrimenti invia un warning.
+**Nel caso evoca un'eccezione e non autorizza l'operazione.
 ***************************************************************************************************/
 
 --FUNCTION
@@ -416,7 +415,7 @@ IF ((SELECT COUNT(p.CF)
 	GROUP BY p.IDMeeting) > Cap) THEN
 		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
 		 USING
-		 	HINT = 'Si consiglia di cambiare sala.',
+		 	HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
 		 	ERRCODE = 'P0002';
 		RETURN NEW;
 END IF;
@@ -496,7 +495,7 @@ IF (EXISTS(SELECT p.IDMeeting
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % ha il meeting % che si accavalla con questo',NEW.CF,OLDMeeting.IDMeeting
 			USING 
-				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				HINT = 'Cambia il meeting.',
 				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;
@@ -545,7 +544,7 @@ LOOP
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % potrebbe avere problemi di accavallamento con il meeting di ID %', dip, OLDMeeting.IDMeeting
 			USING 
-				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				HINT = 'Cambia il meeting.',
 				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;
@@ -640,7 +639,7 @@ BEGIN
 --Controlla che non ci siano altri record in Partecipazione con stesso progetto e ruolo project manager
 IF (EXISTS (SELECT p.CF
 			FROM Partecipazione AS p
-			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente=NEW.ruolodipendente)) THEN
+			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente = NEW.ruolodipendente)) THEN
 				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto
 				USING
 					ERRCODE = 'P0004';
@@ -652,7 +651,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER unicità_projectmanager AFTER INSERT ON Partecipazione
+CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione
 FOR EACH ROW
 EXECUTE PROCEDURE check_projectmanager();
 --------------------------------------------------------------------------------

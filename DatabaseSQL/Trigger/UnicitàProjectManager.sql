@@ -12,7 +12,7 @@ BEGIN
 --Controlla che non ci siano altri record in Partecipazione con stesso progetto e ruolo project manager
 IF (EXISTS (SELECT p.CF
 			FROM Partecipazione AS p
-			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente=NEW.ruolodipendente)) THEN
+			WHERE p.CodProgetto = NEW.CodProgetto AND p.RuoloDipendente = 'Project Manager' AND p.ruoloDipendente = NEW.ruolodipendente)) THEN
 				RAISE EXCEPTION 'Esiste già un project manager per il progetto di codice %', NEW.CodProgetto
 				USING
 					ERRCODE = 'P0004';
@@ -24,7 +24,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER unicità_projectmanager AFTER INSERT OR UPDATE ON Partecipazione
+CREATE TRIGGER unicità_projectmanager BEFORE INSERT OR UPDATE ON Partecipazione
 FOR EACH ROW
 EXECUTE PROCEDURE check_projectmanager();
 --------------------------------------------------------------------------------

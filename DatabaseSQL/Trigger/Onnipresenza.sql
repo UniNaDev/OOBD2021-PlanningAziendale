@@ -34,7 +34,7 @@ IF (EXISTS(SELECT p.IDMeeting
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % ha il meeting % che si accavalla con questo',NEW.CF,OLDMeeting.IDMeeting
 			USING 
-				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				HINT = 'Cambia il meeting.',
 				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;
@@ -83,7 +83,7 @@ LOOP
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
 			RAISE EXCEPTION 'Il dipendente % potrebbe avere problemi di accavallamento con il meeting di ID %', dip, OLDMeeting.IDMeeting
 			USING 
-				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',
+				HINT = 'Cambia il meeting.',
 				ERRCODE = 'P0003';
 			RETURN OLD;
 		END IF;

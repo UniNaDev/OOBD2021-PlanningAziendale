@@ -1040,7 +1040,7 @@ public class CostruttoreDB {
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
             if (!esisteTrigger("unicità_projectmanager")) {
-                String createTrigger = "CREATE TRIGGER unicità_projectmanager AFTER INSERT ON Partecipazione\r\n"
+                String createTrigger = "CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_projectmanager();";
                 risultato = statement.executeUpdate(createTrigger);
