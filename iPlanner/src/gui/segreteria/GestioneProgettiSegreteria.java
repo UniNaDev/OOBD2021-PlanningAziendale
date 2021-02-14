@@ -63,6 +63,7 @@ import javax.swing.JRadioButton;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.event.ListSelectionEvent;
+import java.awt.SystemColor;
 
 public class GestioneProgettiSegreteria extends JFrame {
 
@@ -209,9 +210,9 @@ public class GestioneProgettiSegreteria extends JFrame {
 		//List ambiti del progetto
 		ambitiModel = new DefaultListModel();
 		JList <AmbitoProgetto> ambitiList = new JList();
+		ambitiList.setSelectionBackground(Color.WHITE);
 		ambitiList.setBorder(null);
 		ambitiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		ambitiList.setSelectionBackground(Color.WHITE);
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		ambitiScrollPanel.setViewportView(ambitiList);
 		
