@@ -25,23 +25,27 @@ public class ManagerEccezioniDatiSQLAmbito implements  ManagerEccezioniDatiSQL {
 		case VIOLAZIONE_PKEY_UNIQUE:
 			setTitoloFinestraErrore("Errore Ambiti Duplicati");
 			setMessaggioErrore("Non possono esistere ambiti duplicati.");
-			setHint("Verificate che il nome dell'ambito non esista già.");
+			setHint("Verificare che il nome dell'ambito non esista già.");
+			break;
 		case VIOLAZIONE_NOT_NULL:
 			setTitoloFinestraErrore("Errore Valori Nulli");
 			setMessaggioErrore("Non possono esserci valori nulli.");
-			setHint("Verificate che il nome dell'ambito non sia vuoto.");
+			setHint("Verificare che il nome dell'ambito non sia vuoto.");
+			break;
 		case VIOLAZIONE_VINCOLI_TABELLA:
 			setTitoloFinestraErrore("Errore Valori Non Validi");
 			setMessaggioErrore("Errori non validi.");
-			setHint("Verificate che il nome dell'ambito non contenga numeri.");
+			setHint("Verificare che il nome dell'ambito non contenga numeri.");
+			break;
 		case VIOLAZIONE_LUNGHEZZA_STRINGA:
 			setTitoloFinestraErrore("Errore Nome Troppo Lungo");
 			setMessaggioErrore("Verificare che il nome dell'ambito non contenga più di " + lunghezzaMaxNome + " caratteri.");
-			setHint("Verificate che il programma sia aggiornato \\noppure contattare uno sviluppatore.");
+			setHint("Verificare che il programma sia aggiornato \\noppure contattare uno sviluppatore.");
+			break;
 		default:
 			setTitoloFinestraErrore("Errore #" + eccezione.getSQLState());
 			setMessaggioErrore(eccezione.getMessage());
-			setHint("Verificate che il programma sia aggiornato \noppure contattare uno sviluppatore.");
+			setHint("Verificare che il programma sia aggiornato \noppure contattare uno sviluppatore.");
 			casoDefault = true;
 		}
 	}

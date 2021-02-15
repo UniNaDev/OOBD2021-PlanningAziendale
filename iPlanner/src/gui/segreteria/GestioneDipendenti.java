@@ -3,6 +3,7 @@
 package gui.segreteria;
 
 import controller.segreteria.ControllerDipendentiSegreteria;
+import eccezioni.ManagerEccezioniDatiSQLDipendente;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -89,7 +90,7 @@ public class GestioneDipendenti extends JFrame {
 	private JLabel skillsLabel;
 	private JLabel iconaSkillsLabel;
 	private JLabel mostraPasswordLabel;
-	private JLabel mostraConfirmPasswordLabel;
+	private JLabel mostraConfermaPasswordLabel;
 	private JLabel campiObbligatoriLabel;
 	private JLabel premereCtrlLabel;
 	private JLabel inserireSkillLabel;
@@ -150,11 +151,12 @@ public class GestioneDipendenti extends JFrame {
 	
 	private Dipendente dipendenteSelezionato;
 	
+	private ManagerEccezioniDatiSQLDipendente eccezioniSQLDipendente;
+	
 	private final String VIOLAZIONE_NOT_NULL = "23502";
 	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
 	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
 	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
-	private final String VIOLAZIONE_DATA_INESISTENTE = "22008";
 	
 	public GestioneDipendenti(ControllerDipendentiSegreteria controller) {
 		addWindowListener(new WindowAdapter() {
@@ -308,37 +310,21 @@ public class GestioneDipendenti extends JFrame {
 		provNascitaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		provNascitaLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		try {
-			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
-			provinciaComboBox.setUI(new BasicComboBoxUI());
-			provinciaComboBox.setBackground(Color.WHITE);
-			provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
-			provinciaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-			provinciaComboBox.setBounds(229, 319, 210, 22);
-			infoPanel.add(provinciaComboBox);
-			provinciaComboBox.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					cittaComboBox.setEnabled(true);
-					cittaComboBox.removeAllItems();
-					try {
-						for(LuogoNascita comune: controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
-								cittaComboBox.addItem(comune.getNomeComune());
-					} 
-					catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null,
-							"Impossibile ottenere tutti i comuni di tale provincia dal database.\nControllare che la connessione al database sia stabilita.",
-							"Errore Interrogazione Database",
-							JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			});
-		} catch (SQLException e2) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutte le province dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
-		}
+		inizializzaProvinceComboBox(controller);
+		provinciaComboBox.setUI(new BasicComboBoxUI());
+		provinciaComboBox.setBackground(Color.WHITE);
+		provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
+		provinciaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		provinciaComboBox.setBounds(229, 319, 210, 22);
+		infoPanel.add(provinciaComboBox);
+		provinciaComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cittaComboBox.setEnabled(true);
+				cittaComboBox.removeAllItems();
+				inizializzaComuniComboBox(controller);
+			}
+		});
 		
 		cittaComboBox = new JComboBox();
 		cittaComboBox.setBounds(229, 350, 210, 22);
@@ -433,18 +419,12 @@ public class GestioneDipendenti extends JFrame {
 		skillsScrollPane.setBounds(810, 128, 318, 268);
 		infoPanel.add(skillsScrollPane);
 		skillsScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		try {
-			skillsList = new JList(controller.ottieniSkill().toArray());
-			skillsList.setToolTipText("");
-			skillsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			skillsList.setFont(new Font("Consolas", Font.PLAIN, 12));
-			skillsScrollPane.setViewportView(skillsList);
-		} catch (SQLException e2) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
-		}
+
+		inizializzaSkillList(controller);
+		skillsList.setToolTipText("");
+		skillsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		skillsList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		skillsScrollPane.setViewportView(skillsList);
 		
 		skillsLabel = new JLabel("Skills");
 		skillsLabel.setBounds(745, 222, 47, 14);
@@ -530,12 +510,12 @@ public class GestioneDipendenti extends JFrame {
 			}
 		});
 		
-		mostraConfirmPasswordLabel = new JLabel("");
-		mostraConfirmPasswordLabel.setBounds(448, 557, 47, 29);
-		infoPanel.add(mostraConfirmPasswordLabel);
-		mostraConfirmPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mostraConfirmPasswordLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/showpass_24.png")));
-		mostraConfirmPasswordLabel.addMouseListener(new MouseAdapter() {
+		mostraConfermaPasswordLabel = new JLabel("");
+		mostraConfermaPasswordLabel.setBounds(448, 557, 47, 29);
+		infoPanel.add(mostraConfermaPasswordLabel);
+		mostraConfermaPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mostraConfermaPasswordLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/showpass_24.png")));
+		mostraConfermaPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) 
 			{
@@ -589,7 +569,6 @@ public class GestioneDipendenti extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				pulisciCampi();
-				
 				dipendenteSelezionato = null;
 				dipendentiTable.clearSelection();
 			}
@@ -641,7 +620,7 @@ public class GestioneDipendenti extends JFrame {
 		creaAccountButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		creaAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				campiObbligatoriNeri();
+				campiNeri();
 				
 				if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText()))
 					creaDipendente(controller);
@@ -780,15 +759,13 @@ public class GestioneDipendenti extends JFrame {
 		salvaModificheButton.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				campiObbligatoriNeri();
+				campiNeri();
 				if (dipendenteSelezionato != null) {
-					if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText())) {
-						salvaModifiche(controller, dipendenteSelezionato);
-					}
-					else if(!passwordField.getText().equals(confermaPasswordField.getText()))
-					{	
+					if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText()))
+						salvaModificheDipendente(controller, dipendenteSelezionato);
+					else if(!passwordField.getText().equals(confermaPasswordField.getText())) {	
 						JOptionPane.showMessageDialog(null,
-								"Le password inserite sono diverse",
+								"Le password inserite sono diverse.",
 								"Errore Conferma Password",
 								JOptionPane.ERROR_MESSAGE);
 						passwordLabel.setForeground(Color.RED);
@@ -826,27 +803,7 @@ public class GestioneDipendenti extends JFrame {
 		JButton eliminaAccountButton = new JButton("Elimina");
 		eliminaAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ricavaInfoDipendente(controller);
-				
-				try {
-					Dipendente temp = new Dipendente(null, nome,cognome,sesso,dataNascita,luogoNascita,indirizzo,email,telefono,cellulare,salario,password, 0f);
-					temp.setCf(temp.generaCF());
-					controller.eliminaDipendente(temp);
-					
-					pulisciCampi();
-					
-					aggiornaTabella(controller);
-				} catch (SQLException e1) {
-					JOptionPane.showMessageDialog(null,
-							e1.getMessage() + "\nContattare uno sviluppatore",
-							"Errore #" + e1.getErrorCode(),
-							JOptionPane.ERROR_MESSAGE);
-				} catch (NullPointerException npe) {
-					JOptionPane.showMessageDialog(null,
-							"Il dipendente selezionato è vuoto.",
-							"Errore Dipendente Nullo",
-							JOptionPane.ERROR_MESSAGE);
-				}
+				eliminaDipendente(controller, dipendenteSelezionato);
 			}
 		});
 		eliminaAccountButton.setToolTipText("Elimina il dipendente");
@@ -874,21 +831,12 @@ public class GestioneDipendenti extends JFrame {
 		skillFiltroLabel.setBounds(814, 12, 39, 14);
 		comandiPanel.add(skillFiltroLabel);
 		
-		try {
-			ArrayList<Skill> skills = controller.ottieniSkill();
-			skills.add(0,null);
-			skillFiltroComboBox = new JComboBox(skills.toArray());
-			skillFiltroComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
-			skillFiltroComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-			skillFiltroComboBox.setBackground(Color.WHITE);
-			skillFiltroComboBox.setBounds(856, 6, 157, 22);
-			comandiPanel.add(skillFiltroComboBox);
-		} catch (SQLException e2) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
-		}
+		inizializzaFiltroSkillComboBox(controller);
+		skillFiltroComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
+		skillFiltroComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		skillFiltroComboBox.setBackground(Color.WHITE);
+		skillFiltroComboBox.setBounds(856, 6, 157, 22);
+		comandiPanel.add(skillFiltroComboBox);
 		
 		tableScrollPanel = new JScrollPane();
 		tableScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
@@ -896,74 +844,52 @@ public class GestioneDipendenti extends JFrame {
 		contentPane.add(tableScrollPanel);
 		
 		dataModelDipendente = new DipendentiTableModel();
-		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-			dipendentiTable = new JTable(dataModelDipendente);
-			dipendentiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());
-			dipendentiTable.setRowSorter(sorter);
-			
-			dipendentiTable.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					campiObbligatoriNeri();
-					
-					int row = dipendentiTable.getSelectedRow();
-					row = dipendentiTable.convertRowIndexToModel(row);
-					dipendenteSelezionato = dataModelDipendente.getSelected(row);
-					
-					pulisciCampi();
-					
-					nomeTextField.setText(dipendenteSelezionato.getNome());
-					cognomeTextField.setText(dipendenteSelezionato.getCognome());
-					emailTextField.setText(dipendenteSelezionato.getEmail());
-					if(dipendenteSelezionato.getSesso() == 'M') {
-						uomoRadioButton.setSelected(true);
-						donnaRadioButton.setSelected(false);
-					}
-					else {
-						uomoRadioButton.setSelected(false);		
-						donnaRadioButton.setSelected(true);
-					}
-					giornoComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getDayOfMonth()-1);
-					meseComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getMonthOfYear()-1);
-					annoComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getYear()-1900);
-					provinciaComboBox.setSelectedItem(dipendenteSelezionato.getLuogoNascita().getNomeProvincia());
-					cittaComboBox.setSelectedItem(dipendenteSelezionato.getLuogoNascita().getNomeComune());
-					cittaComboBox.setEnabled(false);
-					indirizzoTextField.setText(dipendenteSelezionato.getIndirizzo());
-					cellulareTextField.setText(dipendenteSelezionato.getCellulare());
-					telefonoFissoTextField.setText(dipendenteSelezionato.getTelefonoCasa());
-					passwordField.setText(dipendenteSelezionato.getPassword());
-					confermaPasswordField.setText(dipendenteSelezionato.getPassword());
-					salarioTextField.setText(Float.toString(dipendenteSelezionato.getSalario()));
-					ArrayList<Skill> skills = dipendenteSelezionato.getSkills();
-					int[] indici = new int[skills.size()];
-					int i = 0;
-					for (Skill skill: skills) {
-						try {
-							indici[i] = controller.ottieniSkill().indexOf(skill);
-							i++;
-							skillsList.setSelectedIndices(indici);
-						} catch (SQLException e1) {
-							JOptionPane.showMessageDialog(null,
-								"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
-								"Errore Interrogazione Database",
-								JOptionPane.ERROR_MESSAGE);
-						}
-					}
-					valutazioneLabel.setText("Valutazione: " + String.format("%.2f",dipendenteSelezionato.getValutazione()));	
+		inizializzaModelloTabellaDipendenti(controller);
+		dipendentiTable = new JTable(dataModelDipendente);
+		dipendentiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());
+		dipendentiTable.setRowSorter(sorter);
+
+		dipendentiTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				campiNeri();
+
+				int rigaSelezionata = dipendentiTable.getSelectedRow();
+				rigaSelezionata = dipendentiTable.convertRowIndexToModel(rigaSelezionata);
+				dipendenteSelezionato = dataModelDipendente.getSelected(rigaSelezionata);
+				
+				pulisciCampi();
+
+				nomeTextField.setText(dipendenteSelezionato.getNome());
+				cognomeTextField.setText(dipendenteSelezionato.getCognome());
+				emailTextField.setText(dipendenteSelezionato.getEmail());
+				if (dipendenteSelezionato.getSesso() == 'M') {
+					uomoRadioButton.setSelected(true);
+					donnaRadioButton.setSelected(false);
+				} else {
+					uomoRadioButton.setSelected(false);
+					donnaRadioButton.setSelected(true);
 				}
-			});
-			dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			dipendentiTable.setFont(new Font("Consolas", Font.PLAIN, 11));
-			tableScrollPanel.setViewportView(dipendentiTable);
-		} catch (SQLException e1) {
-				JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutti i dipendenti dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
-		}
+				giornoComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getDayOfMonth() - 1);
+				meseComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getMonthOfYear() - 1);
+				annoComboBox.setSelectedIndex(dipendenteSelezionato.getDataNascita().getYear() - 1900);
+				provinciaComboBox.setSelectedItem(dipendenteSelezionato.getLuogoNascita().getNomeProvincia());
+				cittaComboBox.setSelectedItem(dipendenteSelezionato.getLuogoNascita().getNomeComune());
+				cittaComboBox.setEnabled(false);
+				indirizzoTextField.setText(dipendenteSelezionato.getIndirizzo());
+				cellulareTextField.setText(dipendenteSelezionato.getCellulare());
+				telefonoFissoTextField.setText(dipendenteSelezionato.getTelefonoCasa());
+				passwordField.setText(dipendenteSelezionato.getPassword());
+				confermaPasswordField.setText(dipendenteSelezionato.getPassword());
+				salarioTextField.setText(Float.toString(dipendenteSelezionato.getSalario()));
+				aggiornaSkillDipendente(controller);
+				valutazioneLabel.setText("Valutazione: " + String.format("%.2f", dipendenteSelezionato.getValutazione()));
+			}
+		});
+		dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		dipendentiTable.setFont(new Font("Consolas", Font.PLAIN, 11));
+		tableScrollPanel.setViewportView(dipendentiTable);
 	}
 	
 	//Altri metodi
@@ -981,6 +907,7 @@ public class GestioneDipendenti extends JFrame {
 			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
 		}
 		catch (SQLException e1) {
+			//TODO: creare handler eccezioni luogo nascita
 			JOptionPane.showMessageDialog(null,
 				"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
 				"Errore Interrogazione Database",
@@ -997,55 +924,16 @@ public class GestioneDipendenti extends JFrame {
 		salario = parseFloat(salarioTextField.getText(), 0f);
 	}
 	
-	private void aggiornaTabella(ControllerDipendentiSegreteria controller) {
+	private void setModelloTabellaDipendentiTutti(ControllerDipendentiSegreteria controller) {
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} 
 		catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutti i dipendenti dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLDipendente = new ManagerEccezioniDatiSQLDipendente(e1);
+			eccezioniSQLDipendente.mostraErrore();
 		}
-	}
-	
-	private void campiObbligatoriRossi() {
-		if (nomeTextField.getText().isBlank())
-			nomeLabel.setForeground(Color.RED);
-		if (cognomeTextField.getText().isBlank())
-			cognomeLabel.setForeground(Color.RED);
-		if (emailTextField.getText().isBlank())
-			emailLabel.setForeground(Color.RED);
-		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
-			sessoLabel.setForeground(Color.RED);
-		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)
-			dataNascitaLabel.setForeground(Color.RED);
-		if (indirizzoTextField.getText().isBlank())
-			indirizzoLabel.setForeground(Color.RED);
-		if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null)
-			cittàDiNascitaLabel.setForeground(Color.RED);
-		if (salarioTextField.getText().isBlank())
-			salarioLabel.setForeground(Color.RED);
-		if (passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
-			passwordLabel.setForeground(Color.RED);
-			confermaPasswordLabel.setForeground(Color.RED);
-		}
-	}
-	
-	private void campiObbligatoriNeri() {
-		nomeLabel.setForeground(Color.BLACK);
-		cognomeLabel.setForeground(Color.BLACK);
-		emailLabel.setForeground(Color.BLACK);
-		passwordLabel.setForeground(Color.BLACK);
-		confermaPasswordLabel.setForeground(Color.BLACK);
-		sessoLabel.setForeground(Color.BLACK);
-		indirizzoLabel.setForeground(Color.BLACK);
-		dataNascitaLabel.setForeground(Color.BLACK);
-		cittàDiNascitaLabel.setForeground(Color.BLACK);
-		provNascitaLabel.setForeground(Color.BLACK);
-		salarioLabel.setForeground(Color.BLACK);
 	}
 	
 	private void creaDipendente(ControllerDipendentiSegreteria controller) {
@@ -1056,94 +944,103 @@ public class GestioneDipendenti extends JFrame {
 		dipendente.setSkills(skills);
 		try {
 			controller.creaDipendente(dipendente);
-			
 			pulisciCampi();
-			
-			aggiornaTabella(controller);
+			setModelloTabellaDipendentiTutti(controller);
 		}
 		catch(SQLException e1) {
-			if (e1.getSQLState().equals(VIOLAZIONE_NOT_NULL)) {
-				JOptionPane.showMessageDialog(null,
-						"Alcuni campi obbligatori per la creazione sono vuoti.",
-						"Errore Campi Obbligatori Vuoti",
-						JOptionPane.ERROR_MESSAGE);
-				campiObbligatoriRossi();
-			}
-			else if (e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
-				JOptionPane.showMessageDialog(null,
-						"Il dipendente che intendi creare esiste già.",
-						"Errore Dipendente Esistente",
-						JOptionPane.ERROR_MESSAGE);
-			}
-			else if(e1.getSQLState().equals(VIOLAZIONE_VINCOLI_TABELLA)) {
-				JOptionPane.showMessageDialog(null,
-						"I valori inseriti sono errati.\n"
-						+ "Controlla che:\n"
-						+ "1)Il formato dell'email sia corretto\n"
-						+ "2)Il dipendente sia maggiorenne e la sua data di nascita sia corretta\n"
-						+ "3)Il salario previsto per lui sia positivo\n"
-						+ "4)Nome e Cognome non siano del formato corretto o vuoti\n"
-						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
-						"Errore Vincoli",
-						JOptionPane.ERROR_MESSAGE);	
-				Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-				Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
-				if (!matcher.find())
-					emailLabel.setForeground(Color.RED);
-				dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() +1, giornoComboBox.getSelectedIndex() + 1);
-				Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
-				int età = period.getYears();
-				if (età < 18)
-					dataNascitaLabel.setForeground(Color.RED);
-				if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
-					salarioLabel.setForeground(Color.RED);
-			}
-			else if(e1.getSQLState().equals(VIOLAZIONE_LUNGHEZZA_STRINGA)) {
-				JOptionPane.showMessageDialog(null,
-						"I dati inseriti sono errati.\n"
-						+ "Controlla che:\n"
-						+ "1)Nome e Cognome abbiano meno di 30 caratteri\n"
-						+ "2)Email e Indirizzo abbiano meno di 100 caratteri\n"
-						+ "3)Numero di telefono e Cellulare abbiano esattamente 10 caratteri\n"
-						+ "4)La Password non superi i 50 caratteri e non sia vuota\n"
-						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
-						"Errore Dati Inseriti",
-						JOptionPane.ERROR_MESSAGE);
-				if (nomeTextField.getText().length() > 30)
-					nomeLabel.setForeground(Color.RED);
-				if (cognomeTextField.getText().length() > 30)
-					cognomeLabel.setForeground(Color.RED);
-				if (emailTextField.getText().length() > 100)
-					emailLabel.setForeground(Color.RED);
-				if (indirizzoTextField.getText().length() > 100)
-					indirizzoLabel.setForeground(Color.RED);
-				if (telefonoFissoTextField.getText().length() != 10)
-					telefonoFissoLabel.setForeground(Color.RED);
-				if (cellulareTextField.getText().length() != 10)
-					cellulareLabel.setForeground(Color.RED);
-				if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50 ||passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
-					passwordLabel.setForeground(Color.RED);
-					confermaPasswordLabel.setForeground(Color.RED);
-				}
-			}
-			else if (e1.getSQLState().equals(VIOLAZIONE_DATA_INESISTENTE)){
-				JOptionPane.showMessageDialog(null,
-						"Accertarsi che la data di nascita esista davvero.",
-						"Data Inesistente",
-						JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLDipendente = new ManagerEccezioniDatiSQLDipendente(e1);
+			eccezioniSQLDipendente.mostraErrore();
+			feedbackGUIEccezioniSQLDipendente(e1.getSQLState());
+		}
+	}
+	
+	private void salvaModificheDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) {
+		ricavaInfoDipendente(controller);
+		dipendenteModificato.setNome(nome);
+		dipendenteModificato.setCognome(cognome);
+		dipendenteModificato.setSesso(sesso);
+		dipendenteModificato.setDataNascita(dataNascita);
+		dipendenteModificato.setLuogoNascita(luogoNascita);
+		dipendenteModificato.setEmail(email);
+		dipendenteModificato.setPassword(password);
+		dipendenteModificato.setTelefonoCasa(telefono);
+		dipendenteModificato.setCellulare(cellulare);
+		dipendenteModificato.setIndirizzo(indirizzo);
+		ArrayList<Skill> skills = new ArrayList<Skill>();
+		skills.addAll(skillsList.getSelectedValuesList());
+		dipendenteModificato.setSkills(skills);
+		dipendenteModificato.setSalario(salario);
+		try {
+			controller.aggiornaDipendente(dipendenteModificato);
+			pulisciCampi();
+		}
+		catch(SQLException e1) {
+			eccezioniSQLDipendente = new ManagerEccezioniDatiSQLDipendente(e1);
+			eccezioniSQLDipendente.mostraErrore();
+			feedbackGUIEccezioniSQLDipendente(e1.getSQLState());
+		}
+		setModelloTabellaDipendentiTutti(controller);
+	}
+	
+	private void eliminaDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteSelezionato) {
+		try {
+			controller.eliminaDipendente(dipendenteSelezionato);
+			pulisciCampi();
+			setModelloTabellaDipendentiTutti(controller);
+		} catch (SQLException e1) {
+			eccezioniSQLDipendente = new ManagerEccezioniDatiSQLDipendente(e1);
+			eccezioniSQLDipendente.mostraErrore();
+			feedbackGUIEccezioniSQLDipendente(e1.getSQLState());
+		} catch (NullPointerException npe) {
+			JOptionPane.showMessageDialog(null,
+					"Il dipendente selezionato è vuoto.",
+					"Errore Dipendente Nullo",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void feedbackGUIEccezioniSQLDipendente(String SQLState) {
+		if (SQLState.equals(eccezioniSQLDipendente.VIOLAZIONE_NOT_NULL))
+			campiObbligatoriRossi();
+		else if(SQLState.equals(eccezioniSQLDipendente.VIOLAZIONE_VINCOLI_TABELLA)) {
+			//TODO: mancano alcuni controlli
+			Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+			Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
+			if (!matcher.find())
+				emailLabel.setForeground(Color.RED);
+			dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() +1, giornoComboBox.getSelectedIndex() + 1);
+			Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
+			int età = period.getYears();
+			if (età < 18)
 				dataNascitaLabel.setForeground(Color.RED);
-			}
-			else {
-				JOptionPane.showMessageDialog(null,
-						e1.getMessage() + "\nContattare uno sviluppatore.",
-						"Errore #" + e1.getErrorCode(),
-						JOptionPane.ERROR_MESSAGE);
+			if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
+				salarioLabel.setForeground(Color.RED);
+		}
+		else if(SQLState.equals(eccezioniSQLDipendente.VIOLAZIONE_LUNGHEZZA_STRINGA)) {
+			if (nomeTextField.getText().length() > eccezioniSQLDipendente.getLunghezzaMaxNomeCognome())
+				nomeLabel.setForeground(Color.RED);
+			if (cognomeTextField.getText().length() > eccezioniSQLDipendente.getLunghezzaMaxNomeCognome())
+				cognomeLabel.setForeground(Color.RED);
+			if (emailTextField.getText().length() > eccezioniSQLDipendente.getLunghezzaMaxIndirizzoEmail())
+				emailLabel.setForeground(Color.RED);
+			if (indirizzoTextField.getText().length() > eccezioniSQLDipendente.getLunghezzaMaxIndirizzoEmail())
+				indirizzoLabel.setForeground(Color.RED);
+			if (telefonoFissoTextField.getText().length() != eccezioniSQLDipendente.getLunghezzaNumeroTelefonico())
+				telefonoFissoLabel.setForeground(Color.RED);
+			if (cellulareTextField.getText().length() != eccezioniSQLDipendente.getLunghezzaNumeroTelefonico())
+				cellulareLabel.setForeground(Color.RED);
+			if (passwordField.getText().length() > eccezioniSQLDipendente.getLunghezzaMaxPassword() || confermaPasswordField.getText().length() > eccezioniSQLDipendente.getLunghezzaMaxPassword() ||passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
+				passwordLabel.setForeground(Color.RED);
+				confermaPasswordLabel.setForeground(Color.RED);
 			}
 		}
+		else if (SQLState.equals(eccezioniSQLDipendente.VIOLAZIONE_DATA_INESISTENTE))
+			dataNascitaLabel.setForeground(Color.RED);
 	}
 	
 	private void creaSkill(ControllerDipendentiSegreteria controller) {
 		try {
+			//TODO: creare handler eccezioni per le skill
 			controller.creaNuovaSkill(nuovaSkillTextField.getText());
 			DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();
 			skillModel.addAll(controller.ottieniSkill());
@@ -1217,10 +1114,87 @@ public class GestioneDipendenti extends JFrame {
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
+			eccezioniSQLDipendente = new ManagerEccezioniDatiSQLDipendente(e);
+			eccezioniSQLDipendente.mostraErrore();
+		}
+	}
+	
+	private void aggiornaSkillDipendente(ControllerDipendentiSegreteria controller) {
+		ArrayList<Skill> skills = dipendenteSelezionato.getSkills();
+		int[] indici = new int[skills.size()];
+		int i = 0;
+		for (Skill skill : skills) {
+			try {
+				indici[i] = controller.ottieniSkill().indexOf(skill);
+				i++;
+				skillsList.setSelectedIndices(indici);
+			} catch (SQLException e1) {
+				//TODO: handler per le skills
+				JOptionPane.showMessageDialog(null,
+						"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
+						"Errore Interrogazione Database", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	private void inizializzaComuniComboBox(ControllerDipendentiSegreteria controller) {
+		try {
+			//TODO: handler per luogo nascita
+			for(LuogoNascita comune: controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
+					cittaComboBox.addItem(comune.getNomeComune());
+		} 
+		catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null,
-					"Filtro fallito.\nControllare che la connessione al database sia stabilita",
-					"Errore #" + e.getErrorCode(),
-					JOptionPane.ERROR_MESSAGE);
+				"Impossibile ottenere tutti i comuni di tale provincia dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void inizializzaProvinceComboBox(ControllerDipendentiSegreteria controller) {
+		try {
+			//TODO: handler per luogo nascita
+			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
+		} catch (SQLException e2) {
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutte le province dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void inizializzaSkillList(ControllerDipendentiSegreteria controller) {
+		try {
+			//TODO: handler per skills
+			skillsList = new JList(controller.ottieniSkill().toArray());
+		} catch (SQLException e2) {
+			JOptionPane.showMessageDialog(null,
+				"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
+				"Errore Interrogazione Database",
+				JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void inizializzaFiltroSkillComboBox(ControllerDipendentiSegreteria controller) {
+		ArrayList<Skill> skills = new ArrayList<Skill>();
+		try {
+			// TODO: handler per skills
+			skills = controller.ottieniSkill();
+		} catch (SQLException e2) {
+			JOptionPane.showMessageDialog(null,
+					"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
+					"Errore Interrogazione Database", JOptionPane.ERROR_MESSAGE);
+		}
+		skills.add(0, null);
+		skillFiltroComboBox = new JComboBox(skills.toArray());
+	}
+	
+	private void inizializzaModelloTabellaDipendenti(ControllerDipendentiSegreteria controller) {
+		try {
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
+		} catch (SQLException e1) {
+			eccezioniSQLDipendente = new ManagerEccezioniDatiSQLDipendente(e1);
+			eccezioniSQLDipendente.mostraErrore();
 		}
 	}
 	
@@ -1239,123 +1213,6 @@ public class GestioneDipendenti extends JFrame {
 			}
 		catch(NumberFormatException e) {
 			return valoreDefault;
-		}
-	}
-	
-	private void salvaModifiche(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) {
-		dipendenteModificato.setNome(nomeTextField.getText());
-		dipendenteModificato.setCognome(cognomeTextField.getText());
-		if (uomoRadioButton.isSelected())
-			dipendenteModificato.setSesso('M');
-		else
-			dipendenteModificato.setSesso('F');
-		dipendenteModificato.setDataNascita(new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex()+1));
-		try {
-			dipendenteModificato.setLuogoNascita(controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex()));
-		}
-		catch(SQLException e1) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
-		}
-		dipendenteModificato.setEmail(emailTextField.getText());
-		dipendenteModificato.setPassword(passwordField.getText());
-		if (!telefonoFissoTextField.getText().equals(""))
-			dipendenteModificato.setTelefonoCasa(telefonoFissoTextField.getText());
-		if (!cellulareTextField.getText().isBlank())
-			dipendenteModificato.setCellulare(cellulareTextField.getText());
-		dipendenteModificato.setIndirizzo(indirizzoTextField.getText());
-		ArrayList<Skill> skills = new ArrayList<Skill>();
-		skills.addAll(skillsList.getSelectedValuesList());
-		dipendenteModificato.setSkills(skills);
-		dipendenteModificato.setSalario(parseFloat(salarioTextField.getText(), 0f));
-		
-		try {
-			controller.aggiornaDipendente(dipendenteModificato);
-			
-			pulisciCampi();
-			
-			aggiornaTabella(controller);
-		}
-		catch(SQLException e1) {
-			if (e1.getSQLState().equals(VIOLAZIONE_NOT_NULL)) {
-				JOptionPane.showMessageDialog(null,
-						"Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
-						"Errore Campi Obbligatori Vuoti",
-						JOptionPane.ERROR_MESSAGE);
-				campiObbligatoriRossi();
-				}
-			else if (e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
-				JOptionPane.showMessageDialog(null,
-						"Il dipendente che intendi aggiornare è uguale a uno già esistente.\nControllare email o codice fiscale.",
-						"Errore Dipendente Esistente",
-						JOptionPane.ERROR_MESSAGE);
-			}
-			else if(e1.getSQLState().equals(VIOLAZIONE_VINCOLI_TABELLA)) {
-				JOptionPane.showMessageDialog(null,
-						"I valori inseriti sono errati.\n"
-						+ "Controlla che:\n"
-						+ "1)Il formato dell'email sia corretto\n"
-						+ "2)Il dipendente sia maggiorenne e la sua data di nascita sia corretta\n"
-						+ "3)Il salario previsto per lui sia positivo\n"
-						+ "4)Nome e Cognome non siano del formato corretto o vuoti\n"
-						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
-						"Errore Vincoli",
-						JOptionPane.ERROR_MESSAGE);	
-				Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-				Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
-				if (!matcher.find())
-					emailLabel.setForeground(Color.RED);
-				LocalDate dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() +1, giornoComboBox.getSelectedIndex() + 1);
-				Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
-				int età = period.getYears();
-				if (età < 18)
-					dataNascitaLabel.setForeground(Color.RED);
-				if (Float.parseFloat(salarioTextField.getText()) < 0)
-					salarioLabel.setForeground(Color.RED);
-			}
-			else if(e1.getSQLState().equals(VIOLAZIONE_LUNGHEZZA_STRINGA)) {
-				JOptionPane.showMessageDialog(null,
-						"I dati inseriti sono errati.\n"
-						+ "Controlla che:\n"
-						+ "1)Nome e Cognome abbiano meno di 30 caratteri\n"
-						+ "2)Email e Indirizzo abbiano meno di 100 caratteri\n"
-						+ "3)Numero di telefono e Cellulare abbiano esattamente 10 caratteri\n"
-						+ "4)La Password non superi i 50 caratteri o non sia vuota\n"
-						+ "Contattare gli sviluppatori se non è nessuno dei seguenti casi.",
-						"Errore Dati Inseriti",
-						JOptionPane.ERROR_MESSAGE);
-				if (nomeTextField.getText().length() > 30)
-					nomeLabel.setForeground(Color.RED);
-				if (cognomeTextField.getText().length() > 30)
-					cognomeLabel.setForeground(Color.RED);
-				if (emailTextField.getText().length() > 100)
-					emailLabel.setForeground(Color.RED);
-				if (indirizzoTextField.getText().length() > 100)
-					indirizzoLabel.setForeground(Color.RED);
-				if (telefonoFissoTextField.getText().length() != 10)
-					telefonoFissoLabel.setForeground(Color.RED);
-				if (cellulareTextField.getText().length() != 10)
-					cellulareLabel.setForeground(Color.RED);
-				if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50 ||passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
-					passwordLabel.setForeground(Color.RED);
-					confermaPasswordLabel.setForeground(Color.RED);
-				}
-			}
-			else if (e1.getSQLState().equals(VIOLAZIONE_DATA_INESISTENTE)) {
-				JOptionPane.showMessageDialog(null,
-						"Accertarsi che la data di nascita esista davvero.",
-						"Data Inesistente",
-						JOptionPane.ERROR_MESSAGE);
-				dataNascitaLabel.setForeground(Color.RED);
-			}
-			else {
-				JOptionPane.showMessageDialog(null,
-						e1.getMessage() + "\nContattare uno sviluppatore.",
-						"Errore #" + e1.getErrorCode(),
-						JOptionPane.ERROR_MESSAGE);
-			}
 		}
 	}
 	
@@ -1399,5 +1256,44 @@ public class GestioneDipendenti extends JFrame {
 		confermaPasswordField.setText("");
 		salarioTextField.setText("");
 		skillsList.clearSelection();
+	}
+	
+	private void campiObbligatoriRossi() {
+		if (nomeTextField.getText().isBlank())
+			nomeLabel.setForeground(Color.RED);
+		if (cognomeTextField.getText().isBlank())
+			cognomeLabel.setForeground(Color.RED);
+		if (emailTextField.getText().isBlank())
+			emailLabel.setForeground(Color.RED);
+		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+			sessoLabel.setForeground(Color.RED);
+		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null || annoComboBox.getSelectedItem() == null)
+			dataNascitaLabel.setForeground(Color.RED);
+		if (indirizzoTextField.getText().isBlank())
+			indirizzoLabel.setForeground(Color.RED);
+		if (provinciaComboBox.getSelectedItem() == null || cittaComboBox.getSelectedItem() == null)
+			cittàDiNascitaLabel.setForeground(Color.RED);
+		if (salarioTextField.getText().isBlank())
+			salarioLabel.setForeground(Color.RED);
+		if (passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
+			passwordLabel.setForeground(Color.RED);
+			confermaPasswordLabel.setForeground(Color.RED);
+		}
+	}
+	
+	private void campiNeri() {
+		nomeLabel.setForeground(Color.BLACK);
+		cognomeLabel.setForeground(Color.BLACK);
+		emailLabel.setForeground(Color.BLACK);
+		passwordLabel.setForeground(Color.BLACK);
+		confermaPasswordLabel.setForeground(Color.BLACK);
+		sessoLabel.setForeground(Color.BLACK);
+		indirizzoLabel.setForeground(Color.BLACK);
+		dataNascitaLabel.setForeground(Color.BLACK);
+		cittàDiNascitaLabel.setForeground(Color.BLACK);
+		provNascitaLabel.setForeground(Color.BLACK);
+		cellulareLabel.setForeground(Color.BLACK);
+		telefonoFissoLabel.setForeground(Color.BLACK);
+		salarioLabel.setForeground(Color.BLACK);
 	}
 }
