@@ -4,6 +4,7 @@ package gui.segreteria;
 
 import controller.segreteria.ControllerDipendentiSegreteria;
 import eccezioni.ManagerEccezioniDatiSQLDipendente;
+import eccezioni.ManagerEccezioniDatiSQLLuogo;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -152,6 +153,7 @@ public class GestioneDipendenti extends JFrame {
 	private Dipendente dipendenteSelezionato;
 	
 	private ManagerEccezioniDatiSQLDipendente eccezioniSQLDipendente;
+	private ManagerEccezioniDatiSQLLuogo eccezioniSQLLuogo;
 	
 	private final String VIOLAZIONE_NOT_NULL = "23502";
 	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
@@ -907,11 +909,8 @@ public class GestioneDipendenti extends JFrame {
 			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
 		}
 		catch (SQLException e1) {
-			//TODO: creare handler eccezioni luogo nascita
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutti i comuni dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLLuogo = new ManagerEccezioniDatiSQLLuogo(e1);
+			eccezioniSQLLuogo.mostraErrore();
 		}
 		email = emailTextField.getText();
 		if (!passwordField.getText().isBlank())
@@ -1139,27 +1138,21 @@ public class GestioneDipendenti extends JFrame {
 	
 	private void inizializzaComuniComboBox(ControllerDipendentiSegreteria controller) {
 		try {
-			//TODO: handler per luogo nascita
 			for(LuogoNascita comune: controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
 					cittaComboBox.addItem(comune.getNomeComune());
 		} 
 		catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutti i comuni di tale provincia dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLLuogo = new ManagerEccezioniDatiSQLLuogo(e1);
+			eccezioniSQLLuogo.mostraErrore();
 		}
 	}
 	
 	private void inizializzaProvinceComboBox(ControllerDipendentiSegreteria controller) {
 		try {
-			//TODO: handler per luogo nascita
 			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
 		} catch (SQLException e2) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutte le province dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLLuogo = new ManagerEccezioniDatiSQLLuogo(e2);
+			eccezioniSQLLuogo.mostraErrore();
 		}
 	}
 	
