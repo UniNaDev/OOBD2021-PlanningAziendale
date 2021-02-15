@@ -14,6 +14,10 @@ public class ManagerEccezioniDatiSQLSala implements ManagerEccezioniDatiSQL {
 	private String messaggioErrore = "";
 	private String titoloFinestraErrore = "";
 	private String hint = "";
+	private boolean casoDefault = false;
+	
+	private final int lunghezzaMaxCodSala = 10;
+	private final int lunghezzaMaxIndirizzo = 50;
 	
 	public ManagerEccezioniDatiSQLSala(SQLException eccezione) {
 		switch(eccezione.getSQLState()) {
@@ -30,18 +34,19 @@ public class ManagerEccezioniDatiSQLSala implements ManagerEccezioniDatiSQL {
 		case VIOLAZIONE_LUNGHEZZA_STRINGA:
 			setTitoloFinestraErrore("Errore Valori Troppo Lunghi");
 			setMessaggioErrore("Alcuni valori sono troppo lunghi.");
-			setHint("Controllare che il codice della sala non superi i 10 caratteri e che il suo indirizzo non superi i 50 caratteri.");
+			setHint("Controllare che il codice della sala non superi i " + lunghezzaMaxCodSala + " caratteri e che il suo indirizzo non superi i " + lunghezzaMaxIndirizzo + " caratteri.");
 			break;
 		case VIOLAZIONE_VINCOLI_TABELLA:
 			setTitoloFinestraErrore("Errore Valori Errati");
 			setMessaggioErrore("Alcuni valori sono errati.");
 			setHint("Controllare che piano e capienza non siano valori negativi.");
 			break;
-		//TODO: vincolo accavallamento sala
+		//TODO: manca vincolo accavallamento sala
 		default:
 			setTitoloFinestraErrore("Errore #" + eccezione.getSQLState());
 			setMessaggioErrore(eccezione.getMessage());
-			setHint("Contattare uno sviluppatore.");
+			setHint("Verificate che il programma sia aggiornato \noppure contattare uno sviluppatore.");
+			casoDefault = true;
 		}
 	}
 
@@ -55,6 +60,18 @@ public class ManagerEccezioniDatiSQLSala implements ManagerEccezioniDatiSQL {
 	
 	public void setHint(String hint) {
 		this.hint = hint;
+	}
+	
+	public boolean isDefault() {
+		return casoDefault;
+	}
+	
+	public int getLunghezzaMaxCodSala() {
+		return lunghezzaMaxCodSala;
+	}
+	
+	public int getLunghezzaMaxIndirizzo() {
+		return lunghezzaMaxIndirizzo;
 	}
 
 	@Override

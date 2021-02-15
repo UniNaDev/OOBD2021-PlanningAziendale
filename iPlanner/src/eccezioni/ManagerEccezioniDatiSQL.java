@@ -14,6 +14,7 @@ public interface ManagerEccezioniDatiSQL {
 	public final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
 	public final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
 	public final String VIOLAZIONE_DATA_INESISTENTE = "22008";
+	public final String VIOLAZIONE_RAPPRESENZATIONE_ENUMERAZIONE = "22P02";
 	
 	public final String VIOLAZIONE_ACCAVALLAMENTO_MEETING = "P0001";
 	public final String VIOLAZIONE_CAPIENZA_SALA = "P0002";
