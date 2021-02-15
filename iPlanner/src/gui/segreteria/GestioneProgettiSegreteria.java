@@ -52,6 +52,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.segreteria.ControllerProgettiSegreteria;
+import eccezioni.ManagerEccezioniDatiSQLAmbito;
 import eccezioni.ManagerEccezioniDatiSQLProgetto;
 
 import java.awt.event.MouseAdapter;
@@ -83,6 +84,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private JLabel dataCreazioneLabel, dataScadenzaLabel, dataTerminazioneLabel;
 	
 	private ManagerEccezioniDatiSQLProgetto eccezioniSQLProgetto;
+	private ManagerEccezioniDatiSQLAmbito eccezioniSQLAmbito;
 	
 	private DateTimeFormatter formatoDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	private String[] siNoComboBox = {null, "Si", "No"};
@@ -518,10 +520,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			ambitoComboBox = new JComboBox(controller.ottieniTuttiAmbiti().toArray());
 		} catch (SQLException e2) {
-			JOptionPane.showMessageDialog(null,
-					"Impossibile ottenere tutti gli ambiti dal database.\nControllare che sia stabilita la connessione al database.",
-					"Errore Interrogazione Database",
-					JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLAmbito = new ManagerEccezioniDatiSQLAmbito(e2);
+			eccezioniSQLAmbito.mostraErrore();
 		}
 	}
 	
@@ -538,22 +538,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			controller.creaAmbitoProgetto(ambitoNuovoTextField.getText());
 		} catch (SQLException e1) {
-			// violazione vincolo primary key/unique
-			if (e1.getSQLState().equals("23505")) {
-				JOptionPane.showMessageDialog(null, "Impossibile inserire il nuovo ambito perchè esiste già.",
-						"Errore Ambito Esistente", JOptionPane.ERROR_MESSAGE);
-			}
-			// violazione vincolo sui dati (es: troppo lungo il nome dell'ambito da creare)
-			else if (e1.getSQLState().equals("22001")) {
-				JOptionPane.showMessageDialog(null,
-						"Impossibile creare l'ambito inserito perchè il suo nome supera i 20 caratteri.",
-						"Errore Dati Non Validi", JOptionPane.ERROR_MESSAGE);
-			}
-			// errori non contemplati
-			else {
-				JOptionPane.showMessageDialog(null, e1.getMessage() + "\nContattare uno sviluppatore.",
-						"Errore #" + e1.getErrorCode(), JOptionPane.ERROR_MESSAGE);
-			}
+			eccezioniSQLAmbito = new ManagerEccezioniDatiSQLAmbito(e1);
+			eccezioniSQLAmbito.mostraErrore();
 		}
 	}
 	
@@ -562,9 +548,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 			ambitiListModel.addAll(controller.ottieniAmbitiProgetto(progettoSelezionato));
 			ambitiList.setModel(ambitiListModel);
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null,
-					"Impossibile ottenere tutti gli ambiti del progetto dal database.\nControllare che sia stabilita la connessione al database.",
-					"Errore Interrogazione Database", JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLAmbito = new ManagerEccezioniDatiSQLAmbito(e1);
+			eccezioniSQLAmbito.mostraErrore();
 		}
 	}
 	

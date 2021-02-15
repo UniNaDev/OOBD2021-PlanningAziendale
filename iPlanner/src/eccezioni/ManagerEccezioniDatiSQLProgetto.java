@@ -27,7 +27,7 @@ public class ManagerEccezioniDatiSQLProgetto implements ManagerEccezioniDatiSQL 
 		default:
 			setTitoloFinestraErrore("Errore #" + eccezione.getSQLState());
 			setMessaggioErrore(eccezione.getMessage());
-			setHint("Verificate che il programma sia aggiornato \\noppure contattare uno sviluppatore.");
+			setHint("Verificate che il programma sia aggiornato \noppure contattare uno sviluppatore.");
 			casoDefault = true;
 		}
 	}
