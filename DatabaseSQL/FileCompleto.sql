@@ -651,7 +651,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione
+CREATE TRIGGER unicità_projectmanager BEFORE INSERT OR UPDATE ON Partecipazione
 FOR EACH ROW
 EXECUTE PROCEDURE check_projectmanager();
 --------------------------------------------------------------------------------
