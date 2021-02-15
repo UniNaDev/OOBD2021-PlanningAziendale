@@ -1391,7 +1391,6 @@ public class GestioneMeetingDipendente extends JFrame {
 			
 			if(e1.getSQLState().equals(raiseExceptionMeetingOrganizzatore)) {
 				
-				//TODO (forse seconda frase va eliminata)
 				JOptionPane.showMessageDialog(null,"Errore ,ci sono problemi di accavvallamento:"
 						+ "\nControllare che l'organizzatore non partecipi a più meeting contemporaneamente ");
 				int idMeeting=theController.ultimoMeetingInserito();

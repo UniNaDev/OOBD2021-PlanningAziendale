@@ -36,6 +36,8 @@ import org.joda.time.LocalTime;
 import controller.dipendente.ControllerMeeting;
 import controller.dipendente.ControllerPartecipantiMeeting;
 import controller.dipendente.ControllerPartecipantiProgetto;
+import controller.segreteria.ControllerDipendentiSegreteria;
+import eccezioni.ManagerEccezioniDatiSQLDipendente;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
@@ -71,6 +73,7 @@ import entita.CollaborazioneProgetto;
 import javax.swing.JSeparator;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.JSplitPane;
 
 
 
@@ -82,7 +85,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	//Attributi GUI
 	private JPanel contentPane;
 	private JTable progettoTable;
-	private JTextField cercaTextField;
 	private JLabel valutazioneLabel;
 	private JLabel salarioLabel;
 	private final ButtonGroup modalitàButtonGroup = new ButtonGroup();
@@ -101,14 +103,24 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private DefaultListModel listaSkillModel;
 	private JLabel partecipantiLabel;
 	private JComboBox ruoloComboBox;
+	private JComboBox skillFiltroComboBox;
 	private JTextArea nomeProgettotextArea;
 	private JTextField textField_1;
 	private JTextArea ambitiTextArea;
 	private TableRowSorter<TableModel> sorterDipendente;
+	private JTextField etàMinimaTextField;
+	private JTextField etàMassimaTextField;
+	private JTextField salarioMinimoTextField;
+	private JTextField salarioMassimoTextField;
+	private JTextField valutazioneMinimaTextField;
+	private JTextField valutazioneMassimaTextField;
+	private JTextField cercaTextField;
+	private Progetto progettoSelezionato;
 
 	//Creazione frame
 	//---------------------------------------------
 	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato) {
+		this.progettoSelezionato=progettoSelezionato;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1600, 900));
 		
@@ -139,44 +151,29 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
-						.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE))
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(23)
+					.addContainerGap()
 					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+					.addGap(5)
+					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
 					.addContainerGap())
 		);
-		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel comandiPanel2 = new JPanel();
-		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
+		comandiPanel2.setBorder(null);
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-
-		
-		//Label "Cerca"
-		JLabel cercaLabel = new JLabel("Cerca");
-		cercaLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
-		comandiPanel2.add(cercaLabel);
-		
-		//TextField per cercare un meeting
-		cercaTextField = new JTextField();
-		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		comandiPanel2.add(cercaTextField);
-		cercaTextField.setColumns(10);
-		comandiPanel.add(comandiPanel2);
 		
 		//panel interno a quello delle info
 		JPanel infoPanel2 = new JPanel();
@@ -744,6 +741,166 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		comandiPanel2.add(inserisciPartecipanteButton);
 		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		comandiPanel2.add(eliminaPartecipanteButton);
+		
+		JPanel comandiPanel_1 = new JPanel();
+		comandiPanel_1.setBorder(null);
+		
+		JButton filtraButton = new JButton("Filtra");
+		filtraButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				applicaFiltri(controller);
+			}
+
+			
+		});
+		filtraButton.setToolTipText("Clicca per applicare i filtri");
+		filtraButton.setFont(new Font("Consolas", Font.PLAIN, 16));
+		filtraButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtraButton.setBackground(Color.WHITE);
+		
+		cercaTextField = new JTextField();
+		cercaTextField.setText("Nome/Cognome/Email\r\n");
+		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		cercaTextField.setColumns(20);
+		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		etàMinimaTextField = new JTextField();
+		etàMinimaTextField.setText("min");
+		etàMinimaTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+		etàMinimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		etàMinimaTextField.setColumns(10);
+		etàMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		JLabel etàFiltroLabel = new JLabel("Età");
+		etàFiltroLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		etàFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		
+		etàMassimaTextField = new JTextField();
+		etàMassimaTextField.setText("max");
+		etàMassimaTextField.setHorizontalAlignment(SwingConstants.LEFT);
+		etàMassimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		etàMassimaTextField.setColumns(10);
+		etàMassimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		salarioMinimoTextField = new JTextField();
+		salarioMinimoTextField.setText("min");
+		salarioMinimoTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+		salarioMinimoTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		salarioMinimoTextField.setColumns(10);
+		salarioMinimoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		JLabel salarioFiltroLabel = new JLabel("Salario");
+		salarioFiltroLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		salarioFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		
+		salarioMassimoTextField = new JTextField();
+		salarioMassimoTextField.setText("max");
+		salarioMassimoTextField.setHorizontalAlignment(SwingConstants.LEFT);
+		salarioMassimoTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		salarioMassimoTextField.setColumns(10);
+		salarioMassimoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		valutazioneMinimaTextField = new JTextField();
+		valutazioneMinimaTextField.setText("min");
+		valutazioneMinimaTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+		valutazioneMinimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		valutazioneMinimaTextField.setColumns(10);
+		valutazioneMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		JLabel valutazioneFiltroLabel = new JLabel("Valutazione");
+		valutazioneFiltroLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		valutazioneFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		
+		valutazioneMassimaTextField = new JTextField();
+		valutazioneMassimaTextField.setText("max");
+		valutazioneMassimaTextField.setHorizontalAlignment(SwingConstants.LEFT);
+		valutazioneMassimaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		valutazioneMassimaTextField.setColumns(10);
+		valutazioneMassimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		JLabel lblSkill = new JLabel("Skill:");
+		lblSkill.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblSkill.setFont(new Font("Consolas", Font.PLAIN, 13));
+		
+		skillFiltroComboBox = new JComboBox(new Object[]{});
+		skillFiltroComboBox.setModel(new DefaultComboBoxModel(new String[] {"           "}));
+		skillFiltroComboBox.setUI(new BasicComboBoxUI());
+		skillFiltroComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		skillFiltroComboBox.setBackground(Color.WHITE);
+		skillFiltroComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		skillFiltroComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		skillFiltroComboBox.setSelectedItem(null);
+		GroupLayout gl_comandiPanel = new GroupLayout(comandiPanel);
+		gl_comandiPanel.setHorizontalGroup(
+			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_comandiPanel.createSequentialGroup()
+					.addGap(303)
+					.addComponent(comandiPanel2, GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
+					.addGap(302))
+				.addComponent(comandiPanel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+		);
+		gl_comandiPanel.setVerticalGroup(
+			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_comandiPanel.createSequentialGroup()
+					.addGap(5)
+					.addComponent(comandiPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(comandiPanel_1, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
+		);
+		
+		JLabel lblTipologiaProgetto = new JLabel("Tipologia Progetto:");
+		lblTipologiaProgetto.setFont(new Font("Consolas", Font.PLAIN, 13));
+		
+		JComboBox tipologiaProgettoComboBox = new JComboBox(new Object[]{});
+		tipologiaProgettoComboBox.setModel(new DefaultComboBoxModel(new String[] {"         "}));
+		tipologiaProgettoComboBox.setUI(new BasicComboBoxUI());
+		tipologiaProgettoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		tipologiaProgettoComboBox.setBackground(Color.WHITE);
+		tipologiaProgettoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		tipologiaProgettoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		tipologiaProgettoComboBox.setSelectedItem(null);
+		
+		JSeparator separator_1_1 = new JSeparator();
+		separator_1_1.setPreferredSize(new Dimension(1, 30));
+		separator_1_1.setOrientation(SwingConstants.VERTICAL);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setPreferredSize(new Dimension(1, 30));
+		separator_1.setOrientation(SwingConstants.VERTICAL);
+		
+		JSeparator separator_1_2 = new JSeparator();
+		separator_1_2.setPreferredSize(new Dimension(1, 30));
+		separator_1_2.setOrientation(SwingConstants.VERTICAL);
+		
+		JSeparator separator_1_3 = new JSeparator();
+		separator_1_3.setPreferredSize(new Dimension(1, 30));
+		separator_1_3.setOrientation(SwingConstants.VERTICAL);
+		
+		JSeparator separator_1_4 = new JSeparator();
+		separator_1_4.setPreferredSize(new Dimension(1, 30));
+		separator_1_4.setOrientation(SwingConstants.VERTICAL);
+		comandiPanel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		comandiPanel_1.add(filtraButton);
+		comandiPanel_1.add(cercaTextField);
+		comandiPanel_1.add(separator_1_1);
+		comandiPanel_1.add(etàMinimaTextField);
+		comandiPanel_1.add(etàFiltroLabel);
+		comandiPanel_1.add(etàMassimaTextField);
+		comandiPanel_1.add(separator_1);
+		comandiPanel_1.add(salarioMinimoTextField);
+		comandiPanel_1.add(salarioFiltroLabel);
+		comandiPanel_1.add(salarioMassimoTextField);
+		comandiPanel_1.add(separator_1_2);
+		comandiPanel_1.add(valutazioneMinimaTextField);
+		comandiPanel_1.add(valutazioneFiltroLabel);
+		comandiPanel_1.add(valutazioneMassimaTextField);
+		comandiPanel_1.add(separator_1_3);
+		comandiPanel_1.add(lblSkill);
+		comandiPanel_1.add(skillFiltroComboBox);
+		comandiPanel_1.add(separator_1_4);
+		comandiPanel_1.add(lblTipologiaProgetto);
+		comandiPanel_1.add(tipologiaProgettoComboBox);
+		comandiPanel.setLayout(gl_comandiPanel);
 		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		partecipantiLabel = new JLabel("Partecipanti");
@@ -887,8 +1044,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								String ruolo=ruoloComboBox.getSelectedItem().toString();
 								
 								
-//								Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
-								
 								//Creo la collaborazione al progetto
 								CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
 								
@@ -946,5 +1101,59 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		partecipantiLabel.setBackground(Color.BLACK);
 		
 		
+	}
+	
+	private void applicaFiltri(ControllerPartecipantiProgetto controller) {
+		String nomeCognomeEmail = "%";
+		if (!cercaTextField.getText().isBlank())
+			nomeCognomeEmail = cercaTextField.getText();
+		
+		int etàMinima = 0;
+		if (!etàMinimaTextField.getText().isBlank())
+			etàMinima = parseInteger(etàMinimaTextField.getText(), etàMinima);
+		int etàMassima = 100;
+		if (!etàMassimaTextField.getText().isBlank())
+			etàMassima = parseInteger(etàMassimaTextField.getText(), etàMassima);
+		float salarioMinimo = 1;
+		if (!salarioMinimoTextField.getText().isBlank() && !salarioMinimoTextField.getText().equals("min"))
+			salarioMinimo=parseFloat(salarioMinimoTextField.getText(),salarioMinimo);
+		float salarioMassimo = controller.ottieniMaxStipendio();
+		if (!salarioMassimoTextField.getText().isBlank())
+			salarioMassimo=parseFloat(salarioMassimoTextField.getText(),salarioMassimo);
+		float valutazioneMinima = 0;
+		if (!valutazioneMinimaTextField.getText().isBlank())
+			valutazioneMinima=parseFloat(valutazioneMinimaTextField.getText(), valutazioneMinima);
+		float valutazioneMassima = 10;
+		if (!valutazioneMassimaTextField.getText().isBlank())
+			valutazioneMassima=parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
+		Skill skillCercata = null;
+		skillCercata = (Skill) skillFiltroComboBox.getSelectedItem();
+		try {
+		
+			dataModelDipendente.setDipendenteTabella(controller.filtraDipendenti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata,progettoSelezionato));
+			dipendenteTable.setModel(dataModelDipendente);
+			dataModelDipendente.fireTableDataChanged();
+		} catch (SQLException e) {
+		
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	private int parseInteger(String numero, int valoreDefault) {
+		try {
+			return Integer.parseInt(numero);
+		}
+		catch(NumberFormatException e) {
+			return valoreDefault;
+		}
+	}
+	
+	private float parseFloat(String numero, float valoreDefault) {
+		try {
+			return Float.parseFloat(numero);
+			}
+		catch(NumberFormatException e) {
+			return valoreDefault;
+		}
 	}
 }

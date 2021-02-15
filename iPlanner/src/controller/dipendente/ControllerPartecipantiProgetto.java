@@ -73,4 +73,19 @@ public class ControllerPartecipantiProgetto {
 	public void aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		projDAO.updatePartecipanteProgetto(collaborazioneProgetto);
 	}
+	
+	public float ottieniMaxStipendio() {
+		try {
+			return dipDAO.getMaxStipendio();
+		} catch (SQLException e) {
+			return 100000000f;
+		}
+	}
+
+	public ArrayList<Dipendente> filtraDipendenti(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima, Skill skill,Progetto progettoSelezionato) throws SQLException {
+		ArrayList<Dipendente> dipendentiFiltrati = dipDAO.getDipendentiNonPartecipantiFiltrati(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, progettoSelezionato);
+		if (skill != null)
+			dipendentiFiltrati.retainAll(dipDAO.getDipendenteBySkill(skill));
+		return dipendentiFiltrati;
+	}
 }

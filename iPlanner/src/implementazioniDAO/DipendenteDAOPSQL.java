@@ -41,6 +41,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getDipendenteByCFPS,
 		getMaxSalarioPS,
 		getDipendentiFiltratiPS,
+		getDipendentiNonPartecipantiFiltratiPS,
 		getDipendenteBySkillPS;
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
@@ -67,7 +68,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
 		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
 		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome ILIKE '%' || ? || '%' OR d.Cognome ILIKE '%' || ? || '%' OR d.Email ILIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
-		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome LIKE '%' || ? || '%' OR d.Cognome LIKE '%' || ? || '%' OR d.Email LIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
+		getDipendentiNonPartecipantiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome ILIKE '%' || ? || '%' OR d.Cognome ILIKE '%' || ? || '%' OR d.Email ILIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?) AND d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ?)");
 		getDipendenteBySkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT a.CF FROM Abilità AS a WHERE a.IDSkill = ?)");
 	}
 
@@ -286,6 +287,50 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		getDipendentiFiltratiPS.setFloat(9, valutazioneMassima);
 		
 		ResultSet risultato = getDipendentiFiltratiPS.executeQuery();
+		
+		while (risultato.next()) {
+			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			
+			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"), 
+					risultato.getString("Nome"),
+					risultato.getString("Cognome"),
+					risultato.getString("Sesso").charAt(0),
+					new LocalDate(risultato.getDate("DataNascita")),
+					luogoTemp,
+					risultato.getString("Indirizzo"),
+					risultato.getString("Email"),
+					risultato.getString("TelefonoCasa"),
+					risultato.getString("Cellulare"),
+					risultato.getFloat("Salario"),
+					risultato.getString("Password"),
+					
+					this.getValutazione(risultato.getString("CF")));
+			
+			dipendenti.add(dipendenteTemp);
+		}
+		risultato.close();
+		
+		return dipendenti;
+	}
+	
+	@Override
+	public ArrayList<Dipendente> getDipendentiNonPartecipantiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima,
+			float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima,Progetto progettoSelezionato)
+			throws SQLException {
+		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
+		
+		getDipendentiNonPartecipantiFiltratiPS.setString(1, nomeCognomeEmail);
+		getDipendentiNonPartecipantiFiltratiPS.setString(2, nomeCognomeEmail);
+		getDipendentiNonPartecipantiFiltratiPS.setString(3, nomeCognomeEmail);
+		getDipendentiNonPartecipantiFiltratiPS.setInt(4, etàMinima);
+		getDipendentiNonPartecipantiFiltratiPS.setInt(5, etàMassima);
+		getDipendentiNonPartecipantiFiltratiPS.setFloat(6, salarioMinimo);
+		getDipendentiNonPartecipantiFiltratiPS.setFloat(7, salarioMassimo);
+		getDipendentiNonPartecipantiFiltratiPS.setFloat(8, valutazioneMinima);
+		getDipendentiNonPartecipantiFiltratiPS.setFloat(9, valutazioneMassima);
+		getDipendentiNonPartecipantiFiltratiPS.setInt(10, progettoSelezionato.getIdProgettto());
+		
+		ResultSet risultato = getDipendentiNonPartecipantiFiltratiPS.executeQuery();
 		
 		while (risultato.next()) {
 			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));

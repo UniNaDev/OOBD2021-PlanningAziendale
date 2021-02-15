@@ -39,4 +39,8 @@ public interface DipendenteDAO {
 	public ArrayList<Dipendente> getDipendentiNonPartecipanti(Progetto progettoSelezionato) throws SQLException;
 	
 	public String organizzatoreCheck(Meeting meeting) throws SQLException;
+
+	ArrayList<Dipendente> getDipendentiNonPartecipantiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima,
+			float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima,
+			Progetto progettoSelezionato) throws SQLException;
 }
