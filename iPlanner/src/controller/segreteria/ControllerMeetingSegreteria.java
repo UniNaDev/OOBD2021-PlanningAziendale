@@ -64,7 +64,7 @@ public class ControllerMeetingSegreteria {
 	}
 	
 	private void aggiornaSaleFiltro() {
-		gestioneMeetingSegreteriaFrame.aggiornaSale(this);
+		gestioneMeetingSegreteriaFrame.aggiornaFiltroSale(this);
 	}
 
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{

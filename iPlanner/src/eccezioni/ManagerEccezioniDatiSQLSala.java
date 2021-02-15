@@ -1,4 +1,4 @@
-/*Implementazione dell'handler di eccezioni SQL più comuni in caso di INSERT UPDATE o DELETE di sale nel database.
+/*Implementazione dell'handler di eccezioni SQL più comuni per operazioni con le sale nel database.
  *Permette una gestione rapida e chiara delle eccezioni oltre che una rapida costumizzazione
  *dei messaggi di errore e dei consigli se necessario. 
 *****************************************************************************************************************/

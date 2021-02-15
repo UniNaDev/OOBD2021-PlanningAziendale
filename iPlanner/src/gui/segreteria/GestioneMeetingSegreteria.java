@@ -1,3 +1,8 @@
+/*Gui per la gestione dei meeting aziendali.
+ *Qui è possibile visualizzare tutte le informazioni
+ *dei meeting e filtrare tra essi.
+ ***********************************************/
+
 package gui.segreteria;
 
 import javax.swing.JFrame;
@@ -378,7 +383,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		}
 	}
 	
-	public void aggiornaSale(ControllerMeetingSegreteria controller) {
+	public void aggiornaFiltroSale(ControllerMeetingSegreteria controller) {
 		filtroSaleComboBox.removeAllItems();
 		try {
 			for (SalaRiunione sala: controller.ottieniSale())

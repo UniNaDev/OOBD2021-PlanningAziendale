@@ -1,4 +1,4 @@
-/*Implementazione dell'handler di eccezioni SQL più comuni per operazioni con i meeting nel database.
+/*Implementazione dell'handler di eccezioni SQL più comuni per operazioni con i progetti nel database.
  *Permette una gestione rapida e chiara delle eccezioni oltre che una rapida costumizzazione
  *dei messaggi di errore e dei consigli se necessario. 
 *****************************************************************************************************************/
@@ -9,7 +9,8 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-public class ManagerEccezioniDatiSQLMeeting implements ManagerEccezioniDatiSQL {
+public class ManagerEccezioniDatiSQLProgetto implements ManagerEccezioniDatiSQL {
+
 	private String messaggioErrore = "";
 	private String titoloFinestraErrore = "";
 	private String hint = "";
@@ -19,14 +20,10 @@ public class ManagerEccezioniDatiSQLMeeting implements ManagerEccezioniDatiSQL {
 //	private final int lunghezzaMaxCodSala = 10;
 //	private final int lunghezzaMaxIndirizzo = 50;
 	
-	public ManagerEccezioniDatiSQLMeeting(SQLException eccezione) {
+	public ManagerEccezioniDatiSQLProgetto(SQLException eccezione) {
 		switch(eccezione.getSQLState()) {
 		//TODO: implementare altri casi
-		case VIOLAZIONE_RAPPRESENZATIONE_ENUMERAZIONE:
-			setTitoloFinestraErrore("Errore Valore Non Valido");
-			setMessaggioErrore("Valore modalità del meeting non valido.");
-			setHint("Controllare che sia Fisico o Telematico.");
-			break;
+		
 		default:
 			setTitoloFinestraErrore("Errore #" + eccezione.getSQLState());
 			setMessaggioErrore(eccezione.getMessage());
