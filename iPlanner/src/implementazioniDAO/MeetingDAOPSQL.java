@@ -544,4 +544,14 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		
 		return meetings;
 	}
+
+	@Override
+	public int getLastIdMeeting() throws SQLException {
+		
+		ResultSet risultato=lastIdMeetingPS.executeQuery();
+		risultato.next();
+		
+		int idMeeting=risultato.getInt("IdMeeting");
+		return idMeeting;
+	}
 }

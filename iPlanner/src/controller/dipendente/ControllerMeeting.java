@@ -135,5 +135,10 @@ public class ControllerMeeting {
 		return meetDAO.getMeetingsDipendenteByPiattaforma(piattaforma,dipendenteLogged);
 	}
 
+	public int ultimoMeetingInserito() throws SQLException {
+		
+		return meetDAO.getLastIdMeeting();
+	}
+
 
 }

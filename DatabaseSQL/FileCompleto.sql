@@ -425,7 +425,7 @@ $$;
 ------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER capienza_rispettata_meeting AFTER UPDATE OF CodSala ON Meeting
+CREATE TRIGGER capienza_rispettata_meeting BEFORE INSERT OR UPDATE OF CodSala ON Meeting
 FOR EACH ROW
 EXECUTE PROCEDURE check_capienza_meeting();
 -----------------------------------------------------------------------------
@@ -510,7 +510,8 @@ $$;
 CREATE TRIGGER no_onnipresenza_presenza AFTER INSERT OR UPDATE ON Presenza
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_presenza();
---------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 /*TRIGGER PER ONNIPRESENZA DEI DIPENDENTI NEI MEETING (MEETING)
 **Ad ogni update della tabella Meeting controlla che
@@ -556,7 +557,7 @@ $$;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER no_onnipresenza_meeting AFTER INSERT OR UPDATE ON Meeting
+CREATE TRIGGER no_onnipresenza_meeting BEFORE INSERT OR UPDATE ON Meeting
 FOR EACH ROW
 EXECUTE PROCEDURE check_onnipresenza_meeting();
 ----------------------------------------------------------------

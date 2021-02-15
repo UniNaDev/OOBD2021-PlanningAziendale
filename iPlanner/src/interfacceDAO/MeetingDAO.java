@@ -49,6 +49,8 @@ public interface MeetingDAO {
 	public ArrayList<Meeting> getMeetingsDipendenteBySala(SalaRiunione sala, Dipendente dipendente) throws SQLException;
 
 	public ArrayList<Meeting> getMeetingsDipendenteByPiattaforma(String piattaforma, Dipendente dipendente) throws SQLException;
+
+	public int getLastIdMeeting() throws SQLException;
 	
 
 }

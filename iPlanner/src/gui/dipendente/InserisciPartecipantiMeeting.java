@@ -655,10 +655,10 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					} catch (SQLException e1) {
 						
 						
-						if(e1.getSQLState().equals("70000"))
+						if(e1.getSQLState().equals("P0002"))
 							JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
 						
-						if(e1.getSQLState().equals("P0001"))
+						if(e1.getSQLState().equals("P0003"))
 							JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
 						
 						

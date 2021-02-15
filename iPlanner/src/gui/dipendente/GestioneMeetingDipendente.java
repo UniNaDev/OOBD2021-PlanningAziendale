@@ -40,6 +40,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
 import controller.segreteria.ControllerMeetingSegreteria;
+import eccezioni.ManagerEccezioniDatiSQL;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
@@ -332,21 +333,19 @@ public class GestioneMeetingDipendente extends JFrame {
 					
 					meetingScrollPane.setViewportView(meetingTable);
 				} catch (SQLException e1) {
-						
 					
-					if(e1.getSQLState().equals("71000"))
-						JOptionPane.showMessageDialog(null, "Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare"
-								+ "\nControllare che la piattaforma inserita non sia già utilizzata per un meeting relativo al progetto da discutere nelle date e orari inseriti.");
+					if(e1.getSQLState().equals("P0003"))
+						JOptionPane.showMessageDialog(null, "Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare"
+								+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti");
 					
-					if(e1.getSQLState().equals("70000"))
+					if(e1.getSQLState().equals("P0002"))
 						JOptionPane.showMessageDialog(null, "Errore: I partecipanti al meeting che si vuole modificare sono maggiori "
 								+ "\nrispetto alla capienza massima della sala");		
 					
 					if(e1.getSQLState().equals("P0001"))	
-						JOptionPane.showMessageDialog(null,"Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare"
+						JOptionPane.showMessageDialog(null,"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare"
 								+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti");
 					
-				
 				}
 			}
 				
@@ -1386,22 +1385,26 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 		} catch (SQLException e1) {
 			
-			String raiseExceptionMeetingTelematici= "71000";
+			
 			String raiseExceptionMeetingFisici="P0001";
+			String raiseExceptionMeetingOrganizzatore="P0003";
 			
-			if(e1.getSQLState().equals(raiseExceptionMeetingTelematici))
-				JOptionPane.showMessageDialog(null, "Ci sono problemi di accavallamento con il meeting che si sta tentando di inserire"
-						+ "\n1)Controllare che la piattaforma inserita non sia già utilizzata per un meeting relativo al progetto da discutere nelle date e orari inseriti."
-						+ "\n2)Controllare che il meeting inserito non sia già presente");
-			
-			if(e1.getSQLState().equals("23505"))
-				JOptionPane.showMessageDialog(null, "Il meeting inserito è già presente");
+			if(e1.getSQLState().equals(raiseExceptionMeetingOrganizzatore)) {
+				
+				//TODO (forse seconda frase va eliminata)
+				JOptionPane.showMessageDialog(null,"Errore ,ci sono problemi di accavvallamento:"
+						+ "\nControllare che l'organizzatore non partecipi a più meeting contemporaneamente ");
+				int idMeeting=theController.ultimoMeetingInserito();
+				theController.rimuoviMeeting(idMeeting);
+				
+			}
+				
 			
 			if(e1.getSQLState().equals(raiseExceptionMeetingFisici))	
 			JOptionPane.showMessageDialog(null,"Ci sono problemi di accavallamento con il meeting che si sta tentando di inserire"
 					+ "\n 1)Controllare che la sala inserita non sia già occupata per le date e orari inseriti"
 					+ "\n 2)Controllare che il meeting inserito non sia già presente");
-					
+	
 		}
 		
 		
