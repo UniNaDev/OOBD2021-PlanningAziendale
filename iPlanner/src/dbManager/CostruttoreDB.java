@@ -73,7 +73,6 @@ public class CostruttoreDB {
                 		+ "	\r\n"
                 		+ "	PRIMARY KEY (IDSkill),\r\n"
                 		+ "	UNIQUE (NomeSkill),\r\n"
-                		+ "    CONSTRAINT NomeSkillLegit CHECK (NomeSkill ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$')\r\n"
                 		+ ");";
                 risultato = statement.executeUpdate(createTable);              
                 statement.close();

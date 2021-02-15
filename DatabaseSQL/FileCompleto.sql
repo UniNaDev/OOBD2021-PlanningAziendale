@@ -99,7 +99,6 @@ CREATE TABLE Skill(
 	
 	PRIMARY KEY (IDSkill),
 	UNIQUE (NomeSkill),
-    CONSTRAINT NomeSkillLegit CHECK (NomeSkill ~* '^[A-Za-zÀ-ÿ]+''?[ A-Za-zÀ-ÿ]+$')
 );
 
 
@@ -652,7 +651,7 @@ $$;
 --------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER unicità_projectmanager BEFORE INSERT OR UPDATE ON Partecipazione
+CREATE TRIGGER unicità_projectmanager BEFORE INSERT ON Partecipazione
 FOR EACH ROW
 EXECUTE PROCEDURE check_projectmanager();
 --------------------------------------------------------------------------------

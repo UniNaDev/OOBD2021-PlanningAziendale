@@ -5,6 +5,7 @@ package gui.segreteria;
 import controller.segreteria.ControllerDipendentiSegreteria;
 import eccezioni.ManagerEccezioniDatiSQLDipendente;
 import eccezioni.ManagerEccezioniDatiSQLLuogo;
+import eccezioni.ManagerEccezioniDatiSQLSkill;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -154,6 +155,7 @@ public class GestioneDipendenti extends JFrame {
 	
 	private ManagerEccezioniDatiSQLDipendente eccezioniSQLDipendente;
 	private ManagerEccezioniDatiSQLLuogo eccezioniSQLLuogo;
+	private ManagerEccezioniDatiSQLSkill eccezioniSQLSkill;
 	
 	private final String VIOLAZIONE_NOT_NULL = "23502";
 	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
@@ -1038,50 +1040,31 @@ public class GestioneDipendenti extends JFrame {
 	}
 	
 	private void creaSkill(ControllerDipendentiSegreteria controller) {
+		nuovaSkillTextField.setForeground(Color.BLACK);
+		
 		try {
-			//TODO: creare handler eccezioni per le skill
 			controller.creaNuovaSkill(nuovaSkillTextField.getText());
-			DefaultListModel<Skill> skillModel = new DefaultListModel<Skill>();
-			skillModel.addAll(controller.ottieniSkill());
-			skillsList.setModel(skillModel);
-			skillFiltroComboBox.removeAllItems();
-			skillFiltroComboBox.addItem(null);
-			for (Skill skill: controller.ottieniSkill())
-				skillFiltroComboBox.addItem(skill);
-			nuovaSkillTextField.setText("");
-			} 
-		catch (SQLException e1) {
-			if (e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
-				JOptionPane.showMessageDialog(null,
-						"La skill " + nuovaSkillTextField.getText() + " esiste già.",
-						"Errore Skill Esistente",
-						JOptionPane.ERROR_MESSAGE);
-			}
-			else if (e1.getSQLState().equals(VIOLAZIONE_NOT_NULL)) {
-				JOptionPane.showMessageDialog(null,
-						"Per favore inserici il nome della skill.",
-						"Errore Nome Skill",
-						JOptionPane.ERROR_MESSAGE);
-			}
-			else if(e1.getSQLState().equals(VIOLAZIONE_VINCOLI_TABELLA)) {
-				JOptionPane.showMessageDialog(null,
-						"Il formato del nome della skill non è corretto\noppure il nome è vuoto.",
-						"Errore Nome Skill",
-						JOptionPane.ERROR_MESSAGE);
-			}
-			else if(e1.getSQLState().equals(VIOLAZIONE_LUNGHEZZA_STRINGA)) {
-				JOptionPane.showMessageDialog(null,
-						"Il nome della skill è troppo lungo./nControlla che non superi i 50 caratteri.",
-						"Errore Skill Lunga",
-						JOptionPane.ERROR_MESSAGE);
-			}
-			else {
-				JOptionPane.showMessageDialog(null,
-						e1.getMessage() + "\nContattare uno sviluppatore.",
-						"Errore #" + e1.getErrorCode(),
-						JOptionPane.ERROR_MESSAGE);
-			}
+		} catch (SQLException e1) {
+			eccezioniSQLSkill = new ManagerEccezioniDatiSQLSkill(e1);
+			eccezioniSQLSkill.mostraErrore();
+			nuovaSkillTextField.setForeground(Color.RED);
 		}
+		DefaultListModel<Skill> skillListModel = new DefaultListModel<Skill>();
+		ArrayList<Skill> skills = new ArrayList<Skill>();
+		try {
+			skills = controller.ottieniSkill();
+		} catch (SQLException e1) {
+			eccezioniSQLSkill = new ManagerEccezioniDatiSQLSkill(e1);
+			eccezioniSQLSkill.mostraErrore();
+			nuovaSkillTextField.setForeground(Color.RED);
+		}
+		skillListModel.addAll(skills);
+		skillsList.setModel(skillListModel);
+		skillFiltroComboBox.removeAllItems();
+		skillFiltroComboBox.addItem(null);
+		for (Skill skill : skills)
+			skillFiltroComboBox.addItem(skill);
+		nuovaSkillTextField.setText("");
 	}
 	
 	private void applicaFiltri(ControllerDipendentiSegreteria controller) {
@@ -1128,10 +1111,8 @@ public class GestioneDipendenti extends JFrame {
 				i++;
 				skillsList.setSelectedIndices(indici);
 			} catch (SQLException e1) {
-				//TODO: handler per le skills
-				JOptionPane.showMessageDialog(null,
-						"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
-						"Errore Interrogazione Database", JOptionPane.ERROR_MESSAGE);
+				eccezioniSQLSkill = new ManagerEccezioniDatiSQLSkill(e1);
+				eccezioniSQLSkill.mostraErrore();
 			}
 		}
 	}
@@ -1158,25 +1139,20 @@ public class GestioneDipendenti extends JFrame {
 	
 	private void inizializzaSkillList(ControllerDipendentiSegreteria controller) {
 		try {
-			//TODO: handler per skills
 			skillsList = new JList(controller.ottieniSkill().toArray());
 		} catch (SQLException e2) {
-			JOptionPane.showMessageDialog(null,
-				"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
-				"Errore Interrogazione Database",
-				JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLSkill = new ManagerEccezioniDatiSQLSkill(e2);
+			eccezioniSQLSkill.mostraErrore();
 		}
 	}
 	
 	private void inizializzaFiltroSkillComboBox(ControllerDipendentiSegreteria controller) {
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		try {
-			// TODO: handler per skills
 			skills = controller.ottieniSkill();
 		} catch (SQLException e2) {
-			JOptionPane.showMessageDialog(null,
-					"Impossibile ottenere tutte le skill dal database.\nControllare che la connessione al database sia stabilita.",
-					"Errore Interrogazione Database", JOptionPane.ERROR_MESSAGE);
+			eccezioniSQLSkill = new ManagerEccezioniDatiSQLSkill(e2);
+			eccezioniSQLSkill.mostraErrore();
 		}
 		skills.add(0, null);
 		skillFiltroComboBox = new JComboBox(skills.toArray());
