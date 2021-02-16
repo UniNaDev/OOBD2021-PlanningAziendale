@@ -91,22 +91,8 @@ public class ControllerGestioneProfilo {
 	return meetDAO.getMeetingsByInvitato(dipendenteLogged);
     }
 
-    public void aggiornaInfoDipendente(String nome, String cognome, char sesso, LocalDate dataNascita,
-	    LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare,
-	    String indirizzo) throws SQLException {
-	dipendenteLogged.setNome(nome);
-	dipendenteLogged.setCognome(cognome);
-	dipendenteLogged.setSesso(sesso);
-	dipendenteLogged.setDataNascita(dataNascita);
-	dipendenteLogged.setLuogoNascita(luogoNascita);
-	if (!dipendenteLogged.getEmail().equals(email))
-	    dipendenteLogged.setEmail(email);
-	dipendenteLogged.setPassword(password);
-	dipendenteLogged.setTelefonoCasa(telefono);
-	dipendenteLogged.setCellulare(cellulare);
-	dipendenteLogged.setIndirizzo(indirizzo);
-
-	dipDAO.updateDipendente(dipendenteLogged);
+    public void aggiornaInfoDipendente(Dipendente dipendenteModificato) throws SQLException {
+	dipDAO.updateDipendente(dipendenteModificato);
     }
 
     public ArrayList<String> ottieniProvince() throws SQLException {

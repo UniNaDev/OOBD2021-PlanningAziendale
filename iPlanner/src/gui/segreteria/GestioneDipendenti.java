@@ -632,12 +632,12 @@ public class GestioneDipendenti extends JFrame {
 		    confermaPasswordLabel.setForeground(Color.RED);
 		} else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
 		    JOptionPane.showMessageDialog(null,
-			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
 			    "Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
 		    telefonoFissoLabel.setForeground(Color.RED);
 		} else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
 		    JOptionPane.showMessageDialog(null,
-			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
 			    "Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
 		    cellulareLabel.setForeground(Color.RED);
 		} else {
@@ -778,12 +778,12 @@ public class GestioneDipendenti extends JFrame {
 			confermaPasswordLabel.setForeground(Color.RED);
 		    } else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
 			JOptionPane.showMessageDialog(null,
-				"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+				"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
 				"Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
 			telefonoFissoLabel.setForeground(Color.RED);
 		    } else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
 			JOptionPane.showMessageDialog(null,
-				"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+				"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
 				"Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
 			cellulareLabel.setForeground(Color.RED);
 		    } else {
@@ -930,8 +930,7 @@ public class GestioneDipendenti extends JFrame {
 		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 	}
 	email = emailTextField.getText();
-	if (!passwordField.getText().isBlank())
-	    password = passwordField.getText();
+	password = passwordField.getText();
 	if (!telefonoFissoTextField.getText().isBlank())
 	    telefono = telefonoFissoTextField.getText();
 	if (!cellulareTextField.getText().isBlank())
