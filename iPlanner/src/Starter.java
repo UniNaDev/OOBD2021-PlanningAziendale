@@ -1,20 +1,19 @@
 //Classe main del programma
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.ColorUIResource;
 
 import controller.ControllerStart;
 import dbManager.CostruttoreDB;
 import dbManager.ManagerConnessioneDB;
+import gui.customUI.DefaultLookManager;
 import implementazioniDAO.AmbitoProgettoDAOPSQL;
 import implementazioniDAO.DipendenteDAOPSQL;
 import implementazioniDAO.LuogoNascitaDAOPSQL;
@@ -33,19 +32,8 @@ import interfacceDAO.SkillDAO;
 public class Starter {
 
     public static void main(String[] args) {
-
-	// L'UIMANAGER IMPOSTA UNA SERIE DI PROPRIETÀ PER TUTTI COMPONENTI UI PRESENTI
-	// NEL SOFTWARE
-
-	UIManager.put("OptionPane.messageFont", new Font("Consolas", Font.PLAIN, 15)); // font dei JOptionPane
-	UIManager.put("OptionPane.buttonFont", new Font("Consolas", Font.PLAIN, 15)); // font dei bottoni nei
-										      // JOptionPane
-
-	UIManager.put("Button.background", Color.WHITE); // sfondo di tutti i bottoni compresi quelli dei JOptionPane
-	UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0))); // rimuove il rettangolo di selezione
-										   // presente normalmente quando si
-										   // preme su un bottone
-	UIManager.put("Button.border", new MatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY)); // border di tutti i bottoni
+	DefaultLookManager lookManager = new DefaultLookManager();
+	lookManager.setDefaultLook();
 	
 	try {
 	    ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
