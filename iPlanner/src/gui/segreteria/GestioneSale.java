@@ -59,7 +59,10 @@ public class GestioneSale extends JFrame {
 	private JList saleList;
 	private JLabel nomeSalaLabel, capienzaLabel, indirizzoLabel, pianoLabel;
 	
-	private ManagerEccezioniDatiSQLSala eccezioniSQLSala;
+	private final String VIOLAZIONE_NOT_NULL = "23502";
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
+	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
 	
 	public GestioneSale(ControllerMeetingSegreteria controller) {
 		addWindowListener(new WindowAdapter() {
@@ -336,34 +339,6 @@ public class GestioneSale extends JFrame {
 				JOptionPane.ERROR_MESSAGE);
 	}
 	
-	private void feedbackEccezioniSQLGUI(String SQLState) {
-		if (SQLState.equals(eccezioniSQLSala.VIOLAZIONE_PKEY_UNIQUE)) {
-			 nomeSalaLabel.setForeground(Color.RED);
-		}
-		else if (SQLState.equals(eccezioniSQLSala.VIOLAZIONE_NOT_NULL)) {
-			if (nomeSalaTextField.getText().isBlank())
-				nomeSalaLabel.setForeground(Color.RED);
-			if (capienzaTextField.getText().isBlank())
-				capienzaLabel.setForeground(Color.RED);
-			if (indirizzoTextArea.getText().isBlank())
-				indirizzoLabel.setForeground(Color.RED);
-			if (pianoTextField.getText().isBlank())
-				pianoLabel.setForeground(Color.RED);
-		}
-		else if (SQLState.equals(eccezioniSQLSala.VIOLAZIONE_VINCOLI_TABELLA)) {
-			if (Integer.parseInt(capienzaTextField.getText()) < 0)
-				capienzaLabel.setForeground(Color.RED);
-			if (Integer.parseInt(pianoTextField.getText()) < 0)
-				pianoLabel.setForeground(Color.RED);
-		}
-		else if (SQLState.equals(eccezioniSQLSala.VIOLAZIONE_LUNGHEZZA_STRINGA)) {
-			if (nomeSalaTextField.getText().length() > eccezioniSQLSala.getLunghezzaMaxCodSala())
-				nomeSalaLabel.setForeground(Color.RED);
-			if (indirizzoTextArea.getText().length() > eccezioniSQLSala.getLunghezzaMaxIndirizzo())
-				indirizzoLabel.setForeground(Color.RED);
-		}
-	}
-	
 	private void aggiornaSala(ControllerMeetingSegreteria controller) {
 		try {
 			controller.aggiornaSala(nomeSalaTextField.getText(),
@@ -372,9 +347,51 @@ public class GestioneSale extends JFrame {
 			saleListModel.clear();
 			setModelloListaSaleTutte(controller);
 		} catch (SQLException e1) {
-			eccezioniSQLSala = new ManagerEccezioniDatiSQLSala(e1);
-			eccezioniSQLSala.mostraErrore();
-			feedbackEccezioniSQLGUI(e1.getSQLState());
+			switch(e1.getSQLState()) {
+			case VIOLAZIONE_PKEY_UNIQUE:
+				JOptionPane.showMessageDialog(null,
+						"Non possono esistere sale duplicate.\nControllare il codice della sala.",
+						"Errore Sale Identiche",
+						JOptionPane.ERROR_MESSAGE);
+				 nomeSalaLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_NOT_NULL:
+				JOptionPane.showMessageDialog(null,
+						"Alcuni valori obbligatori sono nulli.\nControllare il codice, la capienza, l'indirizzo e il piano della sala.",
+						"Errore Valori Nulli",
+						JOptionPane.ERROR_MESSAGE);
+				if (nomeSalaTextField.getText().isBlank())
+					nomeSalaLabel.setForeground(Color.RED);
+				if (capienzaTextField.getText().isBlank())
+					capienzaLabel.setForeground(Color.RED);
+				if (indirizzoTextArea.getText().isBlank())
+					indirizzoLabel.setForeground(Color.RED);
+				if (pianoTextField.getText().isBlank())
+					pianoLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_LUNGHEZZA_STRINGA:
+				JOptionPane.showMessageDialog(null,
+						"Alcuni valori sono troppo lunghi.\nControllare che il codice della sala non superi i 10 caratteri\ne che il suo indirizzo non superi i 50 caratteri.",
+						"Errore Valori Troppo Lunghi",
+						JOptionPane.ERROR_MESSAGE);
+				if (nomeSalaTextField.getText().length() > 10)
+					nomeSalaLabel.setForeground(Color.RED);
+				if (indirizzoTextArea.getText().length() > 50)
+					indirizzoLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_VINCOLI_TABELLA:
+				JOptionPane.showMessageDialog(null,
+						"Alcuni valori sono errati.\nControllare che piano e capienza non siano valori negativi.",
+						"Errore Valori Errati",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			//TODO: manca vincolo accavallamento sala
+			default:
+				JOptionPane.showMessageDialog(null,
+						e1.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+						"Errore #" + e1.getSQLState(),
+						JOptionPane.ERROR_MESSAGE);
+			}
 		} catch (NumberFormatException nfe) {
 			JOptionPane.showMessageDialog(null,
 					"I valori di capienza e/o piano sono errati.\nControlla che siano valori numerici.",
@@ -392,9 +409,51 @@ public class GestioneSale extends JFrame {
 				saleListModel.addElement(salaNuova);
 				pulisciCampi();
 			} catch (SQLException e1) {
-				eccezioniSQLSala = new ManagerEccezioniDatiSQLSala(e1);
-				eccezioniSQLSala.mostraErrore();
-				feedbackEccezioniSQLGUI(e1.getSQLState());
+				switch(e1.getSQLState()) {
+				case VIOLAZIONE_PKEY_UNIQUE:
+					JOptionPane.showMessageDialog(null,
+							"Non possono esistere sale duplicate.\nControllare il codice della sala.",
+							"Errore Sale Identiche",
+							JOptionPane.ERROR_MESSAGE);
+					 nomeSalaLabel.setForeground(Color.RED);
+					break;
+				case VIOLAZIONE_NOT_NULL:
+					JOptionPane.showMessageDialog(null,
+							"Alcuni valori obbligatori sono nulli.\nControllare il codice, la capienza, l'indirizzo e il piano della sala.",
+							"Errore Valori Nulli",
+							JOptionPane.ERROR_MESSAGE);
+					if (nomeSalaTextField.getText().isBlank())
+						nomeSalaLabel.setForeground(Color.RED);
+					if (capienzaTextField.getText().isBlank())
+						capienzaLabel.setForeground(Color.RED);
+					if (indirizzoTextArea.getText().isBlank())
+						indirizzoLabel.setForeground(Color.RED);
+					if (pianoTextField.getText().isBlank())
+						pianoLabel.setForeground(Color.RED);
+					break;
+				case VIOLAZIONE_LUNGHEZZA_STRINGA:
+					JOptionPane.showMessageDialog(null,
+							"Alcuni valori sono troppo lunghi.\nControllare che il codice della sala non superi i 10 caratteri\ne che il suo indirizzo non superi i 50 caratteri.",
+							"Errore Valori Troppo Lunghi",
+							JOptionPane.ERROR_MESSAGE);
+					if (nomeSalaTextField.getText().length() > 10)
+						nomeSalaLabel.setForeground(Color.RED);
+					if (indirizzoTextArea.getText().length() > 50)
+						indirizzoLabel.setForeground(Color.RED);
+					break;
+				case VIOLAZIONE_VINCOLI_TABELLA:
+					JOptionPane.showMessageDialog(null,
+							"Alcuni valori sono errati.\nControllare che piano e capienza non siano valori negativi.",
+							"Errore Valori Errati",
+							JOptionPane.ERROR_MESSAGE);
+					break;
+				//TODO: manca vincolo accavallamento sala
+				default:
+					JOptionPane.showMessageDialog(null,
+							e1.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+							"Errore #" + e1.getSQLState(),
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}catch(NumberFormatException nfe) {
 			JOptionPane.showMessageDialog(null,
@@ -417,8 +476,10 @@ public class GestioneSale extends JFrame {
 			else
 				saleList.setSelectedIndex(0);
 		} catch (SQLException e1) {
-			eccezioniSQLSala = new ManagerEccezioniDatiSQLSala(e1);
-			eccezioniSQLSala.mostraErrore();
+			JOptionPane.showMessageDialog(null,
+					e1.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e1.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -426,8 +487,10 @@ public class GestioneSale extends JFrame {
 		try {
 			saleListModel.addAll(controller.ottieniSale());
 		} catch (SQLException e) {
-			eccezioniSQLSala = new ManagerEccezioniDatiSQLSala(e);
-			eccezioniSQLSala.mostraErrore();
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 			saleListModel.clear();
 		}
 		saleList.setModel(saleListModel);

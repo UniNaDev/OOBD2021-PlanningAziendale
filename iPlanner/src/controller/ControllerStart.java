@@ -42,7 +42,7 @@ public class ControllerStart {
 		
 		this.isSegreteria = isSegreteria;
 		
-		iPlannerFrame=new iPlanner(this, isSegreteria);
+		iPlannerFrame = new iPlanner(this, isSegreteria);
 		iPlannerFrame.setVisible(true);		
 	}
 	
@@ -61,9 +61,8 @@ public class ControllerStart {
 		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}
 	
-	//Metodo che indirizza al controller gestione meeting della segreteria
 	public void vaiAGestioneMeeting() {
-		iPlannerFrame.setVisible(false);	//chiude la finestra di scelta
+		iPlannerFrame.setVisible(false);
 		ControllerMeetingSegreteria controller = new ControllerMeetingSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}
 }

@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 
+import javax.swing.JOptionPane;
+
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 
@@ -17,6 +19,8 @@ public class CostruttoreDB {
     
     private final String pathCSVLuoghi = "lib/Comuni.csv";
 
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+    
     public CostruttoreDB(Connection connection) {
         this.connection = connection;
     }
@@ -59,20 +63,20 @@ public class CostruttoreDB {
     	return false;
     }
 
-    //CREAZIONE TABELLE - ENUMERAZIONI
+    //CREAZIONE TABELLE ED ENUMERAZIONI
 	//------------------------------------------------
     
     private int creaTabellaSkill() throws SQLException{
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("Skill")) {
+            if (!esisteTabella("skill")) {
                 String createTable = "CREATE TABLE Skill(\r\n"
                 		+ "	IDSkill SERIAL,\r\n"
                 		+ "	NomeSkill varchar(50) NOT NULL,\r\n"
                 		+ "	\r\n"
                 		+ "	PRIMARY KEY (IDSkill),\r\n"
-                		+ "	UNIQUE (NomeSkill),\r\n"
+                		+ "	UNIQUE (NomeSkill)\r\n"
                 		+ ");";
                 risultato = statement.executeUpdate(createTable);              
                 statement.close();
@@ -85,7 +89,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("LuogoNascita")) {
+            if (!esisteTabella("luogonascita")) {
                 String createTable = "CREATE TABLE LuogoNascita(\r\n"
                 		+ "	NomeComune varchar(50) NOT NULL,\r\n"
                 		+ "	NomeProvincia varchar(50) NOT NULL,\r\n"
@@ -105,7 +109,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("SalaRiunione")) {
+            if (!esisteTabella("salariunione")) {
                 String createTable = "CREATE TABLE SalaRiunione(\r\n"
                 		+ "	CodSala varchar(10) ,\r\n"
                 		+ "	Capienza integer NOT NULL,\r\n"
@@ -127,7 +131,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("AmbitoProgetto")) {
+            if (!esisteTabella("ambitoprogetto")) {
                 String createTable = "CREATE TABLE AmbitoProgetto(\r\n"
                 		+ "	IDAmbito SERIAL,\r\n"
                 		+ "	NomeAmbito VARCHAR(20) NOT NULL,\r\n"
@@ -165,7 +169,7 @@ public class CostruttoreDB {
 	    if(connessioneEsiste()) {
 			creaEnumTipologia();
 	        Statement statement = connection.createStatement();
-	        if (!esisteTabella("Progetto")) {
+	        if (!esisteTabella("progetto")) {
 	            String createTable = "CREATE TABLE Progetto (\r\n"
 	            		+ "	CodProgetto SERIAL,\r\n"
 	            		+ "	NomeProgetto varchar(100) NOT NULL,\r\n"
@@ -190,7 +194,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("Dipendente")) {
+            if (!esisteTabella("dipendente")) {
                 String createTable = "CREATE TABLE Dipendente(\r\n"
                 		+ "	CF char(16),\r\n"
                 		+ "	Nome varchar(30) NOT NULL,\r\n"
@@ -266,7 +270,7 @@ public class CostruttoreDB {
 	    	creaEnumModalita();
 	    	creaEnumPiattaforma();
             Statement statement = connection.createStatement();
-            if (!esisteTabella("Meeting")) {
+            if (!esisteTabella("meeting")) {
                 String createTable = "CREATE TABLE Meeting(\r\n"
                 		+ "	IDMeeting SERIAL,\r\n"
                 		+ "	DataInizio DATE NOT NULL,\r\n"
@@ -301,7 +305,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("AmbitoProgettoLink")) {
+            if (!esisteTabella("ambitoprogettolink")) {
                 String createTable = "CREATE TABLE AmbitoProgettoLink(\r\n"
                 		+ "	IDAmbito integer NOT NULL,\r\n"
                 		+ "	CodProgetto integer NOT NULL,\r\n"
@@ -338,7 +342,7 @@ public class CostruttoreDB {
 	    if(connessioneEsiste()) {
 	    	creaEnumRuolo();
             Statement statement = connection.createStatement();
-            if (!esisteTabella("Partecipazione")) {
+            if (!esisteTabella("partecipazione")) {
                 String createTable = "CREATE TABLE Partecipazione(\r\n"
                 		+ "	CodProgetto integer NOT NULL,\r\n"
                 		+ "	CF char(16) NOT NULL,\r\n"
@@ -360,7 +364,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("Abilità")) {
+            if (!esisteTabella("abilità")) {
                 String createTable = "CREATE TABLE Abilità(\r\n"
                 		+ "	IDSkill integer,\r\n"
                 		+ "	CF char(16) NOT NULL,\r\n"
@@ -381,7 +385,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTabella("Presenza")) {
+            if (!esisteTabella("presenza")) {
                 String createTable = "CREATE TABLE Presenza(\r\n"
                 		+ "	CF char(16) NOT NULL,\r\n"
                 		+ "	IDMeeting integer NOT NULL ,\r\n"
@@ -890,7 +894,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTrigger("CF_uppercase_Abilità")) {
+            if (!esisteTrigger("cf_uppercase_abilità")) {
                 String createTrigger = "CREATE TRIGGER CF_uppercase_Abilità\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Abilità\r\n"
@@ -925,7 +929,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTrigger("CF_uppercase_Dipendente")) {
+            if (!esisteTrigger("cf_uppercase_dipendente")) {
                 String createTrigger = "CREATE TRIGGER CF_uppercase_Dipendente\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Dipendente\r\n"
@@ -960,7 +964,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTrigger("CF_uppercase_Presenza")) {
+            if (!esisteTrigger("cf_uppercase_presenza")) {
                 String createTrigger = "CREATE TRIGGER CF_uppercase_Presenza\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Presenza\r\n"
@@ -995,7 +999,7 @@ public class CostruttoreDB {
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
-            if (!esisteTrigger("CF_uppercase_Partecipazione")) {
+            if (!esisteTrigger("cf_uppercase_partecipazione")) {
                 String createTrigger = "CREATE TRIGGER CF_uppercase_Partecipazione\r\n"
                 		+ "  BEFORE INSERT OR UPDATE\r\n"
                 		+ "  ON Partecipazione\r\n"
@@ -1093,21 +1097,33 @@ public class CostruttoreDB {
 		try {
 			copyManager = new CopyManager((BaseConnection) connection);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, 
+					e1.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e1.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
     	BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(pathCSVLuoghi));
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, 
+					"Impossibile trovare il file Comuni.csv.\nVerificare che il file esista\noppure contattare uno sviluppatore.",
+					"Errore File Non Trovato",
+					JOptionPane.ERROR_MESSAGE);
 		}
     	try {
 			copyManager.copyIn("COPY LuogoNascita (NomeComune,NomeProvincia,CodComune) FROM STDIN WITH (FORMAT CSV, DELIMITER ';')", reader);
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, 
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore Importazione",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (SQLException e1) {
+			if (!e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))
+				JOptionPane.showMessageDialog(null, 
+					e1.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e1.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
     }
 }
