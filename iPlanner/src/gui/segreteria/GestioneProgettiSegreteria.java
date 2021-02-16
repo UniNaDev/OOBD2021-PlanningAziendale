@@ -550,7 +550,6 @@ public class GestioneProgettiSegreteria extends JFrame {
 			controller.creaAmbitoProgetto(ambitoNuovoTextField.getText());
 		} catch (SQLException e) {
 			switch(e.getSQLState()) {
-			//TODO: controllare se ci siano altre eccezioni possibili
 			case VIOLAZIONE_PKEY_UNIQUE:
 				JOptionPane.showMessageDialog(null,
 						"Non possono esistere ambiti duplicati." +
