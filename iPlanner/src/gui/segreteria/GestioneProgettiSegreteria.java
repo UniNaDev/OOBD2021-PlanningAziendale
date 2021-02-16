@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import entita.AmbitoProgetto;
+import entita.CollaborazioneProgetto;
 import entita.Meeting;
 import entita.Progetto;
 import gui.cellRenderers.MeetingListRenderer;
@@ -52,8 +53,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.segreteria.ControllerProgettiSegreteria;
-import eccezioni.ManagerEccezioniDatiSQLAmbito;
-import eccezioni.ManagerEccezioniDatiSQLProgetto;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -68,23 +67,24 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private JTextField tipologiaTextField;
 	private JTable tabellaProgetti;
 	private JTextField ambitoNuovoTextField;
-	private DefaultListModel ambitiListModel;
-	private DefaultListModel meetingRelativiModel;
-	private DefaultListModel partecipantiListModel;
+	private DefaultListModel<AmbitoProgetto> ambitiListModel;
+	private DefaultListModel<Meeting> meetingRelativiModel;
+	private DefaultListModel<CollaborazioneProgetto> partecipantiListModel;
 	private JTextField filtroNomeTextField;
-	private JComboBox ambitoComboBox;
-	private JComboBox tipologiaComboBox;
-	private JComboBox scadutoComboBox;
-	private JComboBox terminatoComboBox;
+	private JComboBox<AmbitoProgetto> ambitoComboBox;
+	private JComboBox<String> tipologiaComboBox;
+	private JComboBox<String> scadutoComboBox;
+	private JComboBox<String> terminatoComboBox;
 	private ProgettoTableModel dataModelTabella;
 	private JList <AmbitoProgetto> ambitiList;
-	private JList partecipantiList;
+	private JList<CollaborazioneProgetto> partecipantiList;
 	private JList <Meeting> meetingRelativiList;
 	private JTextArea descrizioneTextArea;
 	private JLabel dataCreazioneLabel, dataScadenzaLabel, dataTerminazioneLabel;
 	
-	private ManagerEccezioniDatiSQLProgetto eccezioniSQLProgetto;
-	private ManagerEccezioniDatiSQLAmbito eccezioniSQLAmbito;
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
+	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
 	
 	private DateTimeFormatter formatoDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	private String[] siNoComboBox = {null, "Si", "No"};
@@ -247,6 +247,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (!ambitoNuovoTextField.getText().isBlank())
 					creaAmbitoProgetto(controller);
+				else
+					JOptionPane.showMessageDialog(null,
+							"Inserire prima il nome dell'ambito.",
+							"Nome Ambito Vuoto",
+							JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		creaAmbitoButton.addMouseListener(new MouseAdapter() {
@@ -511,35 +516,66 @@ public class GestioneProgettiSegreteria extends JFrame {
 			tabellaProgetti.clearSelection();
 			pulisciCampi();
 		} catch (SQLException e) {
-			eccezioniSQLProgetto = new ManagerEccezioniDatiSQLProgetto(e);
-			eccezioniSQLProgetto.mostraErrore();
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void inizializzaFiltroAmbitiComboBox(ControllerProgettiSegreteria controller) {
 		try {
 			ambitoComboBox = new JComboBox(controller.ottieniTuttiAmbiti().toArray());
-		} catch (SQLException e2) {
-			eccezioniSQLAmbito = new ManagerEccezioniDatiSQLAmbito(e2);
-			eccezioniSQLAmbito.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void inizializzaFiltroTipologieComboBox(ControllerProgettiSegreteria controller) {
 		try {
 			tipologiaComboBox = new JComboBox(controller.ottieniTipologie().toArray());
-		} catch (SQLException e2) {
-			eccezioniSQLProgetto = new ManagerEccezioniDatiSQLProgetto(e2);
-			eccezioniSQLProgetto.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void creaAmbitoProgetto(ControllerProgettiSegreteria controller) {
 		try {
 			controller.creaAmbitoProgetto(ambitoNuovoTextField.getText());
-		} catch (SQLException e1) {
-			eccezioniSQLAmbito = new ManagerEccezioniDatiSQLAmbito(e1);
-			eccezioniSQLAmbito.mostraErrore();
+		} catch (SQLException e) {
+			switch(e.getSQLState()) {
+			//TODO: controllare se ci siano altre eccezioni possibili
+			case VIOLAZIONE_PKEY_UNIQUE:
+				JOptionPane.showMessageDialog(null,
+						"Non possono esistere ambiti duplicati." +
+								"\nVerificare che il nome dell'ambito non esista già.",
+						"Errore Ambiti Duplicati",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			case VIOLAZIONE_VINCOLI_TABELLA:
+				JOptionPane.showMessageDialog(null,
+						"Verificare che non ci siano numeri nel nome dell'ambito.",
+								"Errore Formato Nome Ambito",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			case VIOLAZIONE_LUNGHEZZA_STRINGA:
+				JOptionPane.showMessageDialog(null,
+						"Verificare che il nome dell'ambito non abbia più di 20 caratteri.",
+								"Errore Lunghezza Nome Ambito",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			default:
+				JOptionPane.showMessageDialog(null,
+						e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
+						"Errore #" + e.getSQLState(),
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	
@@ -547,9 +583,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			ambitiListModel.addAll(controller.ottieniAmbitiProgetto(progettoSelezionato));
 			ambitiList.setModel(ambitiListModel);
-		} catch (SQLException e1) {
-			eccezioniSQLAmbito = new ManagerEccezioniDatiSQLAmbito(e1);
-			eccezioniSQLAmbito.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -557,10 +595,11 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			partecipantiListModel.addAll(controller.ottieniCollaborazioni(progettoSelezionato));
 			partecipantiList.setModel(partecipantiListModel);
-		} catch (SQLException e1) {
-			//TODO: trattandosi di enitità composte da dipendente e progetto hanno bisogno anche dell'handler del dipendente?
-			eccezioniSQLProgetto = new ManagerEccezioniDatiSQLProgetto(e1);
-			eccezioniSQLProgetto.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -568,8 +607,10 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			dataModelTabella.setProgettiTabella(controller.ottieniProgetti());
 		} catch (SQLException e) {
-			eccezioniSQLProgetto = new ManagerEccezioniDatiSQLProgetto(e);
-			eccezioniSQLProgetto.mostraErrore();
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
