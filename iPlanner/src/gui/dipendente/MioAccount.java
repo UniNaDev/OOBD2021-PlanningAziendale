@@ -81,7 +81,6 @@ public class MioAccount extends JFrame {
 
     private boolean modificheEffettuate = false;
 
-    private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
     private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
     private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
 
