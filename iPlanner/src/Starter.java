@@ -32,30 +32,21 @@ import interfacceDAO.SkillDAO;
 
 public class Starter {
 
-	public static void main(String[] args) {
-			
-			//L'UIMANAGER IMPOSTA UNA SERIE DI PROPRIETÀ PER TUTTI COMPONENTI UI PRESENTI NEL SOFTWARE
-			
-			UIManager.put("OptionPane.messageFont", new Font("Consolas", Font.PLAIN, 15)); //font dei JOptionPane
-			UIManager.put("OptionPane.buttonFont", new Font("Consolas", Font.PLAIN, 15)); //font dei bottoni nei JOptionPane
-						
-			UIManager.put("Button.background", Color.WHITE); //sfondo di tutti i bottoni compresi quelli dei JOptionPane
-			UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0))); //rimuove il rettangolo di selezione presente normalmente quando si preme su un bottone
-			UIManager.put("Button.border", new MatteBorder(1, 1, 1, 1,Color.LIGHT_GRAY)); //border di tutti i bottoni
-			
-			
-		try {
-			ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
-			Connection connection = connDB.getConnection();
-			CostruttoreDB costruttoreDB = new CostruttoreDB(connection);
-			costruttoreDB.creaTabelle();
-			costruttoreDB.creaFunzioniTrigger();
-			costruttoreDB.importaLuoghi();
+    public static void main(String[] args) {
 
-	// Setta il font di tutti i JOptionPane nel software
-	UIManager.put("OptionPane.messageFont", new Font("Consolas", Font.PLAIN, 15));
-	UIManager.put("OptionPane.buttonFont", new Font("Consolas", Font.BOLD, 15));
+	// L'UIMANAGER IMPOSTA UNA SERIE DI PROPRIETÀ PER TUTTI COMPONENTI UI PRESENTI
+	// NEL SOFTWARE
 
+	UIManager.put("OptionPane.messageFont", new Font("Consolas", Font.PLAIN, 15)); // font dei JOptionPane
+	UIManager.put("OptionPane.buttonFont", new Font("Consolas", Font.PLAIN, 15)); // font dei bottoni nei
+										      // JOptionPane
+
+	UIManager.put("Button.background", Color.WHITE); // sfondo di tutti i bottoni compresi quelli dei JOptionPane
+	UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0))); // rimuove il rettangolo di selezione
+										   // presente normalmente quando si
+										   // preme su un bottone
+	UIManager.put("Button.border", new MatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY)); // border di tutti i bottoni
+	
 	try {
 	    ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
 	    Connection connection = connDB.getConnection();
