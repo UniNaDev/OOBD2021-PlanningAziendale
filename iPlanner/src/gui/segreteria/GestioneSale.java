@@ -258,12 +258,10 @@ public class GestioneSale extends JFrame {
 					if (salaSelezionata.getCodiceSala().equals(nomeSalaLabel.getText()))
 						aggiornaSala(controller);
 					else {
-						int risposta = JOptionPane.showConfirmDialog(null,
-								"Attenzione le modifiche che vuoi apportare saranno fatte sulla sala "
-										+ nomeSalaTextField.getText() + "\ne non sulla sala "
-										+ salaSelezionata.getCodiceSala() + ".\nVuoi continuare?");
-						if (risposta == JOptionPane.YES_OPTION)
-							aggiornaSala(controller);
+						JOptionPane.showMessageDialog(null,
+								"Impossibile salvare le modifiche alla sala " + salaSelezionata.getCodiceSala() + "\nperchè i codici non corrispondono.",
+								"Salvataggio Modifiche Fallito",
+								JOptionPane.ERROR_MESSAGE);
 					}
 				} else
 					campiObbligatoriVuoti();
@@ -412,7 +410,6 @@ public class GestioneSale extends JFrame {
 							"Alcuni valori sono errati.\nControllare che piano e capienza non siano valori negativi.",
 							"Errore Valori Errati", JOptionPane.ERROR_MESSAGE);
 					break;
-				// TODO: manca vincolo accavallamento sala
 				default:
 					JOptionPane.showMessageDialog(null, e1.getMessage()
 							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
