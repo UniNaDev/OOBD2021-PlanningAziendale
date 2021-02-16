@@ -106,7 +106,7 @@ public class GestioneProgettiDipendente extends JFrame {
 	LocalDate dataAttuale = LocalDate.now();	//data attuale
 	String[] siNoOpzioni = {null, "Si", "No"};	//array di opzioni per combobox dove le opzioni sono si/no
 	private JComboBox filtroAmbitiComboBox_1;
-	private JComboBox filtroTipologieComboBox_1;
+	private JComboBox filtroTipologieComboBox_1;	
 
 	//Creazione frame
 	//-----------------------------------------------------------------
@@ -215,7 +215,9 @@ public class GestioneProgettiDipendente extends JFrame {
 			public void actionPerformed(ActionEvent e) 
 			{
 				//chiede conferma all utente 
-				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare il progetto selezionato?");
+				JLabel confermaOptionPaneLabel = new JLabel("Sei sicuro di voler eliminare il progetto selezionato?");
+				confermaOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));				
+				int conferma = JOptionPane.showConfirmDialog(null, confermaOptionPaneLabel);
 				
 				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
 				{
@@ -226,8 +228,10 @@ public class GestioneProgettiDipendente extends JFrame {
 						Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
 						boolean risultato = controller.rimuoviProgetto(progetto);
 						
+						JLabel eliminatoOptionPanelLabel = new JLabel("Progetto Eliminato con successo");
+						eliminatoOptionPanelLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+						JOptionPane.showMessageDialog(null, eliminatoOptionPanelLabel);
 						
-						JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
 						dataModelProgetti.fireTableDataChanged();
 						dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
 						
@@ -237,11 +241,16 @@ public class GestioneProgettiDipendente extends JFrame {
 						svuotaCampi();
 						
 					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage());
+						JLabel messaggio = new JLabel(e1.getMessage());
+						messaggio.setFont(new Font("Consolas", Font.PLAIN, 15));						
+						JOptionPane.showMessageDialog(null, messaggio);
 					}
 				}
-				else if(progettoTable.getSelectedRow()==-1) {
-					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
+				else if(progettoTable.getSelectedRow()==-1) 
+				{					
+					JLabel selezionareRigaOptionPaneLabel = new JLabel("Selezionare una riga dalla tabella");
+					selezionareRigaOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));					
+					JOptionPane.showMessageDialog(null, selezionareRigaOptionPaneLabel);
 				}
 			}
 		});
@@ -253,7 +262,9 @@ public class GestioneProgettiDipendente extends JFrame {
 				int row=progettoTable.getSelectedRow();
 				
 				if(row==-1) {
-					JOptionPane.showMessageDialog(null, "Seleziona un progetto dalla tabella");	
+					JLabel selezionaProgettoOptionPaneLabel = new JLabel("Seleziona un progetto dalla tabella");
+					selezionaProgettoOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+					JOptionPane.showMessageDialog(null, selezionaProgettoOptionPaneLabel);	
 				}
 				else {
 					Progetto progettoSelezionato=dataModelProgetti.getSelected(progettoTable.convertRowIndexToModel(progettoTable.getSelectedRow()));
@@ -901,10 +912,14 @@ public class GestioneProgettiDipendente extends JFrame {
 				// NELLA JTABLE (colonna 0 della riga selezionata)
 				//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
 				
-				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
+				JLabel confermaOptionPaneLabel = new JLabel("Vuoi Confermare le modifiche effettuate?");
+				confermaOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+				int conferma = JOptionPane.showConfirmDialog(null, confermaOptionPaneLabel);
+				
 				//se l'utente conferma allora vengono effettivamente fatte le modifiche
 				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1) {
-					if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty()) {					
+					if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty()) 
+					{					
 						//fa diventare rossi i campi obbligatori che non sono stati inseriti
 						if(nomeTextField.getText().isBlank())					
 								nomeProgettoLabel.setForeground(Color.RED);
@@ -918,7 +933,10 @@ public class GestioneProgettiDipendente extends JFrame {
 							ambitoProgettoLabel.setForeground(Color.RED);
 						else if(!ambitiList.isSelectionEmpty())
 							ambitoProgettoLabel.setForeground(Color.BLACK);
-						JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
+						
+						JLabel controllaCampiOptionPaneLabel = new JLabel("Controlla i campi inseriti");
+						controllaCampiOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+						JOptionPane.showMessageDialog(null, controllaCampiOptionPaneLabel);
 					}
 					else {
 						int rigaSelezionata = progettoTable.getSelectedRow();
@@ -950,7 +968,10 @@ public class GestioneProgettiDipendente extends JFrame {
 							//prende tutti i campi e fa l'update del progetto
 							Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
 							controller.aggiornaProgetto(progetto.getIdProgettto(), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
-							JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
+							
+							JLabel modificheEffettuateOptionPaneLabel = new JLabel("Modifiche effettuate correttamente");
+							modificheEffettuateOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+							JOptionPane.showMessageDialog(null, modificheEffettuateOptionPaneLabel);
 							
 							//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
 							dataModelProgetti.fireTableDataChanged();
@@ -972,8 +993,12 @@ public class GestioneProgettiDipendente extends JFrame {
 						}
 					}
 				}
-				else if(progettoTable.getSelectedRow()==-1)
-					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
+				else if(progettoTable.getSelectedRow()==-1) 
+				{					
+					JLabel selezionareRigaOptionPaneLabel = new JLabel("Selezionare una riga dalla tabella");
+					selezionareRigaOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+					JOptionPane.showMessageDialog(null, selezionareRigaOptionPaneLabel);
+				}
 			}
 		});
 		//CLICK SUL PULSANTE "CREA NUOVO"
@@ -997,12 +1022,17 @@ public class GestioneProgettiDipendente extends JFrame {
 							else if(!ambitiList.isSelectionEmpty())
 								ambitoProgettoLabel.setForeground(Color.BLACK);
 							
-							JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
+							JLabel controllaCampiOptionPaneLabel = new JLabel("Controlla i campi inseriti");
+							controllaCampiOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+							JOptionPane.showMessageDialog(null,controllaCampiOptionPaneLabel);
 						}
 						else {
 						//chiede all utente la conferma della creazione
-						int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?");
-						
+						JLabel confermaCreazioneOptionPaneLabel = new JLabel("Sei sicuro di voler creare un nuovo progetto?");
+						confermaCreazioneOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+						int conferma = JOptionPane.showConfirmDialog(null, confermaCreazioneOptionPaneLabel);
+												
+												
 						//se l'utente conferma di voler creare un nuovo progetto viene fatto l'insert
 						if (conferma == JOptionPane.YES_OPTION) {
 							LocalDate dataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
@@ -1019,7 +1049,10 @@ public class GestioneProgettiDipendente extends JFrame {
 						
 							try {
 								controller.creaProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
-								JOptionPane.showMessageDialog(null, "Progetto creato con successo");
+								
+								JLabel progettoCreatoOptionPaneLabel = new JLabel("Progetto creato con successo");
+								progettoCreatoOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+								JOptionPane.showMessageDialog(null, progettoCreatoOptionPaneLabel);
 								
 								dataModelProgetti.fireTableDataChanged();
 								dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
@@ -1329,10 +1362,9 @@ public class GestioneProgettiDipendente extends JFrame {
 			dataModelProgetti.fireTableDataChanged();
 		} catch (SQLException e) {
 			//errore query per tutti i progetti filtrati
-			JOptionPane.showMessageDialog(null,
-					"Impossibile filtrare i progetti dal database.\nControllare che sia stabilita la connessione al database.",
-					"Errore Interrogazione Database",
-					JOptionPane.ERROR_MESSAGE);
+			JLabel impossibileFiltrareOptionPaneLabel = new JLabel("<html><center>" + "Impossibile filtrare i progetti dal database."+"<br/>"+"Controllare che sia stabilita la connessione al database." + "</html></center>");
+			impossibileFiltrareOptionPaneLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+			JOptionPane.showMessageDialog(null,impossibileFiltrareOptionPaneLabel,"Errore Interrogazione Database",JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
