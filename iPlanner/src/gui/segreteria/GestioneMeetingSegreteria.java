@@ -29,7 +29,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.segreteria.ControllerMeetingSegreteria;
-import eccezioni.ManagerEccezioniDatiSQLMeeting;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -69,8 +68,6 @@ public class GestioneMeetingSegreteria extends JFrame {
 	
 	private DateTimeFormatter formatoDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	private DateTimeFormatter formatoTime = DateTimeFormat.forPattern("HH:mm");
-	
-	private ManagerEccezioniDatiSQLMeeting eccezioniSQLMeeting;
 	
 	public GestioneMeetingSegreteria(ControllerMeetingSegreteria controller) {
 		setResizable(false);
@@ -156,7 +153,6 @@ public class GestioneMeetingSegreteria extends JFrame {
 		telematicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (telematicoRadioButton.isSelected()) {
-					fisicoRadioButton.setSelected(false);
 					applicaFiltroTelematico(controller);
 				} else {
 					setModelloTabellaTuttiMeeting(controller);
@@ -172,7 +168,6 @@ public class GestioneMeetingSegreteria extends JFrame {
 		fisicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (fisicoRadioButton.isSelected()) {
-					telematicoRadioButton.setSelected(false);
 					applicaFiltroFisico(controller);
 				} else {
 					setModelloTabellaTuttiMeeting(controller);
@@ -345,41 +340,61 @@ public class GestioneMeetingSegreteria extends JFrame {
 	//-----------------------------------------------------------------
 	private void applicaFiltroTelematico(ControllerMeetingSegreteria controller) {
 		try {
+			fisicoRadioButton.setSelected(false);
+			filtroPiattaformaComboBox.setSelectedIndex(0);
+			filtroSaleComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingTelematici());
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e1) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e1);
-			eccezioniSQLMeeting.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void applicaFiltroPiattaforma(ControllerMeetingSegreteria controller, String piattaforma) {
 		try {
+			fisicoRadioButton.setSelected(false);
+			telematicoRadioButton.setSelected(false);
+			filtroSaleComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingPiattaforma(piattaforma));
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e);
-			eccezioniSQLMeeting.mostraErrore();
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void applicaFiltroFisico(ControllerMeetingSegreteria controller) {
 		try {
+			telematicoRadioButton.setSelected(false);
+			filtroSaleComboBox.setSelectedIndex(0);
+			filtroPiattaformaComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingFisici());
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e1) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e1);
-			eccezioniSQLMeeting.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void applicaFiltroSala(ControllerMeetingSegreteria controller, SalaRiunione sala) {
 		try {
+			fisicoRadioButton.setSelected(false);
+			telematicoRadioButton.setSelected(false);
+			filtroPiattaformaComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingSala(sala));
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e);
-			eccezioniSQLMeeting.mostraErrore();
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -389,35 +404,43 @@ public class GestioneMeetingSegreteria extends JFrame {
 			for (SalaRiunione sala: controller.ottieniSale())
 				filtroSaleComboBox.addItem(sala);
 		} catch (SQLException e) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e);
-			eccezioniSQLMeeting.mostraErrore();
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void setModelloTabellaTuttiMeeting(ControllerMeetingSegreteria controller) {
 		try {
 			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeeting());
-		} catch (SQLException e2) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e2);
-			eccezioniSQLMeeting.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void inizializzaFiltroSaleComboBox(ControllerMeetingSegreteria controller) {
 		try {
 			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());
-		} catch (SQLException e2) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e2);
-			eccezioniSQLMeeting.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void inizializzaFiltroPiattaformaComboBox(ControllerMeetingSegreteria controller) {
 		try {
 			filtroPiattaformaComboBox = new JComboBox(controller.ottieniPiattaforme().toArray());
-		} catch (SQLException e1) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e1);
-			eccezioniSQLMeeting.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -425,9 +448,11 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			invitatiListModel.addAll(controller.ottieniPartecipanti(meeting));
 			invitatiList.setModel(invitatiListModel);
-		} catch (SQLException e1) {
-			eccezioniSQLMeeting = new ManagerEccezioniDatiSQLMeeting(e1);
-			eccezioniSQLMeeting.mostraErrore();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
