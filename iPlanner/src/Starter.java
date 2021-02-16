@@ -1,9 +1,11 @@
 //Classe main del programma
 
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import controller.ControllerStart;
 import dbManager.CostruttoreDB;
@@ -26,6 +28,11 @@ import interfacceDAO.SkillDAO;
 public class Starter {
 
 	public static void main(String[] args) {
+			
+			//Setta il font di tutti i JOptionPane nel software
+			UIManager.put("OptionPane.messageFont", new Font("Consolas", Font.PLAIN, 15));
+			UIManager.put("OptionPane.buttonFont", new Font("Consolas", Font.BOLD, 15));
+		
 		try {
 			ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
 			Connection connection = connDB.getConnection();
