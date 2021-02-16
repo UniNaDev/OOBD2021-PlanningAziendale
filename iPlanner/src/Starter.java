@@ -1,14 +1,9 @@
 //Classe main del programma
 
-import java.awt.Color;
-import java.awt.Font;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.border.MatteBorder;
-import javax.swing.plaf.ColorUIResource;
 
 import controller.ControllerStart;
 import dbManager.CostruttoreDB;

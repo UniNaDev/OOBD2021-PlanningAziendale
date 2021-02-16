@@ -60,7 +60,7 @@ public class MieiMeeting extends JFrame {
     public MieiMeeting(ControllerMeeting controller) {
 	setMinimumSize(new Dimension(1440, 900));
 	setIconImage(Toolkit.getDefaultToolkit().getImage(MieiMeeting.class.getResource("/Icone/WindowIcon_16.png")));
-	setTitle("iPlanner - Meeting");
+	setTitle("iPlanner - I Miei Meeting");
 	setBounds(650, 150, 1353, 708);
 	setLocationRelativeTo(null);
 	contentPane = new JPanel();
