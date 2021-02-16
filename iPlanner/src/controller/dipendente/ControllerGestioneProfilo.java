@@ -23,91 +23,97 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerGestioneProfilo {
-	private Home homeFrame;
-	private MioAccount accountFrame;
+    private Home homeFrame;
+    private MioAccount accountFrame;
 
-	private LuogoNascitaDAO luogoDAO = null;
-	private DipendenteDAO dipDAO = null;
-	private ProgettoDAO projDAO = null;
-	private MeetingDAO meetDAO = null;
-	private SkillDAO skillDAO = null;
-	private SalaRiunioneDAO salaDAO = null;
-	private AmbitoProgettoDAO ambitoDAO = null;
+    private LuogoNascitaDAO luogoDAO = null;
+    private DipendenteDAO dipDAO = null;
+    private ProgettoDAO projDAO = null;
+    private MeetingDAO meetDAO = null;
+    private SkillDAO skillDAO = null;
+    private SalaRiunioneDAO salaDAO = null;
+    private AmbitoProgettoDAO ambitoDAO = null;
 
-	private Dipendente dipendenteLogged = null;
+    private Dipendente dipendenteLogged = null;
 
-	public ControllerGestioneProfilo(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, Dipendente dipendenteLogged) {
-		this.luogoDAO = luogoDAO;
-		this.dipDAO = dipDAO;
-		this.projDAO = projDAO;
-		this.meetDAO = meetDAO;
-		this.skillDAO = skillDAO;
-		this.salaDAO = salaDAO;
-		this.ambitoDAO = ambitoDAO;
-		
-		this.dipendenteLogged = dipendenteLogged;
-		
-		homeFrame = new Home(this, dipendenteLogged);
-		homeFrame.setVisible(true);
-		
-	}
-	
-	public void apriMioAccount() {
-		accountFrame=new MioAccount(this, dipendenteLogged);
-		accountFrame.setVisible(true);
-	}
-	
-	public void chiudiMioAccount() {
-		accountFrame.setVisible(false);
-	}
+    public ControllerGestioneProfilo(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO,
+	    MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO,
+	    Dipendente dipendenteLogged) {
+	this.luogoDAO = luogoDAO;
+	this.dipDAO = dipDAO;
+	this.projDAO = projDAO;
+	this.meetDAO = meetDAO;
+	this.skillDAO = skillDAO;
+	this.salaDAO = salaDAO;
+	this.ambitoDAO = ambitoDAO;
 
-	public void logout() {
-		System.exit(0);
-	}
+	this.dipendenteLogged = dipendenteLogged;
 
-	public void apriMieiProgetti() {
-		ControllerProgetto controller= new ControllerProgetto(luogoDAO,dipDAO,projDAO,meetDAO,ambitoDAO,skillDAO, dipendenteLogged);
-	}
-	
-	public void apriMieiMeeting() {
-		ControllerMeeting controller= new ControllerMeeting(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,dipendenteLogged);
-	}
-	
-	public void tornaAHome() {
-		homeFrame.setVisible(false);
-		homeFrame=new Home(this, dipendenteLogged);
-		homeFrame.setVisible(true);
-	}
+	homeFrame = new Home(this, dipendenteLogged);
+	homeFrame.setVisible(true);
 
-	public ArrayList<CollaborazioneProgetto> ottieniProgetti() throws SQLException {
-		return projDAO.getProgettiByDipendente(dipendenteLogged);
-	}
-	
-	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		return meetDAO.getMeetingsByInvitato(dipendenteLogged);
-	}
-	
-	public void aggiornaInfoDipendente(String nome, String cognome, char sesso, LocalDate dataNascita, LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare, String indirizzo) throws SQLException {
-		dipendenteLogged.setNome(nome);
-		dipendenteLogged.setCognome(cognome);
-		dipendenteLogged.setSesso(sesso);
-		dipendenteLogged.setDataNascita(dataNascita);
-		dipendenteLogged.setLuogoNascita(luogoNascita);
-		if(!dipendenteLogged.getEmail().equals(email))
-			dipendenteLogged.setEmail(email);
-		dipendenteLogged.setPassword(password);
-		dipendenteLogged.setTelefonoCasa(telefono);
-		dipendenteLogged.setCellulare(cellulare);
-		dipendenteLogged.setIndirizzo(indirizzo);
-	
-		dipDAO.updateDipendente(dipendenteLogged);
-		}
-	
-	public ArrayList<String> ottieniProvince() throws SQLException{
-		return luogoDAO.getProvince();
-	}
-	
-	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException{
-		return luogoDAO.getLuoghiByProvincia(provincia);
-	}	
+    }
+
+    public void apriMioAccount() {
+	accountFrame = new MioAccount(this, dipendenteLogged);
+	accountFrame.setVisible(true);
+    }
+
+    public void chiudiMioAccount() {
+	accountFrame.setVisible(false);
+    }
+
+    public void logout() {
+	System.exit(0);
+    }
+
+    public void apriMieiProgetti() {
+	ControllerProgetto controller = new ControllerProgetto(luogoDAO, dipDAO, projDAO, meetDAO, ambitoDAO, skillDAO,
+		dipendenteLogged);
+    }
+
+    public void apriMieiMeeting() {
+	ControllerMeeting controller = new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO,
+		dipendenteLogged);
+    }
+
+    public void tornaAHome() {
+	homeFrame.setVisible(false);
+	homeFrame = new Home(this, dipendenteLogged);
+	homeFrame.setVisible(true);
+    }
+
+    public ArrayList<CollaborazioneProgetto> ottieniProgetti() throws SQLException {
+	return projDAO.getProgettiByDipendente(dipendenteLogged);
+    }
+
+    public ArrayList<Meeting> ottieniMeeting() throws SQLException {
+	return meetDAO.getMeetingsByInvitato(dipendenteLogged);
+    }
+
+    public void aggiornaInfoDipendente(String nome, String cognome, char sesso, LocalDate dataNascita,
+	    LuogoNascita luogoNascita, String email, String password, String telefono, String cellulare,
+	    String indirizzo) throws SQLException {
+	dipendenteLogged.setNome(nome);
+	dipendenteLogged.setCognome(cognome);
+	dipendenteLogged.setSesso(sesso);
+	dipendenteLogged.setDataNascita(dataNascita);
+	dipendenteLogged.setLuogoNascita(luogoNascita);
+	if (!dipendenteLogged.getEmail().equals(email))
+	    dipendenteLogged.setEmail(email);
+	dipendenteLogged.setPassword(password);
+	dipendenteLogged.setTelefonoCasa(telefono);
+	dipendenteLogged.setCellulare(cellulare);
+	dipendenteLogged.setIndirizzo(indirizzo);
+
+	dipDAO.updateDipendente(dipendenteLogged);
+    }
+
+    public ArrayList<String> ottieniProvince() throws SQLException {
+	return luogoDAO.getProvince();
+    }
+
+    public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException {
+	return luogoDAO.getLuoghiByProvincia(provincia);
+    }
 }
