@@ -40,7 +40,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
 import controller.segreteria.ControllerMeetingSegreteria;
-import eccezioni.ManagerEccezioniDatiSQL;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;

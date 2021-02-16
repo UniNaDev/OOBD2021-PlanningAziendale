@@ -5,6 +5,9 @@ package controller.dipendente;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.DefaultListModel;
 
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
@@ -82,10 +85,22 @@ public class ControllerPartecipantiProgetto {
 		}
 	}
 
-	public ArrayList<Dipendente> filtraDipendenti(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima, Skill skill,Progetto progettoSelezionato) throws SQLException {
-		ArrayList<Dipendente> dipendentiFiltrati = dipDAO.getDipendentiNonPartecipantiFiltrati(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, progettoSelezionato);
+	public ArrayList<Dipendente> filtraDipendentiNonPartecipanti(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima, Skill skill,Progetto progettoSelezionato,String tipologiaProgetto) throws SQLException {
+		ArrayList<Dipendente> dipendentiFiltrati = dipDAO.getDipendentiNonPartecipantiFiltrati(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima,progettoSelezionato);
 		if (skill != null)
-			dipendentiFiltrati.retainAll(dipDAO.getDipendenteBySkill(skill));
+			dipendentiFiltrati.retainAll(dipDAO.getDipendenteNonPartecipantiBySkill(progettoSelezionato,skill));
+		
+		if(tipologiaProgetto!=null)
+		dipendentiFiltrati.retainAll(dipDAO.getDipendentiNonPartecipantiByTipologieProgetto(progettoSelezionato, tipologiaProgetto));
+		
 		return dipendentiFiltrati;
+	}
+
+	public ArrayList<Skill> ottieniSkill() throws SQLException{
+		return skillDAO.getSkills();
+	}
+
+	public ArrayList<String> ottieniTipologieProgetto() throws SQLException {
+		return projDAO.getTipologie();
 	}
 }

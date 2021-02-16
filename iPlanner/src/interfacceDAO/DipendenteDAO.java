@@ -7,6 +7,7 @@ package interfacceDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import entita.Dipendente;
 import entita.Meeting;
@@ -41,6 +42,9 @@ public interface DipendenteDAO {
 	public String organizzatoreCheck(Meeting meeting) throws SQLException;
 
 	ArrayList<Dipendente> getDipendentiNonPartecipantiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima,
-			float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima,
-			Progetto progettoSelezionato) throws SQLException;
+			float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima,Progetto progettoSelezionato) throws SQLException;
+
+	ArrayList<Dipendente> getDipendenteNonPartecipantiBySkill(Progetto progettoSelezionato, Skill skill) throws SQLException;
+
+	ArrayList<Dipendente> getDipendentiNonPartecipantiByTipologieProgetto(Progetto progettoSelezionato,String tipologiaProgetto) throws SQLException;
 }

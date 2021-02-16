@@ -37,7 +37,6 @@ import controller.dipendente.ControllerMeeting;
 import controller.dipendente.ControllerPartecipantiMeeting;
 import controller.dipendente.ControllerPartecipantiProgetto;
 import controller.segreteria.ControllerDipendentiSegreteria;
-import eccezioni.ManagerEccezioniDatiSQLDipendente;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
@@ -104,6 +103,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private JLabel partecipantiLabel;
 	private JComboBox ruoloComboBox;
 	private JComboBox skillFiltroComboBox;
+	private JComboBox tipologiaProgettoComboBox;
 	private JTextArea nomeProgettotextArea;
 	private JTextField textField_1;
 	private JTextArea ambitiTextArea;
@@ -759,7 +759,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		filtraButton.setBackground(Color.WHITE);
 		
 		cercaTextField = new JTextField();
-		cercaTextField.setText("Nome/Cognome/Email\r\n");
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		cercaTextField.setColumns(20);
 		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -821,9 +820,17 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		JLabel lblSkill = new JLabel("Skill:");
 		lblSkill.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSkill.setFont(new Font("Consolas", Font.PLAIN, 13));
+		skillFiltroComboBox=new JComboBox();
+		try {
+			DefaultComboBoxModel skillModel=new DefaultComboBoxModel();
+			skillModel.addElement(null);
+			skillModel.addAll(controller.ottieniSkill());
+			skillFiltroComboBox.setModel(skillModel);
+		} catch (SQLException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		
-		skillFiltroComboBox = new JComboBox(new Object[]{});
-		skillFiltroComboBox.setModel(new DefaultComboBoxModel(new String[] {"           "}));
 		skillFiltroComboBox.setUI(new BasicComboBoxUI());
 		skillFiltroComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		skillFiltroComboBox.setBackground(Color.WHITE);
@@ -851,8 +858,16 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		JLabel lblTipologiaProgetto = new JLabel("Tipologia Progetto:");
 		lblTipologiaProgetto.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
-		JComboBox tipologiaProgettoComboBox = new JComboBox(new Object[]{});
-		tipologiaProgettoComboBox.setModel(new DefaultComboBoxModel(new String[] {"         "}));
+		tipologiaProgettoComboBox = new JComboBox();
+		DefaultComboBoxModel tipologiaProgettoModel=new DefaultComboBoxModel<>();
+		tipologiaProgettoModel.addElement(null);
+		try {
+			tipologiaProgettoModel.addAll(controller.ottieniTipologieProgetto());
+		} catch (SQLException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		tipologiaProgettoComboBox.setModel(tipologiaProgettoModel);
 		tipologiaProgettoComboBox.setUI(new BasicComboBoxUI());
 		tipologiaProgettoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaProgettoComboBox.setBackground(Color.WHITE);
@@ -1127,10 +1142,15 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		if (!valutazioneMassimaTextField.getText().isBlank())
 			valutazioneMassima=parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
 		Skill skillCercata = null;
-		skillCercata = (Skill) skillFiltroComboBox.getSelectedItem();
+	
+		skillCercata =(Skill) skillFiltroComboBox.getSelectedItem();
+		
+		String tipologiaProgetto=null;
+		tipologiaProgetto=(String) tipologiaProgettoComboBox.getSelectedItem();
+		
 		try {
 		
-			dataModelDipendente.setDipendenteTabella(controller.filtraDipendenti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata,progettoSelezionato));
+			dataModelDipendente.setDipendenteTabella(controller.filtraDipendentiNonPartecipanti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata,progettoSelezionato,tipologiaProgetto));
 			dipendenteTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
