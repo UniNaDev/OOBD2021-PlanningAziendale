@@ -148,11 +148,9 @@ public class GestioneDipendenti extends JFrame {
 
 	private Dipendente dipendenteSelezionato;
 
-	private final String VIOLAZIONE_NOT_NULL = "23502";
 	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
 	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
 	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
-	private final String VIOLAZIONE_DATA_INESISTENTE = "22008";
 
 	public GestioneDipendenti(ControllerDipendentiSegreteria controller) {
 		addWindowListener(new WindowAdapter() {
@@ -623,14 +621,28 @@ public class GestioneDipendenti extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				campiNeri();
 
-				if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText()))
+				if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText()) && lunghezzaTelefonoValida(telefonoFissoTextField.getText())
+						&& lunghezzaTelefonoValida(cellulareTextField.getText()))
 					creaDipendente(controller);
 				else if (!passwordField.getText().equals(confermaPasswordField.getText())) {
 					JOptionPane.showMessageDialog(null, "Le password inserite sono diverse", "Errore Conferma Password",
 							JOptionPane.ERROR_MESSAGE);
 					passwordLabel.setForeground(Color.RED);
 					confermaPasswordLabel.setForeground(Color.RED);
-				} else {
+				} else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
+					JOptionPane.showMessageDialog(null,
+							"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+							"Numeto di Telefono Non Valido",
+							JOptionPane.ERROR_MESSAGE);
+					telefonoFissoLabel.setForeground(Color.RED);
+				} else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
+					JOptionPane.showMessageDialog(null,
+							"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+							"Numeto di Telefono Non Valido",
+							JOptionPane.ERROR_MESSAGE);
+					cellulareLabel.setForeground(Color.RED); 
+				}
+				else {
 					JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.",
 							"Errore Campi Obbligatori Vuoti", JOptionPane.ERROR_MESSAGE);
 					campiObbligatoriRossi();
@@ -757,14 +769,27 @@ public class GestioneDipendenti extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				campiNeri();
 				if (dipendenteSelezionato != null) {
-					if (!checkCampiObbligatoriVuoti()
-							&& passwordField.getText().equals(confermaPasswordField.getText()))
+					if (!checkCampiObbligatoriVuoti() && passwordField.getText().equals(confermaPasswordField.getText())
+							&& lunghezzaTelefonoValida(telefonoFissoTextField.getText())
+							&& lunghezzaTelefonoValida(cellulareTextField.getText()))
 						salvaModificheDipendente(controller, dipendenteSelezionato);
 					else if (!passwordField.getText().equals(confermaPasswordField.getText())) {
 						JOptionPane.showMessageDialog(null, "Le password inserite sono diverse.",
 								"Errore Conferma Password", JOptionPane.ERROR_MESSAGE);
 						passwordLabel.setForeground(Color.RED);
 						confermaPasswordLabel.setForeground(Color.RED);
+					} else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
+						JOptionPane.showMessageDialog(null,
+								"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+								"Numeto di Telefono Non Valido",
+								JOptionPane.ERROR_MESSAGE);
+						telefonoFissoLabel.setForeground(Color.RED);
+					} else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
+						JOptionPane.showMessageDialog(null,
+								"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre.",
+								"Numeto di Telefono Non Valido",
+								JOptionPane.ERROR_MESSAGE);
+						cellulareLabel.setForeground(Color.RED);
 					} else {
 						JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.",
 								"Errore Campi Obbligatori Vuoti", JOptionPane.ERROR_MESSAGE);
@@ -874,8 +899,7 @@ public class GestioneDipendenti extends JFrame {
 				confermaPasswordField.setText(dipendenteSelezionato.getPassword());
 				salarioTextField.setText(Float.toString(dipendenteSelezionato.getSalario()));
 				aggiornaSkillDipendente(controller);
-				valutazioneLabel
-						.setText("Valutazione: " + String.format("%.2f", dipendenteSelezionato.getValutazione()));
+				valutazioneLabel.setText("Valutazione: " + String.format("%.2f", dipendenteSelezionato.getValutazione()));
 			}
 		});
 		dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -885,7 +909,6 @@ public class GestioneDipendenti extends JFrame {
 
 	// Altri metodi
 	// -----------------------------------------------------------------
-
 	private void ricavaInfoDipendente(ControllerDipendentiSegreteria controller) {
 		nome = nomeTextField.getText();
 		cognome = cognomeTextField.getText();
@@ -897,8 +920,8 @@ public class GestioneDipendenti extends JFrame {
 			dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
 					giornoComboBox.getSelectedIndex() + 1);
 		} catch (IllegalFieldValueException ifve) {
-			// TODO: trovare modo di gestirla meglio
-			dataNascita = LocalDate.now();
+			JOptionPane.showMessageDialog(null, "La data inserita non esiste.", "Errore Data Inesistente",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		try {
 			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem())
@@ -912,7 +935,7 @@ public class GestioneDipendenti extends JFrame {
 		email = emailTextField.getText();
 		if (!passwordField.getText().isBlank())
 			password = passwordField.getText();
-		if (!telefonoFissoTextField.getText().equals(""))
+		if (!telefonoFissoTextField.getText().isBlank())
 			telefono = telefonoFissoTextField.getText();
 		if (!cellulareTextField.getText().isBlank())
 			cellulare = cellulareTextField.getText();
@@ -957,32 +980,46 @@ public class GestioneDipendenti extends JFrame {
 				JOptionPane.showMessageDialog(null, "Verificare che:\n" 
 						+ "1) L'email sia del formato corretto.\n"
 						+ "2) Nome e cognome non contengano numeri.\n"
-						+ "3) Telefono di casa e cellulare non contengono lettere.\n"
-						+ "4) Il dipendente sia maggiorenne.\n" 
-						+ "5) Il salario stabilito sia un valore positivo.",
-						"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-				// TODO: mancano alcuni controlli
+						+ "3) Telefono e cellulare non contengano lettere.\n" 
+						+ "4) Il dipendente sia maggiorenne.\n"
+						+ "5) Il salario stabilito sia un valore positivo.", 
+						"Errore Creazione Account",
+						JOptionPane.ERROR_MESSAGE);
 				Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 						Pattern.CASE_INSENSITIVE);
 				Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
 				if (!matcher.find())
 					emailLabel.setForeground(Color.RED);
+
+				if (!nonHaCifre(nome))
+					nomeLabel.setForeground(Color.RED);
+
+				if (!nonHaCifre(cognome))
+					cognomeLabel.setForeground(Color.RED);
+
+				if (!isNumero(telefono))
+					telefonoFissoLabel.setForeground(Color.RED);
+
+				if (!isNumero(cellulare))
+					cellulareLabel.setForeground(Color.RED);
+
 				dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
 						giornoComboBox.getSelectedIndex() + 1);
 				Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
 				int età = period.getYears();
 				if (età < 18)
 					dataNascitaLabel.setForeground(Color.RED);
+
 				if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
 					salarioLabel.setForeground(Color.RED);
+
 				break;
 			case VIOLAZIONE_LUNGHEZZA_STRINGA:
 				JOptionPane.showMessageDialog(null,
 						"Verificare che:\n" 
 								+ "1) Nome e cognome non contengano più di 30 caratteri.\n"
 								+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
-								+ "3) Numero di telefono e cellulare siano esattamente di 10 numeri.\n"
-								+ "4) La password non superi i 50 caratteri.",
+								+ "3) La password non superi i 50 caratteri.",
 						"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
 				if (nomeTextField.getText().length() > 30)
 					nomeLabel.setForeground(Color.RED);
@@ -992,10 +1029,6 @@ public class GestioneDipendenti extends JFrame {
 					emailLabel.setForeground(Color.RED);
 				if (indirizzoTextField.getText().length() > 100)
 					indirizzoLabel.setForeground(Color.RED);
-				if (telefonoFissoTextField.getText().length() != 10)
-					telefonoFissoLabel.setForeground(Color.RED);
-				if (cellulareTextField.getText().length() != 10)
-					cellulareLabel.setForeground(Color.RED);
 				if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50
 						|| passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
 					passwordLabel.setForeground(Color.RED);
@@ -1036,32 +1069,45 @@ public class GestioneDipendenti extends JFrame {
 				JOptionPane.showMessageDialog(null, "Verificare che:\n" 
 						+ "1) L'email sia del formato corretto.\n"
 						+ "2) Nome e cognome non contengano numeri.\n"
-						+ "3) Telefono di casa e cellulare non contengono lettere.\n"
-						+ "4) Il dipendente sia maggiorenne.\n" 
-						+ "5) Il salario stabilito sia un valore positivo.",
-						"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-				// TODO: mancano alcuni controlli
+						+ "3) Telefono e cellulare non contengano lettere.\n" 
+						+ "4) Il dipendente sia maggiorenne.\n"
+						+ "5) Il salario stabilito sia un valore positivo.", 
+						"Errore Creazione Account",
+						JOptionPane.ERROR_MESSAGE);
 				Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 						Pattern.CASE_INSENSITIVE);
 				Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
 				if (!matcher.find())
 					emailLabel.setForeground(Color.RED);
+
+				if (!nonHaCifre(nome))
+					nomeLabel.setForeground(Color.RED);
+
+				if (!nonHaCifre(cognome))
+					cognomeLabel.setForeground(Color.RED);
+
+				if (!isNumero(telefono))
+					telefonoFissoLabel.setForeground(Color.RED);
+
+				if (!isNumero(cellulare))
+					cellulareLabel.setForeground(Color.RED);
+
 				dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
 						giornoComboBox.getSelectedIndex() + 1);
 				Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
 				int età = period.getYears();
 				if (età < 18)
 					dataNascitaLabel.setForeground(Color.RED);
+
 				if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
 					salarioLabel.setForeground(Color.RED);
+
 				break;
 			case VIOLAZIONE_LUNGHEZZA_STRINGA:
 				JOptionPane.showMessageDialog(null,
-						"Verificare che:\n" 
-								+ "1) Nome e cognome non contengano più di 30 caratteri.\n"
+						"Verificare che:\n" + "1) Nome e cognome non contengano più di 30 caratteri.\n"
 								+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
-								+ "3) Numero di telefono e cellulare siano esattamente di 10 numeri.\n"
-								+ "4) La password non superi i 50 caratteri.",
+								+ "3) La password non superi i 50 caratteri.",
 						"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
 				if (nomeTextField.getText().length() > 30)
 					nomeLabel.setForeground(Color.RED);
@@ -1071,10 +1117,6 @@ public class GestioneDipendenti extends JFrame {
 					emailLabel.setForeground(Color.RED);
 				if (indirizzoTextField.getText().length() > 100)
 					indirizzoLabel.setForeground(Color.RED);
-				if (telefonoFissoTextField.getText().length() != 10)
-					telefonoFissoLabel.setForeground(Color.RED);
-				if (cellulareTextField.getText().length() != 10)
-					cellulareLabel.setForeground(Color.RED);
 				if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50
 						|| passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
 					passwordLabel.setForeground(Color.RED);
@@ -1089,6 +1131,30 @@ public class GestioneDipendenti extends JFrame {
 			}
 		}
 		setModelloTabellaDipendentiTutti(controller);
+	}
+
+	private boolean nonHaCifre(String stringa) {
+		for (char c : stringa.toCharArray())
+			if (Character.isDigit(c))
+				return false;
+		return true;
+	}
+
+	private boolean isNumero(String stringa) {
+		if (stringa == null || stringa == "")
+			return true;
+		for (char c : stringa.toCharArray())
+			if (!Character.isDigit(c))
+				return false;
+		return true;
+
+	}
+
+	private boolean lunghezzaTelefonoValida(String numero) {
+		if (numero.length() == 10 || numero.isBlank())
+			return true;
+		else
+			return false;
 	}
 
 	private void eliminaDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteSelezionato) {
@@ -1322,6 +1388,8 @@ public class GestioneDipendenti extends JFrame {
 		confermaPasswordField.setText("");
 		salarioTextField.setText("");
 		skillsList.clearSelection();
+
+		campiNeri();
 	}
 
 	private void campiObbligatoriRossi() {
