@@ -25,7 +25,6 @@ public class MeetingListRenderer implements ListCellRenderer<Meeting> {
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
-        // text
         textArea = new JTextArea();
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);

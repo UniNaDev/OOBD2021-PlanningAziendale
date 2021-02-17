@@ -554,219 +554,219 @@ public class MioAccount extends JFrame {
     // Altri metodi
     // ------------------------------------------------------------------------
     private void inizializzaComboBoxProvince(ControllerGestioneProfilo controller) {
-	try {
-	    modelloComboBoxProvince = new DefaultComboBoxModel();
-	    modelloComboBoxProvince.addAll(controller.ottieniProvince());
-	    provinciaComboBox.setModel(modelloComboBoxProvince);
-	} catch (SQLException e) {
-	    JOptionPane.showMessageDialog(null,
-		    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	}
+		try {
+		    modelloComboBoxProvince = new DefaultComboBoxModel();
+		    modelloComboBoxProvince.addAll(controller.ottieniProvince());
+		    provinciaComboBox.setModel(modelloComboBoxProvince);
+		} catch (SQLException e) {
+		    JOptionPane.showMessageDialog(null,
+			    e.getMessage()
+				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
     }
 
     private void aggiornaComboBoxComuni(ControllerGestioneProfilo controller) {
-	comuneComboBox.removeAllItems();
-	try {
-	    modelloComboBoxComuni.addAll(controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()));
-	    comuneComboBox.setModel(modelloComboBoxComuni);
-	} catch (SQLException e) {
-	    JOptionPane.showMessageDialog(null,
-		    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	}
+		comuneComboBox.removeAllItems();
+		try {
+		    modelloComboBoxComuni.addAll(controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()));
+		    comuneComboBox.setModel(modelloComboBoxComuni);
+		} catch (SQLException e) {
+		    JOptionPane.showMessageDialog(null,
+			    e.getMessage()
+				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
     }
 
     private void aggiornaAccount(ControllerGestioneProfilo controller, Dipendente dipendente) {
-	ricavaInfoDipendente(controller);
-	dipendente.setNome(nome);
-	dipendente.setCognome(cognome);
-	dipendente.setSesso(sesso);
-	dipendente.setDataNascita(dataNascita);
-	dipendente.setLuogoNascita(luogoNascita);
-	dipendente.setEmail(email);
-	dipendente.setPassword(password);
-	dipendente.setTelefonoCasa(telefono);
-	dipendente.setCellulare(cellulare);
-	dipendente.setIndirizzo(indirizzo);
-	try {
-	    controller.aggiornaInfoDipendente(dipendente);
-	    if (modificheEffettuate)
-		JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo.");
-	    controller.chiudiMioAccount();
-	    controller.tornaAHome();
-	} catch (SQLException e1) {
-	    switch (e1.getSQLState()) {
-	    case VIOLAZIONE_VINCOLI_TABELLA:
-		JOptionPane.showMessageDialog(null, "Verificare che:\n" + "1) L'email sia del formato corretto.\n"
-			+ "2) Nome e cognome non contengano numeri.\n"
-			+ "3) Telefono e cellulare non contengano lettere.\n" + "4) Il dipendente sia maggiorenne.",
-			"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-		Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
-		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
-		if (!matcher.find())
-		    emailLabel.setForeground(Color.RED);
-
-		if (!nonHaCifre(nome))
-		    nomeLabel.setForeground(Color.RED);
-
-		if (!nonHaCifre(cognome))
-		    cognomeLabel.setForeground(Color.RED);
-
-		if (!isNumero(telefono))
-		    telefonoFissoLabel.setForeground(Color.RED);
-
-		if (!isNumero(cellulare))
-		    cellulareLabel.setForeground(Color.RED);
-
-		dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
-			giornoComboBox.getSelectedIndex() + 1);
-		Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
-		int età = period.getYears();
-		if (età < 18)
-		    dataNascitaLabel.setForeground(Color.RED);
-
-		break;
-	    case VIOLAZIONE_LUNGHEZZA_STRINGA:
-		JOptionPane.showMessageDialog(null,
-			"Verificare che:\n" + "1) Nome e cognome non contengano più di 30 caratteri.\n"
-				+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
-				+ "3) La password non superi i 50 caratteri.",
-			"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-		if (nomeTextField.getText().length() > 30)
-		    nomeLabel.setForeground(Color.RED);
-		if (cognomeTextField.getText().length() > 30)
-		    cognomeLabel.setForeground(Color.RED);
-		if (emailTextField.getText().length() > 100)
-		    emailLabel.setForeground(Color.RED);
-		if (indirizzoTextField.getText().length() > 100)
-		    indirizzoLabel.setForeground(Color.RED);
-		if (passwordField.getText().length() > 50 || passwordField.getText().isBlank()) {
-		    passwordLabel.setForeground(Color.RED);
-		    break;
-		}
-	    default:
-		JOptionPane.showMessageDialog(null,
-			e1.getMessage()
-				+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-			"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	    }
+		ricavaInfoDipendente(controller);
+		dipendente.setNome(nome);
+		dipendente.setCognome(cognome);
+		dipendente.setSesso(sesso);
+		dipendente.setDataNascita(dataNascita);
+		dipendente.setLuogoNascita(luogoNascita);
+		dipendente.setEmail(email);
+		dipendente.setPassword(password);
+		dipendente.setTelefonoCasa(telefono);
+		dipendente.setCellulare(cellulare);
+		dipendente.setIndirizzo(indirizzo);
+		try {
+		    controller.aggiornaInfoDipendente(dipendente);
+		    if (modificheEffettuate)
+			JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo.");
+		    controller.chiudiMioAccount();
+		    controller.tornaAHome();
+		} catch (SQLException e1) {
+		    switch (e1.getSQLState()) {
+		    case VIOLAZIONE_VINCOLI_TABELLA:
+			JOptionPane.showMessageDialog(null, "Verificare che:\n" + "1) L'email sia del formato corretto.\n"
+				+ "2) Nome e cognome non contengano numeri.\n"
+				+ "3) Telefono e cellulare non contengano lettere.\n" + "4) Il dipendente sia maggiorenne.",
+				"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
+			Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+				Pattern.CASE_INSENSITIVE);
+			Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
+			if (!matcher.find())
+			    emailLabel.setForeground(Color.RED);
+	
+			if (!nonHaCifre(nome))
+			    nomeLabel.setForeground(Color.RED);
+	
+			if (!nonHaCifre(cognome))
+			    cognomeLabel.setForeground(Color.RED);
+	
+			if (!isNumero(telefono))
+			    telefonoFissoLabel.setForeground(Color.RED);
+	
+			if (!isNumero(cellulare))
+			    cellulareLabel.setForeground(Color.RED);
+	
+			dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
+				giornoComboBox.getSelectedIndex() + 1);
+			Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
+			int età = period.getYears();
+			if (età < 18)
+			    dataNascitaLabel.setForeground(Color.RED);
+	
+			break;
+		    case VIOLAZIONE_LUNGHEZZA_STRINGA:
+			JOptionPane.showMessageDialog(null,
+				"Verificare che:\n" + "1) Nome e cognome non contengano più di 30 caratteri.\n"
+					+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
+					+ "3) La password non superi i 50 caratteri.",
+				"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
+			if (nomeTextField.getText().length() > 30)
+			    nomeLabel.setForeground(Color.RED);
+			if (cognomeTextField.getText().length() > 30)
+			    cognomeLabel.setForeground(Color.RED);
+			if (emailTextField.getText().length() > 100)
+			    emailLabel.setForeground(Color.RED);
+			if (indirizzoTextField.getText().length() > 100)
+			    indirizzoLabel.setForeground(Color.RED);
+			if (passwordField.getText().length() > 50 || passwordField.getText().isBlank()) {
+			    passwordLabel.setForeground(Color.RED);
+			    break;
+			}
+		    default:
+			JOptionPane.showMessageDialog(null,
+				e1.getMessage()
+					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+				"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		    }
 	}
     }
 
     private void ricavaInfoDipendente(ControllerGestioneProfilo controller) {
-	nome = nomeTextField.getText();
-	cognome = cognomeTextField.getText();
-	if (uomoRadioButton.isSelected())
-	    sesso = 'M';
-	else
-	    sesso = 'F';
-	try {
-	    dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
-		    giornoComboBox.getSelectedIndex() + 1);
-	} catch (IllegalFieldValueException ifve) {
-	    JOptionPane.showMessageDialog(null, "La data inserita non esiste.", "Errore Data Inesistente",
-		    JOptionPane.ERROR_MESSAGE);
-	}
-	try {
-	    luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem())
-		    .get(comuneComboBox.getSelectedIndex());
-	} catch (SQLException e) {
-	    JOptionPane.showMessageDialog(null,
-		    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	}
-	email = emailTextField.getText();
-	password = passwordField.getText();
-	if (!telefonoFissoTextField.getText().isBlank())
-	    telefono = telefonoFissoTextField.getText();
-	if (!cellulareTextField.getText().isBlank())
-	    cellulare = cellulareTextField.getText();
-	indirizzo = indirizzoTextField.getText();
-    }
-
-    private boolean nonHaCifre(String stringa) {
-	for (char c : stringa.toCharArray())
-	    if (Character.isDigit(c))
-		return false;
-	return true;
+		nome = nomeTextField.getText();
+		cognome = cognomeTextField.getText();
+		if (uomoRadioButton.isSelected())
+		    sesso = 'M';
+		else
+		    sesso = 'F';
+		try {
+		    dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
+			    giornoComboBox.getSelectedIndex() + 1);
+		} catch (IllegalFieldValueException ifve) {
+		    JOptionPane.showMessageDialog(null, "La data inserita non esiste.", "Errore Data Inesistente",
+			    JOptionPane.ERROR_MESSAGE);
+		}
+		try {
+		    luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem())
+			    .get(comuneComboBox.getSelectedIndex());
+		} catch (SQLException e) {
+		    JOptionPane.showMessageDialog(null,
+			    e.getMessage()
+				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+		email = emailTextField.getText();
+		password = passwordField.getText();
+		if (!telefonoFissoTextField.getText().isBlank())
+		    telefono = telefonoFissoTextField.getText();
+		if (!cellulareTextField.getText().isBlank())
+		    cellulare = cellulareTextField.getText();
+		indirizzo = indirizzoTextField.getText();
+	    }
+	
+	    private boolean nonHaCifre(String stringa) {
+			for (char c : stringa.toCharArray())
+			    if (Character.isDigit(c))
+				return false;
+			return true;
     }
 
     private boolean isNumero(String stringa) {
-	if (stringa == null || stringa == "")
-	    return true;
-	for (char c : stringa.toCharArray())
-	    if (!Character.isDigit(c))
-		return false;
-	return true;
+		if (stringa == null || stringa == "")
+		    return true;
+		for (char c : stringa.toCharArray())
+		    if (!Character.isDigit(c))
+			return false;
+		return true;
 
     }
 
     private boolean lunghezzaTelefonoValida(String numero) {
-	if (numero.length() == 10 || numero.isBlank())
-	    return true;
-	else
-	    return false;
+		if (numero.length() == 10 || numero.isBlank())
+		    return true;
+		else
+		    return false;
     }
 
     private void campiObbligatoriRossi() {
-	if (nomeTextField.getText().isBlank())
-	    nomeLabel.setForeground(Color.RED);
-	if (cognomeTextField.getText().isBlank())
-	    cognomeLabel.setForeground(Color.RED);
-	if (emailTextField.getText().isBlank())
-	    emailLabel.setForeground(Color.RED);
-	if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
-	    sessoLabel.setForeground(Color.RED);
-	if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null
-		|| annoComboBox.getSelectedItem() == null)
-	    dataNascitaLabel.setForeground(Color.RED);
-	if (indirizzoTextField.getText() == null)
-	    indirizzoLabel.setForeground(Color.RED);
-	if (provinciaComboBox.getSelectedItem() == null || comuneComboBox.getSelectedItem() == null) {
-	    provinciaNascitaLabel.setForeground(Color.RED);
-	    comuneNascitaLabel.setForeground(Color.RED);
-	}
-	if (passwordField.getText().isBlank()) {
-	    passwordLabel.setForeground(Color.RED);
-	}
+		if (nomeTextField.getText().isBlank())
+		    nomeLabel.setForeground(Color.RED);
+		if (cognomeTextField.getText().isBlank())
+		    cognomeLabel.setForeground(Color.RED);
+		if (emailTextField.getText().isBlank())
+		    emailLabel.setForeground(Color.RED);
+		if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+		    sessoLabel.setForeground(Color.RED);
+		if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null
+			|| annoComboBox.getSelectedItem() == null)
+		    dataNascitaLabel.setForeground(Color.RED);
+		if (indirizzoTextField.getText() == null)
+		    indirizzoLabel.setForeground(Color.RED);
+		if (provinciaComboBox.getSelectedItem() == null || comuneComboBox.getSelectedItem() == null) {
+		    provinciaNascitaLabel.setForeground(Color.RED);
+		    comuneNascitaLabel.setForeground(Color.RED);
+		}
+		if (passwordField.getText().isBlank()) {
+		    passwordLabel.setForeground(Color.RED);
+		}
     }
 
     private void campiObbligatoriNeri() {
-	nomeLabel.setForeground(Color.BLACK);
-	cognomeLabel.setForeground(Color.BLACK);
-	emailLabel.setForeground(Color.BLACK);
-	passwordLabel.setForeground(Color.BLACK);
-	sessoLabel.setForeground(Color.BLACK);
-	indirizzoLabel.setForeground(Color.BLACK);
-	dataNascitaLabel.setForeground(Color.BLACK);
-	comuneNascitaLabel.setForeground(Color.BLACK);
-	provinciaNascitaLabel.setForeground(Color.BLACK);
+		nomeLabel.setForeground(Color.BLACK);
+		cognomeLabel.setForeground(Color.BLACK);
+		emailLabel.setForeground(Color.BLACK);
+		passwordLabel.setForeground(Color.BLACK);
+		sessoLabel.setForeground(Color.BLACK);
+		indirizzoLabel.setForeground(Color.BLACK);
+		dataNascitaLabel.setForeground(Color.BLACK);
+		comuneNascitaLabel.setForeground(Color.BLACK);
+		provinciaNascitaLabel.setForeground(Color.BLACK);
     }
 
     private boolean checkCampiObbligatoriVuoti() {
-	if (nomeTextField.getText().isBlank())
-	    return true;
-	else if (cognomeTextField.getText().isBlank())
-	    return true;
-	else if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
-	    return true;
-	else if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null
-		|| annoComboBox.getSelectedItem() == null)
-	    return true;
-	else if (provinciaComboBox.getSelectedItem() == null || comuneComboBox.getSelectedItem() == null)
-	    return true;
-	else if (indirizzoTextField.getText().isBlank())
-	    return true;
-	else if (emailTextField.getText().isBlank())
-	    return true;
-	else if (passwordField.getText().isBlank())
-	    return true;
-	else
-	    return false;
+		if (nomeTextField.getText().isBlank())
+		    return true;
+		else if (cognomeTextField.getText().isBlank())
+		    return true;
+		else if (!uomoRadioButton.isSelected() && !donnaRadioButton.isSelected())
+		    return true;
+		else if (giornoComboBox.getSelectedItem() == null || meseComboBox.getSelectedItem() == null
+			|| annoComboBox.getSelectedItem() == null)
+		    return true;
+		else if (provinciaComboBox.getSelectedItem() == null || comuneComboBox.getSelectedItem() == null)
+		    return true;
+		else if (indirizzoTextField.getText().isBlank())
+		    return true;
+		else if (emailTextField.getText().isBlank())
+		    return true;
+		else if (passwordField.getText().isBlank())
+		    return true;
+		else
+		    return false;
     }
 }

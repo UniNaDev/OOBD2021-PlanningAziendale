@@ -138,6 +138,7 @@ public class ControllerMeeting {
 					int idMeeting = idUltimoMeetingInserito();
 					rimuoviMeeting(idMeeting);
 					break;
+					
 				default:
 					JOptionPane.showMessageDialog(null, e.getMessage()
 							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
@@ -146,9 +147,12 @@ public class ControllerMeeting {
 				return false;
 			}
 		} catch(SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
+							+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
+							"Errore Sala Occupata",
+							JOptionPane.ERROR_MESSAGE);
+			
 			return false;
 		}
 		return true;

@@ -53,8 +53,20 @@ import javax.swing.event.ListSelectionEvent;
 public class MieiMeeting extends JFrame {
 	private JPanel contentPane;
 	private JLabel mieiMeetingLabel;
+	private JLabel dataInizioLabel;
+	private JLabel dataFineLabel;
+	private JLabel orarioInizioLabel;
+	private JLabel orarioFineLabel;
+	private JLabel piattaformaSalaLabel;
+	private JLabel progettoDiscussoLabel;
+	private JLabel infoLabel;
+	private JLabel modalitàLabel;
+	private JButton nuovoMeetingButton;
 	private JPanel panel;
+	private JPanel infoMeetingPanel;
+	private JScrollPane mieiMeetingScrollPane;
 	private JList<Meeting> meetingList = new JList();
+	private MeetingListRenderer meetingCellRenderer;
 	private DefaultListModel modelloListaMeeting = new DefaultListModel<Meeting>();
 	private Meeting meetingSelezionato;
 
@@ -68,7 +80,94 @@ public class MieiMeeting extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JButton nuovoMeetingButton = new JButton("Inserisci/Modifica Meeting");
+		mieiMeetingLabel = new JLabel("Miei Meeting");
+		mieiMeetingLabel.setIcon(new ImageIcon(MieiMeeting.class.getResource("/Icone/meeting_64.png")));
+		mieiMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+
+		mieiMeetingScrollPane = new JScrollPane();
+		mieiMeetingScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		mieiMeetingScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+		mieiMeetingScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		
+		meetingCellRenderer = new MeetingListRenderer();
+		meetingList.setCellRenderer(meetingCellRenderer);
+		meetingList.setSelectionBackground(Color.LIGHT_GRAY);
+		meetingList.setFixedCellHeight(70);
+		meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
+		meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meetingList.setSelectedIndex(0);
+		mieiMeetingScrollPane.setViewportView(meetingList);
+		inizializzaListaMeeting(controller);
+		meetingList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				meetingSelezionato = meetingList.getSelectedValue();
+
+				progettoDiscussoLabel.setText("<html><center>"
+						+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() + "</html></center>");
+
+				modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());
+
+				if (meetingSelezionato.getModalita().equals("Fisico"))
+					piattaformaSalaLabel.setText("Sala: " + meetingSelezionato.getSala().getCodiceSala());
+				else
+					piattaformaSalaLabel.setText("Piattaforma: " + meetingSelezionato.getPiattaforma());
+
+				DateTimeFormatter formatTime = DateTimeFormat.forPattern("HH:mm");
+				orarioFineLabel.setText("Orario Fine: " + meetingSelezionato.getOraFine().toString(formatTime));
+				orarioInizioLabel
+						.setText("Orario Inizio: " + meetingSelezionato.getOraInizio().toString(formatTime));
+
+				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+				dataFineLabel.setText("Data Fine: " + meetingSelezionato.getDataFine().toString(formatDate));
+				dataInizioLabel.setText("Data Inizio: " + meetingSelezionato.getDataInizio().toString(formatDate));
+			}
+		});
+
+		infoMeetingPanel = new JPanel();
+		infoMeetingPanel.setFont(new Font("Consolas", Font.PLAIN, 21));
+		infoMeetingPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		infoMeetingPanel.setBackground(Color.WHITE);
+		
+		piattaformaSalaLabel = new JLabel("Piattaforma/Sala: N/A");
+		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+
+		modalitàLabel = new JLabel("Modalità: N/A");
+		modalitàLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		modalitàLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+
+		orarioInizioLabel = new JLabel("Orario Inizio: N/A");
+		orarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		orarioInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		orarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+
+		orarioFineLabel = new JLabel("Orario Fine: N/A");
+		orarioFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+
+		dataInizioLabel = new JLabel("Data Inizio: N/A");
+		dataInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+
+		dataFineLabel = new JLabel("Data Fine: N/A");
+		dataFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
+
+		progettoDiscussoLabel = new JLabel("N/A");
+		progettoDiscussoLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
+
+		JPanel panel_1 = new JPanel();
+
+		infoLabel = new JLabel("Info");
+		infoLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+		panel_1.add(infoLabel);
+		nuovoMeetingButton = new JButton("Inserisci/Modifica Meeting");
+		nuovoMeetingButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		nuovoMeetingButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		nuovoMeetingButton.setBackground(Color.WHITE);
+		nuovoMeetingButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nuovoMeetingButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -80,65 +179,11 @@ public class MieiMeeting extends JFrame {
 				nuovoMeetingButton.setBackground(Color.WHITE);
 			}
 		});
-		nuovoMeetingButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		nuovoMeetingButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		nuovoMeetingButton.setBackground(Color.WHITE);
-		nuovoMeetingButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.apriGestioneMeeting();
 			}
 		});
-
-		mieiMeetingLabel = new JLabel("Miei Meeting");
-		mieiMeetingLabel.setIcon(new ImageIcon(MieiMeeting.class.getResource("/Icone/meeting_64.png")));
-		mieiMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
-
-		JScrollPane mieiMeetingPanel = new JScrollPane();
-		mieiMeetingPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
-		mieiMeetingPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
-		mieiMeetingPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-
-		JPanel infoMeetingPanel = new JPanel();
-		infoMeetingPanel.setFont(new Font("Consolas", Font.PLAIN, 21));
-		infoMeetingPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		infoMeetingPanel.setBackground(Color.WHITE);
-
-		JLabel piattaformaSalaLabel = new JLabel("Piattaforma/Sala: N/A");
-		piattaformaSalaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		piattaformaSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-
-		JLabel modalitàLabel = new JLabel("Modalità: N/A");
-		modalitàLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		modalitàLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-
-		JLabel orarioInizioLabel = new JLabel("Orario Inizio: N/A");
-		orarioInizioLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		orarioInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		orarioInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-
-		JLabel orarioFineLabel = new JLabel("Orario Fine: N/A");
-		orarioFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		orarioFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-
-		JLabel dataInizioLabel = new JLabel("Data Inizio: N/A");
-		dataInizioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-
-		JLabel dataFineLabel = new JLabel("Data Fine: N/A");
-		dataFineLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
-
-		JLabel progettoDiscussoLabel = new JLabel("N/A");
-		progettoDiscussoLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		progettoDiscussoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		progettoDiscussoLabel.setFont(new Font("Consolas", Font.PLAIN, 27));
-
-		JPanel panel_1 = new JPanel();
-
-		JLabel infoLabel = new JLabel("Info");
-		infoLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-		panel_1.add(infoLabel);
 
 		GroupLayout gl_infoMeetingPanel = new GroupLayout(infoMeetingPanel);
 		gl_infoMeetingPanel.setHorizontalGroup(gl_infoMeetingPanel.createParallelGroup(Alignment.LEADING)
@@ -181,7 +226,7 @@ public class MieiMeeting extends JFrame {
 						.addComponent(nuovoMeetingButton, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 176,
 								GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+								.addComponent(mieiMeetingScrollPane, GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
 								.addGap(154)
 								.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 621, Short.MAX_VALUE))
 						.addComponent(mieiMeetingLabel, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE))
@@ -191,43 +236,10 @@ public class MieiMeeting extends JFrame {
 						.addGap(31)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addComponent(infoMeetingPanel, GroupLayout.PREFERRED_SIZE, 688, Short.MAX_VALUE)
-								.addComponent(mieiMeetingPanel, GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE))
+								.addComponent(mieiMeetingScrollPane, GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(nuovoMeetingButton, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)));
-
-		inizializzaListaMeeting(controller);
-		meetingList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				meetingSelezionato = meetingList.getSelectedValue();
-
-				progettoDiscussoLabel.setText("<html><center>"
-						+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() + "</html></center>");
-
-				modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());
-
-				if (meetingSelezionato.getModalita().equals("Fisico"))
-					piattaformaSalaLabel.setText("Sala: " + meetingSelezionato.getSala().getCodiceSala());
-				else
-					piattaformaSalaLabel.setText("Piattaforma: " + meetingSelezionato.getPiattaforma());
-
-				DateTimeFormatter formatTime = DateTimeFormat.forPattern("HH:mm");
-				orarioFineLabel.setText("Orario Fine: " + meetingSelezionato.getOraFine().toString(formatTime));
-				orarioInizioLabel
-						.setText("Orario Inizio: " + meetingSelezionato.getOraInizio().toString(formatTime));
-
-				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-				dataFineLabel.setText("Data Fine: " + meetingSelezionato.getDataFine().toString(formatDate));
-				dataInizioLabel.setText("Data Inizio: " + meetingSelezionato.getDataInizio().toString(formatDate));
-			}
-		});
-		MeetingListRenderer renderer = new MeetingListRenderer();
-		meetingList.setCellRenderer(renderer);
-		meetingList.setSelectionBackground(Color.LIGHT_GRAY);
-		meetingList.setFixedCellHeight(70);
-		meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
-		meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		meetingList.setSelectedIndex(0);
-		mieiMeetingPanel.setViewportView(meetingList);
+		
 		contentPane.setLayout(gl_contentPane);
 	}
 
