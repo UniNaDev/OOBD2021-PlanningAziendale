@@ -48,7 +48,7 @@ public class ControllerProgettiSegreteria {
 	
 	public void tornaAiPlanner() {
 		gestioneProgettiFrame.setVisible(false);
-		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);
+		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
 	}
 	
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException{

@@ -3,12 +3,6 @@
 
 package controller;
 
-
-
-import controller.dipendente.ControllerAccesso;
-import controller.segreteria.ControllerDipendentiSegreteria;
-import controller.segreteria.ControllerMeetingSegreteria;
-import controller.segreteria.ControllerProgettiSegreteria;
 import gui.*;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
@@ -29,9 +23,7 @@ public class ControllerStart {
 	private SalaRiunioneDAO salaDAO = null;
 	private AmbitoProgettoDAO ambitoDAO = null;
 	
-	private boolean isSegreteria = false;
-	
-	public ControllerStart(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO, boolean isSegreteria) {
+	public ControllerStart(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO) {
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
@@ -39,30 +31,20 @@ public class ControllerStart {
 		this.skillDAO = skillDAO;
 		this.salaDAO = salaDAO;
 		this.ambitoDAO = ambitoDAO;
-		
-		this.isSegreteria = isSegreteria;
-		
-		iPlannerFrame = new iPlanner(this, isSegreteria);
+				
+		iPlannerFrame = new iPlanner(this);
 		iPlannerFrame.setVisible(true);		
 	}
 	
 	public void apriLogin() {
 		iPlannerFrame.setVisible(false);
-		ControllerAccesso controller=new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO, isSegreteria);
+		ControllerAccesso controller = new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
+		controller.apriLogin();
 	}
 	
-	public void vaiAGestioneDipendenti() {
+	public void apriAutenticazioneSegreteria() {
 		iPlannerFrame.setVisible(false);
-		ControllerDipendentiSegreteria controller = new ControllerDipendentiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
-	}
-	
-	public void vaiAGestioneProgetti() {
-		iPlannerFrame.setVisible(false);
-		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
-	}
-	
-	public void vaiAGestioneMeeting() {
-		iPlannerFrame.setVisible(false);
-		ControllerMeetingSegreteria controller = new ControllerMeetingSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
+		ControllerAccesso controller = new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
+		controller.apriAutenticazioneSegreteria();
 	}
 }

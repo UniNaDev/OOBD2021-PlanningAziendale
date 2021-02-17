@@ -54,7 +54,7 @@ public class ControllerDipendentiSegreteria {
 	
 	public void tornaAiPlanner() {
 		gestioneDipendentiFrame.setVisible(false);
-		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, true);
+		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
 	}
 	
 	public ArrayList<String> ottieniProvince() throws SQLException{

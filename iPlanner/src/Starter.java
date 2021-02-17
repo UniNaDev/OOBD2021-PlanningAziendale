@@ -25,47 +25,32 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class Starter {
-
     public static void main(String[] args) {
-	DefaultLookManager lookManager = new DefaultLookManager();
-	lookManager.setDefaultLook();
+		DefaultLookManager lookManager = new DefaultLookManager();
+		lookManager.setDefaultLook();
+		
+		try {
+		    ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
+		    Connection connection = connDB.getConnection();
+		    CostruttoreDB costruttoreDB = new CostruttoreDB(connection);
+		    costruttoreDB.creaTabelle();
+		    costruttoreDB.creaFunzioniTrigger();
+		    costruttoreDB.importaLuoghi();
 	
-	try {
-	    ManagerConnessioneDB connDB = ManagerConnessioneDB.getInstance();
-	    Connection connection = connDB.getConnection();
-	    CostruttoreDB costruttoreDB = new CostruttoreDB(connection);
-	    costruttoreDB.creaTabelle();
-	    costruttoreDB.creaFunzioniTrigger();
-	    costruttoreDB.importaLuoghi();
-
-	    DipendenteDAO dipDAO = new DipendenteDAOPSQL(connection);
-	    LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(connection);
-	    ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
-	    MeetingDAO meetDAO = new MeetingDAOPSQL(connection);
-	    SkillDAO skillDAO = new SkillDAOPSQL(connection);
-	    SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
-	    AmbitoProgettoDAO ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
-
-	    boolean isSegreteria = false;
-
-	    try {
-		if (args[0].equals("-s"))
-		    isSegreteria = true;
-		else if (args[0].equals("-d"))
-		    isSegreteria = false;
-
-		ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO,
-			ambitoDAO, isSegreteria);
-	    } catch (ArrayIndexOutOfBoundsException e) {
-		JOptionPane.showMessageDialog(null,
-			"Mancano argomenti di autorizzazione in input.\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-			"Errore Argomenti Autorizzazione", JOptionPane.ERROR_MESSAGE);
-	    }
-	} catch (SQLException e) {
-	    JOptionPane.showMessageDialog(null,
-		    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	}
+		    DipendenteDAO dipDAO = new DipendenteDAOPSQL(connection);
+		    LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(connection);
+		    ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
+		    MeetingDAO meetDAO = new MeetingDAOPSQL(connection);
+		    SkillDAO skillDAO = new SkillDAOPSQL(connection);
+		    SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
+		    AmbitoProgettoDAO ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
+	
+			ControllerStart controller = new ControllerStart(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
+		} catch (SQLException e) {
+		    JOptionPane.showMessageDialog(null,
+			    e.getMessage()
+				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
     }
 }

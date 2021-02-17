@@ -4,7 +4,6 @@
 
 package gui.dipendente;
 
-import controller.dipendente.ControllerAccesso;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -21,6 +20,9 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import javax.swing.border.MatteBorder;
+
+import controller.ControllerAccesso;
+
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -111,12 +113,12 @@ public class Login extends JFrame {
 		mostraPasswordLabel.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mousePressed(MouseEvent e) {
-			passwordField.setEchoChar((char) 0);
+		    	passwordField.setEchoChar((char) 0);
 		    }
 	
 		    @Override
 		    public void mouseReleased(MouseEvent e) {
-			passwordField.setEchoChar('*');
+		    	passwordField.setEchoChar('*');
 		    }
 		});
 		
@@ -127,17 +129,17 @@ public class Login extends JFrame {
 		annullaButton.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseEntered(MouseEvent e) {
-			annullaButton.setBackground(Color.LIGHT_GRAY);
+		    	annullaButton.setBackground(Color.LIGHT_GRAY);
 		    }
 	
 		    @Override
 		    public void mouseExited(MouseEvent e) {
-			annullaButton.setBackground(Color.WHITE);
+		    	annullaButton.setBackground(Color.WHITE);
 		    }
 		});
 		annullaButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-			controller.tornaAIPlanner();
+		    	controller.tornaAIPlanner();
 		    }
 		});
 	
@@ -148,17 +150,17 @@ public class Login extends JFrame {
 		accessoButton.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseEntered(MouseEvent e) {
-			accessoButton.setBackground(Color.LIGHT_GRAY);
+		    	accessoButton.setBackground(Color.LIGHT_GRAY);
 		    }
 	
 		    @Override
 		    public void mouseExited(MouseEvent e) {
-			accessoButton.setBackground(Color.WHITE);
+		    	accessoButton.setBackground(Color.WHITE);
 		    }
 		});
 		accessoButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-			login(controller);
+		    	login(controller);
 		    }
 		});
 	
@@ -183,13 +185,13 @@ public class Login extends JFrame {
 	
 		if (emailTextField.getText().isBlank() || passwordField.getText().isBlank()) {
 		    if (emailTextField.getText().isBlank()) {
-			emailLabel.setForeground(Color.RED);
-			pulisciCampi();
+		    	emailLabel.setForeground(Color.RED);
+		    	pulisciCampi();
 		    }
 		    
 		    if (passwordField.getText().isBlank()) {
-			passwordLabel.setForeground(Color.RED);
-			pulisciCampi();
+		    	passwordLabel.setForeground(Color.RED);
+		    	pulisciCampi();
 		    }
 		    
 		    JOptionPane.showMessageDialog(null, "Inserire Email e Password per login.", "Credenziali Vuote",
@@ -199,9 +201,9 @@ public class Login extends JFrame {
 		    String email = emailTextField.getText();
 		    String password = passwordField.getText();
 		    try {
-			controller.eseguiLogin(emailTextField.getText(), passwordField.getText());
+		    	controller.eseguiLoginDipendente(emailTextField.getText(), passwordField.getText());
 		    } catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, "Credenziali errate.", "Login Fallito", JOptionPane.ERROR_MESSAGE);
+		    	JOptionPane.showMessageDialog(null, "Credenziali errate.", "Login Fallito", JOptionPane.ERROR_MESSAGE);
 		    }
 		}
     }
