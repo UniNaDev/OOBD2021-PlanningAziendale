@@ -40,7 +40,6 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		updateDipendentePS,
 		deleteDipendentePS,
 		loginCheckPS,
-		organizzatoreCheckPS,
 		getDipendenteByCFPS,
 		getMaxSalarioPS,
 		getDipendentiFiltratiPS,
@@ -69,7 +68,6 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
 		deleteDipendentePS = connection.prepareStatement("DELETE FROM Dipendente WHERE CF = ?");
 		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email ILIKE ? AND Password = ?");
-		organizzatoreCheckPS=connection.prepareStatement("SELECT cf FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=? AND organizzatore=true");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
 		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
 
@@ -424,20 +422,6 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 			return tipologie.substring(1, tipologie.length());
 		else
 			return null;
-	}
-
-
-	@Override
-	public String organizzatoreCheck(Meeting meeting) throws SQLException {
-		String cf;
-		organizzatoreCheckPS.setInt(1, meeting.getIdMeeting());	
-		ResultSet risultato=organizzatoreCheckPS.executeQuery();
-		
-		risultato.next();
-		cf = risultato.getString(1);
-		risultato.close();
-		
-		return cf;
 	}
 	
 	@Override

@@ -43,10 +43,10 @@ public class ControllerProgetto {
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.ambitoDAO = ambitoDAO;
-		this.skillDAO=skillDAO;
+		this.skillDAO = skillDAO;
 		this.dipendenteLogged = dipendenteLogged;
 		
-		mieiProgettiFrame=new MieiProgetti(this, this.dipendenteLogged);
+		mieiProgettiFrame = new MieiProgetti(this);
 		mieiProgettiFrame.setVisible(true);
 	}
 

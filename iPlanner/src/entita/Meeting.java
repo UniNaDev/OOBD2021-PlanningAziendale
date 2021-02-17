@@ -38,18 +38,6 @@ public class Meeting {
 		this.sala = sala;
 	}
 
-	//TODO: probabilmente inutile (basta usare l'altro e porre l'id = null)
-	public Meeting(LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
-			String modalita, String piattaforma, SalaRiunione sala) {
-		this.dataInizio = dataInizio;
-		this.dataFine = dataFine;
-		this.oraInizio = oraInizio;
-		this.oraFine = oraFine;
-		this.modalita = modalita;
-		this.piattaforma = piattaforma;
-		this.sala = sala;
-	}
-
 	public LocalDate getDataInizio() {
 		return dataInizio;
 	}

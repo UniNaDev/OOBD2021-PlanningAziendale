@@ -57,10 +57,10 @@ public class MieiProgetti extends JFrame {
 
 	private JPanel contentPane;
 	private JButton nuovoProgettoBotton;
-	private JList<Progetto> progettiList;
+	private JList<Progetto> progettiList = new JList();
 	private DefaultListModel modelloListaProgetti;
 
-	public MieiProgetti(ControllerProgetto controller, Dipendente dipendente) {
+	public MieiProgetti(ControllerProgetto controller) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiProgetti.class.getResource("/Icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1440, 900));
 		setTitle("iPlanner - I Miei Progetti");

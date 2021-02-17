@@ -18,11 +18,11 @@ public interface MeetingDAO {
 	
 	public ArrayList<Dipendente> getInvitati(int idMeeting) throws SQLException;
 	
-	public boolean insertMeeting(Meeting meeting,String nomeProgettoDiscusso) throws SQLException;
+	public boolean insertMeeting(Meeting meeting) throws SQLException;
 	
 	public boolean deleteMeeting(int idMeeting) throws SQLException;
 	
-	public boolean updateMeeting(Meeting meeting, Progetto progettoSelezionato) throws SQLException;
+	public boolean updateMeeting(Meeting meeting) throws SQLException;
 	
 	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException;
 	
@@ -32,8 +32,6 @@ public interface MeetingDAO {
 	
 	public boolean insertOrganizzatore(String CF) throws SQLException;
 	
-	public boolean insertMeetingCompleto(Meeting meetingInserito, Progetto progetto) throws SQLException;
-
 	public ArrayList<PartecipazioneMeeting> getInvitatiPartecipazioneMeeting(int idMeeting) throws SQLException;
 	
 	public ArrayList<Meeting> getMeetingsByModalità(String modalità) throws SQLException;
@@ -50,7 +48,7 @@ public interface MeetingDAO {
 
 	public ArrayList<Meeting> getMeetingsDipendenteByPiattaforma(String piattaforma, Dipendente dipendente) throws SQLException;
 
-	public int getLastIdMeeting() throws SQLException;
+	public int getUltimoIDMeeting() throws SQLException;
 	
-
+	public String getCFOrganizzatore(Meeting meeting) throws SQLException;
 }

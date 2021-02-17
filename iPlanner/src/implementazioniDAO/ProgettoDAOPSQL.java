@@ -429,22 +429,6 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public Progetto getProgettoInserito(String nomeProgetto) throws SQLException {
-		Progetto progetto = null;
-		getProgettoInseritoPS.setString(1,nomeProgetto);
-		ResultSet risultato=getProgettoInseritoPS.executeQuery();
-		risultato.next();
-		
-		progetto = new Progetto(risultato.getString("nomeProgetto"),
-				risultato.getString("tipoProgetto"), 
-				risultato.getString("descrizioneProgetto"),	
-				new LocalDate(risultato.getDate("DataCreazione")),
-				new LocalDate(risultato.getDate("DataScadenza")));
-		
-		return progetto;
-	}
-
-	@Override
 	public boolean insertProjectManager(String cf, Progetto progetto, String ruolo) throws SQLException {
 		addPartecipantePS.setInt(1, progetto.getIdProgettto());
 		addPartecipantePS.setString(2, cf);

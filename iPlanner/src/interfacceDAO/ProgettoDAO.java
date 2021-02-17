@@ -49,7 +49,6 @@ public interface ProgettoDAO {
 	public ArrayList<String> getRuoliDipendenti() throws SQLException;
 	
 	//TODO: probabilmente inutile
-	public Progetto getProgettoInserito(String nomeProgetto) throws SQLException;
 	public ArrayList<CollaborazioneProgetto> getPartecipantiProgetto(int codiceProgetto) throws SQLException;
 	
 	//TODO: probabilmente inutile

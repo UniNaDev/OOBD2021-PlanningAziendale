@@ -84,7 +84,7 @@ public class MioAccount extends JFrame {
     private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
     private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
 
-    public MioAccount(ControllerGestioneProfilo controller, Dipendente dipendente) {
+    public MioAccount(ControllerGestioneProfilo controller, Dipendente dipendenteLogged) {
 	addWindowListener(new WindowAdapter() {
 	    public void windowClosing(WindowEvent evt) {
 		if (modificheEffettuate) {
@@ -131,7 +131,7 @@ public class MioAccount extends JFrame {
 		campiObbligatoriNeri();
 		if (!checkCampiObbligatoriVuoti() && lunghezzaTelefonoValida(telefonoFissoTextField.getText())
 			&& lunghezzaTelefonoValida(cellulareTextField.getText()))
-		    aggiornaAccount(controller, dipendente);
+		    aggiornaAccount(controller, dipendenteLogged);
 		else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
 		    JOptionPane.showMessageDialog(null,
 			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
@@ -163,7 +163,7 @@ public class MioAccount extends JFrame {
 	nomeTextField = new JTextField();
 	nomeTextField.setHorizontalAlignment(SwingConstants.LEFT);
 	nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
-	nomeTextField.setText(dipendente.getNome());
+	nomeTextField.setText(dipendenteLogged.getNome());
 	nomeTextField.setEditable(false);
 	nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 	nomeTextField.setBounds(239, 119, 187, 24);
@@ -176,7 +176,7 @@ public class MioAccount extends JFrame {
 
 	cfTextField = new JTextField();
 	cfTextField.setHorizontalAlignment(SwingConstants.LEFT);
-	cfTextField.setText(dipendente.getCf());
+	cfTextField.setText(dipendenteLogged.getCf());
 	cfTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 	cfTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 	cfTextField.setEditable(false);
@@ -190,7 +190,7 @@ public class MioAccount extends JFrame {
 
 	cognomeTextField = new JTextField();
 	cognomeTextField.setHorizontalAlignment(SwingConstants.LEFT);
-	cognomeTextField.setText(dipendente.getCognome());
+	cognomeTextField.setText(dipendenteLogged.getCognome());
 	cognomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 	cognomeTextField.setEditable(false);
 	cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -218,7 +218,7 @@ public class MioAccount extends JFrame {
 	donnaRadioButton.setBounds(312, 195, 62, 23);
 	contentPane.add(donnaRadioButton);
 
-	if (dipendente.getSesso() == 'M') {
+	if (dipendenteLogged.getSesso() == 'M') {
 	    uomoRadioButton.setSelected(true);
 	    donnaRadioButton.setSelected(false);
 	} else {
@@ -241,7 +241,7 @@ public class MioAccount extends JFrame {
 	giornoComboBox.setModel(new DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08",
 		"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
 		"26", "27", "28", "29", "30", "31" }));
-	giornoComboBox.setSelectedIndex(dipendente.getDataNascita().getDayOfMonth() - 1);
+	giornoComboBox.setSelectedIndex(dipendenteLogged.getDataNascita().getDayOfMonth() - 1);
 	giornoComboBox.setBounds(239, 236, 47, 22);
 	contentPane.add(giornoComboBox);
 
@@ -253,7 +253,7 @@ public class MioAccount extends JFrame {
 	meseComboBox.setBackground(Color.WHITE);
 	meseComboBox.setModel(new DefaultComboBoxModel(
 		new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
-	meseComboBox.setSelectedIndex(dipendente.getDataNascita().getMonthOfYear() - 1);
+	meseComboBox.setSelectedIndex(dipendenteLogged.getDataNascita().getMonthOfYear() - 1);
 	meseComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 	meseComboBox.setBounds(296, 236, 47, 22);
 	contentPane.add(meseComboBox);
@@ -270,7 +270,7 @@ public class MioAccount extends JFrame {
 	annoComboBox.setModel(anniComboBoxModel);
 	for (int i = 1900; i <= LocalDate.now().getYear(); i++)
 	    anniComboBoxModel.addElement(i);
-	annoComboBox.setSelectedIndex(dipendente.getDataNascita().getYear() - 1900);
+	annoComboBox.setSelectedIndex(dipendenteLogged.getDataNascita().getYear() - 1900);
 	contentPane.add(annoComboBox);
 
 	JButton modificaButton = new JButton("Modifica");
@@ -373,8 +373,8 @@ public class MioAccount extends JFrame {
 	provinciaComboBox.setBackground(Color.WHITE);
 	provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 	provinciaComboBox.setBounds(239, 268, 144, 22);
-	provinciaComboBox.setSelectedItem(dipendente.getLuogoNascita().getNomeProvincia());
-	comuneComboBox.setSelectedItem(dipendente.getLuogoNascita());
+	provinciaComboBox.setSelectedItem(dipendenteLogged.getLuogoNascita().getNomeProvincia());
+	comuneComboBox.setSelectedItem(dipendenteLogged.getLuogoNascita());
 	contentPane.add(provinciaComboBox);
 
 	indirizzoLabel = new JLabel("Indirizzo");
@@ -383,7 +383,7 @@ public class MioAccount extends JFrame {
 	indirizzoLabel.setBounds(85, 337, 144, 20);
 	contentPane.add(indirizzoLabel);
 
-	indirizzoTextField = new JTextField(dipendente.getIndirizzo());
+	indirizzoTextField = new JTextField(dipendenteLogged.getIndirizzo());
 	indirizzoTextField.setHorizontalAlignment(SwingConstants.LEFT);
 	indirizzoTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 	indirizzoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -400,7 +400,7 @@ public class MioAccount extends JFrame {
 
 	cellulareTextField = new JTextField();
 	cellulareTextField.setHorizontalAlignment(SwingConstants.LEFT);
-	cellulareTextField.setText(dipendente.getCellulare());
+	cellulareTextField.setText(dipendenteLogged.getCellulare());
 	cellulareTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 	cellulareTextField.setEditable(false);
 	cellulareTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -416,7 +416,7 @@ public class MioAccount extends JFrame {
 
 	telefonoFissoTextField = new JTextField();
 	telefonoFissoTextField.setHorizontalAlignment(SwingConstants.LEFT);
-	telefonoFissoTextField.setText(dipendente.getTelefonoCasa());
+	telefonoFissoTextField.setText(dipendenteLogged.getTelefonoCasa());
 	telefonoFissoTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 	telefonoFissoTextField.setEditable(false);
 	telefonoFissoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -436,7 +436,7 @@ public class MioAccount extends JFrame {
 	laMiaValutazioneLabel.setBounds(772, 136, 386, 37);
 	contentPane.add(laMiaValutazioneLabel);
 
-	JLabel valoreValutazioneLabel = new JLabel(String.format("%.2f", dipendente.getValutazione()));
+	JLabel valoreValutazioneLabel = new JLabel(String.format("%.2f", dipendenteLogged.getValutazione()));
 	valoreValutazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	valoreValutazioneLabel.setForeground(Color.BLACK);
 	valoreValutazioneLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
@@ -450,7 +450,7 @@ public class MioAccount extends JFrame {
 	IlMioSalarioLabel.setBounds(772, 293, 386, 37);
 	contentPane.add(IlMioSalarioLabel);
 
-	JLabel valoreSalarioLabel = new JLabel(String.format("%.2f", dipendente.getSalario()) + "€");
+	JLabel valoreSalarioLabel = new JLabel(String.format("%.2f", dipendenteLogged.getSalario()) + "€");
 	valoreSalarioLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	valoreSalarioLabel.setForeground(Color.BLACK);
 	valoreSalarioLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
@@ -488,7 +488,7 @@ public class MioAccount extends JFrame {
 	emailLabel.setBounds(85, 376, 144, 19);
 	contentPane.add(emailLabel);
 
-	emailTextField = new JTextField(dipendente.getEmail());
+	emailTextField = new JTextField(dipendenteLogged.getEmail());
 	emailTextField.setHorizontalAlignment(SwingConstants.LEFT);
 	emailTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 	emailTextField.setEditable(false);
@@ -503,7 +503,7 @@ public class MioAccount extends JFrame {
 	passwordLabel.setBounds(85, 414, 144, 19);
 	contentPane.add(passwordLabel);
 
-	passwordField = new JPasswordField(dipendente.getPassword());
+	passwordField = new JPasswordField(dipendenteLogged.getPassword());
 	passwordField.setFont(new Font("Consolas", Font.PLAIN, 12));
 	passwordField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 	passwordField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -526,7 +526,7 @@ public class MioAccount extends JFrame {
 	valoreSkillTextArea.setLineWrap(true);
 	valoreSkillTextArea.setFont(new Font("Monospaced", Font.PLAIN, 18));
 	String skillDipendente = "";
-	for (Skill skill : dipendente.getSkills())
+	for (Skill skill : dipendenteLogged.getSkills())
 	    skillDipendente += skill.toString() + "\n";
 	valoreSkillTextArea.setText(skillDipendente);
 	skillsScrollPane.setViewportView(valoreSkillTextArea);
