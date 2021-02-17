@@ -17,7 +17,6 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -40,7 +39,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerMeeting;
-import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
 import entita.SalaRiunione;
@@ -126,10 +124,10 @@ public class GestioneMeetingDipendente extends JFrame {
 	private SalaRiunione sala;
 	private Progetto progettoDiscusso;
 	
-	LocalDate dataAttuale = LocalDate.now();
-	LocalTime oraAttuale = LocalTime.now();
-	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-	DateTimeFormatter formatOra = DateTimeFormat.forPattern("HH:mm");
+	private LocalDate dataAttuale = LocalDate.now();
+	private LocalTime oraAttuale = LocalTime.now();
+	private DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+	private DateTimeFormatter formatOra = DateTimeFormat.forPattern("HH:mm");
 
 	public GestioneMeetingDipendente(ControllerMeeting controller) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));

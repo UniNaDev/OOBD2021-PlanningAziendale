@@ -6,6 +6,8 @@ package controller.dipendente;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import org.joda.time.LocalDate;
 
 import entita.AmbitoProgetto;
@@ -72,11 +74,8 @@ public class ControllerProgetto {
 		return ambitoDAO.getAmbiti();
 	}
 	
-	public String [] ottieniTipologie() throws SQLException{
-		String [] temp = new String [projDAO.getTipologie().size()];
-		for (int i = 0; i < projDAO.getTipologie().size(); i++)
-			temp[i] = projDAO.getTipologie().get(i);
-		return temp;
+	public ArrayList<String> ottieniTipologie() throws SQLException{
+		return projDAO.getTipologie();
 	}
 
 	//TODO: eliminabile probabilmente
@@ -89,21 +88,80 @@ public class ControllerProgetto {
 		return projDAO.getMeetingRelativiProgetto(codProgettoSelezionato);
 	}
 
-	public void aggiornaProgetto(int codProgetto ,String nuovoNome ,String nuovaTipologia ,String nuovaDescrizione,LocalDate dataCreazione, LocalDate nuovaDataTerminazione , LocalDate nuovaDataScadenza, ArrayList<AmbitoProgetto> nuoviAmbiti) throws SQLException {
-		Progetto progetto = new Progetto(codProgetto, nuovoNome , nuovaTipologia , nuovaDescrizione ,dataCreazione, nuovaDataScadenza, nuovaDataTerminazione);
-		projDAO.updateProgetto(progetto);
-		ambitoDAO.deleteAmbitiProgetto(progetto);
-		progetto.setAmbiti(nuoviAmbiti);
-		ambitoDAO.insertAmbitiOfProgetto(progetto);								
+	public boolean aggiornaProgetto(Progetto progettoModificato) {
+		try {
+			projDAO.updateProgetto(progettoModificato);
+		} catch(SQLException e) {
+			//TODO: aggiungi altre eccezioni
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		try {
+			ambitoDAO.deleteAmbitiProgetto(progettoModificato);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		try {
+			//TODO: aggiungi altre eccezioni
+			ambitoDAO.insertAmbitiOfProgetto(progettoModificato);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 	
-	public void creaProgetto(String nomeProgetto , String tipologia , String descrizioneProgetto , LocalDate dataCreazione , LocalDate dataScadenza,ArrayList<AmbitoProgetto> ambiti) throws SQLException {
-		Progetto progetto = new Progetto(nomeProgetto, tipologia, descrizioneProgetto , dataCreazione , dataScadenza);
-		projDAO.insertProgetto(progetto);
-		progetto.setIdProgettto(projDAO.getCodProgetto(progetto));
-		progetto.setAmbiti(ambiti);
-		ambitoDAO.insertAmbitiOfProgetto(progetto);
-		projDAO.insertProjectManager(dipendenteLogged.getCf(), progetto, "Project Manager");	
+	public boolean creaProgetto(Progetto nuovoProgetto) {
+		try {
+			//TODO: aggiungi altre eccezioni
+			projDAO.insertProgetto(nuovoProgetto);
+		} catch(SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		try {
+			nuovoProgetto.setIdProgettto(projDAO.getCodProgetto(nuovoProgetto));
+		} catch(SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		try {
+			//TODO: aggiungi altre eccezioni
+			ambitoDAO.insertAmbitiOfProgetto(nuovoProgetto);
+		} catch(SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		try {
+			//TODO: aggiungi altre eccezioni
+			projDAO.insertProjectManager(dipendenteLogged.getCf(), nuovoProgetto, "Project Manager");
+		} catch(SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 	
 	//TODO: eliminabile probabilmente
@@ -111,10 +169,17 @@ public class ControllerProgetto {
 		return ambitoDAO.getAmbitiProgettoByCodice(codProgetto);
 	}
 	
-	//TODO: potrebbe diventare void
-	public boolean rimuoviProgetto (Progetto progetto) throws SQLException {
-		boolean risultato = projDAO.deleteProgetto(progetto);
-		return risultato;
+	public boolean rimuoviProgetto (Progetto progetto) {
+		try {
+			projDAO.deleteProgetto(progetto);
+		} catch(SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
 	public void updateProgetto(Progetto progetto) throws SQLException {
@@ -124,9 +189,11 @@ public class ControllerProgetto {
 		ambitoDAO.insertAmbitiOfProgetto(progetto);
 	}
 	
-	//TODO: eliminabile probabilmente
-	public String ottieniProjectManager(Progetto progetto) throws SQLException {
-		return projDAO.getProjectManager(progetto);
+	public boolean isProjectManager(Progetto progetto) throws SQLException {
+		String cf =  projDAO.getCFProjectManager(progetto);
+		if (dipendenteLogged.getCf().equals(cf))
+			return true;
+		return false;
 	}
 
 	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{

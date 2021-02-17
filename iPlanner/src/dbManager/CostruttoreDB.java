@@ -172,7 +172,7 @@ public class CostruttoreDB {
 	        if (!esisteTabella("progetto")) {
 	            String createTable = "CREATE TABLE Progetto (\r\n"
 	            		+ "	CodProgetto SERIAL,\r\n"
-	            		+ "	NomeProgetto varchar(100) NOT NULL,\r\n"
+	            		+ "	NomeProgetto varchar(100) UNIQUE,\r\n"
 	            		+ "	TipoProgetto tipologia NOT NULL ,\r\n"
 	            		+ "	DescrizioneProgetto varchar (500),\r\n"
 	            		+ "	DataCreazione DATE NOT NULL DEFAULT CURRENT_DATE,\r\n"

@@ -48,16 +48,6 @@ public class Progetto {
 		this.scadenza = scadenza;
 		this.dataTerminazione=dataTerminazione;
 	}
-
-	//TODO: si può eliminare (basta usare l'altro costruttore e inserire null negli attributi non necessari)
-	public Progetto(String nomeProgetto, String tipoProgetto, String descrizioneProgetto, LocalDate dataCreazione,
-			LocalDate scadenza) {
-		this.nomeProgetto = nomeProgetto;
-		this.tipoProgetto = tipoProgetto;
-		this.descrizioneProgetto = descrizioneProgetto;
-		this.dataCreazione = dataCreazione;
-		this.scadenza = scadenza;
-	}
 	
 	public int getIdProgettto() {
 		return idProgettto;

@@ -45,8 +45,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	getProgettoByCodPS,
 	getTipologiePS,
 	getRuoliDipendentiPS,
-	getCodProgettoPS,
-	getProgettoInseritoPS;
+	getCodProgettoPS;
 
 	public ProgettoDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;
@@ -62,15 +61,15 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		deleteProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?");
 		addPartecipantePS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)");
 		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?");
-		projectManagerPS=connection.prepareStatement("SELECT cf FROM Dipendente NATURAL JOIN Partecipazione WHERE codProgetto=? AND ruolodipendente='Project Manager'");
+		projectManagerPS = connection.prepareStatement("SELECT CF FROM Dipendente NATURAL JOIN Partecipazione WHERE CodProgetto = ? AND RuoloDipendente = 'Project Manager'");
 		aggiornaRuoloCollaboratorePS=connection.prepareStatement("UPDATE Partecipazione SET RuoloDipendente=? WHERE CF=? AND CodProgetto=?");
 		updateProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?");
 		getProgettoByCodPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");
 		getTipologiePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::tipologia))");
 		getRuoliDipendentiPS=connection.prepareStatement("SELECT unnest(enum_range(NULL::ruolo))");
-		getCodProgettoPS = connection.prepareStatement("SELECT codprogetto FROM progetto WHERE nomeprogetto = ? AND datacreazione =?");
-		getProgettoInseritoPS=connection.prepareStatement("SELECT nomeProgetto,tipoProgetto,descrizioneProgetto,dataCreazione,datascadenza FROM Progetto WHERE NomeProgetto= ?");
+		getCodProgettoPS = connection.prepareStatement("SELECT codprogetto FROM progetto WHERE nomeprogetto = ?");
+		connection.prepareStatement("SELECT nomeProgetto,tipoProgetto,descrizioneProgetto,dataCreazione,datascadenza FROM Progetto WHERE NomeProgetto= ?");
 	}
 
 	@Override
@@ -282,10 +281,6 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			addProgettoPS.setDate(6, new Date(proj.getDataTerminazione().toDateTimeAtStartOfDay().getMillis()));
 		else
 			addProgettoPS.setNull(6, Types.DATE);
-		if (!proj.getAmbiti().isEmpty()) {
-			ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
-			ambitoDAO.insertAmbitiOfProgetto(proj);
-		}
 		
 		int record = addProgettoPS.executeUpdate();
 		
@@ -404,7 +399,6 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		int codProgetto;
 		
 		getCodProgettoPS.setString(1, proj.getNomeProgetto());
-		getCodProgettoPS.setDate(2, new Date(proj.getDataCreazione().toDateTimeAtStartOfDay().getMillis()));
 		
 		ResultSet risultato = getCodProgettoPS.executeQuery();
 		
@@ -490,7 +484,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public String getProjectManager(Progetto progetto) throws SQLException {
+	public String getCFProjectManager(Progetto progetto) throws SQLException {
 		String cf;
 		projectManagerPS.setInt(1, progetto.getIdProgettto());
 		ResultSet risultato=projectManagerPS.executeQuery();

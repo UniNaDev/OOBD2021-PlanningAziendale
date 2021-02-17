@@ -105,7 +105,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		
 		int risultato = removeAmbitiProgettoPS.executeUpdate();
 		
-		if(risultato ==1)
+		if(risultato > 0)
 			return true;		
 		else 
 			return false;		

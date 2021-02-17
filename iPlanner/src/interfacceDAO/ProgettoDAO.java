@@ -40,10 +40,11 @@ public interface ProgettoDAO {
 	
 	public ArrayList<String> getTipologie() throws SQLException;
 	
+	public String getCFProjectManager(Progetto progetto) throws SQLException;
+	
 	//TODO: probabilmente inutile
 	public ArrayList<Dipendente> getPartecipantiProgettoSenzaRuolo(int codiceProgetto) throws SQLException;
 	
-	//TODO: probabilmente inutile
 	public int getCodProgetto(Progetto proj) throws SQLException;
 	
 	public ArrayList<String> getRuoliDipendenti() throws SQLException;
@@ -53,9 +54,8 @@ public interface ProgettoDAO {
 	
 	//TODO: probabilmente inutile
 	public boolean insertProjectManager(String cf, Progetto tmp, String string) throws SQLException;
-
+	
 	//TODO: probabilmente inutile
-	public String getProjectManager(Progetto progetto) throws SQLException;
 	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException;
 	public boolean addProjectManager(String cf, Progetto tmp, String string) throws SQLException;
 	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;

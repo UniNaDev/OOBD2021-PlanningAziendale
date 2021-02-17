@@ -29,7 +29,7 @@ CREATE TYPE tipologia AS ENUM('Ricerca base','Ricerca industriale','Ricerca sper
 
 CREATE TABLE Progetto (
 	CodProgetto SERIAL,
-	NomeProgetto varchar(100) NOT NULL,
+	NomeProgetto varchar(100) UNIQUE,
 	TipoProgetto tipologia NOT NULL ,
 	DescrizioneProgetto varchar (500),
 	DataCreazione DATE NOT NULL DEFAULT CURRENT_DATE,

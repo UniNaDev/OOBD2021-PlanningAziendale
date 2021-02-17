@@ -13,9 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -45,12 +43,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import controller.dipendente.ControllerProgetto;
-import controller.segreteria.ControllerProgettiSegreteria;
 import entita.AmbitoProgetto;
 import entita.Dipendente;
 import entita.Progetto;
@@ -62,11 +60,6 @@ import gui.tableModels.ProgettoTableModel;
 import java.awt.BorderLayout;
 
 public class GestioneProgettiDipendente extends JFrame {
-
-	//ATTRIBUTI
-	//-----------------------------------------------------------------
-	
-	//Attributi GUI
 	private JPanel contentPane;
 	private JLabel nomeProgettoLabel;
 	private JLabel descrizioneProgettoLabel;
@@ -77,7 +70,7 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JLabel meetingRelativiLabel;
 	private JLabel gestioneProgettoLabel;
 	private JLabel scadenzaProgettoLabel;
-	private JTable progettoTable;
+	private JTable progettiTable;
 	private JTextField cercaTextField;
 	private JScrollPane descrizioneProgettoScrollPane;
 	private JComboBox giornoScadenzaComboBox;
@@ -87,12 +80,14 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JComboBox meseTerminazioneComboBox;
 	private JComboBox annoTerminazioneComboBox;
 	private JComboBox tipologiaComboBox;
-	private ProgettoTableModel dataModelProgetti;
+	private DefaultComboBoxModel modelloComboBoxTipologie;
+	private ProgettoTableModel modelloTabellaProgetti;
 	private TableRowSorter<TableModel> sorterProgetti;
 	private JCheckBox progettoTerminatoCheckBox;
-	private DefaultListModel listaPartecipantiModel;
-	private DefaultListModel listaMeetingRelativiModel;
+	private DefaultListModel modelloListaPartecipanti;
+	private DefaultListModel modelloListaMeetingRelativi;
 	private JList ambitiList;
+	private DefaultListModel<AmbitoProgetto> modelloListaAmbiti;
 	private JList partecipantiList;
 	private JList meetingRelativiList;
 	private JTextField nomeTextField;
@@ -101,40 +96,46 @@ public class GestioneProgettiDipendente extends JFrame {
 	private JComboBox filtroScadutoComboBox;
 	private JLabel filtroTerminatoLabel;
 	private JComboBox filtroTerminatoComboBox;
+	private JComboBox filtroAmbitiComboBox;
+	private DefaultComboBoxModel modelloComboBoxFiltroAmbiti;
+	private JComboBox filtroTipologieComboBox;
+	private DefaultComboBoxModel modelloComboBoxFiltroTipologie;
+	private JButton inserisciPartecipanteButton;
+	private JButton eliminaButton;
+	private JButton confermaModificheButton;
 	
-	//Altri attributi
-	LocalDate dataAttuale = LocalDate.now();	//data attuale
-	String[] siNoOpzioni = {null, "Si", "No"};	//array di opzioni per combobox dove le opzioni sono si/no
-	private JComboBox filtroAmbitiComboBox_1;
-	private JComboBox filtroTipologieComboBox_1;
-
-	//Creazione frame
-	//-----------------------------------------------------------------
+	private LocalDate dataAttuale = LocalDate.now();
+	private DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+	
+	
+	private Progetto progettoSelezionato;
+	private String nomeProgetto, descrizioneProgetto;
+	private LocalDate dataCreazione, dataScadenza, dataTerminazione;
+	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
+	private String tipologia;
+	
+	private String[] siNoOpzioni = {null, "Si", "No"};
 	
 	public GestioneProgettiDipendente(ControllerProgetto controller, Dipendente dipendente) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1600,900));
-		setTitle("iPlanner-Gestione progetto");
+		setTitle("iPlanner - Gestione progetto");
 		setBounds(100, 100, 1600, 900);
 		contentPane = new JPanel();		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
 		
-		//Panel generale
 		JPanel panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		//Panel delle info
-		JPanel infoPanel = new JPanel();	//panel delle info
+		JPanel infoPanel = new JPanel();
 		
-		//Panel esterno dei comandi
-		JPanel comandiPanel = new JPanel();	//panel dei comandi
+		JPanel comandiPanel = new JPanel();
 		comandiPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		comandiPanel.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		comandiPanel.setAlignmentY(Component.TOP_ALIGNMENT);
 		
-		//ScrollPanel per la tabella dei progetti
 		JScrollPane tabellaScrollPane = new JScrollPane();
 		tabellaScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
 		tabellaScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -162,11 +163,9 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addContainerGap())
 		);
 		
-		//panel interno dei comandi
 		JPanel comandiPanel2 = new JPanel();
 		comandiPanel2.setBorder(null);
 		
-		//Button "Pulisci Campi"
 		JButton pulisciCampiButton = new JButton("Pulisci Campi");
 		pulisciCampiButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -180,6 +179,11 @@ public class GestioneProgettiDipendente extends JFrame {
 				pulisciCampiButton.setBackground(Color.WHITE);
 			}
 		});
+		pulisciCampiButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					pulisciCampi();
+			}
+		});
 		pulisciCampiButton.setPreferredSize(new Dimension(150, 30));
 		pulisciCampiButton.setMaximumSize(new Dimension(150, 150));
 		pulisciCampiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -189,8 +193,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		pulisciCampiButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		pulisciCampiButton.setMargin(new Insets(2, 20, 2, 20));
 		
-		//Button "Elimina"
-		JButton eliminaButton = new JButton("Elimina");
+		eliminaButton = new JButton("Elimina");
 		eliminaButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -212,53 +215,18 @@ public class GestioneProgettiDipendente extends JFrame {
 		eliminaButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		eliminaButton.setAlignmentX(0.5f);
 		eliminaButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				//chiede conferma all utente 
+			public void actionPerformed(ActionEvent e) {
 				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare il progetto selezionato?");
-				
-				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1)
-				{
-					//ricava il codice del progetto selezionato dalla tabella
-					try 
-					{
-						
-						Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
-						boolean risultato = controller.rimuoviProgetto(progetto);
-						
-						
-						JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
-						dataModelProgetti.fireTableDataChanged();
-						dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
-						
-						//Aggiorna il modello del sorterProgetti in seguito alla modifica effettuata
-						sorterProgetti.setModel(dataModelProgetti);
-					
-						svuotaCampi();
-						
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage());
-					}
-				}
-				else if(progettoTable.getSelectedRow()==-1) {
-					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
+				if(conferma == JOptionPane.YES_OPTION) {
+					eliminaProgetto(controller);
 				}
 			}
 		});
 		
-		//Button "Inserisci partecipanti"
-		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+		inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int row=progettoTable.getSelectedRow();
-				
-				if(row==-1) {
-					JOptionPane.showMessageDialog(null, "Seleziona un progetto dalla tabella");	
-				}
-				else {
-					Progetto progettoSelezionato=dataModelProgetti.getSelected(progettoTable.convertRowIndexToModel(progettoTable.getSelectedRow()));
 					controller.apriInserisciPartecipantiProgetto(progettoSelezionato);
-				}	
 			}
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -282,8 +250,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		
-		//Button "Conferma Modifiche"
-		JButton confermaModificheButton = new JButton("Conferma Modifiche");
+		confermaModificheButton = new JButton("Conferma Modifiche");
 		confermaModificheButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -304,8 +271,20 @@ public class GestioneProgettiDipendente extends JFrame {
 		confermaModificheButton.setMargin(new Insets(2, 20, 2, 20));
 		confermaModificheButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		confermaModificheButton.setAlignmentX(0.5f);
+		confermaModificheButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
+				
+				if(conferma == JOptionPane.YES_OPTION)
+					if(campiObbligatoriVuoti())
+						JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.\nDare un nome al progetto,\n selezionare una tipologia e\n assegnargli almeno un ambito.",
+								"Campi Obbligatori Vuoti",
+								JOptionPane.ERROR_MESSAGE);
+					else
+						aggiornaProgetto(controller);
+				}
+		});
 		
-		//Button "Crea Nuovo"
 		JButton creaNuovoButton = new JButton("Crea Nuovo");
 		creaNuovoButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -329,6 +308,19 @@ public class GestioneProgettiDipendente extends JFrame {
 		creaNuovoButton.setFont(new Font("Consolas", Font.PLAIN, 17));
 		creaNuovoButton.setAlignmentX(0.5f);
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		creaNuovoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?");
+				if (conferma == JOptionPane.YES_OPTION)	
+					if(campiObbligatoriVuoti()) {
+						JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.\nDare un nome al progetto,\n selezionare una tipologia e\n assegnargli almeno un ambito.",
+								"Campi Obbligatori Vuoti",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					else
+						creaProgetto(controller);
+				}
+		});
 		
 		comandiPanel2.add(inserisciPartecipanteButton);
 		comandiPanel2.add(confermaModificheButton);
@@ -337,12 +329,10 @@ public class GestioneProgettiDipendente extends JFrame {
 		comandiPanel2.add(pulisciCampiButton);
 		comandiPanel.add(comandiPanel2, BorderLayout.NORTH);
 		
-		//Panel per i filtri
 		JPanel filtriPanel = new JPanel();
 		filtriPanel.setBorder(null);
 		comandiPanel.add(filtriPanel, BorderLayout.SOUTH);
 		
-		//Button "Filtra"
 		JButton filtraButton = new JButton("Filtra");
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -366,60 +356,42 @@ public class GestioneProgettiDipendente extends JFrame {
 			}
 		});
 		
-		//TextField per cercare progetti
 		cercaTextField = new JTextField();
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		cercaTextField.setColumns(10);
 		
-		//Label "Tipologia" in filtri
 		JLabel filtroTipologiaLabel = new JLabel("Tipologia");
 		filtroTipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		//ComboBox filtro per tipologia
-		JComboBox filtroTipologieComboBox = null;
-		try {
-			filtroTipologieComboBox_1 = new JComboBox(controller.ottieniTipologie());
-		} catch (SQLException e5) {
-			// TODO Auto-generated catch block
-			e5.printStackTrace();
-		}
-		filtroTipologieComboBox_1.setFont(new Font("Consolas", Font.PLAIN, 12));
-		filtroTipologieComboBox_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		filtroTipologieComboBox_1.setBackground(Color.WHITE);
-		filtroTipologieComboBox_1.setUI(new BasicComboBoxUI());
-		filtroTipologieComboBox_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		filtroTipologieComboBox_1.setBackground(Color.WHITE);
-		filtroTipologieComboBox_1.setSelectedItem(null);
-
+		filtroTipologieComboBox = new JComboBox();
+		inizializzaComboBoxFiltroTipologie(controller);
+		filtroTipologieComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroTipologieComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroTipologieComboBox.setBackground(Color.WHITE);
+		filtroTipologieComboBox.setUI(new BasicComboBoxUI());
+		filtroTipologieComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filtroTipologieComboBox.setBackground(Color.WHITE);
+		filtroTipologieComboBox.setSelectedItem(null);
 		
-		//Label "Ambito" in filtri
 		JLabel filtroAmbitoLabel = new JLabel("Ambito");
 		filtroAmbitoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroAmbitoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		//ComboBox filtro per ambito
+		filtroAmbitiComboBox = new JComboBox();
+		inizializzaComboBoxFiltroAmbiti(controller);
+		filtroAmbitiComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		filtroAmbitiComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		filtroAmbitiComboBox.setBackground(Color.WHITE);
+		filtroAmbitiComboBox.setUI(new BasicComboBoxUI());
+		filtroAmbitiComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filtroAmbitiComboBox.setSelectedItem(null);
 		
-		try {
-			filtroAmbitiComboBox_1 = new JComboBox(controller.ottieniAmbiti().toArray());
-		} catch (SQLException e4) {
-			// TODO Auto-generated catch block
-			e4.printStackTrace();
-		}
-		filtroAmbitiComboBox_1.setFont(new Font("Consolas", Font.PLAIN, 12));
-		filtroAmbitiComboBox_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		filtroAmbitiComboBox_1.setBackground(Color.WHITE);
-		filtroAmbitiComboBox_1.setUI(new BasicComboBoxUI());
-		filtroAmbitiComboBox_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		filtroAmbitiComboBox_1.setSelectedItem(null);
-		
-		//Label "Scaduto" in filtri
 		filtroScadutoLabel = new JLabel("Scaduto");
 		filtroScadutoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroScadutoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		//ComboBox filtro per scaduto
 		filtroScadutoComboBox = new JComboBox(siNoOpzioni);
 		filtroScadutoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroScadutoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -428,12 +400,10 @@ public class GestioneProgettiDipendente extends JFrame {
 		filtroScadutoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		filtroScadutoComboBox.setSelectedItem(null);
 		
-		//Label "Terminato" in filtri
 		filtroTerminatoLabel = new JLabel("Terminato");
 		filtroTerminatoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroTerminatoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		//ComboBox filtro per terminato
 		filtroTerminatoComboBox = new JComboBox(siNoOpzioni);
 		filtroTerminatoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		filtroTerminatoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -442,26 +412,18 @@ public class GestioneProgettiDipendente extends JFrame {
 		filtroTerminatoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		filtroTerminatoComboBox.setSelectedItem(null);
 		
-		JLabel resetCampiLabel = new JLabel("");
-		resetCampiLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		resetCampiLabel.setIcon(new ImageIcon(GestioneProgettiDipendente.class.getResource("/icone/refresh.png")));
-		resetCampiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-		resetCampiLabel.addMouseListener(new MouseAdapter() {
+		JLabel resetFiltri = new JLabel("");
+		resetFiltri.setHorizontalAlignment(SwingConstants.CENTER);
+		resetFiltri.setIcon(new ImageIcon(GestioneProgettiDipendente.class.getResource("/icone/refresh.png")));
+		resetFiltri.setFont(new Font("Consolas", Font.PLAIN, 13));
+		resetFiltri.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				filtroAmbitiComboBox_1.setSelectedItem(null);
-				filtroTipologieComboBox_1.setSelectedItem(null);
+				filtroAmbitiComboBox.setSelectedItem(null);
+				filtroTipologieComboBox.setSelectedItem(null);
 				filtroTerminatoComboBox.setSelectedItem(null);
 				filtroScadutoComboBox.setSelectedItem(null);
-				
-				try {
-					dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				dataModelProgetti.fireTableDataChanged();
+				aggiornaTabella(controller);
 			}
 			});
 		
@@ -470,7 +432,7 @@ public class GestioneProgettiDipendente extends JFrame {
 			gl_filtriPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(resetCampiLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+					.addComponent(resetFiltri, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 					.addGap(31)
 					.addComponent(filtraButton, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -478,11 +440,11 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGap(26)
 					.addComponent(filtroTipologiaLabel, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
 					.addGap(18)
-					.addComponent(filtroTipologieComboBox_1, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
+					.addComponent(filtroTipologieComboBox, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
 					.addGap(44)
 					.addComponent(filtroAmbitoLabel, GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
 					.addGap(18)
-					.addComponent(filtroAmbitiComboBox_1, 0, 129, Short.MAX_VALUE)
+					.addComponent(filtroAmbitiComboBox, 0, 129, Short.MAX_VALUE)
 					.addGap(43)
 					.addComponent(filtroScadutoLabel, GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
 					.addGap(18)
@@ -505,7 +467,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addContainerGap(22, Short.MAX_VALUE))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addGap(17)
-					.addComponent(resetCampiLabel, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+					.addComponent(resetFiltri, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
 					.addGap(18))
 				.addGroup(Alignment.TRAILING, gl_filtriPanel.createSequentialGroup()
 					.addGap(19)
@@ -525,7 +487,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGap(22))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addGap(21)
-					.addComponent(filtroAmbitiComboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(filtroAmbitiComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(21, Short.MAX_VALUE))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addGap(15)
@@ -533,7 +495,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGap(16))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addGap(21)
-					.addComponent(filtroTipologieComboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(filtroTipologieComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(21, Short.MAX_VALUE))
 				.addGroup(gl_filtriPanel.createSequentialGroup()
 					.addGap(22)
@@ -542,27 +504,22 @@ public class GestioneProgettiDipendente extends JFrame {
 		);
 		filtriPanel.setLayout(gl_filtriPanel);
 		
-		//Panel interno al panel info del progetto
 		JPanel infoPanel2 = new JPanel();
 		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		
-		//ScrollPanel lista meeting relativi
 		JScrollPane meetingScrollPane = new JScrollPane();
 		meetingScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		//Label "Tipologia"
 		tipologiaProgettoLabel = new JLabel("Tipologia");
 		tipologiaProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		tipologiaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Label "Scadenza"
 		scadenzaProgettoLabel = new JLabel("Scadenza");
 		scadenzaProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		scadenzaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//ComboBox giorno scadenza
 		giornoScadenzaComboBox = new JComboBox();
 		giornoScadenzaComboBox.setUI(new BasicComboBoxUI());
 		giornoScadenzaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -574,7 +531,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		giornoScadenzaComboBox.setBounds(244, 235, 47, 22);
 		infoPanel2.add(giornoScadenzaComboBox);
 		
-		//ComboBox mese scadenza
 		meseScadenzaComboBox = new JComboBox();
 		meseScadenzaComboBox.setUI(new BasicComboBoxUI());
 		meseScadenzaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -586,7 +542,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		meseScadenzaComboBox.setBounds(301, 235, 47, 22);
 		infoPanel2.add(meseScadenzaComboBox);
 		
-		//ComboBox anno scadenza
 		annoScadenzaComboBox = new JComboBox();
 		annoScadenzaComboBox.setUI(new BasicComboBoxUI());
 		annoScadenzaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -597,21 +552,18 @@ public class GestioneProgettiDipendente extends JFrame {
 		DefaultComboBoxModel annoModel = new DefaultComboBoxModel();
 		annoScadenzaComboBox.setModel(annoModel);
 		int annoAttuale = LocalDate.now().getYear();
-		for(int i= annoAttuale;i<= annoAttuale + 20; i++)	//inserisce nella combobox gli anni da ora a 20 anni
+		for(int i= annoAttuale;i<= annoAttuale + 20; i++)
 			annoModel.addElement(i);
 		infoPanel2.add(annoScadenzaComboBox);
 		
-		//Label "Descrizione"
 		descrizioneProgettoLabel = new JLabel("Descrizione");
 		descrizioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		descrizioneProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		//Label "Data Terminazione"
 		dataTerminazioneLabel = new JLabel("Data Terminazione");
 		dataTerminazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		dataTerminazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		//ComboBox giorno terminazione
 		giornoTerminazioneComboBox = new JComboBox();
 		giornoTerminazioneComboBox.setEnabled(false);
 		giornoTerminazioneComboBox.setUI(new BasicComboBoxUI());
@@ -621,7 +573,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		giornoTerminazioneComboBox.setSelectedItem(null);
 		giornoTerminazioneComboBox.setBackground(Color.WHITE);
 		
-		//ComboBox mese terminazione
 		meseTerminazioneComboBox = new JComboBox();
 		meseTerminazioneComboBox.setEnabled(false);
 		meseTerminazioneComboBox.setUI(new BasicComboBoxUI());
@@ -631,7 +582,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		meseTerminazioneComboBox.setSelectedItem(null);
 		meseTerminazioneComboBox.setBackground(Color.WHITE);
 		
-		//ComboBox anno terminazione
 		annoTerminazioneComboBox = new JComboBox();
 		annoTerminazioneComboBox.setEnabled(false);
 		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
@@ -645,28 +595,21 @@ public class GestioneProgettiDipendente extends JFrame {
 		annoTerminazioneComboBox.setModel(annoTerminazioneModel);
 		annoTerminazioneComboBox.setSelectedItem(null);
 		
-		//ScrollPane per lista partecipanti
 		JScrollPane partecipantiScrollPane = new JScrollPane();
 		partecipantiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 	
 		
-		//Label "Progetto Terminato"
 		progettoTerminatoLabel = new JLabel("Progetto Terminato");
 		progettoTerminatoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		progettoTerminatoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		//CheckBox progetto terminato o no
 		progettoTerminatoCheckBox = new JCheckBox("");
-		//quando si preme sul checkbox "progetto terminato" se viene selezionato allora i campi del giorno terminazione si attivano , mentre se non viene selezionato 
-		//si disattivano
-		//checkbox modificata
+		progettoTerminatoCheckBox.setFont(new Font("Consolas", Font.PLAIN, 14));
 		progettoTerminatoCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//se il checkbox è selezionato
 				if(progettoTerminatoCheckBox.isSelected()){
-					//abilita i campi della data di terminazione
 					giornoTerminazioneComboBox.setEnabled(true);
 					meseTerminazioneComboBox.setEnabled(true);	
 					annoTerminazioneComboBox.setEnabled(true);
@@ -675,9 +618,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					meseTerminazioneComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
 					annoTerminazioneComboBox.setSelectedIndex(0);
 				}
-				//se il checkbox non è selezionato
 				else {	
-					//disabilita i campi della data di terminazione
 					giornoTerminazioneComboBox.setSelectedItem(null);
 					meseTerminazioneComboBox.setSelectedItem(null);
 					annoTerminazioneComboBox.setSelectedItem(null);
@@ -689,38 +630,27 @@ public class GestioneProgettiDipendente extends JFrame {
 			}
 		});
 		
-		progettoTerminatoCheckBox.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		//ScrollPanel ambiti
 		JScrollPane ambitiScrollPane = new JScrollPane();
 		ambitiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		//ComboBox per tipologia progetti
-		try {
-			tipologiaComboBox = new JComboBox(controller.ottieniTipologie());
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
+		tipologiaComboBox = new JComboBox();
+		inizializzaComboBoxTipologie(controller);
 		tipologiaComboBox.setBackground(Color.WHITE);
 		tipologiaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		tipologiaComboBox.setUI(new BasicComboBoxUI());
 		tipologiaComboBox.setSelectedItem(null);
 		
-		//TextField nome del progetto
 		nomeTextField = new JTextField();
 		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		//Label "Nome"
 		nomeProgettoLabel = new JLabel("Nome");
 		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		//ScrollPanel per la descrizione del progetto
 		descrizioneProgettoScrollPane = new JScrollPane();
 		descrizioneProgettoScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		descrizioneProgettoScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -830,7 +760,6 @@ public class GestioneProgettiDipendente extends JFrame {
 					.addGap(11))
 		);
 		
-		//TextArea della descrizione del progetto
 		descrizioneTextArea = new JTextArea();
 		descrizioneTextArea.setWrapStyleWord(true);
 		descrizioneTextArea.setLineWrap(true);
@@ -838,43 +767,32 @@ public class GestioneProgettiDipendente extends JFrame {
 		descrizioneTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		descrizioneProgettoScrollPane.setViewportView(descrizioneTextArea);
 		
-		//Label "Ambito/i"
 		ambitoProgettoLabel = new JLabel("Ambito/i");
 		ambitiScrollPane.setColumnHeaderView(ambitoProgettoLabel);
 		ambitoProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		//List ambiti
-		ambitiList=new JList<AmbitoProgetto>();
+		ambitiList = new JList<AmbitoProgetto>();
+		modelloListaAmbiti = new DefaultListModel<AmbitoProgetto>();		
+		inizializzaListaAmbiti(controller);
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		DefaultListModel<AmbitoProgetto> ambitoModel = new DefaultListModel<AmbitoProgetto>();	//aggiorna la lista delle skill			
-		ambitiList.setModel(ambitoModel);	
-		ambitiScrollPane.setViewportView(ambitiList);		
-		try {
-			ambitoModel.addAll(controller.ottieniAmbiti());
-			
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-		}
+		ambitiScrollPane.setViewportView(ambitiList);	
 		
-		//Label "Partecipanti"
 		JLabel lblNewLabel = new JLabel("Partecipanti");
 		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
 		partecipantiScrollPane.setColumnHeaderView(lblNewLabel);
 		
-		//List partecipanti
-		listaPartecipantiModel = new DefaultListModel<>();
+		modelloListaPartecipanti = new DefaultListModel<>();
 		PartecipantiListRenderer partecipantiListRenderer=new PartecipantiListRenderer();
 		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		partecipantiList = new JList();
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		partecipantiList.setSelectionBackground(Color.WHITE);
 		partecipantiList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		partecipantiList.setModel(listaPartecipantiModel);
+		partecipantiList.setModel(modelloListaPartecipanti);
 		partecipantiList.setCellRenderer(partecipantiListRenderer);
 		partecipantiScrollPane.setViewportView(partecipantiList);
 		
-		//Label "Meeting Relativi"
 		meetingRelativiLabel = new JLabel("Meeting Relativi");
 		meetingRelativiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
 		meetingScrollPane.setColumnHeaderView(meetingRelativiLabel);
@@ -882,174 +800,17 @@ public class GestioneProgettiDipendente extends JFrame {
 		infoPanel.add(infoPanel2);
 		panel.setLayout(gl_panel);
 		
-		//List meeting relativi al progetto
-		listaMeetingRelativiModel = new DefaultListModel<>();
-		MeetingListRenderer renderer = new MeetingListRenderer();
 		meetingRelativiList = new JList();
+		modelloListaMeetingRelativi = new DefaultListModel();
+		meetingRelativiList.setModel(modelloListaMeetingRelativi);
+		MeetingListRenderer renderer = new MeetingListRenderer();
 		meetingRelativiList.setFixedCellHeight(80);
 		meetingRelativiList.setSelectionBackground(Color.WHITE);
-		meetingRelativiList.setModel(listaMeetingRelativiModel);
 		meetingRelativiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		meetingRelativiList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		meetingRelativiList.setCellRenderer(renderer);
 		meetingScrollPane.setViewportView(meetingRelativiList);
 		
-		//CLICK SUL PULSANTE "CONFERMA MODIFICHE" 
-		confermaModificheButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//QUANDO SI PREME SUL PULSANTE "CONFERMA MODIFICHE" VA A FARE UN UPDATE DI TUTTI I CAMPI SUL PROGETTO CHE HA COME CODICE QUELLO DELLA RIGA SELEZIONATA
-				// NELLA JTABLE (colonna 0 della riga selezionata)
-				//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
-				
-				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
-				//se l'utente conferma allora vengono effettivamente fatte le modifiche
-				if(conferma == JOptionPane.YES_OPTION && progettoTable.getSelectedRow()!=-1) {
-					if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty()) {					
-						//fa diventare rossi i campi obbligatori che non sono stati inseriti
-						if(nomeTextField.getText().isBlank())					
-								nomeProgettoLabel.setForeground(Color.RED);
-						else if(!nomeTextField.getText().isBlank())
-							nomeProgettoLabel.setForeground(Color.BLACK);
-						if(tipologiaComboBox.getSelectedItem()== null)
-							tipologiaProgettoLabel.setForeground(Color.RED);
-						else if(tipologiaComboBox.getSelectedItem()!= null)
-							tipologiaProgettoLabel.setForeground(Color.BLACK);
-						if(ambitiList.isSelectionEmpty())
-							ambitoProgettoLabel.setForeground(Color.RED);
-						else if(!ambitiList.isSelectionEmpty())
-							ambitoProgettoLabel.setForeground(Color.BLACK);
-						JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
-					}
-					else {
-						int rigaSelezionata = progettoTable.getSelectedRow();
-						
-						//prende i campi dai singoli combo box e crea la data di scadenza e di terminazione
-						LocalDate nuovaDataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
-						
-						LocalDate nuovaDataTerminazione=null;
-						
-						if(annoTerminazioneComboBox.getSelectedItem()!=null && meseTerminazioneComboBox.getSelectedItem()!=null && giornoTerminazioneComboBox.getSelectedItem()!=null)
-						nuovaDataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
-						ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
-						
-						//prende tutte le righe selezionate nella lista degli ambiti
-						int[] selezionati = ambitiList.getSelectedIndices();
-										
-						//aggiunge alla lista di ambiti gli elementi nelle righe selezionate
-						for(int i : selezionati)
-						ambiti.add(ambitoModel.getElementAt(i));
-						
-						//Se il checkbox "Progetto terminato" NON è selezionato allora imposta la data di terminazione a null
-						if(!progettoTerminatoCheckBox.isSelected())
-							nuovaDataTerminazione = null;
-						
-						DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-						LocalDate dataCreazione=formatDate.parseLocalDate(progettoTable.getValueAt(progettoTable.getSelectedRow(), 3).toString());
-						
-						try {
-							//prende tutti i campi e fa l'update del progetto
-							Progetto progetto=dataModelProgetti.getProgettiTabella().get(progettoTable.getSelectedRow());
-							controller.aggiornaProgetto(progetto.getIdProgettto(), nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(),dataCreazione, nuovaDataTerminazione,nuovaDataScadenza, ambiti);
-							JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
-							
-							//aggiorna nuovamente la tabella con i dati aggiornati dei progetti
-							dataModelProgetti.fireTableDataChanged();
-							dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
-							
-							//Aggiorna il modello del sorterProgetti in seguito alla modifica effettuata
-							sorterProgetti.setModel(dataModelProgetti);
-							
-							//Svuota i campi precedentemente settati
-							svuotaCampi();
-							
-							//Setta i colori delle label a quelli di default
-							tipologiaProgettoLabel.setForeground(Color.BLACK);
-							ambitoProgettoLabel.setForeground(Color.BLACK);
-							nomeProgettoLabel.setForeground(Color.BLACK);
-
-						} catch (SQLException e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage());
-						}
-					}
-				}
-				else if(progettoTable.getSelectedRow()==-1)
-					JOptionPane.showMessageDialog(null, "Selezionare una riga dalla tabella");
-			}
-		});
-		//CLICK SUL PULSANTE "CREA NUOVO"
-				creaNuovoButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						//se uno dei campi obbligatori è vuoto non consente di fare l inserimento
-						if(nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty()) {
-							//fa diventare rossi i campi obbligatori che non sono stati inseriti
-							if(nomeTextField.getText().isBlank())					
-									nomeProgettoLabel.setForeground(Color.RED);
-							else if(!nomeTextField.getText().isBlank())
-								nomeProgettoLabel.setForeground(Color.BLACK);
-							
-							if(tipologiaComboBox.getSelectedItem()== null)
-								tipologiaProgettoLabel.setForeground(Color.RED);
-							else if(tipologiaComboBox.getSelectedItem()!= null)
-								tipologiaProgettoLabel.setForeground(Color.BLACK);
-							
-							if(ambitiList.isSelectionEmpty())
-								ambitoProgettoLabel.setForeground(Color.RED);
-							else if(!ambitiList.isSelectionEmpty())
-								ambitoProgettoLabel.setForeground(Color.BLACK);
-							
-							JOptionPane.showMessageDialog(null, "Controlla i campi inseriti");
-						}
-						else {
-						//chiede all utente la conferma della creazione
-						int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?");
-						
-						//se l'utente conferma di voler creare un nuovo progetto viene fatto l'insert
-						if (conferma == JOptionPane.YES_OPTION) {
-							LocalDate dataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
-						
-							ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
-						
-							//prende tutte le righe selezionate nella lista degli ambiti
-							int[] selezionati = ambitiList.getSelectedIndices();
-						
-							//DA RIVEDERE
-							//aggiunge alla lista di ambiti gli elementi nelle righe selezionate
-							for(int i : selezionati)
-							ambiti.add(ambitoModel.getElementAt(i));				 
-						
-							try {
-								controller.creaProgetto(nomeTextField.getText(), (String)tipologiaComboBox.getSelectedItem(), descrizioneTextArea.getText(), LocalDate.now(), dataScadenza, ambiti);
-								JOptionPane.showMessageDialog(null, "Progetto creato con successo");
-								
-								dataModelProgetti.fireTableDataChanged();
-								dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
-								
-								sorterProgetti.setModel(dataModelProgetti);
-								
-								//Svuota i campi inseriti
-								svuotaCampi();
-								
-								//Setta i colori delle label a quelli di default
-								tipologiaProgettoLabel.setForeground(Color.BLACK);
-								ambitoProgettoLabel.setForeground(Color.BLACK);
-								nomeProgettoLabel.setForeground(Color.BLACK);
-								
-							} catch (SQLException e1) {
-								JOptionPane.showMessageDialog(null, e1.getMessage());
-								}
-							}
-						}
-					}
-				});
-
-		//Click sul pulsante "Pulisci Campi"
-		pulisciCampiButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-					svuotaCampi();
-			}
-		});
-		
-		//Label "Gestione Progetto"
 		gestioneProgettoLabel = new JLabel("Gestione Progetto");
 		gestioneProgettoLabel.setIcon(new ImageIcon(GestioneProgettiDipendente.class.getResource("/Icone/progetto_64.png")));
 		gestioneProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
@@ -1076,187 +837,274 @@ public class GestioneProgettiDipendente extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 		
-		//Tabella progetti
-		dataModelProgetti = new ProgettoTableModel();
-		progettoTable = new JTable(dataModelProgetti);
-		progettoTable.setFont(new Font("Consolas", Font.PLAIN, 11));
-		progettoTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		progettoTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		progettoTable.setBackground(Color.WHITE);
-		progettoTable.setSelectionBackground(Color.LIGHT_GRAY);
-		
-		//Modello delle colonne personalizzato(Testo allineato al centro)
+		modelloTabellaProgetti = new ProgettoTableModel();
+		progettiTable = new JTable(modelloTabellaProgetti);
+		inizializzaTabella(controller);
+		progettiTable.setFont(new Font("Consolas", Font.PLAIN, 11));
+		progettiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		progettiTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		progettiTable.setBackground(Color.WHITE);
+		progettiTable.setSelectionBackground(Color.LIGHT_GRAY);
 		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
         renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
         renderTabella.setVerticalAlignment(SwingConstants.CENTER);
-		progettoTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
-		progettoTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
-		progettoTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
-		progettoTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
-		progettoTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
-		progettoTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
-		
-		
-		//Modello delle colonne personalizzato(Larghezza minima)
-		progettoTable.getColumnModel().getColumn(0).setMinWidth(500);
-		progettoTable.getColumnModel().getColumn(1).setMinWidth(400);
-		progettoTable.getColumnModel().getColumn(2).setMinWidth(200);
-		progettoTable.getColumnModel().getColumn(3).setMinWidth(150);
-		progettoTable.getColumnModel().getColumn(4).setMinWidth(150);
-		progettoTable.getColumnModel().getColumn(5).setMinWidth(145);
-		
-		//Setta i progetti nella tabella
-		try {
-			dataModelProgetti.fireTableDataChanged();
-			dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		//Sorter tabella progetto
-		sorterProgetti=new TableRowSorter<>(dataModelProgetti);
-		progettoTable.setRowSorter(sorterProgetti);
-		//Comparatore date per sorter
-		DataComparator comparatorDate = new DataComparator();	//comparator date
-		sorterProgetti.setComparator(3, comparatorDate);	//data creazione
-		sorterProgetti.setComparator(4, comparatorDate);	//data terminazione
-		sorterProgetti.setComparator(5, comparatorDate);	//data scadenza
-		//Seleziona singola
-		progettoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//Le colonne non possono essere riordinate
-		progettoTable.getTableHeader().setReorderingAllowed(false);
-		//Selezione riga
-		progettoTable.addMouseListener(new MouseAdapter() {
+		progettiTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
+		progettiTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
+		progettiTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
+		progettiTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
+		progettiTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
+		progettiTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
+		progettiTable.getColumnModel().getColumn(0).setMinWidth(500);
+		progettiTable.getColumnModel().getColumn(1).setMinWidth(400);
+		progettiTable.getColumnModel().getColumn(2).setMinWidth(200);
+		progettiTable.getColumnModel().getColumn(3).setMinWidth(150);
+		progettiTable.getColumnModel().getColumn(4).setMinWidth(150);
+		progettiTable.getColumnModel().getColumn(5).setMinWidth(145);
+		sorterProgetti = new TableRowSorter<>(modelloTabellaProgetti);
+		progettiTable.setRowSorter(sorterProgetti);
+		DataComparator comparatorDate = new DataComparator();
+		sorterProgetti.setComparator(3, comparatorDate);
+		sorterProgetti.setComparator(4, comparatorDate);
+		sorterProgetti.setComparator(5, comparatorDate);
+		progettiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		progettiTable.getTableHeader().setReorderingAllowed(false);
+		progettiTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//ottiene il progetto alla riga selezionata
-				Progetto progetto=dataModelProgetti.getSelected(progettoTable.convertRowIndexToModel(progettoTable.getSelectedRow()));
+				int rigaSelezionata = progettiTable.getSelectedRow();	
+				rigaSelezionata = progettiTable.convertRowIndexToModel(rigaSelezionata);
+				progettoSelezionato = modelloTabellaProgetti.getSelected(rigaSelezionata);
 				
-				int row= progettoTable.getSelectedRow();	
-	
-				//Formatter date
-				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+				nomeTextField.setText(progettoSelezionato.getNomeProgetto());
+				descrizioneTextArea.setText(progettoSelezionato.getDescrizioneProgetto());
 				
-				//Nome progetto
-				nomeTextField.setText(progetto.getNomeProgetto());
+				if(progettoSelezionato.getDataTerminazione() != null) {
+						annoTerminazioneComboBox.setSelectedItem(progettoSelezionato.getDataTerminazione().getYear());
+						meseTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getMonthOfYear()-1);
+						giornoTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getDayOfMonth()-1);
+						progettoTerminatoCheckBox.setSelected(true);
+						annoTerminazioneComboBox.setEnabled(false);
+						meseTerminazioneComboBox.setEnabled(false);
+						giornoTerminazioneComboBox.setEnabled(false);
+					}
+					else {
+						annoTerminazioneComboBox.setSelectedItem(null);
+						meseTerminazioneComboBox.setSelectedItem(null);
+						giornoTerminazioneComboBox.setSelectedItem(null);
+						progettoTerminatoCheckBox.setSelected(false);
+					}
 				
-				//descrizione progetto
-				descrizioneTextArea.setText(progetto.getDescrizioneProgetto());	
-				
-				String valoreTabella=(String)progettoTable.getValueAt(row, 4);
-			
-				//Data terminazione
-				LocalDate dataTerminazione=null;
-				if(valoreTabella != null)	
-				dataTerminazione=formatDate.parseLocalDate((String) progettoTable.getValueAt(row, 4));
-				if (dataTerminazione != null) {
-					dataTerminazione=formatDate.parseLocalDate(progettoTable.getValueAt(row, 4).toString());
-					annoTerminazioneComboBox.setSelectedItem(dataTerminazione.getYear());
-					meseTerminazioneComboBox.setSelectedIndex(dataTerminazione.getMonthOfYear()-1);
-					giornoTerminazioneComboBox.setSelectedIndex(dataTerminazione.getDayOfMonth()-1);
-					progettoTerminatoCheckBox.setSelected(true);
-					annoTerminazioneComboBox.setEnabled(false);
-					meseTerminazioneComboBox.setEnabled(false);
-					giornoTerminazioneComboBox.setEnabled(false);
+				if (progettoSelezionato.getScadenza() != null) {
+					annoScadenzaComboBox.setSelectedItem(progettoSelezionato.getScadenza().getYear());
+					meseScadenzaComboBox.setSelectedIndex(progettoSelezionato.getScadenza().getMonthOfYear()-1);
+					giornoScadenzaComboBox.setSelectedIndex(progettoSelezionato.getScadenza().getDayOfMonth()-1);
 				}
 				else {
-					//pulisci i campi della data di terminazione
-					annoTerminazioneComboBox.setSelectedItem(null);
-					meseTerminazioneComboBox.setSelectedItem(null);
-					giornoTerminazioneComboBox.setSelectedItem(null);
-					progettoTerminatoCheckBox.setSelected(false);
-				}
-				
-				//Data scadenza
-				LocalDate dataScadenza=formatDate.parseLocalDate(progettoTable.getValueAt(row, 5).toString());	//data scadenza
-				if (dataScadenza != null) {
-					annoScadenzaComboBox.setSelectedItem(dataScadenza.getYear());
-					meseScadenzaComboBox.setSelectedIndex(dataScadenza.getMonthOfYear()-1);
-					giornoScadenzaComboBox.setSelectedIndex(dataScadenza.getDayOfMonth()-1);
-				}
-				else {
-					//pulisci i campi della data di scadenza
 					annoScadenzaComboBox.setSelectedItem(null);
 					meseScadenzaComboBox.setSelectedItem(null);
 					giornoScadenzaComboBox.setSelectedItem(null);
 				}
-								
-				//RICAVA GLI AMBITI DEL PROGETTO E LI SELEZIONA NELLA LISTA
-				ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
-				try {
-					ambiti = controller.ottieniAmbitiProgettoByCod(progetto.getIdProgettto());					
-				} catch (SQLException e2) {
-					e2.printStackTrace();
+					
+				int[] ambitiSelezionati = new int[progettoSelezionato.getAmbiti().size()];
+				for (int i = 0; i < ambitiSelezionati.length; i++) {
+					ambitiSelezionati[i] = modelloListaAmbiti.indexOf(progettoSelezionato.getAmbiti().get(i));
 				}
+				ambitiList.setSelectedIndices(ambitiSelezionati);
 				
-				ArrayList<Integer> selezionati = new ArrayList<Integer>();
-			    
-				//scorre tutti gli ambiti presenti nella lista degli ambiti e li confronta con ogni ambito del progetto per ottenere gli indici degli ambiti da selezionare
-				for(int i = 0 ;i < ambitoModel.size() ; i++) {
-					for(int j = 0 ; j< ambiti.size() ; j++) {
-						if(ambiti.get(j).getNomeAmbito().equals(ambitoModel.getElementAt(i).getNomeAmbito())) {	//confonta i nomi degli ambiti								
-							selezionati.add(i);	 //aggiunge tutti gli indici ottenuti in una lista
-						}
-					}	
-				}
-					
-				// converte l'arraylist di integer in int[]
-				int[] array = selezionati.stream().mapToInt(i -> i).toArray();
-							
-				ambitiList.setSelectedIndices(array); //seleziona gli indici recuperati nella lista degli ambiti
-					
-				//Tipologia progetto
-				try {
-					tipologiaComboBox.setModel(new DefaultComboBoxModel(controller.ottieniTipologie()));
-					tipologiaComboBox.setSelectedItem(progettoTable.getValueAt(row, 2));
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			
-
-				//ripulisce le liste ogni volta che si preme su una riga della tabella , in modo che non vengano aggiunti elementi ad ogni click
-				listaPartecipantiModel.clear();
-				listaMeetingRelativiModel.clear();
-					
-				//Aggiorna la tabella in seguito all'inserimento di partecipanti
-				try {
-					dataModelProgetti.setProgettiTabella(controller.ottieniProgetti());
-				} catch (SQLException e1) {	
-					e1.printStackTrace();
-				}
+				tipologiaComboBox.setSelectedItem(progettoSelezionato.getTipoProgetto());
 				
-				//aggiunge meeting e partecipanti alle rispettive liste
-				listaMeetingRelativiModel.addAll(progetto.getMeetingsRelativi()); //Riempe la lista con i meeting relativi al progetto
-				listaPartecipantiModel.addAll(progetto.getCollaborazioni());  //Riempe la lista con i partecipanti al progetto
+				modelloListaPartecipanti.clear();
+				modelloListaPartecipanti.addAll(progettoSelezionato.getCollaborazioni());
+				partecipantiList.setModel(modelloListaPartecipanti);
 				
-				//Controllo ProjectManager
-				try {
-					String cf=controller.ottieniProjectManager(progetto);
-					
-					if (dipendente.getCf().equals(cf)) {
-						inserisciPartecipanteButton.setEnabled(true);
-						eliminaButton.setEnabled(true);
-						confermaModificheButton.setEnabled(true);	
-					}
-					else {
-						inserisciPartecipanteButton.setEnabled(false);
-						eliminaButton.setEnabled(false);
-						confermaModificheButton.setEnabled(false);
-					}
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				modelloListaMeetingRelativi.clear();
+				modelloListaMeetingRelativi.addAll(progettoSelezionato.getMeetingsRelativi());
+				meetingRelativiList.setModel(modelloListaMeetingRelativi);
+				
+				checkProjectManager(controller);
 			}
 		});
-		tabellaScrollPane.setViewportView(progettoTable);
+		tabellaScrollPane.setViewportView(progettiTable);
 	}
 	
 	//Altri metodi
 	//-----------------------------------------------------------------
+	private void inizializzaTabella(ControllerProgetto controller) {
+		try {
+			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgetti());
+			modelloTabellaProgetti.fireTableDataChanged();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
 	
-	//Metodo che svuota i campi
-	private void svuotaCampi() {
+	private void inizializzaComboBoxTipologie(ControllerProgetto controller) {
+		try {
+			modelloComboBoxTipologie = new DefaultComboBoxModel();
+			modelloComboBoxTipologie.addAll(controller.ottieniTipologie());
+			tipologiaComboBox.setModel(modelloComboBoxTipologie);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void inizializzaListaAmbiti(ControllerProgetto controller) {
+		try {
+			modelloListaAmbiti.addAll(controller.ottieniAmbiti());
+			ambitiList.setModel(modelloListaAmbiti);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void checkProjectManager(ControllerProgetto controller) {
+		try {
+			if (controller.isProjectManager(progettoSelezionato)) {
+				inserisciPartecipanteButton.setEnabled(true);
+				eliminaButton.setEnabled(true);
+				confermaModificheButton.setEnabled(true);	
+			}
+			else {
+				inserisciPartecipanteButton.setEnabled(false);
+				eliminaButton.setEnabled(false);
+				confermaModificheButton.setEnabled(false);
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private boolean campiObbligatoriVuoti() {
+		if (nomeTextField.getText().isBlank() || tipologiaComboBox.getSelectedItem()== null || ambitiList.isSelectionEmpty()) {
+			if(nomeTextField.getText().isBlank())					
+				nomeProgettoLabel.setForeground(Color.RED);
+			else if(!nomeTextField.getText().isBlank())
+				nomeProgettoLabel.setForeground(Color.BLACK);
+			
+			if(tipologiaComboBox.getSelectedItem()== null)
+				tipologiaProgettoLabel.setForeground(Color.RED);
+			else if(tipologiaComboBox.getSelectedItem()!= null)
+				tipologiaProgettoLabel.setForeground(Color.BLACK);
+			
+			if(ambitiList.isSelectionEmpty())
+				ambitoProgettoLabel.setForeground(Color.RED);
+			else if(!ambitiList.isSelectionEmpty())
+				ambitoProgettoLabel.setForeground(Color.BLACK);
+			
+			return true;
+		}
+		return false;
+	}
+	
+	private void creaProgetto(ControllerProgetto controller) {
+		try {
+			ricavaInfoProgetto();
+			dataCreazione = dataAttuale;
+			
+			Progetto nuovoProgetto = new Progetto(-1,nomeProgetto, tipologia, descrizioneProgetto, dataCreazione, dataScadenza, dataTerminazione);
+			nuovoProgetto.setAmbiti(ambiti);
+			
+			if (controller.creaProgetto(nuovoProgetto)) {
+				JOptionPane.showMessageDialog(null, "Progetto creato con successo");
+				aggiornaTabella(controller);
+				
+				tipologiaProgettoLabel.setForeground(Color.BLACK);
+				ambitoProgettoLabel.setForeground(Color.BLACK);
+				nomeProgettoLabel.setForeground(Color.BLACK);
+			}
+		} catch(IllegalFieldValueException nfve) {
+			JOptionPane.showMessageDialog(null, 
+					"Inserire una data valida.",
+					"Data Non Valida",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void aggiornaProgetto(ControllerProgetto controller) {
+		try {
+			ricavaInfoProgetto();
+			dataCreazione = progettoSelezionato.getDataCreazione();
+			
+			if (dataScadenza != null)
+				progettoSelezionato.setScadenza(dataScadenza);
+			if (dataTerminazione != null)
+				progettoSelezionato.setDataTerminazione(dataTerminazione);
+			progettoSelezionato.setNomeProgetto(nomeProgetto);
+			progettoSelezionato.setDescrizioneProgetto(descrizioneProgetto);
+			progettoSelezionato.setAmbiti(ambiti);
+			
+			if (controller.aggiornaProgetto(progettoSelezionato)) {
+				JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
+				aggiornaTabella(controller);							
+				tipologiaProgettoLabel.setForeground(Color.BLACK);
+				ambitoProgettoLabel.setForeground(Color.BLACK);
+				nomeProgettoLabel.setForeground(Color.BLACK);
+			}
+		} catch (IllegalFieldValueException e) {
+			JOptionPane.showMessageDialog(null, 
+					"Inserire una data valida.",
+					"Data Non Valida",
+					JOptionPane.ERROR_MESSAGE);
+			}
+	}
+	
+	private void eliminaProgetto(ControllerProgetto controller) {
+		if (controller.rimuoviProgetto(progettoSelezionato)) {	
+			JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
+			aggiornaTabella(controller);
+			pulisciCampi();
+		}
+	}
+	
+	private void ricavaInfoProgetto() throws IllegalFieldValueException{
+		nomeProgetto = nomeTextField.getText();
+		
+		if (!descrizioneTextArea.getText().isBlank())
+			descrizioneProgetto = descrizioneTextArea.getText();	
+		
+		if (annoScadenzaComboBox.getSelectedItem() != null && meseScadenzaComboBox.getSelectedItem() != null && giornoScadenzaComboBox.getSelectedItem() != null)
+			dataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
+		
+		if(!progettoTerminatoCheckBox.isSelected())
+			dataTerminazione = null;
+		
+		if(annoTerminazioneComboBox.getSelectedItem()!=null && meseTerminazioneComboBox.getSelectedItem()!=null && giornoTerminazioneComboBox.getSelectedItem()!=null)
+			dataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
+		
+		tipologia = tipologiaComboBox.getSelectedItem().toString();
+		
+		ambiti.clear();
+		int[] ambitiSelezionati = ambitiList.getSelectedIndices();			
+		for(int i : ambitiSelezionati)
+			ambiti.add(modelloListaAmbiti.getElementAt(i));
+	}
+	
+	private void aggiornaTabella(ControllerProgetto controller) {
+		try {
+			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgetti());
+			modelloTabellaProgetti.fireTableDataChanged();
+			pulisciCampi();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void pulisciCampi() {
 		nomeProgettoLabel.setForeground(Color.BLACK);
 		descrizioneProgettoLabel.setForeground(Color.BLACK);
 		tipologiaProgettoLabel.setForeground(Color.BLACK);
@@ -1265,74 +1113,80 @@ public class GestioneProgettiDipendente extends JFrame {
 		dataTerminazioneLabel.setForeground(Color.BLACK);
 
 		nomeTextField.setText("");
-		descrizioneTextArea.setText("");
-			
+		descrizioneTextArea.setText("");	
 		progettoTerminatoCheckBox.setSelected(false);
-		
 		ambitiList.clearSelection();
-		
-		//ricava la data attuale
-		LocalDate dataAttuale = LocalDate.now();
 		annoTerminazioneComboBox.setSelectedItem(null);
 		meseTerminazioneComboBox.setSelectedItem(null);
 		giornoTerminazioneComboBox.setSelectedItem(null);
-			
-		//imposta di default giorno e mese come quelli della data attuale (-1 perche gli indici partono da 0)
 		giornoScadenzaComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
 		meseScadenzaComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);				
-			
-		//imposta di default l'anno di scadenza come l'anno successivo 
 		annoScadenzaComboBox.setSelectedIndex(1); 
-			
 		tipologiaComboBox.setSelectedItem(null);
+		if (modelloListaPartecipanti.isEmpty())
+			modelloListaPartecipanti.clear();
+		if(!modelloListaMeetingRelativi.isEmpty())
+			modelloListaMeetingRelativi.clear();
 		
-		//svuota le liste di partecipanti e meeting
-		listaPartecipantiModel.clear();
-		if(listaMeetingRelativiModel !=null)
-		listaMeetingRelativiModel.clear();
-		
-		progettoTable.clearSelection();
-		
+		progettiTable.clearSelection();
 	}
-	//Metodo che applica tutti i filtri
+	
+	private void inizializzaComboBoxFiltroTipologie(ControllerProgetto controller) {
+		try {
+			modelloComboBoxFiltroTipologie = new DefaultComboBoxModel();
+			modelloComboBoxFiltroTipologie.addAll(controller.ottieniTipologie());
+			filtroTipologieComboBox.setModel(modelloComboBoxFiltroTipologie);;
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void inizializzaComboBoxFiltroAmbiti(ControllerProgetto controller) {
+		try {
+			modelloComboBoxFiltroAmbiti = new DefaultComboBoxModel<AmbitoProgetto>();
+			modelloComboBoxFiltroAmbiti.addAll(controller.ottieniAmbiti());
+			filtroAmbitiComboBox.setModel(modelloComboBoxFiltroAmbiti);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
 	private void applicaFiltri(ControllerProgetto controller) {
-		//ottiene tutti gli elementi dei filtri
-		//nome progetto
 		String nomeCercato = "%";
 		if (!cercaTextField.getText().isBlank())
 			nomeCercato = cercaTextField.getText();
-		//ambito progetto
 		AmbitoProgetto ambitoCercato = null;
-		if (filtroAmbitiComboBox_1.getSelectedItem() != null)
-			ambitoCercato= (AmbitoProgetto) filtroAmbitiComboBox_1.getSelectedItem();
-		//tipologia progetto
+		if (filtroAmbitiComboBox.getSelectedItem() != null)
+			ambitoCercato= (AmbitoProgetto) filtroAmbitiComboBox.getSelectedItem();
 		String tipologiaCercata = null;
-		if (filtroTipologieComboBox_1.getSelectedItem() != null)
-			tipologiaCercata=  filtroTipologieComboBox_1.getSelectedItem().toString();
-		//scaduto
+		if (filtroTipologieComboBox.getSelectedItem() != null)
+			tipologiaCercata =  filtroTipologieComboBox.getSelectedItem().toString();
 		String scaduto = "Entrambi";
 		if (filtroScadutoComboBox.getSelectedItem() != null)
 			if (filtroScadutoComboBox.getSelectedItem().toString().equals("Si"))
 				scaduto = "Si";
 			else
 				scaduto = "No";
-		//terminato
 		String terminato = "Entrambi";
 		if (filtroTerminatoComboBox.getSelectedItem() != null)
 			if (filtroTerminatoComboBox.getSelectedItem().toString().equals("Si"))
 				terminato = "Si";
 			else
 				terminato = "No";
-		//richiama il controller
 		try {
-			dataModelProgetti.setProgettiTabella(controller.ottieniProgettiFiltrati(nomeCercato,ambitoCercato,tipologiaCercata, scaduto, terminato));
-			dataModelProgetti.fireTableDataChanged();
+			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiFiltrati(nomeCercato,ambitoCercato,tipologiaCercata, scaduto, terminato));
+			modelloTabellaProgetti.fireTableDataChanged();
 		} catch (SQLException e) {
-			//errore query per tutti i progetti filtrati
 			JOptionPane.showMessageDialog(null,
-					"Impossibile filtrare i progetti dal database.\nControllare che sia stabilita la connessione al database.",
-					"Errore Interrogazione Database",
-					JOptionPane.ERROR_MESSAGE);
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
