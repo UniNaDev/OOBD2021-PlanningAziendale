@@ -97,7 +97,7 @@ public class Home extends JFrame {
 	mioAccountButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 	mioAccountButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-		controller.apriMioAccount();
+	    	controller.apriMioAccount();
 	    }
 	});
 	mioAccountButton.addMouseListener(new MouseAdapter() {

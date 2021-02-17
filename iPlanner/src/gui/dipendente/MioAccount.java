@@ -247,20 +247,6 @@ public class MioAccount extends JFrame {
 	annoComboBox.setSelectedIndex(dipendenteLogged.getDataNascita().getYear() - 1900);
 	contentPane.add(annoComboBox);
 
-	
-	contentPane.setLayout(null);
-	contentPane.add(modificaButton);
-	contentPane.add(confermaButton);
-	contentPane.add(cfLabel);
-	contentPane.add(nomeLabel);
-	contentPane.add(cognomeLabel);
-	contentPane.add(sessoLabel);
-	contentPane.add(dataNascitaLabel);
-	contentPane.add(nomeTextField);
-	contentPane.add(cognomeTextField);
-	contentPane.add(cfTextField);
-	contentPane.add(informazioniPersonaliLabel);
-
 	separator = new JSeparator();
 	separator.setForeground(Color.LIGHT_GRAY);
 	separator.setBackground(Color.WHITE);
@@ -548,6 +534,19 @@ public class MioAccount extends JFrame {
 	  }
 
 	});
+	
+	contentPane.setLayout(null);
+	contentPane.add(modificaButton);
+	contentPane.add(confermaButton);
+	contentPane.add(cfLabel);
+	contentPane.add(nomeLabel);
+	contentPane.add(cognomeLabel);
+	contentPane.add(sessoLabel);
+	contentPane.add(dataNascitaLabel);
+	contentPane.add(nomeTextField);
+	contentPane.add(cognomeTextField);
+	contentPane.add(cfTextField);
+	contentPane.add(informazioniPersonaliLabel);
     }
     
 
