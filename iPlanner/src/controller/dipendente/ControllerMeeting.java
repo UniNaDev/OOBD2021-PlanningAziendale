@@ -130,8 +130,8 @@ public class ControllerMeeting {
 				//TODO: verificare altre possibli eccezioni
 				switch(e.getSQLState()) {
 				case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-					JOptionPane.showMessageDialog(null, e.getMessage()
-							+ "\nImpossibile creare il meeting perchè si accavalla con altri meeting."
+					JOptionPane.showMessageDialog(null,
+							"\nImpossibile creare il meeting perchè si accavalla con altri meeting."
 							+ "\nCambiare data e orario oppure modificare prima il meeting che si accavalla.",
 							"Errore Accavallamento Meeting",
 							JOptionPane.ERROR_MESSAGE);
