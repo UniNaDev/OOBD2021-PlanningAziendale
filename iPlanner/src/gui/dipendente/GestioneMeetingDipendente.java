@@ -1202,18 +1202,10 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 	
 	private void eliminaMeeting(ControllerMeeting controller) {
-		try {
-			controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
-			JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
-			modelloTabellaMeeting.fireTableDataChanged();
-			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeeting());
-			sorterMeeting.setModel(modelloTabellaMeeting);
-			svuotaCampiMeeting();
-		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
-		}
+		controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
+		JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
+		aggiornaTabella(controller);
+		svuotaCampiMeeting();
 	}
 	
 	private boolean campiObbligatoriVuoti() {
@@ -1275,7 +1267,6 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingTable.getColumnModel().getColumn(3).setCellRenderer(tabellaMeetingCellRenderer);
 		meetingTable.getColumnModel().getColumn(4).setCellRenderer(tabellaMeetingCellRenderer);
 		meetingTable.getColumnModel().getColumn(5).setCellRenderer(tabellaMeetingCellRenderer);
-		
 	}
 	
 	private void impostaSorterTabellaMeeting() {
@@ -1287,6 +1278,5 @@ public class GestioneMeetingDipendente extends JFrame {
 		sorterMeeting.setComparator(1, comparatorDate);
 		sorterMeeting.setComparator(2, comparatorOrario);
 		sorterMeeting.setComparator(3, comparatorOrario);
-		
 	}
 }

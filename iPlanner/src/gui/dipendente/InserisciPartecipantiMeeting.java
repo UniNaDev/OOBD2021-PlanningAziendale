@@ -82,39 +82,63 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	
 	//Attributi GUI
 	private JPanel contentPane;
-	private JTable progettoTable;
-	private JTextField cercaTextField;
-	private JLabel valutazioneLabel;
-	private JLabel salarioLabel;
-	private final ButtonGroup modalitàButtonGroup = new ButtonGroup();
+	private JLabel gestioneMeetingLabel;
+	private JLabel infoDipendenteLabel;
+	private JLabel nomeLabel;
+	private JTextField nomeTextField;
+	private JLabel cognomeLabel;
+	private JTextField cognomeTextField;
+	private JLabel etàLabel;
+	private JTextField etàTextField;
+	private JLabel sessoLabel;
 	private JRadioButton uomoRadioButton;
 	private JRadioButton donnaRadioButton;
-	private JTable dipendenteTable;
+	private ButtonGroup modalitàButtonGroup = new ButtonGroup();
+	private JLabel valutazioneLabel;
+	private JTextField valutazioneTextField;
+	private JLabel salarioLabel;
+	private JTextField salarioTextField;
+	private JList skillList;
+	private JScrollPane skillScrollPane;
+	private JLabel skillListLabel;
+	private DefaultListModel skillModel;
+	private DefaultListModel listmodel;
+	
+	private JSeparator separator;
+	private JLabel infoMeetingLabel;
+	private JLabel dataInizioLabel;
+	private JTextField dataInizioTextField;
+	private JLabel dataFineLabel;
+	private JTextField dataFineTextField;
+	private JLabel oraInizioLabel;
+	private JTextField oraInizioTextField;
+	private JLabel oraFineLabel;
+	private JTextField oraFineTextField;
+	private JCheckBox presenzaCheckBox;
+	private JLabel lblPresenza;
+	private JList invitatiList;
+	private JScrollPane invitatiScrollPane;
+	private InvitatiListRenderer invitatiListRenderer;
+	private JLabel invitatiLabel;
+
 	private JButton eliminaPartecipanteButton;
 	private JButton aggiornaPartecipantiButton;
 	private JButton inserisciPartecipanteButton;
+	
+
 	private DipendentiTableModel dataModelDipendente;
-	private JTextField nomeTextField;
-	private JTextField cognomeTextField;
-	private JTextField etàTextField;
-	private JTextField valutazioneTextField;
-	private JTextField salarioTextField;
-	private JTextField dataInizioTextField;
-	private JTextField dataFineTextField;
-	private JTextField oraInizioTextField;
-	private JTextField oraFineTextField;
-	private JList invitatiList;
-	private JLabel invitatiLabel;
-	private JList skillList;
-	private DefaultListModel skillModel;
+	private JScrollPane dipendenteScrollPane;
+	private JTable dipendenteTable;
+	private DefaultTableCellRenderer renderTabella;
 	private TableRowSorter<TableModel> sorterDipendente;
+	
+	private Meeting meetingSelezionato;
 
 	//Creazione frame
 	//---------------------------------------------
 	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1280, 720));
-		
 		
 		setTitle("iPlanner-Gestione invitati meeting");
 		setBounds(100, 100, 1280, 720);
@@ -125,115 +149,36 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		setLocationRelativeTo(null);
 		
-		JPanel panel = new JPanel();	//main panel
+		JPanel panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		JPanel infoPanel = new JPanel();	//panel info
+		JPanel infoPanel = new JPanel();	
 		
-		JPanel comandiPanel = new JPanel();	//panel per i comandi
+		JPanel comandiPanel = new JPanel();	
 		comandiPanel.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		
-		JScrollPane DipendenteScrollPane = new JScrollPane();	//scroll pane per la tabella meeting
-		DipendenteScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
-		DipendenteScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		DipendenteScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		this.meetingSelezionato=meetingSelezionato;
 		
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(23)
-					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-					.addGap(26)
-					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		gestioneMeetingLabel = new JLabel("Gestione invitati meeting");
+		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
+		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-		JPanel comandiPanel2 = new JPanel();	//panel interno a quello dei comandi
-		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
-		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		infoMeetingLabel = new JLabel("Info Meeting");
+		infoMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
-
+		infoDipendenteLabel = new JLabel("Info Dipendente");
+		infoDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
-		//Label "Cerca"
-		JLabel cercaLabel = new JLabel("Cerca");
-		cercaLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
-		comandiPanel2.add(cercaLabel);
+		dipendenteScrollPane = new JScrollPane();
+		dipendenteScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
+		dipendenteScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		dipendenteScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		//TextField per cercare un meeting
-		cercaTextField = new JTextField();
-		cercaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		comandiPanel2.add(cercaTextField);
-		cercaTextField.setColumns(10);
-		comandiPanel.add(comandiPanel2);
-		
-		//panel interno a quello delle info
-		JPanel infoPanel2 = new JPanel();
-		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
-		
-		//Label "Data inizio"
-		JLabel nomeLabel = new JLabel("Nome");
+		nomeLabel = new JLabel("Nome");
 		nomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		nomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-	
-		
-		//Label "Data fine"
-		JLabel cognomeLabel = new JLabel("Cognome");
-		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		cognomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		DefaultComboBoxModel myModel2 = new DefaultComboBoxModel();
-		for(int i=1900;i<= 2021;i++)
-			myModel2.addElement(i);
-		
-		//Label "Ora inizio"
-		JLabel sessoLabel = new JLabel("Sesso");
-		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		sessoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		
-		//Label età
-		JLabel etàLabel = new JLabel("Età");
-		etàLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		etàLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		
-		//Label valutazione
-		valutazioneLabel = new JLabel("Valutazione");
-		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		valutazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		//Label Salario
-		salarioLabel = new JLabel("Salario");
-		salarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		salarioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		//RadioButton uomo
-		uomoRadioButton = new JRadioButton("M");
-		uomoRadioButton.setEnabled(false);
-		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		modalitàButtonGroup.add(uomoRadioButton);
-		
-		//RadioButton donna
-		donnaRadioButton = new JRadioButton("F");
-		donnaRadioButton.setEnabled(false);
-		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		modalitàButtonGroup.add(donnaRadioButton);
 		
 		nomeTextField = new JTextField();
 		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -241,11 +186,35 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		nomeTextField.setColumns(10);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
+		cognomeLabel = new JLabel("Cognome");
+		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		cognomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		
 		cognomeTextField = new JTextField();
 		cognomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		cognomeTextField.setEditable(false);
 		cognomeTextField.setColumns(10);
 		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		sessoLabel = new JLabel("Sesso");
+		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		sessoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		uomoRadioButton = new JRadioButton("M");
+		uomoRadioButton.setEnabled(false);
+		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		modalitàButtonGroup.add(uomoRadioButton);
+			
+		donnaRadioButton = new JRadioButton("F");
+		donnaRadioButton.setEnabled(false);
+		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		modalitàButtonGroup.add(donnaRadioButton);
+		
+		etàLabel = new JLabel("Età");
+		etàLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		etàLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		etàTextField = new JTextField();
 		etàTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -253,11 +222,19 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		etàTextField.setColumns(10);
 		etàTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
+		valutazioneLabel = new JLabel("Valutazione");
+		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		valutazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		
 		valutazioneTextField = new JTextField();
 		valutazioneTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneTextField.setEditable(false);
 		valutazioneTextField.setColumns(10);
 		valutazioneTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		salarioLabel = new JLabel("Salario");
+		salarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		salarioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		salarioTextField = new JTextField();
 		salarioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -265,214 +242,10 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-
-		dataInizioTextField = new JTextField(meetingSelezionato.getDataInizio().toString(formatDate));
-		dataInizioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		dataInizioTextField.setEditable(false);
-		dataInizioTextField.setColumns(10);
-		dataInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		dataFineTextField = new JTextField(meetingSelezionato.getDataFine().toString(formatDate));
-		dataFineTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		dataFineTextField.setEditable(false);
-		dataFineTextField.setColumns(10);
-		dataFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		JSeparator separator = new JSeparator();
-		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		separator.setOrientation(SwingConstants.VERTICAL);
-		
-		JLabel dataInizioLabel = new JLabel("Data inizio");
-		dataInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		JLabel dataFineLabel = new JLabel("Data fine");
-		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
-		oraInizioTextField = new JTextField(meetingSelezionato.getOraInizio().toString(formatHour));
-		oraInizioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		oraInizioTextField.setEditable(false);
-		oraInizioTextField.setColumns(10);
-		oraInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		oraFineTextField = new JTextField(meetingSelezionato.getOraFine().toString(formatHour));
-		oraFineTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
-		oraFineTextField.setEditable(false);
-		oraFineTextField.setColumns(10);
-		oraFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		JLabel oraInizioLabel = new JLabel("Ora inizio");
-		oraInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		oraInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		JLabel oraFineLabel = new JLabel("Ora fine");
-		oraFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		JScrollPane invitatiScrollPane = new JScrollPane();
-		invitatiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
-		invitatiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
-		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
-		JLabel lblNewLabel = new JLabel("Info Meeting");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		
-		JLabel lblInfoDipendente = new JLabel("Info Dipendente");
-		lblInfoDipendente.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInfoDipendente.setFont(new Font("Consolas", Font.PLAIN, 20));
-		
-		JScrollPane skillScrollPane = new JScrollPane();
+		skillScrollPane = new JScrollPane();
 		skillScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		skillScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
-		JLabel lblPresenza = new JLabel("Presenza");
-		lblPresenza.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPresenza.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		JCheckBox presenzaCheckBox = new JCheckBox("");
-
-		
-		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
-		gl_infoPanel2.setHorizontalGroup(
-			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(184)
-							.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-							.addGap(148))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(43)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addComponent(valutazioneLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-								.addComponent(sessoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(nomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(cognomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(salarioLabel))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
-									.addGroup(gl_infoPanel2.createSequentialGroup()
-										.addComponent(uomoRadioButton)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(donnaRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
-									.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-									.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-									.addComponent(nomeTextField)
-									.addComponent(cognomeTextField))
-								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-							.addGap(33)))
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
-							.addGap(230))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(30)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-								.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-							.addGap(10)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(presenzaCheckBox))
-							.addPreferredGap(ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-							.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 278, GroupLayout.PREFERRED_SIZE)
-							.addGap(22))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(130)
-							.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(360, Short.MAX_VALUE))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(130)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(dataFineTextField, 90, 90, 90)
-								.addComponent(dataInizioTextField, 90, 90, 90))
-							.addGap(360))))
-		);
-		gl_infoPanel2.setVerticalGroup(
-			gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGap(73)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-						.addComponent(uomoRadioButton)
-						.addComponent(donnaRadioButton))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addGap(68))
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addContainerGap(63, Short.MAX_VALUE)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
-					.addGap(59))
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGap(25)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-					.addGap(13)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(skillScrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
-						.addComponent(invitatiScrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(64, Short.MAX_VALUE))
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGap(91)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addComponent(presenzaCheckBox)
-						.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addGap(87))
-		);
-		gl_infoPanel2.linkSize(SwingConstants.VERTICAL, new Component[] {invitatiScrollPane, skillScrollPane});
-		gl_infoPanel2.linkSize(SwingConstants.VERTICAL, new Component[] {dataInizioLabel, dataFineLabel, oraInizioLabel, oraFineLabel, lblPresenza});
-		gl_infoPanel2.linkSize(SwingConstants.HORIZONTAL, new Component[] {oraInizioTextField, oraFineTextField, oraInizioLabel, oraFineLabel});
-		gl_infoPanel2.linkSize(SwingConstants.HORIZONTAL, new Component[] {dataInizioTextField, dataFineTextField, dataInizioLabel, dataFineLabel});
 		
 		skillList = new JList();
 		skillModel=new DefaultListModel();
@@ -481,18 +254,83 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		skillList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		skillScrollPane.setViewportView(skillList);
 		
-		JLabel Skill = new JLabel("Skill");
-		Skill.setFont(new Font("Consolas", Font.PLAIN, 15));
-		skillScrollPane.setColumnHeaderView(Skill);
+		skillListLabel = new JLabel("Skill");
+		skillListLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		skillScrollPane.setColumnHeaderView(skillListLabel);
+		
+		separator = new JSeparator();
+		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		dataInizioLabel = new JLabel("Data inizio");
+		dataInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+
+		dataInizioTextField = new JTextField(meetingSelezionato.getDataInizio().toString(formatDate));
+		dataInizioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		dataInizioTextField.setEditable(false);
+		dataInizioTextField.setColumns(10);
+		dataInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		dataFineLabel = new JLabel("Data fine");
+		dataFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		dataFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		dataFineTextField = new JTextField(meetingSelezionato.getDataFine().toString(formatDate));
+		dataFineTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		dataFineTextField.setEditable(false);
+		dataFineTextField.setColumns(10);
+		dataFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
+
+		oraInizioLabel = new JLabel("Ora inizio");
+		oraInizioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		oraInizioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		oraInizioTextField = new JTextField(meetingSelezionato.getOraInizio().toString(formatHour));
+		oraInizioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		oraInizioTextField.setEditable(false);
+		oraInizioTextField.setColumns(10);
+		oraInizioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		oraFineLabel = new JLabel("Ora fine");
+		oraFineLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		oraFineLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		oraFineTextField = new JTextField(meetingSelezionato.getOraFine().toString(formatHour));
+		oraFineTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		oraFineTextField.setEditable(false);
+		oraFineTextField.setColumns(10);
+		oraFineTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		lblPresenza = new JLabel("Presenza");
+		lblPresenza.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPresenza.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		presenzaCheckBox = new JCheckBox("");
+		
+		invitatiScrollPane = new JScrollPane();
+		invitatiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		invitatiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+		invitatiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		
+		invitatiLabel = new JLabel("Invitati");
+		invitatiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		invitatiScrollPane.setColumnHeaderView(invitatiLabel);
 		
 		invitatiList = new JList();
 		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		InvitatiListRenderer invitatiListRenderer=new InvitatiListRenderer();
+		invitatiListRenderer=new InvitatiListRenderer();
 		invitatiList.setCellRenderer(invitatiListRenderer);
 		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		listmodel=new DefaultListModel();
+		invitatiList.setModel(listmodel);
+		listmodel.addAll(meetingSelezionato.getPartecipantiAlMeeting());
+		invitatiScrollPane.setViewportView(invitatiList);
 		invitatiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				
 				
 				PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) invitatiList.getSelectedValue();
 				if(partecipaz!=null) {
@@ -501,7 +339,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 						presenzaCheckBox.setSelected(true);
 						else
 							presenzaCheckBox.setSelected(false);
-					
 					
 					nomeTextField.setText(partecipaz.getPartecipante().getNome());
 					cognomeTextField.setText(partecipaz.getPartecipante().getCognome());
@@ -526,20 +363,15 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				}
 					
 					
-					
 				}
 					
-				}
-				
-			
+			}
 		);
 		
-		DefaultListModel listmodel=new DefaultListModel();
-		invitatiList.setModel(listmodel);
-		listmodel.addAll(meetingSelezionato.getPartecipantiAlMeeting());
-
-		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		invitatiScrollPane.setViewportView(invitatiList);
+		JPanel comandiPanel2 = new JPanel();	
+		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
+		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		comandiPanel.add(comandiPanel2);
 		
 		eliminaPartecipanteButton = new JButton("Elimina partecipante");
 		eliminaPartecipanteButton.setPreferredSize(new Dimension(190, 30));
@@ -566,55 +398,39 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(invitatiList.isSelectionEmpty()) {
-					
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante da eliminare");
 					invitatiLabel.setForeground(Color.RED);
-					
 				}
 				else {
 					
-					try {
-						invitatiLabel.setForeground(Color.BLACK);
 						
-						controller.eliminaPartecipante((PartecipazioneMeeting)invitatiList.getSelectedValue());
-						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
-						
-						//Rimuove dalla lista l'elemento eliminato
-						listmodel.removeElementAt(invitatiList.getSelectedIndex());
-						
-						//Pone il valore selezionato a null
-						invitatiList.setSelectedValue(null,false);
-						
-						//Aggiorna i dipendenti disponibili
-						dataModelDipendente.fireTableDataChanged();
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
-						
-						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
-						
-						sorterDipendente.setModel(dataModelDipendente);
-						
+						eliminaInvitato(controller);
 						svuotaCampi();
 						
-					} catch (SQLException e1) {
-						
-						e1.printStackTrace();
-					}
+					
 				}
 					
 				}
+
+			
 				
 			
 		});
-		
-		//Button "Inserisci partecipanti"
+
 		inserisciPartecipanteButton = new JButton("Inserisci partecipante");
+		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
+		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
+		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		inserisciPartecipanteButton.setBackground(Color.WHITE);
+		inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
+		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(dipendenteTable.getSelectedRow()==-1) {
-					
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla tabella");
-					
 				}
 				else {
 					
@@ -666,8 +482,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					
 				}
 			
-				
-			
 			}
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -684,6 +498,14 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		});
 		
 		aggiornaPartecipantiButton = new JButton("Aggiorna partecipante");
+		aggiornaPartecipantiButton.setPreferredSize(new Dimension(190, 30));
+		aggiornaPartecipantiButton.setMaximumSize(new Dimension(150, 150));
+		aggiornaPartecipantiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		aggiornaPartecipantiButton.setBackground(Color.WHITE);
+		aggiornaPartecipantiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		aggiornaPartecipantiButton.setMargin(new Insets(2, 20, 2, 20));
+		aggiornaPartecipantiButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		aggiornaPartecipantiButton.setAlignmentX(0.5f);
 		aggiornaPartecipantiButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -748,42 +570,184 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				
 			}
 		});
-		aggiornaPartecipantiButton.setPreferredSize(new Dimension(190, 30));
-		aggiornaPartecipantiButton.setMaximumSize(new Dimension(150, 150));
-		aggiornaPartecipantiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		aggiornaPartecipantiButton.setBackground(Color.WHITE);
-		aggiornaPartecipantiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		aggiornaPartecipantiButton.setMargin(new Insets(2, 20, 2, 20));
-		aggiornaPartecipantiButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-		aggiornaPartecipantiButton.setAlignmentX(0.5f);
 		comandiPanel2.add(aggiornaPartecipantiButton);
 		
-		
-		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
-		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
-		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		inserisciPartecipanteButton.setBackground(Color.WHITE);
-		inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
-		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-		inserisciPartecipanteButton.setAlignmentX(0.5f);
-		comandiPanel2.add(inserisciPartecipanteButton);
+
 		comandiPanel2.add(inserisciPartecipanteButton);
 		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		comandiPanel2.add(eliminaPartecipanteButton);
 		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		invitatiLabel = new JLabel("Invitati");
-		invitatiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
-		invitatiScrollPane.setColumnHeaderView(invitatiLabel);
+		JPanel infoPanel2 = new JPanel();
+		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
+
+
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(dipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(23)
+					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+					.addGap(26)
+					.addComponent(dipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		
+		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
+		gl_infoPanel2.setHorizontalGroup(
+			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(184)
+							.addComponent(infoDipendenteLabel, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
+							.addGap(148))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(43)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addComponent(valutazioneLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+								.addComponent(sessoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(nomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(cognomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(salarioLabel))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+									.addGroup(gl_infoPanel2.createSequentialGroup()
+										.addComponent(uomoRadioButton)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(donnaRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
+									.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+									.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+									.addComponent(nomeTextField)
+									.addComponent(cognomeTextField))
+								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+							.addGap(33)))
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
+							.addComponent(infoMeetingLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+							.addGap(230))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(30)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+								.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+							.addGap(10)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(presenzaCheckBox))
+							.addPreferredGap(ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+							.addComponent(invitatiScrollPane, GroupLayout.PREFERRED_SIZE, 278, GroupLayout.PREFERRED_SIZE)
+							.addGap(22))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(130)
+							.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap(360, Short.MAX_VALUE))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(130)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(dataFineTextField, 90, 90, 90)
+								.addComponent(dataInizioTextField, 90, 90, 90))
+							.addGap(360))))
+		);
+		gl_infoPanel2.setVerticalGroup(
+			gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addGap(73)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addComponent(uomoRadioButton)
+						.addComponent(donnaRadioButton))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addGap(68))
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addContainerGap(63, Short.MAX_VALUE)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
+					.addGap(59))
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addGap(25)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(infoMeetingLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(infoDipendenteLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(13)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(skillScrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+						.addComponent(invitatiScrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(64, Short.MAX_VALUE))
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addGap(91)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(dataInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(dataFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dataFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(oraInizioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(oraInizioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(oraFineTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(oraFineLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addComponent(presenzaCheckBox)
+						.addComponent(lblPresenza, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addGap(87))
+		);
+		gl_infoPanel2.linkSize(SwingConstants.VERTICAL, new Component[] {invitatiScrollPane, skillScrollPane});
+		gl_infoPanel2.linkSize(SwingConstants.VERTICAL, new Component[] {dataInizioLabel, dataFineLabel, oraInizioLabel, oraFineLabel, lblPresenza});
+		gl_infoPanel2.linkSize(SwingConstants.HORIZONTAL, new Component[] {oraInizioTextField, oraFineTextField, oraInizioLabel, oraFineLabel});
+		gl_infoPanel2.linkSize(SwingConstants.HORIZONTAL, new Component[] {dataInizioTextField, dataFineTextField, dataInizioLabel, dataFineLabel});
+		
 		infoPanel2.setLayout(gl_infoPanel2);
 		infoPanel.add(infoPanel2);
 		panel.setLayout(gl_panel);
 		
-		//Label "Gestione Meeting"
-		JLabel gestioneMeetingLabel = new JLabel("Gestione invitati meeting");
-		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
-		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -825,7 +789,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		
 		//Modello delle colonne personalizzato(Testo allineato al centro)
-		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
+		renderTabella = new DefaultTableCellRenderer();
         renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
         renderTabella.setVerticalAlignment(SwingConstants.CENTER);
 		dipendenteTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
@@ -949,11 +913,37 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			
 		});
 		
-		DipendenteScrollPane.setViewportView(dipendenteTable);
+		dipendenteScrollPane.setViewportView(dipendenteTable);
 
 		
 	}
 	
+	private void eliminaInvitato(ControllerPartecipantiMeeting controller){
+		invitatiLabel.setForeground(Color.BLACK);
+		controller.eliminaPartecipante((PartecipazioneMeeting)invitatiList.getSelectedValue());
+		JOptionPane.showMessageDialog(null, "Partecipante eliminato");
+		aggiornaListaDipendenti();
+		aggiornaTabellaDipendenti(controller);
+	}
+	
+	private void aggiornaListaDipendenti() {
+		listmodel.removeElementAt(invitatiList.getSelectedIndex());
+		invitatiList.setSelectedValue(null,false);
+	}
+
+	private void aggiornaTabellaDipendenti(ControllerPartecipantiMeeting controller) {
+		dataModelDipendente.fireTableDataChanged();
+		try {
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		sorterDipendente.setModel(dataModelDipendente);
+		
+	}
+
 	private void svuotaCampi() {
 		
 		nomeTextField.setText(null);

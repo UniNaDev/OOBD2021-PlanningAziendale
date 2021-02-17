@@ -6,6 +6,8 @@ package controller.dipendente;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
@@ -65,8 +67,13 @@ public class ControllerPartecipantiMeeting {
 		return skillDAO.getSkillsDipendente(cfDipendente);
 	}
 
-	public void eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
-		meetDAO.deletePartecipanteMeeting(partecipazioneMeeting);
+	public void eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting){
+		try {
+			meetDAO.deletePartecipanteMeeting(partecipazioneMeeting);
+		} catch (SQLException e) {
+			
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
 	}
 
 	public void inserisciPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
