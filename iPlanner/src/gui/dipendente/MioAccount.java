@@ -55,6 +55,8 @@ public class MioAccount extends JFrame {
     private JPanel contentPane;
     private JTextField nomeTextField, cfTextField, cognomeTextField, cellulareTextField, telefonoFissoTextField,
 	    indirizzoTextField, emailTextField;
+    private JButton confermaButton;
+    private JButton modificaButton;
     private JRadioButton uomoRadioButton, donnaRadioButton;
     private JComboBox giornoComboBox;
     private JComboBox meseComboBox;
@@ -66,6 +68,19 @@ public class MioAccount extends JFrame {
     private JPasswordField passwordField;
     private JLabel nomeLabel, cognomeLabel, sessoLabel, dataNascitaLabel, provinciaNascitaLabel, comuneNascitaLabel,
 	    indirizzoLabel, cellulareLabel, telefonoFissoLabel, emailLabel, passwordLabel;
+    private JLabel informazioniPersonaliLabel;
+    private JLabel cfLabel;
+    private JLabel informazioniAziendaliLabel;
+    private JLabel valutazioneDipendenteLabel;
+    private JLabel valoreValutazioneDipendenteLabel;
+    private JLabel salarioDipendenteLabel;
+    private JLabel valoreSalarioDipendenteLabel;
+    private JLabel iconaSalarioLabel;
+    private JLabel iconaSkillsLabel;
+    private JLabel iconaValutazioneLabel;
+    private JLabel skillDipendenteLabel;
+    private JTextArea valoreSkillTextArea;
+    private JSeparator separator;
     private final ButtonGroup buttonGroup = new ButtonGroup();
 
     private String nome;
@@ -85,6 +100,12 @@ public class MioAccount extends JFrame {
     private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
 
     public MioAccount(ControllerGestioneProfilo controller, Dipendente dipendenteLogged) {
+
+	setResizable(false);
+	setIconImage(Toolkit.getDefaultToolkit().getImage(MioAccount.class.getResource("/Icone/WindowIcon_16.png")));
+	setTitle("iPlanner - Il mio Account");
+	setBounds(100, 100, 1280, 720);
+	setLocationRelativeTo(null);
 	addWindowListener(new WindowAdapter() {
 	    public void windowClosing(WindowEvent evt) {
 		if (modificheEffettuate) {
@@ -99,59 +120,12 @@ public class MioAccount extends JFrame {
 		    controller.chiudiMioAccount();
 	    }
 	});
-	setResizable(false);
-	setIconImage(Toolkit.getDefaultToolkit().getImage(MioAccount.class.getResource("/Icone/WindowIcon_16.png")));
-	setTitle("iPlanner - Il mio Account");
-	setBounds(100, 100, 1280, 720);
-	setLocationRelativeTo(null);
-
+	
 	contentPane = new JPanel();
 	contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 	setContentPane(contentPane);
 
-	JButton confermaButton = new JButton("Conferma");
-	confermaButton.addMouseListener(new MouseAdapter() {
-	    @Override
-	    public void mouseEntered(MouseEvent e) {
-		confermaButton.setBackground(Color.LIGHT_GRAY);
-	    }
-
-	    @Override
-	    public void mouseExited(MouseEvent e) {
-		confermaButton.setBackground(Color.WHITE);
-	    }
-	});
-	confermaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	confermaButton.setBackground(Color.WHITE);
-	confermaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-	confermaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-	confermaButton.setBounds(1136, 628, 118, 42);
-	confermaButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-		campiObbligatoriNeri();
-		if (!checkCampiObbligatoriVuoti() && lunghezzaTelefonoValida(telefonoFissoTextField.getText())
-			&& lunghezzaTelefonoValida(cellulareTextField.getText()))
-		    aggiornaAccount(controller, dipendenteLogged);
-		else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
-		    JOptionPane.showMessageDialog(null,
-			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
-			    "Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
-		    telefonoFissoLabel.setForeground(Color.RED);
-		} else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
-		    JOptionPane.showMessageDialog(null,
-			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
-			    "Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
-		    cellulareLabel.setForeground(Color.RED);
-		} else {
-		    JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
-			    "Errore Campi Obbligatori Vuoti", JOptionPane.ERROR_MESSAGE);
-		    campiObbligatoriRossi();
-		}
-	    }
-
-	});
-
-	JLabel informazioniPersonaliLabel = new JLabel("Informazioni Personali");
+	informazioniPersonaliLabel = new JLabel("Informazioni Personali");
 	informazioniPersonaliLabel.setBounds(125, 11, 386, 37);
 	informazioniPersonaliLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 
@@ -169,7 +143,7 @@ public class MioAccount extends JFrame {
 	nomeTextField.setBounds(239, 119, 187, 24);
 	nomeTextField.setColumns(10);
 
-	JLabel cfLabel = new JLabel("Codice Fiscale");
+	cfLabel = new JLabel("Codice Fiscale");
 	cfLabel.setBounds(85, 87, 144, 19);
 	cfLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 	cfLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -273,44 +247,7 @@ public class MioAccount extends JFrame {
 	annoComboBox.setSelectedIndex(dipendenteLogged.getDataNascita().getYear() - 1900);
 	contentPane.add(annoComboBox);
 
-	JButton modificaButton = new JButton("Modifica");
-	modificaButton.addMouseListener(new MouseAdapter() {
-
-	    @Override
-	    public void mouseEntered(MouseEvent e) {
-		modificaButton.setBackground(Color.LIGHT_GRAY);
-	    }
-
-	    @Override
-	    public void mouseExited(MouseEvent e) {
-		modificaButton.setBackground(Color.WHITE);
-	    }
-	});
-	modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-	modificaButton.setBackground(Color.WHITE);
-	modificaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
-	modificaButton.setBounds(275, 541, 126, 42);
-	modificaButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-		nomeTextField.setEditable(true);
-		cognomeTextField.setEditable(true);
-		uomoRadioButton.setEnabled(true);
-		donnaRadioButton.setEnabled(true);
-		giornoComboBox.setEnabled(true);
-		meseComboBox.setEnabled(true);
-		annoComboBox.setEnabled(true);
-		provinciaComboBox.setEnabled(true);
-		emailTextField.setEditable(true);
-		passwordField.setEditable(true);
-		indirizzoTextField.setEditable(true);
-		cellulareTextField.setEditable(true);
-		telefonoFissoTextField.setEditable(true);
-		modificaButton.setEnabled(false);
-		modificheEffettuate = true;
-	    }
-	});
-
+	
 	contentPane.setLayout(null);
 	contentPane.add(modificaButton);
 	contentPane.add(confermaButton);
@@ -324,7 +261,7 @@ public class MioAccount extends JFrame {
 	contentPane.add(cfTextField);
 	contentPane.add(informazioniPersonaliLabel);
 
-	JSeparator separator = new JSeparator();
+	separator = new JSeparator();
 	separator.setForeground(Color.LIGHT_GRAY);
 	separator.setBackground(Color.WHITE);
 	separator.setOrientation(SwingConstants.VERTICAL);
@@ -357,9 +294,15 @@ public class MioAccount extends JFrame {
 	contentPane.add(comuneComboBox);
 
 	provinciaComboBox = new JComboBox();
-	inizializzaComboBoxProvince(controller);
 	provinciaComboBox.setEnabled(false);
 	provinciaComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+	provinciaComboBox.setUI(new BasicComboBoxUI());
+	provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	provinciaComboBox.setEnabled(false);
+	provinciaComboBox.setBackground(Color.WHITE);
+	provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+	provinciaComboBox.setBounds(239, 268, 144, 22);
+	inizializzaComboBoxProvince(controller);
 	provinciaComboBox.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
 		if (provinciaComboBox.isEnabled())
@@ -367,12 +310,6 @@ public class MioAccount extends JFrame {
 		aggiornaComboBoxComuni(controller);
 	    }
 	});
-	provinciaComboBox.setUI(new BasicComboBoxUI());
-	provinciaComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	provinciaComboBox.setEnabled(false);
-	provinciaComboBox.setBackground(Color.WHITE);
-	provinciaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-	provinciaComboBox.setBounds(239, 268, 144, 22);
 	provinciaComboBox.setSelectedItem(dipendenteLogged.getLuogoNascita().getNomeProvincia());
 	comuneComboBox.setSelectedItem(dipendenteLogged.getLuogoNascita());
 	contentPane.add(provinciaComboBox);
@@ -423,63 +360,101 @@ public class MioAccount extends JFrame {
 	telefonoFissoTextField.setColumns(10);
 	telefonoFissoTextField.setBounds(239, 479, 187, 24);
 	contentPane.add(telefonoFissoTextField);
+	
+	modificaButton = new JButton("Modifica");
+	modificaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	modificaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+	modificaButton.setBackground(Color.WHITE);
+	modificaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+	modificaButton.setBounds(275, 541, 126, 42);
+	modificaButton.addMouseListener(new MouseAdapter() {
 
-	JLabel informazioniAziendaliLabel = new JLabel("Informazioni Aziendali");
+	    @Override
+	    public void mouseEntered(MouseEvent e) {
+		modificaButton.setBackground(Color.LIGHT_GRAY);
+	    }
+
+	    @Override
+	    public void mouseExited(MouseEvent e) {
+		modificaButton.setBackground(Color.WHITE);
+	    }
+	});
+	modificaButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+		nomeTextField.setEditable(true);
+		cognomeTextField.setEditable(true);
+		uomoRadioButton.setEnabled(true);
+		donnaRadioButton.setEnabled(true);
+		giornoComboBox.setEnabled(true);
+		meseComboBox.setEnabled(true);
+		annoComboBox.setEnabled(true);
+		provinciaComboBox.setEnabled(true);
+		emailTextField.setEditable(true);
+		passwordField.setEditable(true);
+		indirizzoTextField.setEditable(true);
+		cellulareTextField.setEditable(true);
+		telefonoFissoTextField.setEditable(true);
+		modificaButton.setEnabled(false);
+		modificheEffettuate = true;
+	    }
+	});
+
+	informazioniAziendaliLabel = new JLabel("Informazioni Aziendali");
 	informazioniAziendaliLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 	informazioniAziendaliLabel.setBounds(772, 11, 386, 37);
 	contentPane.add(informazioniAziendaliLabel);
 
-	JLabel laMiaValutazioneLabel = new JLabel("La mia Valutazione:");
-	laMiaValutazioneLabel.setForeground(Color.DARK_GRAY);
-	laMiaValutazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	laMiaValutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-	laMiaValutazioneLabel.setBounds(772, 136, 386, 37);
-	contentPane.add(laMiaValutazioneLabel);
+	valutazioneDipendenteLabel = new JLabel("La mia Valutazione:");
+	valutazioneDipendenteLabel.setForeground(Color.DARK_GRAY);
+	valutazioneDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	valutazioneDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+	valutazioneDipendenteLabel.setBounds(772, 136, 386, 37);
+	contentPane.add(valutazioneDipendenteLabel);
 
-	JLabel valoreValutazioneLabel = new JLabel(String.format("%.2f", dipendenteLogged.getValutazione()));
-	valoreValutazioneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	valoreValutazioneLabel.setForeground(Color.BLACK);
-	valoreValutazioneLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
-	valoreValutazioneLabel.setBounds(772, 184, 386, 37);
-	contentPane.add(valoreValutazioneLabel);
+	valoreValutazioneDipendenteLabel = new JLabel(String.format("%.2f", dipendenteLogged.getValutazione()));
+	valoreValutazioneDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	valoreValutazioneDipendenteLabel.setForeground(Color.BLACK);
+	valoreValutazioneDipendenteLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
+	valoreValutazioneDipendenteLabel.setBounds(772, 184, 386, 37);
+	contentPane.add(valoreValutazioneDipendenteLabel);
 
-	JLabel IlMioSalarioLabel = new JLabel("Il mio Salario:");
-	IlMioSalarioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	IlMioSalarioLabel.setForeground(Color.DARK_GRAY);
-	IlMioSalarioLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-	IlMioSalarioLabel.setBounds(772, 293, 386, 37);
-	contentPane.add(IlMioSalarioLabel);
+	salarioDipendenteLabel = new JLabel("Il mio Salario:");
+	salarioDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	salarioDipendenteLabel.setForeground(Color.DARK_GRAY);
+	salarioDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+	salarioDipendenteLabel.setBounds(772, 293, 386, 37);
+	contentPane.add(salarioDipendenteLabel);
 
-	JLabel valoreSalarioLabel = new JLabel(String.format("%.2f", dipendenteLogged.getSalario()) + "€");
-	valoreSalarioLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	valoreSalarioLabel.setForeground(Color.BLACK);
-	valoreSalarioLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
-	valoreSalarioLabel.setBounds(772, 336, 386, 37);
-	contentPane.add(valoreSalarioLabel);
+	valoreSalarioDipendenteLabel = new JLabel(String.format("%.2f", dipendenteLogged.getSalario()) + "€");
+	valoreSalarioDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	valoreSalarioDipendenteLabel.setForeground(Color.BLACK);
+	valoreSalarioDipendenteLabel.setFont(new Font("Monospaced", Font.PLAIN, 30));
+	valoreSalarioDipendenteLabel.setBounds(772, 336, 386, 37);
+	contentPane.add(valoreSalarioDipendenteLabel);
 
-	JLabel leMieSkillLabel = new JLabel("Le mie Skill:");
-	leMieSkillLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	leMieSkillLabel.setForeground(Color.DARK_GRAY);
-	leMieSkillLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-	leMieSkillLabel.setBounds(772, 462, 386, 37);
-	contentPane.add(leMieSkillLabel);
+	skillDipendenteLabel = new JLabel("Le mie Skill:");
+	skillDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	skillDipendenteLabel.setForeground(Color.DARK_GRAY);
+	skillDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+	skillDipendenteLabel.setBounds(772, 462, 386, 37);
+	contentPane.add(skillDipendenteLabel);
 
-	JLabel iconaValutazioneLabel = new JLabel("");
+	iconaValutazioneLabel = new JLabel("");
 	iconaValutazioneLabel.setForeground(Color.DARK_GRAY);
 	iconaValutazioneLabel.setIcon(new ImageIcon(MioAccount.class.getResource("/Icone/valutazione_32.png")));
-	iconaValutazioneLabel.setBounds(743, 123, 32, 51);
+	iconaValutazioneLabel.setBounds(743, 122, 32, 51);
 	contentPane.add(iconaValutazioneLabel);
 
-	JLabel iconaSalarioLabel = new JLabel("");
+	iconaSalarioLabel = new JLabel("");
 	iconaSalarioLabel.setIcon(new ImageIcon(MioAccount.class.getResource("/Icone/salary_32.png")));
 	iconaSalarioLabel.setForeground(Color.DARK_GRAY);
-	iconaSalarioLabel.setBounds(743, 274, 32, 51);
+	iconaSalarioLabel.setBounds(743, 279, 32, 51);
 	contentPane.add(iconaSalarioLabel);
 
-	JLabel iconaSkillsLabel = new JLabel("");
+	iconaSkillsLabel = new JLabel("");
 	iconaSkillsLabel.setIcon(new ImageIcon(MioAccount.class.getResource("/Icone/skills_32.png")));
 	iconaSkillsLabel.setForeground(Color.DARK_GRAY);
-	iconaSkillsLabel.setBounds(743, 447, 32, 51);
+	iconaSkillsLabel.setBounds(743, 448, 32, 51);
 	contentPane.add(iconaSkillsLabel);
 
 	emailLabel = new JLabel("Email");
@@ -517,7 +492,7 @@ public class MioAccount extends JFrame {
 	skillsScrollPane.setBounds(753, 510, 427, 107);
 	contentPane.add(skillsScrollPane);
 
-	JTextArea valoreSkillTextArea = new JTextArea();
+	valoreSkillTextArea = new JTextArea();
 	valoreSkillTextArea.setOpaque(false);
 	valoreSkillTextArea.setBorder(null);
 	valoreSkillTextArea.setEditable(false);
@@ -530,7 +505,51 @@ public class MioAccount extends JFrame {
 	    skillDipendente += skill.toString() + "\n";
 	valoreSkillTextArea.setText(skillDipendente);
 	skillsScrollPane.setViewportView(valoreSkillTextArea);
+	
+	confermaButton = new JButton("Conferma");
+	confermaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	confermaButton.setBackground(Color.WHITE);
+	confermaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+	confermaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+	confermaButton.setBounds(1136, 628, 118, 42);
+	confermaButton.addMouseListener(new MouseAdapter() {
+	    @Override
+	    public void mouseEntered(MouseEvent e) {
+		confermaButton.setBackground(Color.LIGHT_GRAY);
+	    }
+
+	    @Override
+	    public void mouseExited(MouseEvent e) {
+		confermaButton.setBackground(Color.WHITE);
+	    }
+	});
+	confermaButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+		campiObbligatoriNeri();
+		
+		if (!checkCampiObbligatoriVuoti() && lunghezzaTelefonoValida(telefonoFissoTextField.getText())
+			&& lunghezzaTelefonoValida(cellulareTextField.getText()))
+		    aggiornaAccount(controller, dipendenteLogged);
+		else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
+		    JOptionPane.showMessageDialog(null,
+			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
+			    "Numero di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
+		    telefonoFissoLabel.setForeground(Color.RED);
+		} else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
+		    JOptionPane.showMessageDialog(null,
+			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
+			    "Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
+		    cellulareLabel.setForeground(Color.RED);
+		} else {
+		    JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
+			    "Errore Campi Obbligatori Vuoti", JOptionPane.ERROR_MESSAGE);
+		    campiObbligatoriRossi();
+		}
+	  }
+
+	});
     }
+    
 
     // Altri metodi
     // ------------------------------------------------------------------------

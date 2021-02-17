@@ -21,8 +21,8 @@ public class ManagerConnessioneDB {
 	private Connection connection = null;
 	
 	private final String username = "postgres";
-	private final String password = "160995";
-	private final String nomeDB = "iplanner";
+	private final String password = "michele";
+	private final String nomeDB = "MikeDB";
 	private final String url = "jdbc:postgresql://localhost:5432/";
 	
 	private ManagerConnessioneDB() throws SQLException {

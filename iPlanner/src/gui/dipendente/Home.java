@@ -60,7 +60,19 @@ public class Home extends JFrame {
     private JButton mioAccountButton;
     private JButton mieiProgettiButton;
     private JButton mieiMeetingButton;
+    private JButton logoutButton;
+    private JLabel nomeUtenteLabel;
+    private JLabel emailUtenteLabel;
+    private JLabel iconaEmailLabel;
+    private JLabel dataAttualeLabel;
+    private JLabel oraAttualeLabel;
+    private JLabel meetingLabel;
+    private JLabel progettiLabel;
+    private JScrollPane progettiScrollPanel;
+    private JScrollPane meetingScrollPanel;
     private JList<Meeting> meetingList;
+    private MeetingListRenderer meetingCellRenderer;
+    private ProgettoListRenderer progettoCellRenderer;
     private DefaultListModel modelloListaMeeting;
     private JList<Progetto> progettiList;
     private DefaultListModel modelloListaProgetti;
@@ -79,6 +91,15 @@ public class Home extends JFrame {
 	setContentPane(contentPane);
 
 	mioAccountButton = new JButton("Mio Account");
+	mioAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	mioAccountButton.setBackground(Color.WHITE);
+	mioAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+	mioAccountButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+	mioAccountButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+		controller.apriMioAccount();
+	    }
+	});
 	mioAccountButton.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseEntered(MouseEvent e) {
@@ -90,17 +111,17 @@ public class Home extends JFrame {
 		mioAccountButton.setBackground(Color.WHITE);
 	    }
 	});
-	mioAccountButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	mioAccountButton.setBackground(Color.WHITE);
-	mioAccountButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-	mioAccountButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-	mioAccountButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-		controller.apriMioAccount();
-	    }
-	});
 
 	mieiProgettiButton = new JButton("Miei Progetti");
+	mieiProgettiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	mieiProgettiButton.setBackground(Color.WHITE);
+	mieiProgettiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+	mieiProgettiButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+	mieiProgettiButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+		controller.apriMieiProgetti();
+	    }
+	});
 	mieiProgettiButton.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseEntered(MouseEvent e) {
@@ -112,17 +133,17 @@ public class Home extends JFrame {
 		mieiProgettiButton.setBackground(Color.WHITE);
 	    }
 	});
-	mieiProgettiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	mieiProgettiButton.setBackground(Color.WHITE);
-	mieiProgettiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-	mieiProgettiButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-	mieiProgettiButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-		controller.apriMieiProgetti();
-	    }
-	});
 
 	mieiMeetingButton = new JButton("Miei Meeting");
+	mieiMeetingButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	mieiMeetingButton.setBackground(Color.WHITE);
+	mieiMeetingButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+	mieiMeetingButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+	mieiMeetingButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+		controller.apriMieiMeeting();
+	    }
+	});
 	mieiMeetingButton.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseEntered(MouseEvent e) {
@@ -135,17 +156,17 @@ public class Home extends JFrame {
 	    }
 
 	});
-	mieiMeetingButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	mieiMeetingButton.setBackground(Color.WHITE);
-	mieiMeetingButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-	mieiMeetingButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-	mieiMeetingButton.addActionListener(new ActionListener() {
+
+	logoutButton = new JButton("Esci");
+	logoutButton.setBackground(Color.WHITE);
+	logoutButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+	logoutButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+	logoutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	logoutButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-		controller.apriMieiMeeting();
+		controller.logout();
 	    }
 	});
-
-	JButton logoutButton = new JButton("Esci");
 	logoutButton.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseEntered(MouseEvent e) {
@@ -157,36 +178,27 @@ public class Home extends JFrame {
 		logoutButton.setBackground(Color.WHITE);
 	    }
 	});
-	logoutButton.setBackground(Color.WHITE);
-	logoutButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-	logoutButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-	logoutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	logoutButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-		controller.logout();
-	    }
-	});
 
-	JScrollPane progettiScrollPanel = new JScrollPane();
+	progettiScrollPanel = new JScrollPane();
 	progettiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 	progettiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 	progettiScrollPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 
-	JScrollPane meetingScrollPanel = new JScrollPane();
+	meetingScrollPanel = new JScrollPane();
 	meetingScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 	meetingScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 	meetingScrollPanel.setBorder(new LineBorder(Color.GRAY, 2));
 
-	JLabel nomeUtenteLabel = new JLabel(dipendente.getNome() + " " + dipendente.getCognome());
+	nomeUtenteLabel = new JLabel(dipendente.getNome() + " " + dipendente.getCognome());
 	nomeUtenteLabel.setIcon(new ImageIcon(Home.class.getResource("/Icone/employee_64.png")));
 	nomeUtenteLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 
-	JLabel emailUtenteLabel = new JLabel(dipendente.getEmail());
+	emailUtenteLabel = new JLabel(dipendente.getEmail());
 	emailUtenteLabel.setIcon(null);
 	emailUtenteLabel.setForeground(Color.DARK_GRAY);
 	emailUtenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 
-	JLabel iconaEmailLabel = new JLabel("");
+	iconaEmailLabel = new JLabel("");
 	iconaEmailLabel.setIcon(new ImageIcon(Home.class.getResource("/Icone/email_32.png")));
 
 	LocalDate dataAttuale = LocalDate.now();
@@ -197,11 +209,11 @@ public class Home extends JFrame {
 	String dataInStringa = giornoAttuale + " " + String.valueOf(giornoAttualeInt) + " " + meseAttuale + " "
 		+ String.valueOf(annoAttuale);
 
-	JLabel dataAttualeLabel = new JLabel(String.valueOf(dataInStringa));
+	dataAttualeLabel = new JLabel(String.valueOf(dataInStringa));
 	dataAttualeLabel.setForeground(Color.BLACK);
 	dataAttualeLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 
-	JLabel oraAttualeLabel = new JLabel("Updating...");
+	oraAttualeLabel = new JLabel("Updating...");
 	oraAttualeLabel.setForeground(Color.BLACK);
 	oraAttualeLabel.setFont(new Font("Consolas", Font.PLAIN, 22));
 
@@ -215,23 +227,23 @@ public class Home extends JFrame {
 	});
 	timer.start();
 
-	JLabel meetingLabel = new JLabel("Meeting");
+	meetingLabel = new JLabel("Meeting");
 	meetingLabel.setForeground(Color.DARK_GRAY);
 	meetingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 	meetingScrollPanel.setColumnHeaderView(meetingLabel);
 
 	meetingList = new JList();
 	modelloListaMeeting = new DefaultListModel();
-	inizializzaListaMeeting(controller);
-	MeetingListRenderer renderer = new MeetingListRenderer();
-	meetingList.setCellRenderer(renderer);
+	meetingCellRenderer = new MeetingListRenderer();
+	meetingList.setCellRenderer(meetingCellRenderer);
 	meetingList.setSelectionBackground(Color.WHITE);
 	meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	meetingList.setFixedCellHeight(80);
 	meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
+	inizializzaListaMeeting(controller);
 	meetingScrollPanel.setViewportView(meetingList);
 
-	JLabel progettiLabel = new JLabel("Progetti");
+	progettiLabel = new JLabel("Progetti");
 	progettiLabel.setHorizontalAlignment(SwingConstants.LEFT);
 	progettiLabel.setForeground(Color.DARK_GRAY);
 	progettiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
@@ -239,12 +251,12 @@ public class Home extends JFrame {
 
 	progettiList = new JList();
 	modelloListaProgetti = new DefaultListModel();
-	inizializzaListaProgetti(controller);
-	ProgettoListRenderer progettoCellRenderer = new ProgettoListRenderer();
+	progettoCellRenderer = new ProgettoListRenderer();
 	progettiList.setCellRenderer(progettoCellRenderer);
 	progettiList.setSelectionBackground(Color.WHITE);
 	progettiList.setFixedCellHeight(80);
 	progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
+	inizializzaListaProgetti(controller);
 	progettiScrollPanel.setViewportView(progettiList);
 
 	GroupLayout gl_contentPane = new GroupLayout(contentPane);

@@ -8,14 +8,9 @@
 package gui;
 import controller.*;
 import java.awt.*;
-
-
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-
-
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
@@ -24,8 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
-
-
 
 public class iPlanner extends JFrame {
 	private JPanel contentPane;
@@ -66,7 +59,6 @@ public class iPlanner extends JFrame {
 			loginLabel.setForeground(Color.BLACK);
 			loginLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 			loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			
 			loginLabel.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
