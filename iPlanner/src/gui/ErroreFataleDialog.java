@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -19,7 +20,7 @@ import javax.swing.JTextArea;
 
 public class ErroreFataleDialog extends JDialog {
 	
-	public ErroreFataleDialog(Frame frameParente, Exception eccezione, ModalityType modalità) {
+	public ErroreFataleDialog(Frame frameParente, Exception eccezione) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ErroreFataleDialog.class.getResource("/icone/fatalError.png")));
 		setResizable(false);
 		setTitle("Errore Fatale");
@@ -81,7 +82,7 @@ public class ErroreFataleDialog extends JDialog {
 		mostraDettagliLabel.setBounds(14, 88, 98, 14);
 		getContentPane().add(mostraDettagliLabel);
 		
-		setModalityType(modalità);
+		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
     	setVisible(true);
 	}
 	
