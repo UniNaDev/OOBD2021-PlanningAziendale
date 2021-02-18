@@ -15,10 +15,13 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class ErroreFataleDialog extends JDialog {
+	
+    private JPanel contentPane = new JPanel();
 	
 	public ErroreFataleDialog(Frame frameParente, Exception eccezione) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ErroreFataleDialog.class.getResource("/icone/fatalError.png")));
@@ -26,13 +29,13 @@ public class ErroreFataleDialog extends JDialog {
 		setTitle("Errore Fatale");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 575, 272);
-		setContentPane(getContentPane());
-		getContentPane().setLayout(null);
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(14, 108, 529, 83);
-		getContentPane().add(scrollPane);
+		contentPane.add(scrollPane);
 		
 		JTextArea stackTraceTextArea = new JTextArea();
 		stackTraceTextArea.setLineWrap(true);
@@ -46,7 +49,7 @@ public class ErroreFataleDialog extends JDialog {
 		messaggioTextArea.setText("Errore Fatale!\r\n\r\nVerificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).");
 		messaggioTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
 		messaggioTextArea.setBounds(14, 11, 530, 66);
-		getContentPane().add(messaggioTextArea);
+		contentPane.add(messaggioTextArea);
 		
 		JButton okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
@@ -68,7 +71,7 @@ public class ErroreFataleDialog extends JDialog {
 		okButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		okButton.setBounds(497, 202, 46, 20);
-		getContentPane().add(okButton);
+		contentPane.add(okButton);
 		
 		JLabel mostraDettagliLabel = new JLabel("Mostra Dettagli");
 		mostraDettagliLabel.addMouseListener(new MouseAdapter() {
@@ -80,7 +83,7 @@ public class ErroreFataleDialog extends JDialog {
 		mostraDettagliLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mostraDettagliLabel.setFont(new Font("Consolas", Font.BOLD, 11));
 		mostraDettagliLabel.setBounds(14, 88, 98, 14);
-		getContentPane().add(mostraDettagliLabel);
+		contentPane.add(mostraDettagliLabel);
 		
 		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
     	setVisible(true);
