@@ -815,7 +815,8 @@ public class GestioneDipendenti extends JFrame {
 	JButton eliminaAccountButton = new JButton("Elimina");
 	eliminaAccountButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-		eliminaDipendente(controller, dipendenteSelezionato);
+	    	if (dipendenteSelezionato != null)
+	    		eliminaDipendente(controller, dipendenteSelezionato);
 	    }
 	});
 	eliminaAccountButton.setToolTipText("Elimina il dipendente");
