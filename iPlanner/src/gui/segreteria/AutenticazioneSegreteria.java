@@ -11,6 +11,7 @@ import controller.ControllerAccesso;
 
 import java.awt.Toolkit;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -19,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class AutenticazioneSegreteria extends JFrame {
 
@@ -46,6 +49,19 @@ public class AutenticazioneSegreteria extends JFrame {
 		contentPane.add(istruzioniLabel);
 		
 		passwordField = new JPasswordField();
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					if (!passwordField.getText().isBlank())
+						controller.autenticaSegreteria(passwordField.getText());
+					else
+						JOptionPane.showMessageDialog(null,
+								"Inserire la password amministrativa.",
+								"Errore Autenticazione",
+								JOptionPane.ERROR_MESSAGE);
+			}
+		});
 		passwordField.setFont(new Font("Consolas", Font.PLAIN, 13));
 		passwordField.setBounds(88, 65, 203, 20);
 		contentPane.add(passwordField);
@@ -75,6 +91,7 @@ public class AutenticazioneSegreteria extends JFrame {
 		    }
 		});
 		autenticaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		autenticaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		autenticaButton.setBounds(282, 101, 89, 23);
 		contentPane.add(autenticaButton);
 		
@@ -96,6 +113,7 @@ public class AutenticazioneSegreteria extends JFrame {
 		    }
 		});
 		annullaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		annullaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annullaButton.setBounds(10, 101, 75, 23);
 		contentPane.add(annullaButton);
 	}
