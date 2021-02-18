@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -23,9 +24,10 @@ import java.awt.Toolkit;
 import javax.swing.border.MatteBorder;
 
 import controller.ControllerAccesso;
-import gui.ErroreFatale;
+import gui.ErroreFataleDialog;
 
 import java.awt.Cursor;
+import java.awt.Dialog;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
