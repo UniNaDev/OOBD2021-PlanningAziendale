@@ -83,38 +83,84 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	
 	//Attributi GUI
 	private JPanel contentPane;
-	private JTable progettoTable;
-	private JLabel valutazioneLabel;
-	private JLabel salarioLabel;
+	private JLabel gestionePartecipantiProgettoLabel;
+	private JLabel infoDipendenteLabel;
+	private JLabel nomeLabel;
+	private JTextField nomeTextField;
+	private JLabel cognomeLabel;
+	private JTextField cognomeTextField;
+	private JLabel sessoLabel;
 	private final ButtonGroup modalitàButtonGroup = new ButtonGroup();
 	private JRadioButton uomoRadioButton;
 	private JRadioButton donnaRadioButton;
-	private JTable dipendenteTable;
-	private JButton eliminaPartecipanteButton;
-	private PartecipantiTableModel dataModelDipendente;
-	private JTextField nomeTextField;
-	private JTextField cognomeTextField;
+	private JLabel etàLabel;
 	private JTextField etàTextField;
+	private JLabel valutazioneLabel;
 	private JTextField valutazioneTextField;
+	private JLabel salarioLabel;
 	private JTextField salarioTextField;
-	private JList partecipantiList;
-	private JList skillList;
-	private DefaultListModel listaSkillModel;
-	private JLabel partecipantiLabel;
+	private JLabel ruoloLabel;
 	private JComboBox ruoloComboBox;
-	private JComboBox skillFiltroComboBox;
-	private JComboBox tipologiaProgettoComboBox;
+	private JList skillList;
+	private JLabel skillLabel;
+	private DefaultListModel listaSkillModel;
+	private JScrollPane skillScrollPane;
+	
+	private JSeparator infoDipendenteProgettoSeparator;
+	
+	private JLabel infoProgettoLabel;
+	private JLabel nomeProgettoLabel;
 	private JTextArea nomeProgettotextArea;
-	private JTextField textField_1;
+	private JLabel ambitiProgettoLabel;
 	private JTextArea ambitiTextArea;
-	private TableRowSorter<TableModel> sorterDipendente;
-	private JTextField etàMinimaTextField;
-	private JTextField etàMassimaTextField;
-	private JTextField salarioMinimoTextField;
-	private JTextField salarioMassimoTextField;
-	private JTextField valutazioneMinimaTextField;
-	private JTextField valutazioneMassimaTextField;
+	private JLabel tipologiaProgettoLabel;
+	private JTextField tipologiaProgettoTextField;
+	private JList partecipantiList;
+	private JLabel partecipantiLabel;
+	private JScrollPane partecipantiScrollPane;
+	private PartecipantiListRenderer partecipantiListRenderer;
+	private DefaultListModel partecipantiListModel;
+	
+	private JButton aggiornaRuoloButton;
+	private JButton inserisciPartecipanteButton;
+	private JButton eliminaPartecipanteButton;
+	
+	private JButton filtraButton;
 	private JTextField cercaTextField;
+	private JSeparator ricercaEtàSeparator;
+	private JTextField etàMinimaTextField;
+	private JLabel etàFiltroLabel;
+	private JTextField etàMassimaTextField;
+	private JSeparator etàSalarioSeparator;
+	private JTextField salarioMinimoTextField;
+	private JLabel salarioFiltroLabel;
+	private JTextField salarioMassimoTextField;
+	private JSeparator salarioValutazioneSeparator;
+	private JTextField valutazioneMinimaTextField;
+	private JLabel valutazioneFiltroLabel;
+	private JTextField valutazioneMassimaTextField;
+	private JSeparator valutazioneSkillSeparator;
+	private JLabel filtroSkillLabel;
+	private JComboBox skillFiltroComboBox;
+	private JSeparator skillTipologiaProgettoSeparator;
+	private JLabel tipologiaProgettoFiltroLabel;
+	private DefaultComboBoxModel tipologiaProgettoModel;
+	private JComboBox tipologiaProgettoComboBox;
+	
+
+	
+	
+	private JTable progettoTable;
+	private JTable dipendenteTable;
+
+	private PartecipantiTableModel dataModelDipendente;
+
+
+
+
+
+	private TableRowSorter<TableModel> sorterDipendente;
+
 	private Progetto progettoSelezionato;
 
 	//Creazione frame
@@ -123,15 +169,12 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		this.progettoSelezionato=progettoSelezionato;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1600, 900));
-		
-		
 		setTitle("Inserisci Partecipanti Progetto");
 		setBounds(100, 100, 1600, 900);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
 		setLocationRelativeTo(null);
 		
 		JPanel panel = new JPanel();	//main panel
@@ -148,111 +191,76 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		DipendenteScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		DipendenteScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
-						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(5)
-					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+		gestionePartecipantiProgettoLabel = new JLabel("Gestione partecipanti progetto");
+		gestionePartecipantiProgettoLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
+		gestionePartecipantiProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
-		JPanel comandiPanel2 = new JPanel();
-		comandiPanel2.setBorder(null);
-		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		infoDipendenteLabel = new JLabel("Info Dipendente");
+		infoDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		
-		//panel interno a quello delle info
-		JPanel infoPanel2 = new JPanel();
-		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
-		
-		//Label "Data inizio"
-		JLabel nomeLabel = new JLabel("Nome");
+		nomeLabel = new JLabel("Nome");
 		nomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		nomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-	
-		
-		//Label "Data fine"
-		JLabel cognomeLabel = new JLabel("Cognome");
-		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		cognomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		DefaultComboBoxModel myModel2 = new DefaultComboBoxModel();
-		for(int i=1900;i<= 2021;i++)
-			myModel2.addElement(i);
-		
-		//Label "Ora inizio"
-		JLabel sessoLabel = new JLabel("Sesso");
-		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		sessoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		
-		//Label età
-		JLabel etàLabel = new JLabel("Età");
-		etàLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		etàLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		
-		//Label valutazione
-		valutazioneLabel = new JLabel("Valutazione");
-		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		valutazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		//Label Salario
-		salarioLabel = new JLabel("Salario");
-		salarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		salarioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		//RadioButton uomo
-		uomoRadioButton = new JRadioButton("M");
-		uomoRadioButton.setEnabled(false);
-		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		modalitàButtonGroup.add(uomoRadioButton);
-		
-		//RadioButton donna
-		donnaRadioButton = new JRadioButton("F");
-		donnaRadioButton.setEnabled(false);
-		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		modalitàButtonGroup.add(donnaRadioButton);
 		
 		nomeTextField = new JTextField();
 		nomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nomeTextField.setEditable(false);
 		nomeTextField.setColumns(10);
 		nomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+			
+		cognomeLabel = new JLabel("Cognome");
+		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		cognomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		DefaultComboBoxModel myModel2 = new DefaultComboBoxModel();
+		for(int i=1900;i<= 2021;i++)
+			myModel2.addElement(i);
 		
 		cognomeTextField = new JTextField();
 		cognomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		cognomeTextField.setEditable(false);
 		cognomeTextField.setColumns(10);
 		cognomeTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+				
+		sessoLabel = new JLabel("Sesso");
+		sessoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		sessoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		uomoRadioButton = new JRadioButton("M");
+		uomoRadioButton.setEnabled(false);
+		uomoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		uomoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		modalitàButtonGroup.add(uomoRadioButton);
+	
+		donnaRadioButton = new JRadioButton("F");
+		donnaRadioButton.setEnabled(false);
+		donnaRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		donnaRadioButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		modalitàButtonGroup.add(donnaRadioButton);
+				
+		etàLabel = new JLabel("Età");
+		etàLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		etàLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		etàTextField = new JTextField();
 		etàTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		etàTextField.setEditable(false);
 		etàTextField.setColumns(10);
 		etàTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+				
+		valutazioneLabel = new JLabel("Valutazione");
+		valutazioneLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		valutazioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		valutazioneTextField = new JTextField();
 		valutazioneTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		valutazioneTextField.setEditable(false);
 		valutazioneTextField.setColumns(10);
 		valutazioneTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+				
+		salarioLabel = new JLabel("Salario");
+		salarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		salarioLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		salarioTextField = new JTextField();
 		salarioTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -260,60 +268,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		salarioTextField.setColumns(10);
 		salarioTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		JSeparator separator = new JSeparator();
-		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		separator.setOrientation(SwingConstants.VERTICAL);
-		
-		JScrollPane partecipantiScrollPane = new JScrollPane();
-		partecipantiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
-		partecipantiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
-		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
-		JLabel lblNewLabel = new JLabel("Info progetto");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		
-		JLabel lblInfoDipendente = new JLabel("Info Dipendente");
-		lblInfoDipendente.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInfoDipendente.setFont(new Font("Consolas", Font.PLAIN, 20));
-		
-		JScrollPane skillScrollPane = new JScrollPane();
-		skillScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
-		skillScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
-		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
-		
-		nomeProgettotextArea = new JTextArea(progettoSelezionato.getNomeProgetto());
-		nomeProgettotextArea.setEditable(false);
-		nomeProgettotextArea.setWrapStyleWord(true);
-		nomeProgettotextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
-		nomeProgettotextArea.setLineWrap(true);
-
-		nomeProgettotextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		JLabel nomeLabel_1 = new JLabel("Nome");
-		nomeLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		nomeLabel_1.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		textField_1 = new JTextField(progettoSelezionato.getTipoProgetto());
-		textField_1.setFont(new Font("Consolas", Font.PLAIN, 11));
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		textField_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		JLabel nomeLabel_1_1 = new JLabel("Tipologia");
-		nomeLabel_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		nomeLabel_1_1.setFont(new Font("Consolas", Font.PLAIN, 14));
-		
-		ambitiTextArea = new JTextArea(progettoSelezionato.getAmbiti().toString());
-		ambitiTextArea.setWrapStyleWord(true);
-		ambitiTextArea.setEditable(false);
-		ambitiTextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
-		ambitiTextArea.setLineWrap(true);
-		ambitiTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		
-		JLabel nomeLabel_1_1_1 = new JLabel("Ambito/i");
-		nomeLabel_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		nomeLabel_1_1_1.setFont(new Font("Consolas", Font.PLAIN, 14));
+		ruoloLabel = new JLabel("Ruolo");
+		ruoloLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		ruoloLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		try {
 			ruoloComboBox = new JComboBox(controller.ottieniRuoli());
@@ -328,139 +285,10 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			e4.printStackTrace();
 		}
 		
-		JLabel lblRuolo = new JLabel("Ruolo");
-		lblRuolo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblRuolo.setFont(new Font("Consolas", Font.PLAIN, 14));
-
-		
-		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
-		gl_infoPanel2.setHorizontalGroup(
-			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(184)
-							.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-							.addGap(136))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(39)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-									.addComponent(valutazioneLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-									.addComponent(sessoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(nomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(cognomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(salarioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addComponent(lblRuolo, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(ruoloComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(uomoRadioButton)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(donnaRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
-								.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(nomeTextField)
-								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(cognomeTextField, 102, 102, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(7)
-							.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGap(46)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-										.addGroup(gl_infoPanel2.createSequentialGroup()
-											.addComponent(nomeLabel_1)
-											.addGap(14))
-										.addGroup(gl_infoPanel2.createSequentialGroup()
-											.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-											.addGap(18))))
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(nomeLabel_1_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)))
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(nomeProgettotextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-								.addComponent(ambitiTextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-								.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
-							.addGap(18)
-							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
-							.addGap(30))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
-							.addGap(235))))
-		);
-		gl_infoPanel2.setVerticalGroup(
-			gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblInfoDipendente, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(29)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(nomeLabel_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addComponent(nomeProgettotextArea, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-										.addComponent(nomeLabel_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addComponent(ambitiTextArea, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-								.addComponent(nomeLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_infoPanel2.createSequentialGroup()
-							.addGap(18)
-							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_infoPanel2.createSequentialGroup()
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-										.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_infoPanel2.createSequentialGroup()
-											.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-												.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-												.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-												.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-												.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-											.addComponent(uomoRadioButton)
-											.addComponent(donnaRadioButton)))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-										.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
-										.addComponent(ruoloComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblRuolo, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
-								.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(67, Short.MAX_VALUE))
-				.addGroup(gl_infoPanel2.createSequentialGroup()
-					.addContainerGap(68, Short.MAX_VALUE)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
-					.addGap(65))
-		);
+		skillScrollPane = new JScrollPane();
+		skillScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		skillScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+		skillScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		listaSkillModel = new DefaultListModel<>();
 		skillList = new JList();
@@ -471,15 +299,64 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		skillList.setModel(listaSkillModel);
 		skillScrollPane.setViewportView(skillList);
 		
+		skillLabel = new JLabel("Skill");
+		skillLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		skillScrollPane.setColumnHeaderView(skillLabel);
 		
-		JLabel Skill = new JLabel("Skill");
-		Skill.setFont(new Font("Consolas", Font.PLAIN, 15));
-		skillScrollPane.setColumnHeaderView(Skill);
+		infoDipendenteProgettoSeparator = new JSeparator();
+		infoDipendenteProgettoSeparator.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		infoDipendenteProgettoSeparator.setOrientation(SwingConstants.VERTICAL);
+		
+		infoProgettoLabel = new JLabel("Info progetto");
+		infoProgettoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		
+		nomeProgettoLabel = new JLabel("Nome");
+		nomeProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		nomeProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		nomeProgettotextArea = new JTextArea(progettoSelezionato.getNomeProgetto());
+		nomeProgettotextArea.setEditable(false);
+		nomeProgettotextArea.setWrapStyleWord(true);
+		nomeProgettotextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
+		nomeProgettotextArea.setLineWrap(true);
+		nomeProgettotextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		tipologiaProgettoLabel = new JLabel("Tipologia");
+		tipologiaProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		tipologiaProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		tipologiaProgettoTextField = new JTextField(progettoSelezionato.getTipoProgetto());
+		tipologiaProgettoTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
+		tipologiaProgettoTextField.setEditable(false);
+		tipologiaProgettoTextField.setColumns(10);
+		tipologiaProgettoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		ambitiProgettoLabel = new JLabel("Ambito/i");
+		ambitiProgettoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		ambitiProgettoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+		
+		ambitiTextArea = new JTextArea(progettoSelezionato.getAmbiti().toString());
+		ambitiTextArea.setWrapStyleWord(true);
+		ambitiTextArea.setEditable(false);
+		ambitiTextArea.setFont(new Font("Consolas", Font.PLAIN, 11));
+		ambitiTextArea.setLineWrap(true);
+		ambitiTextArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		
+		partecipantiScrollPane = new JScrollPane();
+		partecipantiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
+		partecipantiScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		partecipantiList = new JList();
-		PartecipantiListRenderer partecipantiListRenderer=new PartecipantiListRenderer();
+		partecipantiListRenderer=new PartecipantiListRenderer();
 		partecipantiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		partecipantiList.setCellRenderer(partecipantiListRenderer);
+		partecipantiListModel=new DefaultListModel();
+		partecipantiList.setModel(partecipantiListModel);
+		partecipantiListModel.addAll(progettoSelezionato.getCollaborazioni());
+		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
+		partecipantiScrollPane.setViewportView(partecipantiList);
 		partecipantiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				
@@ -488,7 +365,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				if(collaborazione!=null) {
 					
 					ruoloComboBox.setSelectedItem(collaborazione.getRuoloCollaboratore());
-					
 					nomeTextField.setText(collaborazione.getCollaboratore().getNome());
 					cognomeTextField.setText(collaborazione.getCollaboratore().getCognome());
 					etàTextField.setText(String.valueOf(collaborazione.getCollaboratore().getEtà()));
@@ -513,85 +389,93 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				else 
 					ruoloComboBox.setSelectedItem(null);
 				
-				
-				
-					
-				
 			}
 		});
-		DefaultListModel listmodel=new DefaultListModel();
-		partecipantiList.setModel(listmodel);
-		listmodel.addAll(progettoSelezionato.getCollaborazioni());
-		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		partecipantiScrollPane.setViewportView(partecipantiList);
+	
+		partecipantiLabel = new JLabel("Partecipanti");
+		partecipantiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+		partecipantiScrollPane.setColumnHeaderView(partecipantiLabel);
 		
-		eliminaPartecipanteButton = new JButton("Elimina partecipante");
-		eliminaPartecipanteButton.setPreferredSize(new Dimension(190, 30));
-		eliminaPartecipanteButton.setMaximumSize(new Dimension(150, 150));
-		eliminaPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		eliminaPartecipanteButton.setBackground(Color.WHITE);
-		eliminaPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		eliminaPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
-		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-		eliminaPartecipanteButton.setAlignmentX(0.5f);
-		eliminaPartecipanteButton.addMouseListener(new MouseAdapter() {
+		JPanel comandiPanel2 = new JPanel();
+		comandiPanel2.setBorder(null);
+		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		//panel interno a quello delle info
+		JPanel infoPanel2 = new JPanel();
+		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
+		
+
+		aggiornaRuoloButton = new JButton("Aggiorna ruolo");
+		aggiornaRuoloButton.setPreferredSize(new Dimension(150, 30));
+		aggiornaRuoloButton.setMaximumSize(new Dimension(150, 150));
+		aggiornaRuoloButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		aggiornaRuoloButton.setMargin(new Insets(2, 20, 2, 20));
+		aggiornaRuoloButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		aggiornaRuoloButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		aggiornaRuoloButton.setBackground(Color.WHITE);
+		aggiornaRuoloButton.setAlignmentX(0.5f);
+		aggiornaRuoloButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				eliminaPartecipanteButton.setBackground(Color.LIGHT_GRAY);
+				aggiornaRuoloButton.setBackground(Color.LIGHT_GRAY);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				eliminaPartecipanteButton.setBackground(Color.WHITE);
+				aggiornaRuoloButton.setBackground(Color.WHITE);
 			}
 		});
-		eliminaPartecipanteButton.addActionListener(new ActionListener() {
+		aggiornaRuoloButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				if(partecipantiList.isSelectionEmpty()) {
-					
-					JOptionPane.showMessageDialog(null, "Seleziona un partecipante da eliminare");
+				if(partecipantiList.getSelectedValue()==null) {
+					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista");
 					partecipantiLabel.setForeground(Color.RED);
-					
 				}
-				else {
+				else
+				{
+					partecipantiLabel.setForeground(Color.BLACK);
+					String nuovoRuolo=ruoloComboBox.getSelectedItem().toString();
+					
+					//Vecchia collaborazione
+					CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
+					
+					//Nuova collaborazione
+					CollaborazioneProgetto collaborazioneProgetto=new CollaborazioneProgetto(progettoSelezionato, collaborazione.getCollaboratore(), nuovoRuolo);
 					
 					try {
-						partecipantiLabel.setForeground(Color.BLACK);
+						controller.aggiornaPartecipante(collaborazioneProgetto);
+						JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
+						partecipantiListModel.removeElementAt(partecipantiList.getSelectedIndex()); //rimuove il vecchio elemento
+						partecipantiListModel.addElement(collaborazioneProgetto); //lo aggiorna con il nuovo
 						
-						controller.eliminaPartecipante((CollaborazioneProgetto)partecipantiList.getSelectedValue());
-						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
-				
-						//Rimuove dalla lista l'elemento eliminato
-						listmodel.removeElementAt(partecipantiList.getSelectedIndex());
-						
-						//Pone il valore selezionato a null
-						partecipantiList.setSelectedValue(null,false);
-						
-						//Aggiorna i dipendenti disponibili
-						dataModelDipendente.fireTableDataChanged();
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
-						
-						//Aggiorna il modello del sorterDipendente in seguito all'eliminazione
+						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
 						sorterDipendente.setModel(dataModelDipendente);
 						
 						//Svuota i campi
 						svuotaCampi();
-						
 					} catch (SQLException e1) {
 					
-						e1.printStackTrace();
+						ruoloComboBox.setSelectedItem(null);
+						JOptionPane.showMessageDialog(null, e1.getMessage());
 					}
-				}
 					
+				
 				}
 				
-			
+			}
 		});
+		comandiPanel2.add(aggiornaRuoloButton);
 		
-		//Button "Inserisci partecipanti"
-		JButton inserisciPartecipanteButton = new JButton("Inserisci partecipante");
+		inserisciPartecipanteButton = new JButton("Inserisci partecipante");
+		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
+		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
+		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		inserisciPartecipanteButton.setBackground(Color.WHITE);
+		inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
+		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -632,7 +516,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						sorterDipendente.setModel(dataModelDipendente);
 						
 						//Aggiunge l'elemento inserito alla lista
-						listmodel.addElement(collaborazione);
+						partecipantiListModel.addElement(collaborazione);
 						
 						//Svuota i campi
 						svuotaCampi();
@@ -663,100 +547,88 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				inserisciPartecipanteButton.setBackground(Color.WHITE);
 			}
 		});
+		comandiPanel2.add(inserisciPartecipanteButton);
 		
-		JButton aggiornaRuoloButton = new JButton("Aggiorna ruolo");
-		aggiornaRuoloButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(partecipantiList.getSelectedValue()==null) {
-					
-					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista");
-					partecipantiLabel.setForeground(Color.RED);
-					
-				}
-				else
-				{
-					partecipantiLabel.setForeground(Color.BLACK);
-					String nuovoRuolo=ruoloComboBox.getSelectedItem().toString();
-					
-					//Vecchia collaborazione
-					CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
-					
-					//Nuova collaborazione
-					CollaborazioneProgetto collaborazioneProgetto=new CollaborazioneProgetto(progettoSelezionato, collaborazione.getCollaboratore(), nuovoRuolo);
-					
-					try {
-						controller.aggiornaPartecipante(collaborazioneProgetto);
-						JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
-						listmodel.removeElementAt(partecipantiList.getSelectedIndex()); //rimuove il vecchio elemento
-						listmodel.addElement(collaborazioneProgetto); //lo aggiorna con il nuovo
-						
-						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
-						sorterDipendente.setModel(dataModelDipendente);
-						
-						//Svuota i campi
-						svuotaCampi();
-					} catch (SQLException e1) {
-					
-						ruoloComboBox.setSelectedItem(null);
-						JOptionPane.showMessageDialog(null, e1.getMessage());
-					}
-					
-				
-				}
-				
-			}
-		});
-		aggiornaRuoloButton.setPreferredSize(new Dimension(150, 30));
-		aggiornaRuoloButton.setMaximumSize(new Dimension(150, 150));
-		aggiornaRuoloButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		aggiornaRuoloButton.setMargin(new Insets(2, 20, 2, 20));
-		aggiornaRuoloButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-		aggiornaRuoloButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		aggiornaRuoloButton.setBackground(Color.WHITE);
-		aggiornaRuoloButton.setAlignmentX(0.5f);
-		aggiornaRuoloButton.addMouseListener(new MouseAdapter() {
+
+		eliminaPartecipanteButton = new JButton("Elimina partecipante");
+		eliminaPartecipanteButton.setPreferredSize(new Dimension(190, 30));
+		eliminaPartecipanteButton.setMaximumSize(new Dimension(150, 150));
+		eliminaPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		eliminaPartecipanteButton.setBackground(Color.WHITE);
+		eliminaPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		eliminaPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
+		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		eliminaPartecipanteButton.setAlignmentX(0.5f);
+		eliminaPartecipanteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				aggiornaRuoloButton.setBackground(Color.LIGHT_GRAY);
+				eliminaPartecipanteButton.setBackground(Color.LIGHT_GRAY);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				aggiornaRuoloButton.setBackground(Color.WHITE);
+				eliminaPartecipanteButton.setBackground(Color.WHITE);
 			}
 		});
-		comandiPanel2.add(aggiornaRuoloButton);
-		
-		
-		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
-		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
-		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		inserisciPartecipanteButton.setBackground(Color.WHITE);
-		inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
-		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-		inserisciPartecipanteButton.setAlignmentX(0.5f);
-		comandiPanel2.add(inserisciPartecipanteButton);
-		comandiPanel2.add(inserisciPartecipanteButton);
-		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		eliminaPartecipanteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(partecipantiList.isSelectionEmpty()) {
+					
+					JOptionPane.showMessageDialog(null, "Seleziona un partecipante da eliminare");
+					partecipantiLabel.setForeground(Color.RED);
+					
+				}
+				else {
+					
+					try {
+						partecipantiLabel.setForeground(Color.BLACK);
+						
+						controller.eliminaPartecipante((CollaborazioneProgetto)partecipantiList.getSelectedValue());
+						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
+				
+						//Rimuove dalla lista l'elemento eliminato
+						partecipantiListModel.removeElementAt(partecipantiList.getSelectedIndex());
+						
+						//Pone il valore selezionato a null
+						partecipantiList.setSelectedValue(null,false);
+						
+						//Aggiorna i dipendenti disponibili
+						dataModelDipendente.fireTableDataChanged();
+						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+						
+						//Aggiorna il modello del sorterDipendente in seguito all'eliminazione
+						sorterDipendente.setModel(dataModelDipendente);
+						
+						//Svuota i campi
+						svuotaCampi();
+						
+					} catch (SQLException e1) {
+					
+						e1.printStackTrace();
+					}
+				}
+					
+				}
+				
+			
+		});
 		comandiPanel2.add(eliminaPartecipanteButton);
 		
-		JPanel comandiPanel_1 = new JPanel();
-		comandiPanel_1.setBorder(null);
-		
-		JButton filtraButton = new JButton("Filtra");
+		filtraButton = new JButton("Filtra");
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				applicaFiltri(controller);
 			}
-
-			
 		});
 		filtraButton.setToolTipText("Clicca per applicare i filtri");
 		filtraButton.setFont(new Font("Consolas", Font.PLAIN, 16));
 		filtraButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtraButton.setBackground(Color.WHITE);
+	
+		JPanel comandiPanel_1 = new JPanel();
+		comandiPanel_1.setBorder(null);
 		
 		cercaTextField = new JTextField();
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -770,7 +642,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		etàMinimaTextField.setColumns(10);
 		etàMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		JLabel etàFiltroLabel = new JLabel("Età");
+		etàFiltroLabel = new JLabel("Età");
 		etàFiltroLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		etàFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
@@ -788,7 +660,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		salarioMinimoTextField.setColumns(10);
 		salarioMinimoTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		JLabel salarioFiltroLabel = new JLabel("Salario");
+		salarioFiltroLabel = new JLabel("Salario");
 		salarioFiltroLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		salarioFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
@@ -806,7 +678,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		valutazioneMinimaTextField.setColumns(10);
 		valutazioneMinimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		JLabel valutazioneFiltroLabel = new JLabel("Valutazione");
+		valutazioneFiltroLabel = new JLabel("Valutazione");
 		valutazioneFiltroLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		valutazioneFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
@@ -817,9 +689,10 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		valutazioneMassimaTextField.setColumns(10);
 		valutazioneMassimaTextField.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		
-		JLabel lblSkill = new JLabel("Skill:");
-		lblSkill.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSkill.setFont(new Font("Consolas", Font.PLAIN, 13));
+		filtroSkillLabel = new JLabel("Skill:");
+		filtroSkillLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		filtroSkillLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+		
 		skillFiltroComboBox=new JComboBox();
 		try {
 			DefaultComboBoxModel skillModel=new DefaultComboBoxModel();
@@ -837,36 +710,12 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		skillFiltroComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		skillFiltroComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		skillFiltroComboBox.setSelectedItem(null);
-		GroupLayout gl_comandiPanel = new GroupLayout(comandiPanel);
-		gl_comandiPanel.setHorizontalGroup(
-			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_comandiPanel.createSequentialGroup()
-					.addGap(303)
-					.addComponent(comandiPanel2, GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
-					.addGap(302))
-				.addComponent(comandiPanel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
-		);
-		gl_comandiPanel.setVerticalGroup(
-			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_comandiPanel.createSequentialGroup()
-					.addGap(5)
-					.addComponent(comandiPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comandiPanel_1, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
-		);
 		
-		JLabel lblTipologiaProgetto = new JLabel("Tipologia Progetto:");
-		lblTipologiaProgetto.setFont(new Font("Consolas", Font.PLAIN, 13));
+		tipologiaProgettoFiltroLabel = new JLabel("Tipologia Progetto:");
+		tipologiaProgettoFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
 		tipologiaProgettoComboBox = new JComboBox();
-		DefaultComboBoxModel tipologiaProgettoModel=new DefaultComboBoxModel<>();
-		tipologiaProgettoModel.addElement(null);
-		try {
-			tipologiaProgettoModel.addAll(controller.ottieniTipologieProgetto());
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
+		tipologiaProgettoModel=new DefaultComboBoxModel<>();
 		tipologiaProgettoComboBox.setModel(tipologiaProgettoModel);
 		tipologiaProgettoComboBox.setUI(new BasicComboBoxUI());
 		tipologiaProgettoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -874,83 +723,57 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		tipologiaProgettoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tipologiaProgettoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		tipologiaProgettoComboBox.setSelectedItem(null);
+		tipologiaProgettoModel.addElement(null);
+		try {
+			tipologiaProgettoModel.addAll(controller.ottieniTipologieProgetto());
+		} catch (SQLException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		
-		JSeparator separator_1_1 = new JSeparator();
-		separator_1_1.setPreferredSize(new Dimension(1, 30));
-		separator_1_1.setOrientation(SwingConstants.VERTICAL);
 		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setPreferredSize(new Dimension(1, 30));
-		separator_1.setOrientation(SwingConstants.VERTICAL);
+		ricercaEtàSeparator = new JSeparator();
+		ricercaEtàSeparator.setPreferredSize(new Dimension(1, 30));
+		ricercaEtàSeparator.setOrientation(SwingConstants.VERTICAL);
 		
-		JSeparator separator_1_2 = new JSeparator();
-		separator_1_2.setPreferredSize(new Dimension(1, 30));
-		separator_1_2.setOrientation(SwingConstants.VERTICAL);
+		etàSalarioSeparator = new JSeparator();
+		etàSalarioSeparator.setPreferredSize(new Dimension(1, 30));
+		etàSalarioSeparator.setOrientation(SwingConstants.VERTICAL);
 		
-		JSeparator separator_1_3 = new JSeparator();
-		separator_1_3.setPreferredSize(new Dimension(1, 30));
-		separator_1_3.setOrientation(SwingConstants.VERTICAL);
+		salarioValutazioneSeparator = new JSeparator();
+		salarioValutazioneSeparator.setPreferredSize(new Dimension(1, 30));
+		salarioValutazioneSeparator.setOrientation(SwingConstants.VERTICAL);
 		
-		JSeparator separator_1_4 = new JSeparator();
-		separator_1_4.setPreferredSize(new Dimension(1, 30));
-		separator_1_4.setOrientation(SwingConstants.VERTICAL);
+		valutazioneSkillSeparator = new JSeparator();
+		valutazioneSkillSeparator.setPreferredSize(new Dimension(1, 30));
+		valutazioneSkillSeparator.setOrientation(SwingConstants.VERTICAL);
+		
+		skillTipologiaProgettoSeparator = new JSeparator();
+		skillTipologiaProgettoSeparator.setPreferredSize(new Dimension(1, 30));
+		skillTipologiaProgettoSeparator.setOrientation(SwingConstants.VERTICAL);
+		
 		comandiPanel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		comandiPanel_1.add(filtraButton);
 		comandiPanel_1.add(cercaTextField);
-		comandiPanel_1.add(separator_1_1);
+		comandiPanel_1.add(ricercaEtàSeparator);
 		comandiPanel_1.add(etàMinimaTextField);
 		comandiPanel_1.add(etàFiltroLabel);
 		comandiPanel_1.add(etàMassimaTextField);
-		comandiPanel_1.add(separator_1);
+		comandiPanel_1.add(etàSalarioSeparator);
 		comandiPanel_1.add(salarioMinimoTextField);
 		comandiPanel_1.add(salarioFiltroLabel);
 		comandiPanel_1.add(salarioMassimoTextField);
-		comandiPanel_1.add(separator_1_2);
+		comandiPanel_1.add(salarioValutazioneSeparator);
 		comandiPanel_1.add(valutazioneMinimaTextField);
 		comandiPanel_1.add(valutazioneFiltroLabel);
 		comandiPanel_1.add(valutazioneMassimaTextField);
-		comandiPanel_1.add(separator_1_3);
-		comandiPanel_1.add(lblSkill);
+		comandiPanel_1.add(valutazioneSkillSeparator);
+		comandiPanel_1.add(filtroSkillLabel);
 		comandiPanel_1.add(skillFiltroComboBox);
-		comandiPanel_1.add(separator_1_4);
-		comandiPanel_1.add(lblTipologiaProgetto);
+		comandiPanel_1.add(skillTipologiaProgettoSeparator);
+		comandiPanel_1.add(tipologiaProgettoFiltroLabel);
 		comandiPanel_1.add(tipologiaProgettoComboBox);
-		comandiPanel.setLayout(gl_comandiPanel);
-		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		partecipantiLabel = new JLabel("Partecipanti");
-		partecipantiLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
-		partecipantiScrollPane.setColumnHeaderView(partecipantiLabel);
-		infoPanel2.setLayout(gl_infoPanel2);
-		infoPanel.add(infoPanel2);
-		panel.setLayout(gl_panel);
-		
-		//Label "Gestione Meeting"
-		JLabel gestioneMeetingLabel = new JLabel("Gestione partecipanti progetto");
-		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
-		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(14)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-					.addGap(4))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(gestioneMeetingLabel)
-					.addContainerGap(1208, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(gestioneMeetingLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		contentPane.setLayout(gl_contentPane);
-		
-		//Table dei meeting
 		dataModelDipendente=new PartecipantiTableModel();
 		
 		dipendenteTable = new JTable(dataModelDipendente);
@@ -1067,7 +890,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 								JOptionPane.showMessageDialog(null, "Partecipante inserito correttamente");
 								
 								//Aggiorna la lista e la tabella
-								listmodel.addElement(collaborazione);
+								partecipantiListModel.addElement(collaborazione);
 								dataModelDipendente.fireTableDataChanged();
 								dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
 							
@@ -1092,7 +915,206 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		});
 		
 		DipendenteScrollPane.setViewportView(dipendenteTable);
+				
+		
+		GroupLayout gl_comandiPanel = new GroupLayout(comandiPanel);
+		gl_comandiPanel.setHorizontalGroup(
+			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_comandiPanel.createSequentialGroup()
+					.addGap(303)
+					.addComponent(comandiPanel2, GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
+					.addGap(302))
+				.addComponent(comandiPanel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+		);
+		gl_comandiPanel.setVerticalGroup(
+			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_comandiPanel.createSequentialGroup()
+					.addGap(5)
+					.addComponent(comandiPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(comandiPanel_1, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
+		);
+		comandiPanel.setLayout(gl_comandiPanel);
+		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(5)
+					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		
+		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
+		gl_infoPanel2.setHorizontalGroup(
+			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(184)
+							.addComponent(infoDipendenteLabel, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
+							.addGap(136))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(39)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addComponent(valutazioneLabel, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+									.addComponent(sessoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(nomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(cognomeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(salarioLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addComponent(ruoloLabel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(ruoloComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(uomoRadioButton)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(donnaRadioButton, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
+								.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addComponent(nomeTextField)
+								.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cognomeTextField, 102, 102, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+							.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(7)
+							.addComponent(infoDipendenteProgettoSeparator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGap(46)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(nomeProgettoLabel)
+											.addGap(14))
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(ambitiProgettoLabel, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+											.addGap(18))))
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(tipologiaProgettoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)))
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(nomeProgettotextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+								.addComponent(ambitiTextArea, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+								.addComponent(tipologiaProgettoTextField, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
+							.addGap(18)
+							.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+							.addGap(30))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addComponent(infoProgettoLabel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+							.addGap(235))))
+		);
+		gl_infoPanel2.setVerticalGroup(
+			gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.TRAILING)
+						.addComponent(infoDipendenteLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(infoProgettoLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(29)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(nomeProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addComponent(nomeProgettotextArea, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(tipologiaProgettoTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+										.addComponent(tipologiaProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addComponent(ambitiTextArea, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+								.addComponent(ambitiProgettoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_infoPanel2.createSequentialGroup()
+							.addGap(18)
+							.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_infoPanel2.createSequentialGroup()
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(nomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(nomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+										.addComponent(cognomeLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(cognomeTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_infoPanel2.createSequentialGroup()
+											.addComponent(sessoLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+												.addComponent(etàLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addComponent(etàTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+												.addComponent(valutazioneLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+												.addComponent(valutazioneTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+										.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+											.addComponent(uomoRadioButton)
+											.addComponent(donnaRadioButton)))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(salarioLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+										.addComponent(salarioTextField, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_infoPanel2.createParallelGroup(Alignment.LEADING)
+										.addComponent(ruoloComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(ruoloLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(partecipantiScrollPane, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
+								.addComponent(skillScrollPane, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(67, Short.MAX_VALUE))
+				.addGroup(gl_infoPanel2.createSequentialGroup()
+					.addContainerGap(68, Short.MAX_VALUE)
+					.addComponent(infoDipendenteProgettoSeparator, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
+					.addGap(65))
+		);
+		
+		infoPanel2.setLayout(gl_infoPanel2);
+		infoPanel.add(infoPanel2);
+		panel.setLayout(gl_panel);
+		
 
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(14)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
+					.addGap(4))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addComponent(gestionePartecipantiProgettoLabel)
+					.addContainerGap(1208, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(gestionePartecipantiProgettoLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		contentPane.setLayout(gl_contentPane);
 		
 	}
 	
@@ -1122,7 +1144,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		String nomeCognomeEmail = "%";
 		if (!cercaTextField.getText().isBlank())
 			nomeCognomeEmail = cercaTextField.getText();
-		
 		int etàMinima = 0;
 		if (!etàMinimaTextField.getText().isBlank())
 			etàMinima = parseInteger(etàMinimaTextField.getText(), etàMinima);
@@ -1142,20 +1163,16 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		if (!valutazioneMassimaTextField.getText().isBlank())
 			valutazioneMassima=parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
 		Skill skillCercata = null;
-	
 		skillCercata =(Skill) skillFiltroComboBox.getSelectedItem();
-		
 		String tipologiaProgetto=null;
 		tipologiaProgetto=(String) tipologiaProgettoComboBox.getSelectedItem();
 		
 		try {
-		
 			dataModelDipendente.setDipendenteTabella(controller.filtraDipendentiNonPartecipanti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata,progettoSelezionato,tipologiaProgetto));
 			dipendenteTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
-		
-			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 	

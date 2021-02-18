@@ -59,7 +59,7 @@ public class ControllerPartecipantiMeeting {
 		return meetDAO.getMeetingsByInvitato(dipendenteLogged);
 	}
 	
-	public ArrayList<Dipendente> ottieniDipendenti(Meeting meetingSelezionato) throws SQLException {
+	public ArrayList<Dipendente> ottieniDipendenti(Meeting meetingSelezionato) throws SQLException{
 		return dipDAO.getDipendentiNonInvitati(meetingSelezionato);
 	}
 	
@@ -67,22 +67,46 @@ public class ControllerPartecipantiMeeting {
 		return skillDAO.getSkillsDipendente(cfDipendente);
 	}
 
-	public void eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting){
+	public boolean eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting){
 		try {
 			meetDAO.deletePartecipanteMeeting(partecipazioneMeeting);
+			return true;
 		} catch (SQLException e) {
 			
 			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
 		}
 	}
 
-	public void inserisciPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
-		meetDAO.insertPartecipanteMeeting(partecipazioneMeeting);
+	public boolean inserisciPartecipante(PartecipazioneMeeting partecipazioneMeeting){
+		try {
+			meetDAO.insertPartecipanteMeeting(partecipazioneMeeting);
+			return true;
+		} catch (SQLException e1) {
+			
+			if(e1.getSQLState().equals("P0002"))
+				JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
+			if(e1.getSQLState().equals("P0003"))
+				JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
+			
+			return false;
+		}
 		
 	}
 
-	public void aggiornaPresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
-		meetDAO.updatePresenzaPartecipante(partecipazioneMeeting);
+	public boolean aggiornaPresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting){
+		try {
+			meetDAO.updatePresenzaPartecipante(partecipazioneMeeting);
+			return true;
+		} catch (SQLException e1) {
+			if(e1.getSQLState().equals("70000"))
+				JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
+			
+			if(e1.getSQLState().equals("P0001"))
+				JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
+			
+			return false;
+		}
 		
 	}
 

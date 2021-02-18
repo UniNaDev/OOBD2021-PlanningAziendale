@@ -77,12 +77,8 @@ import javax.swing.event.ListSelectionEvent;
 
 public class InserisciPartecipantiMeeting extends JFrame {
 
-	//ATTRIBUTI
-	//---------------------------------------------
-	
-	//Attributi GUI
 	private JPanel contentPane;
-	private JLabel gestioneMeetingLabel;
+	private JLabel gestioneInvitatiMeetingLabel;
 	private JLabel infoDipendenteLabel;
 	private JLabel nomeLabel;
 	private JTextField nomeTextField;
@@ -103,7 +99,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JLabel skillListLabel;
 	private DefaultListModel skillModel;
 	private DefaultListModel listmodel;
-	
 	private JSeparator separator;
 	private JLabel infoMeetingLabel;
 	private JLabel dataInizioLabel;
@@ -120,12 +115,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private JScrollPane invitatiScrollPane;
 	private InvitatiListRenderer invitatiListRenderer;
 	private JLabel invitatiLabel;
-
 	private JButton eliminaPartecipanteButton;
 	private JButton aggiornaPartecipantiButton;
 	private JButton inserisciPartecipanteButton;
-	
-
 	private DipendentiTableModel dataModelDipendente;
 	private JScrollPane dipendenteScrollPane;
 	private JTable dipendenteTable;
@@ -139,14 +131,12 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller, Meeting meetingSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1280, 720));
-		
 		setTitle("iPlanner - Gestione Invitati Meeting");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
 		setLocationRelativeTo(null);
 		
 		JPanel panel = new JPanel();
@@ -159,9 +149,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		this.meetingSelezionato=meetingSelezionato;
 		
-		gestioneMeetingLabel = new JLabel("Gestione invitati meeting");
-		gestioneMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
-		gestioneMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
+		gestioneInvitatiMeetingLabel = new JLabel("Gestione invitati meeting");
+		gestioneInvitatiMeetingLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
+		gestioneInvitatiMeetingLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 		
 		infoMeetingLabel = new JLabel("Info Meeting");
 		infoMeetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -170,11 +160,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		infoDipendenteLabel = new JLabel("Info Dipendente");
 		infoDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		infoDipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		
-		dipendenteScrollPane = new JScrollPane();
-		dipendenteScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
-		dipendenteScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dipendenteScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		nomeLabel = new JLabel("Nome");
 		nomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -322,51 +307,15 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		invitatiList = new JList();
 		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
-		invitatiListRenderer=new InvitatiListRenderer();
-		invitatiList.setCellRenderer(invitatiListRenderer);
 		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		listmodel=new DefaultListModel();
-		invitatiList.setModel(listmodel);
-		listmodel.addAll(meetingSelezionato.getPartecipantiAlMeeting());
+		impostaRendererListaInvitati();
+		inizializzaListaInvitati();
 		invitatiScrollPane.setViewportView(invitatiList);
 		invitatiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				
-				PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) invitatiList.getSelectedValue();
-				if(partecipaz!=null) {
-					
-					if(partecipaz.isPresente()==true)
-						presenzaCheckBox.setSelected(true);
-						else
-							presenzaCheckBox.setSelected(false);
-					
-					nomeTextField.setText(partecipaz.getPartecipante().getNome());
-					cognomeTextField.setText(partecipaz.getPartecipante().getCognome());
-					etàTextField.setText(String.valueOf(partecipaz.getPartecipante().getEtà()));
-					valutazioneTextField.setText(String.format("%.2f", partecipaz.getPartecipante().getValutazione()));
-					salarioTextField.setText(String.format("%.2f", partecipaz.getPartecipante().getSalario()));
-					if(partecipaz.getPartecipante().getSesso()=='M')
-						uomoRadioButton.setSelected(true);
-					else 
-						donnaRadioButton.setSelected(true);
-					
-					skillList.setModel(skillModel);
-					skillModel.removeAllElements();
-					try {
-						skillModel.addAll(controller.ottieniSkillDipendente(partecipaz.getPartecipante().getCf()));
-					} catch (SQLException e1) {
-						
-						e1.printStackTrace();
-					}
-					
-					dipendenteTable.clearSelection();
-				}
-					
-					
-				}
-					
-			}
-		);
+				impostaInfoDipendenteDaLista(controller);
+			}		
+		});
 		
 		JPanel comandiPanel2 = new JPanel();	
 		comandiPanel2.setBorder(new LineBorder(new Color(192, 192, 192)));
@@ -402,19 +351,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					invitatiLabel.setForeground(Color.RED);
 				}
 				else {
-					
-						
-						eliminaInvitato(controller);
-						svuotaCampi();
-						
-					
+					eliminaInvitato(controller);
+					svuotaCampi();
 				}
 					
-				}
-
-			
-				
-			
+			}
 		});
 
 		inserisciPartecipanteButton = new JButton("Inserisci partecipante");
@@ -432,56 +373,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				if(dipendenteTable.getSelectedRow()==-1) {
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla tabella");
 				}
-				else {
-					
-					int row= dipendenteTable.getSelectedRow();
-					try {
-						
-						
-						boolean presenza;
-						Dipendente dipendenteSelezionato=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
-						if(presenzaCheckBox.isSelected())
-						{
-							presenza=true;
-						}
-						else
-							presenza=false;
-						
-						//Crea la partecipazione al meeting
-						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendenteSelezionato, presenza, false);
-					
-						//Prova a fare l'inserimento del partecipante al meeting
-						controller.inserisciPartecipante(partecipazioneMeeting);
-						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
-						
-						//Aggiorna i dipendenti disponibili
-						dataModelDipendente.fireTableDataChanged();
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
-					
-						//Aggiunge l'elemento inserito alla lista
-						listmodel.addElement(partecipazioneMeeting);  
-					
-						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
-						if(dipendenteTable.getRowCount()!=0)
-						sorterDipendente.setModel(dataModelDipendente);
-						
-						//Svuota i campi
-						svuotaCampi();
-					
-					} catch (SQLException e1) {
-						
-						
-						if(e1.getSQLState().equals("P0002"))
-							JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
-						
-						if(e1.getSQLState().equals("P0003"))
-							JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
-						
-						
-					}
-					
-				}
-			
+				else {		
+					inserisciInvitatoMeeting(controller);
+					aggiornaTabellaDipendenti(controller);
+					svuotaCampi();
+				} 	
 			}
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -522,75 +418,64 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(invitatiList.getSelectedValue()==null) {
-					
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista");
 					invitatiLabel.setForeground(Color.RED);
 				}
-				
 				else {
-					
-					invitatiLabel.setForeground(Color.BLACK);
-					boolean presenza;
-					PartecipazioneMeeting partecipazione=(PartecipazioneMeeting) invitatiList.getSelectedValue();
-					
-					if(presenzaCheckBox.isSelected())
-					{
-						presenza=true;
-					}
-					else
-						presenza=false;
-					
-					PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, partecipazione.getPartecipante(), presenza, false);
-					
-					
-					try {
-						controller.aggiornaPresenzaPartecipante(partecipazioneMeeting);
-						JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
-						listmodel.removeElementAt(invitatiList.getSelectedIndex()); //rimuove il vecchio elemento
-						listmodel.addElement(partecipazioneMeeting); //lo aggiorna con il nuovo
-						
-						 //Aggiorna il modello del sorterDipendente in seguito alle modifiche
-						if(dipendenteTable.getRowCount()!=0)
-						sorterDipendente.setModel(dataModelDipendente);
-						
-						//Svuota i campi
-						svuotaCampi();
-						
-					} catch (SQLException e1) {
-						
-						
-						if(e1.getSQLState().equals("70000"))
-							JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
-						
-						if(e1.getSQLState().equals("P0001"))
-							JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
-					}
+					aggiornaPresenzaInvitato(controller);
+					svuotaCampi();
 				}
-				
-				
-			}
+			}	
 		});
 		comandiPanel2.add(aggiornaPartecipantiButton);
-		
-
 		comandiPanel2.add(inserisciPartecipanteButton);
-		eliminaPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 		comandiPanel2.add(eliminaPartecipanteButton);
 		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JPanel infoPanel2 = new JPanel();
 		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
-
+		
+		dipendenteScrollPane = new JScrollPane();
+		dipendenteScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
+		dipendenteScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		dipendenteScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+		
+		dataModelDipendente=new DipendentiTableModel();
+		dipendenteTable = new JTable(dataModelDipendente);
+		dipendenteTable.setFont(new Font("Consolas", Font.PLAIN, 12));
+		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		dipendenteTable.setBackground(Color.WHITE);
+		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
+		impostaProprietàTabellaDipendente();
+		inizializzaTabellaDipendente(controller);
+		dipendenteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		dipendenteTable.getTableHeader().setReorderingAllowed(false);
+		dipendenteTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				invitatiList.clearSelection();
+				impostaInfoDipendenteDaTabella(controller);
+				
+				if(e.getClickCount()==2) {	
+					inserisciInvitatoMeeting(controller);
+					aggiornaTabellaDipendenti(controller);
+					svuotaCampi();
+				} 
+			}
+		});
+		
+		dipendenteScrollPane.setViewportView(dipendenteTable);
 
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(infoPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
-						.addComponent(dipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(dipendenteScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(comandiPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
+						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -601,12 +486,10 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
 					.addGap(26)
-					.addComponent(dipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-					.addContainerGap())
+					.addComponent(dipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
 		);
 		comandiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		
 		GroupLayout gl_infoPanel2 = new GroupLayout(infoPanel2);
 		gl_infoPanel2.setHorizontalGroup(
 			gl_infoPanel2.createParallelGroup(Alignment.LEADING)
@@ -756,39 +639,46 @@ public class InserisciPartecipantiMeeting extends JFrame {
 					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
 					.addGap(4))
 				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(gestioneMeetingLabel)
+					.addComponent(gestioneInvitatiMeetingLabel)
 					.addContainerGap(1208, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(gestioneMeetingLabel)
+					.addComponent(gestioneInvitatiMeetingLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
 					.addContainerGap())
 		);
-		contentPane.setLayout(gl_contentPane);
-		
-		//Table dei meeting
-		dataModelDipendente=new DipendentiTableModel();
-		dipendenteTable = new JTable(dataModelDipendente);
-		dipendenteTable.setFont(new Font("Consolas", Font.PLAIN, 12));
-		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		dipendenteTable.setBackground(Color.WHITE);
-		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
-		
-		//Modello delle colonne personalizzato
-		dipendenteTable.getColumnModel().getColumn(0).setMinWidth(150);
-		dipendenteTable.getColumnModel().getColumn(1).setMinWidth(150);
-		dipendenteTable.getColumnModel().getColumn(2).setMinWidth(300);
-		dipendenteTable.getColumnModel().getColumn(3).setMinWidth(50);
-		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(100);
-		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(100);
-		
-		
-		
-		//Modello delle colonne personalizzato(Testo allineato al centro)
+		contentPane.setLayout(gl_contentPane);	
+	}
+
+	private void inizializzaListaInvitati() {
+		listmodel=new DefaultListModel();
+		invitatiList.setModel(listmodel);
+		listmodel.addAll(meetingSelezionato.getPartecipantiAlMeeting());
+	}
+
+	private void impostaRendererListaInvitati() {
+		invitatiListRenderer=new InvitatiListRenderer();
+		invitatiList.setCellRenderer(invitatiListRenderer);
+	}
+
+	private void inizializzaTabellaDipendente(ControllerPartecipantiMeeting controller) {
+		try {
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+	
+	private void impostaProprietàTabellaDipendente() {
+		impostaCellRendererTabellaDipendente();
+		impostaModelloColonneTabellaDipendente();
+		impostaSorterTabellaDipendente();
+	}
+
+	private void impostaCellRendererTabellaDipendente() {
 		renderTabella = new DefaultTableCellRenderer();
         renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
         renderTabella.setVerticalAlignment(SwingConstants.CENTER);
@@ -798,135 +688,69 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		dipendenteTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
 		dipendenteTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
 		dipendenteTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
-
-		//Setta i dati nella tabella
-		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));	//setta il modello di dati della tabella
-		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage());
-		}
-		
-		//Sorter tabella
+	}
+	
+	private void impostaModelloColonneTabellaDipendente() {
+		dipendenteTable.getColumnModel().getColumn(0).setMinWidth(150);
+		dipendenteTable.getColumnModel().getColumn(1).setMinWidth(150);
+		dipendenteTable.getColumnModel().getColumn(2).setMinWidth(300);
+		dipendenteTable.getColumnModel().getColumn(3).setMinWidth(50);
+		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(100);
+		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(100);
+	}
+	
+	private void impostaSorterTabellaDipendente() {
 		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
 		dipendenteTable.setRowSorter(sorterDipendente);
-		
-		//Seleziona singola
-		dipendenteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		//Le colonne non possono essere riordinate
-		dipendenteTable.getTableHeader().setReorderingAllowed(false);
+	}
 	
-
-		//Click sulla tabella
-		dipendenteTable.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				//quando viene cliccata una riga della tabella,viene deselezionata elemento selezionato della lista
-				invitatiList.clearSelection();
-
-				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
-				
-				
-				//Riceve il dipendente selezionato
-				Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(row));
-					
-				//ricava le info del dipendente selezionato
-				nomeTextField.setText(dipendente.getNome());
-				cognomeTextField.setText(dipendente.getCognome());
-				
-				if(dipendente.getSesso()=='M') {
-					
-					uomoRadioButton.setSelected(true);
-					donnaRadioButton.setSelected(false);
-				}
-				else
-				{
-					uomoRadioButton.setSelected(false);
-					donnaRadioButton.setSelected(true);	
-				}
-				
-				etàTextField.setText(String.valueOf(dipendente.getEtà()));
-				salarioTextField.setText(String.valueOf(dipendente.getSalario()));
-				valutazioneTextField.setText(String.format("%.2f",dipendente.getValutazione()));
-				
-
-				skillList.setModel(skillModel);
-				skillModel.removeAllElements();
-				try {
-					skillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
-				} catch (SQLException e2) {
-					
-					e2.printStackTrace();
-				}
-				
-					if(e.getClickCount()==2) {
-					
-					try {
-						
-						//Controllo la checkbox
-						boolean presenza;
-						if(presenzaCheckBox.isSelected())
-						{
-							presenza=true;
-						}
-						else
-							presenza=false;
-						
-						//Creo la partecipazione al meeting
-						PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendente, presenza, false);
-						
-						//Inserisce invitato al meeting
-						controller.inserisciPartecipante(partecipazioneMeeting);
-						JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
-						
-						//Aggiorna la lista e la tabella
-						listmodel.addElement(partecipazioneMeeting);
-						dataModelDipendente.fireTableDataChanged();
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato)); //Per aggiornare tabella
-					
-						 //Aggiorna il modello del sorterDipendente in seguito alle modifiche
-					
-						sorterDipendente.setModel(dataModelDipendente);
-						
-						//Svuota i campi
-						svuotaCampi();
+	private void inserisciInvitatoMeeting(ControllerPartecipantiMeeting controller) {
+		boolean presenza;
+		Dipendente dipendenteSelezionato=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
+		if(presenzaCheckBox.isSelected())
+		{
+			presenza=true;
+		}
+		else
+			presenza=false;
+		PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendenteSelezionato, presenza, false);
+		if(controller.inserisciPartecipante(partecipazioneMeeting)==true) {
+		JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
+		listmodel.addElement(partecipazioneMeeting);
+		} 
+		aggiornaSorter();
+	}
 	
-		
-					} catch (SQLException e1) {
-						
-
-						if(e1.getSQLState().equals("70000"))
-							JOptionPane.showMessageDialog(null, "Il numero di invitati al meeting supera la capienza massima consentita.\nSi consiglia di cambiare sala.");		
-						
-						if(e1.getSQLState().equals("P0001"))
-							JOptionPane.showMessageDialog(null, "Il dipendente che si sta tentando di inserire partecipa ad un meeting che si accavalla con il corrente");
-						
-					}
-				
-				}
-			
-					
-
-			}
-		
-			
-		});
-		
-		dipendenteScrollPane.setViewportView(dipendenteTable);
-
-		
+	private void aggiornaPresenzaInvitato(ControllerPartecipantiMeeting controller) {
+		invitatiLabel.setForeground(Color.BLACK);
+		boolean presenza;
+		PartecipazioneMeeting partecipazione=(PartecipazioneMeeting) invitatiList.getSelectedValue();
+		if(presenzaCheckBox.isSelected())
+		{
+			presenza=true;
+		}
+		else
+			presenza=false;
+		PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, partecipazione.getPartecipante(), presenza, false);
+		if(controller.aggiornaPresenzaPartecipante(partecipazioneMeeting)==true) {
+			JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
+			listmodel.removeElementAt(invitatiList.getSelectedIndex()); 
+			listmodel.addElement(partecipazioneMeeting);
+		}
+		aggiornaSorter();
 	}
 	
 	private void eliminaInvitato(ControllerPartecipantiMeeting controller){
 		invitatiLabel.setForeground(Color.BLACK);
-		controller.eliminaPartecipante((PartecipazioneMeeting)invitatiList.getSelectedValue());
-		JOptionPane.showMessageDialog(null, "Partecipante eliminato");
-		aggiornaListaDipendenti();
-		aggiornaTabellaDipendenti(controller);
+		if(controller.eliminaPartecipante((PartecipazioneMeeting)invitatiList.getSelectedValue())==true) {
+			JOptionPane.showMessageDialog(null, "Partecipante eliminato");
+			aggiornaListaInvitati();
+			aggiornaTabellaDipendenti(controller);
+			aggiornaSorter();
+		}
 	}
 	
-	private void aggiornaListaDipendenti() {
+	private void aggiornaListaInvitati() {
 		listmodel.removeElementAt(invitatiList.getSelectedIndex());
 		invitatiList.setSelectedValue(null,false);
 	}
@@ -936,30 +760,80 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
 		} catch (SQLException e) {
-			
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
-		
+		aggiornaSorter();
+	}
+	
+	private void aggiornaSorter() {
+		if(dipendenteTable.getRowCount()!=0)
 		sorterDipendente.setModel(dataModelDipendente);
-		
+	}
+	
+	private void impostaInfoDipendenteDaTabella(ControllerPartecipantiMeeting controller) {
+		Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
+		nomeTextField.setText(dipendente.getNome());
+		cognomeTextField.setText(dipendente.getCognome());
+		if(dipendente.getSesso()=='M') {
+			uomoRadioButton.setSelected(true);
+			donnaRadioButton.setSelected(false);
+		}
+		else
+		{
+			uomoRadioButton.setSelected(false);
+			donnaRadioButton.setSelected(true);	
+		}
+		etàTextField.setText(String.valueOf(dipendente.getEtà()));
+		salarioTextField.setText(String.valueOf(dipendente.getSalario()));
+		valutazioneTextField.setText(String.format("%.2f",dipendente.getValutazione()));
+		skillList.setModel(skillModel);
+		skillModel.removeAllElements();
+		try {
+			skillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
+		} catch (SQLException e2) {
+			
+			e2.printStackTrace();
+		}
+	}
+	
+	private void impostaInfoDipendenteDaLista(ControllerPartecipantiMeeting controller) {
+		PartecipazioneMeeting partecipaz=(PartecipazioneMeeting) invitatiList.getSelectedValue();
+		if(partecipaz!=null) {
+			if(partecipaz.isPresente()==true)
+				presenzaCheckBox.setSelected(true);
+			else
+				presenzaCheckBox.setSelected(false);
+			nomeTextField.setText(partecipaz.getPartecipante().getNome());
+			cognomeTextField.setText(partecipaz.getPartecipante().getCognome());
+			etàTextField.setText(String.valueOf(partecipaz.getPartecipante().getEtà()));
+			valutazioneTextField.setText(String.format("%.2f", partecipaz.getPartecipante().getValutazione()));
+			salarioTextField.setText(String.format("%.2f", partecipaz.getPartecipante().getSalario()));
+			if(partecipaz.getPartecipante().getSesso()=='M')
+				uomoRadioButton.setSelected(true);
+			else 
+				donnaRadioButton.setSelected(true);
+			skillList.setModel(skillModel);
+			skillModel.removeAllElements();
+			try {
+				skillModel.addAll(controller.ottieniSkillDipendente(partecipaz.getPartecipante().getCf()));
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
+			dipendenteTable.clearSelection();
+		}	
 	}
 
 	private void svuotaCampi() {
-		
 		nomeTextField.setText(null);
 		cognomeTextField.setText(null);
 		etàTextField.setText(null);
 		valutazioneTextField.setText(null);
 		salarioTextField.setText(null);
-		
 		if(uomoRadioButton.isSelected()) 
 			uomoRadioButton.setSelected(false);
 		else
-			donnaRadioButton.setSelected(false);
-		
+		donnaRadioButton.setSelected(false);
 		skillModel.removeAllElements();
-		
-		
-		
 	}
 }
