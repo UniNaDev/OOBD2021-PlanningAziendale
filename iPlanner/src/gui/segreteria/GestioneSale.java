@@ -356,7 +356,6 @@ public class GestioneSale extends JFrame {
 			controller.aggiornaSala(nomeSalaTextField.getText(), Integer.parseInt(capienzaTextField.getText()),
 					indirizzoTextArea.getText(), Integer.parseInt(pianoTextField.getText()));
 			JOptionPane.showMessageDialog(null, "Sala " + salaSelezionata.getCodiceSala() + " modificata con successo.");
-			saleListModel.clear();
 			setModelloListaSaleTutte(controller);
 		} catch (SQLException e1) {
 			switch (e1.getSQLState()) {
@@ -445,7 +444,6 @@ public class GestioneSale extends JFrame {
 		try {
 			controller.eliminaSala(nomeSalaTextField.getText());
 			pulisciCampi();
-			saleListModel.clear();
 			setModelloListaSaleTutte(controller);
 			if (saleListModel.isEmpty())
 				saleList.setSelectedValue(null, false);
@@ -460,6 +458,7 @@ public class GestioneSale extends JFrame {
 	}
 
 	private void setModelloListaSaleTutte(ControllerMeetingSegreteria controller) {
+		saleListModel.clear();
 		try {
 			saleListModel.addAll(controller.ottieniSale());
 		} catch (SQLException e) {
