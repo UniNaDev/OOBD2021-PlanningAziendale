@@ -78,7 +78,7 @@ public class MieiProgetti extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiProgetti.class.getResource("/Icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1440, 900));
 		setTitle("iPlanner - I Miei Progetti");
-		setBounds(100, 100, 1419, 900);
+		setBounds(100, 100, 1440, 900);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -168,13 +168,15 @@ public class MieiProgetti extends JFrame {
 			}
 		});
 		
-		progettiList=new JList();
+		progettiList=new JList<>();
 		progettiList.setSelectedIndex(0);
 		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		progettiList.setFixedCellHeight(60);
 		progettoCellRenderer = new ProgettoListRenderer();
 		progettiList.setCellRenderer(progettoCellRenderer);
+		modelloListaProgetti=new DefaultListModel<>();
+		inizializzaListaProgetti(controller);
 		progettiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				Progetto progettoSelezionato = progettiList.getSelectedValue();
@@ -292,11 +294,8 @@ public class MieiProgetti extends JFrame {
 
 		infoProgettoPanel.setLayout(gl_infoProgettoPanel);
 		contentPane.setLayout(gl_contentPane);
-
 	}
-	
-	//Altri metodi
-	//-------------------------------------------------------------
+
 	private void inizializzaListaProgetti(ControllerProgetto controller) {
 		try {
 			modelloListaProgetti.addAll(controller.ottieniProgetti());

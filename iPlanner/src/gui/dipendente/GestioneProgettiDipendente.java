@@ -51,6 +51,7 @@ import org.joda.time.format.DateTimeFormatter;
 import controller.dipendente.ControllerProgetto;
 import entita.AmbitoProgetto;
 import entita.Dipendente;
+import entita.Meeting;
 import entita.Progetto;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.PartecipantiListRenderer;
@@ -424,7 +425,12 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					controller.apriInserisciPartecipantiProgetto(progettoSelezionato);
+					if(progettiTable.getSelectedRow()!=-1) {
+						Progetto progetto= modelloTabellaProgetti.getSelected(progettiTable.convertColumnIndexToModel(progettiTable.getSelectedRow()));
+						controller.apriInserisciPartecipantiProgetto(progetto);
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella");	
 			}
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -1057,11 +1063,15 @@ public class GestioneProgettiDipendente extends JFrame {
 	}
 	
 	private void eliminaProgetto(ControllerProgetto controller) {
-		if (controller.rimuoviProgetto(progettoSelezionato)) {	
-			JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
-			aggiornaTabella(controller);
-			pulisciCampi();
+		if(progettiTable.getSelectedRow()!=-1) {
+			if (controller.rimuoviProgetto(progettoSelezionato)) {	
+				JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
+				aggiornaTabella(controller);
+				pulisciCampi();
+			}	
 		}
+		else
+			JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella");
 	}
 	
 	private void ricavaInfoProgetto() throws IllegalFieldValueException{

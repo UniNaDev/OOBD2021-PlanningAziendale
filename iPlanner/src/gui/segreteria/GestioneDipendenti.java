@@ -861,7 +861,6 @@ public class GestioneDipendenti extends JFrame {
 	dipendentiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 	TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());
 	dipendentiTable.setRowSorter(sorter);
-
 	dipendentiTable.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseClicked(MouseEvent e) {
@@ -1217,16 +1216,16 @@ public class GestioneDipendenti extends JFrame {
 	    etàMassima = parseInteger(etàMassimaTextField.getText(), etàMassima);
 	float salarioMinimo = 0f;
 	if (!salarioMinimoTextField.getText().isBlank())
-	    parseFloat(salarioMinimoTextField.getText(), salarioMinimo);
+	    salarioMinimo=parseFloat(salarioMinimoTextField.getText(), salarioMinimo);
 	float salarioMassimo = controller.ottieniMaxStipendio();
 	if (!salarioMassimoTextField.getText().isBlank())
-	    parseFloat(salarioMassimoTextField.getText(), salarioMassimo);
+	    salarioMassimo=parseFloat(salarioMassimoTextField.getText(), salarioMassimo);
 	float valutazioneMinima = 0f;
 	if (!valutazioneMinimaTextField.getText().isBlank())
-	    parseFloat(valutazioneMinimaTextField.getText(), valutazioneMinima);
+	    valutazioneMinima=parseFloat(valutazioneMinimaTextField.getText(), valutazioneMinima);
 	float valutazioneMassima = 10f;
 	if (!valutazioneMassimaTextField.getText().isBlank())
-	    parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
+	    valutazioneMassima=parseFloat(valutazioneMassimaTextField.getText(), valutazioneMassima);
 	Skill skillCercata = null;
 	skillCercata = (Skill) skillFiltroComboBox.getSelectedItem();
 	try {

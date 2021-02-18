@@ -45,7 +45,6 @@ public class ControllerAccesso {
 	this.skillDAO = skillDAO;
 	this.salaDAO = salaDAO;
 	this.ambitoDAO = ambitoDAO;
-
     }
     
     public void apriLogin() {

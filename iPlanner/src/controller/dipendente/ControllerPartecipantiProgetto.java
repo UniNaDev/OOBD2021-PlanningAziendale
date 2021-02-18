@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
@@ -58,12 +59,30 @@ public class ControllerPartecipantiProgetto {
 		return projDAO.getPartecipantiProgettoSenzaRuolo(codiceProgetto);
 	}
 
-	public void inserisciPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-		projDAO.insertPartecipanteProgetto(collaborazioneProgetto);
+	public boolean inserisciPartecipante(CollaborazioneProgetto collaborazioneProgetto){
+		try {
+			projDAO.insertPartecipanteProgetto(collaborazioneProgetto);
+			return true;
+		} catch (SQLException e) {
+			
+			String unicitàProjectManager="P0004";
+			
+			if(e.getSQLState().equals(unicitàProjectManager))
+			JOptionPane.showMessageDialog(null, "Errore: Esiste già un project manager per questo progetto"
+					+ "\nN.B. Se si vuole effettuare un cambio di project Manager,aggiornare "
+					+ "\ni ruoli attraverso l'apposito pulsante aggiorna ruolo");
+			return false;
+		}
 	}
 
-	public void eliminaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-		projDAO.deletePartecipanteProgetto(collaborazioneProgetto);
+	public boolean eliminaPartecipante(CollaborazioneProgetto collaborazioneProgetto){
+		try {
+			projDAO.deletePartecipanteProgetto(collaborazioneProgetto);
+			return true;
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
+		}
 	}
 	
 	public String [] ottieniRuoli() throws SQLException{
@@ -73,8 +92,15 @@ public class ControllerPartecipantiProgetto {
 		return ruoli;
 	}
 	
-	public void aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-		projDAO.updatePartecipanteProgetto(collaborazioneProgetto);
+	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto){
+		try {
+			projDAO.updatePartecipanteProgetto(collaborazioneProgetto);
+			return true;
+		} catch (SQLException e) {
+			
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return false;
+		}
 	}
 	
 	public float ottieniMaxStipendio() {

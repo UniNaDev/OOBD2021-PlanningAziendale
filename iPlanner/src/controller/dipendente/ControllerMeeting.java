@@ -148,7 +148,7 @@ public class ControllerMeeting {
 			}
 		} catch(SQLException e) {
 			JOptionPane.showMessageDialog(null,
-					"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
+					"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di inserire."
 							+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
 							"Errore Sala Occupata",
 							JOptionPane.ERROR_MESSAGE);

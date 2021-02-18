@@ -452,6 +452,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		eliminaButton.setAlignmentX(0.5f);
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+					
 					eliminaMeeting(controller);
 				}
 
@@ -562,7 +563,12 @@ public class GestioneMeetingDipendente extends JFrame {
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					controller.apriInserisciPartecipantiMeeting(meetingSelezionato);
+					if(meetingTable.getSelectedRow()!=-1) {
+						Meeting meeting= modelloTabellaMeeting.getSelected(meetingTable.convertColumnIndexToModel(meetingTable.getSelectedRow()));
+						controller.apriInserisciPartecipantiMeeting(meeting);
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Selezionare un meeting dalla tabella");		
 			}
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
@@ -1159,8 +1165,9 @@ public class GestioneMeetingDipendente extends JFrame {
 		if (controller.aggiornaMeeting(meetingSelezionato)) {
 			JOptionPane.showMessageDialog(null, "Meeting Modificato Correttamente");
 			svuotaCampiMeeting();
+			aggiornaTabella(controller);
 		}
-		aggiornaTabella(controller);
+		
 	}
 	
 	private void ricavaInfoMeeting() {
@@ -1202,9 +1209,14 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 	
 	private void eliminaMeeting(ControllerMeeting controller) {
-		controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
-		JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
-		aggiornaTabella(controller);
+		if(meetingTable.getSelectedRow()!=-1) {
+			controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
+			JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
+			aggiornaTabella(controller);
+		}
+		else
+			JOptionPane.showMessageDialog(null, "Selezionare un meeting dalla tabella");
+	
 		svuotaCampiMeeting();
 	}
 	

@@ -17,18 +17,15 @@ public class PartecipantiTableModel extends AbstractTableModel {
 	
 	private ArrayList<Dipendente> dipendenteTabella=new ArrayList<Dipendente>();
 	
-	
 	String[] colnames= {"Nome","Cognome","Sesso","Età","Email","Salario","Valutazione","Skill","Tipologia progetto"};
 
 	public void setDipendenteTabella(ArrayList<Dipendente> dipendenteTabella) {
 		this.dipendenteTabella = dipendenteTabella;
 	}
 	
-
 	public ArrayList<Dipendente> getDipendenteTabella() {
 		return dipendenteTabella;
 	}
-
 
 	@Override
 	public int getRowCount() {
@@ -37,7 +34,6 @@ public class PartecipantiTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-
 		return colnames.length;
 	}
 
@@ -46,41 +42,48 @@ public class PartecipantiTableModel extends AbstractTableModel {
 		return colnames[columnIndex];
 	}
 
-	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Dipendente dipendente =dipendenteTabella.get(rowIndex);
-		
-		switch(columnIndex) {
-		case 0:
-			return dipendente.getNome();
-		case 1:
-			return dipendente.getCognome();
-		case 2:
-			return dipendente.getSesso();
-		case 3:
-			return dipendente.getEtà();
-		case 4:
-			return dipendente.getEmail();
-		case 5:
-			return dipendente.getSalario();
-		case 6:
-			String s = String.format("%.2f",dipendente.getValutazione());
-			return s;
-		case 7:
-			return dipendente.getSkills();
-		case 8:
-			return dipendente.getTipologieProgetto();
+		if(rowIndex>=0) {
+			
+			Dipendente dipendente =dipendenteTabella.get(rowIndex);
+			
+			switch(columnIndex) {
+			case 0:
+				return dipendente.getNome();
+			case 1:
+				return dipendente.getCognome();
+			case 2:
+				return dipendente.getSesso();
+			case 3:
+				return dipendente.getEtà();
+			case 4:
+				return dipendente.getEmail();
+			case 5:
+				return dipendente.getSalario();
+			case 6:
+				String s = String.format("%.2f",dipendente.getValutazione());
+				return s;
+			case 7:
+				return dipendente.getSkills();
+			case 8:
+				return dipendente.getTipologieProgetto();
+				
+			}
+			return null;
 			
 		}
 		return null;
+	
 	}
 
-
-	
 	public Dipendente getSelected(int rowIndex) {
-		Dipendente dipendente = dipendenteTabella.get(rowIndex);
-		return dipendente;
+		if (rowIndex >= 0) {
+			Dipendente dipendente = dipendenteTabella.get(rowIndex);
+			return dipendente;
+		}
+		else
+			return null;
 	}
 	
 	//Per sorting corretto

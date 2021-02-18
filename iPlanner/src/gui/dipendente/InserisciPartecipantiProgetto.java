@@ -105,9 +105,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private JLabel skillLabel;
 	private DefaultListModel listaSkillModel;
 	private JScrollPane skillScrollPane;
-	
 	private JSeparator infoDipendenteProgettoSeparator;
-	
 	private JLabel infoProgettoLabel;
 	private JLabel nomeProgettoLabel;
 	private JTextArea nomeProgettotextArea;
@@ -120,11 +118,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private JScrollPane partecipantiScrollPane;
 	private PartecipantiListRenderer partecipantiListRenderer;
 	private DefaultListModel partecipantiListModel;
-	
 	private JButton aggiornaRuoloButton;
 	private JButton inserisciPartecipanteButton;
 	private JButton eliminaPartecipanteButton;
-	
 	private JButton filtraButton;
 	private JTextField cercaTextField;
 	private JSeparator ricercaEtàSeparator;
@@ -146,19 +142,11 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private JLabel tipologiaProgettoFiltroLabel;
 	private DefaultComboBoxModel tipologiaProgettoModel;
 	private JComboBox tipologiaProgettoComboBox;
-	
-
-	
-	
+	private JScrollPane dipendenteScrollPane;
 	private JTable progettoTable;
+	private DefaultTableCellRenderer renderTabella;
 	private JTable dipendenteTable;
-
 	private PartecipantiTableModel dataModelDipendente;
-
-
-
-
-
 	private TableRowSorter<TableModel> sorterDipendente;
 
 	private Progetto progettoSelezionato;
@@ -177,19 +165,14 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
 		
-		JPanel panel = new JPanel();	//main panel
+		JPanel panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		JPanel infoPanel = new JPanel();	//panel info
+		JPanel infoPanel = new JPanel();
 		
-		JPanel comandiPanel = new JPanel();	//panel per i comandi
+		JPanel comandiPanel = new JPanel();
 		comandiPanel.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		comandiPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-		
-		JScrollPane DipendenteScrollPane = new JScrollPane();	//scroll pane per la tabella meeting
-		DipendenteScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
-		DipendenteScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		DipendenteScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		gestionePartecipantiProgettoLabel = new JLabel("Gestione partecipanti progetto");
 		gestionePartecipantiProgettoLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/Icone/meeting_64.png")));
@@ -212,9 +195,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		cognomeLabel = new JLabel("Cognome");
 		cognomeLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		cognomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		DefaultComboBoxModel myModel2 = new DefaultComboBoxModel();
-		for(int i=1900;i<= 2021;i++)
-			myModel2.addElement(i);
 		
 		cognomeTextField = new JTextField();
 		cognomeTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -349,46 +329,14 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		partecipantiScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		partecipantiList = new JList();
-		partecipantiListRenderer=new PartecipantiListRenderer();
+		impostaPartecipantiListRenderer();
+		inizializzaListaPartecipanti();
 		partecipantiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		partecipantiList.setCellRenderer(partecipantiListRenderer);
-		partecipantiListModel=new DefaultListModel();
-		partecipantiList.setModel(partecipantiListModel);
-		partecipantiListModel.addAll(progettoSelezionato.getCollaborazioni());
 		partecipantiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		partecipantiScrollPane.setViewportView(partecipantiList);
 		partecipantiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				
-				CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
-				
-				if(collaborazione!=null) {
-					
-					ruoloComboBox.setSelectedItem(collaborazione.getRuoloCollaboratore());
-					nomeTextField.setText(collaborazione.getCollaboratore().getNome());
-					cognomeTextField.setText(collaborazione.getCollaboratore().getCognome());
-					etàTextField.setText(String.valueOf(collaborazione.getCollaboratore().getEtà()));
-					valutazioneTextField.setText(String.format("%.2f", collaborazione.getCollaboratore().getValutazione()));
-					salarioTextField.setText(String.format("%.2f", collaborazione.getCollaboratore().getSalario()));
-					if(collaborazione.getCollaboratore().getSesso()=='M')
-						uomoRadioButton.setSelected(true);
-					else 
-						donnaRadioButton.setSelected(true);
-					
-					skillList.setModel(listaSkillModel);
-					listaSkillModel.removeAllElements();
-					try {
-						listaSkillModel.addAll(controller.ottieniSkillDipendente(collaborazione.getCollaboratore().getCf()));
-					} catch (SQLException e1) {
-						
-						e1.printStackTrace();
-					}
-					
-					dipendenteTable.clearSelection();
-				}
-				else 
-					ruoloComboBox.setSelectedItem(null);
-				
+				impostaInfoDipendenteDaLista(controller);
 			}
 		});
 	
@@ -400,11 +348,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		comandiPanel2.setBorder(null);
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		//panel interno a quello delle info
 		JPanel infoPanel2 = new JPanel();
 		infoPanel2.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		
-
 		aggiornaRuoloButton = new JButton("Aggiorna ruolo");
 		aggiornaRuoloButton.setPreferredSize(new Dimension(150, 30));
 		aggiornaRuoloButton.setMaximumSize(new Dimension(150, 150));
@@ -434,35 +380,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				}
 				else
 				{
-					partecipantiLabel.setForeground(Color.BLACK);
-					String nuovoRuolo=ruoloComboBox.getSelectedItem().toString();
-					
-					//Vecchia collaborazione
-					CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
-					
-					//Nuova collaborazione
-					CollaborazioneProgetto collaborazioneProgetto=new CollaborazioneProgetto(progettoSelezionato, collaborazione.getCollaboratore(), nuovoRuolo);
-					
-					try {
-						controller.aggiornaPartecipante(collaborazioneProgetto);
-						JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
-						partecipantiListModel.removeElementAt(partecipantiList.getSelectedIndex()); //rimuove il vecchio elemento
-						partecipantiListModel.addElement(collaborazioneProgetto); //lo aggiorna con il nuovo
-						
-						//Aggiorna il modello del sorterDipendente in seguito alle modifiche
-						sorterDipendente.setModel(dataModelDipendente);
-						
-						//Svuota i campi
-						svuotaCampi();
-					} catch (SQLException e1) {
-					
-						ruoloComboBox.setSelectedItem(null);
-						JOptionPane.showMessageDialog(null, e1.getMessage());
-					}
-					
-				
-				}
-				
+					aggiornaRuoloPartecipanteProgetto(controller);
+				}	
 			}
 		});
 		comandiPanel2.add(aggiornaRuoloButton);
@@ -480,60 +399,15 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(dipendenteTable.getSelectedRow()==-1) {
-					
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla tabella");
-					
 				}
 				if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
 					JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
-					
 				}
 				else {
-					
-					
-					int row= dipendenteTable.getSelectedRow();
-					try {
-						
-						//Riceve il ruolo selezionato nella combobox
-						String ruolo=ruoloComboBox.getSelectedItem().toString();
-						
-						//Seleziona il dipendente selezionato dalla tabella
-						Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
-						
-						//Crea la collaborazione al progetto
-						CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
-						
-						//Inserisce il partecipante al progetto
-						controller.inserisciPartecipante(collaborazione);
-						JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente");
-								
-						
-						//Aggiorna i dipendenti disponibili
-						dataModelDipendente.fireTableDataChanged();
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
-						
-						//Aggiorna il modello del sorterDipendente in seguito all'inserimento
-						sorterDipendente.setModel(dataModelDipendente);
-						
-						//Aggiunge l'elemento inserito alla lista
-						partecipantiListModel.addElement(collaborazione);
-						
-						//Svuota i campi
-						svuotaCampi();
-					
-					} catch (SQLException e1) {
-						
-						ruoloComboBox.setSelectedItem(null);
-						JOptionPane.showMessageDialog(null, e1.getMessage());
-					}
-					
-				}
-			
-				
-			
+					inserisciPartecipanteProgetto(controller);				
+				}	
 			}
-
-		
 		});
 		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -549,7 +423,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		});
 		comandiPanel2.add(inserisciPartecipanteButton);
 		
-
 		eliminaPartecipanteButton = new JButton("Elimina partecipante");
 		eliminaPartecipanteButton.setPreferredSize(new Dimension(190, 30));
 		eliminaPartecipanteButton.setMaximumSize(new Dimension(150, 150));
@@ -575,44 +448,13 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(partecipantiList.isSelectionEmpty()) {
-					
 					JOptionPane.showMessageDialog(null, "Seleziona un partecipante da eliminare");
 					partecipantiLabel.setForeground(Color.RED);
-					
 				}
 				else {
-					
-					try {
-						partecipantiLabel.setForeground(Color.BLACK);
-						
-						controller.eliminaPartecipante((CollaborazioneProgetto)partecipantiList.getSelectedValue());
-						JOptionPane.showMessageDialog(null, "Partecipante eliminato");
-				
-						//Rimuove dalla lista l'elemento eliminato
-						partecipantiListModel.removeElementAt(partecipantiList.getSelectedIndex());
-						
-						//Pone il valore selezionato a null
-						partecipantiList.setSelectedValue(null,false);
-						
-						//Aggiorna i dipendenti disponibili
-						dataModelDipendente.fireTableDataChanged();
-						dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
-						
-						//Aggiorna il modello del sorterDipendente in seguito all'eliminazione
-						sorterDipendente.setModel(dataModelDipendente);
-						
-						//Svuota i campi
-						svuotaCampi();
-						
-					} catch (SQLException e1) {
-					
-						e1.printStackTrace();
-					}
-				}
-					
-				}
-				
-			
+					eliminaPartecipanteProgetto(controller);
+				}		
+			}
 		});
 		comandiPanel2.add(eliminaPartecipanteButton);
 		
@@ -627,8 +469,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		filtraButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		filtraButton.setBackground(Color.WHITE);
 	
-		JPanel comandiPanel_1 = new JPanel();
-		comandiPanel_1.setBorder(null);
+		JPanel filtriPanel = new JPanel();
+		filtriPanel.setBorder(null);
 		
 		cercaTextField = new JTextField();
 		cercaTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
@@ -694,16 +536,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		filtroSkillLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
 		skillFiltroComboBox=new JComboBox();
-		try {
-			DefaultComboBoxModel skillModel=new DefaultComboBoxModel();
-			skillModel.addElement(null);
-			skillModel.addAll(controller.ottieniSkill());
-			skillFiltroComboBox.setModel(skillModel);
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		
+		inizializzaComboBoxSkillFiltro(controller);
 		skillFiltroComboBox.setUI(new BasicComboBoxUI());
 		skillFiltroComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		skillFiltroComboBox.setBackground(Color.WHITE);
@@ -716,21 +549,13 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		tipologiaProgettoComboBox = new JComboBox();
 		tipologiaProgettoModel=new DefaultComboBoxModel<>();
-		tipologiaProgettoComboBox.setModel(tipologiaProgettoModel);
+		inizializzaTipologiaProgettoFiltroComboBox(controller);
 		tipologiaProgettoComboBox.setUI(new BasicComboBoxUI());
 		tipologiaProgettoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		tipologiaProgettoComboBox.setBackground(Color.WHITE);
 		tipologiaProgettoComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tipologiaProgettoComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		tipologiaProgettoComboBox.setSelectedItem(null);
-		tipologiaProgettoModel.addElement(null);
-		try {
-			tipologiaProgettoModel.addAll(controller.ottieniTipologieProgetto());
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		
 		
 		ricercaEtàSeparator = new JSeparator();
 		ricercaEtàSeparator.setPreferredSize(new Dimension(1, 30));
@@ -752,171 +577,61 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		skillTipologiaProgettoSeparator.setPreferredSize(new Dimension(1, 30));
 		skillTipologiaProgettoSeparator.setOrientation(SwingConstants.VERTICAL);
 		
-		comandiPanel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		comandiPanel_1.add(filtraButton);
-		comandiPanel_1.add(cercaTextField);
-		comandiPanel_1.add(ricercaEtàSeparator);
-		comandiPanel_1.add(etàMinimaTextField);
-		comandiPanel_1.add(etàFiltroLabel);
-		comandiPanel_1.add(etàMassimaTextField);
-		comandiPanel_1.add(etàSalarioSeparator);
-		comandiPanel_1.add(salarioMinimoTextField);
-		comandiPanel_1.add(salarioFiltroLabel);
-		comandiPanel_1.add(salarioMassimoTextField);
-		comandiPanel_1.add(salarioValutazioneSeparator);
-		comandiPanel_1.add(valutazioneMinimaTextField);
-		comandiPanel_1.add(valutazioneFiltroLabel);
-		comandiPanel_1.add(valutazioneMassimaTextField);
-		comandiPanel_1.add(valutazioneSkillSeparator);
-		comandiPanel_1.add(filtroSkillLabel);
-		comandiPanel_1.add(skillFiltroComboBox);
-		comandiPanel_1.add(skillTipologiaProgettoSeparator);
-		comandiPanel_1.add(tipologiaProgettoFiltroLabel);
-		comandiPanel_1.add(tipologiaProgettoComboBox);
+		filtriPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		filtriPanel.add(filtraButton);
+		filtriPanel.add(cercaTextField);
+		filtriPanel.add(ricercaEtàSeparator);
+		filtriPanel.add(etàMinimaTextField);
+		filtriPanel.add(etàFiltroLabel);
+		filtriPanel.add(etàMassimaTextField);
+		filtriPanel.add(etàSalarioSeparator);
+		filtriPanel.add(salarioMinimoTextField);
+		filtriPanel.add(salarioFiltroLabel);
+		filtriPanel.add(salarioMassimoTextField);
+		filtriPanel.add(salarioValutazioneSeparator);
+		filtriPanel.add(valutazioneMinimaTextField);
+		filtriPanel.add(valutazioneFiltroLabel);
+		filtriPanel.add(valutazioneMassimaTextField);
+		filtriPanel.add(valutazioneSkillSeparator);
+		filtriPanel.add(filtroSkillLabel);
+		filtriPanel.add(skillFiltroComboBox);
+		filtriPanel.add(skillTipologiaProgettoSeparator);
+		filtriPanel.add(tipologiaProgettoFiltroLabel);
+		filtriPanel.add(tipologiaProgettoComboBox);
+		
+		dipendenteScrollPane = new JScrollPane();
+		dipendenteScrollPane.setFont(new Font("Consolas", Font.PLAIN, 11));
+		dipendenteScrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		dipendenteScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
 		dataModelDipendente=new PartecipantiTableModel();
-		
 		dipendenteTable = new JTable(dataModelDipendente);
 		dipendenteTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		dipendenteTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteTable.setBackground(Color.WHITE);
 		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
-		
-		//Modello delle colonne personalizzato
-		dipendenteTable.getColumnModel().getColumn(0).setMinWidth(150);
-		dipendenteTable.getColumnModel().getColumn(1).setMinWidth(150);
-		dipendenteTable.getColumnModel().getColumn(2).setMinWidth(50);
-		dipendenteTable.getColumnModel().getColumn(3).setMinWidth(50);
-		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(300);
-		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(100);
-		dipendenteTable.getColumnModel().getColumn(6).setMinWidth(100);
-		dipendenteTable.getColumnModel().getColumn(7).setMinWidth(300);
-		dipendenteTable.getColumnModel().getColumn(8).setMinWidth(300);
-		
-		//Modello delle colonne personalizzato(Testo allineato al centro)
-		DefaultTableCellRenderer renderTabella = new DefaultTableCellRenderer();
-        renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
-        renderTabella.setVerticalAlignment(SwingConstants.CENTER);
-        
-        dipendenteTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(6).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(7).setCellRenderer(renderTabella);
-        dipendenteTable.getColumnModel().getColumn(8).setCellRenderer(renderTabella);
-		
-		//setta il modello di dati della tabella
-		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));	
-		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage());
-		}
-		
-		//Sorter tabella
-		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
-		dipendenteTable.setRowSorter(sorterDipendente);
-		
-		//Seleziona singola
+		impostaProprietàTabellaDipendente();
+		inizializzaTabellaDipendente(controller);
 		dipendenteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		//Le colonne non possono essere riordinate
 		dipendenteTable.getTableHeader().setReorderingAllowed(false);
-		//Click sulla tabella
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				impostaInfoDipendenteDaTabella(controller);
 				
-				
-				//Quando viene selezionata una riga della tabella,deseleziona elemento selezionato della lista
-				partecipantiList.clearSelection();
-				
-				int row= dipendenteTable.getSelectedRow();	//ottiene l'indice di riga selezionata
-				
-				//Riceve il dipendente selezionato
-				Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(row));
-				
-				
-				//ricava le info del dipendente seleziona
-				nomeTextField.setText(dipendente.getNome());
-				cognomeTextField.setText(dipendente.getCognome());
-				
-				if(dipendente.getSesso()=='M') {
-					
-					uomoRadioButton.setSelected(true);
-					donnaRadioButton.setSelected(false);
-				}
-				else
-				{
-					uomoRadioButton.setSelected(false);
-					donnaRadioButton.setSelected(true);	
-				}
-				
-				etàTextField.setText(String.valueOf(dipendente.getEtà()));
-				salarioTextField.setText(String.valueOf(dipendente.getSalario()));
-				valutazioneTextField.setText(String.format("%.2f",dipendente.getValutazione()));
-				
-
-				try {
-					listaSkillModel.removeAllElements();
-					listaSkillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				
-					if(e.getClickCount()==2) {
-					
-						
-						if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
-							JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
-							
-						}
-						else {
-							try {
-								
-								//riceve il ruolo selezionato nella combo box
-								String ruolo=ruoloComboBox.getSelectedItem().toString();
-								
-								
-								//Creo la collaborazione al progetto
-								CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
-								
-								//Inserisce il partecipante al progetto
-								controller.inserisciPartecipante(collaborazione);
-								JOptionPane.showMessageDialog(null, "Partecipante inserito correttamente");
-								
-								//Aggiorna la lista e la tabella
-								partecipantiListModel.addElement(collaborazione);
-								dataModelDipendente.fireTableDataChanged();
-								dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
-							
-								ruoloComboBox.setSelectedItem(null);
-								
-								//Aggiorna il modello del sorterDipendente in seguito all'inserimento
-								sorterDipendente.setModel(dataModelDipendente);
-								
-								//Svuota i campi
-								svuotaCampi();
-				
-							} catch (SQLException e1) {
-								
-								JOptionPane.showMessageDialog(null, e1.getMessage());
-							}
-							
-						}
-						
-				}
-			
+				if(e.getClickCount()==2) {
+					if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
+						JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
+					}
+					else {
+						inserisciPartecipanteProgetto(controller);
+					}	
+				}	
 			}
 		});
-		
-		DipendenteScrollPane.setViewportView(dipendenteTable);
+		dipendenteScrollPane.setViewportView(dipendenteTable);
 				
-		
 		GroupLayout gl_comandiPanel = new GroupLayout(comandiPanel);
 		gl_comandiPanel.setHorizontalGroup(
 			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
@@ -924,7 +639,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addGap(303)
 					.addComponent(comandiPanel2, GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
 					.addGap(302))
-				.addComponent(comandiPanel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+				.addComponent(filtriPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
 		);
 		gl_comandiPanel.setVerticalGroup(
 			gl_comandiPanel.createParallelGroup(Alignment.LEADING)
@@ -932,7 +647,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addGap(5)
 					.addComponent(comandiPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comandiPanel_1, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
+					.addComponent(filtriPanel, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
 		);
 		comandiPanel.setLayout(gl_comandiPanel);
 		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -945,7 +660,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(comandiPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
-						.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
+						.addComponent(dipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE)
 						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 1536, Short.MAX_VALUE))
 					.addContainerGap())
 		);
@@ -957,7 +672,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addGap(5)
 					.addComponent(comandiPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(DipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+					.addComponent(dipendenteScrollPane, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
@@ -1094,7 +809,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		infoPanel.add(infoPanel2);
 		panel.setLayout(gl_panel);
 		
-
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -1115,29 +829,218 @@ public class InserisciPartecipantiProgetto extends JFrame {
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
-		
+	}
+
+	private void inizializzaListaPartecipanti() {
+		partecipantiListModel=new DefaultListModel();
+		partecipantiList.setModel(partecipantiListModel);
+		partecipantiListModel.addAll(progettoSelezionato.getCollaborazioni());
+	}
+
+	private void impostaPartecipantiListRenderer() {
+		partecipantiListRenderer=new PartecipantiListRenderer();
+		partecipantiList.setCellRenderer(partecipantiListRenderer);
 	}
 	
-	private void svuotaCampi() {
+	private void inizializzaTipologiaProgettoFiltroComboBox(ControllerPartecipantiProgetto controller) {
+		try {
+			tipologiaProgettoComboBox.setModel(tipologiaProgettoModel);
+			tipologiaProgettoModel.addElement(null);
+			tipologiaProgettoModel.addAll(controller.ottieniTipologieProgetto());
+		} catch (SQLException e3) {
+			JOptionPane.showMessageDialog(null,e3.getMessage());
+		}	
+	}
+
+	private void inizializzaComboBoxSkillFiltro(ControllerPartecipantiProgetto controller) {
+		try {
+			DefaultComboBoxModel skillModel=new DefaultComboBoxModel();
+			skillModel.addElement(null);
+			skillModel.addAll(controller.ottieniSkill());
+			skillFiltroComboBox.setModel(skillModel);
+		} catch (SQLException e3) {
+			JOptionPane.showMessageDialog(null,e3.getMessage());
+		}
+	}
+
+	private void inizializzaTabellaDipendente(ControllerPartecipantiProgetto controller) {
+		try {
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void impostaProprietàTabellaDipendente() {
+		impostaModelloColonneTabellaDipendente();
+		impostaRendererTabellaDipendente();
+		impostaSorterTabellaDipendente();
+	}
+	
+	private void impostaModelloColonneTabellaDipendente() {
+		dipendenteTable.getColumnModel().getColumn(0).setMinWidth(150);
+		dipendenteTable.getColumnModel().getColumn(1).setMinWidth(150);
+		dipendenteTable.getColumnModel().getColumn(2).setMinWidth(50);
+		dipendenteTable.getColumnModel().getColumn(3).setMinWidth(50);
+		dipendenteTable.getColumnModel().getColumn(4).setMinWidth(300);
+		dipendenteTable.getColumnModel().getColumn(5).setMinWidth(100);
+		dipendenteTable.getColumnModel().getColumn(6).setMinWidth(100);
+		dipendenteTable.getColumnModel().getColumn(7).setMinWidth(300);
+		dipendenteTable.getColumnModel().getColumn(8).setMinWidth(300);
+	}
+
+	private void impostaRendererTabellaDipendente() {
+		renderTabella = new DefaultTableCellRenderer();
+        renderTabella.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabella.setVerticalAlignment(SwingConstants.CENTER);
+        dipendenteTable.getColumnModel().getColumn(0).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(1).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(2).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(3).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(4).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(5).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(6).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(7).setCellRenderer(renderTabella);
+        dipendenteTable.getColumnModel().getColumn(8).setCellRenderer(renderTabella);	
+	}
+	
+	private void impostaSorterTabellaDipendente() {
+		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
+		dipendenteTable.setRowSorter(sorterDipendente);
+	}
+	
+	private void aggiornaRuoloPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
+		partecipantiLabel.setForeground(Color.BLACK);
+		String nuovoRuolo=ruoloComboBox.getSelectedItem().toString();
+		CollaborazioneProgetto collaborazioneProgettoPrecedente=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
+		CollaborazioneProgetto collaborazioneProgettoNuova=new CollaborazioneProgetto(progettoSelezionato, collaborazioneProgettoPrecedente.getCollaboratore(), nuovoRuolo);
+		if(controller.aggiornaPartecipante(collaborazioneProgettoNuova)==true) {
+			JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
+			aggiornaListaPartecipantiDopoAggiornamento(collaborazioneProgettoNuova);
+			aggiornaSorter();
+		}
+		svuotaCampi();
+		} 
+	
+	private void aggiornaListaPartecipantiDopoAggiornamento(CollaborazioneProgetto collaborazioneProgettoNuova) {
+		partecipantiListModel.removeElementAt(partecipantiList.getSelectedIndex());
+		partecipantiListModel.addElement(collaborazioneProgettoNuova);
+	}
+	
+	private void inserisciPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
 		
+		String ruolo=ruoloComboBox.getSelectedItem().toString();
+		Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
+		CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
+	
+		if(controller.inserisciPartecipante(collaborazione)==true) {
+			JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente");
+			aggiornaListaPartecipantiDopoInserimento(collaborazione);
+			aggiornaTabella(controller);
+		}
+		aggiornaSorter();
+		svuotaCampi();
+	} 
+	
+	private void aggiornaListaPartecipantiDopoInserimento(CollaborazioneProgetto collaborazione) {
+		partecipantiListModel.addElement(collaborazione);
+	}
+
+	private void eliminaPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
+		partecipantiLabel.setForeground(Color.BLACK);
+		if(controller.eliminaPartecipante((CollaborazioneProgetto)partecipantiList.getSelectedValue())==true) {
+			JOptionPane.showMessageDialog(null, "Partecipante eliminato");
+			aggiornaListaPartecipantiDopoEliminazione();
+			aggiornaTabella(controller);
+		}
+		aggiornaSorter();
+		svuotaCampi();
+	}
+
+	private void aggiornaListaPartecipantiDopoEliminazione() {
+		partecipantiListModel.removeElementAt(partecipantiList.getSelectedIndex());
+		partecipantiList.setSelectedValue(null,false);
+	}
+
+	private void aggiornaTabella(ControllerPartecipantiProgetto controller){
+		
+		try {
+			dataModelDipendente.fireTableDataChanged();
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
+		aggiornaSorter();
+	}
+
+	private void aggiornaSorter() {
+		if(dipendenteTable.getRowCount()!=0)
+		sorterDipendente.setModel(dataModelDipendente);
+	}
+	
+	private void impostaInfoDipendenteDaTabella(ControllerPartecipantiProgetto controller) {
+		
+		if(dipendenteTable.getSelectedRow()!=-1) {
+			partecipantiList.clearSelection();
+			Dipendente dipendenteSelezionato=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
+			impostaInfoDipendente(dipendenteSelezionato,controller);
+			ruoloComboBox.setSelectedItem(null);
+		}
+	}
+	
+	private void impostaInfoDipendenteDaLista(ControllerPartecipantiProgetto controller) {
+		
+		CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
+		if(collaborazione!=null) {
+			impostaInfoDipendente(collaborazione.getCollaboratore(), controller);
+			ruoloComboBox.setSelectedItem(collaborazione.getRuoloCollaboratore());
+			dipendenteTable.clearSelection();
+		}
+	}
+
+	private void impostaInfoDipendente(Dipendente dipendente, ControllerPartecipantiProgetto controller) {
+		nomeTextField.setText(dipendente.getNome());
+		cognomeTextField.setText(dipendente.getCognome());
+		if(dipendente.getSesso()=='M') {
+			uomoRadioButton.setSelected(true);
+			donnaRadioButton.setSelected(false);
+		}
+		else
+		{
+			uomoRadioButton.setSelected(false);
+			donnaRadioButton.setSelected(true);	
+		}
+		etàTextField.setText(String.valueOf(dipendente.getEtà()));
+		salarioTextField.setText(String.valueOf(dipendente.getSalario()));
+		valutazioneTextField.setText(String.format("%.2f",dipendente.getValutazione()));
+		try {
+		    skillList.setModel(listaSkillModel);
+			listaSkillModel.removeAllElements();
+			listaSkillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+	}
+
+	private void svuotaCampi() {
 		nomeTextField.setText(null);
 		cognomeTextField.setText(null);
 		etàTextField.setText(null);
 		valutazioneTextField.setText(null);
 		salarioTextField.setText(null);
-		
 		if(uomoRadioButton.isSelected()) 
 			uomoRadioButton.setSelected(false);
 		else
 			donnaRadioButton.setSelected(false);
-		
 		listaSkillModel.removeAllElements();
-		
 		ruoloComboBox.setSelectedItem(null);
-		
 		partecipantiLabel.setBackground(Color.BLACK);
-		
-		
 	}
 	
 	private void applicaFiltri(ControllerPartecipantiProgetto controller) {
