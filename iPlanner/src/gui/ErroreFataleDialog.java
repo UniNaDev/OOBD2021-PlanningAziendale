@@ -1,3 +1,8 @@
+/*JDialog per messaggi di errori fatali e non previsti
+Permette all'utente di copiare lo stacktrace per poterlo in seguito inviare agli sviluppatori con qualche commento
+e riportare così l'errore.
+*****************************************************************************************************************/
+
 package gui;
 
 import java.awt.Color;
@@ -28,13 +33,13 @@ public class ErroreFataleDialog extends JDialog {
 		setResizable(false);
 		setTitle("Errore Fatale");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 575, 272);
+		setBounds(100, 100, 554, 272);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(14, 108, 529, 83);
+		scrollPane.setBounds(25, 108, 488, 83);
 		contentPane.add(scrollPane);
 		
 		JTextArea stackTraceTextArea = new JTextArea();
@@ -48,7 +53,7 @@ public class ErroreFataleDialog extends JDialog {
 		messaggioTextArea.setLineWrap(true);
 		messaggioTextArea.setText("Errore Fatale!\r\n\r\nVerificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).");
 		messaggioTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
-		messaggioTextArea.setBounds(14, 11, 530, 66);
+		messaggioTextArea.setBounds(25, 11, 488, 66);
 		contentPane.add(messaggioTextArea);
 		
 		JButton okButton = new JButton("Ok");
@@ -70,7 +75,7 @@ public class ErroreFataleDialog extends JDialog {
 		});
 		okButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		okButton.setBounds(497, 202, 46, 20);
+		okButton.setBounds(467, 202, 46, 20);
 		contentPane.add(okButton);
 		
 		JLabel mostraDettagliLabel = new JLabel("Mostra Dettagli");
@@ -82,7 +87,7 @@ public class ErroreFataleDialog extends JDialog {
 		});
 		mostraDettagliLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mostraDettagliLabel.setFont(new Font("Consolas", Font.BOLD, 11));
-		mostraDettagliLabel.setBounds(14, 88, 98, 14);
+		mostraDettagliLabel.setBounds(25, 88, 98, 14);
 		contentPane.add(mostraDettagliLabel);
 		
 		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
@@ -92,11 +97,11 @@ public class ErroreFataleDialog extends JDialog {
 	//Altri metodi
 	//--------------------------------------------
 	private String ottieniStackTrace(Exception e) {
-		String messaggio = "";
+		String dettagliErrore = "";
 		
 		for (StackTraceElement stringa: e.getStackTrace())
-			messaggio += stringa.toString() + "\n";
+			dettagliErrore += stringa.toString() + "\n";
 		
-		return messaggio;
+		return dettagliErrore;
 	}
 }
