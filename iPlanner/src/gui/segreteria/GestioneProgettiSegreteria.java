@@ -60,6 +60,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import java.awt.Toolkit;
 
 public class GestioneProgettiSegreteria extends JFrame {
 	private JPanel contentPane;
@@ -90,6 +91,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private String[] siNoComboBox = {null, "Si", "No"};
 
 	public GestioneProgettiSegreteria(ControllerProgettiSegreteria controller) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiSegreteria.class.getResource("/icone/WindowIcon_16.png")));
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

@@ -74,7 +74,6 @@ public class ControllerAccesso {
     
     public void autenticaSegreteria(String password) {
     	if (password.equals(adminPassword)) {
-    		JOptionPane.showMessageDialog(null, "Autenticazione Riuscita!");
     		autenticazioneSegreteriaFrame.setVisible(false);
     		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
     	}

@@ -143,7 +143,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	public GestioneMeetingDipendente(ControllerMeeting controller) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1300, 700));
-		setTitle("GestioneMeeting");
+		setTitle("iPlanner - Gestione Meeting");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -45,6 +45,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
+import java.awt.Toolkit;
 
 public class GestioneSale extends JFrame {
 	private JPanel contentPane;
@@ -63,6 +64,7 @@ public class GestioneSale extends JFrame {
 	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
 
 	public GestioneSale(ControllerMeetingSegreteria controller) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneSale.class.getResource("/icone/WindowIcon_16.png")));
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

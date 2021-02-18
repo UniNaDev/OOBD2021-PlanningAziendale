@@ -136,11 +136,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 
 	//Creazione frame
 	//---------------------------------------------
-	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller,Meeting meetingSelezionato) {
+	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller, Meeting meetingSelezionato) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1280, 720));
 		
-		setTitle("iPlanner-Gestione invitati meeting");
+		setTitle("iPlanner - Gestione Invitati Meeting");
 		setBounds(100, 100, 1280, 720);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

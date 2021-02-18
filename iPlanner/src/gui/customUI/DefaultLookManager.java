@@ -10,14 +10,14 @@ import javax.swing.border.MatteBorder;
 import javax.swing.plaf.ColorUIResource;
 
 public class DefaultLookManager {
-    private final Font defaultStandardFont = new Font("Consolas", Font.PLAIN, 15);
-    
-    public void setDefaultLook() {
-	UIManager.put("OptionPane.messageFont", defaultStandardFont);
-	UIManager.put("OptionPane.buttonFont", defaultStandardFont);
+	private final Font defaultStandardFont = new Font("Consolas", Font.PLAIN, 15);
 
-	UIManager.put("Button.background", Color.WHITE);
-	UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-	UIManager.put("Button.border", new MatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
-    }
+	public void setDefaultLook() {
+		UIManager.put("OptionPane.messageFont", defaultStandardFont);
+		UIManager.put("OptionPane.buttonFont", defaultStandardFont);
+
+		UIManager.put("Button.background", Color.WHITE);
+		UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+		UIManager.put("Button.border", new MatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+	}
 }

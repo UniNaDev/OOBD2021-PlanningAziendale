@@ -55,6 +55,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
+import java.awt.Toolkit;
 
 public class GestioneMeetingSegreteria extends JFrame {
 	private JPanel contentPane;
@@ -70,6 +71,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 	private DateTimeFormatter formatoTime = DateTimeFormat.forPattern("HH:mm");
 	
 	public GestioneMeetingSegreteria(ControllerMeetingSegreteria controller) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingSegreteria.class.getResource("/icone/WindowIcon_16.png")));
 		setResizable(false);
 		setTitle("Gestione Meeting");
 		addWindowListener(new WindowAdapter() {
