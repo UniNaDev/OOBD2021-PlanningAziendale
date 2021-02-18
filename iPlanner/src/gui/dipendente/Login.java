@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -22,6 +23,7 @@ import java.awt.Toolkit;
 import javax.swing.border.MatteBorder;
 
 import controller.ControllerAccesso;
+import gui.ErroreFatale;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
