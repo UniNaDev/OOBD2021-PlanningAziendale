@@ -338,33 +338,6 @@ public class GestioneSale extends JFrame {
 
 	// Altri metodi
 	// -----------------------------------------------------------------
-	private void pulisciCampi() {
-		nomeSalaTextField.setText("");
-		capienzaTextField.setText("");
-		indirizzoTextArea.setText("");
-		pianoTextField.setText("");
-		nomeSalaLabel.setForeground(Color.BLACK);
-		capienzaLabel.setForeground(Color.BLACK);
-		indirizzoLabel.setForeground(Color.BLACK);
-		pianoLabel.setForeground(Color.BLACK);
-	}
-
-	private void campiObbligatoriVuoti() {
-		if (nomeSalaTextField.getText().isBlank())
-			nomeSalaLabel.setForeground(Color.RED);
-		if (capienzaTextField.getText().isBlank())
-			capienzaLabel.setForeground(Color.RED);
-		if (indirizzoTextArea.getText().isBlank())
-			indirizzoLabel.setForeground(Color.RED);
-		if (pianoTextField.getText().isBlank())
-			pianoLabel.setForeground(Color.RED);
-
-		JOptionPane.showMessageDialog(null, 
-				"Alcuni campi obbligatori sono vuoti.", 
-				"Campi Obbligatori Vuoti",
-				JOptionPane.ERROR_MESSAGE);
-	}
-
 	private void creaSala(ControllerMeetingSegreteria controller) {
 		try {
 			ricavaInfoSala();
@@ -485,6 +458,33 @@ public class GestioneSale extends JFrame {
 		capienza = Integer.parseInt(capienzaTextField.getText());
 		indirizzo = indirizzoTextArea.getText();
 		piano = Integer.parseInt(pianoTextField.getText());
+	}
+	
+	private void pulisciCampi() {
+		nomeSalaTextField.setText("");
+		capienzaTextField.setText("");
+		indirizzoTextArea.setText("");
+		pianoTextField.setText("");
+		nomeSalaLabel.setForeground(Color.BLACK);
+		capienzaLabel.setForeground(Color.BLACK);
+		indirizzoLabel.setForeground(Color.BLACK);
+		pianoLabel.setForeground(Color.BLACK);
+	}
+
+	private void campiObbligatoriVuoti() {
+		if (nomeSalaTextField.getText().isBlank())
+			nomeSalaLabel.setForeground(Color.RED);
+		if (capienzaTextField.getText().isBlank())
+			capienzaLabel.setForeground(Color.RED);
+		if (indirizzoTextArea.getText().isBlank())
+			indirizzoLabel.setForeground(Color.RED);
+		if (pianoTextField.getText().isBlank())
+			pianoLabel.setForeground(Color.RED);
+
+		JOptionPane.showMessageDialog(null, 
+				"Alcuni campi obbligatori sono vuoti.", 
+				"Campi Obbligatori Vuoti",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void setModelloListaSaleTutte(ControllerMeetingSegreteria controller) {
