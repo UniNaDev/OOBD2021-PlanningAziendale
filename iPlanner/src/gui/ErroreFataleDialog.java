@@ -37,6 +37,7 @@ public class ErroreFataleDialog extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
+		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(25, 108, 488, 83);
@@ -89,9 +90,6 @@ public class ErroreFataleDialog extends JDialog {
 		mostraDettagliLabel.setFont(new Font("Consolas", Font.BOLD, 11));
 		mostraDettagliLabel.setBounds(25, 88, 98, 14);
 		contentPane.add(mostraDettagliLabel);
-		
-		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-    	setVisible(true);
 	}
 	
 	//Altri metodi

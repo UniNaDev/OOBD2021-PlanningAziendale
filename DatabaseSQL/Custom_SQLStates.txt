@@ -1,4 +1,4 @@
 P0001 = accavallamento meeting fisici nella stessa sala
-P0002 = capienza della sala non rispettata (sia lato meeting che lato presenza)
+P0002 = capienza della sala non rispettata (sia lato meeting che lato presenza che lato sala)
 P0003 = onnipresenza di un dipendente (sia lato meeting che lato presenza)
 P0004 = unicità project manager

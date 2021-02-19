@@ -7,10 +7,12 @@ package controller.segreteria;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import controller.ControllerStart;
+import javax.swing.JOptionPane;
+
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
 import entita.SalaRiunione;
+import gui.ErroreFataleDialog;
 import gui.segreteria.GestioneMeetingSegreteria;
 import gui.segreteria.GestioneSale;
 import interfacceDAO.AmbitoProgettoDAO;
@@ -63,7 +65,7 @@ public class ControllerMeetingSegreteria {
 		gestioneMeetingSegreteriaFrame.toFront();
 	}
 	
-	private void aggiornaSaleFiltro() {
+	public void aggiornaSaleFiltro() {
 		gestioneMeetingSegreteriaFrame.aggiornaFiltroSale(this);
 	}
 
@@ -103,23 +105,28 @@ public class ControllerMeetingSegreteria {
 		return meetDAO.getMeetingsBySala(sala);
 	}
 	
-	public void creaSala(SalaRiunione sala) throws SQLException {
-		salaDAO.insertSala(sala);
-		aggiornaSaleFiltro();
-	}
-	
-	public void eliminaSala(String codSala) throws SQLException {
-		SalaRiunione sala = salaDAO.getSalaByCod(codSala);
-		salaDAO.deleteSala(sala);
+	public void creaSala(SalaRiunione salaNuova) throws SQLException {
+		salaDAO.insertSala(salaNuova);
 		aggiornaSaleFiltro();
 	}
 	
 	public void aggiornaSala(String codSala, int cap, String indirizzo, int piano) throws SQLException {
-		SalaRiunione sala = salaDAO.getSalaByCod(codSala);
-		sala.setCapienza(cap);
-		sala.setIndirizzoSede(indirizzo);
-		sala.setPiano(piano);
-		salaDAO.updateSala(sala);
+		SalaRiunione sala = null;
+		try {
+			sala = salaDAO.getSalaByCod(codSala);
+			sala.setCapienza(cap);
+			sala.setIndirizzoSede(indirizzo);
+			sala.setPiano(piano);
+		} catch(SQLException e) {
+			ErroreFataleDialog erroreFatale = new ErroreFataleDialog(null,e);
+			erroreFatale.setVisible(true);
+		}
+		if (sala != null)
+			salaDAO.updateSala(sala);
+	}
+	
+	public void eliminaSala(SalaRiunione sala) throws SQLException {
+		salaDAO.deleteSala(sala);
 		aggiornaSaleFiltro();
 	}
 }
