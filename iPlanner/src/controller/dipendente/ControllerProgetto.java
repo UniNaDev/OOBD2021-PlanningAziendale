@@ -62,30 +62,20 @@ public class ControllerProgetto {
 		mieiProgettiFrame.setVisible(false);
 	}
 
-	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
-		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendenteLogged);
+	public ArrayList<Progetto> ottieniProgettiDipendente() throws SQLException {
+		ArrayList<CollaborazioneProgetto> collaborazioniDipendente = projDAO.ottieniProgettiDipendente(dipendenteLogged);
 		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-		for (CollaborazioneProgetto collaborazione: collaborazioni)
+		for (CollaborazioneProgetto collaborazione: collaborazioniDipendente)
 			progetti.add(collaborazione.getProgetto());
 		return progetti;
 	}
 	
 	public ArrayList<AmbitoProgetto> ottieniAmbiti() throws SQLException{
-		return ambitoDAO.getAmbiti();
+		return ambitoDAO.ottieniAmbiti();
 	}
 	
 	public ArrayList<String> ottieniTipologie() throws SQLException{
-		return projDAO.getTipologie();
-	}
-
-	//TODO: eliminabile probabilmente
-	public ArrayList<Dipendente> ottieniPartecipantiProgetto (int codiceProgetto) throws SQLException {
-		return projDAO.getPartecipantiProgettoSenzaRuolo(codiceProgetto);
-	}
-
-	//TODO: eliminabile probabilmente
-	public ArrayList<Meeting> ottieniMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException {
-		return projDAO.getMeetingRelativiProgetto(codProgettoSelezionato);
+		return projDAO.ottieniTipologie();
 	}
 
 	public boolean aggiornaProgetto(Progetto progettoModificato) {
@@ -93,11 +83,13 @@ public class ControllerProgetto {
 			projDAO.updateProgetto(progettoModificato);
 		} catch(SQLException e) {
 			//TODO: aggiungi altre eccezioni
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-			return false;
+			if(e.getSQLState().equals("23514")) {
+				JOptionPane.showMessageDialog(null,
+						"Controllare che la data di terminazione inserita non sia successiva alla data odierna."
+								+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		try {
 			ambitoDAO.deleteAmbitiProgetto(progettoModificato);
@@ -169,9 +161,9 @@ public class ControllerProgetto {
 		return ambitoDAO.getAmbitiProgettoByCodice(codProgetto);
 	}
 	
-	public boolean rimuoviProgetto (Progetto progetto) {
+	public boolean rimuoviProgetto(Progetto progetto) {
 		try {
-			projDAO.deleteProgetto(progetto);
+			projDAO.rimuoviProgetto(progetto);
 		} catch(SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					e.getMessage()
@@ -182,6 +174,7 @@ public class ControllerProgetto {
 		return true;
 	}
 
+	//TODO: eliminabile probabilmente
 	public void updateProgetto(Progetto progetto) throws SQLException {
 		projDAO.updateProgetto(progetto);
 		ambitoDAO.deleteAmbitiProgetto(progetto);

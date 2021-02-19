@@ -19,25 +19,23 @@ public class InvitatiListRenderer implements ListCellRenderer<PartecipazioneMeet
     private JTextArea ta;
     private JCheckBox cb;
     
-public InvitatiListRenderer() {
-    p = new JPanel();
-    p.setLayout(new BorderLayout());
-    
-    // text
-    ta = new JTextArea();
-    ta.setLineWrap(true);
-    ta.setWrapStyleWord(true);
-    ta.setFont(new Font("Consolas", Font.PLAIN, 15));
-    ta.setAlignmentX(Component.CENTER_ALIGNMENT);
-    p.add(ta, BorderLayout.CENTER);
-    
-    //checkbox
-    cb = new JCheckBox();
-    cb.setText("");
-    cb.setSelected(false);
-   
-    p.add(cb, BorderLayout.EAST);
-}
+	public InvitatiListRenderer() {
+	    p = new JPanel();
+	    p.setLayout(new BorderLayout());
+	    
+	    ta = new JTextArea();
+	    ta.setLineWrap(true);
+	    ta.setWrapStyleWord(true);
+	    ta.setFont(new Font("Consolas", Font.PLAIN, 15));
+	    ta.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    p.add(ta, BorderLayout.CENTER);
+	    
+	    cb = new JCheckBox();
+	    cb.setText("");
+	    cb.setSelected(false);
+	   
+	    p.add(cb, BorderLayout.EAST);
+	}
 
 	@Override
 	public Component getListCellRendererComponent(JList<? extends PartecipazioneMeeting> list,

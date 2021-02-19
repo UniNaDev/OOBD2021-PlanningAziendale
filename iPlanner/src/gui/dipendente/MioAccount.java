@@ -293,7 +293,7 @@ public class MioAccount extends JFrame {
 	    public void actionPerformed(ActionEvent e) {
 		if (provinciaComboBox.isEnabled())
 		    comuneComboBox.setEnabled(true);
-		aggiornaComboBoxComuni(controller);
+			aggiornaComboBoxComuni(controller);
 	    }
 	});
 	provinciaComboBox.setSelectedItem(dipendenteLogged.getLuogoNascita().getNomeProvincia());

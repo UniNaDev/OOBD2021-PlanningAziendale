@@ -66,7 +66,6 @@ public class ControllerPartecipantiProgetto {
 		} catch (SQLException e) {
 			
 			String unicitàProjectManager="P0004";
-			
 			if(e.getSQLState().equals(unicitàProjectManager))
 			JOptionPane.showMessageDialog(null, "Errore: Esiste già un project manager per questo progetto"
 					+ "\nN.B. Se si vuole effettuare un cambio di project Manager,aggiornare "
@@ -127,6 +126,6 @@ public class ControllerPartecipantiProgetto {
 	}
 
 	public ArrayList<String> ottieniTipologieProgetto() throws SQLException {
-		return projDAO.getTipologie();
+		return projDAO.ottieniTipologie();
 	}
 }

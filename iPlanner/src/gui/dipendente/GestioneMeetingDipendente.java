@@ -7,7 +7,6 @@
 package gui.dipendente;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -22,7 +21,6 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -31,13 +29,11 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
 import controller.dipendente.ControllerMeeting;
 import entita.Meeting;
 import entita.Progetto;
@@ -48,7 +44,6 @@ import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.DataComparator;
 import gui.tableModels.MeetingTableModel;
 import gui.tableModels.OrarioComparator;
-
 import javax.swing.JButton;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -105,7 +100,6 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JButton inserisciPartecipanteButton;
 	private JList invitatiList;
 	private JList progettoDiscussoList;
-
 	private JRadioButton filtroMeetingTelematicoRadioButton;
 	private JRadioButton filtroMeetingFisicoRadioButton;
 	private JComboBox filtroSaleComboBox = new JComboBox<SalaRiunione>();
@@ -428,7 +422,6 @@ public class GestioneMeetingDipendente extends JFrame {
 			public void mouseEntered(MouseEvent e) {
 				pulisciButton.setBackground(Color.LIGHT_GRAY);
 			}
-
 			@Override
 			public void mouseExited(MouseEvent e) {
 				pulisciButton.setBackground(Color.WHITE);
@@ -438,7 +431,6 @@ public class GestioneMeetingDipendente extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				svuotaCampiMeeting();
 			}
-
 		});
 
 		eliminaButton = new JButton("Elimina");
@@ -452,17 +444,14 @@ public class GestioneMeetingDipendente extends JFrame {
 		eliminaButton.setAlignmentX(0.5f);
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					
 					eliminaMeeting(controller);
 				}
-
 			});
 		eliminaButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				eliminaButton.setBackground(Color.LIGHT_GRAY);
 			}
-
 			@Override
 			public void mouseExited(MouseEvent e) {
 				eliminaButton.setBackground(Color.WHITE);
@@ -677,47 +666,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				//Viene utilizzato questo metodo per permettere l'aggiornamento della lista degli invitati al meeting
 				//in seguito a modifiche dei partecipanti ad esso
 				inizializzaTabellaMeeting(controller);
-				
-				int rigaSelezionata = meetingTable.getSelectedRow();
-				rigaSelezionata = meetingTable.convertColumnIndexToModel(rigaSelezionata);
-				meetingSelezionato = modelloTabellaMeeting.getSelected(rigaSelezionata);
-
-				LocalDate dataInizio = formatDate.parseLocalDate(meetingSelezionato.getDataInizio().toString(formatDate));
-				dataInizioAnnoComboBox.setSelectedItem(dataInizio.getYear());
-				dataInizioMeseComboBox.setSelectedIndex(dataInizio.getMonthOfYear() - 1);
-				dataInizioGiornoComboBox.setSelectedIndex(dataInizio.getDayOfMonth() - 1);
-
-				LocalDate dataFine = formatDate.parseLocalDate(meetingSelezionato.getDataFine().toString(formatDate));
-				dataFineAnnoComboBox.setSelectedItem(dataFine.getYear());
-				dataFineMeseComboBox.setSelectedIndex(dataFine.getMonthOfYear() - 1);
-				dataFineGiornoComboBox.setSelectedIndex(dataFine.getDayOfMonth() - 1);
-
-				LocalTime oraInizio = formatOra.parseLocalTime(meetingSelezionato.getOraInizio().toString(formatOra));
-				oraInizioComboBox.setSelectedIndex(oraInizio.getHourOfDay());
-				minutoInizioComboBox.setSelectedIndex(oraInizio.getMinuteOfHour());
-
-				LocalTime oraFine = formatOra.parseLocalTime(meetingSelezionato.getOraFine().toString(formatOra));
-				oraFineComboBox.setSelectedIndex(oraFine.getHourOfDay());
-				minutoFineComboBox.setSelectedIndex(oraFine.getMinuteOfHour());
-
-				if (meetingSelezionato.getPiattaforma() != null) {
-					piattaformaSalaLabel.setText("Piattaforma");
-					selezionaPiattaformaMeetingSelezionato(controller);
-					onlineRadioButton.setSelected(true);
-					fisicoRadioButton.setSelected(false);
-				} else {
-					piattaformaSalaLabel.setText("Sala");
-					selezionaSalaMeetingSelezionato(controller);
-					fisicoRadioButton.setSelected(true);
-					onlineRadioButton.setSelected(false);
-				}
-
-				progettoDiscussoComboBox.setSelectedItem(meetingSelezionato.getProgettoDiscusso());
-
-				modelloListaInvitati.removeAllElements();
-				modelloListaInvitati.addAll(meetingSelezionato.getPartecipantiAlMeeting());
-				invitatiList.setModel(modelloListaInvitati);
-
+				impostaInfoMeeting(controller);
 				checkOrganizzatore(controller);
 			}
 		});
@@ -927,11 +876,54 @@ public class GestioneMeetingDipendente extends JFrame {
 		infoPanel.add(infoPanel2);
 	}
 
-	// Altri metodi
-	// ------------------------------------------------------------------------------
+	private void impostaInfoMeeting(ControllerMeeting controller) {
+		int rigaSelezionata = meetingTable.getSelectedRow();
+		rigaSelezionata = meetingTable.convertColumnIndexToModel(rigaSelezionata);
+		meetingSelezionato = modelloTabellaMeeting.getSelected(rigaSelezionata);
+
+		LocalDate dataInizio = formatDate.parseLocalDate(meetingSelezionato.getDataInizio().toString(formatDate));
+		dataInizioAnnoComboBox.setSelectedItem(dataInizio.getYear());
+		dataInizioMeseComboBox.setSelectedIndex(dataInizio.getMonthOfYear() - 1);
+		dataInizioGiornoComboBox.setSelectedIndex(dataInizio.getDayOfMonth() - 1);
+
+		LocalDate dataFine = formatDate.parseLocalDate(meetingSelezionato.getDataFine().toString(formatDate));
+		dataFineAnnoComboBox.setSelectedItem(dataFine.getYear());
+		dataFineMeseComboBox.setSelectedIndex(dataFine.getMonthOfYear() - 1);
+		dataFineGiornoComboBox.setSelectedIndex(dataFine.getDayOfMonth() - 1);
+
+		LocalTime oraInizio = formatOra.parseLocalTime(meetingSelezionato.getOraInizio().toString(formatOra));
+		oraInizioComboBox.setSelectedIndex(oraInizio.getHourOfDay());
+		minutoInizioComboBox.setSelectedIndex(oraInizio.getMinuteOfHour());
+
+		LocalTime oraFine = formatOra.parseLocalTime(meetingSelezionato.getOraFine().toString(formatOra));
+		oraFineComboBox.setSelectedIndex(oraFine.getHourOfDay());
+		minutoFineComboBox.setSelectedIndex(oraFine.getMinuteOfHour());
+
+		if (meetingSelezionato.getPiattaforma() != null) {
+			piattaformaSalaLabel.setText("Piattaforma");
+			selezionaPiattaformaMeetingSelezionato(controller);
+			onlineRadioButton.setSelected(true);
+			fisicoRadioButton.setSelected(false);
+		} else {
+			piattaformaSalaLabel.setText("Sala");
+			selezionaSalaMeetingSelezionato(controller);
+			fisicoRadioButton.setSelected(true);
+			onlineRadioButton.setSelected(false);
+		}
+
+		progettoDiscussoComboBox.setSelectedItem(meetingSelezionato.getProgettoDiscusso());
+		aggiornaListaInvitati();
+	}
+
+	private void aggiornaListaInvitati() {
+		modelloListaInvitati.removeAllElements();
+		modelloListaInvitati.addAll(meetingSelezionato.getPartecipantiAlMeeting());
+		invitatiList.setModel(modelloListaInvitati);
+	}
+
 	private void inizializzaTabellaMeeting(ControllerMeeting controller) {
 		try {
-			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeeting());
+			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeetingDipendente());
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					e.getMessage()
@@ -1197,7 +1189,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	
 	private void aggiornaTabella(ControllerMeeting controller) {
 		try {
-			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeeting());
+			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeetingDipendente());
 			modelloTabellaMeeting.fireTableDataChanged();
 			sorterMeeting.setModel(modelloTabellaMeeting);
 		} catch (SQLException e) {

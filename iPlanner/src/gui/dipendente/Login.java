@@ -141,7 +141,7 @@ public class Login extends JFrame {
 		});
 		annullaButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	controller.tornaAIPlanner();
+		    	controller.tornaAdIPlanner();
 		    }
 		});
 	
@@ -200,8 +200,6 @@ public class Login extends JFrame {
 			    JOptionPane.OK_OPTION);
 		    
 		} else {
-		    String email = emailTextField.getText();
-		    String password = passwordField.getText();
 		    try {
 		    	controller.eseguiLoginDipendente(emailTextField.getText(), passwordField.getText());
 		    } catch (SQLException e1) {

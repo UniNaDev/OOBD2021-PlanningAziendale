@@ -63,12 +63,12 @@ public class ControllerMeeting {
 		ControllerPartecipantiMeeting controller = new ControllerPartecipantiMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendenteLogged, meetingSelezionato);
 	}
 	
-	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
-		return meetDAO.getMeetingsByInvitato(dipendenteLogged);
+	public ArrayList<Meeting> ottieniMeetingDipendente() throws SQLException {
+		return meetDAO.ottieniMeetingDipendente(dipendenteLogged);
 	}
 	
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
-		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.getProgettiByDipendente(dipendenteLogged);
+		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.ottieniProgettiDipendente(dipendenteLogged);
 		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
 		for (CollaborazioneProgetto collaborazione: collaborazioni)
 			progetti.add(collaborazione.getProgetto());
@@ -80,7 +80,7 @@ public class ControllerMeeting {
 	}
 	
 	public ArrayList<String> ottieniPiattaforme() throws SQLException{
-		return meetDAO.getPiattaforme();
+		return meetDAO.ottieniPiattaforme();
 	}
 	
 	public boolean aggiornaMeeting(Meeting meeting) {

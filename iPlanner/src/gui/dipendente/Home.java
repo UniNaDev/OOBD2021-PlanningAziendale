@@ -54,6 +54,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class Home extends JFrame {
     private JPanel contentPane;
@@ -326,7 +328,7 @@ public class Home extends JFrame {
     // ------------------------------------------------
     private void inizializzaListaMeeting(ControllerGestioneProfilo controller) {
 	try {
-	    modelloListaMeeting.addAll(controller.ottieniMeeting());
+	    modelloListaMeeting.addAll(controller.ottieniMeetingDipendente());
 	    meetingList.setModel(modelloListaMeeting);
 	} catch (SQLException e) {
 	    JOptionPane.showMessageDialog(null,
@@ -339,7 +341,7 @@ public class Home extends JFrame {
     private void inizializzaListaProgetti(ControllerGestioneProfilo controller) {
 	try {
 	    ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-	    for (CollaborazioneProgetto collaborazione : controller.ottieniProgetti())
+	    for (CollaborazioneProgetto collaborazione : controller.ottieniProgettiDipendente())
 		progetti.add(collaborazione.getProgetto());
 	    modelloListaProgetti.addAll(progetti);
 	    progettiList.setModel(modelloListaProgetti);

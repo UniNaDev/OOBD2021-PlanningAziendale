@@ -10,7 +10,7 @@ import entita.Progetto;
 
 
 public interface AmbitoProgettoDAO {
-	public ArrayList<AmbitoProgetto> getAmbiti() throws SQLException;
+	public ArrayList<AmbitoProgetto> ottieniAmbiti() throws SQLException;
 	
 	public boolean insertAmbito(AmbitoProgetto ambito) throws SQLException;
 	

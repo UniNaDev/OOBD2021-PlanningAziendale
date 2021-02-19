@@ -448,7 +448,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 	
 	private void setModelloInvitatiList(ControllerMeetingSegreteria controller, Meeting meeting) {
 		try {
-			invitatiListModel.addAll(controller.ottieniPartecipanti(meeting));
+			invitatiListModel.addAll(controller.ottieniInvitatiMeeting(meeting));
 			invitatiList.setModel(invitatiListModel);
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,

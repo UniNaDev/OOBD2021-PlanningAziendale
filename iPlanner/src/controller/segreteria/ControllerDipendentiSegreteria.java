@@ -58,11 +58,11 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	public ArrayList<String> ottieniProvince() throws SQLException{
-		return luogoDAO.getProvince();
+		return luogoDAO.ottieniProvince();
 	}
 	
 	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException{
-		return luogoDAO.getLuoghiByProvincia(provincia);
+		return luogoDAO.ottieniComuni(provincia);
 	}
 	
 	public void creaDipendente(Dipendente dipendente) throws SQLException {

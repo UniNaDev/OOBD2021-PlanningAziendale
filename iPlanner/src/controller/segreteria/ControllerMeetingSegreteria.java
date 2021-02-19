@@ -73,8 +73,8 @@ public class ControllerMeetingSegreteria {
 		return meetDAO.getMeetings();
 	}
 	
-	public ArrayList<PartecipazioneMeeting> ottieniPartecipanti(Meeting meeting) throws SQLException{
-		return meetDAO.getInvitatiPartecipazioneMeeting(meeting.getIdMeeting());
+	public ArrayList<PartecipazioneMeeting> ottieniInvitatiMeeting(Meeting meeting) throws SQLException{
+		return meetDAO.ottieniInvitatiMeeting(meeting.getIdMeeting());
 	}
 
 	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
@@ -84,7 +84,7 @@ public class ControllerMeetingSegreteria {
 	}
 	
 	public ArrayList<String> ottieniPiattaforme() throws SQLException{
-		ArrayList<String> piattaforme = meetDAO.getPiattaforme();
+		ArrayList<String> piattaforme = meetDAO.ottieniPiattaforme();
 		piattaforme.add(0, null);
 		return piattaforme;
 	}

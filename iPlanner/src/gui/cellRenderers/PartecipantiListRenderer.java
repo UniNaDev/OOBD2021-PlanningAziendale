@@ -23,7 +23,6 @@ public class PartecipantiListRenderer implements ListCellRenderer<Collaborazione
         p = new JPanel();
         p.setLayout(new BorderLayout());
         
-        // text
         ta = new JTextArea();
         ta.setLineWrap(true);
         ta.setWrapStyleWord(true);

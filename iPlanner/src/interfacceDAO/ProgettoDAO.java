@@ -22,11 +22,11 @@ public interface ProgettoDAO {
 	
 	public ArrayList<Meeting> getMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException;
 	
-	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dip) throws SQLException;
+	public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente(Dipendente dip) throws SQLException;
 	
 	public boolean insertProgetto(Progetto proj) throws SQLException;
 	
-	public boolean deleteProgetto(Progetto proj) throws SQLException;
+	public boolean rimuoviProgetto(Progetto proj) throws SQLException;
 	
 	public boolean insertPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
 	
@@ -38,7 +38,7 @@ public interface ProgettoDAO {
 	
 	public Progetto getProgettoByCod(int codProgetto) throws SQLException;
 	
-	public ArrayList<String> getTipologie() throws SQLException;
+	public ArrayList<String> ottieniTipologie() throws SQLException;
 	
 	public String getCFProjectManager(Progetto progetto) throws SQLException;
 	

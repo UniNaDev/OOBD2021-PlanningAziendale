@@ -36,10 +36,10 @@ public class ControllerStart {
 		iPlannerFrame.setVisible(true);		
 	}
 	
-	public void apriLogin() {
+	public void apriGUILoginDipendente() {
 		iPlannerFrame.setVisible(false);
 		ControllerAccesso controller = new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
-		controller.apriLogin();
+		controller.apriGUILoginDipendente();
 	}
 	
 	public void apriAutenticazioneSegreteria() {

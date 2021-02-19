@@ -27,7 +27,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 	}
 	
 	@Override
-	public ArrayList<AmbitoProgetto> getAmbiti() throws SQLException {
+	public ArrayList<AmbitoProgetto> ottieniAmbiti() throws SQLException {
 		ResultSet risultato = getAmbitiPS.executeQuery();
 		ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
 		

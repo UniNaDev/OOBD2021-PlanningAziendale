@@ -29,7 +29,6 @@ public class ProgettoDiscussoListRenderer implements ListCellRenderer<Progetto> 
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
-        // text
         textArea = new JTextArea();
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
@@ -44,16 +43,16 @@ public class ProgettoDiscussoListRenderer implements ListCellRenderer<Progetto> 
 	public Component getListCellRendererComponent(JList<? extends Progetto> list, Progetto progetto, int index,
 			boolean isSelected, boolean cellHasFocus) {
 		
-		String temp="Nome:"+progetto.getNomeProgetto()
+		String progettoDiscussoTesto="Nome:"+progetto.getNomeProgetto()
 				+"\n Data creazione:"+progetto.getDataCreazione().toString(formatDate)
 				+"\n Data scadenza:"+progetto.getScadenza().toString(formatDate)+"\n Data terminazione:";
 		
 		if(progetto.getDataTerminazione()!=null)
-			temp+=progetto.getDataTerminazione().toString(formatDate);
+			progettoDiscussoTesto+=progetto.getDataTerminazione().toString(formatDate);
 		else
-			temp+="In corso";
+			progettoDiscussoTesto+="In corso";
 		
-		textArea.setText(temp);
+		textArea.setText(progettoDiscussoTesto);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         if (isSelected)

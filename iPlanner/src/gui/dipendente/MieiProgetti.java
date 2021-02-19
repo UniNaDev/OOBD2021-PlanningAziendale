@@ -298,7 +298,7 @@ public class MieiProgetti extends JFrame {
 
 	private void inizializzaListaProgetti(ControllerProgetto controller) {
 		try {
-			modelloListaProgetti.addAll(controller.ottieniProgetti());
+			modelloListaProgetti.addAll(controller.ottieniProgettiDipendente());
 		    progettiList.setModel(modelloListaProgetti);
 		} catch (SQLException e) {
 		    JOptionPane.showMessageDialog(null,

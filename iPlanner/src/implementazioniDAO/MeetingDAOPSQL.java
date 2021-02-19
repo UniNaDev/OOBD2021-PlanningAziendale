@@ -35,7 +35,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 	private DipendenteDAO dipDAO = null;
 	private SalaRiunioneDAO salaDAO = null;
-	private PreparedStatement getMeetingsPS, getMeetingByIdPS, getMeetingsByInvitatoPS, getInvitatiPS, addMeetingPS,
+	private PreparedStatement getMeetingsPS, getMeetingByIdPS, ottieniMeetingDipendendentePS, getInvitatiPS, addMeetingPS,
 			removeMeetingPS, updateMeetingPS, getMeetingsBySalaPS, getMeetingsByPiattaformaPS, getPiattaformePS,
 			addPresenzaOrganizzatorePS, getIdProgettoDiscussoPS, getUltimoIDMeeting, removePresenzeMeetingEliminato,
 			aggiungiPartecipanteMeetingPS, eliminaPartecipanteMeetingPS, aggiornaPresenzaMeetingPS,
@@ -48,7 +48,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		getMeetingsPS = connection.prepareStatement("SELECT * FROM Meeting AS m ORDER BY m.DataInizio,m.OrarioInizio");
 		getInvitatiPS = connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza AS p WHERE p.IDMeeting = ?");
 		getMeetingByIdPS = connection.prepareStatement("SELECT * FROM Meeting WHERE idMeeting=?");
-		getMeetingsByInvitatoPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ?) ORDER BY m.DataInizio, m.OrarioInizio");
+		ottieniMeetingDipendendentePS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ?) ORDER BY m.DataInizio, m.OrarioInizio");
 		addMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, CodSala,CodProgetto) VALUES (?,?,?,?,?,?,?,?)");
 		removeMeetingPS = connection.prepareStatement("DELETE FROM Meeting AS m WHERE m.IDMeeting = ?");
 		updateMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, CodSala = ? , CodProgetto= ? WHERE IDMeeting = ?");
@@ -94,10 +94,10 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 
 	@Override
-	public ArrayList<Meeting> getMeetingsByInvitato(Dipendente dip) throws SQLException {
-		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-		getMeetingsByInvitatoPS.setString(1, dip.getCf());
-		ResultSet risultato = getMeetingsByInvitatoPS.executeQuery();
+	public ArrayList<Meeting> ottieniMeetingDipendente(Dipendente dip) throws SQLException {
+		ArrayList<Meeting> meetingDipendente = new ArrayList<Meeting>();
+		ottieniMeetingDipendendentePS.setString(1, dip.getCf());
+		ResultSet risultato = ottieniMeetingDipendendentePS.executeQuery();
 
 		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
 		ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
@@ -110,15 +110,15 @@ public class MeetingDAOPSQL implements MeetingDAO {
 					salaDAO.getSalaByCod(risultato.getString("CodSala")));
 			meetingTemp.setProgettoDiscusso(projDAO.getProgettoByCod(risultato.getInt("CodProgetto")));
 			meetingTemp.setPartecipazioniDipendenti(getInvitati(risultato.getInt("idMeeting")));
-			meetingTemp.setPartecipantiAlMeeting(getInvitatiPartecipazioneMeeting(risultato.getInt("idMeeting")));
-			meetings.add(meetingTemp);
+			meetingTemp.setPartecipantiAlMeeting(ottieniInvitatiMeeting(risultato.getInt("idMeeting")));
+			meetingDipendente.add(meetingTemp);
 		}
 		risultato.close();
 
-		return meetings;
+		return meetingDipendente;
 	}
 
-	public ArrayList<PartecipazioneMeeting> getInvitatiPartecipazioneMeeting(int idMeeting) throws SQLException {
+	public ArrayList<PartecipazioneMeeting> ottieniInvitatiMeeting(int idMeeting) throws SQLException {
 		ArrayList<PartecipazioneMeeting> partecipazioni = new ArrayList<PartecipazioneMeeting>();
 		dipDAO = new DipendenteDAOPSQL(connection);
 		getInvitatiPS.setInt(1, idMeeting);
@@ -306,7 +306,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 
 	@Override
-	public ArrayList<String> getPiattaforme() throws SQLException {
+	public ArrayList<String> ottieniPiattaforme() throws SQLException {
 		ArrayList<String> piattaforme = new ArrayList<String>();
 		ResultSet risultato = getPiattaformePS.executeQuery();
 

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import entita.LuogoNascita;
 
 public interface LuogoNascitaDAO {
-	public ArrayList<String> getProvince() throws SQLException;
+	public ArrayList<String> ottieniProvince() throws SQLException;
 	
-	public ArrayList<LuogoNascita> getLuoghiByProvincia(String provincia) throws SQLException;
+	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException;
 	
 	public LuogoNascita getLuogoByCod(String codComune) throws SQLException;
 }

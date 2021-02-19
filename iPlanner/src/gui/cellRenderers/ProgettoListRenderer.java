@@ -29,7 +29,6 @@ public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
-       
         textArea = new JTextArea();
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
@@ -37,19 +36,17 @@ public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
         textArea.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(textArea, BorderLayout.CENTER);
     }
-	
-	
 
 	@Override
 	public Component getListCellRendererComponent(JList<? extends Progetto> list, Progetto progetto, int index,
 			boolean isSelected, boolean cellHasFocus) {
 		
-		String temp ="Nome:"+progetto.getNomeProgetto();
+		String infoProgetto ="Nome:"+progetto.getNomeProgetto();
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 		
-		temp += "\nScade:" +progetto.getScadenza().toString(formatDate);
+		infoProgetto += "\nScade:" +progetto.getScadenza().toString(formatDate);
 		
-		textArea.setText(temp);
+		textArea.setText(infoProgetto);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         if (isSelected)

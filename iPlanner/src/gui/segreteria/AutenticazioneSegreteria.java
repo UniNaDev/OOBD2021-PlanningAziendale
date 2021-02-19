@@ -98,7 +98,7 @@ public class AutenticazioneSegreteria extends JFrame {
 		JButton annullaButton = new JButton("Annulla");
 		annullaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.tornaAIPlanner();
+				controller.tornaAdIPlanner();
 			}
 		});
 		annullaButton.addMouseListener(new MouseAdapter() {

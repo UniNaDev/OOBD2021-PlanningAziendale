@@ -69,13 +69,13 @@ public class ControllerProgettiSegreteria {
 	}
 	
 	public ArrayList<AmbitoProgetto> ottieniTuttiAmbiti() throws SQLException{
-		ArrayList<AmbitoProgetto> temp = ambitoDAO.getAmbiti();
+		ArrayList<AmbitoProgetto> temp = ambitoDAO.ottieniAmbiti();
 		temp.add(0,null);
 		return temp;
 	}
 	
 	public ArrayList<String> ottieniTipologie() throws SQLException{
-		ArrayList<String> temp = projDAO.getTipologie();
+		ArrayList<String> temp = projDAO.ottieniTipologie();
 		temp.add(0,null);
 		return temp;
 	}

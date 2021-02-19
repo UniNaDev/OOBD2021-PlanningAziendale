@@ -82,12 +82,12 @@ public class ControllerGestioneProfilo {
 		homeFrame.setVisible(true);
     }
 
-    public ArrayList<CollaborazioneProgetto> ottieniProgetti() throws SQLException {
-    	return projDAO.getProgettiByDipendente(dipendenteLogged);
+    public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente() throws SQLException {
+    	return projDAO.ottieniProgettiDipendente(dipendenteLogged);
     }
 
-    public ArrayList<Meeting> ottieniMeeting() throws SQLException {
-    	return meetDAO.getMeetingsByInvitato(dipendenteLogged);
+    public ArrayList<Meeting> ottieniMeetingDipendente() throws SQLException {
+    	return meetDAO.ottieniMeetingDipendente(dipendenteLogged);
     }
 
     public void aggiornaInfoDipendente(Dipendente dipendenteModificato) throws SQLException {
@@ -95,10 +95,10 @@ public class ControllerGestioneProfilo {
     }
 
     public ArrayList<String> ottieniProvince() throws SQLException {
-    	return luogoDAO.getProvince();
+    	return luogoDAO.ottieniProvince();
     }
 
     public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException {
-    	return luogoDAO.getLuoghiByProvincia(provincia);
+    	return luogoDAO.ottieniComuni(provincia);
     }
 }

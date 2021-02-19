@@ -56,7 +56,7 @@ public class ControllerPartecipantiMeeting {
 	}
 	
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
-		return meetDAO.getMeetingsByInvitato(dipendenteLogged);
+		return meetDAO.ottieniMeetingDipendente(dipendenteLogged);
 	}
 	
 	public ArrayList<Dipendente> ottieniDipendenti(Meeting meetingSelezionato) throws SQLException{

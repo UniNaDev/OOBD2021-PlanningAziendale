@@ -108,7 +108,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));
 			
-			dipendenteTemp.setPartecipa(meetDAO.getMeetingsByInvitato(dipendenteTemp));
+			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
 			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);
@@ -141,7 +141,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));
 			
-			dipendenteTemp.setPartecipa(meetDAO.getMeetingsByInvitato(dipendenteTemp));
+			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
 			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);
@@ -217,20 +217,20 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	}
 
 	@Override
-	public Dipendente getLoggedDipendente(String email, String password) throws SQLException {
+	public Dipendente eseguiLoginDipendente(String email, String password) throws SQLException {
 		loginCheckPS.setString(1, email);
 		loginCheckPS.setString(2, password);
 		ResultSet risultato = loginCheckPS.executeQuery();
-		
 		risultato.next();
-		LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
 		
-		Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"), 
+		LuogoNascita luogoNascitaDipendente = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+		
+		Dipendente dipendenteLoggato = new Dipendente(risultato.getString("CF"), 
 				risultato.getString("Nome"),
 				risultato.getString("Cognome"),
 				risultato.getString("Sesso").charAt(0),
 				new LocalDate(risultato.getDate("DataNascita")),
-				luogoTemp,
+				luogoNascitaDipendente,
 				risultato.getString("Indirizzo"),
 				risultato.getString("Email"),
 				risultato.getString("TelefonoCasa"),
@@ -239,16 +239,17 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 				risultato.getString("Password"),
 				this.getValutazione(risultato.getString("CF")));
 		
+		dipendenteLoggato.setSkills(skillDAO.getSkillsDipendente(dipendenteLoggato.getCf()));
+		
 		risultato.close();
 		
-		return dipendenteTemp;
+		return dipendenteLoggato;
 	}
 
 	@Override
 	public Dipendente getDipendenteByCF(String cf) throws SQLException {
 		getDipendenteByCFPS.setString(1, cf);
 		ResultSet risultato = getDipendenteByCFPS.executeQuery();
-		
 		risultato.next();
 		
 		LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
@@ -397,7 +398,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));
 			
-			tempDip.setPartecipa(meetDAO.getMeetingsByInvitato(tempDip));
+			tempDip.setPartecipa(meetDAO.ottieniMeetingDipendente(tempDip));
 			tempDip.setCollaborazioni(projDAO.getPartecipantiProgetto(progettoSelezionato.getIdProgettto()));
 			tempDip.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			tempDip.setTipologieProgetto(getTipologieProgettoDipendente(tempDip.getCf()));
@@ -458,7 +459,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));
 			
-			dipendenteTemp.setPartecipa(meetDAO.getMeetingsByInvitato(dipendenteTemp));
+			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
 			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);
@@ -492,7 +493,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Password"),
 					this.getValutazione(risultato.getString("CF")));
 			
-			dipendenteTemp.setPartecipa(meetDAO.getMeetingsByInvitato(dipendenteTemp));
+			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
 			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);

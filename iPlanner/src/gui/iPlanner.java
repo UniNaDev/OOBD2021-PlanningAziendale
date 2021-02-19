@@ -22,13 +22,11 @@ import javax.swing.ImageIcon;
 
 public class iPlanner extends JFrame {
 	private JPanel contentPane;
-	private JLabel loginLabel;	
-	private JLabel gestisciDipendentiLabel;
+	private JLabel loginLabel;
+	private JLabel areaSegreteriaLabel;
 	private JLabel benvenutoLabel;
 	private JLabel iconaDipendenteLabel;
-	private JLabel gestisciMeetingLabel;
-	private JLabel gestisciProgettiLabel;
- 
+
 	private final String devs = "UninaDevs";
 	private final String versione = "0.0.1";
 
@@ -60,7 +58,7 @@ public class iPlanner extends JFrame {
 		loginLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.apriLogin();
+				controller.apriGUILoginDipendente();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) 
@@ -74,7 +72,7 @@ public class iPlanner extends JFrame {
 			}
 		});
 		
-		JLabel areaSegreteriaLabel = new JLabel("Area Segreteria");
+		areaSegreteriaLabel = new JLabel("Area Segreteria");
 		areaSegreteriaLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		areaSegreteriaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		areaSegreteriaLabel.setForeground(Color.BLACK);

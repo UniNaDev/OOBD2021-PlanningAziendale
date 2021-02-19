@@ -167,7 +167,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public ArrayList<CollaborazioneProgetto> getProgettiByDipendente(Dipendente dipendente) throws SQLException {
+	public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente(Dipendente dipendente) throws SQLException {
 		getProgettiByDipendentePS.setString(1, dipendente.getCf());
 		ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();
 		
@@ -291,7 +291,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public boolean deleteProgetto(Progetto proj) throws SQLException {
+	public boolean rimuoviProgetto(Progetto proj) throws SQLException {
 		deleteProgettoPS.setInt(1, proj.getIdProgettto());
 		
 		int record = deleteProgettoPS.executeUpdate();
@@ -381,7 +381,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public ArrayList<String> getTipologie() throws SQLException {
+	public ArrayList<String> ottieniTipologie() throws SQLException {
 		ArrayList<String> tipologie = new ArrayList<String>();
 		
 		ResultSet risultato = getTipologiePS.executeQuery();

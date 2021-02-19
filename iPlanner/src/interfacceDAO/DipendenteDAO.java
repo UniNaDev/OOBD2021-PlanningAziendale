@@ -25,7 +25,7 @@ public interface DipendenteDAO {
 	
 	public ArrayList<Dipendente> getDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException;
 	
-	public Dipendente getLoggedDipendente(String email, String password) throws SQLException;
+	public Dipendente eseguiLoginDipendente(String email, String password) throws SQLException;
 	
 	public float getValutazione(String cf) throws SQLException;
 	

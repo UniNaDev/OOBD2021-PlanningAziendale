@@ -38,16 +38,16 @@ public class ControllerAccesso {
 
     public ControllerAccesso(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO,
 	    SkillDAO skillDAO, SalaRiunioneDAO salaDAO, AmbitoProgettoDAO ambitoDAO) {
-	this.luogoDAO = luogoDAO;
-	this.dipDAO = dipDAO;
-	this.projDAO = projDAO;
-	this.meetDAO = meetDAO;
-	this.skillDAO = skillDAO;
-	this.salaDAO = salaDAO;
-	this.ambitoDAO = ambitoDAO;
+		this.luogoDAO = luogoDAO;
+		this.dipDAO = dipDAO;
+		this.projDAO = projDAO;
+		this.meetDAO = meetDAO;
+		this.skillDAO = skillDAO;
+		this.salaDAO = salaDAO;
+		this.ambitoDAO = ambitoDAO;
     }
     
-    public void apriLogin() {
+    public void apriGUILoginDipendente() {
     	loginFrame = new Login(this);
     	loginFrame.setVisible(true);
     }
@@ -58,15 +58,9 @@ public class ControllerAccesso {
     }
 
     public void eseguiLoginDipendente(String email, String password) throws SQLException {
-		dipendenteLogged = dipDAO.getLoggedDipendente(email, password);
-		try {
-		    dipendenteLogged.setSkills(skillDAO.getSkillsDipendente(dipendenteLogged.getCf()));
-		} catch (SQLException e) {
-		    JOptionPane.showMessageDialog(null,
-			    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-		}
+		//Esegue il login del dipendente,se ha successo viene restituito il dipendente che ha fatto il login
+    	//Altrimenti viene lanciata un'eccezione
+    	dipendenteLogged = dipDAO.eseguiLoginDipendente(email, password);
 		loginFrame.setVisible(false);
 		ControllerGestioneProfilo controller = new ControllerGestioneProfilo(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, dipendenteLogged);
     }
@@ -81,11 +75,11 @@ public class ControllerAccesso {
     				"Password errata.",
     				"Autenticazione Fallita",
     				JOptionPane.ERROR_MESSAGE);
-    		tornaAIPlanner();
+    		tornaAdIPlanner();
     	}
     }
 
-    public void tornaAIPlanner() {
+    public void tornaAdIPlanner() {
     	if (loginFrame != null)
     		loginFrame.setVisible(false);
     	if (autenticazioneSegreteriaFrame != null)

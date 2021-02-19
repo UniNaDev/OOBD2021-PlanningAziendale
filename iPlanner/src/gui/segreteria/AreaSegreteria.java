@@ -22,8 +22,7 @@ import controller.segreteria.ControllerAreaSegreteria;
 import gui.iPlanner;
 
 public class AreaSegreteria extends JFrame {
-	private JPanel contentPane;
-	private JLabel loginLabel;	
+	private JPanel contentPane;	
 	private JLabel gestisciDipendentiLabel;
 	private JLabel benvenutoLabel;
 	private JLabel iconaDipendenteLabel;

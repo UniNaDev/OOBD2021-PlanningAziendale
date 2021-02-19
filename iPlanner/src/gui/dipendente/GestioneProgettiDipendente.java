@@ -426,8 +426,10 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					if(progettiTable.getSelectedRow()!=-1) {
-						Progetto progetto= modelloTabellaProgetti.getSelected(progettiTable.convertColumnIndexToModel(progettiTable.getSelectedRow()));
-						controller.apriInserisciPartecipantiProgetto(progetto);
+						int rigaSelezionata = progettiTable.getSelectedRow();	
+						rigaSelezionata = progettiTable.convertRowIndexToModel(rigaSelezionata);
+						progettoSelezionato = modelloTabellaProgetti.getSelected(rigaSelezionata);
+						controller.apriInserisciPartecipantiProgetto(progettoSelezionato);
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella");	
@@ -630,7 +632,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		modelloTabellaProgetti = new ProgettoTableModel();
 		progettiTable = new JTable(modelloTabellaProgetti);
-		inizializzaTabella(controller);
+		inizializzaTabellaProgetti(controller);
 		progettiTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		progettiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		progettiTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -641,56 +643,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettiTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int rigaSelezionata = progettiTable.getSelectedRow();	
-				rigaSelezionata = progettiTable.convertRowIndexToModel(rigaSelezionata);
-				progettoSelezionato = modelloTabellaProgetti.getSelected(rigaSelezionata);
-				
-				nomeProgettoTextField.setText(progettoSelezionato.getNomeProgetto());
-				descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());
-				
-				if(progettoSelezionato.getDataTerminazione() != null) {
-						annoTerminazioneComboBox.setSelectedItem(progettoSelezionato.getDataTerminazione().getYear());
-						meseTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getMonthOfYear()-1);
-						giornoTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getDayOfMonth()-1);
-						progettoTerminatoCheckBox.setSelected(true);
-						annoTerminazioneComboBox.setEnabled(false);
-						meseTerminazioneComboBox.setEnabled(false);
-						giornoTerminazioneComboBox.setEnabled(false);
-					}
-					else {
-						annoTerminazioneComboBox.setSelectedItem(null);
-						meseTerminazioneComboBox.setSelectedItem(null);
-						giornoTerminazioneComboBox.setSelectedItem(null);
-						progettoTerminatoCheckBox.setSelected(false);
-					}
-				
-				if (progettoSelezionato.getScadenza() != null) {
-					annoScadenzaComboBox.setSelectedItem(progettoSelezionato.getScadenza().getYear());
-					meseScadenzaComboBox.setSelectedIndex(progettoSelezionato.getScadenza().getMonthOfYear()-1);
-					giornoScadenzaComboBox.setSelectedIndex(progettoSelezionato.getScadenza().getDayOfMonth()-1);
-				}
-				else {
-					annoScadenzaComboBox.setSelectedItem(null);
-					meseScadenzaComboBox.setSelectedItem(null);
-					giornoScadenzaComboBox.setSelectedItem(null);
-				}
-					
-				int[] ambitiSelezionati = new int[progettoSelezionato.getAmbiti().size()];
-				for (int i = 0; i < ambitiSelezionati.length; i++) {
-					ambitiSelezionati[i] = modelloListaAmbiti.indexOf(progettoSelezionato.getAmbiti().get(i));
-				}
-				ambitiList.setSelectedIndices(ambitiSelezionati);
-				
-				tipologiaComboBox.setSelectedItem(progettoSelezionato.getTipoProgetto());
-				
-				modelloListaPartecipanti.clear();
-				modelloListaPartecipanti.addAll(progettoSelezionato.getCollaborazioni());
-				partecipantiList.setModel(modelloListaPartecipanti);
-				
-				modelloListaMeetingRelativi.clear();
-				modelloListaMeetingRelativi.addAll(progettoSelezionato.getMeetingsRelativi());
-				meetingRelativiList.setModel(modelloListaMeetingRelativi);
-				
+				inizializzaTabellaProgetti(controller);
+				impostaInfoProgetto();
 				checkProjectManager(controller);
 			}
 		});
@@ -922,18 +876,73 @@ public class GestioneProgettiDipendente extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 		
-
 		infoPanel2.setLayout(gl_infoPanel2);
 		infoPanel.add(infoPanel2);
 		panel.setLayout(gl_panel);
 	}
 	
-	//Altri metodi
-	//-----------------------------------------------------------------
-	private void inizializzaTabella(ControllerProgetto controller) {
+	private void impostaInfoProgetto() {
+		int rigaSelezionata = progettiTable.getSelectedRow();	
+		rigaSelezionata = progettiTable.convertRowIndexToModel(rigaSelezionata);
+		progettoSelezionato = modelloTabellaProgetti.getSelected(rigaSelezionata);
+		
+		nomeProgettoTextField.setText(progettoSelezionato.getNomeProgetto());
+		descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());
+		
+		if(progettoSelezionato.getDataTerminazione() != null) {
+				annoTerminazioneComboBox.setSelectedItem(progettoSelezionato.getDataTerminazione().getYear());
+				meseTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getMonthOfYear()-1);
+				giornoTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getDayOfMonth()-1);
+				progettoTerminatoCheckBox.setSelected(true);
+				annoTerminazioneComboBox.setEnabled(false);
+				meseTerminazioneComboBox.setEnabled(false);
+				giornoTerminazioneComboBox.setEnabled(false);
+			}
+			else {
+				annoTerminazioneComboBox.setSelectedItem(null);
+				meseTerminazioneComboBox.setSelectedItem(null);
+				giornoTerminazioneComboBox.setSelectedItem(null);
+				progettoTerminatoCheckBox.setSelected(false);
+			}
+		
+		if (progettoSelezionato.getScadenza() != null) {
+			annoScadenzaComboBox.setSelectedItem(progettoSelezionato.getScadenza().getYear());
+			meseScadenzaComboBox.setSelectedIndex(progettoSelezionato.getScadenza().getMonthOfYear()-1);
+			giornoScadenzaComboBox.setSelectedIndex(progettoSelezionato.getScadenza().getDayOfMonth()-1);
+		}
+		else {
+			annoScadenzaComboBox.setSelectedItem(null);
+			meseScadenzaComboBox.setSelectedItem(null);
+			giornoScadenzaComboBox.setSelectedItem(null);
+		}
+			
+		int[] ambitiSelezionati = new int[progettoSelezionato.getAmbiti().size()];
+		for (int i = 0; i < ambitiSelezionati.length; i++) {
+			ambitiSelezionati[i] = modelloListaAmbiti.indexOf(progettoSelezionato.getAmbiti().get(i));
+		}
+		ambitiList.setSelectedIndices(ambitiSelezionati);
+		
+		tipologiaComboBox.setSelectedItem(progettoSelezionato.getTipoProgetto());
+		
+		aggiornaListaPartecipanti();
+		aggiornaListaMeetingRelativi();
+	}
+
+	private void aggiornaListaMeetingRelativi() {
+		modelloListaMeetingRelativi.clear();
+		modelloListaMeetingRelativi.addAll(progettoSelezionato.getMeetingsRelativi());
+		meetingRelativiList.setModel(modelloListaMeetingRelativi);
+	}
+
+	private void aggiornaListaPartecipanti() {
+		modelloListaPartecipanti.removeAllElements();;
+		modelloListaPartecipanti.addAll(progettoSelezionato.getCollaborazioni());
+		partecipantiList.setModel(modelloListaPartecipanti);
+	}
+
+	private void inizializzaTabellaProgetti(ControllerProgetto controller) {
 		try {
-			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgetti());
-			modelloTabellaProgetti.fireTableDataChanged();
+			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiDipendente());
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					e.getMessage()
@@ -1042,10 +1051,10 @@ public class GestioneProgettiDipendente extends JFrame {
 				progettoSelezionato.setScadenza(dataScadenza);
 			if (dataTerminazione != null)
 				progettoSelezionato.setDataTerminazione(dataTerminazione);
-			progettoSelezionato.setNomeProgetto(nomeProgetto);
-			progettoSelezionato.setDescrizioneProgetto(descrizioneProgetto);
-			progettoSelezionato.setAmbiti(ambiti);
-			progettoSelezionato.setTipoProgetto(tipologia);
+				progettoSelezionato.setNomeProgetto(nomeProgetto);
+				progettoSelezionato.setDescrizioneProgetto(descrizioneProgetto);
+				progettoSelezionato.setAmbiti(ambiti);
+				progettoSelezionato.setTipoProgetto(tipologia);
 			
 			if (controller.aggiornaProgetto(progettoSelezionato)) {
 				JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
@@ -1099,7 +1108,7 @@ public class GestioneProgettiDipendente extends JFrame {
 	
 	private void aggiornaTabella(ControllerProgetto controller) {
 		try {
-			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgetti());
+			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiDipendente());
 			modelloTabellaProgetti.fireTableDataChanged();
 			pulisciCampi();
 		} catch (SQLException e) {
@@ -1129,7 +1138,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		meseScadenzaComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);				
 		annoScadenzaComboBox.setSelectedIndex(1); 
 		tipologiaComboBox.setSelectedItem(null);
-		if (modelloListaPartecipanti.isEmpty())
+		if (!modelloListaPartecipanti.isEmpty())
 			modelloListaPartecipanti.clear();
 		if(!modelloListaMeetingRelativi.isEmpty())
 			modelloListaMeetingRelativi.clear();

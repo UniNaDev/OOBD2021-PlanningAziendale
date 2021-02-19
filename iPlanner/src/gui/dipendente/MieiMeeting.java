@@ -247,7 +247,7 @@ public class MieiMeeting extends JFrame {
 	// ----------------------------------------------
 	private void inizializzaListaMeeting(ControllerMeeting controller) {
 		try {
-			ArrayList<Meeting> meetings = controller.ottieniMeeting();
+			ArrayList<Meeting> meetings = controller.ottieniMeetingDipendente();
 			modelloListaMeeting.addAll(meetings);
 			meetingList.setModel(modelloListaMeeting);
 		} catch (SQLException e) {

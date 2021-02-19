@@ -27,7 +27,7 @@ public class LuogoNascitaDAOPSQL implements LuogoNascitaDAO {
 	}
 	
 	@Override
-	public ArrayList<String> getProvince() throws SQLException {
+	public ArrayList<String> ottieniProvince() throws SQLException {
 		ResultSet risultato = getProvincePS.executeQuery();
 		ArrayList<String> province = new ArrayList<String>();
 		
@@ -40,7 +40,7 @@ public class LuogoNascitaDAOPSQL implements LuogoNascitaDAO {
 	}
 
 	@Override
-	public ArrayList<LuogoNascita> getLuoghiByProvincia(String provincia) throws SQLException {
+	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException {
 		getLuoghiByProvinciaPS.setString(1, provincia);
 		ResultSet risultato = getLuoghiByProvinciaPS.executeQuery();
 		ArrayList<LuogoNascita> luoghi = new ArrayList<LuogoNascita>();

@@ -22,7 +22,6 @@ public class ProgettoTableModel extends AbstractTableModel {
 	
 	private ArrayList<Progetto> progettiTabella=new ArrayList<Progetto>();
 	
-
 	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	
 	String[] colnames= {"Nome","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
@@ -36,24 +35,19 @@ public class ProgettoTableModel extends AbstractTableModel {
 	public void setProgettiTabella(ArrayList<Progetto> progettiTabella) {
 		this.progettiTabella = progettiTabella;
 	}
-	
-	
 
 	@Override
 	public int getRowCount() {
-	
 		return progettiTabella.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-	
 		return colnames.length;
 	}
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		
 		return colnames[columnIndex];
 	}
 
@@ -87,23 +81,13 @@ public class ProgettoTableModel extends AbstractTableModel {
 		return progettiTabella.get(rowIndex);
 	}
 
-
-
-
-		//Per sorting corretto
-		public Class<?> getColumnClass(int column) {
-	        switch (column) {
-	        	case 1:
-	        		return AmbitoProgetto.class;
-	            default:
-	                return String.class;
-	        }
-		}
-	
-	
-		
-		
-
-	
+	public Class<?> getColumnClass(int column) {
+        switch (column) {
+        	case 1:
+        		return AmbitoProgetto.class;
+            default:
+                return String.class;
+        }
+	}
 	
 }

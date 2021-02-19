@@ -21,21 +21,16 @@ public class MeetingTableModel extends AbstractTableModel {
 	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 
-	
 	String[] colnames= {"Data inizio", "Data fine","Orario inizio", "Orario fine", "Sala/Piattaforma", "Progetto"};
 
 	public void setMeetingTabella(ArrayList<Meeting> meetingTabella) {
 		this.meetingTabella = meetingTabella;
 	}
-	
-	
 
 	public ArrayList<Meeting> getMeetingTabella() {
 		return meetingTabella;
 	}
-
-
-
+	
 	@Override
 	public int getRowCount() {
 		try {
@@ -59,7 +54,6 @@ public class MeetingTableModel extends AbstractTableModel {
 		return colnames[columnIndex];
 	}
 
-	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
@@ -99,12 +93,5 @@ public class MeetingTableModel extends AbstractTableModel {
                 default:
                 return String.class;
         }
-		
 	}
-
-
-
-	
-
-
 }
