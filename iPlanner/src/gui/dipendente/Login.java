@@ -23,7 +23,7 @@ import java.awt.Toolkit;
 import javax.swing.border.MatteBorder;
 
 import controller.ControllerAccesso;
-import gui.ErroreFataleDialog;
+import gui.ErroreDialog;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;

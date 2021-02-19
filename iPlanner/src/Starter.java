@@ -25,7 +25,7 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class Starter {
-    public static void main(String[] args) {
+    public static void main(String[] args) {    	
 		DefaultLookManager lookManager = new DefaultLookManager();
 		lookManager.setDefaultLook();
 		

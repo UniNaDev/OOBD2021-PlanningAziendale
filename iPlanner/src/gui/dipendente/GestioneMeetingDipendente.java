@@ -118,6 +118,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	private JScrollPane progettoDiscussoScrollPane;
 	private DefaultTableCellRenderer tabellaMeetingCellRenderer;
 	private JTable progettoTable;
+	private JLabel invitatiLabel;
 	private TableRowSorter<TableModel> sorterMeeting;
 
 	private Meeting meetingSelezionato;
@@ -127,7 +128,11 @@ public class GestioneMeetingDipendente extends JFrame {
 	private String piattaforma;
 	private SalaRiunione sala;
 	private Progetto progettoDiscusso;
-	private JLabel invitatiLabel;
+
+	
+	private final String VIOLAZIONE_SALA_OCCUPATA = "P0001";
+	private final String VIOLAZIONE_CAPIENZA_SALA = "P0002";
+	private final String VIOLAZIONE_ONNIPRESENZA_DIPENDENTE = "P0003";
 	
 	private LocalDate dataAttuale = LocalDate.now();
 	private LocalTime oraAttuale = LocalTime.now();
@@ -553,8 +558,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					if(meetingTable.getSelectedRow()!=-1) {
-						Meeting meeting= modelloTabellaMeeting.getSelected(meetingTable.convertColumnIndexToModel(meetingTable.getSelectedRow()));
-						controller.apriInserisciPartecipantiMeeting(meeting);
+						controller.apriInserisciPartecipantiMeeting(meetingSelezionato);
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Selezionare un meeting dalla tabella");		
@@ -1128,61 +1132,132 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 
 	public void creaMeeting(ControllerMeeting controller) {
-		ricavaInfoMeeting();
-		Meeting nuovoMeeting = new Meeting(-1, dataInizio, dataFine, oraInizio, oraFine, modalita, piattaforma, sala);
-		nuovoMeeting.setProgettoDiscusso(progettoDiscusso);
-		if (controller.creaMeeting(nuovoMeeting)) {
-			JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
-			aggiornaTabella(controller);
-			svuotaCampiMeeting();
+		try {
+			ricavaInfoMeeting();
+			Meeting nuovoMeeting = new Meeting(-1, dataInizio, dataFine, oraInizio, oraFine, modalita, piattaforma,
+					sala);
+			nuovoMeeting.setProgettoDiscusso(progettoDiscusso);
+			controller.creaMeeting(nuovoMeeting);
+			try {
+				nuovoMeeting.setIdMeeting(controller.idUltimoMeetingInserito());
+				controller.inserisciOrganizzatore();
+				JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
+				aggiornaTabella(controller);
+				svuotaCampiMeeting();
+			} catch (SQLException e) {
+				//TODO: verificare altre possibili eccezioni
+				switch(e.getSQLState()) {
+                case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
+                    JOptionPane.showMessageDialog(null,
+                            "\nImpossibile creare il meeting perchè si accavalla con altri meeting."
+                            + "\nCambiare data e orario oppure modificare prima il meeting che si accavalla.",
+                            "Errore Accavallamento Meeting",
+                            JOptionPane.ERROR_MESSAGE);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, e.getMessage()
+                            + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+                            "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+                }
+				try {
+					controller.rimuoviMeeting(nuovoMeeting.getIdMeeting());
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(null, e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		} catch (IllegalFieldValueException ifve) {
+			JOptionPane.showMessageDialog(null, "Data inserita non valida.\nInserire una data esistente.",
+					"Errore Data Non Valida", JOptionPane.ERROR_MESSAGE);
+		} catch (SQLException e) {
+			//TODO: verificare altre possibili eccezioni
+            JOptionPane.showMessageDialog(null,
+                    "Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di inserire."
+                            + "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
+                            "Errore Sala Occupata",
+                            JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void aggiornaMeeting(ControllerMeeting controller) {
-		ricavaInfoMeeting();
-		meetingSelezionato.setDataInizio(dataInizio);
-		meetingSelezionato.setDataFine(dataFine);
-		meetingSelezionato.setOraInizio(oraInizio);
-		meetingSelezionato.setOraFine(oraFine);
-		meetingSelezionato.setModalita(modalita);
-		if(meetingSelezionato.getModalita().equals("Fisico")) {
-			meetingSelezionato.setSala(sala);
-			meetingSelezionato.setPiattaforma(null);
-		}
-		else if(meetingSelezionato.getModalita().equals("Telematico")) {
-			meetingSelezionato.setSala(null);
-			meetingSelezionato.setPiattaforma(piattaforma);
-		}
-		meetingSelezionato.setProgettoDiscusso(progettoDiscusso);
-		if (controller.aggiornaMeeting(meetingSelezionato)) {
+		try{
+			ricavaInfoMeeting();
+
+			meetingSelezionato.setDataInizio(dataInizio);
+			meetingSelezionato.setDataFine(dataFine);
+			meetingSelezionato.setOraInizio(oraInizio);
+			meetingSelezionato.setOraFine(oraFine);
+			meetingSelezionato.setModalita(modalita);
+			if(meetingSelezionato.getModalita().equals("Fisico")) {
+				meetingSelezionato.setSala(sala);
+				meetingSelezionato.setPiattaforma(null);
+			}
+			else if(meetingSelezionato.getModalita().equals("Telematico")) {
+				meetingSelezionato.setSala(null);
+				meetingSelezionato.setPiattaforma(piattaforma);
+			}
+			meetingSelezionato.setProgettoDiscusso(progettoDiscusso);
+			
+			controller.aggiornaMeeting(meetingSelezionato);
 			JOptionPane.showMessageDialog(null, "Meeting Modificato Correttamente");
 			svuotaCampiMeeting();
 			aggiornaTabella(controller);
+		} catch(IllegalFieldValueException ifve) {
+			JOptionPane.showMessageDialog(null, "Data inserita non valida.\nInserire una data esistente.",
+					"Errore Data Non Valida", JOptionPane.ERROR_MESSAGE);
+		} catch(SQLException e) {
+			//TODO: verificare altre possibili eccezioni
+			switch(e.getSQLState()) {
+			case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
+				JOptionPane.showMessageDialog(null,
+						"Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
+								+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.",
+								"Errore Accavallamento Meeting",
+								JOptionPane.ERROR_MESSAGE);
+				break;
+			case VIOLAZIONE_CAPIENZA_SALA:
+				JOptionPane.showMessageDialog(null,
+						"I partecipanti al meeting che si vuole modificare sono maggiori "
+								+ "\nrispetto alla capienza massima della sala.\n"
+								+ "Controllare che non ci siano più di " + meetingSelezionato.getSala().getCapienza() + " partecipanti.",
+								"Errore Capienza Sala",
+								JOptionPane.ERROR_MESSAGE);
+				break;
+			case VIOLAZIONE_SALA_OCCUPATA:
+				JOptionPane.showMessageDialog(null,
+						"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
+								+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
+								"Errore Sala Occupata",
+								JOptionPane.ERROR_MESSAGE);
+				break;
+				default:
+					JOptionPane.showMessageDialog(null, e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		
 	}
-	
+
 	private void ricavaInfoMeeting() {
-		try {
-			dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
-			dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
-		} catch (IllegalFieldValueException ifve) {
-			JOptionPane.showMessageDialog(null, 
-					"Data inserita non valida.\nInserire una data esistente.",
-					"Errore Data Non Valida",
-					JOptionPane.ERROR_MESSAGE);
-		}
+		dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()),
+				Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()),
+				Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
+		dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()),
+				Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()),
+				Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
 		oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()),
 				Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);
-		oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);
+		oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()),
+				Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);
 		if (onlineRadioButton.isSelected()) {
 			modalita = "Telematico";
 			piattaforma = piattaformaSalaComboBox.getSelectedItem().toString();
-			sala=null;
+			sala = null;
 		} else if (fisicoRadioButton.isSelected()) {
 			modalita = "Fisico";
 			sala = (SalaRiunione) piattaformaSalaComboBox.getSelectedItem();
-			piattaforma=null;
+			piattaforma = null;
 		}
 		progettoDiscusso = (Progetto) progettoDiscussoComboBox.getSelectedItem();
 	}
@@ -1201,15 +1276,20 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 	
 	private void eliminaMeeting(ControllerMeeting controller) {
-		if(meetingTable.getSelectedRow()!=-1) {
-			controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
-			JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
-			aggiornaTabella(controller);
+		if(meetingSelezionato != null) {
+			try {
+				controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
+				JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
+				aggiornaTabella(controller);
+				svuotaCampiMeeting();
+			} catch(SQLException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage()
+						+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		else
 			JOptionPane.showMessageDialog(null, "Selezionare un meeting dalla tabella");
-	
-		svuotaCampiMeeting();
 	}
 	
 	private boolean campiObbligatoriVuoti() {
@@ -1242,6 +1322,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		if (!modelloListaInfoProgetto.isEmpty())
 			modelloListaInfoProgetto.removeAllElements();
 		meetingTable.clearSelection();
+		meetingSelezionato = null;
 		ripristinaFiltri();
 	}
 

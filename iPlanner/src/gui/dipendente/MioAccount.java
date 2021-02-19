@@ -532,7 +532,6 @@ public class MioAccount extends JFrame {
 		    campiObbligatoriRossi();
 		}
 	  }
-
 	});
 	
 	contentPane.setLayout(null);
@@ -653,7 +652,7 @@ public class MioAccount extends JFrame {
 					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
 				"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
 		    }
-	}
+		}
     }
 
     private void ricavaInfoDipendente(ControllerGestioneProfilo controller) {

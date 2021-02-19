@@ -156,7 +156,7 @@ public class GestioneDipendenti extends JFrame {
 	addWindowListener(new WindowAdapter() {
 	    @Override
 	    public void windowClosing(WindowEvent e) {
-		controller.tornaAiPlanner();
+		controller.tornaAdAreaSegreteria();
 	    }
 	});
 	setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -588,7 +588,7 @@ public class GestioneDipendenti extends JFrame {
 	esciButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 	esciButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-		controller.tornaAiPlanner();
+		controller.tornaAdAreaSegreteria();
 	    }
 	});
 	esciButton.addMouseListener(new MouseAdapter() {
@@ -921,8 +921,7 @@ public class GestioneDipendenti extends JFrame {
 		    JOptionPane.ERROR_MESSAGE);
 	}
 	try {
-	    luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem())
-		    .get(cittaComboBox.getSelectedIndex());
+	    luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
 	} catch (SQLException e) {
 	    JOptionPane.showMessageDialog(null,
 		    e.getMessage()
@@ -953,87 +952,99 @@ public class GestioneDipendenti extends JFrame {
     }
 
     private void creaDipendente(ControllerDipendentiSegreteria controller) {
-	ricavaInfoDipendente(controller);
-	ArrayList<Skill> skills = new ArrayList<Skill>();
-	skills.addAll(skillsList.getSelectedValuesList());
-	Dipendente dipendente = new Dipendente(null, nome, cognome, sesso, dataNascita, luogoNascita, indirizzo, email,
-		telefono, cellulare, salario, password, 0f);
-	dipendente.setSkills(skills);
-	try {
-	    controller.creaDipendente(dipendente);
-	    pulisciCampi();
-	    setModelloTabellaDipendentiTutti(controller);
-	} catch (SQLException e) {
-	    switch (e.getSQLState()) {
-	    case VIOLAZIONE_PKEY_UNIQUE:
-		JOptionPane.showMessageDialog(null,
-			"Verificare che il dipendente non esista già\n"
-				+ "oppure che un altro dipendente non abbia la stessa email\n"
-				+ "o lo stesso numero di cellulare.",
-			"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-		break;
-	    case VIOLAZIONE_VINCOLI_TABELLA:
-		JOptionPane.showMessageDialog(null, "Verificare che:\n" + "1) L'email sia del formato corretto.\n"
-			+ "2) Nome e cognome non contengano numeri.\n"
-			+ "3) Telefono e cellulare non contengano lettere.\n" + "4) Il dipendente sia maggiorenne.\n"
-			+ "5) Il salario stabilito sia un valore positivo.", "Errore Creazione Account",
-			JOptionPane.ERROR_MESSAGE);
-		Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
-		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
-		if (!matcher.find())
-		    emailLabel.setForeground(Color.RED);
-
-		if (!nonHaCifre(nome))
-		    nomeLabel.setForeground(Color.RED);
-
-		if (!nonHaCifre(cognome))
-		    cognomeLabel.setForeground(Color.RED);
-
-		if (!isNumero(telefono))
-		    telefonoFissoLabel.setForeground(Color.RED);
-
-		if (!isNumero(cellulare))
-		    cellulareLabel.setForeground(Color.RED);
-
-		dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
-			giornoComboBox.getSelectedIndex() + 1);
-		Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
-		int età = period.getYears();
-		if (età < 18)
-		    dataNascitaLabel.setForeground(Color.RED);
-
-		if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
-		    salarioLabel.setForeground(Color.RED);
-
-		break;
-	    case VIOLAZIONE_LUNGHEZZA_STRINGA:
-		JOptionPane.showMessageDialog(null,
-			"Verificare che:\n" + "1) Nome e cognome non contengano più di 30 caratteri.\n"
-				+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
-				+ "3) La password non superi i 50 caratteri.",
-			"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-		if (nomeTextField.getText().length() > 30)
-		    nomeLabel.setForeground(Color.RED);
-		if (cognomeTextField.getText().length() > 30)
-		    cognomeLabel.setForeground(Color.RED);
-		if (emailTextField.getText().length() > 100)
-		    emailLabel.setForeground(Color.RED);
-		if (indirizzoTextField.getText().length() > 100)
-		    indirizzoLabel.setForeground(Color.RED);
-		if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50
-			|| passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
-		    passwordLabel.setForeground(Color.RED);
-		    confermaPasswordLabel.setForeground(Color.RED);
-		    break;
+		ricavaInfoDipendente(controller);
+		ArrayList<Skill> skills = new ArrayList<Skill>();
+		skills.addAll(skillsList.getSelectedValuesList());
+		Dipendente dipendente = new Dipendente(null, nome, cognome, sesso, dataNascita, luogoNascita, indirizzo, email,
+			telefono, cellulare, salario, password, 0f);
+		dipendente.setSkills(skills);
+		try {
+			if (controller.creaDipendente(dipendente)) {
+			    pulisciCampi();
+			    setModelloTabellaDipendentiTutti(controller);
+			    
+				int yesNo = JOptionPane.showConfirmDialog(null,
+						"Creazione riuscita.\nVuoi crearne un altro?",
+						"Creazione riuscita",
+						JOptionPane.YES_NO_OPTION);
+				if (yesNo == JOptionPane.NO_OPTION)
+					controller.tornaAdAreaSegreteria();
+				else {
+					pulisciCampi();
+				    setModelloTabellaDipendentiTutti(controller);
+				}
+			}
+		} catch (SQLException e) {
+		    switch (e.getSQLState()) {
+		    case VIOLAZIONE_PKEY_UNIQUE:
+			JOptionPane.showMessageDialog(null,
+				"Verificare che il dipendente non esista già\n"
+					+ "oppure che un altro dipendente non abbia la stessa email\n"
+					+ "o lo stesso numero di cellulare.",
+				"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
+			break;
+		    case VIOLAZIONE_VINCOLI_TABELLA:
+			JOptionPane.showMessageDialog(null, "Verificare che:\n" + "1) L'email sia del formato corretto.\n"
+				+ "2) Nome e cognome non contengano numeri.\n"
+				+ "3) Telefono e cellulare non contengano lettere.\n" + "4) Il dipendente sia maggiorenne.\n"
+				+ "5) Il salario stabilito sia un valore positivo.", "Errore Creazione Account",
+				JOptionPane.ERROR_MESSAGE);
+			Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+				Pattern.CASE_INSENSITIVE);
+			Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
+			if (!matcher.find())
+			    emailLabel.setForeground(Color.RED);
+	
+			if (!nonHaCifre(nome))
+			    nomeLabel.setForeground(Color.RED);
+	
+			if (!nonHaCifre(cognome))
+			    cognomeLabel.setForeground(Color.RED);
+	
+			if (!isNumero(telefono))
+			    telefonoFissoLabel.setForeground(Color.RED);
+	
+			if (!isNumero(cellulare))
+			    cellulareLabel.setForeground(Color.RED);
+	
+			dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
+				giornoComboBox.getSelectedIndex() + 1);
+			Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
+			int età = period.getYears();
+			if (età < 18)
+			    dataNascitaLabel.setForeground(Color.RED);
+	
+			if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
+			    salarioLabel.setForeground(Color.RED);
+	
+			break;
+		    case VIOLAZIONE_LUNGHEZZA_STRINGA:
+			JOptionPane.showMessageDialog(null,
+				"Verificare che:\n" + "1) Nome e cognome non contengano più di 30 caratteri.\n"
+					+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
+					+ "3) La password non superi i 50 caratteri.",
+				"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
+			if (nomeTextField.getText().length() > 30)
+			    nomeLabel.setForeground(Color.RED);
+			if (cognomeTextField.getText().length() > 30)
+			    cognomeLabel.setForeground(Color.RED);
+			if (emailTextField.getText().length() > 100)
+			    emailLabel.setForeground(Color.RED);
+			if (indirizzoTextField.getText().length() > 100)
+			    indirizzoLabel.setForeground(Color.RED);
+			if (passwordField.getText().length() > 50 || confermaPasswordField.getText().length() > 50
+				|| passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
+			    passwordLabel.setForeground(Color.RED);
+			    confermaPasswordLabel.setForeground(Color.RED);
+			    break;
+			}
+		    default:
+				JOptionPane.showMessageDialog(null,
+					e.getMessage()
+						+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		    }
 		}
-	    default:
-		JOptionPane.showMessageDialog(null,
-			e.getMessage()
-				+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-			"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	    }
-	}
     }
 
     private void salvaModificheDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) {
@@ -1053,8 +1064,15 @@ public class GestioneDipendenti extends JFrame {
 	dipendenteModificato.setSkills(skills);
 	dipendenteModificato.setSalario(salario);
 	try {
-	    controller.aggiornaDipendente(dipendenteModificato);
-	    pulisciCampi();
+	    if (controller.aggiornaDipendente(dipendenteModificato)) {
+		    pulisciCampi();
+			setModelloTabellaDipendentiTutti(controller);
+			
+			JOptionPane.showMessageDialog(null, 
+					"Modifica effettuata con successo.",
+					"Salvataggio Riuscito",
+					JOptionPane.INFORMATION_MESSAGE);
+	    }
 	} catch (SQLException e) {
 	    switch (e.getSQLState()) {
 	    case VIOLAZIONE_VINCOLI_TABELLA:
@@ -1119,7 +1137,6 @@ public class GestioneDipendenti extends JFrame {
 			"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 	    }
 	}
-	setModelloTabellaDipendentiTutti(controller);
     }
 
     private boolean nonHaCifre(String stringa) {
@@ -1147,16 +1164,21 @@ public class GestioneDipendenti extends JFrame {
     }
 
     private void eliminaDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteSelezionato) {
-	try {
-	    controller.eliminaDipendente(dipendenteSelezionato);
-	    pulisciCampi();
-	    setModelloTabellaDipendentiTutti(controller);
-	} catch (SQLException e) {
-	    JOptionPane.showMessageDialog(null,
-		    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	}
+		try {
+		    controller.eliminaDipendente(dipendenteSelezionato);
+		    pulisciCampi();
+		    setModelloTabellaDipendentiTutti(controller);
+		    
+		    JOptionPane.showMessageDialog(null,
+		    			"Dipendente eliminato correttamente.",
+		    			"Eliminazione Dipendente Riuscita",
+		    			JOptionPane.INFORMATION_MESSAGE);
+		} catch (SQLException e) {
+		    JOptionPane.showMessageDialog(null,
+			    e.getMessage()
+				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+		}
     }
 
     private void creaSkill(ControllerDipendentiSegreteria controller) {

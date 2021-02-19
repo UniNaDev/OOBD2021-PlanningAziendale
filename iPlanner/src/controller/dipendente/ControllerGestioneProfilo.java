@@ -91,7 +91,7 @@ public class ControllerGestioneProfilo {
     }
 
     public void aggiornaInfoDipendente(Dipendente dipendenteModificato) throws SQLException {
-    	dipDAO.updateDipendente(dipendenteModificato);
+    	dipDAO.aggiornaDipendente(dipendenteModificato);
     }
 
     public ArrayList<String> ottieniProvince() throws SQLException {

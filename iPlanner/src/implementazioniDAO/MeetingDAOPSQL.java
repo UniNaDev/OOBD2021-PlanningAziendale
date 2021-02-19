@@ -210,7 +210,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 	}
 
 	@Override
-	public boolean deleteMeeting(int idMeeting) throws SQLException {
+	public boolean rimuoviMeeting(int idMeeting) throws SQLException {
 		removeMeetingPS.setInt(1, idMeeting);
 
 		int record = removeMeetingPS.executeUpdate();

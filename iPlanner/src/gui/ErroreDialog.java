@@ -24,14 +24,45 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class ErroreFataleDialog extends JDialog {
+public class ErroreDialog extends JDialog {
 	
     private JPanel contentPane = new JPanel();
+    
+    private boolean chiudiProgramma = true;
+
+    
+	public ErroreDialog(Frame frameParente, Exception eccezione, String messaggio, String titolo, boolean chiudiProgramma) {
+		generaGUI(frameParente, eccezione, messaggio, titolo, chiudiProgramma);
+	}
 	
-	public ErroreFataleDialog(Frame frameParente, Exception eccezione) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(ErroreFataleDialog.class.getResource("/icone/fatalError.png")));
+	public ErroreDialog(Frame frameParente, Exception eccezione, boolean chiudiProgramma) {
+	    String messaggio = "Errore Fatale!\r\n\r\nVerificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).";
+	    String titolo = "Errore Fatale";
+	    generaGUI(frameParente, eccezione, messaggio, titolo, chiudiProgramma);
+	}
+	
+	//Altri metodi
+	//--------------------------------------------
+	private String ottieniStackTrace(Exception e) {
+		String dettagliErrore = "";
+		
+		for (StackTraceElement stringa: e.getStackTrace())
+			dettagliErrore += stringa.toString() + "\n";
+		
+		return dettagliErrore;
+	}
+	
+	private void comportamentoOk(boolean chiudiProgramma) {
+		if (chiudiProgramma)
+			System.exit(0);
+		else
+			this.dispose();
+	}
+	
+	private void generaGUI(Frame frameParente, Exception eccezione, String messaggio, String titolo, boolean chiudiProgramma) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ErroreDialog.class.getResource("/icone/fatalError.png")));
 		setResizable(false);
-		setTitle("Errore Fatale");
+		setTitle(titolo);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 554, 272);
 		setContentPane(contentPane);
@@ -52,7 +83,7 @@ public class ErroreFataleDialog extends JDialog {
 		JTextArea messaggioTextArea = new JTextArea();
 		messaggioTextArea.setEditable(false);
 		messaggioTextArea.setLineWrap(true);
-		messaggioTextArea.setText("Errore Fatale!\r\n\r\nVerificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).");
+		messaggioTextArea.setText(messaggio);
 		messaggioTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
 		messaggioTextArea.setBounds(25, 11, 488, 66);
 		contentPane.add(messaggioTextArea);
@@ -60,7 +91,7 @@ public class ErroreFataleDialog extends JDialog {
 		JButton okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				comportamentoOk(chiudiProgramma);
 			}
 		});
 		okButton.addMouseListener(new MouseAdapter() {
@@ -90,16 +121,5 @@ public class ErroreFataleDialog extends JDialog {
 		mostraDettagliLabel.setFont(new Font("Consolas", Font.BOLD, 11));
 		mostraDettagliLabel.setBounds(25, 88, 98, 14);
 		contentPane.add(mostraDettagliLabel);
-	}
-	
-	//Altri metodi
-	//--------------------------------------------
-	private String ottieniStackTrace(Exception e) {
-		String dettagliErrore = "";
-		
-		for (StackTraceElement stringa: e.getStackTrace())
-			dettagliErrore += stringa.toString() + "\n";
-		
-		return dettagliErrore;
 	}
 }

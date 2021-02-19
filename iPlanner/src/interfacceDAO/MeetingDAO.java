@@ -20,7 +20,7 @@ public interface MeetingDAO {
 	
 	public boolean insertMeeting(Meeting meeting) throws SQLException;
 	
-	public boolean deleteMeeting(int idMeeting) throws SQLException;
+	public boolean rimuoviMeeting(int idMeeting) throws SQLException;
 	
 	public boolean updateMeeting(Meeting meeting) throws SQLException;
 	

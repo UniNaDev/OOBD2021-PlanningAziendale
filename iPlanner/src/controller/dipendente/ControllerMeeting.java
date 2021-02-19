@@ -49,7 +49,7 @@ public class ControllerMeeting {
 		this.skillDAO=skillDAO;
 		this.dipendenteLogged = dipendenteLogged;
 		
-		mieiMeetingFrame=new MieiMeeting(this);
+		mieiMeetingFrame = new MieiMeeting(this);
 		mieiMeetingFrame.setVisible(true);
 	}
 
@@ -83,91 +83,20 @@ public class ControllerMeeting {
 		return meetDAO.ottieniPiattaforme();
 	}
 	
-	public boolean aggiornaMeeting(Meeting meeting) {
-		try {
-			meetDAO.updateMeeting(meeting);
-		} catch (SQLException e) {
-			//TODO: verificare altre possibili eccezioni
-			switch(e.getSQLState()) {
-			case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-				JOptionPane.showMessageDialog(null,
-						"Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
-								+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.",
-								"Errore Accavallamento Meeting",
-								JOptionPane.ERROR_MESSAGE);
-				break;
-			case VIOLAZIONE_CAPIENZA_SALA:
-				JOptionPane.showMessageDialog(null,
-						"I partecipanti al meeting che si vuole modificare sono maggiori "
-								+ "\nrispetto alla capienza massima della sala.\n"
-								+ "Controllare che non ci siano più di " + meeting.getSala().getCapienza() + " partecipanti.",
-								"Errore Capienza Sala",
-								JOptionPane.ERROR_MESSAGE);
-				break;
-			case VIOLAZIONE_SALA_OCCUPATA:
-				JOptionPane.showMessageDialog(null,
-						"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
-								+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
-								"Errore Sala Occupata",
-								JOptionPane.ERROR_MESSAGE);
-				break;
-				default:
-					JOptionPane.showMessageDialog(null, e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-			}
-			return false;
-		}
-		return true;
+	public void aggiornaMeeting(Meeting meeting) throws SQLException{
+		meetDAO.updateMeeting(meeting);
 	}
 	
-	public boolean creaMeeting(Meeting nuovoMeeting){
-		try {	
-			meetDAO.insertMeeting(nuovoMeeting);
-			try {
-				meetDAO.insertOrganizzatore(dipendenteLogged.getCf());
-			} catch(SQLException e) {
-				//TODO: verificare altre possibli eccezioni
-				switch(e.getSQLState()) {
-				case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-					JOptionPane.showMessageDialog(null,
-							"\nImpossibile creare il meeting perchè si accavalla con altri meeting."
-							+ "\nCambiare data e orario oppure modificare prima il meeting che si accavalla.",
-							"Errore Accavallamento Meeting",
-							JOptionPane.ERROR_MESSAGE);
-					int idMeeting = idUltimoMeetingInserito();
-					rimuoviMeeting(idMeeting);
-					break;
-					
-				default:
-					JOptionPane.showMessageDialog(null, e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-				}
-				return false;
-			}
-		} catch(SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di inserire."
-							+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
-							"Errore Sala Occupata",
-							JOptionPane.ERROR_MESSAGE);
-			
-			return false;
-		}
-		return true;
+	public void creaMeeting(Meeting nuovoMeeting) throws SQLException{
+		meetDAO.insertMeeting(nuovoMeeting);		
+	}
+	
+	public void inserisciOrganizzatore() throws SQLException{
+			meetDAO.insertOrganizzatore(dipendenteLogged.getCf());
 	}
 
-	public boolean rimuoviMeeting(int idMeeting) {
-		try {
-			meetDAO.deleteMeeting(idMeeting);
-		} catch(SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		return true;
+	public void rimuoviMeeting(int idMeeting) throws SQLException {
+		meetDAO.rimuoviMeeting(idMeeting);
 	}
 	
 	public ArrayList<Meeting> filtraMeetingTelematiciDipendenti() throws SQLException{
@@ -206,6 +135,4 @@ public class ControllerMeeting {
 	public int idUltimoMeetingInserito() throws SQLException {
 		return meetDAO.getUltimoIDMeeting();
 	}
-
-
 }

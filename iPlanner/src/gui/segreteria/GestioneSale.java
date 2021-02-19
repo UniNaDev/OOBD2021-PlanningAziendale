@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 
 import entita.SalaRiunione;
-import gui.ErroreFataleDialog;
+import gui.ErroreDialog;
 import gui.customUI.CustomScrollBarUI;
 
 import java.awt.Color;
@@ -373,7 +373,7 @@ public class GestioneSale extends JFrame {
 							"Creazione Fallita", JOptionPane.ERROR_MESSAGE);
 					break;
 				default:
-					ErroreFataleDialog erroreFatale = new ErroreFataleDialog(null,e);
+					ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
 					erroreFatale.setVisible(true);
 				}
 			}
@@ -426,7 +426,7 @@ public class GestioneSale extends JFrame {
 							JOptionPane.ERROR_MESSAGE);
 					break;
 				default:
-					ErroreFataleDialog erroreFatale = new ErroreFataleDialog(null, e);
+					ErroreDialog erroreFatale = new ErroreDialog(null, e, true);
 					erroreFatale.setVisible(true);
 				}
 			}
@@ -448,7 +448,7 @@ public class GestioneSale extends JFrame {
 			else
 				saleList.setSelectedIndex(0);
 		} catch(SQLException e) {
-			ErroreFataleDialog erroreFatale = new ErroreFataleDialog(null,e);
+			ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
 			erroreFatale.setVisible(true);
 		}
 	}
@@ -492,7 +492,7 @@ public class GestioneSale extends JFrame {
 		try {
 			saleListModel.addAll(controller.ottieniSale());
 		} catch (SQLException e) {
-			ErroreFataleDialog erroreFatale = new ErroreFataleDialog(null,e);
+			ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
 			erroreFatale.setVisible(true);
 			saleListModel.clear();
 		}

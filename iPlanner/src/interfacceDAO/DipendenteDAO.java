@@ -31,9 +31,9 @@ public interface DipendenteDAO {
 	
 	public boolean insertDipendente(Dipendente dipendente) throws SQLException;
 	
-	public boolean updateDipendente(Dipendente dipendente) throws SQLException;
+	public boolean aggiornaDipendente(Dipendente dipendente) throws SQLException;
 	
-	public boolean deleteDipendente(Dipendente dipendente) throws SQLException;
+	public boolean eliminaDipendente(Dipendente dipendente) throws SQLException;
 	
 	public float getMaxStipendio() throws SQLException;
 	

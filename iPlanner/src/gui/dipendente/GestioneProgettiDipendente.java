@@ -53,6 +53,7 @@ import entita.AmbitoProgetto;
 import entita.Dipendente;
 import entita.Meeting;
 import entita.Progetto;
+import gui.ErroreDialog;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.PartecipantiListRenderer;
 import gui.customUI.CustomScrollBarUI;
@@ -395,9 +396,11 @@ public class GestioneProgettiDipendente extends JFrame {
 		eliminaButton.setAlignmentX(0.5f);
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler eliminare il progetto selezionato?");
-				if(conferma == JOptionPane.YES_OPTION) {
-					eliminaProgetto(controller);
+				if (progettoSelezionato != null)
+						eliminaProgetto(controller);
+				else {
+					JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella.", "Eliminazione Fallita",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -426,9 +429,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					if(progettiTable.getSelectedRow()!=-1) {
-						int rigaSelezionata = progettiTable.getSelectedRow();	
-						rigaSelezionata = progettiTable.convertRowIndexToModel(rigaSelezionata);
-						progettoSelezionato = modelloTabellaProgetti.getSelected(rigaSelezionata);
 						controller.apriInserisciPartecipantiProgetto(progettoSelezionato);
 					}
 					else
@@ -464,7 +464,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				if(conferma == JOptionPane.YES_OPTION)
 					if(campiObbligatoriVuoti())
 						JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.\nDare un nome al progetto,\n selezionare una tipologia e\n assegnargli almeno un ambito.",
-								"Campi Obbligatori Vuoti",
+								"Salvataggio Fallito",
 								JOptionPane.ERROR_MESSAGE);
 					else
 						aggiornaProgetto(controller);
@@ -498,11 +498,10 @@ public class GestioneProgettiDipendente extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?");
 				if (conferma == JOptionPane.YES_OPTION)	
-					if(campiObbligatoriVuoti()) {
+					if(campiObbligatoriVuoti())
 						JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.\nDare un nome al progetto,\n selezionare una tipologia e\n assegnargli almeno un ambito.",
 								"Campi Obbligatori Vuoti",
 								JOptionPane.ERROR_MESSAGE);
-					}
 					else
 						creaProgetto(controller);
 				}
@@ -1026,61 +1025,102 @@ public class GestioneProgettiDipendente extends JFrame {
 			Progetto nuovoProgetto = new Progetto(-1,nomeProgetto, tipologia, descrizioneProgetto, dataCreazione, dataScadenza, dataTerminazione);
 			nuovoProgetto.setAmbiti(ambiti);
 			
-			if (controller.creaProgetto(nuovoProgetto)) {
-				JOptionPane.showMessageDialog(null, "Progetto creato con successo");
-				aggiornaTabella(controller);
-				
-				tipologiaProgettoLabel.setForeground(Color.BLACK);
-				ambitoProgettoLabel.setForeground(Color.BLACK);
-				nomeProgettoLabel.setForeground(Color.BLACK);
-			}
+			nuovoProgetto = controller.creaProgetto(nuovoProgetto);
+				try {
+					controller.inserisciAmbitiProgetto(nuovoProgetto);
+					controller.inserisciProjectManager(nuovoProgetto);
+					
+					JOptionPane.showMessageDialog(null, "Progetto creato con successo",
+							"Creazione Riuscita",
+							JOptionPane.INFORMATION_MESSAGE);
+					aggiornaTabella(controller);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null,
+							e.getMessage()
+									+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+					try {
+						controller.rimuoviProgetto(nuovoProgetto);
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null,
+								e1.getMessage()
+										+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+								"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
+					}
+				}
 		} catch(IllegalFieldValueException nfve) {
 			JOptionPane.showMessageDialog(null, 
 					"Inserire una data valida.",
-					"Data Non Valida",
+					"Creazione Fallita",
 					JOptionPane.ERROR_MESSAGE);
+		} catch(SQLException e) {
+			//TODO: aggiungi altre eccezioni
+			ErroreDialog errore = new ErroreDialog(null, e,
+					"Creazione del progetto fallita.",
+					"Creazione Fallita",
+					false);
+			errore.setVisible(true);
 		}
+		tipologiaProgettoLabel.setForeground(Color.BLACK);
+		ambitoProgettoLabel.setForeground(Color.BLACK);
+		nomeProgettoLabel.setForeground(Color.BLACK);
 	}
 	
 	private void aggiornaProgetto(ControllerProgetto controller) {
 		try {
 			ricavaInfoProgetto();
 			dataCreazione = progettoSelezionato.getDataCreazione();
-			
+
 			if (dataScadenza != null)
 				progettoSelezionato.setScadenza(dataScadenza);
 			if (dataTerminazione != null)
 				progettoSelezionato.setDataTerminazione(dataTerminazione);
-				progettoSelezionato.setNomeProgetto(nomeProgetto);
-				progettoSelezionato.setDescrizioneProgetto(descrizioneProgetto);
-				progettoSelezionato.setAmbiti(ambiti);
-				progettoSelezionato.setTipoProgetto(tipologia);
-			
-			if (controller.aggiornaProgetto(progettoSelezionato)) {
+			progettoSelezionato.setNomeProgetto(nomeProgetto);
+			progettoSelezionato.setDescrizioneProgetto(descrizioneProgetto);
+			progettoSelezionato.setAmbiti(ambiti);
+			progettoSelezionato.setTipoProgetto(tipologia);
+			controller.aggiornaProgetto(progettoSelezionato);
+			try {
+				controller.aggiornaAmbitiProgetto(progettoSelezionato);
 				JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
-				aggiornaTabella(controller);							
-				tipologiaProgettoLabel.setForeground(Color.BLACK);
-				ambitoProgettoLabel.setForeground(Color.BLACK);
-				nomeProgettoLabel.setForeground(Color.BLACK);
+				aggiornaTabella(controller);
+			} catch (SQLException e) {
+				// TODO: aggiungi altre eccezioni
+				JOptionPane.showMessageDialog(null,
+						e.getMessage()
+								+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (IllegalFieldValueException e) {
-			JOptionPane.showMessageDialog(null, 
-					"Inserire una data valida.",
-					"Data Non Valida",
+			JOptionPane.showMessageDialog(null, "Inserire una data valida.", "Data Non Valida",
 					JOptionPane.ERROR_MESSAGE);
+		} catch (SQLException e) {
+			// TODO: aggiungi altre eccezioni
+			if (e.getSQLState().equals("23514")) {
+				JOptionPane.showMessageDialog(null,
+						"Controllare che la data di terminazione inserita non sia successiva alla data odierna."
+								+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 			}
+		}
+		tipologiaProgettoLabel.setForeground(Color.BLACK);
+		ambitoProgettoLabel.setForeground(Color.BLACK);
+		nomeProgettoLabel.setForeground(Color.BLACK);
 	}
 	
 	private void eliminaProgetto(ControllerProgetto controller) {
-		if(progettiTable.getSelectedRow()!=-1) {
-			if (controller.rimuoviProgetto(progettoSelezionato)) {	
-				JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo");
-				aggiornaTabella(controller);
-				pulisciCampi();
-			}	
+		try {
+			controller.rimuoviProgetto(progettoSelezionato);
+			JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo", "Eliminazione Riuscita",
+					JOptionPane.INFORMATION_MESSAGE);
+			aggiornaTabella(controller);
+			pulisciCampi();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage()
+							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
+					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 		}
-		else
-			JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella");
 	}
 	
 	private void ricavaInfoProgetto() throws IllegalFieldValueException{
@@ -1144,6 +1184,7 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloListaMeetingRelativi.clear();
 		
 		progettiTable.clearSelection();
+		progettoSelezionato = null;
 	}
 	
 	private void inizializzaComboBoxFiltroTipologie(ControllerProgetto controller) {

@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
 import entita.SalaRiunione;
-import gui.ErroreFataleDialog;
+import gui.ErroreDialog;
 import gui.segreteria.GestioneMeetingSegreteria;
 import gui.segreteria.GestioneSale;
 import interfacceDAO.AmbitoProgettoDAO;
@@ -118,7 +118,7 @@ public class ControllerMeetingSegreteria {
 			sala.setIndirizzoSede(indirizzo);
 			sala.setPiano(piano);
 		} catch(SQLException e) {
-			ErroreFataleDialog erroreFatale = new ErroreFataleDialog(null,e);
+			ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
 			erroreFatale.setVisible(true);
 		}
 		if (sala != null)

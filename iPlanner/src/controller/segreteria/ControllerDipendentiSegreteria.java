@@ -52,7 +52,7 @@ public class ControllerDipendentiSegreteria {
 	  gestioneDipendentiFrame.setVisible(true);	  
 	}
 	
-	public void tornaAiPlanner() {
+	public void tornaAdAreaSegreteria() {
 		gestioneDipendentiFrame.setVisible(false);
 		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
 	}
@@ -65,28 +65,20 @@ public class ControllerDipendentiSegreteria {
 		return luogoDAO.ottieniComuni(provincia);
 	}
 	
-	public void creaDipendente(Dipendente dipendente) throws SQLException {
-		if (dipDAO.insertDipendente(dipendente)) {
+	public boolean creaDipendente(Dipendente dipendente) throws SQLException {
+		dipDAO.insertDipendente(dipendente);
 			for (Skill skill: dipendente.getSkills())
-				if (!skillDAO.insertSkillDipendente(skill, dipendente)) {
+				try{
+					skillDAO.insertSkillDipendente(skill, dipendente);
+				} catch(SQLException e) {
 					JOptionPane.showMessageDialog(null,
-							"Errore inserimento delle skill nel database.",
-							"Errore skill",
-							JOptionPane.ERROR_MESSAGE);	
+							"Errore inserimento delle skill del dipendente nel database.",
+							"Errore Inserimento Skill",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
 				}
-			int yesNo = JOptionPane.showConfirmDialog(null,
-					"Creazione riuscita.\nVuoi crearne un altro?",
-					"Creazione riuscita",
-					JOptionPane.YES_NO_OPTION);
-			if (yesNo == 1)
-				tornaAiPlanner();
-			else {
-				gestioneDipendentiFrame.dispose();
-				gestioneDipendentiFrame=new GestioneDipendenti(this);
-				gestioneDipendentiFrame.setVisible(true);
-			}
+			return true;
 		}
-	}
 	
 	public void creaNuovaSkill(String nomeSkill) throws SQLException {
 		Skill temp = new Skill(0, nomeSkill);
@@ -116,8 +108,8 @@ public class ControllerDipendentiSegreteria {
 		return dipendentiFiltrati;
 	}
 	
-	public void aggiornaDipendente(Dipendente dipendente) throws SQLException {
-		dipDAO.updateDipendente(dipendente);
+	public boolean aggiornaDipendente(Dipendente dipendente) throws SQLException {
+		dipDAO.aggiornaDipendente(dipendente);
 		for (Skill skill: dipendente.getSkills()) {
 			try {
 				skillDAO.insertSkillDipendente(skill, dipendente);
@@ -125,22 +117,19 @@ public class ControllerDipendentiSegreteria {
 			catch (SQLException e) {
 				if (e.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))
 					continue;
-				else
+				else {
 					JOptionPane.showMessageDialog(null,
 							e.getMessage() + "\nContattare uno sviluppatore",
 							"Errore #" + e.getErrorCode(),
 							JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
 			}
 		}
+		return true;
 	}
 	
 	public void eliminaDipendente(Dipendente dipendente) throws SQLException {
-		if (dipDAO.deleteDipendente(dipendente))
-			return;
-		else
-			JOptionPane.showMessageDialog(null,
-					"Impossibile trovare il dipendente da eliminare.",
-					"Dipendente Non Trovato",
-					JOptionPane.ERROR_MESSAGE);
+		dipDAO.eliminaDipendente(dipendente);
 	}
 }

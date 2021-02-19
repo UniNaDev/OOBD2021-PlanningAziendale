@@ -189,14 +189,14 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	}
 	
 	@Override
-	public boolean updateDipendente(Dipendente dipendente) throws SQLException {
+	public boolean aggiornaDipendente(Dipendente dipendente) throws SQLException {
 		String oldCF = dipendente.getCf();
 		
 		updateDipendentePS.setString(1, dipendente.generaCF());
 		updateDipendentePS.setString(2, dipendente.getNome());
 		updateDipendentePS.setString(3, dipendente.getCognome());
 		updateDipendentePS.setString(4, Character.toString(dipendente.getSesso()));
-		updateDipendentePS.setDate(5, new Date( dipendente.getDataNascita().toDate().getTime()));
+		updateDipendentePS.setDate(5, new Date(dipendente.getDataNascita().toDate().getTime()));
 		updateDipendentePS.setString(6, dipendente.getIndirizzo());
 		updateDipendentePS.setString(7, dipendente.getEmail());
 		updateDipendentePS.setString(8, dipendente.getTelefonoCasa());
@@ -320,6 +320,8 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					
 					this.getValutazione(risultato.getString("CF")));
 			
+			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(dipendenteTemp.getCf()));
+			
 			dipendenti.add(dipendenteTemp);
 		}
 		risultato.close();
@@ -426,7 +428,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	}
 	
 	@Override
-	public boolean deleteDipendente(Dipendente dipendente) throws SQLException {
+	public boolean eliminaDipendente(Dipendente dipendente) throws SQLException {
 		deleteDipendentePS.setString(1, dipendente.getCf());
 		int record = deleteDipendentePS.executeUpdate();
 		

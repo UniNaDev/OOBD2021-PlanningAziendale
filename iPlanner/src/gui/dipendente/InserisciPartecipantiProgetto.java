@@ -832,9 +832,10 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	}
 
 	private void inizializzaListaPartecipanti() {
-		partecipantiListModel=new DefaultListModel();
+		partecipantiListModel = new DefaultListModel();
 		partecipantiList.setModel(partecipantiListModel);
 		partecipantiListModel.addAll(progettoSelezionato.getCollaborazioni());
+		partecipantiListModel.remove(0);
 	}
 
 	private void impostaPartecipantiListRenderer() {
@@ -995,8 +996,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	}
 	
 	private void impostaInfoDipendenteDaLista(ControllerPartecipantiProgetto controller) {
-		
-		CollaborazioneProgetto collaborazione=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
+		CollaborazioneProgetto collaborazione = (CollaborazioneProgetto) partecipantiList.getSelectedValue();
 		if(collaborazione!=null) {
 			impostaInfoDipendente(collaborazione.getCollaboratore(), controller);
 			ruoloComboBox.setSelectedItem(collaborazione.getRuoloCollaboratore());

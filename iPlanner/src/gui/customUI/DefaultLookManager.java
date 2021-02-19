@@ -18,6 +18,6 @@ public class DefaultLookManager {
 
 		UIManager.put("Button.background", Color.WHITE);
 		UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-//		UIManager.put("Button.border", new MatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+		UIManager.put("Button.border", new MatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
 	}
 }
