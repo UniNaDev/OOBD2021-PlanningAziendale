@@ -711,6 +711,58 @@ public class CostruttoreDB {
     return risultato;
     }
     
+    private int creaFunzioneCheckCapienzaSala() throws SQLException{
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+	        Statement statement = connection.createStatement();
+            String createFunction = "CREATE OR REPLACE FUNCTION check_capienza_sala() RETURNS TRIGGER\r\n"
+            		+ "LANGUAGE PLPGSQL\r\n"
+            		+ "AS $$\r\n"
+            		+ "DECLARE\r\n"
+            		+ "OLDMeeting RECORD;\r\n"
+            		+ "BEGIN\r\n"
+            		+ "--Per ciascun meeting con codice sala pari a quello della sala modificato\r\n"
+            		+ "FOR OLDMeeting IN\r\n"
+            		+ "	SELECT *\r\n"
+            		+ "	FROM Meeting AS m\r\n"
+            		+ "	WHERE m.CodSala = NEW.CodSala\r\n"
+            		+ "LOOP\r\n"
+            		+ "	--Controlla che il numero di partecipanti in presenza del meeting non superi la capienza della sala\r\n"
+            		+ "	IF ((SELECT COUNT(p.CF)\r\n"
+            		+ "	   FROM Presenza AS p\r\n"
+            		+ "	   WHERE p.IDMeeting = OLDMeeting.IDMeeting\r\n"
+            		+ "	   GROUP BY p.IDMeeting) > NEW.Capienza) THEN\r\n"
+            		+ "	   		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', NEW.Capienza\r\n"
+            		+ "			USING\r\n"
+            		+ "				HINT = 'Si consiglia di cambiare la sala del meeting o di rimuovere qualche partecipante.',\r\n"
+            		+ "				ERRCODE = 'P0002';\r\n"
+            		+ "			RETURN OLD;\r\n"
+            		+ "	END IF;\r\n"
+            		+ "END LOOP;\r\n"
+            		+ "RETURN NEW;\r\n"
+            		+ "END;\r\n"
+            		+ "$$;";
+            risultato = statement.executeUpdate(createFunction);
+            statement.close();
+            }
+    return risultato;
+    }
+    
+    private int creaTriggerCapienzaRispettataSala() throws SQLException{
+	    int risultato = -1;
+	    if(connessioneEsiste()) {
+            Statement statement = connection.createStatement();
+            if (!esisteTrigger("capienza_rispettata_sala")) {
+                String createTrigger = "CREATE TRIGGER capienza_rispettata_sala BEFORE UPDATE ON SalaRiunione\r\n"
+                		+ "FOR EACH ROW\r\n"
+                		+ "EXECUTE PROCEDURE check_capienza_sala();";
+                risultato = statement.executeUpdate(createTrigger);
+                statement.close();
+                }
+            }
+    return risultato;
+    }
+    
 	    private int creaFunzioneCheckSkillExistence() throws SQLException{
 	    int risultato = -1;
 	    if(connessioneEsiste()) {
@@ -1067,6 +1119,8 @@ public class CostruttoreDB {
     	creaTriggerCapienzaRispettataPresenza();
     	creaFunzioneCheckCapienzaMeeting();
     	creaTriggerCapienzaRispettataMeeting();
+    	creaFunzioneCheckCapienzaSala();
+    	creaTriggerCapienzaRispettataSala();
     	
     	creaFunzioneCheckSkillExistence();
     	creaTriggerComposizioneSkill();
