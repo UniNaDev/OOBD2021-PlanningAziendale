@@ -10,9 +10,9 @@ import entita.SalaRiunione;
 public interface SalaRiunioneDAO {
 	public ArrayList<SalaRiunione> getSale() throws SQLException;
 	
-	public boolean insertSala(SalaRiunione sala) throws SQLException;
+	public boolean creaSala(SalaRiunione sala) throws SQLException;
 	
-	public boolean updateSala(SalaRiunione sala) throws SQLException;
+	public boolean aggiornaSala(SalaRiunione sala, String nuovoCodSala) throws SQLException;
 	
 	public boolean deleteSala(SalaRiunione sala) throws SQLException;
 	

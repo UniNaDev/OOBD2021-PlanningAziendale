@@ -23,22 +23,31 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.Dimension;
 
 public class ErroreDialog extends JDialog {
 	
     private JPanel contentPane = new JPanel();
     
-    private boolean chiudiProgramma = true;
-
+    private final boolean chiudiProgramma = true;
     
-	public ErroreDialog(Frame frameParente, Exception eccezione, String messaggio, String titolo, boolean chiudiProgramma) {
-		generaGUI(frameParente, eccezione, messaggio, titolo, chiudiProgramma);
+    private boolean mostratoErrore = false;
+
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public ErroreDialog(Frame frameParente, Exception eccezione, String titolo, String messaggio, boolean chiudiProgramma) {
+		setMinimumSize(new Dimension(555, 273));
+		generaGUI(frameParente, eccezione, titolo, messaggio, chiudiProgramma);
 	}
 	
 	public ErroreDialog(Frame frameParente, Exception eccezione, boolean chiudiProgramma) {
 	    String messaggio = "Errore Fatale!\r\n\r\nVerificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).";
 	    String titolo = "Errore Fatale";
-	    generaGUI(frameParente, eccezione, messaggio, titolo, chiudiProgramma);
+	    generaGUI(frameParente, eccezione, titolo, messaggio, chiudiProgramma);
 	}
 	
 	//Altri metodi
@@ -59,20 +68,16 @@ public class ErroreDialog extends JDialog {
 			this.dispose();
 	}
 	
-	private void generaGUI(Frame frameParente, Exception eccezione, String messaggio, String titolo, boolean chiudiProgramma) {
+	private void generaGUI(Frame frameParente, Exception eccezione, String titolo, String messaggio, boolean chiudiProgramma) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ErroreDialog.class.getResource("/icone/fatalError.png")));
-		setResizable(false);
 		setTitle(titolo);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 554, 272);
+		setBounds(100, 100, 555, 273);
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(25, 108, 488, 83);
-		contentPane.add(scrollPane);
 		
 		JTextArea stackTraceTextArea = new JTextArea();
 		stackTraceTextArea.setLineWrap(true);
@@ -83,10 +88,8 @@ public class ErroreDialog extends JDialog {
 		JTextArea messaggioTextArea = new JTextArea();
 		messaggioTextArea.setEditable(false);
 		messaggioTextArea.setLineWrap(true);
-		messaggioTextArea.setText(messaggio);
+		messaggioTextArea.setText(titolo + "\n\n" + messaggio);
 		messaggioTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
-		messaggioTextArea.setBounds(25, 11, 488, 66);
-		contentPane.add(messaggioTextArea);
 		
 		JButton okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
@@ -107,19 +110,57 @@ public class ErroreDialog extends JDialog {
 		});
 		okButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		okButton.setBounds(467, 202, 46, 20);
-		contentPane.add(okButton);
 		
 		JLabel mostraDettagliLabel = new JLabel("Mostra Dettagli");
+		mostraDettagliLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mostraDettagliLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				stackTraceTextArea.setText(ottieniStackTrace(eccezione));
+				if (!mostratoErrore) {
+					stackTraceTextArea.setText(ottieniStackTrace(eccezione));
+					mostraDettagliLabel.setText("Nascondi Dettagli");
+					mostratoErrore = true;
+				}
+				else {
+					stackTraceTextArea.setText("");
+					mostraDettagliLabel.setText("Mostra Dettagli");
+					mostratoErrore = false;
+				}
 			}
 		});
-		mostraDettagliLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mostraDettagliLabel.setFont(new Font("Consolas", Font.BOLD, 11));
-		mostraDettagliLabel.setBounds(25, 88, 98, 14);
-		contentPane.add(mostraDettagliLabel);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(25)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE))
+							.addGap(31))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(messaggioTextArea, 0, 0, Short.MAX_VALUE)
+							.addGap(31))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(mostraDettagliLabel, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(messaggioTextArea, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+					.addGap(18)
+					.addComponent(mostraDettagliLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+					.addGap(11)
+					.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addGap(12))
+		);
+		contentPane.setLayout(gl_contentPane);
 	}
 }

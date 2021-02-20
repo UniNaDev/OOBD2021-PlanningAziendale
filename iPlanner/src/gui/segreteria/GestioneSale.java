@@ -54,7 +54,7 @@ public class GestioneSale extends JFrame {
 	private JTextField capienzaTextField;
 	private JTextArea indirizzoTextArea;
 	private JTextField pianoTextField;
-	private DefaultListModel<SalaRiunione> saleListModel;
+	private DefaultListModel<SalaRiunione> modelloListaSale;
 	private JList<SalaRiunione> saleList;
 	private JLabel nomeSalaLabel, capienzaLabel, indirizzoLabel, pianoLabel;
 
@@ -162,7 +162,7 @@ public class GestioneSale extends JFrame {
 				else
 					JOptionPane.showMessageDialog(null, 
 							"Per favore selezionare prima una sala dalla lista.",
-							"Eliminazione Fallita",
+							"Selezionare Sala",
 							JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -191,7 +191,7 @@ public class GestioneSale extends JFrame {
 		saleListScrollPanel.setBounds(410, 85, 225, 219);
 		contentPane.add(saleListScrollPanel);
 
-		saleListModel = new DefaultListModel();
+		modelloListaSale = new DefaultListModel();
 		saleList = new JList();
 		saleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		saleList.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -280,21 +280,14 @@ public class GestioneSale extends JFrame {
 				if (!nomeSalaTextField.getText().isBlank() && !capienzaTextField.getText().isBlank()
 						&& !indirizzoTextArea.getText().isBlank() && !pianoTextField.getText().isBlank()) {
 					if (salaSelezionata != null)
-						if (salaSelezionata.getCodiceSala().equals(nomeSalaTextField.getText()))
 							aggiornaSala(controller);
-						else {
-							JOptionPane.showMessageDialog(null,
-									"Impossibile salvare le modifiche alla sala " + salaSelezionata.getCodiceSala()
-											+ "\nperchè il codice inserito va in conflitto\n"
-											+ "con la sala " + nomeSalaTextField.getText() + ".",
-									"Salvataggio Fallito", JOptionPane.ERROR_MESSAGE);
-					}
 					else
 						JOptionPane.showMessageDialog(null, 
 								"Per favore selezionare prima una sala dalla lista.",
 								"Salvataggio Fallito",
 								JOptionPane.INFORMATION_MESSAGE);
-				} else
+				} 
+				else
 					campiObbligatoriVuoti();
 			}
 		});
@@ -348,48 +341,56 @@ public class GestioneSale extends JFrame {
 						"Sala creata con successo.",
 						"Creazione Riuscita",
 						JOptionPane.INFORMATION_MESSAGE);
-				saleListModel.addElement(salaNuova);
+				modelloListaSale.addElement(salaNuova);
 				pulisciCampi();
 			} catch (SQLException e) {
+				ErroreDialog errore = null;
 				switch (e.getSQLState()) {
 				case VIOLAZIONE_PKEY_UNIQUE:
-					JOptionPane.showMessageDialog(null,
-							"Non possono esistere sale duplicate.\nControllare il codice della sala non esista già.",
-							"Creazione Fallita", JOptionPane.ERROR_MESSAGE);
+					errore = new ErroreDialog(null, e, 
+							"Creazione Fallita", 
+							"Non possono esistere sale duplicate.\n"
+							+ "Controllare il codice della sala non esista già.", false);
 					nomeSalaLabel.setForeground(Color.RED);
 					break;
 				case VIOLAZIONE_LUNGHEZZA_STRINGA:
-					JOptionPane.showMessageDialog(null,
-							"Alcuni valori sono troppo lunghi.\nControllare che il codice della sala non superi i 10 caratteri\ne che il suo indirizzo non superi i 50 caratteri.",
-							"Creazione Fallita", JOptionPane.ERROR_MESSAGE);
+					errore = new ErroreDialog(null, e,
+							"Creazione Fallita",
+							"Alcuni valori sono troppo lunghi.\n"
+							+ "Controllare che il codice della sala non superi i 10 caratteri\n"
+							+ "e che il suo indirizzo non superi i 50 caratteri.", false);
 					if (nomeSalaTextField.getText().length() > 10)
 						nomeSalaLabel.setForeground(Color.RED);
 					if (indirizzoTextArea.getText().length() > 50)
 						indirizzoLabel.setForeground(Color.RED);
 					break;
 				case VIOLAZIONE_VINCOLI_TABELLA:
-					JOptionPane.showMessageDialog(null,
-							"Alcuni valori sono errati.\nControllare che piano e capienza non siano valori negativi.",
-							"Creazione Fallita", JOptionPane.ERROR_MESSAGE);
+					errore = new ErroreDialog(null, e, 
+							"Creazione Fallita", 
+							"Alcuni valori sono errati.\n"
+							+ "Controllare che piano e capienza non siano valori negativi.", false);
 					break;
 				default:
 					ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
-					erroreFatale.setVisible(true);
 				}
+				errore.setVisible(true);
 			}
 		} catch (NumberFormatException nfe) {
-			JOptionPane.showMessageDialog(null, 
-					"Controllare che i valori di capienza e piano siano numerici e non troppo grandi.",
-					"Creazione Fallita",
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(null, nfe, 
+					"Creazione Fallita", 
+					"Controllare che i valori di capienza e piano siano numerici e non troppo grandi.", false);
+			errore.setVisible(true);
 		}
 	}
 	
 	private void aggiornaSala(ControllerMeetingSegreteria controller) {
 		try {
 			ricavaInfoSala();
+			salaSelezionata.setCapienza(capienza);
+			salaSelezionata.setIndirizzoSede(indirizzo);
+			salaSelezionata.setPiano(piano);
 			try {
-				controller.aggiornaSala(codSala, capienza, indirizzo, piano);
+				controller.aggiornaSala(salaSelezionata, codSala);
 				JOptionPane.showMessageDialog(null,
 						"Sala " + salaSelezionata.getCodiceSala() + " modificata con successo.", 
 						"Salvataggio Riuscito",
@@ -443,7 +444,7 @@ public class GestioneSale extends JFrame {
 			controller.eliminaSala(salaSelezionata);
 			pulisciCampi();
 			setModelloListaSaleTutte(controller);
-			if (saleListModel.isEmpty())
+			if (modelloListaSale.isEmpty())
 				saleList.setSelectedValue(null, false);
 			else
 				saleList.setSelectedIndex(0);
@@ -480,22 +481,22 @@ public class GestioneSale extends JFrame {
 			indirizzoLabel.setForeground(Color.RED);
 		if (pianoTextField.getText().isBlank())
 			pianoLabel.setForeground(Color.RED);
-
+		
 		JOptionPane.showMessageDialog(null, 
-				"Alcuni campi obbligatori sono vuoti.", 
+				"Impossibile eseguire l'operazione\nperchè alcuni campi obbligatori sono vuoti.", 
 				"Campi Obbligatori Vuoti",
-				JOptionPane.ERROR_MESSAGE);
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void setModelloListaSaleTutte(ControllerMeetingSegreteria controller) {
-		saleListModel.clear();
+		modelloListaSale.clear();
 		try {
-			saleListModel.addAll(controller.ottieniSale());
+			modelloListaSale.addAll(controller.ottieniSale());
 		} catch (SQLException e) {
 			ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
 			erroreFatale.setVisible(true);
-			saleListModel.clear();
+			modelloListaSale.clear();
 		}
-		saleList.setModel(saleListModel);
+		saleList.setModel(modelloListaSale);
 	}
 }

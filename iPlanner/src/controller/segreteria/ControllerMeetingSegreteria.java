@@ -106,23 +106,13 @@ public class ControllerMeetingSegreteria {
 	}
 	
 	public void creaSala(SalaRiunione salaNuova) throws SQLException {
-		salaDAO.insertSala(salaNuova);
+		salaDAO.creaSala(salaNuova);
 		aggiornaSaleFiltro();
 	}
 	
-	public void aggiornaSala(String codSala, int cap, String indirizzo, int piano) throws SQLException {
-		SalaRiunione sala = null;
-		try {
-			sala = salaDAO.getSalaByCod(codSala);
-			sala.setCapienza(cap);
-			sala.setIndirizzoSede(indirizzo);
-			sala.setPiano(piano);
-		} catch(SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
-			erroreFatale.setVisible(true);
-		}
-		if (sala != null)
-			salaDAO.updateSala(sala);
+	public void aggiornaSala(SalaRiunione salaModificata, String nuovoCodSala) throws SQLException {
+		salaDAO.aggiornaSala(salaModificata, nuovoCodSala);
+		aggiornaSaleFiltro();
 	}
 	
 	public void eliminaSala(SalaRiunione sala) throws SQLException {

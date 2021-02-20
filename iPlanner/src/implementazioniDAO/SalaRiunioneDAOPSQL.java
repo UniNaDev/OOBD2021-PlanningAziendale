@@ -21,7 +21,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		
 		getSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione ORDER BY CodSala");
 		addSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");
-		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
+		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ? Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
 		removeSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");
 		getSalaByCodPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala = ?");
 	}
@@ -41,7 +41,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	}
 
 	@Override
-	public boolean insertSala(SalaRiunione sala) throws SQLException {
+	public boolean creaSala(SalaRiunione sala) throws SQLException {
 		addSalaPS.setString(1, sala.getCodiceSala());
 		addSalaPS.setInt(2, sala.getCapienza());
 		addSalaPS.setString(3, sala.getIndirizzoSede());
@@ -56,16 +56,20 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	}
 
 	@Override
-	public boolean updateSala(SalaRiunione sala) throws SQLException {
-		updateSalaPS.setString(4, sala.getCodiceSala());
-		updateSalaPS.setInt(1, sala.getCapienza());
-		updateSalaPS.setString(2, sala.getIndirizzoSede());
-		updateSalaPS.setInt(3, sala.getPiano());
+	public boolean aggiornaSala(SalaRiunione sala, String nuovoCodSala) throws SQLException {
+		String vecchioCodSala = sala.getCodiceSala();
+		updateSalaPS.setString(5, vecchioCodSala);
+		updateSalaPS.setString(1, nuovoCodSala);
+		updateSalaPS.setInt(2, sala.getCapienza());
+		updateSalaPS.setString(3, sala.getIndirizzoSede());
+		updateSalaPS.setInt(4, sala.getPiano());
 		
 		int record = updateSalaPS.executeUpdate();
 		
-		if (record == 1)
+		if (record == 1) {
+			sala.setCodiceSala(nuovoCodSala);
 			return true;
+		}
 		else
 			return false;
 	}
