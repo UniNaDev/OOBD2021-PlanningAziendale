@@ -21,7 +21,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		
 		getSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione ORDER BY CodSala");
 		addSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");
-		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ? Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
+		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ?, Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
 		removeSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");
 		getSalaByCodPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala = ?");
 	}
@@ -58,11 +58,11 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	@Override
 	public boolean aggiornaSala(SalaRiunione sala, String nuovoCodSala) throws SQLException {
 		String vecchioCodSala = sala.getCodiceSala();
-		updateSalaPS.setString(5, vecchioCodSala);
 		updateSalaPS.setString(1, nuovoCodSala);
 		updateSalaPS.setInt(2, sala.getCapienza());
 		updateSalaPS.setString(3, sala.getIndirizzoSede());
 		updateSalaPS.setInt(4, sala.getPiano());
+		updateSalaPS.setString(5, vecchioCodSala);
 		
 		int record = updateSalaPS.executeUpdate();
 		

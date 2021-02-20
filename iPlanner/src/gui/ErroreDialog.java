@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -32,22 +34,18 @@ public class ErroreDialog extends JDialog {
 	
     private JPanel contentPane = new JPanel();
     
-    private final boolean chiudiProgramma = true;
+    private final boolean fatale = true;
     
     private boolean mostratoErrore = false;
 
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public ErroreDialog(Frame frameParente, Exception eccezione, String titolo, String messaggio, boolean chiudiProgramma) {
-		setMinimumSize(new Dimension(555, 273));
-		generaGUI(frameParente, eccezione, titolo, messaggio, chiudiProgramma);
+	public ErroreDialog(Exception eccezione, String titolo, String messaggio, boolean fatale) {
+		generaGUI(eccezione, titolo, messaggio, fatale);
 	}
 	
-	public ErroreDialog(Frame frameParente, Exception eccezione, boolean chiudiProgramma) {
-	    String messaggio = "Errore Fatale!\r\n\r\nVerificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).";
+	public ErroreDialog(Exception eccezione, boolean fatale) {
+	    String messaggio = "Verificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).";
 	    String titolo = "Errore Fatale";
-	    generaGUI(frameParente, eccezione, titolo, messaggio, chiudiProgramma);
+	    generaGUI(eccezione, titolo, messaggio, fatale);
 	}
 	
 	//Altri metodi
@@ -61,20 +59,27 @@ public class ErroreDialog extends JDialog {
 		return dettagliErrore;
 	}
 	
-	private void comportamentoOk(boolean chiudiProgramma) {
-		if (chiudiProgramma)
+	private void comportamentoOk(boolean fatale) {
+		if (fatale)
 			System.exit(0);
 		else
 			this.dispose();
 	}
 	
-	private void generaGUI(Frame frameParente, Exception eccezione, String titolo, String messaggio, boolean chiudiProgramma) {
+	private void generaGUI(Exception eccezione, String titolo, String messaggio, boolean fatale) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ErroreDialog.class.getResource("/icone/fatalError.png")));
 		setTitle(titolo);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				comportamentoOk(fatale);
+			}
+		});
 		setBounds(100, 100, 555, 273);
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
+		setMinimumSize(new Dimension(555, 273));
 		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -94,7 +99,7 @@ public class ErroreDialog extends JDialog {
 		JButton okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				comportamentoOk(chiudiProgramma);
+				comportamentoOk(fatale);
 			}
 		});
 		okButton.addMouseListener(new MouseAdapter() {

@@ -149,6 +149,7 @@ public class GestioneSale extends JFrame {
 			}
 		});
 		resetCampiLabel.setIcon(new ImageIcon(GestioneSale.class.getResource("/icone/refresh.png")));
+		resetCampiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		resetCampiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		resetCampiLabel.setBounds(268, 11, 16, 16);
 		infoPanel.add(resetCampiLabel);
@@ -195,6 +196,7 @@ public class GestioneSale extends JFrame {
 		saleList = new JList();
 		saleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		saleList.setFont(new Font("Consolas", Font.PLAIN, 13));
+		saleList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setModelloListaSaleTutte(controller);
 		saleListScrollPanel.setViewportView(saleList);
 		saleList.addListSelectionListener(new ListSelectionListener() {
@@ -347,14 +349,14 @@ public class GestioneSale extends JFrame {
 				ErroreDialog errore = null;
 				switch (e.getSQLState()) {
 				case VIOLAZIONE_PKEY_UNIQUE:
-					errore = new ErroreDialog(null, e, 
+					errore = new ErroreDialog(e, 
 							"Creazione Fallita", 
 							"Non possono esistere sale duplicate.\n"
 							+ "Controllare il codice della sala non esista già.", false);
 					nomeSalaLabel.setForeground(Color.RED);
 					break;
 				case VIOLAZIONE_LUNGHEZZA_STRINGA:
-					errore = new ErroreDialog(null, e,
+					errore = new ErroreDialog(e,
 							"Creazione Fallita",
 							"Alcuni valori sono troppo lunghi.\n"
 							+ "Controllare che il codice della sala non superi i 10 caratteri\n"
@@ -365,18 +367,18 @@ public class GestioneSale extends JFrame {
 						indirizzoLabel.setForeground(Color.RED);
 					break;
 				case VIOLAZIONE_VINCOLI_TABELLA:
-					errore = new ErroreDialog(null, e, 
+					errore = new ErroreDialog(e, 
 							"Creazione Fallita", 
 							"Alcuni valori sono errati.\n"
 							+ "Controllare che piano e capienza non siano valori negativi.", false);
 					break;
 				default:
-					ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
+					errore = new ErroreDialog(e, true);
 				}
 				errore.setVisible(true);
 			}
 		} catch (NumberFormatException nfe) {
-			ErroreDialog errore = new ErroreDialog(null, nfe, 
+			ErroreDialog errore = new ErroreDialog(nfe, 
 					"Creazione Fallita", 
 					"Controllare che i valori di capienza e piano siano numerici e non troppo grandi.", false);
 			errore.setVisible(true);
@@ -392,50 +394,51 @@ public class GestioneSale extends JFrame {
 			try {
 				controller.aggiornaSala(salaSelezionata, codSala);
 				JOptionPane.showMessageDialog(null,
-						"Sala " + salaSelezionata.getCodiceSala() + " modificata con successo.", 
+						"Sala modificata con successo.", 
 						"Salvataggio Riuscito",
 						JOptionPane.INFORMATION_MESSAGE);
 				setModelloListaSaleTutte(controller);
 				controller.aggiornaSaleFiltro();
 			} catch (SQLException e) {
+				ErroreDialog errore = null;
 				switch (e.getSQLState()) {
 				case VIOLAZIONE_LUNGHEZZA_STRINGA:
-					JOptionPane.showMessageDialog(null,
-							"Alcuni valori sono troppo lunghi.\nControllare che il codice della sala non superi i 10 caratteri\ne che il suo indirizzo non superi i 50 caratteri.",
+					errore = new ErroreDialog(e, 
 							"Salvataggio Fallito", 
-							JOptionPane.ERROR_MESSAGE);
+							"Alcuni valori sono troppo lunghi.\n"
+							+ "Controllare che il codice della sala non superi i 10 caratteri\n"
+							+ "e che il suo indirizzo non superi i 50 caratteri.", false);
 					if (nomeSalaTextField.getText().length() > 10)
 						nomeSalaLabel.setForeground(Color.RED);
 					if (indirizzoTextArea.getText().length() > 50)
 						indirizzoLabel.setForeground(Color.RED);
 					break;
 				case VIOLAZIONE_VINCOLI_TABELLA:
-					JOptionPane.showMessageDialog(null,
-							"Alcuni valori sono errati.\nControllare che piano e capienza non siano valori negativi.",
+					errore = new ErroreDialog(e, 
 							"Salvataggio Fallito", 
-							JOptionPane.ERROR_MESSAGE);
+							"Alcuni valori sono errati.\n"
+							+ "Controllare che piano e capienza non siano valori negativi.", false);
 					if (Integer.parseInt(capienzaTextField.getText()) <= 0)
 						capienzaLabel.setForeground(Color.RED);
 					if (Integer.parseInt(pianoTextField.getText()) < 0)
 						pianoLabel.setForeground(Color.RED);
 					break;
 				case VIOLAZIONE_CAPIENZA_SALA:
-					JOptionPane.showMessageDialog(null,
-							"Alcuni meeting ospitati da questa sala non rispetterebbero più la sua capienza.\n"
-									+ "Si consiglia di modificare prima i meeting e le relative presenze.",
+					errore = new ErroreDialog(e, 
 							"Salvataggio Fallito", 
-							JOptionPane.ERROR_MESSAGE);
+							"Alcuni meeting ospitati da questa sala non rispetterebbero più la sua capienza.\n"
+							+ "Si consiglia di modificare prima i meeting e le relative presenze.", false);
 					break;
 				default:
-					ErroreDialog erroreFatale = new ErroreDialog(null, e, true);
-					erroreFatale.setVisible(true);
+					errore = new ErroreDialog(e, true);
 				}
+				errore.setVisible(true);
 			}
 		} catch (NumberFormatException nfe) {
-			JOptionPane.showMessageDialog(null,
-					"Controllare che i valori di capienza e piano siano numerici e non troppo grandi.",
+			ErroreDialog errore = new ErroreDialog(nfe,
 					"Salvataggio Fallito",
-					JOptionPane.ERROR_MESSAGE);
+					"Controllare che i valori di capienza e piano siano numerici e non troppo grandi.", false);
+			errore.setVisible(true);
 		}
 	}
 
@@ -449,7 +452,7 @@ public class GestioneSale extends JFrame {
 			else
 				saleList.setSelectedIndex(0);
 		} catch(SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
 			erroreFatale.setVisible(true);
 		}
 	}
@@ -493,7 +496,7 @@ public class GestioneSale extends JFrame {
 		try {
 			modelloListaSale.addAll(controller.ottieniSale());
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(null,e, true);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
 			erroreFatale.setVisible(true);
 			modelloListaSale.clear();
 		}

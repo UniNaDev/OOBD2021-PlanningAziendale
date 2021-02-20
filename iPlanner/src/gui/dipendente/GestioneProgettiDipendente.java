@@ -1055,7 +1055,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					JOptionPane.ERROR_MESSAGE);
 		} catch(SQLException e) {
 			//TODO: aggiungi altre eccezioni
-			ErroreDialog errore = new ErroreDialog(null, e,
+			ErroreDialog errore = new ErroreDialog(e,
 					"Creazione del progetto fallita.",
 					"Creazione Fallita",
 					false);
