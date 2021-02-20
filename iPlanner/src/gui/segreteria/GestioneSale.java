@@ -488,7 +488,7 @@ public class GestioneSale extends JFrame {
 		JOptionPane.showMessageDialog(null, 
 				"Impossibile eseguire l'operazione\nperchè alcuni campi obbligatori sono vuoti.", 
 				"Campi Obbligatori Vuoti",
-				JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void setModelloListaSaleTutte(ControllerMeetingSegreteria controller) {

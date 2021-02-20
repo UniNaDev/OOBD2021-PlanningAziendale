@@ -256,7 +256,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 					JOptionPane.showMessageDialog(null,
 							"Inserire prima il nome dell'ambito.",
 							"Creazione Fallita",
-							JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		creaAmbitoButton.addMouseListener(new MouseAdapter() {
