@@ -16,6 +16,7 @@ import entita.AmbitoProgetto;
 import entita.CollaborazioneProgetto;
 import entita.Meeting;
 import entita.Progetto;
+import gui.ErroreDialog;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.PartecipantiListRenderer;
 import gui.customUI.CustomScrollBarUI;
@@ -30,6 +31,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.sql.SQLException;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -73,6 +75,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private DefaultListModel<CollaborazioneProgetto> partecipantiListModel;
 	private JTextField filtroNomeTextField;
 	private JComboBox<AmbitoProgetto> ambitoComboBox;
+	private DefaultComboBoxModel<AmbitoProgetto> modelloFiltroComboBox = new DefaultComboBoxModel();
 	private JComboBox<String> tipologiaComboBox;
 	private JComboBox<String> scadutoComboBox;
 	private JComboBox<String> terminatoComboBox;
@@ -187,7 +190,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		ambitiScrollPanel.setBounds(434, 36, 197, 151);
 		infoPanel.add(ambitiScrollPanel);
 		
-		JLabel ambitiLabel = new JLabel("Ambiti");
+		JLabel ambitiLabel = new JLabel("Ambiti Progetto");
 		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		ambitiScrollPanel.setColumnHeaderView(ambitiLabel);
 		
@@ -206,7 +209,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		partecipantiScrollPanel.setBounds(681, 36, 244, 235);
 		infoPanel.add(partecipantiScrollPanel);
 		
-		JLabel partecipantiLabel = new JLabel("Partecipanti");
+		JLabel partecipantiLabel = new JLabel("Partecipanti Progetto");
 		partecipantiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		partecipantiScrollPanel.setColumnHeaderView(partecipantiLabel);
 		
@@ -252,8 +255,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 				else
 					JOptionPane.showMessageDialog(null,
 							"Inserire prima il nome dell'ambito.",
-							"Nome Ambito Vuoto",
-							JOptionPane.ERROR_MESSAGE);
+							"Creazione Fallita",
+							JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		creaAmbitoButton.addMouseListener(new MouseAdapter() {
@@ -319,6 +322,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		filtraButton.setBackground(Color.WHITE);
 		comandiPanel.add(filtraButton);
 		
+		ambitoComboBox = new JComboBox();
 		inizializzaFiltroAmbitiComboBox(controller);
 		ambitoComboBox.setUI(new BasicComboBoxUI());
 		ambitoComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -395,6 +399,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		dataModelTabella = new ProgettoTableModel();
 		setModelloTabellaProgettiTutti(controller);
 		tabellaProgetti = new JTable(dataModelTabella);
+		tabellaProgetti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabellaProgetti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaProgetti.getModel());
 		DataComparator comparatorDate = new DataComparator();
@@ -518,21 +523,19 @@ public class GestioneProgettiSegreteria extends JFrame {
 			tabellaProgetti.clearSelection();
 			pulisciCampi();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
 	private void inizializzaFiltroAmbitiComboBox(ControllerProgettiSegreteria controller) {
 		try {
-			ambitoComboBox = new JComboBox(controller.ottieniTuttiAmbiti().toArray());
+			modelloFiltroComboBox.removeAllElements();
+			modelloFiltroComboBox.addAll(controller.ottieniTuttiAmbiti());
+			ambitoComboBox.setModel(modelloFiltroComboBox);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -540,43 +543,43 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			tipologiaComboBox = new JComboBox(controller.ottieniTipologie().toArray());
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
 	private void creaAmbitoProgetto(ControllerProgettiSegreteria controller) {
 		try {
 			controller.creaAmbitoProgetto(ambitoNuovoTextField.getText());
+			JOptionPane.showMessageDialog(null, 
+					"Ambito creato con successo.",
+					"Creazione Riuscita",
+					JOptionPane.INFORMATION_MESSAGE);
+			inizializzaFiltroAmbitiComboBox(controller);
+			ambitoNuovoTextField.setText("");
 		} catch (SQLException e) {
+			ErroreDialog errore = null;
 			switch(e.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
-				JOptionPane.showMessageDialog(null,
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
 						"Non possono esistere ambiti duplicati." +
-								"\nVerificare che il nome dell'ambito non esista già.",
-						"Errore Ambiti Duplicati",
-						JOptionPane.ERROR_MESSAGE);
+						"\nVerificare che il nome dell'ambito non esista già.", false);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
-				JOptionPane.showMessageDialog(null,
-						"Verificare che non ci siano numeri nel nome dell'ambito.",
-								"Errore Formato Nome Ambito",
-						JOptionPane.ERROR_MESSAGE);
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Verificare che non ci siano numeri nel nome dell'ambito.", false);
 				break;
 			case VIOLAZIONE_LUNGHEZZA_STRINGA:
-				JOptionPane.showMessageDialog(null,
-						"Verificare che il nome dell'ambito non abbia più di 20 caratteri.",
-								"Errore Lunghezza Nome Ambito",
-						JOptionPane.ERROR_MESSAGE);
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Verificare che il nome dell'ambito non abbia più di 20 caratteri.", false);
 				break;
 			default:
-				JOptionPane.showMessageDialog(null,
-						e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
-						"Errore #" + e.getSQLState(),
-						JOptionPane.ERROR_MESSAGE);
+				errore = new ErroreDialog(e, true);
 			}
+			errore.setVisible(true);
 		}
 	}
 	
@@ -585,10 +588,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 			ambitiListModel.addAll(controller.ottieniAmbitiProgetto(progettoSelezionato));
 			ambitiList.setModel(ambitiListModel);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -597,10 +598,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 			partecipantiListModel.addAll(controller.ottieniCollaborazioni(progettoSelezionato));
 			partecipantiList.setModel(partecipantiListModel);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -608,10 +607,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			dataModelTabella.setProgettiTabella(controller.ottieniProgetti());
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato \noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 }

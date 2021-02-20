@@ -353,8 +353,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingTelematici());
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -366,8 +366,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingPiattaforma(piattaforma));
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -379,8 +379,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingFisici());
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -392,8 +392,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingSala(sala));
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -403,8 +403,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			for (SalaRiunione sala: controller.ottieniSale())
 				filtroSaleComboBox.addItem(sala);
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -412,8 +412,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeeting());
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -421,8 +421,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -430,8 +430,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			filtroPiattaformaComboBox = new JComboBox(controller.ottieniPiattaforme().toArray());
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -440,8 +440,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			invitatiListModel.addAll(controller.ottieniInvitatiMeeting(meeting));
 			invitatiList.setModel(invitatiListModel);
 		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 }

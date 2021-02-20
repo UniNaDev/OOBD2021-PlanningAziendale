@@ -452,8 +452,8 @@ public class GestioneSale extends JFrame {
 			else
 				saleList.setSelectedIndex(0);
 		} catch(SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
