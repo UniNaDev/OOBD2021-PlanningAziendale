@@ -29,46 +29,46 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	
 	private PreparedStatement getProgettiPS,
 	getProgettiByNomePS,
-	getProgettiDipendenteByNomePS,
+	ottieniProgettiDipendentiPerNomePS,
 	getPartecipantiPS,
-	getProgettiByDipendentePS,
-	getProgettiByAmbitoPS,
-	getProgettiByTipoPS,
-	addProgettoPS,
-	deleteProgettoPS,
-	addPartecipantePS,
-	deletePartecipantePS,
+	ottieniProgettiDipendentePS,
+	ottieniProgettiDipendentePerAmbitoPS,
+	ottieniProgettiDipendentePerTipoPS,
+	creaProgettoPS,
+	rimuoviProgettoPS,
+	inserisciPartecipanteProgettoPS,
+	eliminaPartecipanteProgettoPS,
 	projectManagerPS,
 	aggiornaRuoloCollaboratorePS,
-	updateProgettoPS,
+	aggiornaProgettoPS,
 	getMeetingRelativiPS,
-	getProgettoByCodPS,
-	getTipologiePS,
-	getRuoliDipendentiPS,
-	getCodProgettoPS;
+	ottieniProgettoDaCodiceProgettoPS,
+	ottieniTipologiePS,
+	ottieniRuoliPS,
+	ottieniCodiceProgettoPS;
 
 	public ProgettoDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;
 
 		getProgettiPS = connection.prepareStatement("SELECT * FROM Progetto");
 		getProgettiByNomePS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.NomeProgetto ILIKE '%' || ? || '%'");
-		getProgettiDipendenteByNomePS=connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ? AND p.NomeProgetto ILIKE '%' || ? || '%'");
+		ottieniProgettiDipendentiPerNomePS=connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ? AND p.NomeProgetto ILIKE '%' || ? || '%'");
 		getPartecipantiPS = connection.prepareStatement("SELECT * FROM Partecipazione AS p WHERE p.CodProgetto = ?");
-		getProgettiByDipendentePS = connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ?");
-		getProgettiByAmbitoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT a.CodProgetto FROM AmbitoProgettoLink AS a WHERE a.IDAmbito = ?)");
-		getProgettiByTipoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.TipoProgetto = ?");
-		addProgettoPS = connection.prepareStatement("INSERT INTO Progetto (NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione) VALUES (?,?,?,?,?,?)");
-		deleteProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?");
-		addPartecipantePS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)");
-		deletePartecipantePS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?");
+		ottieniProgettiDipendentePS = connection.prepareStatement("SELECT * FROM Progetto AS p NATURAL JOIN Partecipazione AS par WHERE par.CF = ?");
+		ottieniProgettiDipendentePerAmbitoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto IN (SELECT a.CodProgetto FROM AmbitoProgettoLink AS a WHERE a.IDAmbito = ?)");
+		ottieniProgettiDipendentePerTipoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.TipoProgetto = ?");
+		creaProgettoPS = connection.prepareStatement("INSERT INTO Progetto (NomeProgetto,TipoProgetto,DescrizioneProgetto,DataCreazione,DataScadenza,DataTerminazione) VALUES (?,?,?,?,?,?)");
+		rimuoviProgettoPS = connection.prepareStatement("DELETE FROM Progetto AS p WHERE p.CodProgetto = ?");
+		inserisciPartecipanteProgettoPS = connection.prepareStatement("INSERT INTO Partecipazione VALUES (?,?,?)");
+		eliminaPartecipanteProgettoPS = connection.prepareStatement("DELETE FROM Partecipazione WHERE CF = ? AND CodProgetto = ?");
 		projectManagerPS = connection.prepareStatement("SELECT CF FROM Dipendente NATURAL JOIN Partecipazione WHERE CodProgetto = ? AND RuoloDipendente = 'Project Manager'");
 		aggiornaRuoloCollaboratorePS=connection.prepareStatement("UPDATE Partecipazione SET RuoloDipendente=? WHERE CF=? AND CodProgetto=?");
-		updateProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
+		aggiornaProgettoPS = connection.prepareStatement("UPDATE Progetto SET NomeProgetto = ?, TipoProgetto = ?, DescrizioneProgetto = ?,  DataScadenza = ?, DataTerminazione = ? WHERE CodProgetto = ?");
 		getMeetingRelativiPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodProgetto = ?");
-		getProgettoByCodPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");
-		getTipologiePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::tipologia))");
-		getRuoliDipendentiPS=connection.prepareStatement("SELECT unnest(enum_range(NULL::ruolo))");
-		getCodProgettoPS = connection.prepareStatement("SELECT codprogetto FROM progetto WHERE nomeprogetto = ?");
+		ottieniProgettoDaCodiceProgettoPS = connection.prepareStatement("SELECT * FROM Progetto AS p WHERE p.CodProgetto = ?");
+		ottieniTipologiePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::tipologia))");
+		ottieniRuoliPS=connection.prepareStatement("SELECT unnest(enum_range(NULL::ruolo))");
+		ottieniCodiceProgettoPS = connection.prepareStatement("SELECT codprogetto FROM progetto WHERE nomeprogetto = ?");
 		connection.prepareStatement("SELECT nomeProgetto,tipoProgetto,descrizioneProgetto,dataCreazione,datascadenza FROM Progetto WHERE NomeProgetto= ?");
 	}
 
@@ -91,8 +91,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
 			
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);
-			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(projTemp.getIdProgettto()));
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.ottieniAmbitiDelProgetto(projTemp);
+			projTemp.setMeetingsRelativi(ottieniMeetingRelativiProgetto(projTemp.getIdProgettto()));
 			projTemp.setAmbiti(ambiti);
 			
 			progetti.add(projTemp);
@@ -102,8 +102,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return progetti;
 	}
 	
-	@Override
-	public ArrayList<Dipendente> getPartecipantiProgettoSenzaRuolo(int codiceProgetto) throws SQLException {
+	@Override  //OK
+	public ArrayList<Dipendente> ottieniPartecipantiProgettoSenzaRuolo(int codiceProgetto) throws SQLException {
 		ArrayList<Dipendente> partecipanti = new ArrayList<Dipendente>();
 		dipDAO = new DipendenteDAOPSQL(connection);
 		getPartecipantiPS.setInt(1, codiceProgetto);
@@ -111,7 +111,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		ResultSet risultato = getPartecipantiPS.executeQuery();
 		
 		while(risultato.next()) {
-			Dipendente partecipanteTemp = dipDAO.getDipendenteByCF(risultato.getString("CF"));
+			Dipendente partecipanteTemp = dipDAO.ottieniDipendenteDaCF(risultato.getString("CF"));
 			partecipanti.add(partecipanteTemp);
 		}
 		risultato.close();
@@ -119,8 +119,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return partecipanti;
 	}
 	
-	@Override
-	public ArrayList<CollaborazioneProgetto> getPartecipantiProgetto(int codiceProgetto) throws SQLException {
+	@Override  //OK
+	public ArrayList<CollaborazioneProgetto> ottieniPartecipantiProgetto(int codiceProgetto) throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();
 		dipDAO = new DipendenteDAOPSQL(connection);
 		getPartecipantiPS.setInt(1, codiceProgetto);
@@ -128,8 +128,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		ResultSet risultato = getPartecipantiPS.executeQuery();
 		
 		while(risultato.next()) {
-			Dipendente partecipanteTemp = dipDAO.getDipendenteByCF(risultato.getString("CF"));
-			CollaborazioneProgetto partecipazioneTemp = new CollaborazioneProgetto(getProgettoByCod(codiceProgetto), partecipanteTemp, risultato.getString("RuoloDipendente"));
+			Dipendente partecipanteTemp = dipDAO.ottieniDipendenteDaCF(risultato.getString("CF"));
+			CollaborazioneProgetto partecipazioneTemp = new CollaborazioneProgetto(ottieniProgettoDaCodiceProgetto(codiceProgetto), partecipanteTemp, risultato.getString("RuoloDipendente"));
 			collaborazioni.add(partecipazioneTemp);
 		}
 		risultato.close();
@@ -137,8 +137,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return collaborazioni;
 	}
 
-	@Override
-	public ArrayList<Meeting> getMeetingRelativiProgetto(int codiceProgettoSelezionato) throws SQLException {
+	@Override  //Ok
+	public ArrayList<Meeting> ottieniMeetingRelativiProgetto(int codiceProgettoSelezionato) throws SQLException {
 		ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();
 		getMeetingRelativiPS.setInt(1, codiceProgettoSelezionato);
 		
@@ -155,9 +155,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalTime(risultato.getTime("OrarioFine").getTime()),
 					risultato.getString("Modalità"),
 					risultato.getString("Piattaforma"),
-					salaDAO.getSalaByCod(risultato.getString("CodSala")));
+					salaDAO.ottieniSalaDaCodSala(risultato.getString("CodSala")));
 					
-					meetingTemp.setProgettoDiscusso(getProgettoByCod(risultato.getInt("CodProgetto")));
+					meetingTemp.setProgettoDiscusso(ottieniProgettoDaCodiceProgetto(risultato.getInt("CodProgetto")));
 			
 			meetingsRelativi.add(meetingTemp);
 		}
@@ -166,17 +166,17 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return meetingsRelativi;
 	}
 
-	@Override
+	@Override  //OK
 	public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente(Dipendente dipendente) throws SQLException {
-		getProgettiByDipendentePS.setString(1, dipendente.getCf());
-		ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();
+		ottieniProgettiDipendentePS.setString(1, dipendente.getCf());
+		ArrayList<CollaborazioneProgetto> collaborazioniDipendente = new ArrayList<CollaborazioneProgetto>();
 		
-		ResultSet risultato = getProgettiByDipendentePS.executeQuery();
+		ResultSet risultato = ottieniProgettiDipendentePS.executeQuery();
 		
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
 		
 		while(risultato.next()) {
-			Progetto projTemp = new Progetto(risultato.getInt("CodProgetto"),
+			Progetto progettoTemp = new Progetto(risultato.getInt("CodProgetto"),
 					risultato.getString("NomeProgetto"),
 					risultato.getString("TipoProgetto"),
 					risultato.getString("DescrizioneProgetto"),
@@ -185,34 +185,34 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					);
 			
 			if(risultato.getDate("DataTerminazione") != null){
-				projTemp.setDataTerminazione(new LocalDate(risultato.getDate("DataTerminazione")));
+				progettoTemp.setDataTerminazione(new LocalDate(risultato.getDate("DataTerminazione")));
 			}
 			else {
-				projTemp.setDataTerminazione(null);
+				progettoTemp.setDataTerminazione(null);
 			}
 	
-			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(risultato.getInt("CodProgetto")));
-			projTemp.setCollaborazioni(getPartecipantiProgetto(risultato.getInt("CodProgetto")));
-			projTemp.setComprende(getPartecipantiProgettoSenzaRuolo(risultato.getInt("CodProgetto")));
+			progettoTemp.setMeetingsRelativi(ottieniMeetingRelativiProgetto(risultato.getInt("CodProgetto")));
+			progettoTemp.setCollaborazioni(ottieniPartecipantiProgetto(risultato.getInt("CodProgetto")));
+			progettoTemp.setComprende(ottieniPartecipantiProgettoSenzaRuolo(risultato.getInt("CodProgetto")));
 			
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);
-			projTemp.setAmbiti(ambiti);
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.ottieniAmbitiDelProgetto(progettoTemp);
+			progettoTemp.setAmbiti(ambiti);
 			
-			CollaborazioneProgetto partecipazioneTemp = new CollaborazioneProgetto(projTemp,dipendente,risultato.getString("RuoloDipendente"));
+			CollaborazioneProgetto collaborazioneTemp = new CollaborazioneProgetto(progettoTemp,dipendente,risultato.getString("RuoloDipendente"));
 			
-			collaborazioni.add(partecipazioneTemp);
+			collaborazioniDipendente.add(collaborazioneTemp);
 		}
 		risultato.close();
 		
-		return collaborazioni;
+		return collaborazioniDipendente;
 	}
 
-	@Override
-	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException {		
-		getProgettiByAmbitoPS.setInt(1, ambito.getIdAmbito());
+	@Override //Ok
+	public ArrayList<Progetto> ottieniProgettiDipendentePerAmbito(AmbitoProgetto ambito) throws SQLException {		
+		ottieniProgettiDipendentePerAmbitoPS.setInt(1, ambito.getIdAmbito());
 		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
 		
-		ResultSet risultato = getProgettiByAmbitoPS.executeQuery();
+		ResultSet risultato = ottieniProgettiDipendentePerAmbitoPS.executeQuery();
 		
 		dipDAO = new DipendenteDAOPSQL(connection);
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
@@ -228,7 +228,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataCreazione")),
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.ottieniAmbitiDelProgetto(projTemp);
 			projTemp.setAmbiti(ambiti);
 			progetti.add(projTemp);
 		}
@@ -237,12 +237,12 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return progetti;
 	}
 
-	@Override
-	public ArrayList<Progetto> getProgettiByTipo(String tipologia) throws SQLException {		
+	@Override  //Ok
+	public ArrayList<Progetto> ottieniProgettiDipendentePerTipo(String tipologia) throws SQLException {		
 		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-		getProgettiByTipoPS.setObject(1, tipologia, Types.OTHER);
+		ottieniProgettiDipendentePerTipoPS.setObject(1, tipologia, Types.OTHER);
 		
-		ResultSet risultato = getProgettiByTipoPS.executeQuery();
+		ResultSet risultato = ottieniProgettiDipendentePerTipoPS.executeQuery();
 		
 		dipDAO = new DipendenteDAOPSQL(connection);
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
@@ -258,7 +258,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataCreazione")),
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.ottieniAmbitiDelProgetto(projTemp);
 			projTemp.setAmbiti(ambiti);
 			progetti.add(projTemp);
 		}
@@ -267,22 +267,22 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return progetti;
 	}
 
-	@Override
-	public boolean insertProgetto(Progetto proj) throws SQLException {
-		addProgettoPS.setString(1, proj.getNomeProgetto());
-		addProgettoPS.setObject(2, proj.getTipoProgetto(), Types.OTHER);
-		addProgettoPS.setString(3, proj.getDescrizioneProgetto());
-		addProgettoPS.setDate(4, new Date(proj.getDataCreazione().toDateTimeAtStartOfDay().getMillis()));
+	@Override //Ok
+	public boolean creaProgetto(Progetto proj) throws SQLException {
+		creaProgettoPS.setString(1, proj.getNomeProgetto());
+		creaProgettoPS.setObject(2, proj.getTipoProgetto(), Types.OTHER);
+		creaProgettoPS.setString(3, proj.getDescrizioneProgetto());
+		creaProgettoPS.setDate(4, new Date(proj.getDataCreazione().toDateTimeAtStartOfDay().getMillis()));
 		if (proj.getScadenza() != null)
-			addProgettoPS.setDate(5, new Date(proj.getScadenza().toDateTimeAtStartOfDay().getMillis()));
+			creaProgettoPS.setDate(5, new Date(proj.getScadenza().toDateTimeAtStartOfDay().getMillis()));
 		else
-			addProgettoPS.setNull(5, Types.DATE);
+			creaProgettoPS.setNull(5, Types.DATE);
 		if (proj.getDataTerminazione() != null)
-			addProgettoPS.setDate(6, new Date(proj.getDataTerminazione().toDateTimeAtStartOfDay().getMillis()));
+			creaProgettoPS.setDate(6, new Date(proj.getDataTerminazione().toDateTimeAtStartOfDay().getMillis()));
 		else
-			addProgettoPS.setNull(6, Types.DATE);
+			creaProgettoPS.setNull(6, Types.DATE);
 		
-		int record = addProgettoPS.executeUpdate();
+		int record = creaProgettoPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -290,25 +290,11 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			return false;
 	}
 
-	@Override
+	@Override //Ok
 	public boolean rimuoviProgetto(Progetto proj) throws SQLException {
-		deleteProgettoPS.setInt(1, proj.getIdProgettto());
+		rimuoviProgettoPS.setInt(1, proj.getIdProgettto());
 		
-		int record = deleteProgettoPS.executeUpdate();
-		
-		if (record == 1)
-			return true;
-		else
-			return false;
-	}
-
-	@Override
-	public boolean insertPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-		addPartecipantePS.setInt(1, collaborazioneProgetto.getProgetto().getIdProgettto());
-		addPartecipantePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf());
-		addPartecipantePS.setObject(3, collaborazioneProgetto.getRuoloCollaboratore(),Types.OTHER);
-		
-		int record = addPartecipantePS.executeUpdate();
+		int record = rimuoviProgettoPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -317,12 +303,12 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public boolean deletePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-		//TODO: farlo solo se il dipendente non è project manager oppure controllare i trigger
-		deletePartecipantePS.setString(1, collaborazioneProgetto.getCollaboratore().getCf());
-		deletePartecipantePS.setInt(2, collaborazioneProgetto.getProgetto().getIdProgettto());
+	public boolean inserisciPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+		inserisciPartecipanteProgettoPS.setInt(1, collaborazioneProgetto.getProgetto().getIdProgettto());
+		inserisciPartecipanteProgettoPS.setString(2, collaborazioneProgetto.getCollaboratore().getCf());
+		inserisciPartecipanteProgettoPS.setObject(3, collaborazioneProgetto.getRuoloCollaboratore(),Types.OTHER);
 		
-		int record = deletePartecipantePS.executeUpdate();
+		int record = inserisciPartecipanteProgettoPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -331,21 +317,34 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public boolean updateProgetto(Progetto proj) throws SQLException {
-		updateProgettoPS.setString(1, proj.getNomeProgetto());
-		updateProgettoPS.setObject(2, proj.getTipoProgetto(),Types.OTHER);
-		updateProgettoPS.setString(3, proj.getDescrizioneProgetto());
+	public boolean eliminaPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+		eliminaPartecipanteProgettoPS.setString(1, collaborazioneProgetto.getCollaboratore().getCf());
+		eliminaPartecipanteProgettoPS.setInt(2, collaborazioneProgetto.getProgetto().getIdProgettto());
+		
+		int record = eliminaPartecipanteProgettoPS.executeUpdate();
+		
+		if (record == 1)
+			return true;
+		else
+			return false;
+	}
+
+	@Override  //Ok
+	public boolean aggiornaProgetto(Progetto proj) throws SQLException {
+		aggiornaProgettoPS.setString(1, proj.getNomeProgetto());
+		aggiornaProgettoPS.setObject(2, proj.getTipoProgetto(),Types.OTHER);
+		aggiornaProgettoPS.setString(3, proj.getDescrizioneProgetto());
 		if (proj.getScadenza() != null)
-			updateProgettoPS.setDate(4, new Date(proj.getScadenza().toDateTimeAtStartOfDay().getMillis()));
+			aggiornaProgettoPS.setDate(4, new Date(proj.getScadenza().toDateTimeAtStartOfDay().getMillis()));
 		else
-			updateProgettoPS.setNull(4, Types.DATE);
+			aggiornaProgettoPS.setNull(4, Types.DATE);
 		if (proj.getDataTerminazione() != null) 
-			updateProgettoPS.setDate(5, new Date(proj.getDataTerminazione().toDateTimeAtStartOfDay().getMillis()));
+			aggiornaProgettoPS.setDate(5, new Date(proj.getDataTerminazione().toDateTimeAtStartOfDay().getMillis()));
 		else
-			updateProgettoPS.setNull(5,Types.DATE);
-		updateProgettoPS.setInt(6, proj.getIdProgettto());
+			aggiornaProgettoPS.setNull(5,Types.DATE);
+		aggiornaProgettoPS.setInt(6, proj.getIdProgettto());
 		
-		int record = updateProgettoPS.executeUpdate();
+		int record = aggiornaProgettoPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -353,10 +352,10 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 			return false;
 	}
 
-	@Override
-	public Progetto getProgettoByCod(int codProgetto) throws SQLException {
-		getProgettoByCodPS.setInt(1, codProgetto);
-		ResultSet risultato = getProgettoByCodPS.executeQuery();
+	@Override //ok
+	public Progetto ottieniProgettoDaCodiceProgetto(int codProgetto) throws SQLException {
+		ottieniProgettoDaCodiceProgettoPS.setInt(1, codProgetto);
+		ResultSet risultato = ottieniProgettoDaCodiceProgettoPS.executeQuery();
 		risultato.next();
 		
 		dipDAO = new DipendenteDAOPSQL(connection);
@@ -372,7 +371,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 				new LocalDate(risultato.getDate("DataCreazione")),
 				new LocalDate(risultato.getDate("DataScadenza")),
 				dataTerminazione);
-		ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);
+		ArrayList<AmbitoProgetto> ambiti = ambitoDAO.ottieniAmbitiDelProgetto(projTemp);
 		projTemp.setAmbiti(ambiti);
 		
 		risultato.close();
@@ -380,11 +379,11 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return projTemp;
 	}
 
-	@Override
+	@Override  //Ok
 	public ArrayList<String> ottieniTipologie() throws SQLException {
 		ArrayList<String> tipologie = new ArrayList<String>();
 		
-		ResultSet risultato = getTipologiePS.executeQuery();
+		ResultSet risultato = ottieniTipologiePS.executeQuery();
 		
 		while (risultato.next())
 			tipologie.add(risultato.getString(1));
@@ -394,13 +393,13 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return tipologie;
 	}
 	
-	@Override
-	public int getCodProgetto(Progetto proj) throws SQLException {
+	@Override //Ok
+	public int ottieniCodiceProgetto(Progetto proj) throws SQLException {
 		int codProgetto;
 		
-		getCodProgettoPS.setString(1, proj.getNomeProgetto());
+		ottieniCodiceProgettoPS.setString(1, proj.getNomeProgetto());
 		
-		ResultSet risultato = getCodProgettoPS.executeQuery();
+		ResultSet risultato = ottieniCodiceProgettoPS.executeQuery();
 		
 		risultato.next();
 		
@@ -410,9 +409,9 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 	
 	@Override
-	public ArrayList<String> getRuoliDipendenti() throws SQLException {
+	public ArrayList<String> ottieniRuoli() throws SQLException {
 		ArrayList<String> ruoli = new ArrayList<String>();
-		ResultSet risultato = getRuoliDipendentiPS.executeQuery();
+		ResultSet risultato = ottieniRuoliPS.executeQuery();
 		
 		while (risultato.next())
 			ruoli.add(risultato.getString(1));
@@ -422,13 +421,13 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return ruoli;
 	}
 
-	@Override
-	public boolean insertProjectManager(String cf, Progetto progetto, String ruolo) throws SQLException {
-		addPartecipantePS.setInt(1, progetto.getIdProgettto());
-		addPartecipantePS.setString(2, cf);
-		addPartecipantePS.setObject(3, ruolo,Types.OTHER);
+	@Override //Ok
+	public boolean inserisciProjectManager(String cf, Progetto progetto, String ruolo) throws SQLException {
+		inserisciPartecipanteProgettoPS.setInt(1, progetto.getIdProgettto());
+		inserisciPartecipanteProgettoPS.setString(2, cf);
+		inserisciPartecipanteProgettoPS.setObject(3, ruolo,Types.OTHER);
 		
-		int record = addPartecipantePS.executeUpdate();
+		int record = inserisciPartecipanteProgettoPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -437,8 +436,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 	}
 
-	@Override
-	public boolean updatePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
+	@Override  //Ok
+	public boolean aggiornaRuoloCollaboratore(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
 		aggiornaRuoloCollaboratorePS.setObject(1, collaborazioneProgetto.getRuoloCollaboratore(),Types.OTHER);
 		aggiornaRuoloCollaboratorePS.setString(2, collaborazioneProgetto.getCollaboratore().getCf());
 		aggiornaRuoloCollaboratorePS.setInt(3, collaborazioneProgetto.getProgetto().getIdProgettto());
@@ -472,8 +471,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
 			
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);
-			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(projTemp.getIdProgettto()));
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.ottieniAmbitiDelProgetto(projTemp);
+			projTemp.setMeetingsRelativi(ottieniMeetingRelativiProgetto(projTemp.getIdProgettto()));
 			projTemp.setAmbiti(ambiti);
 			
 			progetti.add(projTemp);
@@ -484,7 +483,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 	}
 
 	@Override
-	public String getCFProjectManager(Progetto progetto) throws SQLException {
+	public String ottieniCFProjectManager(Progetto progetto) throws SQLException {
 		String cf;
 		projectManagerPS.setInt(1, progetto.getIdProgettto());
 		ResultSet risultato=projectManagerPS.executeQuery();
@@ -497,12 +496,12 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return cf;
 	}
 
-	@Override
-	public ArrayList<Progetto> getProgettiDipendenteByNome(String nomeCercato, Dipendente dipendente) throws SQLException {
+	@Override  //Ok
+	public ArrayList<Progetto> ottieniProgettiDipendentePerNome(String nomeCercato, Dipendente dipendente) throws SQLException {
 		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-		getProgettiDipendenteByNomePS.setString(1, dipendente.getCf());
-		getProgettiDipendenteByNomePS.setString(2, nomeCercato);
-		ResultSet risultato = getProgettiDipendenteByNomePS.executeQuery();
+		ottieniProgettiDipendentiPerNomePS.setString(1, dipendente.getCf());
+		ottieniProgettiDipendentiPerNomePS.setString(2, nomeCercato);
+		ResultSet risultato = ottieniProgettiDipendentiPerNomePS.executeQuery();
 		
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
 		
@@ -518,8 +517,8 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 					new LocalDate(risultato.getDate("DataScadenza")),
 					dataTerminazione);
 			
-			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.getAmbitiOfProgetto(projTemp);
-			projTemp.setMeetingsRelativi(getMeetingRelativiProgetto(projTemp.getIdProgettto()));
+			ArrayList<AmbitoProgetto> ambiti = ambitoDAO.ottieniAmbitiDelProgetto(projTemp);
+			projTemp.setMeetingsRelativi(ottieniMeetingRelativiProgetto(projTemp.getIdProgettto()));
 			projTemp.setAmbiti(ambiti);
 			
 			progetti.add(projTemp);
@@ -529,28 +528,6 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		return progetti;
 	}
 
-	@Override
-	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public boolean addProjectManager(String cf, Progetto tmp, String string) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String ottieniProjectManager(Progetto progetto) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
 

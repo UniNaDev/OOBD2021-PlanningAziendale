@@ -14,21 +14,21 @@ import interfacceDAO.SalaRiunioneDAO;
 
 public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	private Connection connection;
-	private PreparedStatement getSalePS,addSalaPS,updateSalaPS,removeSalaPS,getSalaByCodPS;
+	private PreparedStatement ottieniSalePS,creaSalaPS,aggiornaSalaPS,eliminaSalaPS,getSalaByCodPS;
 	
 	public SalaRiunioneDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;
 		
-		getSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione ORDER BY CodSala");
-		addSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");
-		updateSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ?, Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
-		removeSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");
+		ottieniSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione ORDER BY CodSala");
+		creaSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");
+		aggiornaSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ? Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
+		eliminaSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");
 		getSalaByCodPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala = ?");
 	}
 	
-	@Override
-	public ArrayList<SalaRiunione> getSale() throws SQLException {
-		ResultSet risultato = getSalePS.executeQuery();
+	@Override //Ok
+	public ArrayList<SalaRiunione> ottieniSale() throws SQLException {
+		ResultSet risultato = ottieniSalePS.executeQuery();
 		ArrayList<SalaRiunione> sale = new ArrayList<SalaRiunione>();
 		
 		while(risultato.next()) {
@@ -40,14 +40,14 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		return sale;
 	}
 
-	@Override
+	@Override  //Ok
 	public boolean creaSala(SalaRiunione sala) throws SQLException {
-		addSalaPS.setString(1, sala.getCodiceSala());
-		addSalaPS.setInt(2, sala.getCapienza());
-		addSalaPS.setString(3, sala.getIndirizzoSede());
-		addSalaPS.setInt(4, sala.getPiano());
+		creaSalaPS.setString(1, sala.getCodiceSala());
+		creaSalaPS.setInt(2, sala.getCapienza());
+		creaSalaPS.setString(3, sala.getIndirizzoSede());
+		creaSalaPS.setInt(4, sala.getPiano());
 		
-		int record = addSalaPS.executeUpdate();
+		int record = creaSalaPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -58,13 +58,13 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	@Override
 	public boolean aggiornaSala(SalaRiunione sala, String nuovoCodSala) throws SQLException {
 		String vecchioCodSala = sala.getCodiceSala();
-		updateSalaPS.setString(1, nuovoCodSala);
-		updateSalaPS.setInt(2, sala.getCapienza());
-		updateSalaPS.setString(3, sala.getIndirizzoSede());
-		updateSalaPS.setInt(4, sala.getPiano());
-		updateSalaPS.setString(5, vecchioCodSala);
-		
-		int record = updateSalaPS.executeUpdate();
+		aggiornaSalaPS.setString(5, vecchioCodSala);
+		aggiornaSalaPS.setString(1, nuovoCodSala);
+		aggiornaSalaPS.setInt(2, sala.getCapienza());
+		aggiornaSalaPS.setString(3, sala.getIndirizzoSede());
+		aggiornaSalaPS.setInt(4, sala.getPiano());
+
+		int record = aggiornaSalaPS.executeUpdate();
 		
 		if (record == 1) {
 			sala.setCodiceSala(nuovoCodSala);
@@ -75,10 +75,10 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	}
 
 	@Override
-	public boolean deleteSala(SalaRiunione sala) throws SQLException {
-		removeSalaPS.setString(1, sala.getCodiceSala());
+	public boolean eliminaSala(SalaRiunione sala) throws SQLException {
+		eliminaSalaPS.setString(1, sala.getCodiceSala());
 		
-		int record = removeSalaPS.executeUpdate();
+		int record = eliminaSalaPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -87,7 +87,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	}
 
 	@Override
-	public SalaRiunione getSalaByCod(String codSala) throws SQLException {
+	public SalaRiunione ottieniSalaDaCodSala(String codSala) throws SQLException {
 		if (codSala != null) {
 			getSalaByCodPS.setString(1, codSala);
 		

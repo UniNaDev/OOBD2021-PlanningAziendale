@@ -666,7 +666,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 
 	private void inizializzaTabellaDipendente(ControllerPartecipantiMeeting controller) {
 		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonInvitatiMeeting(meetingSelezionato));
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
@@ -714,7 +714,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		else
 			presenza=false;
 		PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, dipendenteSelezionato, presenza, false);
-		if(controller.inserisciPartecipante(partecipazioneMeeting)==true) {
+		if(controller.inserisciInvitatoMeeting(partecipazioneMeeting)==true) {
 		JOptionPane.showMessageDialog(null, "Invitato inserito correttamente");
 		listmodel.addElement(partecipazioneMeeting);
 		} 
@@ -732,7 +732,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		else
 			presenza=false;
 		PartecipazioneMeeting partecipazioneMeeting=new PartecipazioneMeeting(meetingSelezionato, partecipazione.getPartecipante(), presenza, false);
-		if(controller.aggiornaPresenzaPartecipante(partecipazioneMeeting)==true) {
+		if(controller.aggiornaPresenzaInvitato(partecipazioneMeeting)==true) {
 			JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
 			listmodel.removeElementAt(invitatiList.getSelectedIndex()); 
 			listmodel.addElement(partecipazioneMeeting);
@@ -742,7 +742,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	
 	private void eliminaInvitato(ControllerPartecipantiMeeting controller){
 		invitatiLabel.setForeground(Color.BLACK);
-		if(controller.eliminaPartecipante((PartecipazioneMeeting)invitatiList.getSelectedValue())==true) {
+		if(controller.eliminaInvitato((PartecipazioneMeeting)invitatiList.getSelectedValue())==true) {
 			JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 			aggiornaListaInvitati();
 			aggiornaTabellaDipendenti(controller);
@@ -758,7 +758,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private void aggiornaTabellaDipendenti(ControllerPartecipantiMeeting controller) {
 		dataModelDipendente.fireTableDataChanged();
 		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(meetingSelezionato));
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonInvitatiMeeting(meetingSelezionato));
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}

@@ -86,7 +86,7 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	public ArrayList<Skill> ottieniSkill() throws SQLException{
-		return skillDAO.getSkills();
+		return skillDAO.ottieniSkill();
 	}
 	
 	public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
@@ -95,7 +95,7 @@ public class ControllerDipendentiSegreteria {
 	
 	public float ottieniMaxStipendio() {
 		try {
-			return dipDAO.getMaxStipendio();
+			return dipDAO.ottieniMaxStipendio();
 		} catch (SQLException e) {
 			return 100000000f;
 		}

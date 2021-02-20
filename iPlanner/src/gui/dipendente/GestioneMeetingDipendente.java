@@ -324,7 +324,7 @@ public class GestioneMeetingDipendente extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (onlineRadioButton.isSelected() == true) {
 					piattaformaSalaLabel.setText("Piattaforma");
-					setModelloComboBoxPiattaforme(controller);
+					impostaModelloComboBoxPiattaforme(controller);
 					fisicoRadioButton.setSelected(false);
 				}
 			}
@@ -338,7 +338,7 @@ public class GestioneMeetingDipendente extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (fisicoRadioButton.isSelected() == true) {
 					piattaformaSalaLabel.setText("Sala");
-					setModelloComboBoxSale(controller);
+					impostaModelloComboBoxSale(controller);
 					onlineRadioButton.setSelected(false);
 				}
 			}
@@ -370,9 +370,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		progettoDiscussoComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (progettoDiscussoComboBox.getSelectedItem() != null) {
-					selezionaProgettoDiscusso(controller);
+					impostaProgettoDiscusso(controller);
 				}
-
 			}
 		});
 
@@ -390,8 +389,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		invitatiList.setSelectionBackground(Color.WHITE);
 		invitatiList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		InvitatiListRenderer invitatiListRenderer = new InvitatiListRenderer();
-		invitatiList.setCellRenderer(invitatiListRenderer);
+		impostaInvitatiListRenderer();
 		invitatiScrollPane.setViewportView(invitatiList);
 		
 		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -406,12 +404,11 @@ public class GestioneMeetingDipendente extends JFrame {
 		progettoDiscussoScrollPane.setColumnHeaderView(infoProgettoDiscussoLabel);
 		
 		progettoDiscussoList = new JList();
-		ProgettoDiscussoListRenderer progettoDiscussoCellRenderer = new ProgettoDiscussoListRenderer();
+		impostaProgettoDiscussoListRenderer();
 		progettoDiscussoList.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		progettoDiscussoList.setFont(new Font("Consolas", Font.PLAIN, 12));
 		progettoDiscussoList.setSelectionBackground(Color.WHITE);
 		progettoDiscussoScrollPane.setViewportView(progettoDiscussoList);
-		progettoDiscussoList.setCellRenderer(progettoDiscussoCellRenderer);
 
 		pulisciButton = new JButton("Pulisci Campi");
 		pulisciButton.setPreferredSize(new Dimension(150, 30));
@@ -558,7 +555,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					if(meetingTable.getSelectedRow()!=-1) {
-						controller.apriInserisciPartecipantiMeeting(meetingSelezionato);
+						controller.apriGUIInserisciPartecipantiMeeting(meetingSelezionato);
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Selezionare un meeting dalla tabella");		
@@ -924,6 +921,11 @@ public class GestioneMeetingDipendente extends JFrame {
 		modelloListaInvitati.addAll(meetingSelezionato.getPartecipantiAlMeeting());
 		invitatiList.setModel(modelloListaInvitati);
 	}
+	
+	private void impostaInvitatiListRenderer() {
+		InvitatiListRenderer invitatiListRenderer = new InvitatiListRenderer();
+		invitatiList.setCellRenderer(invitatiListRenderer);
+	}
 
 	private void inizializzaTabellaMeeting(ControllerMeeting controller) {
 		try {
@@ -962,7 +964,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		}
 	}
 	
-	private void selezionaProgettoDiscusso(ControllerMeeting controller) {
+	private void impostaProgettoDiscusso(ControllerMeeting controller) {
 		try {
 			Progetto progetto = controller.ottieniProgettoInserito((Progetto) progettoDiscussoComboBox.getSelectedItem());
 			progettoDiscussoList.setModel(modelloListaInfoProgetto);
@@ -975,7 +977,12 @@ public class GestioneMeetingDipendente extends JFrame {
 		}
 	}
 	
-	private void setModelloComboBoxPiattaforme(ControllerMeeting controller) {
+	private void impostaProgettoDiscussoListRenderer() {
+		ProgettoDiscussoListRenderer progettoDiscussoCellRenderer = new ProgettoDiscussoListRenderer();
+		progettoDiscussoList.setCellRenderer(progettoDiscussoCellRenderer);
+	}
+	
+	private void impostaModelloComboBoxPiattaforme(ControllerMeeting controller) {
 		modelloComboBoxPiattaformaSala.removeAllElements();
 		try {
 			modelloComboBoxPiattaformaSala.addAll(controller.ottieniPiattaforme());
@@ -988,7 +995,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		}
 	}
 	
-	private void setModelloComboBoxSale(ControllerMeeting controller) {
+	private void impostaModelloComboBoxSale(ControllerMeeting controller) {
 		modelloComboBoxPiattaformaSala.removeAllElements();
 		try {
 			modelloComboBoxPiattaformaSala.addAll(controller.ottieniSale());
@@ -1005,7 +1012,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	
 	private void inizializzaComboBoxProgettoDiscusso(ControllerMeeting controller) {
 		try {
-			modelloComboBoxProgettoDiscusso.addAll(controller.ottieniProgetti());
+			modelloComboBoxProgettoDiscusso.addAll(controller.ottieniProgettiDipendente());
 			progettoDiscussoComboBox.setModel(modelloComboBoxProgettoDiscusso);
 			progettoDiscussoComboBox.setSelectedItem(null);
 		} catch (SQLException e) {
@@ -1139,7 +1146,7 @@ public class GestioneMeetingDipendente extends JFrame {
 			nuovoMeeting.setProgettoDiscusso(progettoDiscusso);
 			controller.creaMeeting(nuovoMeeting);
 			try {
-				nuovoMeeting.setIdMeeting(controller.idUltimoMeetingInserito());
+				nuovoMeeting.setIdMeeting(controller.ottieniIdUltimoMeetingInserito());
 				controller.inserisciOrganizzatore();
 				JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
 				aggiornaTabella(controller);

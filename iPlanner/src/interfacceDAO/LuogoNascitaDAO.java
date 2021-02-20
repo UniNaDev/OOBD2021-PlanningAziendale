@@ -14,5 +14,5 @@ public interface LuogoNascitaDAO {
 	
 	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException;
 	
-	public LuogoNascita getLuogoByCod(String codComune) throws SQLException;
+	public LuogoNascita ottieniLuogoNascitaDaCodComune(String codComune) throws SQLException;
 }

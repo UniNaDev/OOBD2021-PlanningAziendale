@@ -147,7 +147,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private DefaultTableCellRenderer renderTabella;
 	private JTable dipendenteTable;
 	private PartecipantiTableModel dataModelDipendente;
-	private TableRowSorter<TableModel> sorterDipendente;
+	private TableRowSorter<TableModel> sorterDipendenteProgetto;
 
 	private Progetto progettoSelezionato;
 
@@ -380,7 +380,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				}
 				else
 				{
-					aggiornaRuoloPartecipanteProgetto(controller);
+					aggiornaRuoloCollaboratore(controller);
 				}	
 			}
 		});
@@ -847,7 +847,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		try {
 			tipologiaProgettoComboBox.setModel(tipologiaProgettoModel);
 			tipologiaProgettoModel.addElement(null);
-			tipologiaProgettoModel.addAll(controller.ottieniTipologieProgetto());
+			tipologiaProgettoModel.addAll(controller.ottieniTipologie());
 		} catch (SQLException e3) {
 			JOptionPane.showMessageDialog(null,e3.getMessage());
 		}	
@@ -866,7 +866,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 
 	private void inizializzaTabellaDipendente(ControllerPartecipantiProgetto controller) {
 		try {
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato));
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					e.getMessage()
@@ -909,16 +909,16 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	}
 	
 	private void impostaSorterTabellaDipendente() {
-		sorterDipendente = new TableRowSorter<TableModel>(dataModelDipendente);
-		dipendenteTable.setRowSorter(sorterDipendente);
+		sorterDipendenteProgetto = new TableRowSorter<TableModel>(dataModelDipendente);
+		dipendenteTable.setRowSorter(sorterDipendenteProgetto);
 	}
 	
-	private void aggiornaRuoloPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
+	private void aggiornaRuoloCollaboratore(ControllerPartecipantiProgetto controller) {
 		partecipantiLabel.setForeground(Color.BLACK);
 		String nuovoRuolo=ruoloComboBox.getSelectedItem().toString();
 		CollaborazioneProgetto collaborazioneProgettoPrecedente=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
 		CollaborazioneProgetto collaborazioneProgettoNuova=new CollaborazioneProgetto(progettoSelezionato, collaborazioneProgettoPrecedente.getCollaboratore(), nuovoRuolo);
-		if(controller.aggiornaPartecipante(collaborazioneProgettoNuova)==true) {
+		if(controller.aggiornaRuoloCollaboratore(collaborazioneProgettoNuova)==true) {
 			JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
 			aggiornaListaPartecipantiDopoAggiornamento(collaborazioneProgettoNuova);
 			aggiornaSorter();
@@ -937,7 +937,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
 		CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
 	
-		if(controller.inserisciPartecipante(collaborazione)==true) {
+		if(controller.inserisciPartecipanteProgetto(collaborazione)==true) {
 			JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente");
 			aggiornaListaPartecipantiDopoInserimento(collaborazione);
 			aggiornaTabella(controller);
@@ -952,7 +952,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 
 	private void eliminaPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
 		partecipantiLabel.setForeground(Color.BLACK);
-		if(controller.eliminaPartecipante((CollaborazioneProgetto)partecipantiList.getSelectedValue())==true) {
+		if(controller.eliminaPartecipanteProgetto((CollaborazioneProgetto)partecipantiList.getSelectedValue())==true) {
 			JOptionPane.showMessageDialog(null, "Partecipante eliminato");
 			aggiornaListaPartecipantiDopoEliminazione();
 			aggiornaTabella(controller);
@@ -970,7 +970,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		
 		try {
 			dataModelDipendente.fireTableDataChanged();
-			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti(progettoSelezionato));
+			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato));
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					e.getMessage()
@@ -982,7 +982,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 
 	private void aggiornaSorter() {
 		if(dipendenteTable.getRowCount()!=0)
-		sorterDipendente.setModel(dataModelDipendente);
+		sorterDipendenteProgetto.setModel(dataModelDipendente);
 	}
 	
 	private void impostaInfoDipendenteDaTabella(ControllerPartecipantiProgetto controller) {

@@ -42,9 +42,9 @@ public class ControllerStart {
 		controller.apriGUILoginDipendente();
 	}
 	
-	public void apriAutenticazioneSegreteria() {
+	public void apriGUIAutenticazioneSegreteria() {
 		iPlannerFrame.setVisible(false);
 		ControllerAccesso controller = new ControllerAccesso(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
-		controller.apriAutenticazioneSegreteria();
+		controller.apriGUIAutenticazioneSegreteria();
 	}
 }

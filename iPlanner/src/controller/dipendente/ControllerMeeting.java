@@ -53,13 +53,13 @@ public class ControllerMeeting {
 		mieiMeetingFrame.setVisible(true);
 	}
 
-	public void apriGestioneMeeting() {
+	public void apriGUIGestioneMeeting() {
 		gestioneMeetingFrame= new GestioneMeetingDipendente(this);
 		gestioneMeetingFrame.setVisible(true);
 		mieiMeetingFrame.setVisible(false);
 	}
 	
-	public void apriInserisciPartecipantiMeeting(Meeting meetingSelezionato) {
+	public void apriGUIInserisciPartecipantiMeeting(Meeting meetingSelezionato) {
 		ControllerPartecipantiMeeting controller = new ControllerPartecipantiMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendenteLogged, meetingSelezionato);
 	}
 	
@@ -67,16 +67,16 @@ public class ControllerMeeting {
 		return meetDAO.ottieniMeetingDipendente(dipendenteLogged);
 	}
 	
-	public ArrayList<Progetto> ottieniProgetti() throws SQLException {
-		ArrayList<CollaborazioneProgetto> collaborazioni = projDAO.ottieniProgettiDipendente(dipendenteLogged);
+	public ArrayList<Progetto> ottieniProgettiDipendente() throws SQLException {
+		ArrayList<CollaborazioneProgetto> collaborazioniDipendente = projDAO.ottieniProgettiDipendente(dipendenteLogged);
 		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-		for (CollaborazioneProgetto collaborazione: collaborazioni)
+		for (CollaborazioneProgetto collaborazione: collaborazioniDipendente)
 			progetti.add(collaborazione.getProgetto());
 		return progetti;
 	}
 	
 	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
-		return salaDAO.getSale();
+		return salaDAO.ottieniSale();
 	}
 	
 	public ArrayList<String> ottieniPiattaforme() throws SQLException{
@@ -84,15 +84,15 @@ public class ControllerMeeting {
 	}
 	
 	public void aggiornaMeeting(Meeting meeting) throws SQLException{
-		meetDAO.updateMeeting(meeting);
+		meetDAO.aggiornaMeeting(meeting);
 	}
 	
 	public void creaMeeting(Meeting nuovoMeeting) throws SQLException{
-		meetDAO.insertMeeting(nuovoMeeting);		
+		meetDAO.creaMeeting(nuovoMeeting);		
 	}
 	
 	public void inserisciOrganizzatore() throws SQLException{
-			meetDAO.insertOrganizzatore(dipendenteLogged.getCf());
+		meetDAO.inserisciOrganizzatore(dipendenteLogged.getCf());
 	}
 
 	public void rimuoviMeeting(int idMeeting) throws SQLException {
@@ -100,15 +100,15 @@ public class ControllerMeeting {
 	}
 	
 	public ArrayList<Meeting> filtraMeetingTelematiciDipendenti() throws SQLException{
-		return meetDAO.getMeetingDipendenteByModalità("Telematico",dipendenteLogged);
+		return meetDAO.filtraMeetingDipendentePerModalità("Telematico",dipendenteLogged);
 	}
 	
 	public ArrayList<Meeting> filtraMeetingFisiciDipendenti() throws SQLException {
-		return meetDAO.getMeetingDipendenteByModalità("Fisico", dipendenteLogged);
+		return meetDAO.filtraMeetingDipendentePerModalità("Fisico", dipendenteLogged);
 	}
 	
 	public Progetto ottieniProgettoInserito(Progetto progetto) throws SQLException {
-		return projDAO.getProgettoByCod(progetto.getIdProgettto());
+		return projDAO.ottieniProgettoDaCodiceProgetto(progetto.getIdProgettto());
 	}
 
 	public boolean isOrganizzatore(Meeting meeting) throws SQLException {
@@ -119,20 +119,18 @@ public class ControllerMeeting {
 	}
 	
 	private String ottieniCFOrganizzatore(Meeting meeting) throws SQLException {
-		return meetDAO.getCFOrganizzatore(meeting);
+		return meetDAO.ottieniCFOrganizzatore(meeting);
 	}
 
 	public ArrayList<Meeting> filtraMeetingDipendentiSala(SalaRiunione sala) throws SQLException {
-		
-		return meetDAO.getMeetingsDipendenteBySala(sala,dipendenteLogged);
+		return meetDAO.filtraMeetingDipendentiSala(sala,dipendenteLogged);
 	}
 
 	public ArrayList<Meeting> filtraMeetingDipendentePiattaforma(String piattaforma) throws SQLException {
-		
-		return meetDAO.getMeetingsDipendenteByPiattaforma(piattaforma,dipendenteLogged);
+		return meetDAO.filtraMeetingDipendentePiattaforma(piattaforma,dipendenteLogged);
 	}
 
-	public int idUltimoMeetingInserito() throws SQLException {
-		return meetDAO.getUltimoIDMeeting();
+	public int ottieniIdUltimoMeetingInserito() throws SQLException {
+		return meetDAO.ottieniIdUltimoMeetingInserito();
 	}
 }

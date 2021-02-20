@@ -53,8 +53,13 @@ import javax.swing.JTextArea;
 
 public class MioAccount extends JFrame {
     private JPanel contentPane;
-    private JTextField nomeTextField, cfTextField, cognomeTextField, cellulareTextField, telefonoFissoTextField,
-	    indirizzoTextField, emailTextField;
+    private JTextField nomeTextField;
+    private JTextField cfTextField;
+    private JTextField cognomeTextField;
+    private JTextField cellulareTextField;
+    private JTextField telefonoFissoTextField;
+    private JTextField indirizzoTextField;
+    private JTextField emailTextField;
     private JButton confermaButton;
     private JButton modificaButton;
     private JRadioButton uomoRadioButton, donnaRadioButton;
@@ -66,8 +71,17 @@ public class MioAccount extends JFrame {
     private JComboBox provinciaComboBox;
     private DefaultComboBoxModel modelloComboBoxProvince;
     private JPasswordField passwordField;
-    private JLabel nomeLabel, cognomeLabel, sessoLabel, dataNascitaLabel, provinciaNascitaLabel, comuneNascitaLabel,
-	    indirizzoLabel, cellulareLabel, telefonoFissoLabel, emailLabel, passwordLabel;
+    private JLabel nomeLabel;
+    private JLabel cognomeLabel;
+    private JLabel sessoLabel;
+    private JLabel dataNascitaLabel;
+    private JLabel provinciaNascitaLabel; 
+    private JLabel comuneNascitaLabel;
+    private JLabel indirizzoLabel;
+    private JLabel cellulareLabel;
+    private JLabel telefonoFissoLabel;
+    private JLabel emailLabel;
+    private JLabel passwordLabel;
     private JLabel informazioniPersonaliLabel;
     private JLabel cfLabel;
     private JLabel informazioniAziendaliLabel;
@@ -78,6 +92,7 @@ public class MioAccount extends JFrame {
     private JLabel iconaSalarioLabel;
     private JLabel iconaSkillsLabel;
     private JLabel iconaValutazioneLabel;
+    private JScrollPane skillsScrollPane;
     private JLabel skillDipendenteLabel;
     private JTextArea valoreSkillTextArea;
     private JSeparator separator;
@@ -112,12 +127,12 @@ public class MioAccount extends JFrame {
 		    int risposta = JOptionPane.showConfirmDialog(null,
 			    "Sei sicuro di uscire? Le modifiche non verranno salvate.");
 		    if (risposta == JOptionPane.YES_OPTION) {
-			controller.chiudiMioAccount();
+			controller.chiudiGUIMioAccount();
 		    } else if (risposta == JOptionPane.NO_OPTION || risposta == JOptionPane.CANCEL_OPTION) {
 			setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		    }
 		} else
-		    controller.chiudiMioAccount();
+		    controller.chiudiGUIMioAccount();
 	    }
 	});
 	
@@ -367,21 +382,7 @@ public class MioAccount extends JFrame {
 	});
 	modificaButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-		nomeTextField.setEditable(true);
-		cognomeTextField.setEditable(true);
-		uomoRadioButton.setEnabled(true);
-		donnaRadioButton.setEnabled(true);
-		giornoComboBox.setEnabled(true);
-		meseComboBox.setEnabled(true);
-		annoComboBox.setEnabled(true);
-		provinciaComboBox.setEnabled(true);
-		emailTextField.setEditable(true);
-		passwordField.setEditable(true);
-		indirizzoTextField.setEditable(true);
-		cellulareTextField.setEditable(true);
-		telefonoFissoTextField.setEditable(true);
-		modificaButton.setEnabled(false);
-		modificheEffettuate = true;
+	    	abilitaModifica();
 	    }
 	});
 
@@ -472,7 +473,7 @@ public class MioAccount extends JFrame {
 	passwordField.setEditable(false);
 	contentPane.add(passwordField);
 
-	JScrollPane skillsScrollPane = new JScrollPane();
+	skillsScrollPane = new JScrollPane();
 	skillsScrollPane.setOpaque(false);
 	skillsScrollPane.setBorder(null);
 	skillsScrollPane.setBounds(753, 510, 427, 107);
@@ -547,10 +548,7 @@ public class MioAccount extends JFrame {
 	contentPane.add(cfTextField);
 	contentPane.add(informazioniPersonaliLabel);
     }
-    
 
-    // Altri metodi
-    // ------------------------------------------------------------------------
     private void inizializzaComboBoxProvince(ControllerGestioneProfilo controller) {
 		try {
 		    modelloComboBoxProvince = new DefaultComboBoxModel();
@@ -590,10 +588,10 @@ public class MioAccount extends JFrame {
 		dipendente.setCellulare(cellulare);
 		dipendente.setIndirizzo(indirizzo);
 		try {
-		    controller.aggiornaInfoDipendente(dipendente);
+		    controller.aggiornaDipendente(dipendente);
 		    if (modificheEffettuate)
 			JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo.");
-		    controller.chiudiMioAccount();
+		    controller.chiudiGUIMioAccount();
 		    controller.tornaAHome();
 		} catch (SQLException e1) {
 		    switch (e1.getSQLState()) {
@@ -767,4 +765,22 @@ public class MioAccount extends JFrame {
 		else
 		    return false;
     }
+    
+    private void abilitaModifica() {
+		nomeTextField.setEditable(true);
+		cognomeTextField.setEditable(true);
+		uomoRadioButton.setEnabled(true);
+		donnaRadioButton.setEnabled(true);
+		giornoComboBox.setEnabled(true);
+		meseComboBox.setEnabled(true);
+		annoComboBox.setEnabled(true);
+		provinciaComboBox.setEnabled(true);
+		emailTextField.setEditable(true);
+		passwordField.setEditable(true);
+		indirizzoTextField.setEditable(true);
+		cellulareTextField.setEditable(true);
+		telefonoFissoTextField.setEditable(true);
+		modificaButton.setEnabled(false);
+		modificheEffettuate = true;
+	}
 }

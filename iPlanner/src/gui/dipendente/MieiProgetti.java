@@ -153,7 +153,7 @@ public class MieiProgetti extends JFrame {
 		nuovoProgettoBotton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		nuovoProgettoBotton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.apriGestioneProgetti();
+				controller.apriGUIGestioneProgetti();
 			}
 		});
 		nuovoProgettoBotton.addMouseListener(new MouseAdapter() {
@@ -173,48 +173,12 @@ public class MieiProgetti extends JFrame {
 		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		progettiList.setFixedCellHeight(60);
-		progettoCellRenderer = new ProgettoListRenderer();
-		progettiList.setCellRenderer(progettoCellRenderer);
 		modelloListaProgetti=new DefaultListModel<>();
+		impostaCellRendererProgetti();
 		inizializzaListaProgetti(controller);
 		progettiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				Progetto progettoSelezionato = progettiList.getSelectedValue();
-
-				nomeProgettoLabel
-						.setText("<html><center>" + progettoSelezionato.getNomeProgetto() + "</center></html>");
-				nomeProgettoLabel.setToolTipText(progettoSelezionato.getNomeProgetto());
-
-				String ambiti = "";
-				for (AmbitoProgetto ambito : progettoSelezionato.getAmbiti())
-					ambiti += ambito.toString() + " ";
-				ambitiLabel.setText("<html><center>" + "Ambiti: " + ambiti + "</center></html>");
-				ambitiLabel.setToolTipText(ambiti);
-
-				tipologiaLabel.setText("Tipologia: " + progettoSelezionato.getTipoProgetto());
-				tipologiaLabel.setToolTipText(progettoSelezionato.getTipoProgetto());
-
-				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-				dataCreazioneLabel
-						.setText("Data Creazione: " + progettoSelezionato.getDataCreazione().toString(formatDate));
-				dataCreazioneLabel.setToolTipText(progettoSelezionato.getDataCreazione().toString(formatDate));
-
-				if (progettoSelezionato.getDataTerminazione() != null) {
-					dataTerminazioneLabel.setText(
-							"Data Terminazione: " + progettoSelezionato.getDataTerminazione().toString(formatDate));
-					dataTerminazioneLabel
-							.setToolTipText(progettoSelezionato.getDataTerminazione().toString(formatDate));
-				} else
-					dataTerminazioneLabel.setText("Non terminato.");
-
-				if (progettoSelezionato.getScadenza() != null) {
-					dataScadenzaLabel
-							.setText("Data Scadenza: " + progettoSelezionato.getScadenza().toString(formatDate));
-					dataScadenzaLabel.setToolTipText(progettoSelezionato.getScadenza().toString(formatDate));
-				} else
-					dataScadenzaLabel.setText("Senza scadenza.");
-
-				descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());
+				impostaInfoProgettoSelezionato();
 			}
 		});
 		progettiScrollPane.setViewportView(progettiList);
@@ -306,5 +270,49 @@ public class MieiProgetti extends JFrame {
 					    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
 				    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	private void impostaCellRendererProgetti() {
+		progettoCellRenderer = new ProgettoListRenderer();
+		progettiList.setCellRenderer(progettoCellRenderer);
+	}
+	
+	private void impostaInfoProgettoSelezionato() {
+		Progetto progettoSelezionato = progettiList.getSelectedValue();
+
+		nomeProgettoLabel
+				.setText("<html><center>" + progettoSelezionato.getNomeProgetto() + "</center></html>");
+		nomeProgettoLabel.setToolTipText(progettoSelezionato.getNomeProgetto());
+
+		String ambiti = "";
+		for (AmbitoProgetto ambito : progettoSelezionato.getAmbiti())
+			ambiti += ambito.toString() + " ";
+		ambitiLabel.setText("<html><center>" + "Ambiti: " + ambiti + "</center></html>");
+		ambitiLabel.setToolTipText(ambiti);
+
+		tipologiaLabel.setText("Tipologia: " + progettoSelezionato.getTipoProgetto());
+		tipologiaLabel.setToolTipText(progettoSelezionato.getTipoProgetto());
+
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		dataCreazioneLabel
+				.setText("Data Creazione: " + progettoSelezionato.getDataCreazione().toString(formatDate));
+		dataCreazioneLabel.setToolTipText(progettoSelezionato.getDataCreazione().toString(formatDate));
+
+		if (progettoSelezionato.getDataTerminazione() != null) {
+			dataTerminazioneLabel.setText(
+					"Data Terminazione: " + progettoSelezionato.getDataTerminazione().toString(formatDate));
+			dataTerminazioneLabel
+					.setToolTipText(progettoSelezionato.getDataTerminazione().toString(formatDate));
+		} else
+			dataTerminazioneLabel.setText("Non terminato.");
+
+		if (progettoSelezionato.getScadenza() != null) {
+			dataScadenzaLabel
+					.setText("Data Scadenza: " + progettoSelezionato.getScadenza().toString(formatDate));
+			dataScadenzaLabel.setToolTipText(progettoSelezionato.getScadenza().toString(formatDate));
+		} else
+			dataScadenzaLabel.setText("Senza scadenza.");
+
+		descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());
 	}
 }

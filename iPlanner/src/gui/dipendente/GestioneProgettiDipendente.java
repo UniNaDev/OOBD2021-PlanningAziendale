@@ -397,7 +397,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (progettoSelezionato != null)
-						eliminaProgetto(controller);
+						rimuoviProgetto(controller);
 				else {
 					JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella.", "Eliminazione Fallita",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -429,7 +429,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					if(progettiTable.getSelectedRow()!=-1) {
-						controller.apriInserisciPartecipantiProgetto(progettoSelezionato);
+						controller.apriGUIInserisciPartecipantiProgetto(progettoSelezionato);
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella");	
@@ -1108,7 +1108,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		nomeProgettoLabel.setForeground(Color.BLACK);
 	}
 	
-	private void eliminaProgetto(ControllerProgetto controller) {
+	private void rimuoviProgetto(ControllerProgetto controller) {
 		try {
 			controller.rimuoviProgetto(progettoSelezionato);
 			JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo", "Eliminazione Riuscita",
@@ -1157,6 +1157,7 @@ public class GestioneProgettiDipendente extends JFrame {
 							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
 					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 		}
+
 	}
 	
 	private void pulisciCampi() {

@@ -16,13 +16,13 @@ public interface MeetingDAO {
 	
 	public ArrayList<Meeting> ottieniMeetingDipendente(Dipendente dip) throws SQLException;
 	
-	public ArrayList<Dipendente> getInvitati(int idMeeting) throws SQLException;
+	public ArrayList<Dipendente> ottieniInvitatiMeetingSenzaRuolo(int idMeeting) throws SQLException;
 	
-	public boolean insertMeeting(Meeting meeting) throws SQLException;
+	public boolean creaMeeting(Meeting meeting) throws SQLException;
 	
 	public boolean rimuoviMeeting(int idMeeting) throws SQLException;
 	
-	public boolean updateMeeting(Meeting meeting) throws SQLException;
+	public boolean aggiornaMeeting(Meeting meeting) throws SQLException;
 	
 	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException;
 	
@@ -30,25 +30,25 @@ public interface MeetingDAO {
 	
 	public ArrayList<String> ottieniPiattaforme() throws SQLException;
 	
-	public boolean insertOrganizzatore(String CF) throws SQLException;
+	public boolean inserisciOrganizzatore(String CF) throws SQLException;
 	
 	public ArrayList<PartecipazioneMeeting> ottieniInvitatiMeeting(int idMeeting) throws SQLException;
 	
 	public ArrayList<Meeting> getMeetingsByModalità(String modalità) throws SQLException;
 
-	public boolean insertPartecipanteMeeting(PartecipazioneMeeting partecipazione) throws SQLException;
+	public boolean inserisciInvitatoMeeting(PartecipazioneMeeting partecipazione) throws SQLException;
 	
-	public boolean updatePresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
+	public boolean aggiornaPresenzaInvitato(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
 	
-	public boolean deletePartecipanteMeeting(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
+	public boolean eliminaInvitato(PartecipazioneMeeting partecipazioneMeeting)throws SQLException;
 
-	public ArrayList<Meeting> getMeetingDipendenteByModalità(String string, Dipendente dipendente) throws SQLException;
+	public ArrayList<Meeting> filtraMeetingDipendentePerModalità(String string, Dipendente dipendente) throws SQLException;
 
-	public ArrayList<Meeting> getMeetingsDipendenteBySala(SalaRiunione sala, Dipendente dipendente) throws SQLException;
+	public ArrayList<Meeting> filtraMeetingDipendentiSala(SalaRiunione sala, Dipendente dipendente) throws SQLException;
 
-	public ArrayList<Meeting> getMeetingsDipendenteByPiattaforma(String piattaforma, Dipendente dipendente) throws SQLException;
+	public ArrayList<Meeting> filtraMeetingDipendentePiattaforma(String piattaforma, Dipendente dipendente) throws SQLException;
 
-	public int getUltimoIDMeeting() throws SQLException;
+	public int ottieniIdUltimoMeetingInserito() throws SQLException;
 	
-	public String getCFOrganizzatore(Meeting meeting) throws SQLException;
+	public String ottieniCFOrganizzatore(Meeting meeting) throws SQLException;
 }

@@ -17,17 +17,17 @@ import entita.Skill;
 public interface DipendenteDAO {
 	public ArrayList<Dipendente> getDipendenti() throws SQLException;
 	
-	public ArrayList<Dipendente> getDipendentiNonInvitati(Meeting meetingSelezionato) throws SQLException;
+	public ArrayList<Dipendente> ottieniDipendentiNonInvitatiMeeting(Meeting meetingSelezionato) throws SQLException;
 	
-	public Dipendente getDipendenteByCF(String cf) throws SQLException;
+	public Dipendente ottieniDipendenteDaCF(String cf) throws SQLException;
 	
 	public ArrayList<Dipendente> getDipendenteBySkill(Skill skill) throws SQLException;
 	
 	public ArrayList<Dipendente> getDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException;
 	
-	public Dipendente eseguiLoginDipendente(String email, String password) throws SQLException;
+	public Dipendente eseguiLoginDipendente(String email, String password) throws SQLException; //OK
 	
-	public float getValutazione(String cf) throws SQLException;
+	public float ottieniValutazione(String cf) throws SQLException;
 	
 	public boolean insertDipendente(Dipendente dipendente) throws SQLException;
 	
@@ -35,14 +35,14 @@ public interface DipendenteDAO {
 	
 	public boolean eliminaDipendente(Dipendente dipendente) throws SQLException;
 	
-	public float getMaxStipendio() throws SQLException;
+	public float ottieniMaxStipendio() throws SQLException;
 	
-	public ArrayList<Dipendente> getDipendentiNonPartecipanti(Progetto progettoSelezionato) throws SQLException;
+	public ArrayList<Dipendente> ottieniDipendentiNonPartecipantiProgetto(Progetto progettoSelezionato) throws SQLException;
 
-	ArrayList<Dipendente> getDipendentiNonPartecipantiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima,
+	ArrayList<Dipendente> filtraDipendentiNonPartecipanti(String nomeCognomeEmail, int etàMinima, int etàMassima,
 			float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima,Progetto progettoSelezionato) throws SQLException;
 
-	ArrayList<Dipendente> getDipendenteNonPartecipantiBySkill(Progetto progettoSelezionato, Skill skill) throws SQLException;
+	ArrayList<Dipendente> filtraDipendentiNonPartecipantiPerSkill(Progetto progettoSelezionato, Skill skill) throws SQLException;
 
-	ArrayList<Dipendente> getDipendentiNonPartecipantiByTipologieProgetto(Progetto progettoSelezionato,String tipologiaProgetto) throws SQLException;
+	ArrayList<Dipendente> filtraDipendentiNonPartecipantiPerTipologiaProgetto(Progetto progettoSelezionato,String tipologiaProgetto) throws SQLException;
 }

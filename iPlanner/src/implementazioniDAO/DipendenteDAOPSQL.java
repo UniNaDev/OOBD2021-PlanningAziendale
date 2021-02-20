@@ -31,22 +31,22 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	private Connection connection;
 	
 	private PreparedStatement 
-		getDipendentiNonInvitatiPS,
+		ottieniDipendentiNonInvitatiMeetingPS,
 		getDipendentiPS,
-		getDipendentiNonPartecipantiPS,
-		getTipologieProgettoDipendentePS,
-		getValutazionePS,
+		ottieniDipendentiNonPartecipantiProgettoPS,
+		ottieniTipologieProgettoDipendentePS,
+		ottieniValutazionePS,
 		addDipendentePS,
-		updateDipendentePS,
+		aggiornaDipendentePS,
 		deleteDipendentePS,
-		loginCheckPS,
+		eseguiLoginDipendentePS,
 		getDipendenteByCFPS,
-		getMaxSalarioPS,
+		ottieniMaxStipendioPS,
 		getDipendentiFiltratiPS,
-		getDipendentiNonPartecipantiFiltratiPS,
+		filtraDipendentiNonPartecipantiPS,
 		getDipendenteBySkillPS,
-		getDipendentiNonPartecipantiBySkillPS,
-		getDipendentiNonPartecipantiByTipologiaProgetto;
+		filtraDipendentiNonPartecipantiPerSkillPS,
+		filtraDipendentiNonPartecipantiPerTipologiaProgettoPS;
 	
 	private LuogoNascitaDAOPSQL luogoDAO = null;
 	private MeetingDAO meetDAO = null;
@@ -60,29 +60,29 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		this.skillDAO = new SkillDAOPSQL(connection);
 		
 		getDipendentiPS = connection.prepareStatement("SELECT * FROM Dipendente");
-		getDipendentiNonPartecipantiPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )");
-		getTipologieProgettoDipendentePS=connection.prepareStatement("SELECT DISTINCT tipoprogetto FROM Progetto NATURAL JOIN Partecipazione WHERE CF ILIKE ?");
-		getDipendentiNonInvitatiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
-		getValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");
+		ottieniDipendentiNonPartecipantiProgettoPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )");
+		ottieniTipologieProgettoDipendentePS=connection.prepareStatement("SELECT DISTINCT tipoprogetto FROM Progetto NATURAL JOIN Partecipazione WHERE CF ILIKE ?");
+		ottieniDipendentiNonInvitatiMeetingPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT pre.cf FROM Meeting NATURAL JOIN Presenza AS pre WHERE pre.idMeeting=?)");
+		ottieniValutazionePS = connection.prepareStatement("SELECT Valutazione(?)");
 		addDipendentePS = connection.prepareStatement("INSERT INTO Dipendente VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)");
-		updateDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
+		aggiornaDipendentePS = connection.prepareStatement("UPDATE Dipendente SET CF = ?, Nome = ?, Cognome = ?, Sesso = ?, DataNascita = ?, Indirizzo = ?, Email = ?, TelefonoCasa = ?, Cellulare = ?, Salario = ?, Password = ?, CodComune = ? WHERE CF = ?");
 		deleteDipendentePS = connection.prepareStatement("DELETE FROM Dipendente WHERE CF = ?");
-		loginCheckPS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email ILIKE ? AND Password = ?");
+		eseguiLoginDipendentePS = connection.prepareStatement("SELECT * FROM Dipendente WHERE Email ILIKE ? AND Password = ?");
 		getDipendenteByCFPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF = ?");
-		getMaxSalarioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
+		ottieniMaxStipendioPS = connection.prepareStatement("SELECT MAX(Salario) FROM Dipendente");
 
 		getDipendentiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE (d.Nome LIKE '%' || ? || '%' OR d.Cognome LIKE '%' || ? || '%' OR d.Email LIKE '%' || ? || '%') AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?) AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)");
 		
-		getDipendentiNonPartecipantiFiltratiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d "
+		filtraDipendentiNonPartecipantiPS = connection.prepareStatement("SELECT * FROM Dipendente AS d "
 				+ "WHERE (d.Nome ILIKE '%' || ? || '%' OR d.Cognome ILIKE '%' || ? || '%' OR d.Email ILIKE '%' || ? || '%')"
 				+ " AND (EXTRACT (YEAR FROM AGE(d.DataNascita)) BETWEEN ? AND ?)"
 				+ " AND (d.Salario BETWEEN ? AND ?) AND (Valutazione(d.CF) BETWEEN ? AND ?)"
 				+ " AND d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ?)");
 		getDipendenteBySkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.CF IN (SELECT a.CF FROM Abilità AS a WHERE a.IDSkill = ?)");
-		getDipendentiNonPartecipantiBySkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d "
+		filtraDipendentiNonPartecipantiPerSkillPS = connection.prepareStatement("SELECT * FROM Dipendente AS d "
 				+ "WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ?)"
 				+ "AND d.CF IN (SELECT a.CF FROM Abilità AS a WHERE a.IDSkill = ?)");
-		getDipendentiNonPartecipantiByTipologiaProgetto=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )"
+		filtraDipendentiNonPartecipantiPerTipologiaProgettoPS=connection.prepareStatement("SELECT * FROM Dipendente AS d WHERE d.cf NOT IN(SELECT par.cf FROM Progetto NATURAL JOIN Partecipazione AS par WHERE par.codProgetto= ? )"
 				+ "AND d.cf IN(SELECT cf FROM Progetto NATURAL JOIN Partecipazione WHERE tipoprogetto = ?)");
 	}
 
@@ -92,7 +92,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 		
 		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"),
 					risultato.getString("Nome"),
@@ -106,10 +106,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Cellulare"),
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
 			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
-			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
+			dipendenteTemp.setSkills(skillDAO.ottieniSkillDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);
 		}
@@ -119,13 +119,13 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	}
 	
 	@Override
-	public ArrayList<Dipendente> getDipendentiNonInvitati(Meeting meetingSelezionato) throws SQLException {
-		getDipendentiNonInvitatiPS.setInt(1, meetingSelezionato.getIdMeeting());
-		ResultSet risultato = getDipendentiNonInvitatiPS.executeQuery();
+	public ArrayList<Dipendente> ottieniDipendentiNonInvitatiMeeting(Meeting meetingSelezionato) throws SQLException {
+		ottieniDipendentiNonInvitatiMeetingPS.setInt(1, meetingSelezionato.getIdMeeting());
+		ResultSet risultato = ottieniDipendentiNonInvitatiMeetingPS.executeQuery();
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 		
 		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"),
 					risultato.getString("Nome"),
@@ -139,10 +139,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Cellulare"),
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
 			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
-			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
+			dipendenteTemp.setSkills(skillDAO.ottieniSkillDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);
 		}
@@ -152,9 +152,9 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 	}
 
 	@Override
-	public float getValutazione(String cf) throws SQLException {
-		getValutazionePS.setString(1, cf);
-		ResultSet risultato = getValutazionePS.executeQuery();
+	public float ottieniValutazione(String cf) throws SQLException {
+		ottieniValutazionePS.setString(1, cf);
+		ResultSet risultato = ottieniValutazionePS.executeQuery();
 		
 		risultato.next();
 		float valutazione = risultato.getFloat(1);
@@ -188,25 +188,25 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 			return false;
 	}
 	
-	@Override
+	@Override  //Ok
 	public boolean aggiornaDipendente(Dipendente dipendente) throws SQLException {
 		String oldCF = dipendente.getCf();
 		
-		updateDipendentePS.setString(1, dipendente.generaCF());
-		updateDipendentePS.setString(2, dipendente.getNome());
-		updateDipendentePS.setString(3, dipendente.getCognome());
-		updateDipendentePS.setString(4, Character.toString(dipendente.getSesso()));
-		updateDipendentePS.setDate(5, new Date(dipendente.getDataNascita().toDate().getTime()));
-		updateDipendentePS.setString(6, dipendente.getIndirizzo());
-		updateDipendentePS.setString(7, dipendente.getEmail());
-		updateDipendentePS.setString(8, dipendente.getTelefonoCasa());
-		updateDipendentePS.setString(9, dipendente.getCellulare());
-		updateDipendentePS.setFloat(10, dipendente.getSalario());
-		updateDipendentePS.setString(11, dipendente.getPassword());
-		updateDipendentePS.setString(12, dipendente.getLuogoNascita().getCodiceComune());
-		updateDipendentePS.setString(13, oldCF);
+		aggiornaDipendentePS.setString(1, dipendente.generaCF());
+		aggiornaDipendentePS.setString(2, dipendente.getNome());
+		aggiornaDipendentePS.setString(3, dipendente.getCognome());
+		aggiornaDipendentePS.setString(4, Character.toString(dipendente.getSesso()));
+		aggiornaDipendentePS.setDate(5, new Date(dipendente.getDataNascita().toDate().getTime()));
+		aggiornaDipendentePS.setString(6, dipendente.getIndirizzo());
+		aggiornaDipendentePS.setString(7, dipendente.getEmail());
+		aggiornaDipendentePS.setString(8, dipendente.getTelefonoCasa());
+		aggiornaDipendentePS.setString(9, dipendente.getCellulare());
+		aggiornaDipendentePS.setFloat(10, dipendente.getSalario());
+		aggiornaDipendentePS.setString(11, dipendente.getPassword());
+		aggiornaDipendentePS.setString(12, dipendente.getLuogoNascita().getCodiceComune());
+		aggiornaDipendentePS.setString(13, oldCF);
 		
-		int record = updateDipendentePS.executeUpdate();
+		int record = aggiornaDipendentePS.executeUpdate();
 		
 		if (record == 1) {
 			dipendente.setCf(dipendente.generaCF());
@@ -216,14 +216,14 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 			return false;
 	}
 
-	@Override
+	@Override   //OK
 	public Dipendente eseguiLoginDipendente(String email, String password) throws SQLException {
-		loginCheckPS.setString(1, email);
-		loginCheckPS.setString(2, password);
-		ResultSet risultato = loginCheckPS.executeQuery();
+		eseguiLoginDipendentePS.setString(1, email);
+		eseguiLoginDipendentePS.setString(2, password);
+		ResultSet risultato = eseguiLoginDipendentePS.executeQuery();
 		risultato.next();
 		
-		LuogoNascita luogoNascitaDipendente = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+		LuogoNascita luogoNascitaDipendente = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 		
 		Dipendente dipendenteLoggato = new Dipendente(risultato.getString("CF"), 
 				risultato.getString("Nome"),
@@ -237,22 +237,22 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 				risultato.getString("Cellulare"),
 				risultato.getFloat("Salario"),
 				risultato.getString("Password"),
-				this.getValutazione(risultato.getString("CF")));
+				this.ottieniValutazione(risultato.getString("CF")));
 		
-		dipendenteLoggato.setSkills(skillDAO.getSkillsDipendente(dipendenteLoggato.getCf()));
+		dipendenteLoggato.setSkills(skillDAO.ottieniSkillDipendente(dipendenteLoggato.getCf()));
 		
 		risultato.close();
 		
 		return dipendenteLoggato;
 	}
 
-	@Override
-	public Dipendente getDipendenteByCF(String cf) throws SQLException {
+	@Override  //ok
+	public Dipendente ottieniDipendenteDaCF(String cf) throws SQLException {
 		getDipendenteByCFPS.setString(1, cf);
 		ResultSet risultato = getDipendenteByCFPS.executeQuery();
 		risultato.next();
 		
-		LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+		LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 		
 		Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"), 
 				risultato.getString("Nome"),
@@ -266,18 +266,18 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 				risultato.getString("Cellulare"),
 				risultato.getFloat("Salario"),
 				risultato.getString("Password"),
-				this.getValutazione(risultato.getString("CF")));
+				this.ottieniValutazione(risultato.getString("CF")));
 		
 		risultato.close();
 		
 		return dipendenteTemp;
 	}
 
-	@Override
-	public float getMaxStipendio() throws SQLException {
+	@Override  //Ok
+	public float ottieniMaxStipendio() throws SQLException {
 		float stipendio = 0;
 		
-		ResultSet risultato = getMaxSalarioPS.executeQuery();
+		ResultSet risultato = ottieniMaxStipendioPS.executeQuery();
 		risultato.next();
 		stipendio = risultato.getFloat(1);
 		risultato.close();
@@ -303,7 +303,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ResultSet risultato = getDipendentiFiltratiPS.executeQuery();
 		
 		while (risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"), 
 					risultato.getString("Nome"),
@@ -318,9 +318,9 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
 					
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
-			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(dipendenteTemp.getCf()));
+			dipendenteTemp.setSkills(skillDAO.ottieniSkillDipendente(dipendenteTemp.getCf()));
 			
 			dipendenti.add(dipendenteTemp);
 		}
@@ -329,27 +329,27 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		return dipendenti;
 	}
 	
-	@Override
-	public ArrayList<Dipendente> getDipendentiNonPartecipantiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima,
+	@Override  //Ok
+	public ArrayList<Dipendente> filtraDipendentiNonPartecipanti(String nomeCognomeEmail, int etàMinima, int etàMassima,
 			float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima,Progetto progettoSelezionato)
 			throws SQLException {
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 		
-		getDipendentiNonPartecipantiFiltratiPS.setString(1, nomeCognomeEmail);
-		getDipendentiNonPartecipantiFiltratiPS.setString(2, nomeCognomeEmail);
-		getDipendentiNonPartecipantiFiltratiPS.setString(3, nomeCognomeEmail);
-		getDipendentiNonPartecipantiFiltratiPS.setInt(4, etàMinima);
-		getDipendentiNonPartecipantiFiltratiPS.setInt(5, etàMassima);
-		getDipendentiNonPartecipantiFiltratiPS.setFloat(6, salarioMinimo);
-		getDipendentiNonPartecipantiFiltratiPS.setFloat(7, salarioMassimo);
-		getDipendentiNonPartecipantiFiltratiPS.setFloat(8, valutazioneMinima);
-		getDipendentiNonPartecipantiFiltratiPS.setFloat(9, valutazioneMassima);
-		getDipendentiNonPartecipantiFiltratiPS.setInt(10, progettoSelezionato.getIdProgettto());
+		filtraDipendentiNonPartecipantiPS.setString(1, nomeCognomeEmail);
+		filtraDipendentiNonPartecipantiPS.setString(2, nomeCognomeEmail);
+		filtraDipendentiNonPartecipantiPS.setString(3, nomeCognomeEmail);
+		filtraDipendentiNonPartecipantiPS.setInt(4, etàMinima);
+		filtraDipendentiNonPartecipantiPS.setInt(5, etàMassima);
+		filtraDipendentiNonPartecipantiPS.setFloat(6, salarioMinimo);
+		filtraDipendentiNonPartecipantiPS.setFloat(7, salarioMassimo);
+		filtraDipendentiNonPartecipantiPS.setFloat(8, valutazioneMinima);
+		filtraDipendentiNonPartecipantiPS.setFloat(9, valutazioneMassima);
+		filtraDipendentiNonPartecipantiPS.setInt(10, progettoSelezionato.getIdProgettto());
 		
-		ResultSet risultato = getDipendentiNonPartecipantiFiltratiPS.executeQuery();
+		ResultSet risultato = filtraDipendentiNonPartecipantiPS.executeQuery();
 		
 		while (risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"), 
 					risultato.getString("Nome"),
@@ -364,10 +364,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
 					
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
-			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
-			dipendenteTemp.setTipologieProgetto(getTipologieProgettoDipendente(risultato.getString("CF")));
+			dipendenteTemp.setSkills(skillDAO.ottieniSkillDipendente(risultato.getString("CF")));
+			dipendenteTemp.setTipologieProgetto(ottieniTipologieProgettoDipendente(risultato.getString("CF")));
 			dipendenti.add(dipendenteTemp);
 		}
 		risultato.close();
@@ -375,16 +375,16 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		return dipendenti;
 	}
 	
-	@Override
-	public ArrayList<Dipendente> getDipendentiNonPartecipanti(Progetto progettoSelezionato) throws SQLException {
-		getDipendentiNonPartecipantiPS.setInt(1, progettoSelezionato.getIdProgettto());
-		ResultSet risultato = getDipendentiNonPartecipantiPS.executeQuery();
+	@Override //Ok
+	public ArrayList<Dipendente> ottieniDipendentiNonPartecipantiProgetto(Progetto progettoSelezionato) throws SQLException {
+		ottieniDipendentiNonPartecipantiProgettoPS.setInt(1, progettoSelezionato.getIdProgettto());
+		ResultSet risultato = ottieniDipendentiNonPartecipantiProgettoPS.executeQuery();
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 		
 		projDAO = new ProgettoDAOPSQL(connection);
 		
 		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente tempDip = new Dipendente(risultato.getString("CF"),
 					risultato.getString("Nome"),
@@ -398,12 +398,12 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Cellulare"),
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
 			tempDip.setPartecipa(meetDAO.ottieniMeetingDipendente(tempDip));
-			tempDip.setCollaborazioni(projDAO.getPartecipantiProgetto(progettoSelezionato.getIdProgettto()));
-			tempDip.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
-			tempDip.setTipologieProgetto(getTipologieProgettoDipendente(tempDip.getCf()));
+			tempDip.setCollaborazioni(projDAO.ottieniPartecipantiProgetto(progettoSelezionato.getIdProgettto()));
+			tempDip.setSkills(skillDAO.ottieniSkillDipendente(risultato.getString("CF")));
+			tempDip.setTipologieProgetto(ottieniTipologieProgettoDipendente(tempDip.getCf()));
 			
 			dipendenti.add(tempDip);
 		}
@@ -411,11 +411,11 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		
 		return dipendenti;
 	}
-
-	private String getTipologieProgettoDipendente(String cf) throws SQLException {
+		//ok
+	private String ottieniTipologieProgettoDipendente(String cf) throws SQLException {
 		String tipologie = "";
-		getTipologieProgettoDipendentePS.setString(1,cf);
-		ResultSet risultato=getTipologieProgettoDipendentePS.executeQuery();
+		ottieniTipologieProgettoDipendentePS.setString(1,cf);
+		ResultSet risultato=ottieniTipologieProgettoDipendentePS.executeQuery();
 		
 		while(risultato.next()) {
 			tipologie = tipologie.concat(","+risultato.getString("tipoProgetto"));
@@ -445,7 +445,7 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 		
 		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"),
 					risultato.getString("Nome"),
@@ -459,10 +459,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Cellulare"),
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
 			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
-			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
+			dipendenteTemp.setSkills(skillDAO.ottieniSkillDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);
 		}
@@ -471,15 +471,15 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		return dipendenti;
 	}
 	
-	@Override
-	public ArrayList<Dipendente> getDipendenteNonPartecipantiBySkill(Progetto progettoSelezionato,Skill skill) throws SQLException {
-		getDipendentiNonPartecipantiBySkillPS.setInt(1, progettoSelezionato.getIdProgettto());
-		getDipendentiNonPartecipantiBySkillPS.setInt(2, skill.getIdSkill());
-		ResultSet risultato = getDipendentiNonPartecipantiBySkillPS.executeQuery();
+	@Override //Ok
+	public ArrayList<Dipendente> filtraDipendentiNonPartecipantiPerSkill(Progetto progettoSelezionato,Skill skill) throws SQLException {
+		filtraDipendentiNonPartecipantiPerSkillPS.setInt(1, progettoSelezionato.getIdProgettto());
+		filtraDipendentiNonPartecipantiPerSkillPS.setInt(2, skill.getIdSkill());
+		ResultSet risultato = filtraDipendentiNonPartecipantiPerSkillPS.executeQuery();
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 		
 		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"),
 					risultato.getString("Nome"),
@@ -493,10 +493,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Cellulare"),
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
 			dipendenteTemp.setPartecipa(meetDAO.ottieniMeetingDipendente(dipendenteTemp));
-			dipendenteTemp.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
+			dipendenteTemp.setSkills(skillDAO.ottieniSkillDipendente(risultato.getString("CF")));
 			
 			dipendenti.add(dipendenteTemp);
 		}
@@ -505,17 +505,17 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 		return dipendenti;
 	}
 
-	@Override
-	public ArrayList<Dipendente> getDipendentiNonPartecipantiByTipologieProgetto(Progetto progettoSelezionato,String tipologiaProgetto) throws SQLException {
-		getDipendentiNonPartecipantiByTipologiaProgetto.setInt(1, progettoSelezionato.getIdProgettto());
-		getDipendentiNonPartecipantiByTipologiaProgetto.setObject(2, tipologiaProgetto, Types.OTHER);
-		ResultSet risultato = getDipendentiNonPartecipantiByTipologiaProgetto.executeQuery();
+	@Override //Ok
+	public ArrayList<Dipendente> filtraDipendentiNonPartecipantiPerTipologiaProgetto(Progetto progettoSelezionato,String tipologiaProgetto) throws SQLException {
+		filtraDipendentiNonPartecipantiPerTipologiaProgettoPS.setInt(1, progettoSelezionato.getIdProgettto());
+		filtraDipendentiNonPartecipantiPerTipologiaProgettoPS.setObject(2, tipologiaProgetto, Types.OTHER);
+		ResultSet risultato = filtraDipendentiNonPartecipantiPerTipologiaProgettoPS.executeQuery();
 		ArrayList<Dipendente> dipendenti = new ArrayList<Dipendente>();
 		
 		projDAO = new ProgettoDAOPSQL(connection);
 		
 		while(risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.getLuogoByCod(risultato.getString("CodComune"));
+			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
 			
 			Dipendente tempDip = new Dipendente(risultato.getString("CF"),
 					risultato.getString("Nome"),
@@ -529,10 +529,10 @@ public class DipendenteDAOPSQL implements DipendenteDAO {
 					risultato.getString("Cellulare"),
 					risultato.getFloat("Salario"),
 					risultato.getString("Password"),
-					this.getValutazione(risultato.getString("CF")));
+					this.ottieniValutazione(risultato.getString("CF")));
 			
-			tempDip.setSkills(skillDAO.getSkillsDipendente(risultato.getString("CF")));
-			tempDip.setTipologieProgetto(getTipologieProgettoDipendente(tempDip.getCf()));
+			tempDip.setSkills(skillDAO.ottieniSkillDipendente(risultato.getString("CF")));
+			tempDip.setTipologieProgetto(ottieniTipologieProgettoDipendente(tempDip.getCf()));
 			
 			dipendenti.add(tempDip);
 		}

@@ -52,11 +52,11 @@ public class ControllerProgetto {
 		mieiProgettiFrame.setVisible(true);
 	}
 
-	public void apriInserisciPartecipantiProgetto(Progetto progettoSelezionato) {
+	public void apriGUIInserisciPartecipantiProgetto(Progetto progettoSelezionato) {
 		ControllerPartecipantiProgetto controller = new ControllerPartecipantiProgetto(luogoDAO, dipDAO, projDAO, meetDAO, dipendenteLogged, skillDAO, progettoSelezionato);
 	}
 	
-	public void apriGestioneProgetti() {
+	public void apriGUIGestioneProgetti() {
 		gestioneProgettiFrame = new GestioneProgettiDipendente(this,dipendenteLogged);
 		gestioneProgettiFrame.setVisible(true);
 		mieiProgettiFrame.setVisible(false);
@@ -79,54 +79,52 @@ public class ControllerProgetto {
 	}
 
 	public void aggiornaProgetto(Progetto progettoModificato) throws SQLException{
-		projDAO.updateProgetto(progettoModificato);
+		projDAO.aggiornaProgetto(progettoModificato);
 	}
 	
-	public void aggiornaAmbitiProgetto(Progetto progettoModificato) throws SQLException{
-			ambitoDAO.deleteAmbitiProgetto(progettoModificato);
-			ambitoDAO.insertAmbitiOfProgetto(progettoModificato);
+	public void aggiornaAmbitiProgetto(Progetto progettoModificato) throws SQLException {
+		ambitoDAO.eliminaAmbitiProgetto(progettoModificato);
+		ambitoDAO.inserisciAmbitiProgetto(progettoModificato);
 	}
 	
 	public Progetto creaProgetto(Progetto nuovoProgetto) throws SQLException {
-		projDAO.insertProgetto(nuovoProgetto);
-		nuovoProgetto.setIdProgettto(projDAO.getCodProgetto(nuovoProgetto));
+		projDAO.creaProgetto(nuovoProgetto);
+		nuovoProgetto.setIdProgettto(projDAO.ottieniCodiceProgetto(nuovoProgetto));
 		return nuovoProgetto;
 	}
 
-	
 	public void inserisciAmbitiProgetto(Progetto nuovoProgetto) throws SQLException{
-			ambitoDAO.insertAmbitiOfProgetto(nuovoProgetto);
+			ambitoDAO.inserisciAmbitiProgetto(nuovoProgetto);
 	}
 	
 	public void inserisciProjectManager(Progetto nuovoProgetto) throws SQLException {
-		projDAO.insertProjectManager(dipendenteLogged.getCf(), nuovoProgetto, "Project Manager");
+		projDAO.inserisciProjectManager(dipendenteLogged.getCf(), nuovoProgetto, "Project Manager");
 	}
-
-	//TODO: eliminabile probabilmente
-	public ArrayList<AmbitoProgetto> ottieniAmbitiProgettoByCod(int codProgetto) throws SQLException {
-		return ambitoDAO.getAmbitiProgettoByCodice(codProgetto);
-	}
+//	//
+//	public ArrayList<AmbitoProgetto> ottieniAmbitiProgettoByCod(int codProgetto) throws SQLException {
+//		return ambitoDAO.ottieniAmbitiProgettoDaCodice(codProgetto);
+//	}
 	
 	public void rimuoviProgetto(Progetto progetto) throws SQLException {
 		projDAO.rimuoviProgetto(progetto);
 	}
 	
 	public boolean isProjectManager(Progetto progetto) throws SQLException {
-		String cf =  projDAO.getCFProjectManager(progetto);
+		String cf =  projDAO.ottieniCFProjectManager(progetto);
 		if (dipendenteLogged.getCf().equals(cf))
 			return true;
 		return false;
 	}
 
 	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{
-		ArrayList<Progetto> progettiFiltrati = projDAO.getProgettiDipendenteByNome(nomeCercato,dipendenteLogged);
+		ArrayList<Progetto> progettiFiltrati = projDAO.ottieniProgettiDipendentePerNome(nomeCercato,dipendenteLogged);
 		ArrayList<Progetto> progettiConFiltro = new ArrayList<Progetto>();
 		if (tipologiaCercata != null) {
-			progettiConFiltro = projDAO.getProgettiByTipo(tipologiaCercata);
+			progettiConFiltro = projDAO.ottieniProgettiDipendentePerTipo(tipologiaCercata);
 			progettiFiltrati.retainAll(progettiConFiltro);
 		}
 		if (ambitoCercato != null) {
-			progettiConFiltro = projDAO.getProgettiByAmbito(ambitoCercato);
+			progettiConFiltro = projDAO.ottieniProgettiDipendentePerAmbito(ambitoCercato);
 			progettiFiltrati.retainAll(progettiConFiltro);
 		}
 		if (scaduto.equals("Si")) {

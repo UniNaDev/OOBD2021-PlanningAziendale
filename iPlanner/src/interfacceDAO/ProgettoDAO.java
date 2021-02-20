@@ -16,51 +16,43 @@ public interface ProgettoDAO {
 	
 	public ArrayList<Progetto> getProgettiByNome(String nomeCercato) throws SQLException;
 	
-	public ArrayList<Progetto> getProgettiByAmbito(AmbitoProgetto ambito) throws SQLException;
+	public ArrayList<Progetto> ottieniProgettiDipendentePerAmbito(AmbitoProgetto ambito) throws SQLException;
 	
-	public ArrayList<Progetto> getProgettiByTipo(String tipologia) throws SQLException;
+	public ArrayList<Progetto> ottieniProgettiDipendentePerTipo(String tipologia) throws SQLException;
 	
-	public ArrayList<Meeting> getMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException;
+	public ArrayList<Meeting> ottieniMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException;
 	
-	public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente(Dipendente dip) throws SQLException;
+	public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente(Dipendente dip) throws SQLException; //OK
 	
-	public boolean insertProgetto(Progetto proj) throws SQLException;
+	public boolean creaProgetto(Progetto proj) throws SQLException;
 	
 	public boolean rimuoviProgetto(Progetto proj) throws SQLException;
 	
-	public boolean insertPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
+	public boolean inserisciPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
 	
-	public boolean updatePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
+	public boolean aggiornaRuoloCollaboratore(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
 	
-	public boolean deletePartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
+	public boolean eliminaPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
 	
-	public boolean updateProgetto(Progetto proj) throws SQLException;
+	public boolean aggiornaProgetto(Progetto proj) throws SQLException;
 	
-	public Progetto getProgettoByCod(int codProgetto) throws SQLException;
+	public Progetto ottieniProgettoDaCodiceProgetto(int codProgetto) throws SQLException;
 	
 	public ArrayList<String> ottieniTipologie() throws SQLException;
 	
-	public String getCFProjectManager(Progetto progetto) throws SQLException;
+	public String ottieniCFProjectManager(Progetto progetto) throws SQLException;
 	
-	//TODO: probabilmente inutile
-	public ArrayList<Dipendente> getPartecipantiProgettoSenzaRuolo(int codiceProgetto) throws SQLException;
+	public ArrayList<Dipendente> ottieniPartecipantiProgettoSenzaRuolo(int codiceProgetto) throws SQLException;
 	
-	public int getCodProgetto(Progetto proj) throws SQLException;
+	public int ottieniCodiceProgetto(Progetto proj) throws SQLException;
 	
-	public ArrayList<String> getRuoliDipendenti() throws SQLException;
+	public ArrayList<String> ottieniRuoli() throws SQLException;
 	
-	//TODO: probabilmente inutile
-	public ArrayList<CollaborazioneProgetto> getPartecipantiProgetto(int codiceProgetto) throws SQLException;
+	public ArrayList<CollaborazioneProgetto> ottieniPartecipantiProgetto(int codiceProgetto) throws SQLException;
 	
-	//TODO: probabilmente inutile
-	public boolean insertProjectManager(String cf, Progetto tmp, String string) throws SQLException;
+	public boolean inserisciProjectManager(String cf, Progetto tmp, String string) throws SQLException;
 	
-	//TODO: probabilmente inutile
-	public ArrayList<CollaborazioneProgetto> getPartecipanti(int codiceProgetto) throws SQLException;
-	public boolean addProjectManager(String cf, Progetto tmp, String string) throws SQLException;
-	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto) throws SQLException;
-	public String ottieniProjectManager(Progetto progetto) throws SQLException;
-	public ArrayList<Progetto> getProgettiDipendenteByNome(String nomeCercato, Dipendente dipendente)throws SQLException;
+	public ArrayList<Progetto> ottieniProgettiDipendentePerNome(String nomeCercato, Dipendente dipendente)throws SQLException;
 
 	
 

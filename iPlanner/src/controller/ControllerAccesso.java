@@ -52,7 +52,7 @@ public class ControllerAccesso {
     	loginFrame.setVisible(true);
     }
     
-    public void apriAutenticazioneSegreteria() {
+    public void apriGUIAutenticazioneSegreteria() {
     	autenticazioneSegreteriaFrame = new AutenticazioneSegreteria(this);
     	autenticazioneSegreteriaFrame.setVisible(true);
     }

@@ -57,15 +57,15 @@ public class ControllerProgettiSegreteria {
 	
 	public void creaAmbitoProgetto(String nomeAmbito) throws SQLException {
 		AmbitoProgetto temp = new AmbitoProgetto(nomeAmbito);
-		ambitoDAO.insertAmbito(temp);
+		ambitoDAO.inserisciAmbito(temp);
 	}
 	
 	public ArrayList<AmbitoProgetto> ottieniAmbitiProgetto(Progetto progetto) throws SQLException {
-		return ambitoDAO.getAmbitiOfProgetto(progetto);
+		return ambitoDAO.ottieniAmbitiDelProgetto(progetto);
 	}
 	
 	public ArrayList<CollaborazioneProgetto> ottieniCollaborazioni(Progetto progetto) throws SQLException{
-		return projDAO.getPartecipantiProgetto(progetto.getIdProgettto());
+		return projDAO.ottieniPartecipantiProgetto(progetto.getIdProgettto());
 	}
 	
 	public ArrayList<AmbitoProgetto> ottieniTuttiAmbiti() throws SQLException{
@@ -84,11 +84,11 @@ public class ControllerProgettiSegreteria {
 		ArrayList<Progetto> progetti = projDAO.getProgettiByNome(nomeCercato);
 		ArrayList<Progetto> progettiConFiltro = new ArrayList<Progetto>();
 		if (tipologiaCercata != null) {
-			progettiConFiltro = projDAO.getProgettiByTipo(tipologiaCercata);
+			progettiConFiltro = projDAO.ottieniProgettiDipendentePerTipo(tipologiaCercata);
 			progetti.retainAll(progettiConFiltro);
 		}
 		if (ambitoCercato != null) {
-			progettiConFiltro = projDAO.getProgettiByAmbito(ambitoCercato);
+			progettiConFiltro = projDAO.ottieniProgettiDipendentePerAmbito(ambitoCercato);
 			progetti.retainAll(progettiConFiltro);
 		}
 		if (scaduto.equals("Si")) {

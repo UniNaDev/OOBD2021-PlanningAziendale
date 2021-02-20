@@ -78,7 +78,7 @@ public class ControllerMeetingSegreteria {
 	}
 
 	public ArrayList<SalaRiunione> ottieniSale() throws SQLException{
-		ArrayList<SalaRiunione> sale = salaDAO.getSale();
+		ArrayList<SalaRiunione> sale = salaDAO.ottieniSale();
 		sale.add(0, null);
 		return sale;
 	}
@@ -116,7 +116,7 @@ public class ControllerMeetingSegreteria {
 	}
 	
 	public void eliminaSala(SalaRiunione sala) throws SQLException {
-		salaDAO.deleteSala(sala);
+		salaDAO.eliminaSala(sala);
 		aggiornaSaleFiltro();
 	}
 }

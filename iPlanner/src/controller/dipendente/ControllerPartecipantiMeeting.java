@@ -50,26 +50,18 @@ public class ControllerPartecipantiMeeting {
 		inserisciPartecipantiMeetingFrame.setVisible(true);
 
 	}
-
-	public ArrayList<Dipendente> ottieniInvitati(int idMeeting) throws SQLException {
-		return meetDAO.getInvitati(idMeeting);
-	}
 	
-	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
-		return meetDAO.ottieniMeetingDipendente(dipendenteLogged);
-	}
-	
-	public ArrayList<Dipendente> ottieniDipendenti(Meeting meetingSelezionato) throws SQLException{
-		return dipDAO.getDipendentiNonInvitati(meetingSelezionato);
+	public ArrayList<Dipendente> ottieniDipendentiNonInvitatiMeeting(Meeting meetingSelezionato) throws SQLException{
+		return dipDAO.ottieniDipendentiNonInvitatiMeeting(meetingSelezionato);
 	}
 	
 	public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
-		return skillDAO.getSkillsDipendente(cfDipendente);
+		return skillDAO.ottieniSkillDipendente(cfDipendente);
 	}
 
-	public boolean eliminaPartecipante(PartecipazioneMeeting partecipazioneMeeting){
+	public boolean eliminaInvitato(PartecipazioneMeeting partecipazioneMeeting){
 		try {
-			meetDAO.deletePartecipanteMeeting(partecipazioneMeeting);
+			meetDAO.eliminaInvitato(partecipazioneMeeting);
 			return true;
 		} catch (SQLException e) {
 			
@@ -78,9 +70,9 @@ public class ControllerPartecipantiMeeting {
 		}
 	}
 
-	public boolean inserisciPartecipante(PartecipazioneMeeting partecipazioneMeeting){
+	public boolean inserisciInvitatoMeeting(PartecipazioneMeeting partecipazioneMeeting){
 		try {
-			meetDAO.insertPartecipanteMeeting(partecipazioneMeeting);
+			meetDAO.inserisciInvitatoMeeting(partecipazioneMeeting);
 			return true;
 		} catch (SQLException e1) {
 			
@@ -94,9 +86,9 @@ public class ControllerPartecipantiMeeting {
 		
 	}
 
-	public boolean aggiornaPresenzaPartecipante(PartecipazioneMeeting partecipazioneMeeting){
+	public boolean aggiornaPresenzaInvitato(PartecipazioneMeeting partecipazioneMeeting){
 		try {
-			meetDAO.updatePresenzaPartecipante(partecipazioneMeeting);
+			meetDAO.aggiornaPresenzaInvitato(partecipazioneMeeting);
 			return true;
 		} catch (SQLException e1) {
 			if(e1.getSQLState().equals("70000"))

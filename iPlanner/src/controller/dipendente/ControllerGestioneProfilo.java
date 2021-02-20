@@ -51,12 +51,12 @@ public class ControllerGestioneProfilo {
 
     }
 
-    public void apriMioAccount() {
+    public void apriGUIMioAccount() {
 		accountFrame = new MioAccount(this, dipendenteLogged);
 		accountFrame.setVisible(true);
     }
 
-    public void chiudiMioAccount() {
+    public void chiudiGUIMioAccount() {
     	accountFrame.setVisible(false);
     }
 
@@ -64,12 +64,12 @@ public class ControllerGestioneProfilo {
     	System.exit(0);
     }
 
-    public void apriMieiProgetti() {
+    public void apriGUIMieiProgetti() {
     	ControllerProgetto controller = new ControllerProgetto(luogoDAO, dipDAO, projDAO, meetDAO, ambitoDAO, skillDAO,
     	dipendenteLogged);
     }
 
-    public void apriMieiMeeting() {
+    public void apriGUIMieiMeeting() {
     	ControllerMeeting controller = new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO,
 		dipendenteLogged);
     }
@@ -88,7 +88,7 @@ public class ControllerGestioneProfilo {
     	return meetDAO.ottieniMeetingDipendente(dipendenteLogged);
     }
 
-    public void aggiornaInfoDipendente(Dipendente dipendenteModificato) throws SQLException {
+    public void aggiornaDipendente(Dipendente dipendenteModificato) throws SQLException {
     	dipDAO.aggiornaDipendente(dipendenteModificato);
     }
 

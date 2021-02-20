@@ -47,21 +47,21 @@ public class ControllerPartecipantiProgetto {
 		inserisciPartecipantiProgettoFrame.setVisible(true);
 	}
 
-	public ArrayList<Dipendente> ottieniDipendenti(Progetto progettoSelezionato) throws SQLException {
-		return dipDAO.getDipendentiNonPartecipanti(progettoSelezionato);
+	public ArrayList<Dipendente> ottieniDipendentiNonPartecipantiProgetto(Progetto progettoSelezionato) throws SQLException {
+		return dipDAO.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato);
 	}
 	
 	public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
-		return skillDAO.getSkillsDipendente(cfDipendente);
+		return skillDAO.ottieniSkillDipendente(cfDipendente);
 	}
 	
 	public ArrayList<Dipendente> ottieniPartecipanti(int codiceProgetto) throws SQLException{
-		return projDAO.getPartecipantiProgettoSenzaRuolo(codiceProgetto);
+		return projDAO.ottieniPartecipantiProgettoSenzaRuolo(codiceProgetto);
 	}
 
-	public boolean inserisciPartecipante(CollaborazioneProgetto collaborazioneProgetto){
+	public boolean inserisciPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto){
 		try {
-			projDAO.insertPartecipanteProgetto(collaborazioneProgetto);
+			projDAO.inserisciPartecipanteProgetto(collaborazioneProgetto);
 			return true;
 		} catch (SQLException e) {
 			
@@ -74,9 +74,9 @@ public class ControllerPartecipantiProgetto {
 		}
 	}
 
-	public boolean eliminaPartecipante(CollaborazioneProgetto collaborazioneProgetto){
+	public boolean eliminaPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto){
 		try {
-			projDAO.deletePartecipanteProgetto(collaborazioneProgetto);
+			projDAO.eliminaPartecipanteProgetto(collaborazioneProgetto);
 			return true;
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -85,15 +85,15 @@ public class ControllerPartecipantiProgetto {
 	}
 	
 	public String [] ottieniRuoli() throws SQLException{
-		String [] ruoli = new String [projDAO.getRuoliDipendenti().size()];
-		for (int i = 0; i < projDAO.getRuoliDipendenti().size(); i++)
-			ruoli[i] = projDAO.getRuoliDipendenti().get(i);
+		String [] ruoli = new String [projDAO.ottieniRuoli().size()];
+		for (int i = 0; i < projDAO.ottieniRuoli().size(); i++)
+			ruoli[i] = projDAO.ottieniRuoli().get(i);
 		return ruoli;
 	}
 	
-	public boolean aggiornaPartecipante(CollaborazioneProgetto collaborazioneProgetto){
+	public boolean aggiornaRuoloCollaboratore(CollaborazioneProgetto collaborazioneProgetto){
 		try {
-			projDAO.updatePartecipanteProgetto(collaborazioneProgetto);
+			projDAO.aggiornaRuoloCollaboratore(collaborazioneProgetto);
 			return true;
 		} catch (SQLException e) {
 			
@@ -104,28 +104,28 @@ public class ControllerPartecipantiProgetto {
 	
 	public float ottieniMaxStipendio() {
 		try {
-			return dipDAO.getMaxStipendio();
+			return dipDAO.ottieniMaxStipendio();
 		} catch (SQLException e) {
 			return 100000000f;
 		}
 	}
 
 	public ArrayList<Dipendente> filtraDipendentiNonPartecipanti(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima, Skill skill,Progetto progettoSelezionato,String tipologiaProgetto) throws SQLException {
-		ArrayList<Dipendente> dipendentiFiltrati = dipDAO.getDipendentiNonPartecipantiFiltrati(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima,progettoSelezionato);
+		ArrayList<Dipendente> dipendentiFiltrati = dipDAO.filtraDipendentiNonPartecipanti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima,progettoSelezionato);
 		if (skill != null)
-			dipendentiFiltrati.retainAll(dipDAO.getDipendenteNonPartecipantiBySkill(progettoSelezionato,skill));
+			dipendentiFiltrati.retainAll(dipDAO.filtraDipendentiNonPartecipantiPerSkill(progettoSelezionato,skill));
 		
 		if(tipologiaProgetto!=null)
-		dipendentiFiltrati.retainAll(dipDAO.getDipendentiNonPartecipantiByTipologieProgetto(progettoSelezionato, tipologiaProgetto));
+		dipendentiFiltrati.retainAll(dipDAO.filtraDipendentiNonPartecipantiPerTipologiaProgetto(progettoSelezionato, tipologiaProgetto));
 		
 		return dipendentiFiltrati;
 	}
 
 	public ArrayList<Skill> ottieniSkill() throws SQLException{
-		return skillDAO.getSkills();
+		return skillDAO.ottieniSkill();
 	}
 
-	public ArrayList<String> ottieniTipologieProgetto() throws SQLException {
+	public ArrayList<String> ottieniTipologie() throws SQLException {
 		return projDAO.ottieniTipologie();
 	}
 }

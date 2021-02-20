@@ -89,37 +89,17 @@ public class MieiMeeting extends JFrame {
 		mieiMeetingScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		mieiMeetingScrollPane.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		
-		meetingCellRenderer = new MeetingListRenderer();
-		meetingList.setCellRenderer(meetingCellRenderer);
 		meetingList.setSelectionBackground(Color.LIGHT_GRAY);
 		meetingList.setFixedCellHeight(70);
 		meetingList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		meetingList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		meetingList.setSelectedIndex(0);
 		mieiMeetingScrollPane.setViewportView(meetingList);
+		impostaMeetingCellRenderer();
 		inizializzaListaMeeting(controller);
 		meetingList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				meetingSelezionato = meetingList.getSelectedValue();
-
-				progettoDiscussoLabel.setText("<html><center>"
-						+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() + "</html></center>");
-
-				modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());
-
-				if (meetingSelezionato.getModalita().equals("Fisico"))
-					piattaformaSalaLabel.setText("Sala: " + meetingSelezionato.getSala().getCodiceSala());
-				else
-					piattaformaSalaLabel.setText("Piattaforma: " + meetingSelezionato.getPiattaforma());
-
-				DateTimeFormatter formatTime = DateTimeFormat.forPattern("HH:mm");
-				orarioFineLabel.setText("Orario Fine: " + meetingSelezionato.getOraFine().toString(formatTime));
-				orarioInizioLabel
-						.setText("Orario Inizio: " + meetingSelezionato.getOraInizio().toString(formatTime));
-
-				DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
-				dataFineLabel.setText("Data Fine: " + meetingSelezionato.getDataFine().toString(formatDate));
-				dataInizioLabel.setText("Data Inizio: " + meetingSelezionato.getDataInizio().toString(formatDate));
+				impostaInfoMeetingSelezionato();
 			}
 		});
 
@@ -181,7 +161,7 @@ public class MieiMeeting extends JFrame {
 		});
 		nuovoMeetingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.apriGestioneMeeting();
+				controller.apriGUIGestioneMeeting();
 			}
 		});
 
@@ -243,8 +223,6 @@ public class MieiMeeting extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 
-	// Altri metodi
-	// ----------------------------------------------
 	private void inizializzaListaMeeting(ControllerMeeting controller) {
 		try {
 			ArrayList<Meeting> meetings = controller.ottieniMeetingDipendente();
@@ -256,5 +234,33 @@ public class MieiMeeting extends JFrame {
 							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
 					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	private void impostaMeetingCellRenderer() {
+		meetingCellRenderer = new MeetingListRenderer();
+		meetingList.setCellRenderer(meetingCellRenderer);
+	}
+	
+	private void impostaInfoMeetingSelezionato() {
+		meetingSelezionato = meetingList.getSelectedValue();
+
+		progettoDiscussoLabel.setText("<html><center>"
+				+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() + "</html></center>");
+
+		modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());
+
+		if (meetingSelezionato.getModalita().equals("Fisico"))
+			piattaformaSalaLabel.setText("Sala: " + meetingSelezionato.getSala().getCodiceSala());
+		else
+			piattaformaSalaLabel.setText("Piattaforma: " + meetingSelezionato.getPiattaforma());
+
+		DateTimeFormatter formatTime = DateTimeFormat.forPattern("HH:mm");
+		orarioFineLabel.setText("Orario Fine: " + meetingSelezionato.getOraFine().toString(formatTime));
+		orarioInizioLabel
+				.setText("Orario Inizio: " + meetingSelezionato.getOraInizio().toString(formatTime));
+
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		dataFineLabel.setText("Data Fine: " + meetingSelezionato.getDataFine().toString(formatDate));
+		dataInizioLabel.setText("Data Inizio: " + meetingSelezionato.getDataInizio().toString(formatDate));
 	}
 }

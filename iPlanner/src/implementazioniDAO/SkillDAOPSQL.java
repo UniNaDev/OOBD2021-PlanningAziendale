@@ -17,20 +17,20 @@ import interfacceDAO.SkillDAO;
 
 public class SkillDAOPSQL implements SkillDAO {
 	private Connection conn;
-	private PreparedStatement getSkillsPS,addSkillPS, addSkillDipendentePS, getSkillDipendentePS;
+	private PreparedStatement ottieniSkillPS,addSkillPS, addSkillDipendentePS, ottieniSkillDipendentePS;
 	
 	public SkillDAOPSQL(Connection connection) throws SQLException {
 		this.conn = connection;
 		
-		getSkillsPS = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");
+		ottieniSkillPS = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");
 		addSkillPS = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");
 		addSkillDipendentePS = conn.prepareStatement("INSERT INTO Abilità VALUES (?,?)");
-		getSkillDipendentePS = conn.prepareStatement("SELECT * FROM Skill AS s WHERE s.IDSkill IN (SELECT a.IDSkill FROM Abilità AS a WHERE a.CF = ?)");
+		ottieniSkillDipendentePS = conn.prepareStatement("SELECT * FROM Skill AS s WHERE s.IDSkill IN (SELECT a.IDSkill FROM Abilità AS a WHERE a.CF = ?)");
 	}
 	
-	@Override
-	public ArrayList<Skill> getSkills() throws SQLException {
-		ResultSet risultato = getSkillsPS.executeQuery();
+	@Override  //Ok
+	public ArrayList<Skill> ottieniSkill() throws SQLException {
+		ResultSet risultato = ottieniSkillPS.executeQuery();
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		
 		while(risultato.next()) {
@@ -66,12 +66,12 @@ public class SkillDAOPSQL implements SkillDAO {
 		else
 			return false;
 	}
-
-	@Override
-	public ArrayList<Skill> getSkillsDipendente(String cfDipendente) throws SQLException {
+ 
+	@Override  //Ok
+	public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
 		ArrayList<Skill> skills = new ArrayList<Skill>();
-		getSkillDipendentePS.setString(1, cfDipendente);
-		ResultSet risultato = getSkillDipendentePS.executeQuery();
+		ottieniSkillDipendentePS.setString(1, cfDipendente);
+		ResultSet risultato = ottieniSkillDipendentePS.executeQuery();
 		
 		while (risultato.next()) {
 			Skill tempSkill = new Skill(risultato.getInt(1), risultato.getString(2));

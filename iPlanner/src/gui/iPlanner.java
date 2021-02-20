@@ -80,7 +80,7 @@ public class iPlanner extends JFrame {
 		areaSegreteriaLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.apriAutenticazioneSegreteria();
+				controller.apriGUIAutenticazioneSegreteria();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) 
