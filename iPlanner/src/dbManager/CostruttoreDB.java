@@ -566,12 +566,12 @@ public class CostruttoreDB {
             		+ "	--Se esistono altri record di meeting fisici con la stessa sala del nuovo record\r\n"
             		+ "	IF (EXISTS(SELECT m.IDMeeting\r\n"
             		+ "		FROM Meeting AS m\r\n"
-            		+ "		WHERE m.CodSala=NEW.CodSala AND modalità='Fisico')) THEN\r\n"
+            		+ "		WHERE m.CodSala=NEW.CodSala AND m.Modalità='Fisico' AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME)) THEN\r\n"
             		+ "		--Per ogni meeting con la stessa sala che non sia quello nuovo\r\n"
             		+ "		FOR OLDMeeting IN\r\n"
             		+ "			SELECT *\r\n"
             		+ "			FROM Meeting AS m\r\n"
-            		+ "			WHERE m.CodSala=NEW.CodSala AND modalità = 'Fisico' AND m.IDMeeting <> NEW.IDMeeting\r\n"
+            		+ "			WHERE m.CodSala=NEW.CodSala AND m.Modalità = 'Fisico' AND m.IDMeeting <> NEW.IDMeeting\r\n"
             		+ "		LOOP\r\n"
             		+ "			--Controlla che non si accavallino gli orari\r\n"
             		+ "			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN\r\n"
@@ -621,7 +621,7 @@ public class CostruttoreDB {
             		+ "--Controlla che il meeting inserito/modificato sia fisico\r\n"
             		+ "IF ((SELECT m.Modalità\r\n"
             		+ "	FROM Meeting AS m\r\n"
-            		+ "	WHERE m.IDMeeting = NEW.IDMeeting) = 'Fisico') THEN\r\n"
+            		+ "	WHERE m.IDMeeting = NEW.IDMeeting AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME) = 'Fisico') THEN\r\n"
             		+ "		--Salva la capienza della sala\r\n"
             		+ "		SELECT s.Capienza INTO Cap\r\n"
             		+ "		FROM Meeting AS m NATURAL JOIN SalaRiunione AS s\r\n"
@@ -631,10 +631,10 @@ public class CostruttoreDB {
             		+ "			FROM Presenza AS p\r\n"
             		+ "			WHERE p.IDMeeting = NEW.IDMeeting\r\n"
             		+ "			GROUP BY p.IDMeeting) > Cap) THEN\r\n"
-            		+ "				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita', Cap \r\n"
-            		+ "					USING\r\n"
-            		+ "						HINT = 'Si consiglia di cambiare sala.',\r\n"
-            		+ "						ERRCODE = 'P0002';\r\n"
+            		+ "				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', Cap\r\n"
+            		+ "				USING \r\n"
+            		+ "					HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',\r\n"
+            		+ "					ERRCODE = 'P0002';\r\n"
             		+ "				RETURN NEW;\r\n"
             		+ "		END IF;\r\n"
             		+ "END IF;\r\n"
@@ -672,20 +672,23 @@ public class CostruttoreDB {
             		+ "DECLARE\r\n"
             		+ "Cap SalaRiunione.Capienza%TYPE;\r\n"
             		+ "BEGIN\r\n"
-            		+ "--Salva la capienza della nuova sala\r\n"
-            		+ "SELECT s.Capienza INTO Cap\r\n"
-            		+ "FROM SalaRiunione AS s\r\n"
-            		+ "WHERE s.CodSala = NEW.CodSala;\r\n"
-            		+ "--Controlla che il numero di partecipanti al meeting non superi la capienza della nuova sala\r\n"
-            		+ "IF ((SELECT COUNT(p.CF)\r\n"
-            		+ "	FROM Presenza AS p \r\n"
-            		+ "	WHERE p.IDMeeting = NEW.IDMeeting\r\n"
-            		+ "	GROUP BY p.IDMeeting) > Cap) THEN\r\n"
-            		+ "		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala\r\n"
-            		+ "		 USING\r\n"
-            		+ "		 	HINT = 'Si consiglia di cambiare sala.',\r\n"
-            		+ "		 	ERRCODE = 'P0002';\r\n"
-            		+ "		RETURN NEW;\r\n"
+            		+ "--Se il meeting non è già terminato\r\n"
+            		+ "IF (NEW.DataFine >= CURRENT_DATE AND NEW.OraFine >= CURRENT_TIME) THEN\r\n"
+            		+ "	--Salva la capienza della nuova sala\r\n"
+            		+ "	SELECT s.Capienza INTO Cap\r\n"
+            		+ "	FROM SalaRiunione AS s\r\n"
+            		+ "	WHERE s.CodSala = NEW.CodSala;\r\n"
+            		+ "	--Controlla che il numero di partecipanti al meeting non superi la capienza della nuova sala\r\n"
+            		+ "	IF ((SELECT COUNT(p.CF)\r\n"
+            		+ "		FROM Presenza AS p \r\n"
+            		+ "		WHERE p.IDMeeting = NEW.IDMeeting\r\n"
+            		+ "		GROUP BY p.IDMeeting) > Cap) THEN\r\n"
+            		+ "			RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala\r\n"
+            		+ "			USING \r\n"
+            		+ "				HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',\r\n"
+            		+ "				ERRCODE = 'P0002';\r\n"
+            		+ "			RETURN NEW;\r\n"
+            		+ "	END IF;\r\n"
             		+ "END IF;\r\n"
             		+ "RETURN NEW;\r\n"
             		+ "END;\r\n"
@@ -704,58 +707,6 @@ public class CostruttoreDB {
                 String createTrigger = "CREATE TRIGGER capienza_rispettata_meeting AFTER UPDATE OF CodSala ON Meeting\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_capienza_meeting();";
-                risultato = statement.executeUpdate(createTrigger);
-                statement.close();
-                }
-            }
-    return risultato;
-    }
-    
-    private int creaFunzioneCheckCapienzaSala() throws SQLException{
-	    int risultato = -1;
-	    if(connessioneEsiste()) {
-	        Statement statement = connection.createStatement();
-            String createFunction = "CREATE OR REPLACE FUNCTION check_capienza_sala() RETURNS TRIGGER\r\n"
-            		+ "LANGUAGE PLPGSQL\r\n"
-            		+ "AS $$\r\n"
-            		+ "DECLARE\r\n"
-            		+ "OLDMeeting RECORD;\r\n"
-            		+ "BEGIN\r\n"
-            		+ "--Per ciascun meeting con codice sala pari a quello della sala modificato\r\n"
-            		+ "FOR OLDMeeting IN\r\n"
-            		+ "	SELECT *\r\n"
-            		+ "	FROM Meeting AS m\r\n"
-            		+ "	WHERE m.CodSala = NEW.CodSala\r\n"
-            		+ "LOOP\r\n"
-            		+ "	--Controlla che il numero di partecipanti in presenza del meeting non superi la capienza della sala\r\n"
-            		+ "	IF ((SELECT COUNT(p.CF)\r\n"
-            		+ "	   FROM Presenza AS p\r\n"
-            		+ "	   WHERE p.IDMeeting = OLDMeeting.IDMeeting\r\n"
-            		+ "	   GROUP BY p.IDMeeting) > NEW.Capienza) THEN\r\n"
-            		+ "	   		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', NEW.Capienza\r\n"
-            		+ "			USING\r\n"
-            		+ "				HINT = 'Si consiglia di cambiare la sala del meeting o di rimuovere qualche partecipante.',\r\n"
-            		+ "				ERRCODE = 'P0002';\r\n"
-            		+ "			RETURN OLD;\r\n"
-            		+ "	END IF;\r\n"
-            		+ "END LOOP;\r\n"
-            		+ "RETURN NEW;\r\n"
-            		+ "END;\r\n"
-            		+ "$$;";
-            risultato = statement.executeUpdate(createFunction);
-            statement.close();
-            }
-    return risultato;
-    }
-    
-    private int creaTriggerCapienzaRispettataSala() throws SQLException{
-	    int risultato = -1;
-	    if(connessioneEsiste()) {
-            Statement statement = connection.createStatement();
-            if (!esisteTrigger("capienza_rispettata_sala")) {
-                String createTrigger = "CREATE TRIGGER capienza_rispettata_sala BEFORE UPDATE ON SalaRiunione\r\n"
-                		+ "FOR EACH ROW\r\n"
-                		+ "EXECUTE PROCEDURE check_capienza_sala();";
                 risultato = statement.executeUpdate(createTrigger);
                 statement.close();
                 }
@@ -826,17 +777,17 @@ public class CostruttoreDB {
             		+ "	SELECT m.DataInizio,m.DataFine,m.OrarioInizio,m.OrarioFine INTO NEWDataInizio,NEWDataFine,NEWOraInizio,NEWOraFine\r\n"
             		+ "	FROM Presenza AS p NATURAL JOIN Meeting AS m\r\n"
             		+ "	WHERE p.IDMeeting=NEW.IDMeeting;\r\n"
-            		+ "	--Per ogni meeting dello stesso dipendente\r\n"
+            		+ "	--Per ogni meeting non terminato dello stesso dipendente\r\n"
             		+ "	FOR OLDMeeting IN\r\n"
             		+ "		SELECT *\r\n"
             		+ "		FROM Presenza AS p NATURAL JOIN Meeting AS m\r\n"
-            		+ "		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting\r\n"
+            		+ "		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting AND m.DataFine >= CURRENT_DATE AND OrarioFine >= CURRENT_TIME\r\n"
             		+ "	LOOP\r\n"
             		+ "		--Controlla che non si accavalli con quello nuovo\r\n"
             		+ "		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN\r\n"
             		+ "			RAISE EXCEPTION 'Il dipendente % ha il meeting % che si accavalla con questo',NEW.CF,OLDMeeting.IDMeeting\r\n"
             		+ "			USING \r\n"
-            		+ "				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',\r\n"
+            		+ "				HINT = 'Cambia il meeting.',\r\n"
             		+ "				ERRCODE = 'P0003';\r\n"
             		+ "			RETURN OLD;\r\n"
             		+ "		END IF;\r\n"
@@ -884,17 +835,17 @@ public class CostruttoreDB {
             		+ "	FROM Presenza AS p\r\n"
             		+ "	WHERE p.IDMeeting = NEW.IDMeeting\r\n"
             		+ "LOOP\r\n"
-            		+ "--Per ogni meeting a cui esso partecipa\r\n"
+            		+ "--Per ogni meeting non terminato a cui esso partecipa\r\n"
             		+ "	FOR OLDMeeting IN\r\n"
             		+ "		SELECT *\r\n"
             		+ "		FROM Presenza AS p NATURAL JOIN Meeting AS m\r\n"
-            		+ "		WHERE m.IDMeeting <> NEW.IDMeeting AND p.CF=dip\r\n"
+            		+ "		WHERE m.IDMeeting <> NEW.IDMeeting AND p.CF=dip AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME\r\n"
             		+ "	LOOP\r\n"
             		+ "		--Controlla se si accavalla con il meeting aggiornato\r\n"
             		+ "		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN\r\n"
             		+ "			RAISE EXCEPTION 'Il dipendente % potrebbe avere problemi di accavallamento con il meeting di ID %', dip, OLDMeeting.IDMeeting\r\n"
             		+ "			USING \r\n"
-            		+ "				HINT = 'Cambia il meeting oppure chiedi al dipendente di organizzarsi.',\r\n"
+            		+ "				HINT = 'Cambia il meeting.',\r\n"
             		+ "				ERRCODE = 'P0003';\r\n"
             		+ "			RETURN OLD;\r\n"
             		+ "		END IF;\r\n"
@@ -1119,8 +1070,6 @@ public class CostruttoreDB {
     	creaTriggerCapienzaRispettataPresenza();
     	creaFunzioneCheckCapienzaMeeting();
     	creaTriggerCapienzaRispettataMeeting();
-    	creaFunzioneCheckCapienzaSala();
-    	creaTriggerCapienzaRispettataSala();
     	
     	creaFunzioneCheckSkillExistence();
     	creaTriggerComposizioneSkill();

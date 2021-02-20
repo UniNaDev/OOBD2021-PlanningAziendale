@@ -24,11 +24,11 @@ IF (EXISTS(SELECT p.IDMeeting
 	SELECT m.DataInizio,m.DataFine,m.OrarioInizio,m.OrarioFine INTO NEWDataInizio,NEWDataFine,NEWOraInizio,NEWOraFine
 	FROM Presenza AS p NATURAL JOIN Meeting AS m
 	WHERE p.IDMeeting=NEW.IDMeeting;
-	--Per ogni meeting dello stesso dipendente
+	--Per ogni meeting non terminato dello stesso dipendente
 	FOR OLDMeeting IN
 		SELECT *
 		FROM Presenza AS p NATURAL JOIN Meeting AS m
-		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting
+		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting AND m.DataFine >= CURRENT_DATE AND OrarioFine >= CURRENT_TIME
 	LOOP
 		--Controlla che non si accavalli con quello nuovo
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN
@@ -73,11 +73,11 @@ FOR dip IN
 	FROM Presenza AS p
 	WHERE p.IDMeeting = NEW.IDMeeting
 LOOP
---Per ogni meeting a cui esso partecipa
+--Per ogni meeting non terminato a cui esso partecipa
 	FOR OLDMeeting IN
 		SELECT *
 		FROM Presenza AS p NATURAL JOIN Meeting AS m
-		WHERE m.IDMeeting <> NEW.IDMeeting AND p.CF=dip
+		WHERE m.IDMeeting <> NEW.IDMeeting AND p.CF=dip AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME
 	LOOP
 		--Controlla se si accavalla con il meeting aggiornato
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN

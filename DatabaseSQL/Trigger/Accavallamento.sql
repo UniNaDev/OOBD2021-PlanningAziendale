@@ -14,12 +14,12 @@ BEGIN
 	--Se esistono altri record di meeting fisici con la stessa sala del nuovo record
 	IF (EXISTS(SELECT m.IDMeeting
 		FROM Meeting AS m
-		WHERE m.CodSala=NEW.CodSala AND modalità='Fisico')) THEN
+		WHERE m.CodSala=NEW.CodSala AND m.Modalità='Fisico' AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME)) THEN
 		--Per ogni meeting con la stessa sala che non sia quello nuovo
 		FOR OLDMeeting IN
 			SELECT *
 			FROM Meeting AS m
-			WHERE m.CodSala=NEW.CodSala AND modalità = 'Fisico' AND m.IDMeeting <> NEW.IDMeeting
+			WHERE m.CodSala=NEW.CodSala AND m.Modalità = 'Fisico' AND m.IDMeeting <> NEW.IDMeeting
 		LOOP
 			--Controlla che non si accavallino gli orari
 			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN

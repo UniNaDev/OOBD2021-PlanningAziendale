@@ -315,12 +315,12 @@ BEGIN
 	--Se esistono altri record di meeting fisici con la stessa sala del nuovo record
 	IF (EXISTS(SELECT m.IDMeeting
 		FROM Meeting AS m
-		WHERE m.CodSala=NEW.CodSala AND modalità='Fisico')) THEN
+		WHERE m.CodSala=NEW.CodSala AND m.Modalità='Fisico' AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME)) THEN
 		--Per ogni meeting con la stessa sala che non sia quello nuovo
 		FOR OLDMeeting IN
 			SELECT *
 			FROM Meeting AS m
-			WHERE m.CodSala=NEW.CodSala AND modalità = 'Fisico' AND m.IDMeeting <> NEW.IDMeeting
+			WHERE m.CodSala=NEW.CodSala AND m.Modalità = 'Fisico' AND m.IDMeeting <> NEW.IDMeeting
 		LOOP
 			--Controlla che non si accavallino gli orari
 			IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
@@ -362,7 +362,7 @@ BEGIN
 --Controlla che il meeting inserito/modificato sia fisico
 IF ((SELECT m.Modalità
 	FROM Meeting AS m
-	WHERE m.IDMeeting = NEW.IDMeeting) = 'Fisico') THEN
+	WHERE m.IDMeeting = NEW.IDMeeting AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME) = 'Fisico') THEN
 		--Salva la capienza della sala
 		SELECT s.Capienza INTO Cap
 		FROM Meeting AS m NATURAL JOIN SalaRiunione AS s
@@ -372,10 +372,10 @@ IF ((SELECT m.Modalità
 			FROM Presenza AS p
 			WHERE p.IDMeeting = NEW.IDMeeting
 			GROUP BY p.IDMeeting) > Cap) THEN
-				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', Cap 
-					USING
-						HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
-						ERRCODE = 'P0002';
+				RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', Cap
+				USING 
+					HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
+					ERRCODE = 'P0002';
 				RETURN NEW;
 		END IF;
 END IF;
@@ -403,20 +403,23 @@ AS $$
 DECLARE
 Cap SalaRiunione.Capienza%TYPE;
 BEGIN
---Salva la capienza della nuova sala
-SELECT s.Capienza INTO Cap
-FROM SalaRiunione AS s
-WHERE s.CodSala = NEW.CodSala;
---Controlla che il numero di partecipanti al meeting non superi la capienza della nuova sala
-IF ((SELECT COUNT(p.CF)
-	FROM Presenza AS p 
-	WHERE p.IDMeeting = NEW.IDMeeting
-	GROUP BY p.IDMeeting) > Cap) THEN
-		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
-		 USING
-		 	HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
-		 	ERRCODE = 'P0002';
-		RETURN NEW;
+--Se il meeting non è già terminato
+IF (NEW.DataFine >= CURRENT_DATE AND NEW.OraFine >= CURRENT_TIME) THEN
+	--Salva la capienza della nuova sala
+	SELECT s.Capienza INTO Cap
+	FROM SalaRiunione AS s
+	WHERE s.CodSala = NEW.CodSala;
+	--Controlla che il numero di partecipanti al meeting non superi la capienza della nuova sala
+	IF ((SELECT COUNT(p.CF)
+		FROM Presenza AS p 
+		WHERE p.IDMeeting = NEW.IDMeeting
+		GROUP BY p.IDMeeting) > Cap) THEN
+			RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della nuvova sala %', Cap, NEW.CodSala
+			USING 
+				HINT = 'Si consiglia di cambiare sala o di rimuovere qualche partecipante.',
+				ERRCODE = 'P0002';
+			RETURN NEW;
+	END IF;
 END IF;
 RETURN NEW;
 END;
@@ -428,49 +431,6 @@ CREATE TRIGGER capienza_rispettata_meeting BEFORE INSERT OR UPDATE OF CodSala ON
 FOR EACH ROW
 EXECUTE PROCEDURE check_capienza_meeting();
 -----------------------------------------------------------------------------
-
-/*TRIGGER PER CAPIENZA DELLE SALE RISPETTATE (SALA RIUNIONE)
-**Ad ogni update in SalaRiunione controlla che
-**il numero di invitati in ciascun meeting che ospita sia minore o uguale
-**alla capienza della sala in cui avviene.
-**Nel caso evoca un'eccezione e non autorizza l'operazione.
-*********************************************************************/
-
---FUNCTION
-CREATE OR REPLACE FUNCTION check_capienza_sala() RETURNS TRIGGER
-LANGUAGE PLPGSQL
-AS $$
-DECLARE
-OLDMeeting RECORD;
-BEGIN
---Per ciascun meeting con codice sala pari a quello della sala modificato
-FOR OLDMeeting IN
-	SELECT *
-	FROM Meeting AS m
-	WHERE m.CodSala = NEW.CodSala
-LOOP
-	--Controlla che il numero di partecipanti in presenza del meeting non superi la capienza della sala
-	IF ((SELECT COUNT(p.CF)
-	   FROM Presenza AS p
-	   WHERE p.IDMeeting = OLDMeeting.IDMeeting
-	   GROUP BY p.IDMeeting) > NEW.Capienza) THEN
-	   		RAISE EXCEPTION 'Il numero di invitati al meeting supera la capienza (%) della sala stabilita.', NEW.Capienza
-			USING
-				HINT = 'Si consiglia di cambiare la sala del meeting o di rimuovere qualche partecipante.',
-				ERRCODE = 'P0002';
-			RETURN OLD;
-	END IF;
-END LOOP;
-RETURN NEW;
-END;
-$$;
-----------------------------------------------------------------------------------------------------------------
-
---TRIGGER
-CREATE TRIGGER capienza_rispettata_sala BEFORE UPDATE ON SalaRiunione
-FOR EACH ROW
-EXECUTE PROCEDURE check_capienza_sala();
---------------------------------------------------------------------------------
 
 /*TRIGGER PER ELIMINAZIONE SKILL NON NECESSARIE
 **Quando avviene un delete nella tabella Ablità (quindi un dipendente perde una skill)
@@ -527,11 +487,11 @@ IF (EXISTS(SELECT p.IDMeeting
 	SELECT m.DataInizio,m.DataFine,m.OrarioInizio,m.OrarioFine INTO NEWDataInizio,NEWDataFine,NEWOraInizio,NEWOraFine
 	FROM Presenza AS p NATURAL JOIN Meeting AS m
 	WHERE p.IDMeeting=NEW.IDMeeting;
-	--Per ogni meeting dello stesso dipendente
+	--Per ogni meeting non terminato dello stesso dipendente
 	FOR OLDMeeting IN
 		SELECT *
 		FROM Presenza AS p NATURAL JOIN Meeting AS m
-		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting
+		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting AND m.DataFine >= CURRENT_DATE AND OrarioFine >= CURRENT_TIME
 	LOOP
 		--Controlla che non si accavalli con quello nuovo
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN
@@ -577,11 +537,11 @@ FOR dip IN
 	FROM Presenza AS p
 	WHERE p.IDMeeting = NEW.IDMeeting
 LOOP
---Per ogni meeting a cui esso partecipa
+--Per ogni meeting non terminato a cui esso partecipa
 	FOR OLDMeeting IN
 		SELECT *
 		FROM Presenza AS p NATURAL JOIN Meeting AS m
-		WHERE m.IDMeeting <> NEW.IDMeeting AND p.CF=dip
+		WHERE m.IDMeeting <> NEW.IDMeeting AND p.CF=dip AND m.DataFine >= CURRENT_DATE AND m.OrarioFine >= CURRENT_TIME
 	LOOP
 		--Controlla se si accavalla con il meeting aggiornato
 		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEW.DataInizio,NEW.DataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEW.OrarioInizio,NEW.OrarioFine)) THEN
