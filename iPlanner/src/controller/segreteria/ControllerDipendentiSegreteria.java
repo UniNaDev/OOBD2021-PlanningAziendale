@@ -52,7 +52,7 @@ public class ControllerDipendentiSegreteria {
 	  gestioneDipendentiFrame.setVisible(true);	  
 	}
 	
-	public void tornaAdAreaSegreteria() {
+	public void tornaASegreteria() {
 		gestioneDipendentiFrame.setVisible(false);
 		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
 	}

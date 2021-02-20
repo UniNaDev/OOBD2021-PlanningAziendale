@@ -47,7 +47,7 @@ public class ControllerMeetingSegreteria {
 		gestioneMeetingSegreteriaFrame = new GestioneMeetingSegreteria(this);
 		gestioneMeetingSegreteriaFrame.setVisible(true);
 	}
-	public void tornaAiPlanner() {
+	public void tornaASegreteria() {
 		gestioneMeetingSegreteriaFrame.setVisible(false);
 		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
 	}

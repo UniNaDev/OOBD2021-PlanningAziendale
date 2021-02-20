@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 import entita.Meeting;
 import entita.SalaRiunione;
+import gui.ErroreDialog;
 import gui.cellRenderers.InvitatiListRenderer;
 import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.DataComparator;
@@ -77,7 +78,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				controller.tornaAiPlanner();
+				controller.tornaASegreteria();
 			}
 		});
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -152,6 +153,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		comandiPanel.setLayout(null);
 		
 		telematicoRadioButton = new JRadioButton("Telematico");
+		telematicoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		telematicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (telematicoRadioButton.isSelected()) {
@@ -167,6 +169,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		comandiPanel.add(telematicoRadioButton);
 
 		fisicoRadioButton = new JRadioButton("Fisico");
+		fisicoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		fisicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (fisicoRadioButton.isSelected()) {
@@ -226,6 +229,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		comandiPanel.add(filtroPiattaformaLabel);
 		
 		JLabel refreshFiltriLabel = new JLabel("");
+		refreshFiltriLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		refreshFiltriLabel.setToolTipText("Reset dei filtri");
 		refreshFiltriLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -251,6 +255,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		tabellaMeeting = new JTable(modelloTabellaMeeting);
 		tabellaMeeting.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabellaMeeting.setFont(new Font("Consolas", Font.PLAIN, 11));
+		tabellaMeeting.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaMeeting.getModel());
 		DataComparator comparatorDate = new DataComparator();
 		OrarioComparator comparatorOrari = new OrarioComparator();
@@ -316,7 +321,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		JButton esciButton = new JButton("Esci");
 		esciButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.tornaAiPlanner();
+				controller.tornaASegreteria();
 			}
 		});
 		esciButton.addMouseListener(new MouseAdapter() {
@@ -348,10 +353,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingTelematici());
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -363,10 +366,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingPiattaforma(piattaforma));
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -378,10 +379,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingFisici());
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -393,10 +392,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingSala(sala));
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -406,10 +403,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			for (SalaRiunione sala: controller.ottieniSale())
 				filtroSaleComboBox.addItem(sala);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -417,10 +412,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeeting());
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -428,10 +421,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -439,10 +430,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			filtroPiattaformaComboBox = new JComboBox(controller.ottieniPiattaforme().toArray());
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 	
@@ -451,10 +440,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			invitatiListModel.addAll(controller.ottieniInvitatiMeeting(meeting));
 			invitatiList.setModel(invitatiListModel);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+			erroreFatale.setVisible(true);
 		}
 	}
 }

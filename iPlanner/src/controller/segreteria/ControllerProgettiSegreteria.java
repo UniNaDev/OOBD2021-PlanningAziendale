@@ -46,7 +46,7 @@ public class ControllerProgettiSegreteria {
 		gestioneProgettiFrame.setVisible(true);
 	}
 	
-	public void tornaAiPlanner() {
+	public void tornaASegreteria() {
 		gestioneProgettiFrame.setVisible(false);
 		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);
 	}

@@ -156,7 +156,7 @@ public class GestioneDipendenti extends JFrame {
 	addWindowListener(new WindowAdapter() {
 	    @Override
 	    public void windowClosing(WindowEvent e) {
-		controller.tornaAdAreaSegreteria();
+		controller.tornaASegreteria();
 	    }
 	});
 	setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -588,7 +588,7 @@ public class GestioneDipendenti extends JFrame {
 	esciButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 	esciButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-		controller.tornaAdAreaSegreteria();
+		controller.tornaASegreteria();
 	    }
 	});
 	esciButton.addMouseListener(new MouseAdapter() {
@@ -968,7 +968,7 @@ public class GestioneDipendenti extends JFrame {
 						"Creazione riuscita",
 						JOptionPane.YES_NO_OPTION);
 				if (yesNo == JOptionPane.NO_OPTION)
-					controller.tornaAdAreaSegreteria();
+					controller.tornaASegreteria();
 				else {
 					pulisciCampi();
 				    setModelloTabellaDipendentiTutti(controller);

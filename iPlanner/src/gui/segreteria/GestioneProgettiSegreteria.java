@@ -95,7 +95,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				controller.tornaAiPlanner();
+				controller.tornaASegreteria();
 			}
 		});
 		setResizable(false);
@@ -442,7 +442,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		JButton esciButton = new JButton("Esci");
 		esciButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.tornaAiPlanner();
+				controller.tornaASegreteria();
 			}
 		});
 		esciButton.setFont(new Font("Consolas", Font.PLAIN, 13));
