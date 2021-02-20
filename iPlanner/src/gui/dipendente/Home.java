@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import entita.Progetto;
+import gui.ErroreDialog;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.cellRenderers.ProgettoListRenderer;
 import gui.customUI.CustomScrollBarUI;
@@ -83,7 +84,7 @@ public class Home extends JFrame {
 	setMinimumSize(new Dimension(1000, 700));
 	setExtendedState(Frame.MAXIMIZED_BOTH);
 	setIconImage(Toolkit.getDefaultToolkit().getImage(Home.class.getResource("/Icone/WindowIcon_16.png")));
-	setTitle("iPlanner - Main");
+	setTitle("iPlanner - Home");
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	setBounds(100, 100, 1920, 1080);
 	setLocationRelativeTo(null);
@@ -327,29 +328,25 @@ public class Home extends JFrame {
     // Altri metodi
     // ------------------------------------------------
     private void inizializzaListaMeeting(ControllerGestioneProfilo controller) {
-	try {
-	    modelloListaMeeting.addAll(controller.ottieniMeetingDipendente());
-	    meetingList.setModel(modelloListaMeeting);
-	} catch (SQLException e) {
-	    JOptionPane.showMessageDialog(null,
-		    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	}
+		try {
+		    modelloListaMeeting.addAll(controller.ottieniMeetingDipendente());
+		    meetingList.setModel(modelloListaMeeting);
+		} catch (SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
+		}
     }
-
+	
     private void inizializzaListaProgetti(ControllerGestioneProfilo controller) {
-	try {
-	    ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-	    for (CollaborazioneProgetto collaborazione : controller.ottieniProgettiDipendente())
-		progetti.add(collaborazione.getProgetto());
-	    modelloListaProgetti.addAll(progetti);
-	    progettiList.setModel(modelloListaProgetti);
-	} catch (SQLException e) {
-	    JOptionPane.showMessageDialog(null,
-		    e.getMessage()
-			    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-		    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-	}
+		try {
+		    ArrayList<Progetto> progetti = new ArrayList<Progetto>();
+		    for (CollaborazioneProgetto collaborazione : controller.ottieniProgettiDipendente())
+			progetti.add(collaborazione.getProgetto());
+		    modelloListaProgetti.addAll(progetti);
+		    progettiList.setModel(modelloListaProgetti);
+		} catch (SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
+		}
     }
 }

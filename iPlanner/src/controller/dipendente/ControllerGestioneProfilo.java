@@ -6,8 +6,6 @@ package controller.dipendente;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.joda.time.LocalDate;
-
 import entita.Meeting;
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;

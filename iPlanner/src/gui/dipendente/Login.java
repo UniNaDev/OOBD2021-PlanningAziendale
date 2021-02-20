@@ -23,7 +23,6 @@ import java.awt.Toolkit;
 import javax.swing.border.MatteBorder;
 
 import controller.ControllerAccesso;
-import gui.ErroreDialog;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -196,14 +195,19 @@ public class Login extends JFrame {
 		    	pulisciCampi();
 		    }
 		    
-		    JOptionPane.showMessageDialog(null, "Inserire Email e Password per login.", "Credenziali Vuote",
-			    JOptionPane.OK_OPTION);
+		    JOptionPane.showMessageDialog(null,
+		    		"Inserire Email e Password per login.",
+		    		"Credenziali Vuote",
+		    		JOptionPane.INFORMATION_MESSAGE);
 		    
 		} else {
 		    try {
 		    	controller.eseguiLoginDipendente(emailTextField.getText(), passwordField.getText());
 		    } catch (SQLException e1) {
-		    	JOptionPane.showMessageDialog(null, "Credenziali errate.", "Login Fallito", JOptionPane.ERROR_MESSAGE);
+		    	JOptionPane.showMessageDialog(null, 
+		    			"Credenziali errate.",
+		    			"Login Fallito",
+		    			JOptionPane.ERROR_MESSAGE);
 		    }
 		}
     }
