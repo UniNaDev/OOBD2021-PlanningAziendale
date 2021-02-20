@@ -106,6 +106,9 @@ public class GestioneDipendenti extends JFrame {
 	private JButton nuovaSkillButton;
 	private JButton creaAccountButton;
 	private JButton esciButton;
+	private JButton eliminaAccountButton;
+	private JButton filtraButton;
+	private JLabel skillFiltroLabel;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JPanel comandiPanel;
 	private JScrollPane tableScrollPanel;
@@ -658,7 +661,7 @@ public class GestioneDipendenti extends JFrame {
 		comandiPanel.add(cercaTextField);
 		cercaTextField.setColumns(10);
 
-		JButton filtraButton = new JButton("Filtra");
+		filtraButton = new JButton("Filtra");
 		filtraButton.setToolTipText("Clicca per applicare i filtri");
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -810,7 +813,7 @@ public class GestioneDipendenti extends JFrame {
 		});
 		comandiPanel.add(salvaModificheButton);
 
-		JButton eliminaAccountButton = new JButton("Elimina");
+		eliminaAccountButton = new JButton("Elimina");
 		eliminaAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (dipendenteSelezionato != null)
@@ -839,7 +842,7 @@ public class GestioneDipendenti extends JFrame {
 		});
 		comandiPanel.add(eliminaAccountButton);
 
-		JLabel skillFiltroLabel = new JLabel("Skill");
+		skillFiltroLabel = new JLabel("Skill");
 		skillFiltroLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		skillFiltroLabel.setBounds(814, 12, 39, 14);
 		comandiPanel.add(skillFiltroLabel);
@@ -870,7 +873,7 @@ public class GestioneDipendenti extends JFrame {
 				int rigaSelezionata = dipendentiTable.getSelectedRow();
 				rigaSelezionata = dipendentiTable.convertRowIndexToModel(rigaSelezionata);
 				dipendenteSelezionato = dataModelDipendente.getSelected(rigaSelezionata);
-				pulisciCampi();
+				
 
 				nomeTextField.setText(dipendenteSelezionato.getNome());
 				cognomeTextField.setText(dipendenteSelezionato.getCognome());
@@ -947,6 +950,7 @@ public class GestioneDipendenti extends JFrame {
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
 			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1175,8 +1179,6 @@ public class GestioneDipendenti extends JFrame {
 		else
 			return false;
 	}
-
-	
 
 	private void eliminaDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteSelezionato) {
 		try {
