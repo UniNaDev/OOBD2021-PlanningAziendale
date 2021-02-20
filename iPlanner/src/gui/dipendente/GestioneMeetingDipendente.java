@@ -878,6 +878,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 
 	private void impostaInfoMeeting(ControllerMeeting controller) {
+		
 		int rigaSelezionata = meetingTable.getSelectedRow();
 		rigaSelezionata = meetingTable.convertColumnIndexToModel(rigaSelezionata);
 		meetingSelezionato = modelloTabellaMeeting.getSelected(rigaSelezionata);
@@ -1175,9 +1176,11 @@ public class GestioneMeetingDipendente extends JFrame {
 				}
 			}
 		} catch (IllegalFieldValueException ifve) {
+			
 			JOptionPane.showMessageDialog(null, "Data inserita non valida.\nInserire una data esistente.",
 					"Errore Data Non Valida", JOptionPane.ERROR_MESSAGE);
 		} catch (SQLException e) {
+			
 			//TODO: verificare altre possibili eccezioni
             JOptionPane.showMessageDialog(null,
                     "Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di inserire."

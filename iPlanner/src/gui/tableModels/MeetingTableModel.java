@@ -90,7 +90,7 @@ public class MeetingTableModel extends AbstractTableModel {
             	return SalaRiunione.class;
             case 5:
                 return Progetto.class;
-                default:
+            default:
                 return String.class;
         }
 	}

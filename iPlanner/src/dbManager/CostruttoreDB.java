@@ -673,7 +673,7 @@ public class CostruttoreDB {
             		+ "Cap SalaRiunione.Capienza%TYPE;\r\n"
             		+ "BEGIN\r\n"
             		+ "--Se il meeting non è già terminato\r\n"
-            		+ "IF (NEW.DataFine >= CURRENT_DATE AND NEW.OraFine >= CURRENT_TIME) THEN\r\n"
+            		+ "IF (NEW.DataFine >= CURRENT_DATE AND NEW.OrarioFine >= CURRENT_TIME) THEN\r\n"
             		+ "	--Salva la capienza della nuova sala\r\n"
             		+ "	SELECT s.Capienza INTO Cap\r\n"
             		+ "	FROM SalaRiunione AS s\r\n"

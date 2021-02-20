@@ -835,7 +835,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		partecipantiListModel = new DefaultListModel();
 		partecipantiList.setModel(partecipantiListModel);
 		partecipantiListModel.addAll(progettoSelezionato.getCollaborazioni());
-		partecipantiListModel.remove(0);
+		partecipantiListModel.removeElementAt(partecipantiListModel.getSize()-1);;
 	}
 
 	private void impostaPartecipantiListRenderer() {

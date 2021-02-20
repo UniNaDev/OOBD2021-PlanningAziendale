@@ -21,7 +21,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		
 		ottieniSalePS = connection.prepareStatement("SELECT * FROM SalaRiunione ORDER BY CodSala");
 		creaSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");
-		aggiornaSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ? Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
+		aggiornaSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ? ,Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
 		eliminaSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");
 		ottieniSalaDaCodSalaPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala = ?");
 	}

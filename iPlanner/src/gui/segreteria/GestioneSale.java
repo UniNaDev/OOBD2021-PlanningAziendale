@@ -50,13 +50,26 @@ import java.awt.Toolkit;
 
 public class GestioneSale extends JFrame {
 	private JPanel contentPane;
+	private JLabel titoloLabel;
+	private JLabel nomeSalaLabel;
 	private JTextField nomeSalaTextField;
+	private JLabel capienzaLabel;
 	private JTextField capienzaTextField;
+	private JLabel indirizzoLabel;
 	private JTextArea indirizzoTextArea;
+	private JLabel pianoLabel;
 	private JTextField pianoTextField;
+	private JButton esciButton;
+	private JButton eliminaSalaButton;
+	private JLabel resetCampiLabel;
+	private JSeparator separator;
+	private JLabel saleLabel;
+	private JScrollPane saleListScrollPanel;
 	private DefaultListModel<SalaRiunione> modelloListaSale;
 	private JList<SalaRiunione> saleList;
-	private JLabel nomeSalaLabel, capienzaLabel, indirizzoLabel, pianoLabel;
+	private JButton salvaModificheButton;
+
+	private JButton creaSalaButton;
 
 	private SalaRiunione salaSelezionata;
 	private String codSala, indirizzo;
@@ -90,6 +103,12 @@ public class GestioneSale extends JFrame {
 		infoPanel.setBounds(25, 85, 304, 219);
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
+		
+		titoloLabel = new JLabel("Gestione Sale");
+		titoloLabel.setIcon(new ImageIcon(GestioneSale.class.getResource("/icone/meeting_64.png")));
+		titoloLabel.setFont(new Font("Consolas", Font.PLAIN, 21));
+		titoloLabel.setBounds(10, 11, 234, 63);
+		contentPane.add(titoloLabel);
 
 		nomeSalaLabel = new JLabel("Sala");
 		nomeSalaLabel.setBounds(10, 29, 28, 16);
@@ -140,7 +159,7 @@ public class GestioneSale extends JFrame {
 		pianoTextField.setBounds(48, 168, 35, 20);
 		infoPanel.add(pianoTextField);
 
-		JLabel resetCampiLabel = new JLabel("");
+		resetCampiLabel = new JLabel("");
 		resetCampiLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -154,7 +173,7 @@ public class GestioneSale extends JFrame {
 		resetCampiLabel.setBounds(268, 11, 16, 16);
 		infoPanel.add(resetCampiLabel);
 
-		JButton eliminaSalaButton = new JButton("Elimina");
+		eliminaSalaButton = new JButton("Elimina");
 		eliminaSalaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nomeSalaLabel.setForeground(Color.BLACK);
@@ -185,7 +204,7 @@ public class GestioneSale extends JFrame {
 		eliminaSalaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		infoPanel.add(eliminaSalaButton);
 
-		JScrollPane saleListScrollPanel = new JScrollPane();
+		saleListScrollPanel = new JScrollPane();
 		saleListScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		saleListScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		saleListScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -217,23 +236,17 @@ public class GestioneSale extends JFrame {
 			}
 		});
 
-		JLabel saleLabel = new JLabel("Sale");
+		saleLabel = new JLabel("Sale");
 		saleLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		saleListScrollPanel.setColumnHeaderView(saleLabel);
 
-		JLabel titoloLabel = new JLabel("Gestione Sale");
-		titoloLabel.setIcon(new ImageIcon(GestioneSale.class.getResource("/icone/meeting_64.png")));
-		titoloLabel.setFont(new Font("Consolas", Font.PLAIN, 21));
-		titoloLabel.setBounds(10, 11, 234, 63);
-		contentPane.add(titoloLabel);
-
-		JSeparator separator = new JSeparator();
+		separator = new JSeparator();
 		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(370, 85, 2, 219);
 		contentPane.add(separator);
 
-		JButton creaSalaButton = new JButton("Crea");
+		creaSalaButton = new JButton("Crea");
 		creaSalaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		creaSalaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		creaSalaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -266,7 +279,7 @@ public class GestioneSale extends JFrame {
 		});
 		contentPane.add(creaSalaButton);
 
-		JButton salvaModificheButton = new JButton("Salva Modifiche");
+		salvaModificheButton = new JButton("Salva Modifiche");
 		salvaModificheButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		salvaModificheButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		salvaModificheButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -306,7 +319,7 @@ public class GestioneSale extends JFrame {
 		});
 		contentPane.add(salvaModificheButton);
 
-		JButton esciButton = new JButton("Esci");
+		esciButton = new JButton("Esci");
 		esciButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.chiudiGestioneSale();
@@ -445,6 +458,10 @@ public class GestioneSale extends JFrame {
 	private void eliminaSala(ControllerMeetingSegreteria controller) {
 		try{
 			controller.eliminaSala(salaSelezionata);
+			JOptionPane.showMessageDialog(null,
+					"Sala eliminata con successo.", 
+					"Eliminazione Riuscita",
+					JOptionPane.INFORMATION_MESSAGE);
 			pulisciCampi();
 			setModelloListaSaleTutte(controller);
 			if (modelloListaSale.isEmpty())
@@ -473,6 +490,7 @@ public class GestioneSale extends JFrame {
 		capienzaLabel.setForeground(Color.BLACK);
 		indirizzoLabel.setForeground(Color.BLACK);
 		pianoLabel.setForeground(Color.BLACK);
+		saleList.clearSelection();
 	}
 
 	private void campiObbligatoriVuoti() {
