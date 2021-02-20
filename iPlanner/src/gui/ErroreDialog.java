@@ -34,8 +34,6 @@ public class ErroreDialog extends JDialog {
 	
     private JPanel contentPane = new JPanel();
     
-    private final boolean fatale = true;
-    
     private boolean mostratoErrore = false;
 
 	public ErroreDialog(Exception eccezione, String titolo, String messaggio, boolean fatale) {
@@ -59,7 +57,7 @@ public class ErroreDialog extends JDialog {
 		return dettagliErrore;
 	}
 	
-	private void comportamentoOk(boolean fatale) {
+	private void comportamentoOkButton(boolean fatale) {
 		if (fatale)
 			System.exit(0);
 		else
@@ -73,7 +71,7 @@ public class ErroreDialog extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				comportamentoOk(fatale);
+				comportamentoOkButton(fatale);
 			}
 		});
 		setBounds(100, 100, 555, 273);
@@ -99,7 +97,7 @@ public class ErroreDialog extends JDialog {
 		JButton okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				comportamentoOk(fatale);
+				comportamentoOkButton(fatale);
 			}
 		});
 		okButton.addMouseListener(new MouseAdapter() {
