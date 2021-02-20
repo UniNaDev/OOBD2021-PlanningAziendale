@@ -874,8 +874,6 @@ public class GestioneDipendenti extends JFrame {
 				rigaSelezionata = dipendentiTable.convertRowIndexToModel(rigaSelezionata);
 				dipendenteSelezionato = dataModelDipendente.getSelected(rigaSelezionata);
 
-				pulisciCampi();
-
 				nomeTextField.setText(dipendenteSelezionato.getNome());
 				cognomeTextField.setText(dipendenteSelezionato.getCognome());
 				emailTextField.setText(dipendenteSelezionato.getEmail());
@@ -930,8 +928,12 @@ public class GestioneDipendenti extends JFrame {
 		password = passwordField.getText();
 		if (!telefonoFissoTextField.getText().isBlank())
 			telefono = telefonoFissoTextField.getText();
+		else
+			telefono = null;
 		if (!cellulareTextField.getText().isBlank())
 			cellulare = cellulareTextField.getText();
+		else
+			cellulare = null;
 		indirizzo = indirizzoTextField.getText();
 		salario = parseFloat(salarioTextField.getText(), 0f);
 	}
