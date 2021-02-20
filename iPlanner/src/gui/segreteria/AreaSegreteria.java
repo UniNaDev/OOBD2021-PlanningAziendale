@@ -50,7 +50,6 @@ public class AreaSegreteria extends JFrame {
 		iconaDipendenteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		iconaDipendenteLabel.setIcon(new ImageIcon(iPlanner.class.getResource("/Icone/employee_64.png")));
 		
-		
 		gestisciDipendentiLabel = new JLabel("Gestisci dipendenti");
 		gestisciDipendentiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		gestisciDipendentiLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
@@ -58,7 +57,7 @@ public class AreaSegreteria extends JFrame {
 		gestisciDipendentiLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.vaiAGestioneDipendenti();
+				controller.apriGUIGestioneDipendentiSegreteria();
 			}
 
 			@Override
@@ -79,7 +78,7 @@ public class AreaSegreteria extends JFrame {
 		gestisciMeetingLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.vaiAGestioneMeeting();
+				controller.apriGUIGestioneMeetingSegreteria();
 			}
 
 			@Override
@@ -100,7 +99,7 @@ public class AreaSegreteria extends JFrame {
 		gestisciProgettiLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.vaiAGestioneProgetti();
+				controller.apriGUIGestioneProgettiSegreteria();
 			}
 
 			@Override

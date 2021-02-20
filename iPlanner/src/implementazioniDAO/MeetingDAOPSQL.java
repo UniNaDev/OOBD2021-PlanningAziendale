@@ -35,44 +35,42 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 	private DipendenteDAO dipDAO = null;
 	private SalaRiunioneDAO salaDAO = null;
-	private PreparedStatement getMeetingsPS, getMeetingByIdPS, ottieniMeetingDipendendentePS, ottieniInvitatiMeetingPS, addMeetingPS,
-			rimuoviMeeting, aggiornaMeetingPS, getMeetingsBySalaPS, getMeetingsByPiattaformaPS, ottieniPiattaformePS,
+	private PreparedStatement ottieniMeetingPS, ottieniMeetingDaIdPS, ottieniMeetingDipendendentePS, ottieniInvitatiMeetingPS, creaMeetingPS,
+			rimuoviMeeting, aggiornaMeetingPS, filtraMeetingSegreteriaSalaPS, filtraMeetingSegreteriaPiattaformaPS, ottieniPiattaformePS,
 			inserisciOrganizzatorePS, getIdProgettoDiscussoPS, ottieniUltimoIdMeetingInseritoPS, removePresenzeMeetingEliminato,
 			inserisciInvitatoMeetingPS, eliminaInvitatoPS, aggiornaPresenzaInvitatoPS,
-			getMeetingsByModalitàPS, filtraMeetingDipendentePerModalitàPS, filtraMeetingDipendentiSalaPS,
+			filtraMeetingSegreteriaPerModalitàPS, filtraMeetingDipendentePerModalitàPS, filtraMeetingDipendentiSalaPS,
 			filtraMeetingDipendentePiattaformaPS, ottieniCFOrganizzatorePS;
 
 	public MeetingDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;
 
-		getMeetingsPS = connection.prepareStatement("SELECT * FROM Meeting AS m ORDER BY m.DataInizio,m.OrarioInizio");
+		ottieniMeetingPS = connection.prepareStatement("SELECT * FROM Meeting AS m ORDER BY m.DataInizio,m.OrarioInizio");
 		ottieniInvitatiMeetingPS = connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza AS p WHERE p.IDMeeting = ?");
-		getMeetingByIdPS = connection.prepareStatement("SELECT * FROM Meeting WHERE idMeeting=?");
+		ottieniMeetingDaIdPS = connection.prepareStatement("SELECT * FROM Meeting WHERE idMeeting=?");
 		ottieniMeetingDipendendentePS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ?) ORDER BY m.DataInizio, m.OrarioInizio");
-		addMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, CodSala,CodProgetto) VALUES (?,?,?,?,?,?,?,?)");
+		creaMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, CodSala,CodProgetto) VALUES (?,?,?,?,?,?,?,?)");
 		rimuoviMeeting = connection.prepareStatement("DELETE FROM Meeting AS m WHERE m.IDMeeting = ?");
 		aggiornaMeetingPS = connection.prepareStatement("UPDATE Meeting SET DataInizio = ?, DataFine = ?, OrarioInizio = ?, OrarioFine = ?, Modalità = ?, Piattaforma = ?, CodSala = ? , CodProgetto= ? WHERE IDMeeting = ?");
-		getMeetingsBySalaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodSala = ?");
-		getMeetingsByPiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.Piattaforma = ?");
+		filtraMeetingSegreteriaSalaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.CodSala = ?");
+		filtraMeetingSegreteriaPiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting WHERE Meeting.Piattaforma = ?");
 		ottieniPiattaformePS = connection.prepareStatement("SELECT unnest(enum_range(NULL::piattaforma))::text AS piattaforma");
-		getIdProgettoDiscussoPS = connection.prepareStatement("SELECT codProgetto FROM Progetto WHERE nomeProgetto ILIKE ?");
 		inserisciOrganizzatorePS = connection.prepareStatement("INSERT INTO Presenza(CF,IdMeeting,Presente,Organizzatore) VALUES(?,?,true,true)");
 		inserisciInvitatoMeetingPS = connection.prepareStatement("INSERT INTO Presenza(CF,IdMeeting,Presente,Organizzatore) VALUES(?,?,?,false)");
 		eliminaInvitatoPS = connection.prepareStatement("DELETE FROM Presenza WHERE CF=? AND idMeeting=?");
 		aggiornaPresenzaInvitatoPS = connection.prepareStatement("UPDATE Presenza as pr SET presente=? WHERE pr.CF ILIKE ? AND pr.idMeeting =?");
 		ottieniUltimoIdMeetingInseritoPS = connection.prepareStatement("SELECT idMeeting FROM Meeting ORDER BY idMeeting DESC LIMIT 1");
-		removePresenzeMeetingEliminato = connection.prepareStatement("DELETE FROM Presenza WHERE IdMeeting =?");
-		getMeetingsByModalitàPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.Modalità = ?");
+		filtraMeetingSegreteriaPerModalitàPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.Modalità = ?");
 		filtraMeetingDipendentePerModalitàPS = connection.prepareStatement("SELECT * FROM Meeting AS m NATURAL JOIN Presenza AS p WHERE m.Modalità = ? AND p.CF=?");
 		filtraMeetingDipendentiSalaPS = connection.prepareStatement("SELECT * FROM Meeting NATURAL JOIN Presenza AS p WHERE Meeting.CodSala = ? AND p.CF=?");
 		filtraMeetingDipendentePiattaformaPS = connection.prepareStatement("SELECT * FROM Meeting NATURAL JOIN Presenza AS p WHERE Meeting.Piattaforma = ? AND p.CF=?");
 		ottieniCFOrganizzatorePS = connection.prepareStatement("SELECT cf FROM Dipendente NATURAL JOIN Presenza WHERE idMeeting=? AND organizzatore=true");
 	}
 
-	@Override
-	public ArrayList<Meeting> getMeetings() throws SQLException {
+	@Override  
+	public ArrayList<Meeting> ottieniMeeting() throws SQLException {
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-		ResultSet risultato = getMeetingsPS.executeQuery();
+		ResultSet risultato = ottieniMeetingPS.executeQuery();
 
 		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
 		ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
@@ -93,7 +91,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return meetings;
 	}
 
-	@Override  //Ok
+	@Override  
 	public ArrayList<Meeting> ottieniMeetingDipendente(Dipendente dip) throws SQLException {
 		ArrayList<Meeting> meetingDipendente = new ArrayList<Meeting>();
 		ottieniMeetingDipendendentePS.setString(1, dip.getCf());
@@ -118,7 +116,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return meetingDipendente;
 	}
 
-	//Ok
+	@Override 
 	public ArrayList<PartecipazioneMeeting> ottieniInvitatiMeeting(int idMeeting) throws SQLException {
 		ArrayList<PartecipazioneMeeting> partecipazioniDipendenti = new ArrayList<PartecipazioneMeeting>();
 		dipDAO = new DipendenteDAOPSQL(connection);
@@ -128,7 +126,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 		while (risultato.next()) {
 			Dipendente partecipante = dipDAO.ottieniDipendenteDaCF(risultato.getString("CF"));
-			PartecipazioneMeeting tempPartecipazione = new PartecipazioneMeeting(getMeetingById(idMeeting),
+			PartecipazioneMeeting tempPartecipazione = new PartecipazioneMeeting(ottieniMeetingDaId(idMeeting),
 					partecipante, risultato.getBoolean("Presente"), risultato.getBoolean("organizzatore"));
 			partecipazioniDipendenti.add(tempPartecipazione);
 		}
@@ -138,9 +136,10 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 	}
 
-	private Meeting getMeetingById(int idMeeting) throws SQLException {
-		getMeetingByIdPS.setInt(1, idMeeting);
-		ResultSet risultato = getMeetingByIdPS.executeQuery();
+	
+	private Meeting ottieniMeetingDaId(int idMeeting) throws SQLException {
+		ottieniMeetingDaIdPS.setInt(1, idMeeting);
+		ResultSet risultato = ottieniMeetingDaIdPS.executeQuery();
 
 		risultato.next();
 
@@ -157,7 +156,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return meetingTemp;
 	}
 
-	@Override //Ok
+	@Override 
 	public ArrayList<Dipendente> ottieniInvitatiMeetingSenzaRuolo(int idMeeting) throws SQLException {
 		ArrayList<Dipendente> invitati = new ArrayList<Dipendente>();
 		ottieniInvitatiMeetingPS.setInt(1, idMeeting);
@@ -184,24 +183,24 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return invitati;
 	}
 
-	@Override  //Ok
+	@Override  
 	public boolean creaMeeting(Meeting meeting) throws SQLException {
-		addMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));
-		addMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));
-		addMeetingPS.setTime(3,
+		creaMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));
+		creaMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));
+		creaMeetingPS.setTime(3,
 				new Time(meeting.getOraInizio().getHourOfDay(), meeting.getOraInizio().getMinuteOfHour(), 0));
-		addMeetingPS.setTime(4,
+		creaMeetingPS.setTime(4,
 				new Time(meeting.getOraFine().getHourOfDay(), meeting.getOraFine().getMinuteOfHour(), 0));
-		addMeetingPS.setObject(5, meeting.getModalita(), Types.OTHER);
-		addMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);
+		creaMeetingPS.setObject(5, meeting.getModalita(), Types.OTHER);
+		creaMeetingPS.setObject(6, meeting.getPiattaforma(), Types.OTHER);
 		if (meeting.getSala() != null)
-			addMeetingPS.setString(7, meeting.getSala().getCodiceSala());
+			creaMeetingPS.setString(7, meeting.getSala().getCodiceSala());
 		else
-			addMeetingPS.setNull(7, Types.CHAR);
+			creaMeetingPS.setNull(7, Types.CHAR);
 
-		addMeetingPS.setInt(8, meeting.getProgettoDiscusso().getIdProgettto());
+		creaMeetingPS.setInt(8, meeting.getProgettoDiscusso().getIdProgettto());
 
-		int record = addMeetingPS.executeUpdate();
+		int record = creaMeetingPS.executeUpdate();
 
 		if (record == 1)
 			return true;
@@ -210,7 +209,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
-	@Override  //Ok
+	@Override  
 	public boolean rimuoviMeeting(int idMeeting) throws SQLException {
 		rimuoviMeeting.setInt(1, idMeeting);
 
@@ -222,7 +221,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
-	@Override  //Ok
+	@Override 
 	public boolean aggiornaMeeting(Meeting meeting) throws SQLException {
 		aggiornaMeetingPS.setDate(1, new Date(meeting.getDataInizio().toDateTimeAtStartOfDay().getMillis()));
 		aggiornaMeetingPS.setDate(2, new Date(meeting.getDataFine().toDateTimeAtStartOfDay().getMillis()));
@@ -251,13 +250,13 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
-	@Override
-	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException {
-		getMeetingsBySalaPS.setString(1, sala.getCodiceSala());
+	@Override 
+	public ArrayList<Meeting> filtraMeetingSala(SalaRiunione sala) throws SQLException {
+		filtraMeetingSegreteriaSalaPS.setString(1, sala.getCodiceSala());
 
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 
-		ResultSet risultato = getMeetingsBySalaPS.executeQuery();
+		ResultSet risultato = filtraMeetingSegreteriaSalaPS.executeQuery();
 
 		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
 		ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
@@ -278,11 +277,11 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return meetings;
 	}
 
-	@Override
-	public ArrayList<Meeting> getMeetingsByPiattaforma(String piattaforma) throws SQLException {
-		getMeetingsByPiattaformaPS.setObject(1, piattaforma, Types.OTHER);
+	@Override 
+	public ArrayList<Meeting> filtraMeetingPiattaforma(String piattaforma) throws SQLException {
+		filtraMeetingSegreteriaPiattaformaPS.setObject(1, piattaforma, Types.OTHER);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-		ResultSet risultato = getMeetingsByPiattaformaPS.executeQuery();
+		ResultSet risultato = filtraMeetingSegreteriaPiattaformaPS.executeQuery();
 
 		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
 		ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
@@ -303,7 +302,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return meetings;
 	}
 
-	@Override //Ok
+	@Override 
 	public ArrayList<String> ottieniPiattaforme() throws SQLException {
 		ArrayList<String> piattaforme = new ArrayList<String>();
 		ResultSet risultato = ottieniPiattaformePS.executeQuery();
@@ -312,11 +311,11 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			piattaforme.add(risultato.getString("piattaforma"));
 		}
 		risultato.close();
-
+		
 		return piattaforme;
 	}
 
-	@Override  //Ok
+	@Override 
 	public boolean inserisciOrganizzatore(String CF) throws SQLException {
 		ResultSet risultato = ottieniUltimoIdMeetingInseritoPS.executeQuery();
 		risultato.next();
@@ -331,7 +330,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
-	@Override  //Ok
+	@Override  
 	public boolean inserisciInvitatoMeeting(PartecipazioneMeeting partecipante) throws SQLException {
 		inserisciInvitatoMeetingPS.setString(1, partecipante.getPartecipante().getCf());
 		inserisciInvitatoMeetingPS.setInt(2, partecipante.getMeeting().getIdMeeting());
@@ -345,7 +344,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
-	@Override  //Ok
+	@Override  
 	public boolean eliminaInvitato(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 		eliminaInvitatoPS.setString(1, partecipazioneMeeting.getPartecipante().getCf());
 		eliminaInvitatoPS.setInt(2, partecipazioneMeeting.getMeeting().getIdMeeting());
@@ -358,7 +357,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
-	@Override  //Ok
+	@Override  
 	public boolean aggiornaPresenzaInvitato(PartecipazioneMeeting partecipazioneMeeting) throws SQLException {
 		aggiornaPresenzaInvitatoPS.setBoolean(1, partecipazioneMeeting.isPresente());
 		aggiornaPresenzaInvitatoPS.setString(2, partecipazioneMeeting.getPartecipante().getCf());
@@ -372,11 +371,11 @@ public class MeetingDAOPSQL implements MeetingDAO {
 			return false;
 	}
 
-	@Override
-	public ArrayList<Meeting> getMeetingsByModalità(String modalità) throws SQLException {
+	@Override  
+	public ArrayList<Meeting> filtraMeetingSegreteriaPerModalità(String modalità) throws SQLException {
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-		getMeetingsByModalitàPS.setObject(1, modalità, Types.OTHER);
-		ResultSet risultato = getMeetingsByModalitàPS.executeQuery();
+		filtraMeetingSegreteriaPerModalitàPS.setObject(1, modalità, Types.OTHER);
+		ResultSet risultato = filtraMeetingSegreteriaPerModalitàPS.executeQuery();
 
 		SalaRiunioneDAO salaDAO = new SalaRiunioneDAOPSQL(connection);
 		ProgettoDAO projDAO = new ProgettoDAOPSQL(connection);
@@ -396,7 +395,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return meetings;
 	}
 
-	@Override  //Ok
+	@Override 
 	public ArrayList<Meeting> filtraMeetingDipendentePerModalità(String modalità, Dipendente dipendente)
 			throws SQLException {
 		ArrayList<Meeting> temp = new ArrayList<Meeting>();
@@ -422,7 +421,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return temp;
 	}
 
-	@Override //Ok
+	@Override 
 	public ArrayList<Meeting> filtraMeetingDipendentiSala(SalaRiunione sala, Dipendente dipendente)
 			throws SQLException {
 		filtraMeetingDipendentiSalaPS.setString(1, sala.getCodiceSala());
@@ -449,7 +448,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 
 	}
 
-	@Override //ok
+	@Override 
 	public ArrayList<Meeting> filtraMeetingDipendentePiattaforma(String piattaforma, Dipendente dipendente)
 			throws SQLException {
 		filtraMeetingDipendentePiattaformaPS.setObject(1, piattaforma, Types.OTHER);
@@ -476,7 +475,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return meetings;
 	}
 
-	@Override //Ok
+	@Override 
 	public int ottieniIdUltimoMeetingInserito() throws SQLException {
 		ResultSet risultato = ottieniUltimoIdMeetingInseritoPS.executeQuery();
 		risultato.next();
@@ -485,7 +484,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		return idMeeting;
 	}
 
-	@Override //Ok
+	@Override
 	public String ottieniCFOrganizzatore(Meeting meeting) throws SQLException {
 		String cf;
 		ottieniCFOrganizzatorePS.setInt(1, meeting.getIdMeeting());

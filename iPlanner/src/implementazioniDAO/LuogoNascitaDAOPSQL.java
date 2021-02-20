@@ -26,7 +26,7 @@ public class LuogoNascitaDAOPSQL implements LuogoNascitaDAO {
 		ottieniLuogoNascitaDaCodComunePS = connection.prepareStatement("SELECT * FROM LuogoNascita AS l WHERE l.CodComune = ?");
 	}
 	
-	@Override  //Ok
+	@Override 
 	public ArrayList<String> ottieniProvince() throws SQLException {
 		ResultSet risultato = ottieniProvincePS.executeQuery();
 		ArrayList<String> province = new ArrayList<String>();
@@ -39,7 +39,7 @@ public class LuogoNascitaDAOPSQL implements LuogoNascitaDAO {
 		return province;
 	}
 
-	@Override  //Ok
+	@Override 
 	public ArrayList<LuogoNascita> ottieniComuni(String provincia) throws SQLException {
 		ottieniComuniPS.setString(1, provincia);
 		ResultSet risultato = ottieniComuniPS.executeQuery();
@@ -54,7 +54,7 @@ public class LuogoNascitaDAOPSQL implements LuogoNascitaDAO {
 		return luoghi;
 	}
 
-	@Override  //Ok
+	@Override 
 	public LuogoNascita ottieniLuogoNascitaDaCodComune(String codComune) throws SQLException {
 		ottieniLuogoNascitaDaCodComunePS.setString(1, codComune.toUpperCase());
 		ResultSet risultato = ottieniLuogoNascitaDaCodComunePS.executeQuery();

@@ -12,7 +12,7 @@ import entita.Progetto;
 import entita.SalaRiunione;
 
 public interface MeetingDAO {
-	public ArrayList<Meeting> getMeetings() throws SQLException;
+	public ArrayList<Meeting> ottieniMeeting() throws SQLException;
 	
 	public ArrayList<Meeting> ottieniMeetingDipendente(Dipendente dip) throws SQLException;
 	
@@ -24,9 +24,9 @@ public interface MeetingDAO {
 	
 	public boolean aggiornaMeeting(Meeting meeting) throws SQLException;
 	
-	public ArrayList<Meeting> getMeetingsBySala(SalaRiunione sala) throws SQLException;
+	public ArrayList<Meeting> filtraMeetingSala(SalaRiunione sala) throws SQLException;
 	
-	public ArrayList<Meeting> getMeetingsByPiattaforma(String piattaforma) throws SQLException;
+	public ArrayList<Meeting> filtraMeetingPiattaforma(String piattaforma) throws SQLException;
 	
 	public ArrayList<String> ottieniPiattaforme() throws SQLException;
 	
@@ -34,7 +34,7 @@ public interface MeetingDAO {
 	
 	public ArrayList<PartecipazioneMeeting> ottieniInvitatiMeeting(int idMeeting) throws SQLException;
 	
-	public ArrayList<Meeting> getMeetingsByModalità(String modalità) throws SQLException;
+	public ArrayList<Meeting> filtraMeetingSegreteriaPerModalità(String modalità) throws SQLException;
 
 	public boolean inserisciInvitatoMeeting(PartecipazioneMeeting partecipazione) throws SQLException;
 	

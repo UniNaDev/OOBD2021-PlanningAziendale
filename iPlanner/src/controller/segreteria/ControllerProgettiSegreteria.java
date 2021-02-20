@@ -52,20 +52,12 @@ public class ControllerProgettiSegreteria {
 	}
 	
 	public ArrayList<Progetto> ottieniProgetti() throws SQLException{
-		return projDAO.getProgetti();
+		return projDAO.ottieniProgetti();
 	}
 	
 	public void creaAmbitoProgetto(String nomeAmbito) throws SQLException {
 		AmbitoProgetto temp = new AmbitoProgetto(nomeAmbito);
-		ambitoDAO.inserisciAmbito(temp);
-	}
-	
-	public ArrayList<AmbitoProgetto> ottieniAmbitiProgetto(Progetto progetto) throws SQLException {
-		return ambitoDAO.ottieniAmbitiDelProgetto(progetto);
-	}
-	
-	public ArrayList<CollaborazioneProgetto> ottieniCollaborazioni(Progetto progetto) throws SQLException{
-		return projDAO.ottieniPartecipantiProgetto(progetto.getIdProgettto());
+		ambitoDAO.creaAmbitoProgetto(temp);
 	}
 	
 	public ArrayList<AmbitoProgetto> ottieniTuttiAmbiti() throws SQLException{
@@ -81,14 +73,14 @@ public class ControllerProgettiSegreteria {
 	}
 	
 	public ArrayList<Progetto> ottieniProgettiFiltrati(String nomeCercato, AmbitoProgetto ambitoCercato, String tipologiaCercata, String scaduto, String terminato) throws SQLException{
-		ArrayList<Progetto> progetti = projDAO.getProgettiByNome(nomeCercato);
+		ArrayList<Progetto> progetti = projDAO.ottieniProgettiSegreteriaFiltratiPerNome(nomeCercato);
 		ArrayList<Progetto> progettiConFiltro = new ArrayList<Progetto>();
 		if (tipologiaCercata != null) {
-			progettiConFiltro = projDAO.ottieniProgettiDipendentePerTipo(tipologiaCercata);
+			progettiConFiltro = projDAO.ottieniProgettiFiltratiPerTipo(tipologiaCercata);
 			progetti.retainAll(progettiConFiltro);
 		}
 		if (ambitoCercato != null) {
-			progettiConFiltro = projDAO.ottieniProgettiDipendentePerAmbito(ambitoCercato);
+			progettiConFiltro = projDAO.ottieniProgettiFiltratiPerAmbito(ambitoCercato);
 			progetti.retainAll(progettiConFiltro);
 		}
 		if (scaduto.equals("Si")) {

@@ -17,18 +17,18 @@ import interfacceDAO.SkillDAO;
 
 public class SkillDAOPSQL implements SkillDAO {
 	private Connection conn;
-	private PreparedStatement ottieniSkillPS,addSkillPS, addSkillDipendentePS, ottieniSkillDipendentePS;
+	private PreparedStatement ottieniSkillPS,creaNuovaSkillPS, inserisciSkillDipendentePS, ottieniSkillDipendentePS;
 	
 	public SkillDAOPSQL(Connection connection) throws SQLException {
 		this.conn = connection;
 		
 		ottieniSkillPS = conn.prepareStatement("SELECT * FROM Skill ORDER BY Skill.NomeSkill");
-		addSkillPS = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");
-		addSkillDipendentePS = conn.prepareStatement("INSERT INTO Abilità VALUES (?,?)");
+		creaNuovaSkillPS = conn.prepareStatement("INSERT INTO Skill(NomeSkill) VALUES (?)");
+		inserisciSkillDipendentePS = conn.prepareStatement("INSERT INTO Abilità VALUES (?,?)");
 		ottieniSkillDipendentePS = conn.prepareStatement("SELECT * FROM Skill AS s WHERE s.IDSkill IN (SELECT a.IDSkill FROM Abilità AS a WHERE a.CF = ?)");
 	}
 	
-	@Override  //Ok
+	@Override  
 	public ArrayList<Skill> ottieniSkill() throws SQLException {
 		ResultSet risultato = ottieniSkillPS.executeQuery();
 		ArrayList<Skill> skills = new ArrayList<Skill>();
@@ -42,11 +42,11 @@ public class SkillDAOPSQL implements SkillDAO {
 		return skills;
 	}
 
-	@Override
-	public boolean insertSkill(Skill skill) throws SQLException {
-		addSkillPS.setString(1, skill.getNomeSkill());
+	@Override  
+	public boolean creaNuovaSkill(Skill skill) throws SQLException {
+		creaNuovaSkillPS.setString(1, skill.getNomeSkill());
 		
-		int record = addSkillPS.executeUpdate();
+		int record = creaNuovaSkillPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -54,12 +54,12 @@ public class SkillDAOPSQL implements SkillDAO {
 			return false;
 	}
 
-	@Override
-	public boolean insertSkillDipendente(Skill skill, Dipendente dipendente) throws SQLException {
-		addSkillDipendentePS.setInt(1, skill.getIdSkill());
-		addSkillDipendentePS.setString(2, dipendente.getCf());
+	@Override  
+	public boolean inserisciSkillDipendente(Skill skill, Dipendente dipendente) throws SQLException {
+		inserisciSkillDipendentePS.setInt(1, skill.getIdSkill());
+		inserisciSkillDipendentePS.setString(2, dipendente.getCf());
 		
-		int record = addSkillDipendentePS.executeUpdate();
+		int record = inserisciSkillDipendentePS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -67,7 +67,7 @@ public class SkillDAOPSQL implements SkillDAO {
 			return false;
 	}
  
-	@Override  //Ok
+	@Override 
 	public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException {
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		ottieniSkillDipendentePS.setString(1, cfDipendente);

@@ -65,7 +65,7 @@ public class ControllerAccesso {
 		ControllerGestioneProfilo controller = new ControllerGestioneProfilo(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, dipendenteLogged);
     }
     
-    public void autenticaSegreteria(String password) {
+    public void eseguiLoginSegreteria(String password) {
     	if (password.equals(adminPassword)) {
     		autenticazioneSegreteriaFrame.setVisible(false);
     		ControllerAreaSegreteria controller = new ControllerAreaSegreteria(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO);

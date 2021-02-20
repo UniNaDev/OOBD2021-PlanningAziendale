@@ -27,8 +27,10 @@ public class AutenticazioneSegreteria extends JFrame {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
+	private JTextArea istruzioniTextArea;
+	private JButton autenticaButton;
+	private JButton annullaButton;
 
-	
 	public AutenticazioneSegreteria(ControllerAccesso controller) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AutenticazioneSegreteria.class.getResource("/icone/WindowIcon_16.png")));
 		setTitle("iPlanner - Autenticazione Segreteria");
@@ -41,12 +43,12 @@ public class AutenticazioneSegreteria extends JFrame {
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		
-		JTextArea istruzioniLabel = new JTextArea("Inserire la password amministrativa per accedere all'area segreteria.");
-		istruzioniLabel.setEditable(false);
-		istruzioniLabel.setLineWrap(true);
-		istruzioniLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
-		istruzioniLabel.setBounds(10, 11, 330, 43);
-		contentPane.add(istruzioniLabel);
+		istruzioniTextArea = new JTextArea("Inserire la password amministrativa per accedere all'area segreteria.");
+		istruzioniTextArea.setEditable(false);
+		istruzioniTextArea.setLineWrap(true);
+		istruzioniTextArea.setFont(new Font("Consolas", Font.PLAIN, 14));
+		istruzioniTextArea.setBounds(10, 11, 330, 43);
+		contentPane.add(istruzioniTextArea);
 		
 		passwordField = new JPasswordField();
 		passwordField.addKeyListener(new KeyAdapter() {
@@ -54,7 +56,7 @@ public class AutenticazioneSegreteria extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
 					if (!passwordField.getText().isBlank())
-						controller.autenticaSegreteria(passwordField.getText());
+						controller.eseguiLoginSegreteria(passwordField.getText());
 					else
 						JOptionPane.showMessageDialog(null,
 								"Inserire la password amministrativa.",
@@ -66,11 +68,11 @@ public class AutenticazioneSegreteria extends JFrame {
 		passwordField.setBounds(88, 65, 203, 20);
 		contentPane.add(passwordField);
 		
-		JButton autenticaButton = new JButton("Verifica");
+		autenticaButton = new JButton("Verifica");
 		autenticaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!passwordField.getText().isBlank())
-					controller.autenticaSegreteria(passwordField.getText());
+					controller.eseguiLoginSegreteria(passwordField.getText());
 				else
 					JOptionPane.showMessageDialog(null,
 							"Inserire la password amministrativa.",
@@ -95,7 +97,7 @@ public class AutenticazioneSegreteria extends JFrame {
 		autenticaButton.setBounds(282, 101, 89, 23);
 		contentPane.add(autenticaButton);
 		
-		JButton annullaButton = new JButton("Annulla");
+		annullaButton = new JButton("Annulla");
 		annullaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.tornaAdIPlanner();

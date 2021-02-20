@@ -10,29 +10,23 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import javax.swing.JComboBox;
-
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
 import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
-
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
 import gui.ErroreDialog;
 import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.DipendentiTableModel;
-
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
-
 import java.awt.Color;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
@@ -40,7 +34,6 @@ import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -62,7 +55,6 @@ import javax.swing.ListSelectionModel;
 
 public class GestioneDipendenti extends JFrame {
 	private JPanel contentPane;
-
 	private JLabel dipendenteLabel;
 	private JLabel nomeLabel;
 	private JLabel cognomeLabel;
@@ -169,8 +161,8 @@ public class GestioneDipendenti extends JFrame {
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
-
 		contentPane.setLayout(null);
+
 		JPanel infoPanel = new JPanel();
 		infoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 		infoPanel.setBounds(28, 11, 1286, 650);
@@ -457,7 +449,7 @@ public class GestioneDipendenti extends JFrame {
 					creaSkill(controller);
 				else
 					JOptionPane.showMessageDialog(null, "Controllare che il nome della skill non sia vuoto.",
-							"Creazione Fallita", JOptionPane.ERROR_MESSAGE);
+								"Creazione Fallita", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		nuovaSkillButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -761,7 +753,8 @@ public class GestioneDipendenti extends JFrame {
 		comandiPanel.add(valutazioneMassimaTextField);
 
 		salvaModificheButton = new JButton("<html> <center> Salva <br> Modifiche <html>");
-		salvaModificheButton.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
+		salvaModificheButton
+				.setToolTipText("<html>Clicca per salvare le modifiche <br>delle informazioni del dipendente<html>");
 		salvaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				campiNeri();
@@ -773,12 +766,14 @@ public class GestioneDipendenti extends JFrame {
 					else if (!passwordField.getText().equals(confermaPasswordField.getText())) {
 						JOptionPane.showMessageDialog(null, "Le password inserite sono diverse.",
 								"Salvataggio Fallito", JOptionPane.ERROR_MESSAGE);
+
 						passwordLabel.setForeground(Color.RED);
 						confermaPasswordLabel.setForeground(Color.RED);
 					} else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
 						JOptionPane.showMessageDialog(null,
 								"Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
 								"Salvataggio Fallito", JOptionPane.ERROR_MESSAGE);
+
 						telefonoFissoLabel.setForeground(Color.RED);
 					} else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
 						JOptionPane.showMessageDialog(null,
@@ -794,6 +789,7 @@ public class GestioneDipendenti extends JFrame {
 				else {
 					JOptionPane.showMessageDialog(null, "Selezionare prima un dipendente.","Salvataggio Fallito", JOptionPane.INFORMATION_MESSAGE);
 				}
+				
 			}
 		});
 		salvaModificheButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -821,6 +817,7 @@ public class GestioneDipendenti extends JFrame {
 					eliminaDipendente(controller, dipendenteSelezionato);
 				else
 					JOptionPane.showMessageDialog(null, "Selezionare prima un dipendente.", "Eliminazione Fallita", JOptionPane.INFORMATION_MESSAGE);
+
 			}
 		});
 		eliminaAccountButton.setToolTipText("Elimina il dipendente");
@@ -873,6 +870,7 @@ public class GestioneDipendenti extends JFrame {
 				int rigaSelezionata = dipendentiTable.getSelectedRow();
 				rigaSelezionata = dipendentiTable.convertRowIndexToModel(rigaSelezionata);
 				dipendenteSelezionato = dataModelDipendente.getSelected(rigaSelezionata);
+				pulisciCampi();
 
 				nomeTextField.setText(dipendenteSelezionato.getNome());
 				cognomeTextField.setText(dipendenteSelezionato.getCognome());
@@ -915,8 +913,10 @@ public class GestioneDipendenti extends JFrame {
 			sesso = 'M';
 		else
 			sesso = 'F';
+
 		dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
 					giornoComboBox.getSelectedIndex() + 1);
+
 		try {
 			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem())
 					.get(cittaComboBox.getSelectedIndex());
@@ -934,44 +934,41 @@ public class GestioneDipendenti extends JFrame {
 			cellulare = cellulareTextField.getText();
 		else
 			cellulare = null;
+
 		indirizzo = indirizzoTextField.getText();
 		salario = parseFloat(salarioTextField.getText(), 0f);
 	}
 
-	private void setModelloTabellaDipendentiTutti(ControllerDipendentiSegreteria controller) {
+	private void impostaModelloTabellaDipendentiSegreteria(ControllerDipendentiSegreteria controller) {
+
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
 			ErroreDialog errore = new ErroreDialog(e,true);
-			errore.setVisible(true);
 		}
 	}
-
+	
 	private void creaDipendente(ControllerDipendentiSegreteria controller) {
 		try {
 			ricavaInfoDipendente(controller);
 			ArrayList<Skill> skills = new ArrayList<Skill>();
 			skills.addAll(skillsList.getSelectedValuesList());
-			Dipendente dipendente = new Dipendente(null, nome, cognome, sesso, dataNascita, luogoNascita, indirizzo, email,
-					telefono, cellulare, salario, password, 0f);
+			Dipendente dipendente = new Dipendente(null, nome, cognome, sesso, dataNascita, luogoNascita, indirizzo,
+					email, telefono, cellulare, salario, password, 0f);
 			dipendente.setSkills(skills);
 			try {
 				if (controller.creaDipendente(dipendente)) {
 					pulisciCampi();
-					setModelloTabellaDipendentiTutti(controller);
-	
-					int yesNo = JOptionPane.showConfirmDialog(null,
-							"Creazione riuscita.\n"
-							+ "Vuoi crearne un altro?",
-							"Creazione Riuscita", 
-							JOptionPane.YES_NO_OPTION);
+					impostaModelloTabellaDipendentiSegreteria(controller);
+					int yesNo = JOptionPane.showConfirmDialog(null, "Creazione riuscita.\n" + "Vuoi crearne un altro?",
+							"Creazione Riuscita", JOptionPane.YES_NO_OPTION);
 					if (yesNo == JOptionPane.NO_OPTION)
 						controller.tornaASegreteria();
 					else {
 						pulisciCampi();
-						setModelloTabellaDipendentiTutti(controller);
+						impostaModelloTabellaDipendentiSegreteria(controller);
 					}
 				}
 			} catch (SQLException e) {
@@ -998,29 +995,28 @@ public class GestioneDipendenti extends JFrame {
 					Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
 					if (!matcher.find())
 						emailLabel.setForeground(Color.RED);
-	
 					if (!nonHaCifre(nome))
 						nomeLabel.setForeground(Color.RED);
-	
+
 					if (!nonHaCifre(cognome))
 						cognomeLabel.setForeground(Color.RED);
-	
+
 					if (!isNumero(telefono))
 						telefonoFissoLabel.setForeground(Color.RED);
-	
+
 					if (!isNumero(cellulare))
 						cellulareLabel.setForeground(Color.RED);
-	
-					dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
-							giornoComboBox.getSelectedIndex() + 1);
+
+					dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900,
+							meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex() + 1);
 					Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
 					int età = period.getYears();
 					if (età < 18)
 						dataNascitaLabel.setForeground(Color.RED);
-	
+
 					if (Float.parseFloat(salarioTextField.getText()) < 0 || salarioTextField.getText().isEmpty())
 						salarioLabel.setForeground(Color.RED);
-	
+
 					break;
 				case VIOLAZIONE_LUNGHEZZA_STRINGA:
 					errore = new ErroreDialog(e,
@@ -1029,6 +1025,7 @@ public class GestioneDipendenti extends JFrame {
 							+ "1) Nome e cognome non contengano più di 30 caratteri.\n"
 							+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
 							+ "3) La password non superi i 50 caratteri.", false);
+						
 					if (nomeTextField.getText().length() > 30)
 						nomeLabel.setForeground(Color.RED);
 					if (cognomeTextField.getText().length() > 30)
@@ -1044,19 +1041,17 @@ public class GestioneDipendenti extends JFrame {
 						break;
 					}
 				default:
-					errore = new ErroreDialog(e,true);
+					errore = new ErroreDialog(e, true);
 				}
 				errore.setVisible(true);
-			} 
-		} catch(IllegalFieldValueException ifve) {
-			ErroreDialog errore = new ErroreDialog(ifve,
-					"Creazione Fallita",
-					"La data inserita non esiste.", false);
+			}
+		} catch (IllegalFieldValueException ifve) {
+			ErroreDialog errore = new ErroreDialog(ifve, "Creazione Fallita", "La data inserita non esiste.", false);
 			errore.setVisible(true);
 		}
 	}
-
 	private void salvaModificheDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) {
+
 		try{
 			ricavaInfoDipendente(controller);
 			dipendenteModificato.setNome(nome);
@@ -1076,7 +1071,7 @@ public class GestioneDipendenti extends JFrame {
 			try {
 				if (controller.aggiornaDipendente(dipendenteModificato)) {
 					pulisciCampi();
-					setModelloTabellaDipendentiTutti(controller);
+					impostaModelloTabellaDipendentiSegreteria(controller);
 	
 					JOptionPane.showMessageDialog(null, 
 							"Modifica effettuata con successo.",
@@ -1181,11 +1176,13 @@ public class GestioneDipendenti extends JFrame {
 			return false;
 	}
 
+	
+
 	private void eliminaDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteSelezionato) {
 		try {
 			controller.eliminaDipendente(dipendenteSelezionato);
 			pulisciCampi();
-			setModelloTabellaDipendentiTutti(controller);
+			impostaModelloTabellaDipendentiSegreteria(controller);
 
 			JOptionPane.showMessageDialog(null, "Dipendente eliminato correttamente.",
 					"Eliminazione Dipendente Riuscita", JOptionPane.INFORMATION_MESSAGE);
@@ -1195,6 +1192,7 @@ public class GestioneDipendenti extends JFrame {
 		}
 	}
 
+
 	private void creaSkill(ControllerDipendentiSegreteria controller) {
 		nuovaSkillTextField.setForeground(Color.BLACK);
 		try {
@@ -1202,6 +1200,7 @@ public class GestioneDipendenti extends JFrame {
 			aggiornaSkillGUI(controller);
 			nuovaSkillTextField.setText("");
 		} catch (SQLException e) {
+
 			ErroreDialog errore = null;
 			switch (e.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
@@ -1217,6 +1216,7 @@ public class GestioneDipendenti extends JFrame {
 				errore = new ErroreDialog(e, true);
 			}
 			errore.setVisible(true);
+			
 		}
 	}
 
@@ -1267,6 +1267,7 @@ public class GestioneDipendenti extends JFrame {
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
+
 			ErroreDialog errore = new ErroreDialog(e, true);
 			errore.setVisible(true);
 		}
@@ -1397,7 +1398,6 @@ public class GestioneDipendenti extends JFrame {
 		salarioTextField.setText("");
 		skillsList.clearSelection();
 		dipendenteSelezionato = null;
-
 		campiNeri();
 	}
 

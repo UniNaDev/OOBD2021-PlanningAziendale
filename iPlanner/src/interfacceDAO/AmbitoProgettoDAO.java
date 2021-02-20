@@ -12,14 +12,11 @@ import entita.Progetto;
 public interface AmbitoProgettoDAO {
 	public ArrayList<AmbitoProgetto> ottieniAmbiti() throws SQLException;
 	
-	public boolean inserisciAmbito(AmbitoProgetto ambito) throws SQLException;
+	public boolean creaAmbitoProgetto(AmbitoProgetto ambito) throws SQLException;
 	
 	public ArrayList<AmbitoProgetto> ottieniAmbitiDelProgetto(Progetto proj) throws SQLException;
 	
 	public boolean inserisciAmbitiProgetto(Progetto proj) throws SQLException;
-	
-	//TODO: eliminare e sostituire le chiamate con getAmbitiOfProgetto
-	public ArrayList<AmbitoProgetto> ottieniAmbitiProgettoDaCodice(int codProgetto) throws SQLException;
 	
 	public boolean eliminaAmbitiProgetto (Progetto proj) throws SQLException;
 }

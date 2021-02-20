@@ -70,7 +70,7 @@ public class ControllerMeetingSegreteria {
 	}
 
 	public ArrayList<Meeting> ottieniMeeting() throws SQLException{
-		return meetDAO.getMeetings();
+		return meetDAO.ottieniMeeting();
 	}
 	
 	public ArrayList<PartecipazioneMeeting> ottieniInvitatiMeeting(Meeting meeting) throws SQLException{
@@ -90,19 +90,19 @@ public class ControllerMeetingSegreteria {
 	}
 	
 	public ArrayList<Meeting> filtraMeetingTelematici() throws SQLException{
-		return meetDAO.getMeetingsByModalità("Telematico");
+		return meetDAO.filtraMeetingSegreteriaPerModalità("Telematico");
 	}
 	
 	public ArrayList<Meeting> filtraMeetingFisici() throws SQLException{
-		return meetDAO.getMeetingsByModalità("Fisico");
+		return meetDAO.filtraMeetingSegreteriaPerModalità("Fisico");
 	}
 	
 	public ArrayList<Meeting> filtraMeetingPiattaforma(String piattaforma) throws SQLException{
-		return meetDAO.getMeetingsByPiattaforma(piattaforma);
+		return meetDAO.filtraMeetingPiattaforma(piattaforma);
 	}
 	
 	public ArrayList<Meeting> filtraMeetingSala(SalaRiunione sala) throws SQLException{
-		return meetDAO.getMeetingsBySala(sala);
+		return meetDAO.filtraMeetingSala(sala);
 	}
 	
 	public void creaSala(SalaRiunione salaNuova) throws SQLException {

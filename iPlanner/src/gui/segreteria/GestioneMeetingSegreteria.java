@@ -60,12 +60,26 @@ import java.awt.Toolkit;
 
 public class GestioneMeetingSegreteria extends JFrame {
 	private JPanel contentPane;
+	private JLabel inizioLabel;
+	private JLabel fineLabel;
+	private JLabel modalitàLabel;
+	private JLabel titoloLabel;
+	private JButton esciButton;
+	private JTextArea progettoDiscussoTextArea;
+	private JLabel refreshFiltriLabel;
+	private JScrollPane tabellaScrollPanel;
 	private JTable tabellaMeeting;
 	private DefaultListModel invitatiListModel;
+	private JButton gestisciSaleButton;
+	private JLabel filtroSalaLabel;
 	private JComboBox filtroSaleComboBox;
 	private MeetingTableModel modelloTabellaMeeting;
+	private JLabel filtroPiattaformaLabel;
 	private JComboBox filtroPiattaformaComboBox;
 	private JRadioButton fisicoRadioButton, telematicoRadioButton;
+	private JLabel invitatiLabel;
+	private JScrollPane partecipantiScrollPanel;
+	private JSeparator separator;
 	private JList invitatiList;
 	
 	private DateTimeFormatter formatoDate = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -95,31 +109,31 @@ public class GestioneMeetingSegreteria extends JFrame {
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
 		
-		JLabel inizioLabel = new JLabel("Inizio: N/A");
+		inizioLabel = new JLabel("Inizio: N/A");
 		inizioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		inizioLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		inizioLabel.setBounds(29, 10, 219, 23);
 		infoPanel.add(inizioLabel);
 		
-		JLabel fineLabel = new JLabel("Fine: N/A");
+		fineLabel = new JLabel("Fine: N/A");
 		fineLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		fineLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		fineLabel.setBounds(29, 43, 219, 23);
 		infoPanel.add(fineLabel);
 		
-		JLabel modalitàLabel = new JLabel("Sala: N/A");
+		modalitàLabel = new JLabel("Sala: N/A");
 		modalitàLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		modalitàLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		modalitàLabel.setBounds(29, 76, 219, 23);
 		infoPanel.add(modalitàLabel);
 		
-		JSeparator separator = new JSeparator();
+		separator = new JSeparator();
 		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(352, 10, 2, 146);
 		infoPanel.add(separator);
 		
-		JScrollPane partecipantiScrollPanel = new JScrollPane();
+		partecipantiScrollPanel = new JScrollPane();
 		partecipantiScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		partecipantiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
@@ -133,12 +147,12 @@ public class GestioneMeetingSegreteria extends JFrame {
 		invitatiList.setFont(new Font("Consolas", Font.PLAIN, 13));
 		partecipantiScrollPanel.setViewportView(invitatiList);
 		
-		JLabel invitatiLabel = new JLabel("Invitati");
+		invitatiLabel = new JLabel("Invitati");
 		invitatiLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		invitatiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		partecipantiScrollPanel.setColumnHeaderView(invitatiLabel);
 		
-		JTextArea progettoDiscussoTextArea = new JTextArea();
+		progettoDiscussoTextArea = new JTextArea();
 		progettoDiscussoTextArea.setLineWrap(true);
 		progettoDiscussoTextArea.setEditable(false);
 		progettoDiscussoTextArea.setText("Progetto Discusso: N/A");
@@ -201,7 +215,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		filtroSaleComboBox.setUI(new BasicComboBoxUI());
 		comandiPanel.add(filtroSaleComboBox);
 
-		JLabel filtroSalaLabel = new JLabel("Sala:");
+		filtroSalaLabel = new JLabel("Sala:");
 		filtroSalaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroSalaLabel.setBounds(274, 13, 35, 14);
 		comandiPanel.add(filtroSalaLabel);
@@ -223,12 +237,12 @@ public class GestioneMeetingSegreteria extends JFrame {
 		filtroPiattaformaComboBox.setUI(new BasicComboBoxUI());
 		comandiPanel.add(filtroPiattaformaComboBox);
 
-		JLabel filtroPiattaformaLabel = new JLabel("Piattaforma:");
+		filtroPiattaformaLabel = new JLabel("Piattaforma:");
 		filtroPiattaformaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroPiattaformaLabel.setBounds(434, 13, 84, 14);
 		comandiPanel.add(filtroPiattaformaLabel);
 		
-		JLabel refreshFiltriLabel = new JLabel("");
+		refreshFiltriLabel = new JLabel("");
 		refreshFiltriLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		refreshFiltriLabel.setToolTipText("Reset dei filtri");
 		refreshFiltriLabel.addMouseListener(new MouseAdapter() {
@@ -245,7 +259,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		refreshFiltriLabel.setBounds(25, 11, 21, 18);
 		comandiPanel.add(refreshFiltriLabel);
 		
-		JScrollPane tabellaScrollPanel = new JScrollPane();
+		tabellaScrollPanel = new JScrollPane();
 		tabellaScrollPanel.setBorder(new LineBorder(new Color(192, 192, 192), 2));
 		tabellaScrollPanel.setBounds(38, 343, 702, 348);
 		contentPane.add(tabellaScrollPanel);
@@ -287,13 +301,13 @@ public class GestioneMeetingSegreteria extends JFrame {
 		});
 		tabellaScrollPanel.setViewportView(tabellaMeeting);
 		
-		JLabel titoloLabel = new JLabel("Gestione Meeting");
+		titoloLabel = new JLabel("Gestione Meeting");
 		titoloLabel.setIcon(new ImageIcon(GestioneMeetingSegreteria.class.getResource("/icone/meeting_64.png")));
 		titoloLabel.setFont(new Font("Consolas", Font.PLAIN, 21));
 		titoloLabel.setBounds(38, 21, 275, 61);
 		contentPane.add(titoloLabel);
 		
-		JButton gestisciSaleButton = new JButton("Gestisci Sale");
+		gestisciSaleButton = new JButton("Gestisci Sale");
 		gestisciSaleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.apriGestioneSale();
@@ -318,7 +332,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 		gestisciSaleButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		contentPane.add(gestisciSaleButton);
 		
-		JButton esciButton = new JButton("Esci");
+		esciButton = new JButton("Esci");
 		esciButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.tornaASegreteria();

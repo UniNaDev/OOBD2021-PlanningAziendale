@@ -14,19 +14,19 @@ import interfacceDAO.AmbitoProgettoDAO;
 
 public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 	private Connection connection;
-	private PreparedStatement ottieniAmbitiPS, inserisciAmbitoPS, ottieniAmbitiProgettoPS, inserisciAmbitiProgettoPS,eliminaAmbitiProgettoPS;
+	private PreparedStatement ottieniAmbitiPS, creaAmbitoProgettoPS, ottieniAmbitiProgettoPS, inserisciAmbitiProgettoPS,eliminaAmbitiProgettoPS;
 	
 	public AmbitoProgettoDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;
 		
 		ottieniAmbitiPS = connection.prepareStatement("SELECT * FROM AmbitoProgetto");
-		inserisciAmbitoPS = connection.prepareStatement("INSERT INTO AmbitoProgetto(NomeAmbito) VALUES (?)");
+		creaAmbitoProgettoPS = connection.prepareStatement("INSERT INTO AmbitoProgetto(NomeAmbito) VALUES (?)");
 		ottieniAmbitiProgettoPS = connection.prepareStatement("SELECT * FROM AmbitoProgetto AS ap WHERE ap.IDAmbito IN (SELECT l.IDAmbito FROM AmbitoProgettoLink AS l WHERE l.CodProgetto = ?)");
 		inserisciAmbitiProgettoPS = connection.prepareStatement("INSERT INTO AmbitoProgettoLink VALUES (?,?)");
 		eliminaAmbitiProgettoPS = connection.prepareStatement("DELETE FROM AmbitoProgettoLink WHERE codprogetto = ?");
 	}
 	
-	@Override  //Ok
+	@Override
 	public ArrayList<AmbitoProgetto> ottieniAmbiti() throws SQLException {
 		ResultSet risultato = ottieniAmbitiPS.executeQuery();
 		ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
@@ -40,11 +40,11 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		return ambiti;
 	}
 
-	@Override  //Ok
-	public boolean inserisciAmbito(AmbitoProgetto ambito) throws SQLException {
-		inserisciAmbitoPS.setString(1, ambito.getNomeAmbito());
+	@Override 
+	public boolean creaAmbitoProgetto(AmbitoProgetto ambito) throws SQLException {
+		creaAmbitoProgettoPS.setString(1, ambito.getNomeAmbito());
 		
-		int record = inserisciAmbitoPS.executeUpdate();
+		int record = creaAmbitoProgettoPS.executeUpdate();
 		
 		if (record == 1)
 			return true;
@@ -52,7 +52,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 			return false;
 	}
 
-	@Override  //Ok
+	@Override 
 	public ArrayList<AmbitoProgetto> ottieniAmbitiDelProgetto(Progetto progetto) throws SQLException {
 		ottieniAmbitiProgettoPS.setInt(1, progetto.getIdProgettto());
 		ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
@@ -67,7 +67,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 		return ambiti;
 	}
 
-	@Override  //Ok
+	@Override
 	public boolean inserisciAmbitiProgetto(Progetto progetto) throws SQLException {
 		int record = 0;
 		
@@ -84,22 +84,7 @@ public class AmbitoProgettoDAOPSQL implements AmbitoProgettoDAO {
 			return false;
 	}
 
-	@Override //Da verificare
-	public ArrayList<AmbitoProgetto> ottieniAmbitiProgettoDaCodice(int codProgetto) throws SQLException {
-		ottieniAmbitiProgettoPS.setInt(1, codProgetto);
-		ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
-		ResultSet risultato = ottieniAmbitiProgettoPS.executeQuery();
-		
-		while (risultato.next()) {
-			AmbitoProgetto ambitoTemp = new AmbitoProgetto(risultato.getInt("IDAmbito"), risultato.getString("NomeAmbito"));
-			ambiti.add(ambitoTemp);
-		}
-		risultato.close();
-		
-		return ambiti;
-	}
-
-	@Override  //Ok
+	@Override 
 	public boolean eliminaAmbitiProgetto (Progetto progetto) throws SQLException {
 		eliminaAmbitiProgettoPS.setInt(1, progetto.getIdProgettto());
 		

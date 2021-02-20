@@ -66,6 +66,26 @@ import java.awt.Toolkit;
 
 public class GestioneProgettiSegreteria extends JFrame {
 	private JPanel contentPane;
+	private JLabel ambitiLabel;
+	private JScrollPane ambitiScrollPanel;
+	private JButton creaAmbitoButton;
+	private JLabel descrizioneLabel;
+	private JButton esciButton;
+	private JButton filtraButton;
+	private JLabel filtroScadutoLabel;
+	private JLabel filtroTerminatoLabel;
+	private JLabel filtroTipologiaLabel;
+	private JLabel filtroAmbitoLabel;
+	private JLabel meetingRelativiLabel;
+	private JScrollPane meetingScrollPanel;
+	private JScrollPane partecipantiScrollPanel;
+	private JLabel resetFiltriLabel;
+	private JSeparator separator;
+	private JScrollPane tabellaScrollPanel;
+	private JLabel tipologiaLabel;
+	private JLabel nomeLabel;
+	private JLabel partecipantiLabel;
+	private JLabel titoloLabel;
 	private JTextField nomeTextField;
 	private JTextField tipologiaTextField;
 	private JTable tabellaProgetti;
@@ -117,7 +137,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		contentPane.add(infoPanel);
 		infoPanel.setLayout(null);
 		
-		JLabel nomeLabel = new JLabel("Nome");
+		nomeLabel = new JLabel("Nome");
 		nomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		nomeLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		nomeLabel.setBounds(48, 34, 39, 23);
@@ -131,7 +151,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		infoPanel.add(nomeTextField);
 		nomeTextField.setColumns(10);
 		
-		JLabel descrizioneLabel = new JLabel("Descrizione");
+		descrizioneLabel = new JLabel("Descrizione");
 		descrizioneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		descrizioneLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		descrizioneLabel.setBounds(10, 65, 77, 23);
@@ -145,7 +165,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		descrizioneTextArea.setBounds(103, 65, 204, 67);
 		infoPanel.add(descrizioneTextArea);
 		
-		JLabel tipologiaLabel = new JLabel("Tipologia");
+		tipologiaLabel = new JLabel("Tipologia");
 		tipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		tipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		tipologiaLabel.setBounds(18, 144, 69, 23);
@@ -177,20 +197,20 @@ public class GestioneProgettiSegreteria extends JFrame {
 		dataTerminazioneLabel.setBounds(88, 246, 219, 23);
 		infoPanel.add(dataTerminazioneLabel);
 		
-		JSeparator separator = new JSeparator();
+		separator = new JSeparator();
 		separator.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(381, 34, 2, 235);
 		infoPanel.add(separator);
 		
-		JScrollPane ambitiScrollPanel = new JScrollPane();
+		ambitiScrollPanel = new JScrollPane();
 		ambitiScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		ambitiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		ambitiScrollPanel.setBounds(434, 36, 197, 151);
 		infoPanel.add(ambitiScrollPanel);
 		
-		JLabel ambitiLabel = new JLabel("Ambiti Progetto");
+		ambitiLabel = new JLabel("Ambiti Progetto");
 		ambitiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		ambitiScrollPanel.setColumnHeaderView(ambitiLabel);
 		
@@ -202,14 +222,14 @@ public class GestioneProgettiSegreteria extends JFrame {
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		ambitiScrollPanel.setViewportView(ambitiList);
 		
-		JScrollPane partecipantiScrollPanel = new JScrollPane();
+		partecipantiScrollPanel = new JScrollPane();
 		partecipantiScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		partecipantiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		partecipantiScrollPanel.setBounds(681, 36, 244, 235);
 		infoPanel.add(partecipantiScrollPanel);
 		
-		JLabel partecipantiLabel = new JLabel("Partecipanti Progetto");
+		partecipantiLabel = new JLabel("Partecipanti Progetto");
 		partecipantiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		partecipantiScrollPanel.setColumnHeaderView(partecipantiLabel);
 		
@@ -221,14 +241,14 @@ public class GestioneProgettiSegreteria extends JFrame {
 		partecipantiList.setCellRenderer(partecipantiRenderer);
 		partecipantiScrollPanel.setViewportView(partecipantiList);
 		
-		JScrollPane meetingScrollPanel = new JScrollPane();
+		meetingScrollPanel = new JScrollPane();
 		meetingScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		meetingScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPanel.getVerticalScrollBar().setUI(new CustomScrollBarUI());
 		meetingScrollPanel.setBounds(972, 36, 288, 235);
 		infoPanel.add(meetingScrollPanel);
 		
-		JLabel meetingRelativiLabel = new JLabel("Meeting Relativi");
+		meetingRelativiLabel = new JLabel("Meeting Relativi");
 		meetingRelativiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		meetingScrollPanel.setColumnHeaderView(meetingRelativiLabel);
 		
@@ -247,7 +267,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		ambitoNuovoTextField.setBounds(434, 198, 197, 20);
 		infoPanel.add(ambitoNuovoTextField);
 		
-		JButton creaAmbitoButton = new JButton("Crea Ambito");
+		creaAmbitoButton = new JButton("Crea Ambito");
 		creaAmbitoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!ambitoNuovoTextField.getText().isBlank())
@@ -278,7 +298,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		creaAmbitoButton.setBackground(Color.WHITE);
 		infoPanel.add(creaAmbitoButton);
 		
-		JLabel titoloLabel = new JLabel("Gestione Progetti");
+		titoloLabel = new JLabel("Gestione Progetti");
 		titoloLabel.setIcon(new ImageIcon(GestioneProgettiSegreteria.class.getResource("/icone/progetto_64.png")));
 		titoloLabel.setFont(new Font("Consolas", Font.PLAIN, 21));
 		titoloLabel.setBounds(42, 11, 290, 64);
@@ -297,7 +317,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		comandiPanel.add(filtroNomeTextField);
 		filtroNomeTextField.setColumns(10);
 		
-		JButton filtraButton = new JButton("Filtra");
+		filtraButton = new JButton("Filtra");
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				applicaFiltri(controller);
@@ -339,25 +359,25 @@ public class GestioneProgettiSegreteria extends JFrame {
 		tipologiaComboBox.setSelectedItem(null);
 		comandiPanel.add(tipologiaComboBox);
 
-		JLabel filtroAmbitoLabel = new JLabel("Ambito");
+		filtroAmbitoLabel = new JLabel("Ambito");
 		filtroAmbitoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroAmbitoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroAmbitoLabel.setBounds(402, 11, 42, 23);
 		comandiPanel.add(filtroAmbitoLabel);
 		
-		JLabel filtroTipologiaLabel = new JLabel("Tipologia");
+		filtroTipologiaLabel = new JLabel("Tipologia");
 		filtroTipologiaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroTipologiaLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroTipologiaLabel.setBounds(660, 10, 69, 24);
 		comandiPanel.add(filtroTipologiaLabel);
 		
-		JLabel filtroScadutoLabel = new JLabel("Scaduto");
+		filtroScadutoLabel = new JLabel("Scaduto");
 		filtroScadutoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroScadutoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroScadutoLabel.setBounds(974, 11, 49, 23);
 		comandiPanel.add(filtroScadutoLabel);
 		
-		JLabel filtroTerminatoLabel = new JLabel("Terminato");
+		filtroTerminatoLabel = new JLabel("Terminato");
 		filtroTerminatoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		filtroTerminatoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroTerminatoLabel.setBounds(1120, 11, 69, 23);
@@ -377,7 +397,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		terminatoComboBox.setBounds(1199, 11, 49, 22);
 		comandiPanel.add(terminatoComboBox);
 		
-		JLabel resetFiltriLabel = new JLabel("");
+		resetFiltriLabel = new JLabel("");
 		resetFiltriLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -391,13 +411,13 @@ public class GestioneProgettiSegreteria extends JFrame {
 		resetFiltriLabel.setBounds(24, 11, 18, 23);
 		comandiPanel.add(resetFiltriLabel);
 		
-		JScrollPane tabellaScrollPanel = new JScrollPane();
+		tabellaScrollPanel = new JScrollPane();
 		tabellaScrollPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		tabellaScrollPanel.setBounds(42, 468, 1283, 268);
 		contentPane.add(tabellaScrollPanel);
 		
 		dataModelTabella = new ProgettoTableModel();
-		setModelloTabellaProgettiTutti(controller);
+		impostaModelloTabellaProgettiSegreteria(controller);
 		tabellaProgetti = new JTable(dataModelTabella);
 		tabellaProgetti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabellaProgetti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -433,18 +453,18 @@ public class GestioneProgettiSegreteria extends JFrame {
 					dataTerminazioneLabel.setText("Non Terminato");
 				}
 				ambitiListModel.clear();
-				setAmbitiListModel(controller, progettoSelezionato);
+				impostaAmbitiListModel(controller, progettoSelezionato);
 				meetingRelativiModel.clear();
 				meetingRelativiModel.addAll(progettoSelezionato.getMeetingsRelativi());
 				meetingRelativiList.setModel(meetingRelativiModel);
 				partecipantiListModel.clear();
-				setPartecipantiListModel(controller, progettoSelezionato);
+				impostaPartecipantiListModel(controller, progettoSelezionato);
 			}
 		});
 		tabellaProgetti.setFont(new Font("Consolas", Font.PLAIN, 11));
 		tabellaScrollPanel.setViewportView(tabellaProgetti);
 
-		JButton esciButton = new JButton("Esci");
+		esciButton = new JButton("Esci");
 		esciButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.tornaASegreteria();
@@ -477,7 +497,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		tipologiaComboBox.setSelectedIndex(0);
 		scadutoComboBox.setSelectedIndex(0);
 		terminatoComboBox.setSelectedIndex(0);
-		setModelloTabellaProgettiTutti(controller);
+		impostaModelloTabellaProgettiSegreteria(controller);
 		dataModelTabella.fireTableDataChanged();
 		tabellaProgetti.clearSelection();
 		pulisciCampi();
@@ -583,27 +603,17 @@ public class GestioneProgettiSegreteria extends JFrame {
 		}
 	}
 	
-	private void setAmbitiListModel(ControllerProgettiSegreteria controller, Progetto progettoSelezionato) {
-		try {
-			ambitiListModel.addAll(controller.ottieniAmbitiProgetto(progettoSelezionato));
+	private void impostaAmbitiListModel(ControllerProgettiSegreteria controller, Progetto progettoSelezionato) {
+			ambitiListModel.addAll(progettoSelezionato.getAmbiti());
 			ambitiList.setModel(ambitiListModel);
-		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
-		}
 	}
 	
-	private void setPartecipantiListModel(ControllerProgettiSegreteria controller, Progetto progettoSelezionato) {
-		try {
-			partecipantiListModel.addAll(controller.ottieniCollaborazioni(progettoSelezionato));
+	private void impostaPartecipantiListModel(ControllerProgettiSegreteria controller, Progetto progettoSelezionato) {
+			partecipantiListModel.addAll(progettoSelezionato.getCollaborazioni());
 			partecipantiList.setModel(partecipantiListModel);
-		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
-			erroreFatale.setVisible(true);
-		}
 	}
 	
-	private void setModelloTabellaProgettiTutti(ControllerProgettiSegreteria controller) {
+	private void impostaModelloTabellaProgettiSegreteria(ControllerProgettiSegreteria controller) {
 		try {
 			dataModelTabella.setProgettiTabella(controller.ottieniProgetti());
 		} catch (SQLException e) {

@@ -44,10 +44,10 @@ public class ControllerDipendentiSegreteria {
 		this.salaDAO = salaDAO;
 		this.ambitoDAO = ambitoDAO;
 		
-		apriGestioneDipendenti();
+		apriGestioneDipendentiSegreteria();
 	}
 	
-	public void apriGestioneDipendenti() {
+	public void apriGestioneDipendentiSegreteria() {
 	  gestioneDipendentiFrame= new GestioneDipendenti(this);
 	  gestioneDipendentiFrame.setVisible(true);	  
 	}
@@ -66,10 +66,10 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	public boolean creaDipendente(Dipendente dipendente) throws SQLException {
-		dipDAO.insertDipendente(dipendente);
+		dipDAO.inserisciDipendente(dipendente);
 			for (Skill skill: dipendente.getSkills())
 				try{
-					skillDAO.insertSkillDipendente(skill, dipendente);
+					skillDAO.inserisciSkillDipendente(skill, dipendente);
 				} catch(SQLException e) {
 					JOptionPane.showMessageDialog(null,
 							"Errore inserimento delle skill del dipendente nel database.",
@@ -82,7 +82,7 @@ public class ControllerDipendentiSegreteria {
 	
 	public void creaNuovaSkill(String nomeSkill) throws SQLException {
 		Skill temp = new Skill(0, nomeSkill);
-		skillDAO.insertSkill(temp);
+		skillDAO.creaNuovaSkill(temp);
 	}
 	
 	public ArrayList<Skill> ottieniSkill() throws SQLException{
@@ -90,7 +90,7 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	public ArrayList<Dipendente> ottieniDipendenti() throws SQLException {
-		return dipDAO.getDipendenti();
+		return dipDAO.ottieniDipendenti();
 	}
 	
 	public float ottieniMaxStipendio() {
@@ -102,9 +102,9 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	public ArrayList<Dipendente> filtraDipendenti(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima, Skill skill) throws SQLException {
-		ArrayList<Dipendente> dipendentiFiltrati = dipDAO.getDipendentiFiltrati(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima);
+		ArrayList<Dipendente> dipendentiFiltrati = dipDAO.ottieniDipendentiFiltrati(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima);
 		if (skill != null)
-			dipendentiFiltrati.retainAll(dipDAO.getDipendenteBySkill(skill));
+			dipendentiFiltrati.retainAll(dipDAO.ottieniDipendentiPerSkill(skill));
 		return dipendentiFiltrati;
 	}
 	
@@ -112,7 +112,7 @@ public class ControllerDipendentiSegreteria {
 		dipDAO.aggiornaDipendente(dipendente);
 		for (Skill skill: dipendente.getSkills()) {
 			try {
-				skillDAO.insertSkillDipendente(skill, dipendente);
+				skillDAO.inserisciSkillDipendente(skill, dipendente);
 			}
 			catch (SQLException e) {
 				if (e.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))

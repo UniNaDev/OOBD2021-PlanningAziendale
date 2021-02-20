@@ -15,25 +15,27 @@ import entita.Progetto;
 import entita.Skill;
 
 public interface DipendenteDAO {
-	public ArrayList<Dipendente> getDipendenti() throws SQLException;
+	public ArrayList<Dipendente> ottieniDipendenti() throws SQLException;
 	
 	public ArrayList<Dipendente> ottieniDipendentiNonInvitatiMeeting(Meeting meetingSelezionato) throws SQLException;
 	
 	public Dipendente ottieniDipendenteDaCF(String cf) throws SQLException;
 	
-	public ArrayList<Dipendente> getDipendenteBySkill(Skill skill) throws SQLException;
+	public ArrayList<Dipendente> ottieniDipendentiPerSkill(Skill skill) throws SQLException;
 	
-	public ArrayList<Dipendente> getDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException;
+	public ArrayList<Dipendente> ottieniDipendentiFiltrati(String nomeCognomeEmail, int etàMinima, int etàMassima, float salarioMinimo, float salarioMassimo, float valutazioneMinima, float valutazioneMassima) throws SQLException;
 	
 	public Dipendente eseguiLoginDipendente(String email, String password) throws SQLException; //OK
 	
 	public float ottieniValutazione(String cf) throws SQLException;
 	
-	public boolean insertDipendente(Dipendente dipendente) throws SQLException;
+	public boolean inserisciDipendente(Dipendente dipendente) throws SQLException;
 	
 	public boolean aggiornaDipendente(Dipendente dipendente) throws SQLException;
 	
 	public boolean eliminaDipendente(Dipendente dipendente) throws SQLException;
+	
+	public String ottieniTipologieProgettoDipendente(String cf) throws SQLException;
 	
 	public float ottieniMaxStipendio() throws SQLException;
 	

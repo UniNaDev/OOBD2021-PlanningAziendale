@@ -12,13 +12,13 @@ import entita.Meeting;
 import entita.Progetto;
 
 public interface ProgettoDAO {
-	public ArrayList<Progetto> getProgetti() throws SQLException;
+	public ArrayList<Progetto> ottieniProgetti() throws SQLException;
 	
-	public ArrayList<Progetto> getProgettiByNome(String nomeCercato) throws SQLException;
+	public ArrayList<Progetto> ottieniProgettiSegreteriaFiltratiPerNome(String nomeCercato) throws SQLException;
 	
-	public ArrayList<Progetto> ottieniProgettiDipendentePerAmbito(AmbitoProgetto ambito) throws SQLException;
+	public ArrayList<Progetto> ottieniProgettiFiltratiPerAmbito(AmbitoProgetto ambito) throws SQLException;
 	
-	public ArrayList<Progetto> ottieniProgettiDipendentePerTipo(String tipologia) throws SQLException;
+	public ArrayList<Progetto> ottieniProgettiFiltratiPerTipo(String tipologia) throws SQLException;
 	
 	public ArrayList<Meeting> ottieniMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException;
 	

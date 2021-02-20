@@ -33,17 +33,17 @@ public class ControllerAreaSegreteria {
 		areaSegreteriaFrame.setVisible(true);
     }
     
-	public void vaiAGestioneDipendenti() {
+	public void apriGUIGestioneDipendentiSegreteria() {
 		areaSegreteriaFrame.setVisible(false);
 		ControllerDipendentiSegreteria controller = new ControllerDipendentiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}
 	
-	public void vaiAGestioneProgetti() {
+	public void apriGUIGestioneProgettiSegreteria() {
 		areaSegreteriaFrame.setVisible(false);
 		ControllerProgettiSegreteria controller = new ControllerProgettiSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}
 	
-	public void vaiAGestioneMeeting() {
+	public void apriGUIGestioneMeetingSegreteria() {
 		areaSegreteriaFrame.setVisible(false);
 		ControllerMeetingSegreteria controller = new ControllerMeetingSegreteria(luogoDAO,dipDAO,projDAO,meetDAO,skillDAO,salaDAO,ambitoDAO);
 	}

@@ -120,11 +120,11 @@ public class ControllerProgetto {
 		ArrayList<Progetto> progettiFiltrati = projDAO.ottieniProgettiDipendentePerNome(nomeCercato,dipendenteLogged);
 		ArrayList<Progetto> progettiConFiltro = new ArrayList<Progetto>();
 		if (tipologiaCercata != null) {
-			progettiConFiltro = projDAO.ottieniProgettiDipendentePerTipo(tipologiaCercata);
+			progettiConFiltro = projDAO.ottieniProgettiFiltratiPerTipo(tipologiaCercata);
 			progettiFiltrati.retainAll(progettiConFiltro);
 		}
 		if (ambitoCercato != null) {
-			progettiConFiltro = projDAO.ottieniProgettiDipendentePerAmbito(ambitoCercato);
+			progettiConFiltro = projDAO.ottieniProgettiFiltratiPerAmbito(ambitoCercato);
 			progettiFiltrati.retainAll(progettiConFiltro);
 		}
 		if (scaduto.equals("Si")) {

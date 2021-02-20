@@ -14,7 +14,7 @@ import interfacceDAO.SalaRiunioneDAO;
 
 public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 	private Connection connection;
-	private PreparedStatement ottieniSalePS,creaSalaPS,aggiornaSalaPS,eliminaSalaPS,getSalaByCodPS;
+	private PreparedStatement ottieniSalePS,creaSalaPS,aggiornaSalaPS,eliminaSalaPS,ottieniSalaDaCodSalaPS;
 	
 	public SalaRiunioneDAOPSQL(Connection connection) throws SQLException {
 		this.connection = connection;
@@ -23,10 +23,10 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		creaSalaPS = connection.prepareStatement("INSERT INTO SalaRiunione VALUES (?,?,?,?)");
 		aggiornaSalaPS = connection.prepareStatement("UPDATE SalaRiunione SET CodSala = ? Capienza = ?, Indirizzo = ?, Piano = ? WHERE CodSala = ?");
 		eliminaSalaPS = connection.prepareStatement("DELETE FROM SalaRiunione WHERE CodSala = ?");
-		getSalaByCodPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala = ?");
+		ottieniSalaDaCodSalaPS = connection.prepareStatement("SELECT * FROM SalaRiunione AS sr WHERE sr.CodSala = ?");
 	}
 	
-	@Override //Ok
+	@Override 
 	public ArrayList<SalaRiunione> ottieniSale() throws SQLException {
 		ResultSet risultato = ottieniSalePS.executeQuery();
 		ArrayList<SalaRiunione> sale = new ArrayList<SalaRiunione>();
@@ -40,7 +40,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 		return sale;
 	}
 
-	@Override  //Ok
+	@Override  
 	public boolean creaSala(SalaRiunione sala) throws SQLException {
 		creaSalaPS.setString(1, sala.getCodiceSala());
 		creaSalaPS.setInt(2, sala.getCapienza());
@@ -55,7 +55,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 			return false;
 	}
 
-	@Override
+	@Override  
 	public boolean aggiornaSala(SalaRiunione sala, String nuovoCodSala) throws SQLException {
 		String vecchioCodSala = sala.getCodiceSala();
 		aggiornaSalaPS.setString(5, vecchioCodSala);
@@ -74,7 +74,7 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 			return false;
 	}
 
-	@Override
+	@Override 
 	public boolean eliminaSala(SalaRiunione sala) throws SQLException {
 		eliminaSalaPS.setString(1, sala.getCodiceSala());
 		
@@ -86,12 +86,12 @@ public class SalaRiunioneDAOPSQL implements SalaRiunioneDAO {
 			return false;
 	}
 
-	@Override
+	@Override 
 	public SalaRiunione ottieniSalaDaCodSala(String codSala) throws SQLException {
 		if (codSala != null) {
-			getSalaByCodPS.setString(1, codSala);
+			ottieniSalaDaCodSalaPS.setString(1, codSala);
 		
-		ResultSet risultato = getSalaByCodPS.executeQuery();
+		ResultSet risultato = ottieniSalaDaCodSalaPS.executeQuery();
 		
 		risultato.next();
 		SalaRiunione salaTemp = new SalaRiunione(risultato.getString("CodSala"),risultato.getInt("Capienza"),risultato.getString("Indirizzo"),risultato.getInt("Piano"));

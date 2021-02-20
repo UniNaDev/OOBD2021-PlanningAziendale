@@ -14,9 +14,9 @@ import entita.Skill;
 public interface SkillDAO {
 	public ArrayList<Skill> ottieniSkill() throws SQLException;
 	
-	public boolean insertSkill(Skill skill) throws SQLException;
+	public boolean creaNuovaSkill(Skill skill) throws SQLException;
 	
-	public boolean insertSkillDipendente(Skill skill, Dipendente dip) throws SQLException;
+	public boolean inserisciSkillDipendente(Skill skill, Dipendente dip) throws SQLException;
 	
 	public ArrayList<Skill> ottieniSkillDipendente(String cfDipendente) throws SQLException;
 }
