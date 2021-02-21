@@ -1040,6 +1040,7 @@ public class GestioneProgettiDipendente extends JFrame {
 							"Creazione Riuscita",
 							JOptionPane.INFORMATION_MESSAGE);
 					aggiornaTabella(controller);
+					impostaSorterTabellaProgetti();
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(null,
 							e.getMessage()
@@ -1088,6 +1089,7 @@ public class GestioneProgettiDipendente extends JFrame {
 				controller.aggiornaAmbitiProgetto(progettoSelezionato);
 				JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
 				aggiornaTabella(controller);
+				impostaSorterTabellaProgetti();
 			} catch (SQLException e) {
 				// TODO: aggiungi altre eccezioni
 				JOptionPane.showMessageDialog(null,
@@ -1118,6 +1120,7 @@ public class GestioneProgettiDipendente extends JFrame {
 			JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo", "Eliminazione Riuscita",
 					JOptionPane.INFORMATION_MESSAGE);
 			aggiornaTabella(controller);
+			impostaSorterTabellaProgetti();
 			pulisciCampi();
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,

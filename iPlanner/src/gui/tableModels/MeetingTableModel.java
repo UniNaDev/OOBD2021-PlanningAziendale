@@ -83,8 +83,7 @@ public class MeetingTableModel extends AbstractTableModel {
 		return meetingTabella.get(rowIndex);
 	}
 	
-	//Per sorting corretto
-	public Class getColumnClass(int column) {
+	public Class<?> getColumnClass(int column) {
         switch (column) {
             case 4:
             	return SalaRiunione.class;
