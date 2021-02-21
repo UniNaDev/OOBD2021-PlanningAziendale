@@ -1153,6 +1153,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 					"Creazione Fallita",
 					"La data inserita non esiste.", false);
 			errore.setVisible(true);
+		} finally {
+			inizializzaModelloTabellaDipendenti(controller);
 		}
 	}
 

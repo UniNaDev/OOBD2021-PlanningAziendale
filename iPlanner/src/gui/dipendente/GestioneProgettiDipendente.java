@@ -375,7 +375,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		pulisciCampiButton.setMargin(new Insets(2, 20, 2, 20));
 		pulisciCampiButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent e) 
+			public void mouseEntered(MouseEvent e)
 			{
 				pulisciCampiButton.setBackground(Color.LIGHT_GRAY);
 			}
@@ -478,8 +478,10 @@ public class GestioneProgettiDipendente extends JFrame {
 						JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.\nDare un nome al progetto,\n selezionare una tipologia e\n assegnargli almeno un ambito.",
 								"Salvataggio Fallito",
 								JOptionPane.ERROR_MESSAGE);
-					else
+					else if (progettoSelezionato != null)
 						aggiornaProgetto(controller);
+					else
+						JOptionPane.showMessageDialog(null, "Selezionare prima un progetto.", "Salvataggio Fallito", JOptionPane.INFORMATION_MESSAGE);
 				}
 		});
 		confermaModificheButton.addMouseListener(new MouseAdapter() {
@@ -1094,7 +1096,7 @@ public class GestioneProgettiDipendente extends JFrame {
 						+ "2)La descrizione del progetto non superi i 500 caratteri.", false);
 				if (nomeProgetto.length() > 100)
 					nomeProgettoLabel.setForeground(Color.RED);
-				if (descrizioneProgetto.length() > 500)
+				if (descrizioneProgetto != null && descrizioneProgetto.length() > 500)
 					descrizioneProgettoLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
@@ -1171,7 +1173,7 @@ public class GestioneProgettiDipendente extends JFrame {
 						+ "2)La descrizione del progetto non superi i 500 caratteri.", false);
 				if (nomeProgetto.length() > 100)
 					nomeProgettoLabel.setForeground(Color.RED);
-				if (descrizioneProgetto.length() > 500)
+				if (descrizioneProgetto != null && descrizioneProgetto.length() > 500)
 					descrizioneProgettoLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
@@ -1196,6 +1198,9 @@ public class GestioneProgettiDipendente extends JFrame {
 			}
 			errore.setVisible(true);
 		}
+		finally {
+			inizializzaTabellaProgetti(controller);
+		}
 	}
 	
 	private void rimuoviProgetto(ControllerProgetto controller) {
@@ -1215,7 +1220,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		nomeProgetto = nomeProgettoTextField.getText();
 		
 		if (!descrizioneProgettoTextArea.getText().isBlank())
-			descrizioneProgetto = descrizioneProgettoTextArea.getText();	
+			descrizioneProgetto = descrizioneProgettoTextArea.getText();
 		
 		if (annoScadenzaComboBox.getSelectedItem() != null && meseScadenzaComboBox.getSelectedItem() != null && giornoScadenzaComboBox.getSelectedItem() != null)
 			dataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);

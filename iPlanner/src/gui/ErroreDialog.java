@@ -40,6 +40,9 @@ public class ErroreDialog extends JDialog {
 		generaGUI(eccezione, titolo, messaggio, fatale);
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ErroreDialog(Exception eccezione, boolean fatale) {
 	    String messaggio = "Si è verificato un errore imprevisto. Si prega di riavviare l'applicazione.";
 	    String titolo = "Errore Fatale";
@@ -133,36 +136,35 @@ public class ErroreDialog extends JDialog {
 		});
 		mostraDettagliLabel.setFont(new Font("Consolas", Font.BOLD, 11));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(25)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE))
-							.addGap(31))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(messaggioTextArea, 0, 0, Short.MAX_VALUE)
 							.addGap(31))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(mostraDettagliLabel, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())))
+							.addContainerGap())
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane))
+							.addGap(31))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(messaggioTextArea, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+					.addComponent(messaggioTextArea, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
 					.addGap(18)
 					.addComponent(mostraDettagliLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 					.addGap(11)
-					.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-					.addGap(12))
+					.addComponent(okButton)
+					.addGap(7))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

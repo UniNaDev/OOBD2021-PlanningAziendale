@@ -116,7 +116,7 @@ public class AutenticazioneSegreteria extends JFrame {
 		});
 		annullaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		annullaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		annullaButton.setBounds(10, 101, 75, 23);
+		annullaButton.setBounds(10, 101, 89, 23);
 		contentPane.add(annullaButton);
 	}
 }
