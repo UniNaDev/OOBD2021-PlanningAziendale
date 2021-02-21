@@ -45,8 +45,11 @@ public class MeetingListRenderer implements ListCellRenderer<Meeting> {
         else
         	textArea.setBackground(list.getBackground());
         
-        if (meeting.getDataInizio().isBefore(LocalDate.now()))
-        	textArea.setForeground(Color.RED);
+        if (meeting.isPassato())
+        	textArea.setForeground(Color.GRAY);
+        else
+        	textArea.setForeground(Color.BLACK);
+        
         return panel;
 	}
 }
