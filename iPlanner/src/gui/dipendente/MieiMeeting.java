@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import entita.Meeting;
+import gui.ErroreDialog;
 import gui.cellRenderers.MeetingListRenderer;
 import gui.customUI.CustomScrollBarUI;
 
@@ -229,10 +230,8 @@ public class MieiMeeting extends JFrame {
 			modelloListaMeeting.addAll(meetings);
 			meetingList.setModel(modelloListaMeeting);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -244,8 +243,7 @@ public class MieiMeeting extends JFrame {
 	private void impostaInfoMeetingSelezionato() {
 		meetingSelezionato = meetingList.getSelectedValue();
 
-		progettoDiscussoLabel.setText("<html><center>"
-				+ meetingSelezionato.getProgettoDiscusso().getNomeProgetto() + "</html></center>");
+		progettoDiscussoLabel.setText("<html><center>" + meetingSelezionato.getProgettoDiscusso().getNomeProgetto() + "</html></center>");
 
 		modalitàLabel.setText("Modalità: " + meetingSelezionato.getModalita());
 
@@ -256,8 +254,7 @@ public class MieiMeeting extends JFrame {
 
 		DateTimeFormatter formatTime = DateTimeFormat.forPattern("HH:mm");
 		orarioFineLabel.setText("Orario Fine: " + meetingSelezionato.getOraFine().toString(formatTime));
-		orarioInizioLabel
-				.setText("Orario Inizio: " + meetingSelezionato.getOraInizio().toString(formatTime));
+		orarioInizioLabel.setText("Orario Inizio: " + meetingSelezionato.getOraInizio().toString(formatTime));
 
 		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 		dataFineLabel.setText("Data Fine: " + meetingSelezionato.getDataFine().toString(formatDate));

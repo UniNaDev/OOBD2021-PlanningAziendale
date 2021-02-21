@@ -150,7 +150,4 @@ public class Meeting {
 		else
 			return false;
 	}
-
-
-	
 }
