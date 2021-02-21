@@ -558,6 +558,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		resetFiltri.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				cercaTextField.setText("");
 				filtroAmbitiComboBox.setSelectedItem(null);
 				filtroTipologieComboBox.setSelectedItem(null);
 				filtroTerminatoComboBox.setSelectedItem(null);
