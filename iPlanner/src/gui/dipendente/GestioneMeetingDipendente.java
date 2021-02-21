@@ -649,6 +649,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		
 		modelloTabellaMeeting = new MeetingTableModel();
 		meetingTable = new JTable(modelloTabellaMeeting);
+		inizializzaTabellaMeeting(controller);
 		meetingTable.setFont(new Font("Consolas", Font.PLAIN, 11));
 		meetingTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		meetingTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -656,16 +657,11 @@ public class GestioneMeetingDipendente extends JFrame {
 		meetingTable.setSelectionBackground(Color.LIGHT_GRAY);
 		meetingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		meetingTable.getTableHeader().setReorderingAllowed(false);
-		inizializzaTabellaMeeting(controller);
-		impostaModelloColonneMeeting();
-		impostaCellRenderTabellaMeeting();
-		impostaSorterTabellaMeeting();
+		impostaProprietàTabellaMeeting();
 		meetingTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				//Viene utilizzato questo metodo per permettere l'aggiornamento della lista degli invitati al meeting
-				//in seguito a modifiche dei partecipanti ad esso
 				inizializzaTabellaMeeting(controller);
 				impostaInfoMeeting(controller);
 				checkOrganizzatore(controller);
@@ -877,11 +873,10 @@ public class GestioneMeetingDipendente extends JFrame {
 		infoPanel.add(infoPanel2);
 	}
 
+
 	private void impostaInfoMeeting(ControllerMeeting controller) {
-		
-		int rigaSelezionata = meetingTable.getSelectedRow();
-		rigaSelezionata = meetingTable.convertColumnIndexToModel(rigaSelezionata);
-		meetingSelezionato = modelloTabellaMeeting.getSelected(rigaSelezionata);
+		int rigaSelezionata=meetingTable.convertRowIndexToModel(meetingTable.getSelectedRow());
+		meetingSelezionato= modelloTabellaMeeting.getSelected(rigaSelezionata);
 
 		LocalDate dataInizio = formatDate.parseLocalDate(meetingSelezionato.getDataInizio().toString(formatDate));
 		dataInizioAnnoComboBox.setSelectedItem(dataInizio.getYear());
@@ -1151,6 +1146,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				controller.inserisciOrganizzatore();
 				JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
 				aggiornaTabella(controller);
+				impostaSorterTabellaMeeting();
 				svuotaCampiMeeting();
 			} catch (SQLException e) {
 				//TODO: verificare altre possibili eccezioni
@@ -1213,6 +1209,7 @@ public class GestioneMeetingDipendente extends JFrame {
 			JOptionPane.showMessageDialog(null, "Meeting Modificato Correttamente");
 			svuotaCampiMeeting();
 			aggiornaTabella(controller);
+			impostaSorterTabellaMeeting();
 		} catch(IllegalFieldValueException ifve) {
 			JOptionPane.showMessageDialog(null, "Data inserita non valida.\nInserire una data esistente.",
 					"Errore Data Non Valida", JOptionPane.ERROR_MESSAGE);
@@ -1291,6 +1288,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
 				JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
 				aggiornaTabella(controller);
+				impostaSorterTabellaMeeting();
 				svuotaCampiMeeting();
 			} catch(SQLException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage()
@@ -1341,6 +1339,12 @@ public class GestioneMeetingDipendente extends JFrame {
 		filtroMeetingTelematicoRadioButton.setSelected(false);
 		filtroSaleComboBox.setSelectedItem(null);
 		filtroPiattaformaComboBox.setSelectedItem(null);
+	}
+	
+	private void impostaProprietàTabellaMeeting() {
+		impostaCellRenderTabellaMeeting();
+		impostaModelloColonneMeeting();
+		impostaSorterTabellaMeeting();
 	}
 	
 	private void impostaModelloColonneMeeting() {
