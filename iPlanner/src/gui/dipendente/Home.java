@@ -77,7 +77,6 @@ public class Home extends JFrame {
 	private DefaultListModel modelloListaMeeting;
 	private JList<Progetto> progettiList;
 	private DefaultListModel modelloListaProgetti;
-	private JButton aggiornaButton;
 
 	public Home(ControllerGestioneProfilo controller, Dipendente dipendente) {
 		setMinimumSize(new Dimension(1000, 700));
@@ -229,6 +228,16 @@ public class Home extends JFrame {
 		timer.start();
 
 		meetingLabel = new JLabel("Meeting");
+		meetingLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				inizializzaListaMeeting(controller);
+			}
+		});
+		meetingLabel.setToolTipText("Aggiorna lista");
+		meetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		meetingLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meetingLabel.setIcon(new ImageIcon(Home.class.getResource("/icone/refresh.png")));
 		meetingLabel.setForeground(Color.DARK_GRAY);
 		meetingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		meetingScrollPanel.setColumnHeaderView(meetingLabel);
@@ -245,7 +254,16 @@ public class Home extends JFrame {
 		meetingScrollPanel.setViewportView(meetingList);
 
 		progettiLabel = new JLabel("Progetti");
-		progettiLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		progettiLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				inizializzaListaProgetti(controller);
+			}
+		});
+		progettiLabel.setToolTipText("Aggiorna lista");
+		progettiLabel.setIcon(new ImageIcon(Home.class.getResource("/icone/refresh.png")));
+		progettiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		progettiLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		progettiLabel.setForeground(Color.DARK_GRAY);
 		progettiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		progettiScrollPanel.setColumnHeaderView(progettiLabel);
@@ -260,29 +278,6 @@ public class Home extends JFrame {
 		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		inizializzaListaProgetti(controller);
 		progettiScrollPanel.setViewportView(progettiList);
-		
-		aggiornaButton = new JButton("Aggiorna");
-		aggiornaButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				inizializzaListaMeeting(controller);
-				inizializzaListaProgetti(controller);
-			}
-		});
-		aggiornaButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				aggiornaButton.setBackground(Color.LIGHT_GRAY);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				aggiornaButton.setBackground(Color.WHITE);
-			}
-
-		});
-		aggiornaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		aggiornaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		aggiornaButton.setBackground(Color.WHITE);
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -311,10 +306,7 @@ public class Home extends JFrame {
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
 								.addComponent(oraAttualeLabel)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 1620, Short.MAX_VALUE)
-							.addComponent(aggiornaButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -345,9 +337,7 @@ public class Home extends JFrame {
 						.addComponent(progettiScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
 						.addComponent(meetingScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
 					.addGap(32)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-						.addComponent(aggiornaButton, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+					.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
 

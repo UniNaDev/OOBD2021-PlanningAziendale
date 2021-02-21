@@ -502,12 +502,12 @@ public class MioAccount extends JFrame {
 	confermaButton.addMouseListener(new MouseAdapter() {
 	    @Override
 	    public void mouseEntered(MouseEvent e) {
-		confermaButton.setBackground(Color.LIGHT_GRAY);
+	    	confermaButton.setBackground(Color.LIGHT_GRAY);
 	    }
 
 	    @Override
 	    public void mouseExited(MouseEvent e) {
-		confermaButton.setBackground(Color.WHITE);
+	    	confermaButton.setBackground(Color.WHITE);
 	    }
 	});
 	confermaButton.addActionListener(new ActionListener() {
@@ -520,16 +520,16 @@ public class MioAccount extends JFrame {
 		else if (!lunghezzaTelefonoValida(telefonoFissoTextField.getText())) {
 		    JOptionPane.showMessageDialog(null,
 			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
-			    "Numero di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
+			    "Salvataggio Fallito", JOptionPane.ERROR_MESSAGE);
 		    telefonoFissoLabel.setForeground(Color.RED);
 		} else if (!lunghezzaTelefonoValida(cellulareTextField.getText())) {
 		    JOptionPane.showMessageDialog(null,
 			    "Numero di telefono non valido.\nVerificare che sia composto da 10 cifre\no che non contenga lettere.",
-			    "Numeto di Telefono Non Valido", JOptionPane.ERROR_MESSAGE);
+			    "Salvataggio Fallito", JOptionPane.ERROR_MESSAGE);
 		    cellulareLabel.setForeground(Color.RED);
 		} else {
 		    JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
-			    "Errore Campi Obbligatori Vuoti", JOptionPane.ERROR_MESSAGE);
+			    "Salvataggio Fallito", JOptionPane.ERROR_MESSAGE);
 		    campiObbligatoriRossi();
 		}
 	  }
