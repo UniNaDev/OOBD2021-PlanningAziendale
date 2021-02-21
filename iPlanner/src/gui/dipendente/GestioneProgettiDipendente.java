@@ -1,3 +1,10 @@
+/*Finestra per la gestione dei progetti del dipendente.
+Qui può creare nuovi progetti, eliminarli o modificarli,
+settandoli come terminati o meno.
+Da qui inoltre può passare alla finestra per la gestione dei singoli partecipanti
+al progetto selezionato.
+**********************************************************************************/
+
 package gui.dipendente;
 
 import java.awt.Color;
@@ -51,7 +58,6 @@ import org.joda.time.format.DateTimeFormatter;
 import controller.dipendente.ControllerProgetto;
 import entita.AmbitoProgetto;
 import entita.Dipendente;
-import entita.Meeting;
 import entita.Progetto;
 import gui.ErroreDialog;
 import gui.cellRenderers.MeetingListRenderer;

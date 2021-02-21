@@ -125,10 +125,9 @@ public class MioAccount extends JFrame {
 	addWindowListener(new WindowAdapter() {
 	    public void windowClosing(WindowEvent evt) {
 		if (modificheEffettuate) {
-		    int risposta = JOptionPane.showConfirmDialog(null,
-			    "Sei sicuro di uscire? Le modifiche non verranno salvate.");
+		    int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di uscire? Le modifiche non verranno salvate.", "Salvataggio Modifiche", JOptionPane.YES_NO_CANCEL_OPTION);
 		    if (risposta == JOptionPane.YES_OPTION) {
-			controller.chiudiGUIMioAccount();
+		    	controller.chiudiGUIMioAccount();
 		    } else if (risposta == JOptionPane.NO_OPTION || risposta == JOptionPane.CANCEL_OPTION) {
 		    	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		    }
@@ -588,7 +587,7 @@ public class MioAccount extends JFrame {
 			
 		    controller.aggiornaDipendente(dipendente);
 		    if (modificheEffettuate)
-		    	JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo.");
+		    	JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo.", "Salvataggio Riuscito", JOptionPane.INFORMATION_MESSAGE);
 		    controller.chiudiGUIMioAccount();
 		    controller.tornaAHome();
 		} catch (SQLException e1) {

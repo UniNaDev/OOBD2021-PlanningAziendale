@@ -41,7 +41,7 @@ public class ErroreDialog extends JDialog {
 	}
 	
 	public ErroreDialog(Exception eccezione, boolean fatale) {
-	    String messaggio = "Verificare che il programma sia aggiornato altrimenti contattare gli sviluppatori (preferibilmente inviando i dettagli dell'errore).";
+	    String messaggio = "Si è verificato un errore imprevisto. Si prega di riavviare l'applicazione.";
 	    String titolo = "Errore Fatale";
 	    generaGUI(eccezione, titolo, messaggio, fatale);
 	}
@@ -74,10 +74,10 @@ public class ErroreDialog extends JDialog {
 				comportamentoOkButton(fatale);
 			}
 		});
-		setBounds(100, 100, 555, 273);
+		setBounds(100, 100, 700, 366);
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
-		setMinimumSize(new Dimension(555, 273));
+		setMinimumSize(new Dimension(700, 366));
 		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -91,7 +91,7 @@ public class ErroreDialog extends JDialog {
 		JTextArea messaggioTextArea = new JTextArea();
 		messaggioTextArea.setEditable(false);
 		messaggioTextArea.setLineWrap(true);
-		messaggioTextArea.setText(titolo + "\n\n" + messaggio);
+		messaggioTextArea.setText(titolo + "\n\n" + messaggio + "\n\nSe l'errore non si risolve verificare che il programma sia aggiornato oppure contattare\ngli sviluppatori (preferibilmente inviando i dettagli dell'errore).");
 		messaggioTextArea.setFont(new Font("Consolas", Font.PLAIN, 13));
 		
 		JButton okButton = new JButton("Ok");

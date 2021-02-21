@@ -1042,8 +1042,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 							|| passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
 						passwordLabel.setForeground(Color.RED);
 						confermaPasswordLabel.setForeground(Color.RED);
-						break;
 					}
+					break;
 				default:
 					errore = new ErroreDialog(e, true);
 				}
@@ -1054,8 +1054,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 			errore.setVisible(true);
 		}
 	}
+	
 	private void salvaModificheDipendente(ControllerDipendentiSegreteria controller, Dipendente dipendenteModificato) {
-
 		try{
 			ricavaInfoDipendente(controller);
 			dipendenteModificato.setNome(nome);
@@ -1141,8 +1141,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 							|| passwordField.getText().isBlank() || confermaPasswordField.getText().isBlank()) {
 						passwordLabel.setForeground(Color.RED);
 						confermaPasswordLabel.setForeground(Color.RED);
-						break;
 					}
+					break;
 				default:
 					errore = new ErroreDialog(e, true);
 				}
