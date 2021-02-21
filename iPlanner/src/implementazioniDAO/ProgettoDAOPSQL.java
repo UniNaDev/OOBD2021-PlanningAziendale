@@ -177,13 +177,17 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		ambitoDAO = new AmbitoProgettoDAOPSQL(connection);
 		
 		while(risultato.next()) {
+			LocalDate dataTerminazione = null;
+			if (risultato.getDate("DataTerminazione") != null)
+				dataTerminazione = new LocalDate(risultato.getDate("DataTerminazione"));
+			
 			Progetto progettoTemp = new Progetto(risultato.getInt("CodProgetto"),
 					risultato.getString("NomeProgetto"),
 					risultato.getString("TipoProgetto"),
 					risultato.getString("DescrizioneProgetto"),
 					new LocalDate(risultato.getDate("DataCreazione")),
-					new LocalDate(risultato.getDate("DataScadenza"))
-					);
+					new LocalDate(risultato.getDate("DataScadenza")),
+					dataTerminazione);
 			
 			if(risultato.getDate("DataTerminazione") != null){
 				progettoTemp.setDataTerminazione(new LocalDate(risultato.getDate("DataTerminazione")));

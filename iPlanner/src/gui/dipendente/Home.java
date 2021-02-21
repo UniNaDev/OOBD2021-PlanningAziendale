@@ -29,6 +29,7 @@ import java.awt.Toolkit;
 import javax.swing.JLabel;
 import java.awt.Frame;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 
 import org.joda.time.LocalDate;
@@ -42,7 +43,6 @@ import entita.Meeting;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 
 import java.awt.Cursor;
@@ -55,8 +55,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
 
 public class Home extends JFrame {
 	private JPanel contentPane;
@@ -79,6 +77,7 @@ public class Home extends JFrame {
 	private DefaultListModel modelloListaMeeting;
 	private JList<Progetto> progettiList;
 	private DefaultListModel modelloListaProgetti;
+	private JButton aggiornaButton;
 
 	public Home(ControllerGestioneProfilo controller, Dipendente dipendente) {
 		setMinimumSize(new Dimension(1000, 700));
@@ -161,7 +160,26 @@ public class Home extends JFrame {
 		});
 
 		logoutButton = new JButton("Esci");
+		logoutButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.logout();
+			}
+		});
+		logoutButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				logoutButton.setBackground(Color.LIGHT_GRAY);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				logoutButton.setBackground(Color.WHITE);
+			}
+
+		});
+		logoutButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		logoutButton.setBackground(Color.WHITE);
+		logoutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		progettiScrollPanel = new JScrollPane();
 		progettiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
@@ -190,8 +208,7 @@ public class Home extends JFrame {
 		int giornoAttualeInt = dataAttuale.getDayOfMonth();
 		String meseAttuale = dataAttuale.monthOfYear().getAsText();
 		int annoAttuale = dataAttuale.getYear();
-		String dataInStringa = giornoAttuale + " " + String.valueOf(giornoAttualeInt) + " " + meseAttuale + " "
-				+ String.valueOf(annoAttuale);
+		String dataInStringa = giornoAttuale + " " + String.valueOf(giornoAttualeInt) + " " + meseAttuale + " " + String.valueOf(annoAttuale);
 
 		dataAttualeLabel = new JLabel(String.valueOf(dataInStringa));
 		dataAttualeLabel.setForeground(Color.BLACK);
@@ -238,87 +255,118 @@ public class Home extends JFrame {
 		progettoCellRenderer = new ProgettoListRenderer();
 		progettiList.setCellRenderer(progettoCellRenderer);
 		progettiList.setSelectionBackground(Color.WHITE);
+		progettiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		progettiList.setFixedCellHeight(80);
 		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
 		inizializzaListaProgetti(controller);
 		progettiScrollPanel.setViewportView(progettiList);
+		
+		aggiornaButton = new JButton("Aggiorna");
+		aggiornaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				inizializzaListaMeeting(controller);
+				inizializzaListaProgetti(controller);
+			}
+		});
+		aggiornaButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				aggiornaButton.setBackground(Color.LIGHT_GRAY);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				aggiornaButton.setBackground(Color.WHITE);
+			}
+
+		});
+		aggiornaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		aggiornaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		aggiornaButton.setBackground(Color.WHITE);
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-								.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
-								.addGap(210)
-								.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE))
-						.addComponent(oraAttualeLabel, Alignment.TRAILING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-										.addGroup(gl_contentPane.createSequentialGroup().addComponent(iconaEmailLabel)
-												.addGap(18).addComponent(emailUtenteLabel))
-										.addComponent(nomeUtenteLabel))
-								.addPreferredGap(ComponentPlacement.RELATED, 1042, Short.MAX_VALUE)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addComponent(dataAttualeLabel)
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 142,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 135,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 144,
-														GroupLayout.PREFERRED_SIZE))))
-						.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false)
-										.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 32,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 32,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 32,
-												GroupLayout.PREFERRED_SIZE))
-								.addGap(18).addComponent(dataAttualeLabel))
-						.addGroup(
-								gl_contentPane.createSequentialGroup().addContainerGap().addComponent(nomeUtenteLabel)))
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-						.createSequentialGroup().addGap(22)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(iconaEmailLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(emailUtenteLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)))
-						.addGroup(gl_contentPane.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(progettiScrollPanel, GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
+							.addGap(210)
+							.addComponent(meetingScrollPanel, GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(iconaEmailLabel)
+									.addGap(18)
+									.addComponent(emailUtenteLabel))
+								.addComponent(nomeUtenteLabel))
+							.addPreferredGap(ComponentPlacement.RELATED, 1042, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(dataAttualeLabel)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
 								.addComponent(oraAttualeLabel)))
-				.addGap(55)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(progettiScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 766,
-								Short.MAX_VALUE)
-						.addComponent(meetingScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 766,
-								Short.MAX_VALUE))
-				.addGap(32).addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap()));
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 1620, Short.MAX_VALUE)
+							.addComponent(aggiornaButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false)
+								.addComponent(mioAccountButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(mieiProgettiButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(mieiMeetingButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(dataAttualeLabel))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(nomeUtenteLabel)))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(22)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(iconaEmailLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(emailUtenteLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(oraAttualeLabel)))
+					.addGap(55)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(progettiScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
+						.addComponent(meetingScrollPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
+					.addGap(32)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+						.addComponent(aggiornaButton, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
 
 		contentPane.setLayout(gl_contentPane);
 	}
 
 	private void inizializzaListaMeeting(ControllerGestioneProfilo controller) {
+		modelloListaMeeting.clear();
 		try {
 			modelloListaMeeting.addAll(controller.ottieniMeetingDipendente());
 			meetingList.setModel(modelloListaMeeting);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 
 	private void inizializzaListaProgetti(ControllerGestioneProfilo controller) {
+		modelloListaProgetti.clear();
 		try {
 			ArrayList<Progetto> progetti = new ArrayList<Progetto>();
 			for (CollaborazioneProgetto collaborazione : controller.ottieniProgettiDipendente())
@@ -326,10 +374,8 @@ public class Home extends JFrame {
 			modelloListaProgetti.addAll(progetti);
 			progettiList.setModel(modelloListaProgetti);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 
@@ -342,5 +388,4 @@ public class Home extends JFrame {
 		meetingCellRenderer = new MeetingListRenderer();
 		meetingList.setCellRenderer(meetingCellRenderer);
 	}
-
 }

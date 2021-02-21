@@ -26,18 +26,6 @@ public class Progetto {
 	private ArrayList<Meeting> meetingsRelativi = new ArrayList<Meeting>();
 	private ArrayList<CollaborazioneProgetto> collaborazioni = new ArrayList<CollaborazioneProgetto>();
 	
-	//TODO: si può eliminare (basta cambiare nel DAO come si comporta rispetto a dataTerminazione)
-	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,
-			LocalDate dataCreazione, LocalDate scadenza) {
-		this.idProgettto = idProgettto;
-		this.nomeProgetto = nomeProgetto;
-		this.tipoProgetto = tipoProgetto;
-		this.descrizioneProgetto = descrizioneProgetto;
-		this.dataCreazione = dataCreazione;
-		this.scadenza = scadenza;
-
-	}
-	
 	public Progetto(int idProgettto, String nomeProgetto, String tipoProgetto, String descrizioneProgetto,
 			LocalDate dataCreazione, LocalDate scadenza,LocalDate dataTerminazione) {
 		this.idProgettto = idProgettto;
@@ -156,5 +144,22 @@ public class Progetto {
 		if (idProgettto != other.idProgettto)
 			return false;
 		return true;
+	}
+	
+	public boolean isScaduto() {
+		if (scadenza != null)
+			if (scadenza.isBefore(LocalDate.now()))
+				return true;
+			else
+				return false;
+		else
+			return false;
+	}
+	
+	public boolean isTerminato() {
+		if (dataTerminazione != null)
+			return true;
+		else
+			return false;
 	}
 }

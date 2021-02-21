@@ -23,6 +23,7 @@ import java.awt.Toolkit;
 import javax.swing.border.MatteBorder;
 
 import controller.ControllerAccesso;
+import gui.ErroreDialog;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -43,6 +44,8 @@ public class Login extends JFrame {
     private JLabel iconaLoginLabel;
     private JLabel iconaEmailLabel;
     private JLabel iconaPasswordLabel;
+    
+    private final String CREDENZIALI_ERRATE = "24000";
 
     public Login(ControllerAccesso controller) {
 		setResizable(false);
@@ -204,10 +207,15 @@ public class Login extends JFrame {
 		    try {
 		    	controller.eseguiLoginDipendente(emailTextField.getText(), passwordField.getText());
 		    } catch (SQLException e1) {
-		    	JOptionPane.showMessageDialog(null, 
-		    			"Credenziali errate.",
-		    			"Login Fallito",
-		    			JOptionPane.ERROR_MESSAGE);
+		    	if (e1.getSQLState().equals(CREDENZIALI_ERRATE))
+			    	JOptionPane.showMessageDialog(null, 
+			    			"Credenziali errate.",
+			    			"Login Fallito",
+			    			JOptionPane.ERROR_MESSAGE);
+		    	else {
+		    		ErroreDialog errore = new ErroreDialog(e1, true);
+		    		errore.setVisible(true);
+		    	}
 		    }
 		}
     }

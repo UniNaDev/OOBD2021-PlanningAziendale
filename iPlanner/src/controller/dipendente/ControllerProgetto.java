@@ -61,7 +61,7 @@ public class ControllerProgetto {
 		gestioneProgettiFrame.setVisible(true);
 		mieiProgettiFrame.setVisible(false);
 	}
-
+	
 	public ArrayList<Progetto> ottieniProgettiDipendente() throws SQLException {
 		ArrayList<CollaborazioneProgetto> collaborazioniDipendente = projDAO.ottieniProgettiDipendente(dipendenteLogged);
 		ArrayList<Progetto> progetti = new ArrayList<Progetto>();
@@ -100,10 +100,6 @@ public class ControllerProgetto {
 	public void inserisciProjectManager(Progetto nuovoProgetto) throws SQLException {
 		projDAO.inserisciProjectManager(dipendenteLogged.getCf(), nuovoProgetto, "Project Manager");
 	}
-//	//
-//	public ArrayList<AmbitoProgetto> ottieniAmbitiProgettoByCod(int codProgetto) throws SQLException {
-//		return ambitoDAO.ottieniAmbitiProgettoDaCodice(codProgetto);
-//	}
 	
 	public void rimuoviProgetto(Progetto progetto) throws SQLException {
 		projDAO.rimuoviProgetto(progetto);

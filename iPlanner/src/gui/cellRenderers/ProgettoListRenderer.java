@@ -7,17 +7,12 @@ import java.awt.Font;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.MatteBorder;
 
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import entita.Meeting;
 import entita.Progetto;
 
 public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
@@ -41,13 +36,18 @@ public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
 	public Component getListCellRendererComponent(JList<? extends Progetto> list, Progetto progetto, int index,
 			boolean isSelected, boolean cellHasFocus) {
 		
-		String infoProgetto ="Nome:"+progetto.getNomeProgetto();
-		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		String infoProgetto ="Nome:" + progetto.getNomeProgetto();
 		
-		infoProgetto += "\nScade:" +progetto.getScadenza().toString(formatDate);
+		DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
+		infoProgetto += "\nScade:" + progetto.getScadenza().toString(formatDate);
+		
+		if (progetto.isScaduto() && !progetto.isTerminato())
+			textArea.setForeground(Color.RED);
+		
+		if (progetto.isTerminato())
+			textArea.setFont(new Font("Consolas", Font.ITALIC, 15));
 		
 		textArea.setText(infoProgetto);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         if (isSelected)
         	textArea.setBackground(list.getSelectionBackground());

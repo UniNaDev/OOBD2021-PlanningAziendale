@@ -26,6 +26,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import javax.swing.JList;
@@ -172,6 +173,7 @@ public class MieiProgetti extends JFrame {
 		progettiList.setSelectedIndex(0);
 		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
+		progettiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		progettiList.setFixedCellHeight(60);
 		modelloListaProgetti=new DefaultListModel<>();
 		impostaCellRendererProgetti();

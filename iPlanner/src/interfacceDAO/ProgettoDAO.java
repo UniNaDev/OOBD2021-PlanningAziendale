@@ -22,7 +22,7 @@ public interface ProgettoDAO {
 	
 	public ArrayList<Meeting> ottieniMeetingRelativiProgetto(int codProgettoSelezionato) throws SQLException;
 	
-	public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente(Dipendente dip) throws SQLException; //OK
+	public ArrayList<CollaborazioneProgetto> ottieniProgettiDipendente(Dipendente dip) throws SQLException;
 	
 	public boolean creaProgetto(Progetto proj) throws SQLException;
 	

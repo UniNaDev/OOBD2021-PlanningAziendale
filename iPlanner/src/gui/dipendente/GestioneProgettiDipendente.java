@@ -1071,10 +1071,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			ricavaInfoProgetto();
 			dataCreazione = progettoSelezionato.getDataCreazione();
 
-			if (dataScadenza != null)
-				progettoSelezionato.setScadenza(dataScadenza);
-			if (dataTerminazione != null)
-				progettoSelezionato.setDataTerminazione(dataTerminazione);
+			progettoSelezionato.setScadenza(dataScadenza);
+			progettoSelezionato.setDataTerminazione(dataTerminazione);
 			progettoSelezionato.setNomeProgetto(nomeProgetto);
 			progettoSelezionato.setDescrizioneProgetto(descrizioneProgetto);
 			progettoSelezionato.setAmbiti(ambiti);
@@ -1131,12 +1129,14 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		if (annoScadenzaComboBox.getSelectedItem() != null && meseScadenzaComboBox.getSelectedItem() != null && giornoScadenzaComboBox.getSelectedItem() != null)
 			dataScadenza = new LocalDate((int)annoScadenzaComboBox.getSelectedItem(), meseScadenzaComboBox.getSelectedIndex()+1 , giornoScadenzaComboBox.getSelectedIndex()+1);
+		else
+			dataScadenza = null;
 		
 		if(!progettoTerminatoCheckBox.isSelected())
 			dataTerminazione = null;
-		
-		if(annoTerminazioneComboBox.getSelectedItem()!=null && meseTerminazioneComboBox.getSelectedItem()!=null && giornoTerminazioneComboBox.getSelectedItem()!=null)
-			dataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
+		else
+			if(annoTerminazioneComboBox.getSelectedItem()!=null && meseTerminazioneComboBox.getSelectedItem()!=null && giornoTerminazioneComboBox.getSelectedItem()!=null)
+				dataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
 		
 		tipologia = tipologiaComboBox.getSelectedItem().toString();
 		

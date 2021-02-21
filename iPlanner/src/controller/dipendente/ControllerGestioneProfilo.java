@@ -65,13 +65,11 @@ public class ControllerGestioneProfilo {
     }
 
     public void apriGUIMieiProgetti() {
-    	ControllerProgetto controller = new ControllerProgetto(luogoDAO, dipDAO, projDAO, meetDAO, ambitoDAO, skillDAO,
-    	dipendenteLogged);
+    	ControllerProgetto controller = new ControllerProgetto(luogoDAO, dipDAO, projDAO, meetDAO, ambitoDAO, skillDAO, dipendenteLogged);
     }
 
     public void apriGUIMieiMeeting() {
-    	ControllerMeeting controller = new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO,
-		dipendenteLogged);
+    	ControllerMeeting controller = new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendenteLogged);
     }
 
     public void tornaAHome() {

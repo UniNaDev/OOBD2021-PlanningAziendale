@@ -58,8 +58,6 @@ public class ControllerAccesso {
     }
 
     public void eseguiLoginDipendente(String email, String password) throws SQLException {
-		//Esegue il login del dipendente,se ha successo viene restituito il dipendente che ha fatto il login
-    	//Altrimenti viene lanciata un'eccezione
     	dipendenteLogged = dipDAO.eseguiLoginDipendente(email, password);
 		loginFrame.setVisible(false);
 		ControllerGestioneProfilo controller = new ControllerGestioneProfilo(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, dipendenteLogged);
