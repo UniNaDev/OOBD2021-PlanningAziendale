@@ -314,6 +314,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		ambitoProgettoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		ambitiList = new JList<AmbitoProgetto>();
+		ambitiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		modelloListaAmbiti = new DefaultListModel<AmbitoProgetto>();		
 		inizializzaListaAmbiti(controller);
 		ambitiList.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -548,6 +549,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		comandiPanel.add(filtriPanel, BorderLayout.SOUTH);
 		
 		resetFiltri = new JLabel("");
+		resetFiltri.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		resetFiltri.setHorizontalAlignment(SwingConstants.CENTER);
 		resetFiltri.setIcon(new ImageIcon(GestioneProgettiDipendente.class.getResource("/icone/refresh.png")));
 		resetFiltri.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -1263,6 +1265,10 @@ public class GestioneProgettiDipendente extends JFrame {
 		annoTerminazioneComboBox.setSelectedItem(null);
 		meseTerminazioneComboBox.setSelectedItem(null);
 		giornoTerminazioneComboBox.setSelectedItem(null);
+		annoScadenzaModel.removeAllElements();
+		for (int i = dataAttuale.getYear(); i < dataAttuale.getYear() + 20; i++)
+			annoScadenzaModel.addElement(i);
+		annoScadenzaComboBox.setModel(annoScadenzaModel);
 		giornoScadenzaComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
 		meseScadenzaComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);				
 		annoScadenzaComboBox.setSelectedIndex(1); 

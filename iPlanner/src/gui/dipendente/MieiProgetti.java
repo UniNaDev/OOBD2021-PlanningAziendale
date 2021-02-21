@@ -282,6 +282,7 @@ public class MieiProgetti extends JFrame {
 	private void impostaInfoProgettoSelezionato() {
 		Progetto progettoSelezionato = progettiList.getSelectedValue();
 
+		nomeProgettoLabel.setText(progettoSelezionato.getNomeProgetto());
 		nomeProgettoLabel.setToolTipText(progettoSelezionato.getNomeProgetto());
 
 		String ambiti = "";
