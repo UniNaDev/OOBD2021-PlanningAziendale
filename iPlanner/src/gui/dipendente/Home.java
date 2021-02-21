@@ -93,6 +93,7 @@ public class Home extends JFrame {
 		setContentPane(contentPane);
 		
 		aggiornaButton = new JButton("Aggiorna");
+		aggiornaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		aggiornaButton.setFont(new Font("Consolas", Font.PLAIN, 11));
 		aggiornaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		aggiornaButton.setBackground(Color.WHITE);
@@ -252,8 +253,7 @@ public class Home extends JFrame {
 
 		meetingLabel = new JLabel("Meeting");
 		meetingLabel.setToolTipText("Aggiorna lista");
-		meetingLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		meetingLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		meetingLabel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		meetingLabel.setForeground(Color.DARK_GRAY);
 		meetingLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		meetingScrollPanel.setColumnHeaderView(meetingLabel);
@@ -271,8 +271,7 @@ public class Home extends JFrame {
 
 		progettiLabel = new JLabel("Progetti");
 		progettiLabel.setToolTipText("Aggiorna lista");
-		progettiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		progettiLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		progettiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		progettiLabel.setForeground(Color.DARK_GRAY);
 		progettiLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
 		progettiScrollPanel.setColumnHeaderView(progettiLabel);

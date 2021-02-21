@@ -47,9 +47,9 @@ public class ProgettoListRenderer implements ListCellRenderer<Progetto> {
 			textArea.setForeground(Color.BLACK);
 		
 		if (progetto.isTerminato())
-			textArea.setFont(new Font("Consolas", Font.ITALIC, 15));
+			textArea.setForeground(Color.GRAY);
 		else
-	        textArea.setFont(new Font("Consolas", Font.PLAIN, 15));
+			textArea.setForeground(Color.BLACK);
 		
 		textArea.setText(infoProgetto);
         
