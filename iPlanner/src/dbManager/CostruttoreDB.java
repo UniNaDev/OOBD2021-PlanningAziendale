@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 
+import gui.ErroreDialog;
+
 public class CostruttoreDB {
     private Connection connection;
     
@@ -1100,33 +1102,29 @@ public class CostruttoreDB {
 		try {
 			copyManager = new CopyManager((BaseConnection) connection);
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, 
-					e1.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e1.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e1, true);
+			errore.setVisible(true);
 		}
     	BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(pathCSVLuoghi));
 		} catch (FileNotFoundException e1) {
-			JOptionPane.showMessageDialog(null, 
-					"Impossibile trovare il file Comuni.csv.\nVerificare che il file esista\noppure contattare uno sviluppatore.",
-					"Errore File Non Trovato",
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e1,
+					"File Non Trovato",
+					"Impossibile trovare il file Comuni.csv per l'import.", true);
 		}
     	try {
 			copyManager.copyIn("COPY LuogoNascita (NomeComune,NomeProvincia,CodComune) FROM STDIN WITH (FORMAT CSV, DELIMITER ';')", reader);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, 
-					e.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore Importazione",
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,
+					"Import Fallito",
+					"Impossibile importare i dati dei luoghi nel database.", true);
+			errore.setVisible(true);
 		} catch (SQLException e1) {
-			if (!e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))
-				JOptionPane.showMessageDialog(null, 
-					e1.getMessage() + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e1.getSQLState(),
-					JOptionPane.ERROR_MESSAGE);
+			if (!e1.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
+				ErroreDialog errore = new ErroreDialog(e1, true);
+				errore.setVisible(true);
+			}
 		}
     }
 }

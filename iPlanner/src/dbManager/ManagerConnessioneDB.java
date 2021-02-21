@@ -14,6 +14,8 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
+import gui.ErroreDialog;
+
 
 public class ManagerConnessioneDB {
 	private static ManagerConnessioneDB instance;
@@ -21,9 +23,11 @@ public class ManagerConnessioneDB {
 	private Connection connection = null;
 	
 	private final String username = "postgres";
-	private final String password = "michele";
-	private final String nomeDB = "MikeDB";
+	private final String password = "160995";
+	private final String nomeDB = "iplanner";
 	private final String url = "jdbc:postgresql://localhost:5432/";
+	
+	private final String DB_ESISTENTE = "42P04";
 	
 	private ManagerConnessioneDB() throws SQLException {
 		try {
@@ -32,10 +36,8 @@ public class ManagerConnessioneDB {
 			creaDatabase(nomeDB);
 			connection = DriverManager.getConnection(url+nomeDB,username,password);
 		} catch(ClassNotFoundException ex) {
-        	JOptionPane.showMessageDialog(null,
-        			"Impossibile stabilire una connessione al database a causa dei driver.\nContattare uno sviluppatore.",
-        			"Errore Connessione Database",
-        			JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(ex, "Connessione Fallita", "Impossibile stabilire una connessione al database.", true);
+			errore.setVisible(true);
         }
 	}
 
@@ -60,12 +62,10 @@ public class ManagerConnessioneDB {
 	        statement.close();
     	}
         catch (SQLException e) {
-        	//errori non contemplati (diversi da database già esistente)
-        	if (!e.getSQLState().equals("42P04"))
-        		JOptionPane.showMessageDialog(null,
-        				e.getMessage() + "\nContattare uno sviluppatore.",
-        				"Errore #" + e.getErrorCode(),
-        				JOptionPane.ERROR_MESSAGE);
+        	if (!e.getSQLState().equals(DB_ESISTENTE)) {
+        		ErroreDialog errore = new ErroreDialog(e, true);
+        		errore.setVisible(true);
+        	}
         }
     }
 }

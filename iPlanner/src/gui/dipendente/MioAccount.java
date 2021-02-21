@@ -528,7 +528,7 @@ public class MioAccount extends JFrame {
 		    cellulareLabel.setForeground(Color.RED);
 		} else {
 		    JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori per l'aggiornamento sono vuoti.",
-			    "Salvataggio Fallito", JOptionPane.ERROR_MESSAGE);
+			    "Salvataggio Fallito", JOptionPane.INFORMATION_MESSAGE);
 		    campiObbligatoriRossi();
 		}
 	  }

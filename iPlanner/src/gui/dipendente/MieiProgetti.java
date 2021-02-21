@@ -13,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 import entita.AmbitoProgetto;
 import entita.Dipendente;
 import entita.Progetto;
+import gui.ErroreDialog;
 import gui.cellRenderers.ProgettoListRenderer;
 import gui.customUI.CustomScrollBarUI;
 
@@ -170,6 +171,7 @@ public class MieiProgetti extends JFrame {
 		});
 		
 		progettiList=new JList<>();
+		progettiList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		progettiList.setSelectedIndex(0);
 		progettiList.setSelectionBackground(Color.LIGHT_GRAY);
 		progettiList.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -267,10 +269,8 @@ public class MieiProgetti extends JFrame {
 			modelloListaProgetti.addAll(controller.ottieniProgettiDipendente());
 		    progettiList.setModel(modelloListaProgetti);
 		} catch (SQLException e) {
-		    JOptionPane.showMessageDialog(null,
-				    e.getMessage()
-					    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-				    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -282,8 +282,6 @@ public class MieiProgetti extends JFrame {
 	private void impostaInfoProgettoSelezionato() {
 		Progetto progettoSelezionato = progettiList.getSelectedValue();
 
-		nomeProgettoLabel
-				.setText("<html><center>" + progettoSelezionato.getNomeProgetto() + "</center></html>");
 		nomeProgettoLabel.setToolTipText(progettoSelezionato.getNomeProgetto());
 
 		String ambiti = "";
@@ -303,14 +301,12 @@ public class MieiProgetti extends JFrame {
 		if (progettoSelezionato.getDataTerminazione() != null) {
 			dataTerminazioneLabel.setText(
 					"Data Terminazione: " + progettoSelezionato.getDataTerminazione().toString(formatDate));
-			dataTerminazioneLabel
-					.setToolTipText(progettoSelezionato.getDataTerminazione().toString(formatDate));
+			dataTerminazioneLabel.setToolTipText(progettoSelezionato.getDataTerminazione().toString(formatDate));
 		} else
 			dataTerminazioneLabel.setText("Non terminato.");
 
 		if (progettoSelezionato.getScadenza() != null) {
-			dataScadenzaLabel
-					.setText("Data Scadenza: " + progettoSelezionato.getScadenza().toString(formatDate));
+			dataScadenzaLabel.setText("Data Scadenza: " + progettoSelezionato.getScadenza().toString(formatDate));
 			dataScadenzaLabel.setToolTipText(progettoSelezionato.getScadenza().toString(formatDate));
 		} else
 			dataScadenzaLabel.setText("Senza scadenza.");
