@@ -36,8 +36,6 @@ public class ProgettoDiscussoListRenderer implements ListCellRenderer<Progetto> 
         textArea.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(textArea, BorderLayout.CENTER);
     }
-	
-	
 
 	@Override
 	public Component getListCellRendererComponent(JList<? extends Progetto> list, Progetto progetto, int index,

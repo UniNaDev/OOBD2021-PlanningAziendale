@@ -404,7 +404,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
 					JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
 				}
-				else {
+				else if(ruoloComboBox.getSelectedItem()!=null && dipendenteTable.getSelectedRow()!=-1){
 					inserisciPartecipanteProgetto(controller);				
 				}	
 			}
@@ -618,7 +618,6 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				impostaInfoDipendenteDaTabella(controller);
 				
 				if(e.getClickCount()==2) {
 					if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
@@ -628,6 +627,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 						inserisciPartecipanteProgetto(controller);
 					}	
 				}	
+				impostaInfoDipendenteDaTabella(controller);
 			}
 		});
 		dipendenteScrollPane.setViewportView(dipendenteTable);
@@ -835,7 +835,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		partecipantiListModel = new DefaultListModel();
 		partecipantiList.setModel(partecipantiListModel);
 		partecipantiListModel.addAll(progettoSelezionato.getCollaborazioni());
-		partecipantiListModel.removeElementAt(partecipantiListModel.getSize()-1);;
+		partecipantiListModel.removeElementAt(0);
 	}
 
 	private void impostaPartecipantiListRenderer() {
@@ -947,7 +947,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	} 
 	
 	private void aggiornaListaPartecipantiDopoInserimento(CollaborazioneProgetto collaborazione) {
-		partecipantiListModel.addElement(collaborazione);
+		partecipantiListModel.add(partecipantiListModel.getSize(),collaborazione);
 	}
 
 	private void eliminaPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
