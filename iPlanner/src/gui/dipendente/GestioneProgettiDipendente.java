@@ -125,6 +125,7 @@ public class GestioneProgettiDipendente extends JFrame {
 	private DefaultComboBoxModel modelloComboBoxFiltroAmbiti;
 	private JComboBox filtroTipologieComboBox;
 	private DefaultComboBoxModel modelloComboBoxFiltroTipologie;
+	private DefaultComboBoxModel annoScadenzaModel;
 	
 	private LocalDate dataAttuale = LocalDate.now();
 	private DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -134,6 +135,11 @@ public class GestioneProgettiDipendente extends JFrame {
 	private LocalDate dataCreazione, dataScadenza, dataTerminazione;
 	private ArrayList<AmbitoProgetto> ambiti = new ArrayList<AmbitoProgetto>();
 	private String tipologia;
+	
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
+	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
+	private final String VIOLAZIONE_DATA_INVALIDA = "22008";
 	
 	private String[] siNoOpzioni = {null, "Si", "No"};
 	
@@ -205,26 +211,19 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettoTerminatoLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
 		progettoTerminatoCheckBox = new JCheckBox("");
+		progettoTerminatoCheckBox.setEnabled(false);
 		progettoTerminatoCheckBox.setFont(new Font("Consolas", Font.PLAIN, 14));
 		progettoTerminatoCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(progettoTerminatoCheckBox.isSelected()){
-					giornoTerminazioneComboBox.setEnabled(true);
-					meseTerminazioneComboBox.setEnabled(true);	
-					annoTerminazioneComboBox.setEnabled(true);
-					
-					giornoTerminazioneComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() -1);
+				if(progettoTerminatoCheckBox.isSelected()){					
+					giornoTerminazioneComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() - 1);
 					meseTerminazioneComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() -1);
-					annoTerminazioneComboBox.setSelectedIndex(0);
+					annoTerminazioneComboBox.setSelectedIndex(dataAttuale.getYear() - 1900);
 				}
 				else {	
 					giornoTerminazioneComboBox.setSelectedItem(null);
 					meseTerminazioneComboBox.setSelectedItem(null);
 					annoTerminazioneComboBox.setSelectedItem(null);
-					
-					giornoTerminazioneComboBox.setEnabled(false);
-					meseTerminazioneComboBox.setEnabled(false);
-					annoTerminazioneComboBox.setEnabled(false);
 				}				
 			}
 		});
@@ -262,11 +261,11 @@ public class GestioneProgettiDipendente extends JFrame {
 		annoScadenzaComboBox.setBackground(Color.WHITE);
 		annoScadenzaComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		annoScadenzaComboBox.setBounds(358, 235, 62, 22);
-		DefaultComboBoxModel annoModel = new DefaultComboBoxModel();
-		annoScadenzaComboBox.setModel(annoModel);
+		annoScadenzaModel = new DefaultComboBoxModel();
+		annoScadenzaComboBox.setModel(annoScadenzaModel);
 		int annoAttuale = LocalDate.now().getYear();
-		for(int i= annoAttuale;i<= annoAttuale + 20; i++)
-			annoModel.addElement(i);
+		for(int i = annoAttuale; i < annoAttuale + 20; i++)
+			annoScadenzaModel.addElement(i);
 		infoPanel2.add(annoScadenzaComboBox);
 		
 		dataTerminazioneLabel = new JLabel("Data Terminazione");
@@ -296,7 +295,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		annoTerminazioneComboBox.setUI(new BasicComboBoxUI());
 		
 		DefaultComboBoxModel annoTerminazioneModel = new DefaultComboBoxModel();
-		for(int i = annoAttuale; i <= annoAttuale + 50; i++)	
+		for(int i = 1900; i <= annoAttuale; i++)	
 			annoTerminazioneModel.addElement(i);
 		annoTerminazioneComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
 		annoTerminazioneComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
@@ -465,7 +464,13 @@ public class GestioneProgettiDipendente extends JFrame {
 		confermaModificheButton.setAlignmentX(0.5f);
 		confermaModificheButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?");
+				nomeProgettoLabel.setForeground(Color.BLACK);
+				descrizioneProgettoLabel.setForeground(Color.BLACK);
+				tipologiaProgettoLabel.setForeground(Color.BLACK);
+				dataTerminazioneLabel.setForeground(Color.BLACK);
+				scadenzaProgettoLabel.setForeground(Color.BLACK);
+				ambitoProgettoLabel.setForeground(Color.BLACK);
+				int conferma = JOptionPane.showConfirmDialog(null, "Vuoi Confermare le modifiche effettuate?", "Conferma Modifiche", JOptionPane.YES_NO_CANCEL_OPTION);
 				
 				if(conferma == JOptionPane.YES_OPTION)
 					if(campiObbligatoriVuoti())
@@ -502,7 +507,13 @@ public class GestioneProgettiDipendente extends JFrame {
 		comandiPanel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		creaNuovoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare un nuovo progetto?");
+				nomeProgettoLabel.setForeground(Color.BLACK);
+				descrizioneProgettoLabel.setForeground(Color.BLACK);
+				tipologiaProgettoLabel.setForeground(Color.BLACK);
+				dataTerminazioneLabel.setForeground(Color.BLACK);
+				scadenzaProgettoLabel.setForeground(Color.BLACK);
+				ambitoProgettoLabel.setForeground(Color.BLACK);
+				int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler creare il progetto?");
 				if (conferma == JOptionPane.YES_OPTION)	
 					if(campiObbligatoriVuoti())
 						JOptionPane.showMessageDialog(null, "Alcuni campi obbligatori sono vuoti.\nDare un nome al progetto,\n selezionare una tipologia e\n assegnargli almeno un ambito.",
@@ -644,11 +655,10 @@ public class GestioneProgettiDipendente extends JFrame {
 		progettiTable.setBackground(Color.WHITE);
 		progettiTable.setSelectionBackground(Color.LIGHT_GRAY);
         impostaProprietàTabella();
-
+		inizializzaTabellaProgetti(controller);
 		progettiTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				inizializzaTabellaProgetti(controller);
 				impostaInfoProgetto();
 				checkProjectManager(controller);
 			}
@@ -886,6 +896,9 @@ public class GestioneProgettiDipendente extends JFrame {
 		panel.setLayout(gl_panel);
 	}
 	
+	//Altri metodi
+	//-------------------------------------------------------
+	
 	private void impostaInfoProgetto() {
 		int rigaSelezionata = progettiTable.getSelectedRow();	
 		rigaSelezionata = progettiTable.convertRowIndexToModel(rigaSelezionata);
@@ -894,21 +907,21 @@ public class GestioneProgettiDipendente extends JFrame {
 		nomeProgettoTextField.setText(progettoSelezionato.getNomeProgetto());
 		descrizioneProgettoTextArea.setText(progettoSelezionato.getDescrizioneProgetto());
 		
+		progettoTerminatoCheckBox.setEnabled(true);
 		if(progettoSelezionato.getDataTerminazione() != null) {
+				progettoTerminatoCheckBox.setSelected(true);
 				annoTerminazioneComboBox.setSelectedItem(progettoSelezionato.getDataTerminazione().getYear());
 				meseTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getMonthOfYear()-1);
 				giornoTerminazioneComboBox.setSelectedIndex(progettoSelezionato.getDataTerminazione().getDayOfMonth()-1);
-				progettoTerminatoCheckBox.setSelected(true);
-				annoTerminazioneComboBox.setEnabled(false);
-				meseTerminazioneComboBox.setEnabled(false);
-				giornoTerminazioneComboBox.setEnabled(false);
 			}
 			else {
+				progettoTerminatoCheckBox.setSelected(false);
 				annoTerminazioneComboBox.setSelectedItem(null);
 				meseTerminazioneComboBox.setSelectedItem(null);
 				giornoTerminazioneComboBox.setSelectedItem(null);
-				progettoTerminatoCheckBox.setSelected(false);
 			}
+		
+		inizializzaAnniScadenza();
 		
 		if (progettoSelezionato.getScadenza() != null) {
 			annoScadenzaComboBox.setSelectedItem(progettoSelezionato.getScadenza().getYear());
@@ -932,7 +945,14 @@ public class GestioneProgettiDipendente extends JFrame {
 		aggiornaListaPartecipanti();
 		aggiornaListaMeetingRelativi();
 	}
-
+	
+	private void inizializzaAnniScadenza() {
+		annoScadenzaModel.removeAllElements();
+		for (int i = progettoSelezionato.getDataCreazione().getYear(); i < dataAttuale.getYear() + 20; i++)
+			annoScadenzaModel.addElement(i);
+		annoScadenzaComboBox.setModel(annoScadenzaModel);
+	}
+	
 	private void aggiornaListaMeetingRelativi() {
 		modelloListaMeetingRelativi.clear();
 		modelloListaMeetingRelativi.addAll(progettoSelezionato.getMeetingsRelativi());
@@ -949,10 +969,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		try {
 			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiDipendente());
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -962,10 +980,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloComboBoxTipologie.addAll(controller.ottieniTipologie());
 			tipologiaComboBox.setModel(modelloComboBoxTipologie);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -974,10 +990,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloListaAmbiti.addAll(controller.ottieniAmbiti());
 			ambitiList.setModel(modelloListaAmbiti);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -994,10 +1008,8 @@ public class GestioneProgettiDipendente extends JFrame {
 				confermaModificheButton.setEnabled(false);
 			}
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1008,7 +1020,7 @@ public class GestioneProgettiDipendente extends JFrame {
 			else if(!nomeProgettoTextField.getText().isBlank())
 				nomeProgettoLabel.setForeground(Color.BLACK);
 			
-			if(tipologiaComboBox.getSelectedItem()== null)
+			if(tipologiaComboBox.getSelectedItem() == null)
 				tipologiaProgettoLabel.setForeground(Color.RED);
 			else if(tipologiaComboBox.getSelectedItem()!= null)
 				tipologiaProgettoLabel.setForeground(Color.BLACK);
@@ -1028,7 +1040,7 @@ public class GestioneProgettiDipendente extends JFrame {
 			ricavaInfoProgetto();
 			dataCreazione = dataAttuale;
 			
-			Progetto nuovoProgetto = new Progetto(-1,nomeProgetto, tipologia, descrizioneProgetto, dataCreazione, dataScadenza, dataTerminazione);
+			Progetto nuovoProgetto = new Progetto(-1, nomeProgetto, tipologia, descrizioneProgetto, dataCreazione, dataScadenza, dataTerminazione);
 			nuovoProgetto.setAmbiti(ambiti);
 			
 			nuovoProgetto = controller.creaProgetto(nuovoProgetto);
@@ -1036,41 +1048,75 @@ public class GestioneProgettiDipendente extends JFrame {
 					controller.inserisciAmbitiProgetto(nuovoProgetto);
 					controller.inserisciProjectManager(nuovoProgetto);
 					
-					JOptionPane.showMessageDialog(null, "Progetto creato con successo",
+					JOptionPane.showMessageDialog(null, 
+							"Progetto creato con successo.",
 							"Creazione Riuscita",
 							JOptionPane.INFORMATION_MESSAGE);
 					aggiornaTabella(controller);
 					impostaSorterTabellaProgetti();
 				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null,
-							e.getMessage()
-									+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+					ErroreDialog errore = new ErroreDialog(e,true);
+					if (e.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))
+						errore = new ErroreDialog(e,
+								"Creazione Fallita",
+								"Impossibile creare il progetto perchè esistono già degli ambiti o un project manager ad esso associati.", false);
+					errore.setVisible(true);
+					ambitoProgettoLabel.setForeground(Color.RED);
 					try {
 						controller.rimuoviProgetto(nuovoProgetto);
 					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null,
-								e1.getMessage()
-										+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-								"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
+						ErroreDialog erroreRimozione = new ErroreDialog(e1,true);
+						erroreRimozione.setVisible(true);
 					}
 				}
 		} catch(IllegalFieldValueException nfve) {
-			JOptionPane.showMessageDialog(null, 
-					"Inserire una data valida.",
-					"Creazione Fallita",
-					JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(nfve,"Creazione Fallita", "La data inserita non esiste.", false);
+			errore.setVisible(true);
+			scadenzaProgettoLabel.setForeground(Color.RED);
+			dataTerminazioneLabel.setForeground(Color.RED);
 		} catch(SQLException e) {
-			//TODO: aggiungi altre eccezioni
-			ErroreDialog errore = new ErroreDialog(e,
-					"Creazione del progetto fallita.",
-					"Creazione Fallita",
-					false);
+			ErroreDialog errore = null;
+			switch (e.getSQLState()) {
+			case VIOLAZIONE_PKEY_UNIQUE:
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Impossibile aggiornare il progetto perchè ne esiste già uno con il suo nome.", false);
+				nomeProgettoLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_LUNGHEZZA_STRINGA:
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Impossibile salvare le modifiche.\n"
+						+ "Verificare che:\n"
+						+ "1)Il nome del progetto non superi i 100 caratteri.\n"
+						+ "2)La descrizione del progetto non superi i 500 caratteri.", false);
+				if (nomeProgetto.length() > 100)
+					nomeProgettoLabel.setForeground(Color.RED);
+				if (descrizioneProgetto.length() > 500)
+					descrizioneProgettoLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_VINCOLI_TABELLA:
+				errore = new ErroreDialog(e, 
+						"Creazione Fallita",
+						"Impossibile salvare le modifiche.\n"
+						+ "Verificare che data di scadenza e terminazione non siano precedenti alla data di creazione del progetto(" + dataCreazione.toString(formatDate) + ")." , false);
+				if (dataScadenza != null && dataCreazione.isAfter(dataScadenza))
+					scadenzaProgettoLabel.setForeground(Color.RED);
+				if (dataTerminazione != null && dataTerminazione.isBefore(dataCreazione))
+					dataTerminazioneLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_DATA_INVALIDA:
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Impossibile salvare le modifiche perchè la data inserita non è valida.", false);
+				scadenzaProgettoLabel.setForeground(Color.RED);
+				dataTerminazioneLabel.setForeground(Color.RED);
+				break;
+			default:
+				errore = new ErroreDialog(e,true);
+			}
 			errore.setVisible(true);
 		}
-		tipologiaProgettoLabel.setForeground(Color.BLACK);
-		ambitoProgettoLabel.setForeground(Color.BLACK);
-		nomeProgettoLabel.setForeground(Color.BLACK);
 	}
 	
 	private void aggiornaProgetto(ControllerProgetto controller) {
@@ -1087,46 +1133,79 @@ public class GestioneProgettiDipendente extends JFrame {
 			controller.aggiornaProgetto(progettoSelezionato);
 			try {
 				controller.aggiornaAmbitiProgetto(progettoSelezionato);
-				JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente");
+				JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente", "Salvataggio Riuscito", JOptionPane.INFORMATION_MESSAGE);
 				aggiornaTabella(controller);
 				impostaSorterTabellaProgetti();
 			} catch (SQLException e) {
-				// TODO: aggiungi altre eccezioni
-				JOptionPane.showMessageDialog(null,
-						e.getMessage()
-								+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+				ErroreDialog errore = new ErroreDialog(e,true);
+				if (e.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
+					errore = new ErroreDialog(e,
+							"Salvataggio Ambiti Fallito",
+							"Impossibile salvare gli ambiti del progetto perchè alcuni di essi sono già associati ad esso.\nProvare a rimuoverli tutti e poi riaggiungerli.", false);
+					ambitoProgettoLabel.setForeground(Color.RED);
+				}
+				errore.setVisible(true);
 			}
-		} catch (IllegalFieldValueException e) {
-			JOptionPane.showMessageDialog(null, "Inserire una data valida.", "Data Non Valida",
-					JOptionPane.ERROR_MESSAGE);
+		} catch (IllegalFieldValueException ifve) {
+			ErroreDialog errore = new ErroreDialog(ifve, "Salvataggio Fallito", "La data inserita non esiste.", false);
+			errore.setVisible(true);
+			scadenzaProgettoLabel.setForeground(Color.RED);
+			dataTerminazioneLabel.setForeground(Color.RED);
 		} catch (SQLException e) {
-			// TODO: aggiungi altre eccezioni
-			if (e.getSQLState().equals("23514")) {
-				JOptionPane.showMessageDialog(null,
-						"Controllare che la data di terminazione inserita non sia successiva alla data odierna."
-								+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = null;
+			switch (e.getSQLState()) {
+			case VIOLAZIONE_PKEY_UNIQUE:
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito",
+						"Impossibile aggiornare il progetto perchè ne esiste già uno con il suo nome.", false);
+				nomeProgettoLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_LUNGHEZZA_STRINGA:
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito",
+						"Impossibile salvare le modifiche.\n"
+						+ "Verificare che:\n"
+						+ "1)Il nome del progetto non superi i 100 caratteri.\n"
+						+ "2)La descrizione del progetto non superi i 500 caratteri.", false);
+				if (nomeProgetto.length() > 100)
+					nomeProgettoLabel.setForeground(Color.RED);
+				if (descrizioneProgetto.length() > 500)
+					descrizioneProgettoLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_VINCOLI_TABELLA:
+				errore = new ErroreDialog(e, 
+						"Salvataggio Fallito",
+						"Impossibile salvare le modifiche.\n"
+						+ "Verificare che data di scadenza e terminazione non siano precedenti alla data di creazione del progetto(" + dataCreazione.toString(formatDate) + ").", false);
+				if (dataScadenza != null && dataCreazione.isAfter(dataScadenza))
+					scadenzaProgettoLabel.setForeground(Color.RED);
+				if (dataTerminazione != null && dataTerminazione.isBefore(dataCreazione))
+					dataTerminazioneLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_DATA_INVALIDA:
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito",
+						"Impossibile salvare le modifiche perchè la data inserita non è valida.", false);
+				scadenzaProgettoLabel.setForeground(Color.RED);
+				dataTerminazioneLabel.setForeground(Color.RED);
+				break;
+			default:
+				errore = new ErroreDialog(e,true);
 			}
+			errore.setVisible(true);
 		}
-		tipologiaProgettoLabel.setForeground(Color.BLACK);
-		ambitoProgettoLabel.setForeground(Color.BLACK);
-		nomeProgettoLabel.setForeground(Color.BLACK);
 	}
 	
 	private void rimuoviProgetto(ControllerProgetto controller) {
 		try {
 			controller.rimuoviProgetto(progettoSelezionato);
-			JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo", "Eliminazione Riuscita",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Progetto Eliminato con successo", "Eliminazione Riuscita", JOptionPane.INFORMATION_MESSAGE);
 			aggiornaTabella(controller);
 			impostaSorterTabellaProgetti();
 			pulisciCampi();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1143,7 +1222,7 @@ public class GestioneProgettiDipendente extends JFrame {
 		
 		if(!progettoTerminatoCheckBox.isSelected())
 			dataTerminazione = null;
-		else
+		else 
 			if(annoTerminazioneComboBox.getSelectedItem()!=null && meseTerminazioneComboBox.getSelectedItem()!=null && giornoTerminazioneComboBox.getSelectedItem()!=null)
 				dataTerminazione = new LocalDate((int)annoTerminazioneComboBox.getSelectedItem(), meseTerminazioneComboBox.getSelectedIndex()+1 , giornoTerminazioneComboBox.getSelectedIndex()+1);
 		
@@ -1161,10 +1240,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloTabellaProgetti.fireTableDataChanged();
 			pulisciCampi();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 
 	}
@@ -1176,9 +1253,11 @@ public class GestioneProgettiDipendente extends JFrame {
 		ambitoProgettoLabel.setForeground(Color.BLACK);
 		progettoTerminatoLabel.setForeground(Color.BLACK);
 		dataTerminazioneLabel.setForeground(Color.BLACK);
+		scadenzaProgettoLabel.setForeground(Color.BLACK);
 
 		nomeProgettoTextField.setText("");
-		descrizioneProgettoTextArea.setText("");	
+		descrizioneProgettoTextArea.setText("");
+		progettoTerminatoCheckBox.setEnabled(false);
 		progettoTerminatoCheckBox.setSelected(false);
 		ambitiList.clearSelection();
 		annoTerminazioneComboBox.setSelectedItem(null);
@@ -1203,10 +1282,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloComboBoxFiltroTipologie.addAll(controller.ottieniTipologie());
 			filtroTipologieComboBox.setModel(modelloComboBoxFiltroTipologie);;
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1216,10 +1293,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloComboBoxFiltroAmbiti.addAll(controller.ottieniAmbiti());
 			filtroAmbitiComboBox.setModel(modelloComboBoxFiltroAmbiti);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1249,12 +1324,9 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiFiltrati(nomeCercato,ambitoCercato,tipologiaCercata, scaduto, terminato));
 			modelloTabellaProgetti.fireTableDataChanged();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
-		
 	}
 
 	private void impostaProprietàTabella() {
