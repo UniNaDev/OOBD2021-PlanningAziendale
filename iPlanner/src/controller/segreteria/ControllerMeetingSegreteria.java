@@ -14,7 +14,7 @@ import entita.PartecipazioneMeeting;
 import entita.SalaRiunione;
 import gui.ErroreDialog;
 import gui.segreteria.GestioneMeetingSegreteria;
-import gui.segreteria.GestioneSale;
+import gui.segreteria.GestioneSaleSegreteria;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -25,7 +25,7 @@ import interfacceDAO.SkillDAO;
 
 public class ControllerMeetingSegreteria {
 	private GestioneMeetingSegreteria gestioneMeetingSegreteriaFrame;
-	private GestioneSale gestioneSaleFrame;
+	private GestioneSaleSegreteria gestioneSaleFrame;
 	
 	private LuogoNascitaDAO luogoDAO = null;
 	private DipendenteDAO dipDAO = null;
@@ -54,7 +54,7 @@ public class ControllerMeetingSegreteria {
 	
 	public void apriGestioneSale() {
 		gestioneMeetingSegreteriaFrame.setEnabled(false);
-		gestioneSaleFrame = new GestioneSale(this);
+		gestioneSaleFrame = new GestioneSaleSegreteria(this);
 		gestioneSaleFrame.setVisible(true);
 		gestioneSaleFrame.toFront();
 	}
