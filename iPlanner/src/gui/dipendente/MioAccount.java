@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
+import gui.ErroreDialog;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -369,7 +370,6 @@ public class MioAccount extends JFrame {
 	modificaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 	modificaButton.setBounds(275, 541, 126, 42);
 	modificaButton.addMouseListener(new MouseAdapter() {
-
 	    @Override
 	    public void mouseEntered(MouseEvent e) {
 		modificaButton.setBackground(Color.LIGHT_GRAY);
@@ -576,106 +576,100 @@ public class MioAccount extends JFrame {
     }
 
     private void aggiornaAccount(ControllerGestioneProfilo controller, Dipendente dipendente) {
-		ricavaInfoDipendente(controller);
-		dipendente.setNome(nome);
-		dipendente.setCognome(cognome);
-		dipendente.setSesso(sesso);
-		dipendente.setDataNascita(dataNascita);
-		dipendente.setLuogoNascita(luogoNascita);
-		dipendente.setEmail(email);
-		dipendente.setPassword(password);
-		dipendente.setTelefonoCasa(telefono);
-		dipendente.setCellulare(cellulare);
-		dipendente.setIndirizzo(indirizzo);
 		try {
+	    	ricavaInfoDipendente(controller);
+	    	
+			dipendente.setNome(nome);
+			dipendente.setCognome(cognome);
+			dipendente.setSesso(sesso);
+			dipendente.setDataNascita(dataNascita);
+			dipendente.setLuogoNascita(luogoNascita);
+			dipendente.setEmail(email);
+			dipendente.setPassword(password);
+			dipendente.setTelefonoCasa(telefono);
+			dipendente.setCellulare(cellulare);
+			dipendente.setIndirizzo(indirizzo);
+			
 		    controller.aggiornaDipendente(dipendente);
 		    if (modificheEffettuate)
-			JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo.");
+		    	JOptionPane.showMessageDialog(null, "Modifica Effettuata con successo.");
 		    controller.chiudiGUIMioAccount();
 		    controller.tornaAHome();
 		} catch (SQLException e1) {
+			ErroreDialog errore = null;
 		    switch (e1.getSQLState()) {
-		    case VIOLAZIONE_VINCOLI_TABELLA:
-			JOptionPane.showMessageDialog(null, "Verificare che:\n" + "1) L'email sia del formato corretto.\n"
-				+ "2) Nome e cognome non contengano numeri.\n"
-				+ "3) Telefono e cellulare non contengano lettere.\n" + "4) Il dipendente sia maggiorenne.",
-				"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-			Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-				Pattern.CASE_INSENSITIVE);
-			Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
-			if (!matcher.find())
-			    emailLabel.setForeground(Color.RED);
-	
-			if (!nonHaCifre(nome))
-			    nomeLabel.setForeground(Color.RED);
-	
-			if (!nonHaCifre(cognome))
-			    cognomeLabel.setForeground(Color.RED);
-	
-			if (!isNumero(telefono))
-			    telefonoFissoLabel.setForeground(Color.RED);
-	
-			if (!isNumero(cellulare))
-			    cellulareLabel.setForeground(Color.RED);
-	
-			dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
-				giornoComboBox.getSelectedIndex() + 1);
-			Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
-			int età = period.getYears();
-			if (età < 18)
-			    dataNascitaLabel.setForeground(Color.RED);
-	
-			break;
-		    case VIOLAZIONE_LUNGHEZZA_STRINGA:
-			JOptionPane.showMessageDialog(null,
-				"Verificare che:\n" + "1) Nome e cognome non contengano più di 30 caratteri.\n"
-					+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
-					+ "3) La password non superi i 50 caratteri.",
-				"Errore Creazione Account", JOptionPane.ERROR_MESSAGE);
-			if (nomeTextField.getText().length() > 30)
-			    nomeLabel.setForeground(Color.RED);
-			if (cognomeTextField.getText().length() > 30)
-			    cognomeLabel.setForeground(Color.RED);
-			if (emailTextField.getText().length() > 100)
-			    emailLabel.setForeground(Color.RED);
-			if (indirizzoTextField.getText().length() > 100)
-			    indirizzoLabel.setForeground(Color.RED);
-			if (passwordField.getText().length() > 50 || passwordField.getText().isBlank()) {
-			    passwordLabel.setForeground(Color.RED);
+			    case VIOLAZIONE_VINCOLI_TABELLA:
+			    	errore = new ErroreDialog(e1,
+			    			"Salvataggio Fallito",
+			    			"Verificare che:\n" 
+			    			+ "1) L'email sia del formato corretto.\n"
+	    					+ "2) Nome e cognome non contengano numeri.\n"
+	    					+ "3) Telefono e cellulare non contengano lettere.\n" 
+	    					+ "4) Il dipendente sia maggiorenne.", false);
+				Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+					Pattern.CASE_INSENSITIVE);
+				Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailTextField.getText());
+				if (!matcher.find())
+				    emailLabel.setForeground(Color.RED);
+		
+				if (!nonHaCifre(nome))
+				    nomeLabel.setForeground(Color.RED);
+		
+				if (!nonHaCifre(cognome))
+				    cognomeLabel.setForeground(Color.RED);
+		
+				if (!isNumero(telefono))
+				    telefonoFissoLabel.setForeground(Color.RED);
+		
+				if (!isNumero(cellulare))
+				    cellulareLabel.setForeground(Color.RED);
+		
+				dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex() + 1);
+				Period period = new Period(dataNascita, LocalDate.now(), PeriodType.yearMonthDay());
+				int età = period.getYears();
+				if (età < 18)
+				    dataNascitaLabel.setForeground(Color.RED);
+				break;
+			    case VIOLAZIONE_LUNGHEZZA_STRINGA:
+			    	errore = new ErroreDialog(e1,
+			    			"Salvataggio Fallito",
+			    			"Verificare che:\n" 
+			    			+ "1) Nome e cognome non contengano più di 30 caratteri.\n"
+	    					+ "2) Indirizzo e email non contengano più di 100 caratteri.\n"
+	    					+ "3) La password non superi i 50 caratteri.", false);
+				if (nomeTextField.getText().length() > 30)
+				    nomeLabel.setForeground(Color.RED);
+				if (cognomeTextField.getText().length() > 30)
+				    cognomeLabel.setForeground(Color.RED);
+				if (emailTextField.getText().length() > 100)
+				    emailLabel.setForeground(Color.RED);
+				if (indirizzoTextField.getText().length() > 100)
+				    indirizzoLabel.setForeground(Color.RED);
+				if (passwordField.getText().length() > 50 || passwordField.getText().isBlank()) {
+				    passwordLabel.setForeground(Color.RED);
+				}
 			    break;
-			}
-		    default:
-			JOptionPane.showMessageDialog(null,
-				e1.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-				"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
-		    }
+			    default:
+			    	errore = new ErroreDialog(e1,true);
+			    }
+	    	errore.setVisible(true);
+		} catch(IllegalFieldValueException ifve) {
+			ErroreDialog errore = new ErroreDialog(ifve,
+					"Salvataggio Fallito",
+					"La data inserita non esiste.", false);
+			errore.setVisible(true);
 		}
     }
 
-    private void ricavaInfoDipendente(ControllerGestioneProfilo controller) {
+    private void ricavaInfoDipendente(ControllerGestioneProfilo controller) throws SQLException, IllegalFieldValueException{
 		nome = nomeTextField.getText();
 		cognome = cognomeTextField.getText();
 		if (uomoRadioButton.isSelected())
 		    sesso = 'M';
 		else
 		    sesso = 'F';
-		try {
-		    dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1,
-			    giornoComboBox.getSelectedIndex() + 1);
-		} catch (IllegalFieldValueException ifve) {
-		    JOptionPane.showMessageDialog(null, "La data inserita non esiste.", "Errore Data Inesistente",
-			    JOptionPane.ERROR_MESSAGE);
-		}
-		try {
-		    luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem())
-			    .get(comuneComboBox.getSelectedIndex());
-		} catch (SQLException e) {
-		    JOptionPane.showMessageDialog(null,
-			    e.getMessage()
-				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-		}
+	    dataNascita = new LocalDate(annoComboBox.getSelectedIndex() + 1900, meseComboBox.getSelectedIndex() + 1, giornoComboBox.getSelectedIndex() + 1);
+	    luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(comuneComboBox.getSelectedIndex());
 		email = emailTextField.getText();
 		password = passwordField.getText();
 		if (!telefonoFissoTextField.getText().isBlank())
@@ -775,6 +769,7 @@ public class MioAccount extends JFrame {
 		meseComboBox.setEnabled(true);
 		annoComboBox.setEnabled(true);
 		provinciaComboBox.setEnabled(true);
+		comuneComboBox.setEnabled(true);
 		emailTextField.setEditable(true);
 		passwordField.setEditable(true);
 		indirizzoTextField.setEditable(true);
