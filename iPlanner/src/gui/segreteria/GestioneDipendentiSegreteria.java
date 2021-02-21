@@ -49,6 +49,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.ListSelectionModel;
@@ -862,7 +863,17 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		dataModelDipendente = new DipendentiTableModel();
 		inizializzaModelloTabellaDipendenti(controller);
 		dipendentiTable = new JTable(dataModelDipendente);
+		dipendentiTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendentiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		DefaultTableCellRenderer renderTabellaProgetti = new DefaultTableCellRenderer();
+        renderTabellaProgetti.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabellaProgetti.setVerticalAlignment(SwingConstants.CENTER);
+        dipendentiTable.getColumnModel().getColumn(0).setCellRenderer(renderTabellaProgetti);
+        dipendentiTable.getColumnModel().getColumn(1).setCellRenderer(renderTabellaProgetti);
+        dipendentiTable.getColumnModel().getColumn(2).setCellRenderer(renderTabellaProgetti);
+        dipendentiTable.getColumnModel().getColumn(3).setCellRenderer(renderTabellaProgetti);
+        dipendentiTable.getColumnModel().getColumn(4).setCellRenderer(renderTabellaProgetti);
+        dipendentiTable.getColumnModel().getColumn(5).setCellRenderer(renderTabellaProgetti);
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());
 		dipendentiTable.setRowSorter(sorter);
 		dipendentiTable.addMouseListener(new MouseAdapter() {

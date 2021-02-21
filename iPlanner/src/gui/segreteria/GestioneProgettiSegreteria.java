@@ -48,6 +48,8 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -421,6 +423,15 @@ public class GestioneProgettiSegreteria extends JFrame {
 		tabellaProgetti = new JTable(dataModelTabella);
 		tabellaProgetti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabellaProgetti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		DefaultTableCellRenderer renderTabellaProgetti = new DefaultTableCellRenderer();
+        renderTabellaProgetti.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabellaProgetti.setVerticalAlignment(SwingConstants.CENTER);
+        tabellaProgetti.getColumnModel().getColumn(0).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(1).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(2).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(3).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(4).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(5).setCellRenderer(renderTabellaProgetti);
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaProgetti.getModel());
 		DataComparator comparatorDate = new DataComparator();
 		sorter.setComparator(3, comparatorDate);

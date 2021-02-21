@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -270,6 +271,15 @@ public class GestioneMeetingSegreteria extends JFrame {
 		tabellaMeeting.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabellaMeeting.setFont(new Font("Consolas", Font.PLAIN, 11));
 		tabellaMeeting.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		DefaultTableCellRenderer renderTabellaProgetti = new DefaultTableCellRenderer();
+        renderTabellaProgetti.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabellaProgetti.setVerticalAlignment(SwingConstants.CENTER);
+        tabellaMeeting.getColumnModel().getColumn(0).setCellRenderer(renderTabellaProgetti);
+        tabellaMeeting.getColumnModel().getColumn(1).setCellRenderer(renderTabellaProgetti);
+        tabellaMeeting.getColumnModel().getColumn(2).setCellRenderer(renderTabellaProgetti);
+        tabellaMeeting.getColumnModel().getColumn(3).setCellRenderer(renderTabellaProgetti);
+        tabellaMeeting.getColumnModel().getColumn(4).setCellRenderer(renderTabellaProgetti);
+        tabellaMeeting.getColumnModel().getColumn(5).setCellRenderer(renderTabellaProgetti);
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaMeeting.getModel());
 		DataComparator comparatorDate = new DataComparator();
 		OrarioComparator comparatorOrari = new OrarioComparator();
