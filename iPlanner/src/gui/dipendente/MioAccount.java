@@ -130,7 +130,7 @@ public class MioAccount extends JFrame {
 		    if (risposta == JOptionPane.YES_OPTION) {
 			controller.chiudiGUIMioAccount();
 		    } else if (risposta == JOptionPane.NO_OPTION || risposta == JOptionPane.CANCEL_OPTION) {
-			setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		    	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		    }
 		} else
 		    controller.chiudiGUIMioAccount();
@@ -555,10 +555,8 @@ public class MioAccount extends JFrame {
 		    modelloComboBoxProvince.addAll(controller.ottieniProvince());
 		    provinciaComboBox.setModel(modelloComboBoxProvince);
 		} catch (SQLException e) {
-		    JOptionPane.showMessageDialog(null,
-			    e.getMessage()
-				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
     }
 
@@ -568,10 +566,8 @@ public class MioAccount extends JFrame {
 		    modelloComboBoxComuni.addAll(controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()));
 		    comuneComboBox.setModel(modelloComboBoxComuni);
 		} catch (SQLException e) {
-		    JOptionPane.showMessageDialog(null,
-			    e.getMessage()
-				    + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-			    "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
     }
 
