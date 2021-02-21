@@ -53,7 +53,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.ListSelectionModel;
 
-public class GestioneDipendenti extends JFrame {
+public class GestioneDipendentiSegreteria extends JFrame {
 	private JPanel contentPane;
 	private JLabel dipendenteLabel;
 	private JLabel nomeLabel;
@@ -148,7 +148,7 @@ public class GestioneDipendenti extends JFrame {
 	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
 	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
 
-	public GestioneDipendenti(ControllerDipendentiSegreteria controller) {
+	public GestioneDipendentiSegreteria(ControllerDipendentiSegreteria controller) {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -157,7 +157,7 @@ public class GestioneDipendenti extends JFrame {
 		});
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(GestioneDipendenti.class.getResource("/Icone/WindowIcon_16.png")));
+				Toolkit.getDefaultToolkit().getImage(GestioneDipendentiSegreteria.class.getResource("/Icone/WindowIcon_16.png")));
 		setResizable(false);
 		setTitle("iPlanner - Dipendenti");
 		setBounds(100, 100, 1358, 944);
@@ -175,14 +175,14 @@ public class GestioneDipendenti extends JFrame {
 		dipendenteLabel = new JLabel("Dipendente");
 		dipendenteLabel.setBounds(517, 11, 251, 75);
 		infoPanel.add(dipendenteLabel);
-		dipendenteLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/employee_64.png")));
+		dipendenteLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/icone/employee_64.png")));
 		dipendenteLabel.setFont(new Font("Consolas", Font.PLAIN, 30));
 
 		iconaNomeLabel = new JLabel("");
 		iconaNomeLabel.setBounds(41, 128, 46, 14);
 		infoPanel.add(iconaNomeLabel);
 		iconaNomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		iconaNomeLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/nome_16.png")));
+		iconaNomeLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/Icone/nome_16.png")));
 
 		nomeTextField = new JTextField();
 		nomeTextField.setBounds(97, 128, 162, 20);
@@ -214,7 +214,7 @@ public class GestioneDipendenti extends JFrame {
 		iconaEmailLabel.setBounds(41, 172, 46, 14);
 		infoPanel.add(iconaEmailLabel);
 		iconaEmailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		iconaEmailLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/email_16.png")));
+		iconaEmailLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/Icone/email_16.png")));
 
 		emailTextField = new JTextField();
 		emailTextField.setBounds(97, 169, 267, 20);
@@ -253,7 +253,7 @@ public class GestioneDipendenti extends JFrame {
 		iconaDataNascitaLabel = new JLabel("");
 		iconaDataNascitaLabel.setBounds(41, 271, 46, 30);
 		infoPanel.add(iconaDataNascitaLabel);
-		iconaDataNascitaLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/dataNascita_16.png")));
+		iconaDataNascitaLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/Icone/dataNascita_16.png")));
 		iconaDataNascitaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		dataNascitaLabel = new JLabel("Data di nascita*");
@@ -332,7 +332,7 @@ public class GestioneDipendenti extends JFrame {
 		iconaIndirizzoLabel = new JLabel("");
 		iconaIndirizzoLabel.setBounds(41, 385, 46, 30);
 		infoPanel.add(iconaIndirizzoLabel);
-		iconaIndirizzoLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/indirizzo_16.png")));
+		iconaIndirizzoLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/Icone/indirizzo_16.png")));
 		iconaIndirizzoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		indirizzoLabel = new JLabel("Indirizzo*");
@@ -343,7 +343,7 @@ public class GestioneDipendenti extends JFrame {
 		iconaCellulareLabel = new JLabel("");
 		iconaCellulareLabel.setBounds(41, 452, 46, 30);
 		infoPanel.add(iconaCellulareLabel);
-		iconaCellulareLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/cellulare_16.png")));
+		iconaCellulareLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/Icone/cellulare_16.png")));
 		iconaCellulareLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		cellulareLabel = new JLabel("Cellulare");
@@ -371,7 +371,7 @@ public class GestioneDipendenti extends JFrame {
 		iconaPasswordLabel = new JLabel("");
 		iconaPasswordLabel.setBounds(43, 529, 46, 30);
 		infoPanel.add(iconaPasswordLabel);
-		iconaPasswordLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/Icone/password_16.png")));
+		iconaPasswordLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/Icone/password_16.png")));
 		iconaPasswordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		passwordLabel = new JLabel("Password*");
@@ -429,7 +429,7 @@ public class GestioneDipendenti extends JFrame {
 		iconaSkillsLabel = new JLabel("");
 		iconaSkillsLabel.setBounds(750, 181, 31, 39);
 		infoPanel.add(iconaSkillsLabel);
-		iconaSkillsLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/skills_32.png")));
+		iconaSkillsLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/icone/skills_32.png")));
 		iconaSkillsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		nuovaSkillButton = new JButton("Crea Nuova Skill");
@@ -486,14 +486,14 @@ public class GestioneDipendenti extends JFrame {
 		iconaSalarioLabel = new JLabel("");
 		iconaSalarioLabel.setBounds(774, 483, 46, 30);
 		infoPanel.add(iconaSalarioLabel);
-		iconaSalarioLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/salario_16.png")));
+		iconaSalarioLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/icone/salario_16.png")));
 		iconaSalarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		mostraPasswordLabel = new JLabel("");
 		mostraPasswordLabel.setBounds(448, 527, 46, 26);
 		infoPanel.add(mostraPasswordLabel);
 		mostraPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mostraPasswordLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/showpass_24.png")));
+		mostraPasswordLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/icone/showpass_24.png")));
 		mostraPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -511,7 +511,7 @@ public class GestioneDipendenti extends JFrame {
 		infoPanel.add(mostraConfermaPasswordLabel);
 		mostraConfermaPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mostraConfermaPasswordLabel
-				.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/showpass_24.png")));
+				.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/icone/showpass_24.png")));
 		mostraConfermaPasswordLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -569,7 +569,7 @@ public class GestioneDipendenti extends JFrame {
 			}
 		});
 		pulisciCampiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		pulisciCampiLabel.setIcon(new ImageIcon(GestioneDipendenti.class.getResource("/icone/refresh.png")));
+		pulisciCampiLabel.setIcon(new ImageIcon(GestioneDipendentiSegreteria.class.getResource("/icone/refresh.png")));
 		pulisciCampiLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		pulisciCampiLabel.setBounds(41, 100, 16, 14);
 		infoPanel.add(pulisciCampiLabel);

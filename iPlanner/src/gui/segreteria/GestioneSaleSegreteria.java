@@ -48,7 +48,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import java.awt.Toolkit;
 
-public class GestioneSale extends JFrame {
+public class GestioneSaleSegreteria extends JFrame {
 	private JPanel contentPane;
 	private JLabel titoloLabel;
 	private JLabel nomeSalaLabel;
@@ -80,8 +80,8 @@ public class GestioneSale extends JFrame {
 	private final String VIOLAZIONE_LUNGHEZZA_STRINGA = "22001";
 	private final String VIOLAZIONE_CAPIENZA_SALA = "P0002";
 
-	public GestioneSale(ControllerMeetingSegreteria controller) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneSale.class.getResource("/icone/WindowIcon_16.png")));
+	public GestioneSaleSegreteria(ControllerMeetingSegreteria controller) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneSaleSegreteria.class.getResource("/icone/WindowIcon_16.png")));
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -105,7 +105,7 @@ public class GestioneSale extends JFrame {
 		infoPanel.setLayout(null);
 		
 		titoloLabel = new JLabel("Gestione Sale");
-		titoloLabel.setIcon(new ImageIcon(GestioneSale.class.getResource("/icone/meeting_64.png")));
+		titoloLabel.setIcon(new ImageIcon(GestioneSaleSegreteria.class.getResource("/icone/meeting_64.png")));
 		titoloLabel.setFont(new Font("Consolas", Font.PLAIN, 21));
 		titoloLabel.setBounds(10, 11, 234, 63);
 		contentPane.add(titoloLabel);
@@ -167,7 +167,7 @@ public class GestioneSale extends JFrame {
 				saleList.setSelectedValue(null, false);
 			}
 		});
-		resetCampiLabel.setIcon(new ImageIcon(GestioneSale.class.getResource("/icone/refresh.png")));
+		resetCampiLabel.setIcon(new ImageIcon(GestioneSaleSegreteria.class.getResource("/icone/refresh.png")));
 		resetCampiLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		resetCampiLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		resetCampiLabel.setBounds(268, 11, 16, 16);

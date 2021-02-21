@@ -1,4 +1,4 @@
-//Controller che si occupa della finestra GestioneDipendenti della segreteria.
+//Controller che si occupa della finestra GestioneDipendentiSegreteria della segreteria.
 //Contiene i metodi principali usati dalla finestra e quelli di passaggio alle altre finestre del programma.
 
 package controller.segreteria;
@@ -12,7 +12,7 @@ import controller.ControllerStart;
 import entita.Dipendente;
 import entita.LuogoNascita;
 import entita.Skill;
-import gui.segreteria.GestioneDipendenti;
+import gui.segreteria.GestioneDipendentiSegreteria;
 import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -22,7 +22,7 @@ import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 public class ControllerDipendentiSegreteria {
-	private GestioneDipendenti gestioneDipendentiFrame;
+	private GestioneDipendentiSegreteria gestioneDipendentiFrame;
 
 	private LuogoNascitaDAO luogoDAO = null;
 	private DipendenteDAO dipDAO = null;
@@ -48,7 +48,7 @@ public class ControllerDipendentiSegreteria {
 	}
 	
 	public void apriGestioneDipendentiSegreteria() {
-	  gestioneDipendentiFrame= new GestioneDipendenti(this);
+	  gestioneDipendentiFrame= new GestioneDipendentiSegreteria(this);
 	  gestioneDipendentiFrame.setVisible(true);	  
 	}
 	
