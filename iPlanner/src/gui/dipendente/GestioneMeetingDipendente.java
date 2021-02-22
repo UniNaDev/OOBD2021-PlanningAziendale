@@ -1213,7 +1213,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				errore = new ErroreDialog(e,
 						"Creazione Fallita",
 						"Impossibile creare il meeting.\n"
-						+ "Verificare che:"
+						+ "Verificare che:\n"
 						+ "1)La data di inizio sia precedente o uguale a quella di termine.\n"
 						+ "2)L'orario di inizio e fine meeting siano corretti.\n"
 						+ "3)Se la modalità è fisico sia selezionata una sala.\n"
@@ -1286,7 +1286,7 @@ public class GestioneMeetingDipendente extends JFrame {
 				errore = new ErroreDialog(e,
 						"Salvataggio Fallito",
 						"Impossibile salvare le modifiche.\n"
-						+ "Verificare che:"
+						+ "Verificare che:\n"
 						+ "1)La data di inizio sia precedente o uguale a quella di termine.\n"
 						+ "2)L'orario di inizio e fine meeting siano corretti.\n"
 						+ "3)Se la modalità è fisico sia selezionata una sala.\n"
@@ -1334,7 +1334,7 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 
 	private void ricavaInfoMeeting() {
-		dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
+		dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioGiornoComboBox.getSelectedItem().toString()));
 		dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
 		oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);
 		oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);
@@ -1356,9 +1356,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloTabellaMeeting.fireTableDataChanged();
 			sorterMeeting.setModel(modelloTabellaMeeting);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
 
 	}
