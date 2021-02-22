@@ -286,7 +286,7 @@ public class CostruttoreDB {
                 		+ "	\r\n"
                 		+ "	PRIMARY KEY(IDMeeting),\r\n"
                 		+ "	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),\r\n"
-                		+ "	CONSTRAINT OrarioValidoMeeting CHECK(OrarioInizio < OrarioFine AND DataInizio = DataFine),\r\n"
+                		+ "	CONSTRAINT OrarioValidoMeeting CHECK((OrarioInizio < OrarioFine AND DataInizio = DataFine) OR DataInizio < DataFine),\r\n"
                 		+ "	CONSTRAINT ModalitàRiunione CHECK ((Modalità='Telematico' AND Piattaforma IS NOT NULL AND CodSala IS NULL) OR (Modalità = 'Fisico' AND Piattaforma IS NULL AND CodSala IS NOT NULL)),\r\n"
                 		+ "	\r\n"
                 		+ "	\r\n"

@@ -1330,16 +1330,10 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 
 	private void ricavaInfoMeeting() {
-		dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()),
-				Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()),
-				Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
-		dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()),
-				Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()),
-				Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
-		oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()),
-				Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);
-		oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()),
-				Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);
+		dataInizio = new LocalDate(Integer.valueOf(dataInizioAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataInizioMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
+		dataFine = new LocalDate(Integer.valueOf(dataFineAnnoComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineMeseComboBox.getSelectedItem().toString()), Integer.valueOf(dataFineGiornoComboBox.getSelectedItem().toString()));
+		oraInizio = new LocalTime(Integer.valueOf(oraInizioComboBox.getSelectedIndex()), Integer.valueOf(minutoInizioComboBox.getSelectedIndex()), 0);
+		oraFine = new LocalTime(Integer.valueOf(oraFineComboBox.getSelectedIndex()), Integer.valueOf(minutoFineComboBox.getSelectedIndex()), 0);
 		if (onlineRadioButton.isSelected()) {
 			modalita = "Telematico";
 			piattaforma = piattaformaSalaComboBox.getSelectedItem().toString();
