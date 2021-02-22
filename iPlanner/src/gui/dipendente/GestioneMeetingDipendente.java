@@ -609,11 +609,15 @@ public class GestioneMeetingDipendente extends JFrame {
 		});
 		
 		filtroMeetingTelematicoRadioButton = new JRadioButton("Telematico");
+		filtroMeetingTelematicoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		filtroMeetingTelematicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroMeetingTelematicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (filtroMeetingTelematicoRadioButton.isSelected())
 					filtraByTelematico(controller);
+				else {
+					aggiornaTabella(controller);
+				}
 			}
 		});
 		
@@ -624,11 +628,15 @@ public class GestioneMeetingDipendente extends JFrame {
 		comandiPanel1.add(filtroMeetingTelematicoRadioButton);
 
 		filtroMeetingFisicoRadioButton = new JRadioButton("Fisico");
+		filtroMeetingFisicoRadioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		filtroMeetingFisicoRadioButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		filtroMeetingFisicoRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (filtroMeetingFisicoRadioButton.isSelected()) {
 					filtraByFisico(controller);
+				}
+				else {
+					aggiornaTabella(controller);
 				}
 			}
 		});
