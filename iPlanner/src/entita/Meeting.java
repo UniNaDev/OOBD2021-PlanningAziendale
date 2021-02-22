@@ -145,7 +145,7 @@ public class Meeting {
 	}
 	
 	public boolean isPassato() {
-		if (dataFine.isBefore(LocalDate.now()) && oraFine.isBefore(LocalTime.now()))
+		if (dataFine.isBefore(LocalDate.now()) || (dataFine.equals(LocalDate.now()) && oraFine.isBefore(LocalTime.now())))
 			return true;
 		else
 			return false;
