@@ -909,8 +909,7 @@ public class GestioneDipendentiSegreteria extends JFrame {
 				confermaPasswordField.setText(dipendenteSelezionato.getPassword());
 				salarioTextField.setText(Float.toString(dipendenteSelezionato.getSalario()));
 				aggiornaSkillDipendente(controller);
-				valutazioneLabel
-						.setText("Valutazione: " + String.format("%.2f", dipendenteSelezionato.getValutazione()));
+				valutazioneLabel.setText("Valutazione: " + String.format("%.2f", dipendenteSelezionato.getValutazione()));
 			}
 		});
 		dipendentiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

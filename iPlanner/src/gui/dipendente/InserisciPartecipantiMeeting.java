@@ -50,6 +50,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -306,10 +307,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 				if (!invitatiList.isSelectionEmpty())
 					presenzaCheckBox.setEnabled(true);
 				
-				System.out.println(dipendenteTable.getSelectedRow());
-				dipendenteSelezionato = null;
-				dipendenteTable.clearSelection();
 				impostaInfoDipendenteDaLista(controller);
+				if (dipendenteTable.getSelectedRow() < 0 || !invitatiList.isSelectionEmpty()) {
+					dipendenteSelezionato = null;
+					dipendenteTable.clearSelection();
+				}
 			}		
 		});
 		
@@ -445,10 +447,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				impostaInfoDipendenteDaTabella(controller);
 				invitatiList.clearSelection();
-				if (dipendenteTable.getSelectedRow() >= 0)
-					impostaInfoDipendenteDaTabella(controller);
-				System.out.println(dipendenteTable.getSelectedRow());
 				
 				if(e.getClickCount() == 2) {	
 					inserisciInvitatoMeeting(controller);
@@ -651,8 +651,13 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	
 	private void inizializzaListaInvitati() {
 		modelloListaInvitati = new DefaultListModel();
-		modelloListaInvitati.addAll(meetingSelezionato.getPartecipantiAlMeeting());
-		modelloListaInvitati.remove(0);
+		ArrayList<PartecipazioneMeeting> partecipanti = meetingSelezionato.getPartecipantiAlMeeting();
+		for (PartecipazioneMeeting partecipante: partecipanti)
+			if (partecipante.isOrganizzatore()) {
+				partecipanti.remove(partecipante);
+				break;
+			}
+		modelloListaInvitati.addAll(partecipanti);
 		invitatiList.setModel(modelloListaInvitati);
 	}
 

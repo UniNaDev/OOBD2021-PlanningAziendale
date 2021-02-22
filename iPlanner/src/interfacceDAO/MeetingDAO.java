@@ -16,8 +16,6 @@ public interface MeetingDAO {
 	
 	public ArrayList<Meeting> ottieniMeetingDipendente(Dipendente dip) throws SQLException;
 	
-	public ArrayList<Dipendente> ottieniInvitatiMeetingSenzaRuolo(int idMeeting) throws SQLException;
-	
 	public boolean creaMeeting(Meeting meeting) throws SQLException;
 	
 	public boolean rimuoviMeeting(int idMeeting) throws SQLException;

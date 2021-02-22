@@ -23,7 +23,6 @@ public class Meeting {
 	private SalaRiunione sala;
 	
 	private Progetto releativoA;
-	private ArrayList<Dipendente> partecipazioniDipendenti = new ArrayList<Dipendente>();
 	private ArrayList<PartecipazioneMeeting>partecipantiAlMeeting= new ArrayList<PartecipazioneMeeting>();
 
 	public Meeting(int idMeeting, LocalDate dataInizio, LocalDate dataFine, LocalTime oraInizio, LocalTime oraFine,
@@ -108,15 +107,6 @@ public class Meeting {
 	public void setProgettoDiscusso(Progetto progetto) {
 		this.releativoA = progetto;
 	}
-
-	public ArrayList<Dipendente> getPartecipazioniDipendenti() {
-		return partecipazioniDipendenti;
-	}
-
-	public void setPartecipazioniDipendenti(ArrayList<Dipendente> partecipazioniDipendenti) {
-		this.partecipazioniDipendenti = partecipazioniDipendenti;
-	}
-
 
 	public ArrayList<PartecipazioneMeeting> getPartecipantiAlMeeting() {
 		return partecipantiAlMeeting;

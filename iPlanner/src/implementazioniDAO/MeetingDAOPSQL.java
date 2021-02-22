@@ -46,7 +46,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		this.connection = connection;
 
 		ottieniMeetingPS = connection.prepareStatement("SELECT * FROM Meeting AS m ORDER BY m.DataInizio,m.OrarioInizio");
-		ottieniInvitatiMeetingPS = connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza AS p WHERE p.IDMeeting = ?");
+		ottieniInvitatiMeetingPS = connection.prepareStatement("SELECT * FROM Dipendente NATURAL JOIN Presenza AS p WHERE p.IDMeeting = ? ORDER BY p.Organizzatore DESC");
 		ottieniMeetingDaIdPS = connection.prepareStatement("SELECT * FROM Meeting WHERE idMeeting=?");
 		ottieniMeetingDipendendentePS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.IDMeeting IN (SELECT p.IDMeeting FROM Presenza AS p WHERE p.CF = ?) ORDER BY m.DataInizio, m.OrarioInizio");
 		creaMeetingPS = connection.prepareStatement("INSERT INTO Meeting (DataInizio, DataFine, OrarioInizio, OrarioFine, Modalità, Piattaforma, CodSala,CodProgetto) VALUES (?,?,?,?,?,?,?,?)");
@@ -107,7 +107,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 					risultato.getString("Modalità"), risultato.getString("Piattaforma"),
 					salaDAO.ottieniSalaDaCodSala(risultato.getString("CodSala")));
 			meetingTemp.setProgettoDiscusso(projDAO.ottieniProgettoDaCodiceProgetto(risultato.getInt("CodProgetto")));
-			meetingTemp.setPartecipazioniDipendenti(ottieniInvitatiMeetingSenzaRuolo(risultato.getInt("idMeeting")));
+			
 			meetingTemp.setPartecipantiAlMeeting(ottieniInvitatiMeeting(risultato.getInt("idMeeting")));
 			meetingDipendente.add(meetingTemp);
 		}
@@ -154,33 +154,6 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		risultato.close();
 
 		return meetingTemp;
-	}
-
-	@Override 
-	public ArrayList<Dipendente> ottieniInvitatiMeetingSenzaRuolo(int idMeeting) throws SQLException {
-		ArrayList<Dipendente> invitati = new ArrayList<Dipendente>();
-		ottieniInvitatiMeetingPS.setInt(1, idMeeting);
-
-		LuogoNascitaDAO luogoDAO = new LuogoNascitaDAOPSQL(connection);
-		DipendenteDAO dipDAO = new DipendenteDAOPSQL(connection);
-
-		ResultSet risultato = ottieniInvitatiMeetingPS.executeQuery();
-
-		while (risultato.next()) {
-			LuogoNascita luogoTemp = luogoDAO.ottieniLuogoNascitaDaCodComune(risultato.getString("CodComune"));
-
-			Dipendente dipendenteTemp = new Dipendente(risultato.getString("CF"), risultato.getString("Nome"),
-					risultato.getString("Cognome"), risultato.getString("Sesso").charAt(0),
-					new LocalDate(risultato.getDate("DataNascita")), luogoTemp, risultato.getString("Indirizzo"),
-					risultato.getString("Email"), risultato.getString("TelefonoCasa"), risultato.getString("Cellulare"),
-					risultato.getFloat("Salario"), risultato.getString("Password"),
-					dipDAO.ottieniValutazione(risultato.getString("CF")));
-
-			invitati.add(dipendenteTemp);
-		}
-		risultato.close();
-
-		return invitati;
 	}
 
 	@Override  
