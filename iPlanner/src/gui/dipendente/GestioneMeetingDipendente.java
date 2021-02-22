@@ -564,7 +564,7 @@ public class GestioneMeetingDipendente extends JFrame {
 			}
 		});
 		
-		inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
+		inserisciPartecipanteButton = new JButton("Gestione partecipanti");
 		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
 		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
 		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

@@ -116,6 +116,10 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private Meeting meetingSelezionato;
 	private Dipendente dipendenteSelezionato;
 	
+	private final String VIOLAZIONE_ONNIPRESENZA_DIPENDENTE = "P0003";
+	private final String VIOLAZIONE_CAPIENZA_SALA = "P0002";
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+	
 	private DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	private DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 
@@ -344,7 +348,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		eliminaPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(invitatiList.isSelectionEmpty()) {
-					JOptionPane.showMessageDialog(null, "Selezionare un partecipante da eliminare.", "Eliminazione Fallita", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Selezionare un partecipante dalla lista da eliminare.", "Eliminazione Fallita", JOptionPane.INFORMATION_MESSAGE);
 					invitatiLabel.setForeground(Color.RED);
 				}
 				else {
@@ -365,8 +369,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(dipendenteSelezionato != null)
-					JOptionPane.showMessageDialog(null, "Selezionare un dipendente dalla tabella.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
+				if(dipendenteSelezionato == null)
+					JOptionPane.showMessageDialog(null, "Selezionare un dipendente dalla tabella da aggiungere.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 				else {
 					inserisciInvitatoMeeting(controller);
 					aggiornaTabellaDipendenti(controller);
@@ -411,7 +415,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		aggiornaPartecipantiButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(invitatiList.isSelectionEmpty()) {
-					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista.", "Aggiornamento Fallito", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista da aggiornare.", "Aggiornamento Fallito", JOptionPane.INFORMATION_MESSAGE);
 					invitatiLabel.setForeground(Color.RED);
 				}
 				else {
@@ -712,12 +716,31 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		PartecipazioneMeeting partecipazioneMeeting = new PartecipazioneMeeting(meetingSelezionato, dipendenteSelezionato, presenza, false);
 		try {
 			controller.inserisciInvitatoMeeting(partecipazioneMeeting);
-			JOptionPane.showMessageDialog(null, "Invitato inserito correttamente.", "Inserimento Riuscito", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente.", "Inserimento Riuscito", JOptionPane.INFORMATION_MESSAGE);
 			modelloListaInvitati.addElement(partecipazioneMeeting);
 			aggiornaSorter();
 		} catch(SQLException e) {
-			//TODO: inserire tutte le possibili eccezioni
-			ErroreDialog errore = new ErroreDialog(e,true);
+			ErroreDialog errore = null;
+			switch (e.getSQLState()) {
+			case VIOLAZIONE_PKEY_UNIQUE:
+				errore = new ErroreDialog(e,
+						"Inserimento Fallito",
+						"L'inserimento del dipendente è fallito perchè già partecipa al meeting.", false);
+				break;
+			case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
+				errore = new ErroreDialog(e,
+						"Inserimento Fallito",
+						"L'inserimento del dipendente è fallito perchè " + dipendenteSelezionato + " ha altri meeting che si accavallano con questo.", false);
+				break;
+			case VIOLAZIONE_CAPIENZA_SALA:
+				errore = new ErroreDialog(e,
+						"Inserimento Fallito",
+						"L'inserimento del dipendente è fallito perchè così il numero di partecipanti supera la capienza della sala scelta per il meeting.\n"
+						+ "Si consiglia di cambiare sala se è necessario aggiungere altri partecipanti.", false);
+				break;
+			default:
+				errore = new ErroreDialog(e,true);
+			}
 			errore.setVisible(true);
 		}
 	}
@@ -733,7 +756,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			modelloListaInvitati.removeElementAt(invitatiList.getSelectedIndex()); 
 			modelloListaInvitati.addElement(partecipazione);
 		} catch(SQLException e) {
-			//TODO: inserire tutte le possibili eccezioni
 			ErroreDialog errore = new ErroreDialog(e,true);
 			errore.setVisible(true);
 		}
