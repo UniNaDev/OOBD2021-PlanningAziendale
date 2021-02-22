@@ -75,7 +75,6 @@ public class DipendentiTableModel extends AbstractTableModel {
 			return null;
 	}
 	
-	//Per sorting corretto
 		public Class<?> getColumnClass(int column) {
 	        switch (column) {
 	            case 3:

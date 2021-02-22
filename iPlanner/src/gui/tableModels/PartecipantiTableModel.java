@@ -44,7 +44,7 @@ public class PartecipantiTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if(rowIndex>=0) {
+		if(rowIndex >= 0) {
 			
 			Dipendente dipendente =dipendenteTabella.get(rowIndex);
 			

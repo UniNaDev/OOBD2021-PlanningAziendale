@@ -58,7 +58,7 @@ public class MeetingDAOPSQL implements MeetingDAO {
 		inserisciOrganizzatorePS = connection.prepareStatement("INSERT INTO Presenza(CF,IdMeeting,Presente,Organizzatore) VALUES(?,?,true,true)");
 		inserisciInvitatoMeetingPS = connection.prepareStatement("INSERT INTO Presenza(CF,IdMeeting,Presente,Organizzatore) VALUES(?,?,?,false)");
 		eliminaInvitatoPS = connection.prepareStatement("DELETE FROM Presenza WHERE CF=? AND idMeeting=?");
-		aggiornaPresenzaInvitatoPS = connection.prepareStatement("UPDATE Presenza as pr SET presente=? WHERE pr.CF ILIKE ? AND pr.idMeeting =?");
+		aggiornaPresenzaInvitatoPS = connection.prepareStatement("UPDATE Presenza as pr SET presente = ? WHERE pr.CF ILIKE ? AND pr.idMeeting =?");
 		ottieniUltimoIdMeetingInseritoPS = connection.prepareStatement("SELECT idMeeting FROM Meeting ORDER BY idMeeting DESC LIMIT 1");
 		filtraMeetingSegreteriaPerModalitàPS = connection.prepareStatement("SELECT * FROM Meeting AS m WHERE m.Modalità = ?");
 		filtraMeetingDipendentePerModalitàPS = connection.prepareStatement("SELECT * FROM Meeting AS m NATURAL JOIN Presenza AS p WHERE m.Modalità = ? AND p.CF=?");
