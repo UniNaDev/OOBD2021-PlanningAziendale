@@ -4,16 +4,11 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-
 import entita.Dipendente;
-import entita.Skill;
 
 public class DipendentiTableModel extends AbstractTableModel {
 	
-	private ArrayList<Dipendente> dipendenteTabella=new ArrayList<Dipendente>();
+	private ArrayList<Dipendente> dipendenteTabella = new ArrayList<Dipendente>();
 	
 	private String[] colnames= {"Nome", "Cognome", "Email", "Età", "Salario", "Valutazione"};
 

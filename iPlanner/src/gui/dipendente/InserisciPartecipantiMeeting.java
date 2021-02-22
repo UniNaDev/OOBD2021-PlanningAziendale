@@ -303,9 +303,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		invitatiScrollPane.setViewportView(invitatiList);
 		invitatiList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				if (invitatiList.getSelectedValue() != null)
+				if (!invitatiList.isSelectionEmpty())
 					presenzaCheckBox.setEnabled(true);
 				
+				System.out.println(dipendenteTable.getSelectedRow());
+				dipendenteSelezionato = null;
 				dipendenteTable.clearSelection();
 				impostaInfoDipendenteDaLista(controller);
 			}		
@@ -444,7 +446,9 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				invitatiList.clearSelection();
-				impostaInfoDipendenteDaTabella(controller);
+				if (dipendenteTable.getSelectedRow() >= 0)
+					impostaInfoDipendenteDaTabella(controller);
+				System.out.println(dipendenteTable.getSelectedRow());
 				
 				if(e.getClickCount() == 2) {	
 					inserisciInvitatoMeeting(controller);
@@ -648,6 +652,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private void inizializzaListaInvitati() {
 		modelloListaInvitati = new DefaultListModel();
 		modelloListaInvitati.addAll(meetingSelezionato.getPartecipantiAlMeeting());
+		modelloListaInvitati.remove(0);
 		invitatiList.setModel(modelloListaInvitati);
 	}
 
@@ -745,7 +750,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	
 	private void aggiornaListaInvitati() {
 		modelloListaInvitati.removeElementAt(invitatiList.getSelectedIndex());
-		invitatiList.setSelectedValue(null,false);
+		invitatiList.clearSelection();
 	}
 
 	private void aggiornaTabellaDipendenti(ControllerPartecipantiMeeting controller) {
@@ -831,5 +836,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			donnaRadioButton.setSelected(false);
 		skillModel.removeAllElements();
 		presenzaCheckBox.setEnabled(false);
+		dipendenteSelezionato = null;
 	}
 }
