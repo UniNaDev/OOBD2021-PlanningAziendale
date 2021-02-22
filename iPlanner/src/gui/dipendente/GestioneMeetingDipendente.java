@@ -38,6 +38,7 @@ import controller.dipendente.ControllerMeeting;
 import entita.Meeting;
 import entita.Progetto;
 import entita.SalaRiunione;
+import gui.ErroreDialog;
 import gui.cellRenderers.InvitatiListRenderer;
 import gui.cellRenderers.ProgettoDiscussoListRenderer;
 import gui.customUI.CustomScrollBarUI;
@@ -133,6 +134,9 @@ public class GestioneMeetingDipendente extends JFrame {
 	private final String VIOLAZIONE_SALA_OCCUPATA = "P0001";
 	private final String VIOLAZIONE_CAPIENZA_SALA = "P0002";
 	private final String VIOLAZIONE_ONNIPRESENZA_DIPENDENTE = "P0003";
+	private final String VIOLAZIONE_PKEY_UNIQUE = "23505";
+	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
+	private final String VIOLAZIONE_DATA_INVALIDA = "22008";
 	
 	private LocalDate dataAttuale = LocalDate.now();
 	private LocalTime oraAttuale = LocalTime.now();
@@ -446,7 +450,10 @@ public class GestioneMeetingDipendente extends JFrame {
 		eliminaButton.setAlignmentX(0.5f);
 		eliminaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (meetingSelezionato != null)	
 					eliminaMeeting(controller);
+				else
+					JOptionPane.showMessageDialog(null, "Selezionare prima un meeting.", "Eliminazione Fallita", JOptionPane.INFORMATION_MESSAGE);
 				}
 			});
 		eliminaButton.addMouseListener(new MouseAdapter() {
@@ -474,19 +481,28 @@ public class GestioneMeetingDipendente extends JFrame {
 				modalitaLabel.setForeground(Color.BLACK);
 				piattaformaSalaLabel.setForeground(Color.BLACK);
 				progettoDiscussoLabel.setForeground(Color.BLACK);
-				if (campiObbligatoriVuoti()) {
-					JOptionPane.showMessageDialog(null,
-							"Alcuni campi obbligatori sono vuoti.",
-							"Campi Obbligatori Vuoti", JOptionPane.ERROR_MESSAGE);
-					if (!onlineRadioButton.isSelected() && !fisicoRadioButton.isSelected())
-						modalitaLabel.setForeground(Color.RED);
-					if (piattaformaSalaComboBox.getSelectedItem() == null)
-						piattaformaSalaLabel.setForeground(Color.RED);
-					if (progettoDiscussoComboBox.getSelectedItem() == null) {
-						progettoDiscussoLabel.setForeground(Color.RED);
+				dataInizioLabel.setForeground(Color.BLACK);
+				dataFineLabel.setForeground(Color.BLACK);
+				invitatiLabel.setForeground(Color.BLACK);
+				oraInizioLabel.setForeground(Color.BLACK);
+				oraFineLabel.setForeground(Color.BLACK);
+				if (meetingSelezionato != null)
+					if (campiObbligatoriVuoti()) {
+						JOptionPane.showMessageDialog(null,
+								"Alcuni campi obbligatori sono vuoti.",
+								"Campi Obbligatori Vuoti", JOptionPane.ERROR_MESSAGE);
+						if (!onlineRadioButton.isSelected() && !fisicoRadioButton.isSelected())
+							modalitaLabel.setForeground(Color.RED);
+						if (piattaformaSalaComboBox.getSelectedItem() == null)
+							piattaformaSalaLabel.setForeground(Color.RED);
+						if (progettoDiscussoComboBox.getSelectedItem() == null) {
+							progettoDiscussoLabel.setForeground(Color.RED);
+						}
 					}
-				} else
-					aggiornaMeeting(controller);
+					else
+						aggiornaMeeting(controller);
+				else
+					JOptionPane.showMessageDialog(null, "Selezionare prima un meeting dalla tabella.", "Salvataggio Fallito", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		modificaButton.addMouseListener(new MouseAdapter() {
@@ -515,6 +531,11 @@ public class GestioneMeetingDipendente extends JFrame {
 				modalitaLabel.setForeground(Color.BLACK);
 				piattaformaSalaLabel.setForeground(Color.BLACK);
 				progettoDiscussoLabel.setForeground(Color.BLACK);
+				dataInizioLabel.setForeground(Color.BLACK);
+				dataFineLabel.setForeground(Color.BLACK);
+				invitatiLabel.setForeground(Color.BLACK);
+				oraInizioLabel.setForeground(Color.BLACK);
+				oraFineLabel.setForeground(Color.BLACK);
 				if (!campiObbligatoriVuoti())
 						creaMeeting(controller);
 				else {
@@ -574,6 +595,7 @@ public class GestioneMeetingDipendente extends JFrame {
 		});
 		
 		refreshFiltriLabel = new JLabel("");
+		refreshFiltriLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		refreshFiltriLabel.setIcon(new ImageIcon(GestioneMeetingDipendente.class.getResource("/icone/refresh.png")));
 		refreshFiltriLabel.setToolTipText("Reset dei filtri");
 		refreshFiltriLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
@@ -874,7 +896,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		infoPanel.add(infoPanel2);
 	}
 
-
+	//Altri metodi
+	//----------------------------------------------------
 	private void impostaInfoMeeting(ControllerMeeting controller) {
 		int rigaSelezionata=meetingTable.convertRowIndexToModel(meetingTable.getSelectedRow());
 		meetingSelezionato= modelloTabellaMeeting.getSelected(rigaSelezionata);
@@ -928,10 +951,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		try {
 			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeetingDipendente());
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -942,9 +963,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			piattaformaSalaComboBox.setModel(modelloComboBoxPiattaformaSala);
 			piattaformaSalaComboBox.setSelectedItem(meetingSelezionato.getPiattaforma());
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e1,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -955,9 +975,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			piattaformaSalaComboBox.setModel(modelloComboBoxPiattaformaSala);
 			piattaformaSalaComboBox.setSelectedItem(meetingSelezionato.getSala());
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e1,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -968,9 +987,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloListaInfoProgetto.removeAllElements();
 			modelloListaInfoProgetto.add(0, progetto);
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e1,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -986,9 +1004,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			piattaformaSalaComboBox.setModel(modelloComboBoxPiattaformaSala);
 			piattaformaSalaComboBox.setSelectedIndex(0);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1002,9 +1019,9 @@ public class GestioneMeetingDipendente extends JFrame {
 			else
 				piattaformaSalaComboBox.setSelectedItem(null);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);		}
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);		
+		}
 	}
 	
 	private void inizializzaComboBoxProgettoDiscusso(ControllerMeeting controller) {
@@ -1013,9 +1030,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			progettoDiscussoComboBox.setModel(modelloComboBoxProgettoDiscusso);
 			progettoDiscussoComboBox.setSelectedItem(null);
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1024,9 +1040,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		try {
 			sale = controller.ottieniSale();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 		sale.add(0, null);
 		modelloComboBoxFiltroSala.addAll(sale);
@@ -1038,9 +1053,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		try {
 			piattaforme = controller.ottieniPiattaforme();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 		piattaforme.add(0, null);
 		modelloComboBoxFiltroPiattaforma.addAll(piattaforme);
@@ -1055,9 +1069,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			sorterMeeting.setModel(modelloTabellaMeeting);
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 			}
 	}
 	
@@ -1068,9 +1081,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingTelematiciDipendenti());
 			modelloTabellaMeeting.fireTableDataChanged();
 		} catch (SQLException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage()
-						+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1089,9 +1101,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		modelloTabellaMeeting.fireTableDataChanged();
 		sorterMeeting.setModel(modelloTabellaMeeting);
 		} catch(SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1110,9 +1121,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		modelloTabellaMeeting.fireTableDataChanged();
 		sorterMeeting.setModel(modelloTabellaMeeting);
 		} catch(SQLException e){
-			JOptionPane.showMessageDialog(null, e.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1129,61 +1139,105 @@ public class GestioneMeetingDipendente extends JFrame {
 				modificaButton.setEnabled(false);
 			}
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage()
-					+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e1.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e1,true);
+			errore.setVisible(true);
 		}
 	}
 
 	public void creaMeeting(ControllerMeeting controller) {
 		try {
 			ricavaInfoMeeting();
-			Meeting nuovoMeeting = new Meeting(-1, dataInizio, dataFine, oraInizio, oraFine, modalita, piattaforma,
-					sala);
+			Meeting nuovoMeeting = new Meeting(-1, dataInizio, dataFine, oraInizio, oraFine, modalita, piattaforma, sala);
 			nuovoMeeting.setProgettoDiscusso(progettoDiscusso);
+			
 			controller.creaMeeting(nuovoMeeting);
 			try {
 				nuovoMeeting.setIdMeeting(controller.ottieniIdUltimoMeetingInserito());
 				controller.inserisciOrganizzatore();
-				JOptionPane.showMessageDialog(null, "Meeting Inserito Correttamente");
+				JOptionPane.showMessageDialog(null, "Meeting inserito correttamente.", "Creazione Riuscita", JOptionPane.INFORMATION_MESSAGE);
 				aggiornaTabella(controller);
 				impostaSorterTabellaMeeting();
 				svuotaCampiMeeting();
 			} catch (SQLException e) {
-				//TODO: verificare altre possibili eccezioni
+				ErroreDialog errore = null;
 				switch(e.getSQLState()) {
-                case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-                    JOptionPane.showMessageDialog(null,
-                            "\nImpossibile creare il meeting perchè si accavalla con altri meeting."
-                            + "\nCambiare data e orario oppure modificare prima il meeting che si accavalla.",
-                            "Errore Accavallamento Meeting",
-                            JOptionPane.ERROR_MESSAGE);
-                    break;
+				case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
+					errore = new ErroreDialog(e,
+							"Creazione Fallita", 
+							"Ci sono problemi di accavallamento con il meeting che si sta tentando di creare."
+							+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.", false);
+					invitatiLabel.setForeground(Color.RED);
+					break;
+				case VIOLAZIONE_CAPIENZA_SALA:
+					errore = new ErroreDialog(e,
+							"Creazione Fallita",
+							"I partecipanti al meeting che si vuole creare sono maggiori"
+							+ "\nrispetto alla capienza massima della sala.\n"
+							+ "Controllare che non ci siano più di " + meetingSelezionato.getSala().getCapienza() + " partecipanti.", false);
+					piattaformaSalaLabel.setForeground(Color.RED);
+					break;
                 default:
-                    JOptionPane.showMessageDialog(null, e.getMessage()
-                            + "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-                            "Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+					errore = new ErroreDialog(e,true);
                 }
+				errore.setVisible(true);
 				try {
 					controller.rimuoviMeeting(nuovoMeeting.getIdMeeting());
 				} catch (SQLException e1) {
-					JOptionPane.showMessageDialog(null, e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+					ErroreDialog erroreRimozione = new ErroreDialog(e1,true);
+					erroreRimozione.setVisible(true);
 				}
 			}
 		} catch (IllegalFieldValueException ifve) {
-			
-			JOptionPane.showMessageDialog(null, "Data inserita non valida.\nInserire una data esistente.",
-					"Errore Data Non Valida", JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(ifve, "La data inserita non esiste.", "Creazione Fallita", false);
+			errore.setVisible(true);
+			dataInizioLabel.setForeground(Color.RED);
+			dataFineLabel.setForeground(Color.RED);
 		} catch (SQLException e) {
-			
-			//TODO: verificare altre possibili eccezioni
-            JOptionPane.showMessageDialog(null,
-                    "Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di inserire."
-                            + "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
-                            "Errore Sala Occupata",
-                            JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = null;
+			switch(e.getSQLState()) {
+			case VIOLAZIONE_PKEY_UNIQUE:
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Impossibile creare il meeting perchè ne esiste uno duplicato.", false);
+				break;
+			case VIOLAZIONE_DATA_INVALIDA:
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"La data inserita non esiste.", false);
+				break;
+			case VIOLAZIONE_VINCOLI_TABELLA:
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Impossibile creare il meeting.\n"
+						+ "Verificare che:"
+						+ "1)La data di inizio sia precedente o uguale a quella di termine.\n"
+						+ "2)L'orario di inizio e fine meeting siano corretti.\n"
+						+ "3)Se la modalità è fisico sia selezionata una sala.\n"
+						+ "4)Se la modalità è telematico sia selezionata una piattaforma.", false);
+				if (dataFine.isBefore(dataInizio)) {
+					dataInizioLabel.setForeground(Color.RED);
+					dataFineLabel.setForeground(Color.RED);
+				}
+				if (dataInizio.equals(dataFine) && oraFine.isBefore(oraInizio)) {
+					oraInizioLabel.setForeground(Color.RED);
+					oraFineLabel.setForeground(Color.RED);
+				}
+				if (modalita.equals("Fisico") && piattaforma != null)
+					piattaformaSalaLabel.setForeground(Color.RED);
+				if (modalita.equals("Telematico") && sala != null)
+					piattaformaSalaLabel.setForeground(Color.RED);
+				break;
+			case VIOLAZIONE_SALA_OCCUPATA:
+				errore = new ErroreDialog(e,
+						"Creazione Fallita",
+						"Ci sono problemi di accavallamento con il meeting che si sta tentando di creare."
+						+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.", false);
+				piattaformaSalaLabel.setForeground(Color.RED);
+				break;
+			default:
+				errore = new ErroreDialog(e,true);
+			}
+			errore.setVisible(true);
 		}
 	}
 	
@@ -1207,43 +1261,71 @@ public class GestioneMeetingDipendente extends JFrame {
 			meetingSelezionato.setProgettoDiscusso(progettoDiscusso);
 			
 			controller.aggiornaMeeting(meetingSelezionato);
-			JOptionPane.showMessageDialog(null, "Meeting Modificato Correttamente");
+			JOptionPane.showMessageDialog(null, "Meeting modificato correttamente.", "Salvataggio Riuscito", JOptionPane.INFORMATION_MESSAGE);
 			svuotaCampiMeeting();
 			aggiornaTabella(controller);
 			impostaSorterTabellaMeeting();
 		} catch(IllegalFieldValueException ifve) {
-			JOptionPane.showMessageDialog(null, "Data inserita non valida.\nInserire una data esistente.",
-					"Errore Data Non Valida", JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(ifve, "La data inserita non esiste.", "Salvataggio Fallito", false);
+			errore.setVisible(true);
+			dataInizioLabel.setForeground(Color.RED);
+			dataFineLabel.setForeground(Color.RED);
 		} catch(SQLException e) {
-			//TODO: verificare altre possibili eccezioni
+			ErroreDialog errore = null;
 			switch(e.getSQLState()) {
+			case VIOLAZIONE_DATA_INVALIDA:
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito",
+						"La data inserita non esiste.", false);
+				break;
+			case VIOLAZIONE_VINCOLI_TABELLA:
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito",
+						"Impossibile salvare le modifiche.\n"
+						+ "Verificare che:"
+						+ "1)La data di inizio sia precedente o uguale a quella di termine.\n"
+						+ "2)L'orario di inizio e fine meeting siano corretti.\n"
+						+ "3)Se la modalità è fisico sia selezionata una sala.\n"
+						+ "4)Se la modalità è telematico sia selezionata una piattaforma.", false);
+				if (dataFine.isBefore(dataInizio)) {
+					dataInizioLabel.setForeground(Color.RED);
+					dataFineLabel.setForeground(Color.RED);
+				}
+				if (dataInizio.equals(dataFine) && oraFine.isBefore(oraInizio)) {
+					oraInizioLabel.setForeground(Color.RED);
+					oraFineLabel.setForeground(Color.RED);
+				}
+				if (modalita.equals("Fisico") && piattaforma != null)
+					piattaformaSalaLabel.setForeground(Color.RED);
+				if (modalita.equals("Telematico") && sala != null)
+					piattaformaSalaLabel.setForeground(Color.RED);
+				break;
 			case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-				JOptionPane.showMessageDialog(null,
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito", 
 						"Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
-								+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.",
-								"Errore Accavallamento Meeting",
-								JOptionPane.ERROR_MESSAGE);
+						+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.", false);
+				invitatiLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_CAPIENZA_SALA:
-				JOptionPane.showMessageDialog(null,
-						"I partecipanti al meeting che si vuole modificare sono maggiori "
-								+ "\nrispetto alla capienza massima della sala.\n"
-								+ "Controllare che non ci siano più di " + meetingSelezionato.getSala().getCapienza() + " partecipanti.",
-								"Errore Capienza Sala",
-								JOptionPane.ERROR_MESSAGE);
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito",
+						"I partecipanti al meeting che si vuole modificare sono maggiori"
+						+ "\nrispetto alla capienza massima della sala.\n"
+						+ "Controllare che non ci siano più di " + meetingSelezionato.getSala().getCapienza() + " partecipanti.", false);
+				piattaformaSalaLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_SALA_OCCUPATA:
-				JOptionPane.showMessageDialog(null,
-						"Errore: Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
-								+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.",
-								"Errore Sala Occupata",
-								JOptionPane.ERROR_MESSAGE);
+				errore = new ErroreDialog(e,
+						"Salvataggio Fallito",
+						"Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
+						+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.", false);
+				piattaformaSalaLabel.setForeground(Color.RED);
 				break;
-				default:
-					JOptionPane.showMessageDialog(null, e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-							"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			default:
+				errore = new ErroreDialog(e,true);
 			}
+			errore.setVisible(true);
 		}
 	}
 
@@ -1284,21 +1366,16 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 	
 	private void eliminaMeeting(ControllerMeeting controller) {
-		if(meetingSelezionato != null) {
-			try {
-				controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
-				JOptionPane.showMessageDialog(null, "Meeting Eliminato Correttamente");
-				aggiornaTabella(controller);
-				impostaSorterTabellaMeeting();
-				svuotaCampiMeeting();
-			} catch(SQLException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage()
-						+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-						"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
-			}
+		try {
+			controller.rimuoviMeeting(meetingSelezionato.getIdMeeting());
+			JOptionPane.showMessageDialog(null, "Meeting eliminato correttamente.", "Eliminazione Riuscita", JOptionPane.INFORMATION_MESSAGE);
+			aggiornaTabella(controller);
+			impostaSorterTabellaMeeting();
+			svuotaCampiMeeting();
+		} catch(SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e, true);
+			errore.setVisible(true);
 		}
-		else
-			JOptionPane.showMessageDialog(null, "Selezionare un meeting dalla tabella");
 	}
 	
 	private boolean campiObbligatoriVuoti() {
@@ -1312,6 +1389,14 @@ public class GestioneMeetingDipendente extends JFrame {
 	}
 
 	private void svuotaCampiMeeting() {
+		modalitaLabel.setForeground(Color.BLACK);
+		piattaformaSalaLabel.setForeground(Color.BLACK);
+		progettoDiscussoLabel.setForeground(Color.BLACK);
+		dataInizioLabel.setForeground(Color.BLACK);
+		dataFineLabel.setForeground(Color.BLACK);
+		invitatiLabel.setForeground(Color.BLACK);
+		oraInizioLabel.setForeground(Color.BLACK);
+		oraFineLabel.setForeground(Color.BLACK);
 		dataInizioGiornoComboBox.setSelectedIndex(dataAttuale.getDayOfMonth() - 1);
 		dataInizioMeseComboBox.setSelectedIndex(dataAttuale.getMonthOfYear() - 1);
 		dataInizioAnnoComboBox.setSelectedIndex(dataAttuale.getYear() - 1900);
