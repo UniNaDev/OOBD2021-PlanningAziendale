@@ -5,6 +5,7 @@ package controller.dipendente;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import entita.Meeting;
 import entita.CollaborazioneProgetto;
@@ -83,8 +84,45 @@ public class ControllerGestioneProfilo {
     }
 
     public ArrayList<Meeting> ottieniMeetingDipendente() throws SQLException {
-    	return meetDAO.ottieniMeetingDipendente(dipendenteLogged);
-    }
+		ArrayList<Meeting> meeting = meetDAO.ottieniMeetingDipendente(dipendenteLogged);
+		meeting.sort(new Comparator<Meeting>() {
+			public int compare(Meeting meet1, Meeting meet2) {
+				if (meet1.isPassato() && !meet2.isPassato())
+					return 1;
+				else if (!meet1.isPassato() && meet2.isPassato())
+					return -1;
+				else if (meet1.isPassato() && meet2.isPassato()) {
+					if (meet1.getDataFine().isBefore(meet2.getDataFine()))
+						return 1;
+					else if (meet1.getDataFine().isAfter(meet2.getDataFine()))
+						return -1;
+					else {
+						if (meet1.getOraFine().isBefore(meet2.getOraFine()))
+							return -1;
+						else if (meet1.getOraFine().isAfter(meet2.getOraFine()))
+							return 1;
+						else
+							return 0;
+					}
+				} else if (!meet1.isPassato() && !meet2.isPassato()) {
+					if (meet1.getDataInizio().isBefore(meet2.getDataInizio()))
+						return -1;
+					else if (meet1.getDataInizio().isAfter(meet2.getDataInizio()))
+						return 1;
+					else {
+						if (meet1.getOraInizio().isBefore(meet2.getOraInizio()))
+							return -1;
+						else if (meet1.getOraInizio().isAfter(meet2.getOraInizio()))
+							return 1;
+						else
+							return 0;
+					}
+				}
+				return 0;
+			}
+		});
+		return meeting;
+	}
 
     public void aggiornaDipendente(Dipendente dipendenteModificato) throws SQLException {
     	dipDAO.aggiornaDipendente(dipendenteModificato);

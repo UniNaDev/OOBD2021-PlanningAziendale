@@ -1147,45 +1147,49 @@ public class GestioneMeetingDipendente extends JFrame {
 	public void creaMeeting(ControllerMeeting controller) {
 		try {
 			ricavaInfoMeeting();
-			Meeting nuovoMeeting = new Meeting(-1, dataInizio, dataFine, oraInizio, oraFine, modalita, piattaforma, sala);
-			nuovoMeeting.setProgettoDiscusso(progettoDiscusso);
-			
-			controller.creaMeeting(nuovoMeeting);
-			try {
-				nuovoMeeting.setIdMeeting(controller.ottieniIdUltimoMeetingInserito());
-				controller.inserisciOrganizzatore();
-				JOptionPane.showMessageDialog(null, "Meeting inserito correttamente.", "Creazione Riuscita", JOptionPane.INFORMATION_MESSAGE);
-				aggiornaTabella(controller);
-				impostaSorterTabellaMeeting();
-				svuotaCampiMeeting();
-			} catch (SQLException e) {
-				ErroreDialog errore = null;
-				switch(e.getSQLState()) {
-				case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-					errore = new ErroreDialog(e,
-							"Creazione Fallita", 
-							"Ci sono problemi di accavallamento con il meeting che si sta tentando di creare."
-							+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.", false);
-					invitatiLabel.setForeground(Color.RED);
-					break;
-				case VIOLAZIONE_CAPIENZA_SALA:
-					errore = new ErroreDialog(e,
-							"Creazione Fallita",
-							"I partecipanti al meeting che si vuole creare sono maggiori"
-							+ "\nrispetto alla capienza massima della sala.\n"
-							+ "Controllare che non ci siano più di " + meetingSelezionato.getSala().getCapienza() + " partecipanti.", false);
-					piattaformaSalaLabel.setForeground(Color.RED);
-					break;
-                default:
-					errore = new ErroreDialog(e,true);
-                }
-				errore.setVisible(true);
+			if ((dataFine.isAfter(dataAttuale) || dataFine.equals(dataAttuale)) && (dataInizio.isAfter(dataAttuale) || dataInizio.equals(dataAttuale))) {
+				Meeting nuovoMeeting = new Meeting(-1, dataInizio, dataFine, oraInizio, oraFine, modalita, piattaforma, sala);
+				nuovoMeeting.setProgettoDiscusso(progettoDiscusso);
+				
+				controller.creaMeeting(nuovoMeeting);
 				try {
-					controller.rimuoviMeeting(nuovoMeeting.getIdMeeting());
-				} catch (SQLException e1) {
-					ErroreDialog erroreRimozione = new ErroreDialog(e1,true);
-					erroreRimozione.setVisible(true);
+					nuovoMeeting.setIdMeeting(controller.ottieniIdUltimoMeetingInserito());
+					controller.inserisciOrganizzatore();
+					JOptionPane.showMessageDialog(null, "Meeting inserito correttamente.", "Creazione Riuscita", JOptionPane.INFORMATION_MESSAGE);
+					aggiornaTabella(controller);
+					impostaSorterTabellaMeeting();
+					svuotaCampiMeeting();
+				} catch (SQLException e) {
+					ErroreDialog errore = null;
+					switch(e.getSQLState()) {
+					case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
+						errore = new ErroreDialog(e,
+								"Creazione Fallita", 
+								"Ci sono problemi di accavallamento con il meeting che si sta tentando di creare."
+								+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.", false);
+						invitatiLabel.setForeground(Color.RED);
+						break;
+					case VIOLAZIONE_CAPIENZA_SALA:
+						errore = new ErroreDialog(e,
+								"Creazione Fallita",
+								"I partecipanti al meeting che si vuole creare sono maggiori"
+								+ "\nrispetto alla capienza massima della sala.\n"
+								+ "Controllare che non ci siano più di " + meetingSelezionato.getSala().getCapienza() + " partecipanti.", false);
+						piattaformaSalaLabel.setForeground(Color.RED);
+						break;
+	                default:
+						errore = new ErroreDialog(e,true);
+	                }
+					errore.setVisible(true);
+					try {
+						controller.rimuoviMeeting(nuovoMeeting.getIdMeeting());
+					} catch (SQLException e1) {
+						ErroreDialog erroreRimozione = new ErroreDialog(e1,true);
+						erroreRimozione.setVisible(true);
+					}
 				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Inserire una data odierna o successiva per l'inizio e la fine del meeting.", "Creazione Fallita", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (IllegalFieldValueException ifve) {
 			ErroreDialog errore = new ErroreDialog(ifve, "La data inserita non esiste.", "Creazione Fallita", false);
