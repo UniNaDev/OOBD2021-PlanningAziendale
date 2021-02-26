@@ -183,6 +183,10 @@ public class Home extends JFrame {
 		});
 
 		logoutButton = new JButton("Esci");
+		logoutButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		logoutButton.setFont(new Font("Consolas", Font.PLAIN, 11));
+		logoutButton.setBackground(Color.WHITE);
+		logoutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		logoutButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.logout();
@@ -200,9 +204,6 @@ public class Home extends JFrame {
 			}
 
 		});
-		logoutButton.setFont(new Font("Consolas", Font.PLAIN, 11));
-		logoutButton.setBackground(Color.WHITE);
-		logoutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		progettiScrollPanel = new JScrollPane();
 		progettiScrollPanel.getHorizontalScrollBar().setUI(new CustomScrollBarUI());

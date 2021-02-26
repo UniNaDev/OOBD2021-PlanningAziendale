@@ -67,9 +67,7 @@ public class ControllerPartecipantiProgetto {
 			
 			String unicitàProjectManager="P0004";
 			if(e.getSQLState().equals(unicitàProjectManager))
-			JOptionPane.showMessageDialog(null, "Errore: Esiste già un project manager per questo progetto"
-					+ "\nN.B. Se si vuole effettuare un cambio di project Manager,aggiornare "
-					+ "\ni ruoli attraverso l'apposito pulsante aggiorna ruolo");
+			JOptionPane.showMessageDialog(null, "Errore: Esiste già un project manager per questo progetto");
 			return false;
 		}
 	}
@@ -97,7 +95,9 @@ public class ControllerPartecipantiProgetto {
 			return true;
 		} catch (SQLException e) {
 			
-			JOptionPane.showMessageDialog(null, e.getMessage());
+			String unicitàProjectManager="P0004";
+			if(e.getSQLState().equals(unicitàProjectManager))
+				JOptionPane.showMessageDialog(null, "Errore: Esiste già un project manager per questo progetto");
 			return false;
 		}
 	}

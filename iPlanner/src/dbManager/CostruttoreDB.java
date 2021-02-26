@@ -397,7 +397,7 @@ public class CostruttoreDB {
                 		+ "	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),\r\n"
                 		+ "	CONSTRAINT PresenzaEsistente UNIQUE(CF,IDMeeting),\r\n"
                 		+ "	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE,\r\n"
-                		+ "	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE --ON UPDATE CASCADE--\r\n"
+                		+ "	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
                 		+ ");";
                 risultato = statement.executeUpdate(createTable);
                 statement.close();
@@ -783,7 +783,7 @@ public class CostruttoreDB {
             		+ "	FOR OLDMeeting IN\r\n"
             		+ "		SELECT *\r\n"
             		+ "		FROM Presenza AS p NATURAL JOIN Meeting AS m\r\n"
-            		+ "		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting AND m.DataFine >= CURRENT_DATE AND OrarioFine >= CURRENT_TIME\r\n"
+            		+ "		WHERE p.CF = NEW.CF AND NEW.IDMeeting <> p.IDMeeting AND m.DataFine >= CURRENT_DATE\r\n"
             		+ "	LOOP\r\n"
             		+ "		--Controlla che non si accavalli con quello nuovo\r\n"
             		+ "		IF (accavallamento(OLDMeeting.DataInizio,OLDMeeting.DataFine,NEWDataInizio,NEWDataFine,OLDMeeting.OrarioInizio,OLDMeeting.OrarioFine,NEWOraInizio,NEWOraFine)) THEN\r\n"

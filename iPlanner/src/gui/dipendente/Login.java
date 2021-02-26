@@ -129,6 +129,7 @@ public class Login extends JFrame {
 		annullaButton = new JButton("Annulla");
 		annullaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		annullaButton.setFont(new Font("Consolas", Font.PLAIN, 13));
+		annullaButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		annullaButton.setBounds(10, 364, 121, 26);
 		annullaButton.addMouseListener(new MouseAdapter() {
 		    @Override
@@ -150,6 +151,7 @@ public class Login extends JFrame {
 		accessoButton = new JButton("Login");
 		accessoButton.setBounds(306, 267, 121, 26);
 		accessoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		accessoButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		accessoButton.setFont(new Font("Consolas", Font.PLAIN, 13));
 		accessoButton.addMouseListener(new MouseAdapter() {
 		    @Override

@@ -849,9 +849,11 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		comandiPanel.add(skillFiltroLabel);
 
 		inizializzaFiltroSkillComboBox(controller);
+		skillFiltroComboBox.setUI(new BasicComboBoxUI());
 		skillFiltroComboBox.setFont(new Font("Consolas", Font.PLAIN, 13));
 		skillFiltroComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		skillFiltroComboBox.setBackground(Color.WHITE);
+		skillFiltroComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		skillFiltroComboBox.setBounds(856, 6, 157, 22);
 		comandiPanel.add(skillFiltroComboBox);
 

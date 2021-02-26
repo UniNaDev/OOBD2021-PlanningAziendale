@@ -1155,7 +1155,8 @@ public class GestioneMeetingDipendente extends JFrame {
 	public void creaMeeting(ControllerMeeting controller) {
 		try {
 			ricavaInfoMeeting();
-			if ((dataFine.isAfter(dataAttuale) || dataFine.equals(dataAttuale)) && (dataInizio.isAfter(dataAttuale) || dataInizio.equals(dataAttuale))) {
+			if ((dataFine.isAfter(dataAttuale) || dataFine.equals(dataAttuale)) && (dataInizio.isAfter(dataAttuale) || dataInizio.equals(dataAttuale)) 
+					&& ((oraInizio.isAfter(oraAttuale) && dataInizio.equals(dataAttuale) && oraFine.isAfter(oraAttuale)) || (dataInizio.isAfter(dataAttuale)) ) ) {
 				Meeting nuovoMeeting = new Meeting(-1, dataInizio, dataFine, oraInizio, oraFine, modalita, piattaforma, sala);
 				nuovoMeeting.setProgettoDiscusso(progettoDiscusso);
 				
@@ -1197,7 +1198,7 @@ public class GestioneMeetingDipendente extends JFrame {
 					}
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Inserire una data odierna o successiva per l'inizio e la fine del meeting.", "Creazione Fallita", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Inserire una data odierna o successiva e/o un orario successivo a quello attuale per l'inizio e la fine del meeting.", "Creazione Fallita", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (IllegalFieldValueException ifve) {
 			ErroreDialog errore = new ErroreDialog(ifve, "La data inserita non esiste.", "Creazione Fallita", false);
@@ -1256,27 +1257,33 @@ public class GestioneMeetingDipendente extends JFrame {
 	private void aggiornaMeeting(ControllerMeeting controller) {
 		try{
 			ricavaInfoMeeting();
-
-			meetingSelezionato.setDataInizio(dataInizio);
-			meetingSelezionato.setDataFine(dataFine);
-			meetingSelezionato.setOraInizio(oraInizio);
-			meetingSelezionato.setOraFine(oraFine);
-			meetingSelezionato.setModalita(modalita);
-			if(meetingSelezionato.getModalita().equals("Fisico")) {
-				meetingSelezionato.setSala(sala);
-				meetingSelezionato.setPiattaforma(null);
-			}
-			else if(meetingSelezionato.getModalita().equals("Telematico")) {
-				meetingSelezionato.setSala(null);
-				meetingSelezionato.setPiattaforma(piattaforma);
-			}
-			meetingSelezionato.setProgettoDiscusso(progettoDiscusso);
 			
-			controller.aggiornaMeeting(meetingSelezionato);
-			JOptionPane.showMessageDialog(null, "Meeting modificato correttamente.", "Salvataggio Riuscito", JOptionPane.INFORMATION_MESSAGE);
-			svuotaCampiMeeting();
-			aggiornaTabella(controller);
-			impostaSorterTabellaMeeting();
+			if ((dataFine.isAfter(dataAttuale) || dataFine.equals(dataAttuale)) && (dataInizio.isAfter(dataAttuale) || dataInizio.equals(dataAttuale)) 
+					&& ((oraInizio.isAfter(oraAttuale) && dataInizio.equals(dataAttuale) && oraFine.isAfter(oraAttuale)) || (dataInizio.isAfter(dataAttuale)) ) ) {
+				meetingSelezionato.setDataInizio(dataInizio);
+				meetingSelezionato.setDataFine(dataFine);
+				meetingSelezionato.setOraInizio(oraInizio);
+				meetingSelezionato.setOraFine(oraFine);
+				meetingSelezionato.setModalita(modalita);
+				if(meetingSelezionato.getModalita().equals("Fisico")) {
+					meetingSelezionato.setSala(sala);
+					meetingSelezionato.setPiattaforma(null);
+				}
+				else if(meetingSelezionato.getModalita().equals("Telematico")) {
+					meetingSelezionato.setSala(null);
+					meetingSelezionato.setPiattaforma(piattaforma);
+				}
+				meetingSelezionato.setProgettoDiscusso(progettoDiscusso);
+				
+				controller.aggiornaMeeting(meetingSelezionato);
+				JOptionPane.showMessageDialog(null, "Meeting modificato correttamente.", "Salvataggio Riuscito", JOptionPane.INFORMATION_MESSAGE);
+				svuotaCampiMeeting();
+				aggiornaTabella(controller);
+				impostaSorterTabellaMeeting();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Inserire una data odierna o successiva e/o un orario successivo a quello attuale per l'inizio e la fine del meeting.", "Modifica Fallita", JOptionPane.ERROR_MESSAGE);
+			}
 		} catch(IllegalFieldValueException ifve) {
 			ErroreDialog errore = new ErroreDialog(ifve, "La data inserita non esiste.", "Salvataggio Fallito", false);
 			errore.setVisible(true);

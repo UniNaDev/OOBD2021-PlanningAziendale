@@ -611,8 +611,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		dipendenteTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendenteTable.setBackground(Color.WHITE);
 		dipendenteTable.setSelectionBackground(Color.LIGHT_GRAY);
-		impostaProprietàTabellaDipendente();
 		inizializzaTabellaDipendente(controller);
+		impostaProprietàTabellaDipendente();
 		dipendenteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		dipendenteTable.getTableHeader().setReorderingAllowed(false);
 		dipendenteTable.addMouseListener(new MouseAdapter() {

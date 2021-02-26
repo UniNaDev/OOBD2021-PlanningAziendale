@@ -289,7 +289,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		
 		presenzaCheckBox = new JCheckBox("");
 		presenzaCheckBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		presenzaCheckBox.setEnabled(false);
 		
 		invitatiScrollPane = new JScrollPane();
 		invitatiScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
@@ -862,7 +861,6 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		else
 			donnaRadioButton.setSelected(false);
 		skillModel.removeAllElements();
-		presenzaCheckBox.setEnabled(false);
 		dipendenteSelezionato = null;
 	}
 }
