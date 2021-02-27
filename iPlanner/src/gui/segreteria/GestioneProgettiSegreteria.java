@@ -583,7 +583,7 @@ public class GestioneProgettiSegreteria extends JFrame {
 		try {
 			controller.creaAmbitoProgetto(ambitoNuovoTextField.getText());
 			JOptionPane.showMessageDialog(null, 
-					"Ambito creato con successo.",
+					"Ambito creato con successo.\nDa ora i dipendenti potranno lavorare a progetti di questo ambito.",
 					"Creazione Riuscita",
 					JOptionPane.INFORMATION_MESSAGE);
 			inizializzaFiltroAmbitiComboBox(controller);
