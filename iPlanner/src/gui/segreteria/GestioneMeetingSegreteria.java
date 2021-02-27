@@ -174,7 +174,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 				if (telematicoRadioButton.isSelected()) {
 					applicaFiltroTelematico(controller);
 				} else {
-					setModelloTabellaTuttiMeeting(controller);
+					inizializzaTabellaMeeting(controller);
 					modelloTabellaMeeting.fireTableDataChanged();
 				}
 			}
@@ -190,7 +190,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 				if (fisicoRadioButton.isSelected()) {
 					applicaFiltroFisico(controller);
 				} else {
-					setModelloTabellaTuttiMeeting(controller);
+					inizializzaTabellaMeeting(controller);
 					modelloTabellaMeeting.fireTableDataChanged();
 				}
 			}
@@ -206,7 +206,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 				if (filtroSaleComboBox.getSelectedItem() != null)
 					applicaFiltroSala(controller, (SalaRiunione) filtroSaleComboBox.getSelectedItem());
 				else {
-					setModelloTabellaTuttiMeeting(controller);
+					inizializzaTabellaMeeting(controller);
 					modelloTabellaMeeting.fireTableDataChanged();
 				}
 			}
@@ -228,7 +228,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 				if (filtroPiattaformaComboBox.getSelectedItem() != null)
 					applicaFiltroPiattaforma(controller, filtroPiattaformaComboBox.getSelectedItem().toString());
 				else {
-					setModelloTabellaTuttiMeeting(controller);
+					inizializzaTabellaMeeting(controller);
 					modelloTabellaMeeting.fireTableDataChanged();
 				}
 			}
@@ -266,29 +266,12 @@ public class GestioneMeetingSegreteria extends JFrame {
 		contentPane.add(tabellaScrollPanel);
 		
 		modelloTabellaMeeting = new MeetingTableModel();
-		setModelloTabellaTuttiMeeting(controller);
 		tabellaMeeting = new JTable(modelloTabellaMeeting);
+		inizializzaTabellaMeeting(controller);
+		impostaProprietàTabellaMeeting();
 		tabellaMeeting.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabellaMeeting.setFont(new Font("Consolas", Font.PLAIN, 11));
 		tabellaMeeting.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		DefaultTableCellRenderer renderTabellaProgetti = new DefaultTableCellRenderer();
-        renderTabellaProgetti.setHorizontalAlignment(SwingConstants.CENTER);
-        renderTabellaProgetti.setVerticalAlignment(SwingConstants.CENTER);
-        tabellaMeeting.getColumnModel().getColumn(0).setCellRenderer(renderTabellaProgetti);
-        tabellaMeeting.getColumnModel().getColumn(1).setCellRenderer(renderTabellaProgetti);
-        tabellaMeeting.getColumnModel().getColumn(2).setCellRenderer(renderTabellaProgetti);
-        tabellaMeeting.getColumnModel().getColumn(3).setCellRenderer(renderTabellaProgetti);
-        tabellaMeeting.getColumnModel().getColumn(4).setCellRenderer(renderTabellaProgetti);
-        tabellaMeeting.getColumnModel().getColumn(5).setCellRenderer(renderTabellaProgetti);
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaMeeting.getModel());
-		DataComparator comparatorDate = new DataComparator();
-		OrarioComparator comparatorOrari = new OrarioComparator();
-		sorter.setComparator(0,comparatorDate);
-		sorter.setComparator(1,comparatorDate);
-		sorter.setComparator(2, comparatorOrari);
-		sorter.setComparator(3, comparatorOrari);
-		tabellaMeeting.setRowSorter(sorter);
-		tabellaMeeting.getRowSorter().toggleSortOrder(0);
 		tabellaMeeting.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -306,7 +289,7 @@ public class GestioneMeetingSegreteria extends JFrame {
 				}
 				progettoDiscussoTextArea.setText("Progetto Discusso: " + meetingSelezionato.getProgettoDiscusso().getNomeProgetto());
 				invitatiListModel.clear();
-				setModelloInvitatiList(controller,meetingSelezionato);
+				inizializzaListaInvitati(controller,meetingSelezionato);
 			}
 		});
 		tabellaScrollPanel.setViewportView(tabellaMeeting);
@@ -367,8 +350,45 @@ public class GestioneMeetingSegreteria extends JFrame {
 		contentPane.add(esciButton);
 	}
 	
-	//Altri metodi
-	//-----------------------------------------------------------------
+	private void impostaProprietàTabellaMeeting() {
+		impostaRenderTabellaMeeting();
+		impostaModelloColonneTabellaMeeting();
+		impostaSorterTabellaMeeting();
+	}
+
+	private void impostaRenderTabellaMeeting() {
+		DefaultTableCellRenderer renderTabellaMeeting = new DefaultTableCellRenderer();
+        renderTabellaMeeting.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabellaMeeting.setVerticalAlignment(SwingConstants.CENTER);
+        tabellaMeeting.getColumnModel().getColumn(0).setCellRenderer(renderTabellaMeeting);
+        tabellaMeeting.getColumnModel().getColumn(1).setCellRenderer(renderTabellaMeeting);
+        tabellaMeeting.getColumnModel().getColumn(2).setCellRenderer(renderTabellaMeeting);
+        tabellaMeeting.getColumnModel().getColumn(3).setCellRenderer(renderTabellaMeeting);
+        tabellaMeeting.getColumnModel().getColumn(4).setCellRenderer(renderTabellaMeeting);
+        tabellaMeeting.getColumnModel().getColumn(5).setCellRenderer(renderTabellaMeeting);
+	}
+
+	private void impostaModelloColonneTabellaMeeting() {
+        tabellaMeeting.getColumnModel().getColumn(0).setMinWidth(100);
+        tabellaMeeting.getColumnModel().getColumn(1).setMinWidth(100);
+        tabellaMeeting.getColumnModel().getColumn(2).setMinWidth(100);
+        tabellaMeeting.getColumnModel().getColumn(3).setMinWidth(100);
+        tabellaMeeting.getColumnModel().getColumn(4).setMinWidth(100);
+        tabellaMeeting.getColumnModel().getColumn(5).setMinWidth(200);	
+	}
+
+	private void impostaSorterTabellaMeeting() {
+		TableRowSorter<TableModel> sorterMeeting = new TableRowSorter<TableModel>(tabellaMeeting.getModel());
+		DataComparator comparatorDate = new DataComparator();
+		OrarioComparator comparatorOrari = new OrarioComparator();
+		sorterMeeting.setComparator(0,comparatorDate);
+		sorterMeeting.setComparator(1,comparatorDate);
+		sorterMeeting.setComparator(2, comparatorOrari);
+		sorterMeeting.setComparator(3, comparatorOrari);
+		tabellaMeeting.setRowSorter(sorterMeeting);
+		tabellaMeeting.getRowSorter().toggleSortOrder(0);
+	}
+
 	private void applicaFiltroTelematico(ControllerMeetingSegreteria controller) {
 		try {
 			fisicoRadioButton.setSelected(false);
@@ -376,8 +396,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroSaleComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingTelematici());
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -389,8 +409,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroSaleComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingPiattaforma(piattaforma));
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -402,8 +422,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroPiattaformaComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingFisici());
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -415,8 +435,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 			filtroPiattaformaComboBox.setSelectedIndex(0);
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingSala(sala));
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -426,17 +446,17 @@ public class GestioneMeetingSegreteria extends JFrame {
 		try {
 			for (SalaRiunione sala: controller.ottieniSale())
 				filtroSaleComboBox.addItem(sala);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
 	
-	private void setModelloTabellaTuttiMeeting(ControllerMeetingSegreteria controller) {
+	private void inizializzaTabellaMeeting(ControllerMeetingSegreteria controller) {
 		try {
 			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeeting());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -444,8 +464,8 @@ public class GestioneMeetingSegreteria extends JFrame {
 	private void inizializzaFiltroSaleComboBox(ControllerMeetingSegreteria controller) {
 		try {
 			filtroSaleComboBox = new JComboBox(controller.ottieniSale().toArray());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -453,18 +473,18 @@ public class GestioneMeetingSegreteria extends JFrame {
 	private void inizializzaFiltroPiattaformaComboBox(ControllerMeetingSegreteria controller) {
 		try {
 			filtroPiattaformaComboBox = new JComboBox(controller.ottieniPiattaforme().toArray());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
 	
-	private void setModelloInvitatiList(ControllerMeetingSegreteria controller, Meeting meeting) {
+	private void inizializzaListaInvitati(ControllerMeetingSegreteria controller, Meeting meeting) {
 		try {
 			invitatiListModel.addAll(controller.ottieniInvitatiMeeting(meeting));
 			invitatiList.setModel(invitatiListModel);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}

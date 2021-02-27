@@ -863,21 +863,11 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		contentPane.add(tableScrollPanel);
 
 		dataModelDipendente = new DipendentiTableModel();
-		inizializzaModelloTabellaDipendenti(controller);
 		dipendentiTable = new JTable(dataModelDipendente);
 		dipendentiTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dipendentiTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		DefaultTableCellRenderer renderTabellaProgetti = new DefaultTableCellRenderer();
-        renderTabellaProgetti.setHorizontalAlignment(SwingConstants.CENTER);
-        renderTabellaProgetti.setVerticalAlignment(SwingConstants.CENTER);
-        dipendentiTable.getColumnModel().getColumn(0).setCellRenderer(renderTabellaProgetti);
-        dipendentiTable.getColumnModel().getColumn(1).setCellRenderer(renderTabellaProgetti);
-        dipendentiTable.getColumnModel().getColumn(2).setCellRenderer(renderTabellaProgetti);
-        dipendentiTable.getColumnModel().getColumn(3).setCellRenderer(renderTabellaProgetti);
-        dipendentiTable.getColumnModel().getColumn(4).setCellRenderer(renderTabellaProgetti);
-        dipendentiTable.getColumnModel().getColumn(5).setCellRenderer(renderTabellaProgetti);
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());
-		dipendentiTable.setRowSorter(sorter);
+		inizializzaModelloTabellaDipendenti(controller);
+		impostaProprietàTabellaDipendenti();
 		dipendentiTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -886,7 +876,6 @@ public class GestioneDipendentiSegreteria extends JFrame {
 				int rigaSelezionata = dipendentiTable.getSelectedRow();
 				rigaSelezionata = dipendentiTable.convertRowIndexToModel(rigaSelezionata);
 				dipendenteSelezionato = dataModelDipendente.getSelected(rigaSelezionata);
-				
 
 				nomeTextField.setText(dipendenteSelezionato.getNome());
 				cognomeTextField.setText(dipendenteSelezionato.getCognome());
@@ -919,8 +908,39 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		tableScrollPanel.setViewportView(dipendentiTable);
 	}
 
-	// Altri metodi
-	// -----------------------------------------------------------------
+	private void impostaProprietàTabellaDipendenti() {
+		impostaCellRendererTabellaDipendenti();
+		impostaModelloColonneTabellaDipendenti();
+		impostaSorterTabellaDipendenti();
+	}
+
+	private void impostaCellRendererTabellaDipendenti() {
+		DefaultTableCellRenderer renderTabellaDipendenti = new DefaultTableCellRenderer();
+        renderTabellaDipendenti.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabellaDipendenti.setVerticalAlignment(SwingConstants.CENTER);
+        dipendentiTable.getColumnModel().getColumn(0).setCellRenderer(renderTabellaDipendenti);
+        dipendentiTable.getColumnModel().getColumn(1).setCellRenderer(renderTabellaDipendenti);
+        dipendentiTable.getColumnModel().getColumn(2).setCellRenderer(renderTabellaDipendenti);
+        dipendentiTable.getColumnModel().getColumn(3).setCellRenderer(renderTabellaDipendenti);
+        dipendentiTable.getColumnModel().getColumn(4).setCellRenderer(renderTabellaDipendenti);
+        dipendentiTable.getColumnModel().getColumn(5).setCellRenderer(renderTabellaDipendenti);
+	}
+	
+	private void impostaModelloColonneTabellaDipendenti() {
+		dipendentiTable.getColumnModel().getColumn(0).setMinWidth(250);
+		dipendentiTable.getColumnModel().getColumn(1).setMinWidth(250);
+		dipendentiTable.getColumnModel().getColumn(2).setMinWidth(400);
+		dipendentiTable.getColumnModel().getColumn(3).setMinWidth(120);
+		dipendentiTable.getColumnModel().getColumn(4).setMinWidth(120);
+		dipendentiTable.getColumnModel().getColumn(5).setMinWidth(120);
+	}
+	
+	private void impostaSorterTabellaDipendenti() {
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dipendentiTable.getModel());
+		dipendentiTable.setRowSorter(sorter);
+	}
+
+
 	private void ricavaInfoDipendente(ControllerDipendentiSegreteria controller) {
 		nome = nomeTextField.getText();
 		cognome = cognomeTextField.getText();
@@ -933,10 +953,9 @@ public class GestioneDipendentiSegreteria extends JFrame {
 					giornoComboBox.getSelectedIndex() + 1);
 
 		try {
-			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem())
-					.get(cittaComboBox.getSelectedIndex());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+			luogoNascita = controller.ottieniComuni((String) provinciaComboBox.getSelectedItem()).get(cittaComboBox.getSelectedIndex());
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 		email = emailTextField.getText();
@@ -960,8 +979,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -987,18 +1006,18 @@ public class GestioneDipendentiSegreteria extends JFrame {
 						impostaModelloTabellaDipendentiSegreteria(controller);
 					}
 				}
-			} catch (SQLException e) {
+			} catch (SQLException eccezioneSQL) {
 				ErroreDialog errore = null;
-				switch (e.getSQLState()) {
+				switch (eccezioneSQL.getSQLState()) {
 				case VIOLAZIONE_PKEY_UNIQUE:
-					errore = new ErroreDialog(e,
+					errore = new ErroreDialog(eccezioneSQL,
 							"Creazione Fallita",
 							"Verificare che il dipendente non esista già\n"
 							+ "oppure che un altro dipendente non abbia la stessa email\n"
 							+ "o lo stesso numero di cellulare.", false);
 					break;
 				case VIOLAZIONE_VINCOLI_TABELLA:
-					errore = new ErroreDialog(e,
+					errore = new ErroreDialog(eccezioneSQL,
 							"Creazione Fallita",
 							"Verificare che:\n" 
 							+ "1) L'email sia del formato corretto.\n"
@@ -1035,7 +1054,7 @@ public class GestioneDipendentiSegreteria extends JFrame {
 
 					break;
 				case VIOLAZIONE_LUNGHEZZA_STRINGA:
-					errore = new ErroreDialog(e,
+					errore = new ErroreDialog(eccezioneSQL,
 							"Creazione Fallita",
 							"Verificare che:\n" 
 							+ "1) Nome e cognome non contengano più di 30 caratteri.\n"
@@ -1057,12 +1076,12 @@ public class GestioneDipendentiSegreteria extends JFrame {
 					}
 					break;
 				default:
-					errore = new ErroreDialog(e, true);
+					errore = new ErroreDialog(eccezioneSQL, true);
 				}
 				errore.setVisible(true);
 			}
-		} catch (IllegalFieldValueException ifve) {
-			ErroreDialog errore = new ErroreDialog(ifve, "Creazione Fallita", "La data inserita non esiste.", false);
+		} catch (IllegalFieldValueException eccezioneValoriIllegali) {
+			ErroreDialog errore = new ErroreDialog(eccezioneValoriIllegali, "Creazione Fallita", "La data inserita non esiste.", false);
 			errore.setVisible(true);
 		}
 	}
@@ -1094,11 +1113,11 @@ public class GestioneDipendentiSegreteria extends JFrame {
 							"Salvataggio Riuscito",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
-			} catch (SQLException e) {
+			} catch (SQLException eccezioneSQL) {
 				ErroreDialog errore = null;
-				switch (e.getSQLState()) {
+				switch (eccezioneSQL.getSQLState()) {
 				case VIOLAZIONE_VINCOLI_TABELLA:
-					errore = new ErroreDialog(e,
+					errore = new ErroreDialog(eccezioneSQL,
 							"Salvataggio Fallito",
 							"Verificare che:\n" 
 							+ "1) L'email sia del formato corretto.\n"
@@ -1135,7 +1154,7 @@ public class GestioneDipendentiSegreteria extends JFrame {
 	
 					break;
 				case VIOLAZIONE_LUNGHEZZA_STRINGA:
-					errore = new ErroreDialog(e,
+					errore = new ErroreDialog(eccezioneSQL,
 							"Salvataggio Fallito",
 							"Verificare che:\n" 
 							+ "1) Nome e cognome non contengano più di 30 caratteri.\n"
@@ -1156,12 +1175,12 @@ public class GestioneDipendentiSegreteria extends JFrame {
 					}
 					break;
 				default:
-					errore = new ErroreDialog(e, true);
+					errore = new ErroreDialog(eccezioneSQL, true);
 				}
 				errore.setVisible(true);
 			}
-		} catch(IllegalFieldValueException ifve) {
-			ErroreDialog errore = new ErroreDialog(ifve,
+		} catch(IllegalFieldValueException eccezioneValoriIllegali) {
+			ErroreDialog errore = new ErroreDialog(eccezioneValoriIllegali,
 					"Creazione Fallita",
 					"La data inserita non esiste.", false);
 			errore.setVisible(true);
@@ -1202,8 +1221,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 
 			JOptionPane.showMessageDialog(null, "Dipendente eliminato correttamente.",
 					"Eliminazione Dipendente Riuscita", JOptionPane.INFORMATION_MESSAGE);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -1215,21 +1234,21 @@ public class GestioneDipendentiSegreteria extends JFrame {
 			controller.creaNuovaSkill(nuovaSkillTextField.getText());
 			aggiornaSkillGUI(controller);
 			nuovaSkillTextField.setText("");
-		} catch (SQLException e) {
+		} catch (SQLException eccezioneSQL) {
 
 			ErroreDialog errore = null;
-			switch (e.getSQLState()) {
+			switch (eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
-				errore = new ErroreDialog(e, 
+				errore = new ErroreDialog(eccezioneSQL, 
 						"Creazione Fallita", 
 						"Impossibile creare la skill perchè essite già.", false);
 				break;
 			case VIOLAZIONE_LUNGHEZZA_STRINGA:
-				errore = new ErroreDialog(e, "Creazione Fallita",
+				errore = new ErroreDialog(eccezioneSQL, "Creazione Fallita",
 						"Impossibile creare la skill perchè il nome contiene più di 50 caratteri.", false);
 				break;
 			default:
-				errore = new ErroreDialog(e, true);
+				errore = new ErroreDialog(eccezioneSQL, true);
 			}
 			errore.setVisible(true);
 			
@@ -1241,8 +1260,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		try {
 			skills = controller.ottieniSkill();
-		} catch (SQLException e1) {
-			ErroreDialog errore = new ErroreDialog(e1, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 		skillListModel.addAll(skills);
@@ -1282,9 +1301,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 					etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata));
 			dipendentiTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
-		} catch (SQLException e) {
-
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -1293,13 +1311,14 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		ArrayList<Skill> skills = dipendenteSelezionato.getSkills();
 		int[] indici = new int[skills.size()];
 		int i = 0;
+		skillsList.clearSelection();
 		for (Skill skill : skills) {
 			try {
 				indici[i] = controller.ottieniSkill().indexOf(skill);
 				i++;
 				skillsList.setSelectedIndices(indici);
-			} catch (SQLException e) {
-				ErroreDialog errore = new ErroreDialog(e, true);
+			} catch (SQLException eccezioneSQL) {
+				ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 				errore.setVisible(true);
 			}
 		}
@@ -1309,8 +1328,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		try {
 			for (LuogoNascita comune : controller.ottieniComuni(provinciaComboBox.getSelectedItem().toString()))
 				cittaComboBox.addItem(comune.getNomeComune());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -1318,8 +1337,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 	private void inizializzaProvinceComboBox(ControllerDipendentiSegreteria controller) {
 		try {
 			provinciaComboBox = new JComboBox(controller.ottieniProvince().toArray());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -1327,8 +1346,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 	private void inizializzaSkillList(ControllerDipendentiSegreteria controller) {
 		try {
 			skillsList = new JList(controller.ottieniSkill().toArray());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -1337,8 +1356,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		try {
 			skills = controller.ottieniSkill();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 		skills.add(0, null);
@@ -1348,8 +1367,8 @@ public class GestioneDipendentiSegreteria extends JFrame {
 	private void inizializzaModelloTabellaDipendenti(ControllerDipendentiSegreteria controller) {
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendenti());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -1357,7 +1376,7 @@ public class GestioneDipendentiSegreteria extends JFrame {
 	private int parseInteger(String numero, int valoreDefault) {
 		try {
 			return Integer.parseInt(numero);
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException eccezioneFormatoNumeri) {
 			return valoreDefault;
 		}
 	}
@@ -1365,7 +1384,7 @@ public class GestioneDipendentiSegreteria extends JFrame {
 	private float parseFloat(String numero, float valoreDefault) {
 		try {
 			return Float.parseFloat(numero);
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException eccezioneFormatoNumeri) {
 			return valoreDefault;
 		}
 	}

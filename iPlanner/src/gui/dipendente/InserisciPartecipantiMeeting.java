@@ -449,11 +449,11 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		dipendenteTable.getTableHeader().setReorderingAllowed(false);
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent event) {
 				impostaInfoDipendenteDaTabella(controller);
 				invitatiList.clearSelection();
 				
-				if(e.getClickCount() == 2) {	
+				if(event.getClickCount() == 2) {	
 					inserisciInvitatoMeeting(controller);
 					aggiornaTabellaDipendenti(controller);
 					svuotaCampi();
@@ -672,8 +672,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private void inizializzaTabellaDipendente(ControllerPartecipantiMeeting controller) {
 		try {
 			modelloTabellaDipendenti.setDipendenteTabella(controller.ottieniDipendentiNonInvitatiMeeting(meetingSelezionato));
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -718,27 +718,27 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente.", "Inserimento Riuscito", JOptionPane.INFORMATION_MESSAGE);
 			modelloListaInvitati.addElement(partecipazioneMeeting);
 			aggiornaSorter();
-		} catch(SQLException e) {
+		} catch(SQLException eccezioneSQL) {
 			ErroreDialog errore = null;
-			switch (e.getSQLState()) {
+			switch (eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Inserimento Fallito",
 						"L'inserimento del dipendente è fallito perchè già partecipa al meeting.", false);
 				break;
 			case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Inserimento Fallito",
 						"L'inserimento del dipendente è fallito perchè " + dipendenteSelezionato + " ha altri meeting che si accavallano con questo.", false);
 				break;
 			case VIOLAZIONE_CAPIENZA_SALA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Inserimento Fallito",
 						"L'inserimento del dipendente è fallito perchè così il numero di partecipanti supera la capienza della sala scelta per il meeting.\n"
 						+ "Si consiglia di cambiare sala se è necessario aggiungere altri partecipanti.", false);
 				break;
 			default:
-				errore = new ErroreDialog(e,true);
+				errore = new ErroreDialog(eccezioneSQL,true);
 			}
 			errore.setVisible(true);
 		}
@@ -754,8 +754,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			JOptionPane.showMessageDialog(null, "Modifica effettuata con successo.", "Aggiornamento Riuscito", JOptionPane.INFORMATION_MESSAGE);
 			modelloListaInvitati.removeElementAt(invitatiList.getSelectedIndex()); 
 			modelloListaInvitati.addElement(partecipazione);
-		} catch(SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch(SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -768,8 +768,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			aggiornaListaInvitati();
 			aggiornaTabellaDipendenti(controller);
 			aggiornaSorter();
-		} catch(SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch(SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -784,8 +784,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			modelloTabellaDipendenti.setDipendenteTabella(controller.ottieniDipendentiNonInvitatiMeeting(meetingSelezionato));
 			modelloTabellaDipendenti.fireTableDataChanged();
 			aggiornaSorter();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -816,8 +816,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		skillModel.removeAllElements();
 		try {
 			skillModel.addAll(controller.ottieniSkillDipendente(dipendenteSelezionato.getCf()));
-		} catch (SQLException e2) {
-			ErroreDialog errore = new ErroreDialog(e2,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 		skillList.setModel(skillModel);
@@ -842,8 +842,8 @@ public class InserisciPartecipantiMeeting extends JFrame {
 			skillModel.removeAllElements();
 			try {
 				skillModel.addAll(controller.ottieniSkillDipendente(partecipazione.getPartecipante().getCf()));
-			} catch (SQLException e1) {
-				ErroreDialog errore = new ErroreDialog(e1,true);
+			} catch (SQLException eccezioneSQL) {
+				ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 				errore.setVisible(true);
 			}
 			skillList.setModel(skillModel);

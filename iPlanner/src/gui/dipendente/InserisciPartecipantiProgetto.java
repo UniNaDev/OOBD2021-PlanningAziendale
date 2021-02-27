@@ -607,9 +607,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		dipendenteTable.getTableHeader().setReorderingAllowed(false);
 		dipendenteTable.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent event) {
 				
-				if(e.getClickCount() == 2) {
+				if(event.getClickCount() == 2) {
 					if(ruoloComboBox.getSelectedItem().equals(null) && dipendenteTable.getSelectedRow()!=-1) {
 						JOptionPane.showMessageDialog(null, "Selezionare un ruolo prima.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -826,8 +826,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private void inizializzaComboBoxRuoli(ControllerPartecipantiProgetto controller) {
 		try {
 			ruoloComboBox = new JComboBox(controller.ottieniRuoli());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -849,8 +849,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			tipologiaProgettoComboBox.setModel(tipologiaProgettoModel);
 			tipologiaProgettoModel.addElement(null);
 			tipologiaProgettoModel.addAll(controller.ottieniTipologie());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}	
 	}
@@ -861,8 +861,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			skillModel.addElement(null);
 			skillModel.addAll(controller.ottieniSkill());
 			skillFiltroComboBox.setModel(skillModel);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -870,8 +870,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private void inizializzaTabellaDipendente(ControllerPartecipantiProgetto controller) {
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato));
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -927,14 +927,14 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			aggiornaListaPartecipantiDopoAggiornamento(collaborazioneSelezionata);
 			aggiornaSorter();
 			svuotaCampi();
-		} catch(SQLException e) {
+		} catch(SQLException eccezioneSQL) {
 			ErroreDialog errore;
-			switch(e.getSQLState()) {
+			switch(eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_UNICITA_PROJECTMANAGER:
-				errore = new ErroreDialog(e,"Esiste già un project manager per questo progetto.", "Aggiornamento Fallito", false);
+				errore = new ErroreDialog(eccezioneSQL,"Esiste già un project manager per questo progetto.", "Aggiornamento Fallito", false);
 				break;
 			default:
-				errore = new ErroreDialog(e,true);
+				errore = new ErroreDialog(eccezioneSQL,true);
 			}
 			errore.setVisible(true);
 		}
@@ -956,14 +956,14 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			aggiornaTabella(controller);
 			aggiornaSorter();
 			svuotaCampi();
-		} catch(SQLException e) {
+		} catch(SQLException eccezioneSQL) {
 			ErroreDialog errore;
-			switch(e.getSQLState()) {
+			switch(eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_UNICITA_PROJECTMANAGER:
-				errore = new ErroreDialog(e,"Esiste già un project manager per questo progetto.", "Inserimento Riuscito", false);
+				errore = new ErroreDialog(eccezioneSQL,"Esiste già un project manager per questo progetto.", "Inserimento Riuscito", false);
 				break;
 			default:
-				errore = new ErroreDialog(e,true);
+				errore = new ErroreDialog(eccezioneSQL,true);
 			}
 			errore.setVisible(true);
 		}
@@ -982,8 +982,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			aggiornaTabella(controller);
 			aggiornaSorter();
 			svuotaCampi();
-		} catch(SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch(SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -998,8 +998,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		try {
 			dataModelDipendente.fireTableDataChanged();
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato));
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 		aggiornaSorter();
@@ -1047,8 +1047,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		    skillList.setModel(listaSkillModel);
 			listaSkillModel.removeAllElements();
 			listaSkillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1099,8 +1099,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			dataModelDipendente.setDipendenteTabella(controller.filtraDipendentiNonPartecipanti(nomeCognomeEmail, etàMinima, etàMassima, salarioMinimo, salarioMassimo, valutazioneMinima, valutazioneMassima, skillCercata,progettoSelezionato,tipologiaProgetto));
 			dipendenteTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1109,7 +1109,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		try {
 			return Integer.parseInt(numero);
 		}
-		catch(NumberFormatException e) {
+		catch(NumberFormatException eccezioneFormatoNumero) {
 			return valoreDefault;
 		}
 	}
@@ -1118,7 +1118,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		try {
 			return Float.parseFloat(numero);
 			}
-		catch(NumberFormatException e) {
+		catch(NumberFormatException eccezioneFormatoNumero) {
 			return valoreDefault;
 		}
 	}

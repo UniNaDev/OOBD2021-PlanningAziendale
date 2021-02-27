@@ -958,8 +958,8 @@ public class GestioneMeetingDipendente extends JFrame {
 	private void inizializzaTabellaMeeting(ControllerMeeting controller) {
 		try {
 			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeetingDipendente());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -970,8 +970,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloComboBoxPiattaformaSala.addAll(controller.ottieniPiattaforme());
 			piattaformaSalaComboBox.setModel(modelloComboBoxPiattaformaSala);
 			piattaformaSalaComboBox.setSelectedItem(meetingSelezionato.getPiattaforma());
-		} catch (SQLException e1) {
-			ErroreDialog errore = new ErroreDialog(e1,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -982,8 +982,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloComboBoxPiattaformaSala.addAll(controller.ottieniSale());
 			piattaformaSalaComboBox.setModel(modelloComboBoxPiattaformaSala);
 			piattaformaSalaComboBox.setSelectedItem(meetingSelezionato.getSala());
-		} catch (SQLException e1) {
-			ErroreDialog errore = new ErroreDialog(e1,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -994,8 +994,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			progettoDiscussoList.setModel(modelloListaInfoProgetto);
 			modelloListaInfoProgetto.removeAllElements();
 			modelloListaInfoProgetto.add(0, progetto);
-		} catch (SQLException e1) {
-			ErroreDialog errore = new ErroreDialog(e1,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1011,8 +1011,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloComboBoxPiattaformaSala.addAll(controller.ottieniPiattaforme());
 			piattaformaSalaComboBox.setModel(modelloComboBoxPiattaformaSala);
 			piattaformaSalaComboBox.setSelectedIndex(0);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1026,8 +1026,8 @@ public class GestioneMeetingDipendente extends JFrame {
 				piattaformaSalaComboBox.setSelectedIndex(0);
 			else
 				piattaformaSalaComboBox.setSelectedItem(null);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);		
 		}
 	}
@@ -1037,8 +1037,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloComboBoxProgettoDiscusso.addAll(controller.ottieniProgettiDipendente());
 			progettoDiscussoComboBox.setModel(modelloComboBoxProgettoDiscusso);
 			progettoDiscussoComboBox.setSelectedItem(null);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1047,8 +1047,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		ArrayList<SalaRiunione> sale = new ArrayList<SalaRiunione>();
 		try {
 			sale = controller.ottieniSale();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 		sale.add(0, null);
@@ -1060,8 +1060,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		ArrayList<String> piattaforme = new ArrayList<String>();
 		try {
 			piattaforme = controller.ottieniPiattaforme();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 		piattaforme.add(0, null);
@@ -1076,8 +1076,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingFisiciDipendenti());
 			sorterMeeting.setModel(modelloTabellaMeeting);
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 			}
 	}
@@ -1088,8 +1088,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		try {
 			modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingTelematiciDipendenti());
 			modelloTabellaMeeting.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1108,8 +1108,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingDipendentiSala(sala));
 		modelloTabellaMeeting.fireTableDataChanged();
 		sorterMeeting.setModel(modelloTabellaMeeting);
-		} catch(SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch(SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1128,8 +1128,8 @@ public class GestioneMeetingDipendente extends JFrame {
 		modelloTabellaMeeting.setMeetingTabella(controller.filtraMeetingDipendentePiattaforma(piattaforma));
 		modelloTabellaMeeting.fireTableDataChanged();
 		sorterMeeting.setModel(modelloTabellaMeeting);
-		} catch(SQLException e){
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch(SQLException eccezioneSQL){
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1146,8 +1146,8 @@ public class GestioneMeetingDipendente extends JFrame {
 				eliminaButton.setEnabled(false);
 				modificaButton.setEnabled(false);
 			}
-		} catch (SQLException e1) {
-			ErroreDialog errore = new ErroreDialog(e1,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1168,18 +1168,18 @@ public class GestioneMeetingDipendente extends JFrame {
 					aggiornaTabella(controller);
 					impostaSorterTabellaMeeting();
 					svuotaCampiMeeting();
-				} catch (SQLException e) {
+				} catch (SQLException eccezioneSQL) {
 					ErroreDialog errore = null;
-					switch(e.getSQLState()) {
+					switch(eccezioneSQL.getSQLState()) {
 					case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-						errore = new ErroreDialog(e,
+						errore = new ErroreDialog(eccezioneSQL,
 								"Creazione Fallita", 
 								"Ci sono problemi di accavallamento con il meeting che si sta tentando di creare."
 								+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.", false);
 						invitatiLabel.setForeground(Color.RED);
 						break;
 					case VIOLAZIONE_CAPIENZA_SALA:
-						errore = new ErroreDialog(e,
+						errore = new ErroreDialog(eccezioneSQL,
 								"Creazione Fallita",
 								"I partecipanti al meeting che si vuole creare sono maggiori"
 								+ "\nrispetto alla capienza massima della sala.\n"
@@ -1187,39 +1187,39 @@ public class GestioneMeetingDipendente extends JFrame {
 						piattaformaSalaLabel.setForeground(Color.RED);
 						break;
 	                default:
-						errore = new ErroreDialog(e,true);
+						errore = new ErroreDialog(eccezioneSQL,true);
 	                }
 					errore.setVisible(true);
 					try {
 						controller.rimuoviMeeting(nuovoMeeting.getIdMeeting());
-					} catch (SQLException e1) {
-						ErroreDialog erroreRimozione = new ErroreDialog(e1,true);
+					} catch (SQLException eccezioneSQLRimozione) {
+						ErroreDialog erroreRimozione = new ErroreDialog(eccezioneSQLRimozione,true);
 						erroreRimozione.setVisible(true);
 					}
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Inserire una data odierna o successiva e/o un orario successivo a quello attuale per l'inizio e la fine del meeting.", "Creazione Fallita", JOptionPane.ERROR_MESSAGE);
 			}
-		} catch (IllegalFieldValueException ifve) {
-			ErroreDialog errore = new ErroreDialog(ifve, "La data inserita non esiste.", "Creazione Fallita", false);
+		} catch (IllegalFieldValueException eccezioneValoriIllegali) {
+			ErroreDialog errore = new ErroreDialog(eccezioneValoriIllegali, "La data inserita non esiste.", "Creazione Fallita", false);
 			errore.setVisible(true);
 			dataInizioLabel.setForeground(Color.RED);
 			dataFineLabel.setForeground(Color.RED);
-		} catch (SQLException e) {
+		} catch (SQLException eccezioneSQL) {
 			ErroreDialog errore = null;
-			switch(e.getSQLState()) {
+			switch(eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Impossibile creare il meeting perchè ne esiste uno duplicato.", false);
 				break;
 			case VIOLAZIONE_DATA_INVALIDA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"La data inserita non esiste.", false);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Impossibile creare il meeting.\n"
 						+ "Verificare che:\n"
@@ -1241,14 +1241,14 @@ public class GestioneMeetingDipendente extends JFrame {
 					piattaformaSalaLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_SALA_OCCUPATA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Ci sono problemi di accavallamento con il meeting che si sta tentando di creare."
 						+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.", false);
 				piattaformaSalaLabel.setForeground(Color.RED);
 				break;
 			default:
-				errore = new ErroreDialog(e,true);
+				errore = new ErroreDialog(eccezioneSQL,true);
 			}
 			errore.setVisible(true);
 		}
@@ -1284,21 +1284,21 @@ public class GestioneMeetingDipendente extends JFrame {
 			else {
 				JOptionPane.showMessageDialog(null, "Inserire una data odierna o successiva e/o un orario successivo a quello attuale per l'inizio e la fine del meeting.", "Modifica Fallita", JOptionPane.ERROR_MESSAGE);
 			}
-		} catch(IllegalFieldValueException ifve) {
-			ErroreDialog errore = new ErroreDialog(ifve, "La data inserita non esiste.", "Salvataggio Fallito", false);
+		} catch(IllegalFieldValueException eccezioneValoriIllegali) {
+			ErroreDialog errore = new ErroreDialog(eccezioneValoriIllegali, "La data inserita non esiste.", "Salvataggio Fallito", false);
 			errore.setVisible(true);
 			dataInizioLabel.setForeground(Color.RED);
 			dataFineLabel.setForeground(Color.RED);
-		} catch(SQLException e) {
+		} catch(SQLException eccezioneSQL) {
 			ErroreDialog errore = null;
-			switch(e.getSQLState()) {
+			switch(eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_DATA_INVALIDA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito",
 						"La data inserita non esiste.", false);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito",
 						"Impossibile salvare le modifiche.\n"
 						+ "Verificare che:\n"
@@ -1320,14 +1320,14 @@ public class GestioneMeetingDipendente extends JFrame {
 					piattaformaSalaLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_ONNIPRESENZA_DIPENDENTE:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito", 
 						"Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
 						+ "\nControllare che i dipendenti siano liberi per le date e orari inseriti.", false);
 				invitatiLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_CAPIENZA_SALA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito",
 						"I partecipanti al meeting che si vuole modificare sono maggiori"
 						+ "\nrispetto alla capienza massima della sala.\n"
@@ -1335,14 +1335,14 @@ public class GestioneMeetingDipendente extends JFrame {
 				piattaformaSalaLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_SALA_OCCUPATA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito",
 						"Ci sono problemi di accavallamento con il meeting che si sta tentando di modificare."
 						+ "\nControllare che la sala inserita non sia già occupata per le date e gli orari inseriti.", false);
 				piattaformaSalaLabel.setForeground(Color.RED);
 				break;
 			default:
-				errore = new ErroreDialog(e,true);
+				errore = new ErroreDialog(eccezioneSQL,true);
 			}
 			errore.setVisible(true);
 		}
@@ -1370,8 +1370,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			modelloTabellaMeeting.setMeetingTabella(controller.ottieniMeetingDipendente());
 			modelloTabellaMeeting.fireTableDataChanged();
 			sorterMeeting.setModel(modelloTabellaMeeting);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 
@@ -1384,8 +1384,8 @@ public class GestioneMeetingDipendente extends JFrame {
 			aggiornaTabella(controller);
 			impostaSorterTabellaMeeting();
 			svuotaCampiMeeting();
-		} catch(SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch(SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}

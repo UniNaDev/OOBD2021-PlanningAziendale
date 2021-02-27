@@ -901,9 +901,6 @@ public class GestioneProgettiDipendente extends JFrame {
 		panel.setLayout(gl_panel);
 	}
 	
-	//Altri metodi
-	//-------------------------------------------------------
-	
 	private void impostaInfoProgetto() {
 		int rigaSelezionata = progettiTable.getSelectedRow();	
 		rigaSelezionata = progettiTable.convertRowIndexToModel(rigaSelezionata);
@@ -973,8 +970,8 @@ public class GestioneProgettiDipendente extends JFrame {
 	private void inizializzaTabellaProgetti(ControllerProgetto controller) {
 		try {
 			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiDipendente());
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -984,8 +981,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloComboBoxTipologie = new DefaultComboBoxModel();
 			modelloComboBoxTipologie.addAll(controller.ottieniTipologie());
 			tipologiaComboBox.setModel(modelloComboBoxTipologie);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -994,8 +991,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		try {
 			modelloListaAmbiti.addAll(controller.ottieniAmbiti());
 			ambitiList.setModel(modelloListaAmbiti);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1012,8 +1009,8 @@ public class GestioneProgettiDipendente extends JFrame {
 				eliminaButton.setEnabled(false);
 				confermaModificheButton.setEnabled(false);
 			}
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1059,37 +1056,37 @@ public class GestioneProgettiDipendente extends JFrame {
 							JOptionPane.INFORMATION_MESSAGE);
 					aggiornaTabella(controller);
 					impostaSorterTabellaProgetti();
-				} catch (SQLException e) {
-					ErroreDialog errore = new ErroreDialog(e,true);
-					if (e.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))
-						errore = new ErroreDialog(e,
+				} catch (SQLException eccezioneSQL) {
+					ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
+					if (eccezioneSQL.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE))
+						errore = new ErroreDialog(eccezioneSQL,
 								"Creazione Fallita",
 								"Impossibile creare il progetto perchè esistono già degli ambiti o un project manager ad esso associati.", false);
 					errore.setVisible(true);
 					ambitoProgettoLabel.setForeground(Color.RED);
 					try {
 						controller.rimuoviProgetto(nuovoProgetto);
-					} catch (SQLException e1) {
-						ErroreDialog erroreRimozione = new ErroreDialog(e1,true);
+					} catch (SQLException eccezioneSQLRimozione) {
+						ErroreDialog erroreRimozione = new ErroreDialog(eccezioneSQLRimozione,true);
 						erroreRimozione.setVisible(true);
 					}
 				}
-		} catch(IllegalFieldValueException nfve) {
-			ErroreDialog errore = new ErroreDialog(nfve,"Creazione Fallita", "La data inserita non esiste.", false);
+		} catch(IllegalFieldValueException eccezioneValoriIllegali) {
+			ErroreDialog errore = new ErroreDialog(eccezioneValoriIllegali,"Creazione Fallita", "La data inserita non esiste.", false);
 			errore.setVisible(true);
 			scadenzaProgettoLabel.setForeground(Color.RED);
 			dataTerminazioneLabel.setForeground(Color.RED);
-		} catch(SQLException e) {
+		} catch(SQLException eccezioneSQL) {
 			ErroreDialog errore = null;
-			switch (e.getSQLState()) {
+			switch (eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Impossibile aggiornare il progetto perchè ne esiste già uno con il suo nome.", false);
 				nomeProgettoLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_LUNGHEZZA_STRINGA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Impossibile salvare le modifiche.\n"
 						+ "Verificare che:\n"
@@ -1101,7 +1098,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					descrizioneProgettoLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
-				errore = new ErroreDialog(e, 
+				errore = new ErroreDialog(eccezioneSQL, 
 						"Creazione Fallita",
 						"Impossibile salvare le modifiche.\n"
 						+ "Verificare che data di scadenza e terminazione non siano precedenti alla data di creazione del progetto(" + dataCreazione.toString(formatDate) + ")." , false);
@@ -1111,14 +1108,14 @@ public class GestioneProgettiDipendente extends JFrame {
 					dataTerminazioneLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_DATA_INVALIDA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Impossibile salvare le modifiche perchè la data inserita non è valida.", false);
 				scadenzaProgettoLabel.setForeground(Color.RED);
 				dataTerminazioneLabel.setForeground(Color.RED);
 				break;
 			default:
-				errore = new ErroreDialog(e,true);
+				errore = new ErroreDialog(eccezioneSQL,true);
 			}
 			errore.setVisible(true);
 		}
@@ -1141,32 +1138,32 @@ public class GestioneProgettiDipendente extends JFrame {
 				JOptionPane.showMessageDialog(null, "Modifiche effettuate correttamente", "Salvataggio Riuscito", JOptionPane.INFORMATION_MESSAGE);
 				aggiornaTabella(controller);
 				impostaSorterTabellaProgetti();
-			} catch (SQLException e) {
-				ErroreDialog errore = new ErroreDialog(e,true);
-				if (e.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
-					errore = new ErroreDialog(e,
+			} catch (SQLException eccezioneSQL) {
+				ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
+				if (eccezioneSQL.getSQLState().equals(VIOLAZIONE_PKEY_UNIQUE)) {
+					errore = new ErroreDialog(eccezioneSQL,
 							"Salvataggio Ambiti Fallito",
 							"Impossibile salvare gli ambiti del progetto perchè alcuni di essi sono già associati ad esso.\nProvare a rimuoverli tutti e poi riaggiungerli.", false);
 					ambitoProgettoLabel.setForeground(Color.RED);
 				}
 				errore.setVisible(true);
 			}
-		} catch (IllegalFieldValueException ifve) {
-			ErroreDialog errore = new ErroreDialog(ifve, "Salvataggio Fallito", "La data inserita non esiste.", false);
+		} catch (IllegalFieldValueException eccezioneValoriIllegali) {
+			ErroreDialog errore = new ErroreDialog(eccezioneValoriIllegali, "Salvataggio Fallito", "La data inserita non esiste.", false);
 			errore.setVisible(true);
 			scadenzaProgettoLabel.setForeground(Color.RED);
 			dataTerminazioneLabel.setForeground(Color.RED);
-		} catch (SQLException e) {
+		} catch (SQLException eccezioneSQL) {
 			ErroreDialog errore = null;
-			switch (e.getSQLState()) {
+			switch (eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito",
 						"Impossibile aggiornare il progetto perchè ne esiste già uno con il suo nome.", false);
 				nomeProgettoLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_LUNGHEZZA_STRINGA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito",
 						"Impossibile salvare le modifiche.\n"
 						+ "Verificare che:\n"
@@ -1178,7 +1175,7 @@ public class GestioneProgettiDipendente extends JFrame {
 					descrizioneProgettoLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
-				errore = new ErroreDialog(e, 
+				errore = new ErroreDialog(eccezioneSQL, 
 						"Salvataggio Fallito",
 						"Impossibile salvare le modifiche.\n"
 						+ "Verificare che data di scadenza e terminazione non siano precedenti alla data di creazione del progetto(" + dataCreazione.toString(formatDate) + ").", false);
@@ -1188,14 +1185,14 @@ public class GestioneProgettiDipendente extends JFrame {
 					dataTerminazioneLabel.setForeground(Color.RED);
 				break;
 			case VIOLAZIONE_DATA_INVALIDA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Salvataggio Fallito",
 						"Impossibile salvare le modifiche perchè la data inserita non è valida.", false);
 				scadenzaProgettoLabel.setForeground(Color.RED);
 				dataTerminazioneLabel.setForeground(Color.RED);
 				break;
 			default:
-				errore = new ErroreDialog(e,true);
+				errore = new ErroreDialog(eccezioneSQL,true);
 			}
 			errore.setVisible(true);
 		}
@@ -1211,8 +1208,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			aggiornaTabella(controller);
 			impostaSorterTabellaProgetti();
 			pulisciCampi();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1247,8 +1244,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiDipendente());
 			modelloTabellaProgetti.fireTableDataChanged();
 			pulisciCampi();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 
@@ -1293,8 +1290,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloComboBoxFiltroTipologie = new DefaultComboBoxModel();
 			modelloComboBoxFiltroTipologie.addAll(controller.ottieniTipologie());
 			filtroTipologieComboBox.setModel(modelloComboBoxFiltroTipologie);;
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1304,8 +1301,8 @@ public class GestioneProgettiDipendente extends JFrame {
 			modelloComboBoxFiltroAmbiti = new DefaultComboBoxModel<AmbitoProgetto>();
 			modelloComboBoxFiltroAmbiti.addAll(controller.ottieniAmbiti());
 			filtroAmbitiComboBox.setModel(modelloComboBoxFiltroAmbiti);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}
@@ -1335,8 +1332,8 @@ public class GestioneProgettiDipendente extends JFrame {
 		try {
 			modelloTabellaProgetti.setProgettiTabella(controller.ottieniProgettiFiltrati(nomeCercato,ambitoCercato,tipologiaCercata, scaduto, terminato));
 			modelloTabellaProgetti.fireTableDataChanged();
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e,true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL,true);
 			errore.setVisible(true);
 		}
 	}

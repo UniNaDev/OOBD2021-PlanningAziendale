@@ -268,8 +268,8 @@ public class MieiProgetti extends JFrame {
 		try {
 			modelloListaProgetti.addAll(controller.ottieniProgettiDipendente());
 		    progettiList.setModel(modelloListaProgetti);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}

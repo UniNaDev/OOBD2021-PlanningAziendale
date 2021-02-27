@@ -53,8 +53,8 @@ public class AutenticazioneSegreteria extends JFrame {
 		passwordField = new JPasswordField();
 		passwordField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_ENTER)
 					if (!passwordField.getText().isBlank())
 						controller.eseguiLoginSegreteria(passwordField.getText());
 					else

@@ -362,8 +362,8 @@ public class Home extends JFrame {
 		try {
 			modelloListaMeeting.addAll(controller.ottieniMeetingDipendente());
 			meetingList.setModel(modelloListaMeeting);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
@@ -376,8 +376,8 @@ public class Home extends JFrame {
 				progetti.add(collaborazione.getProgetto());
 			modelloListaProgetti.addAll(progetti);
 			progettiList.setModel(modelloListaProgetti);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}

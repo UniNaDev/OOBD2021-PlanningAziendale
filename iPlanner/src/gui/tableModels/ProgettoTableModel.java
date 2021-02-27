@@ -25,8 +25,6 @@ public class ProgettoTableModel extends AbstractTableModel {
 	DateTimeFormatter formatDate = DateTimeFormat.forPattern("dd/MM/yyyy");
 	
 	String[] colnames= {"Nome","Ambito/i", "Tipologia", "Creazione", "Terminazione", "Scadenza"};
-
-	//metodo che ritorna la lista di progetti contenuti nella tabella
 	
 	public ArrayList<Progetto> getProgettiTabella() {
 		return progettiTabella;
@@ -51,7 +49,6 @@ public class ProgettoTableModel extends AbstractTableModel {
 		return colnames[columnIndex];
 	}
 
-	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		

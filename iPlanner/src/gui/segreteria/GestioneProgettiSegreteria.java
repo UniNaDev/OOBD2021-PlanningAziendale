@@ -421,24 +421,9 @@ public class GestioneProgettiSegreteria extends JFrame {
 		dataModelTabella = new ProgettoTableModel();
 		impostaModelloTabellaProgettiSegreteria(controller);
 		tabellaProgetti = new JTable(dataModelTabella);
+		impostaProprietàTabellaProgetti();
 		tabellaProgetti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabellaProgetti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		DefaultTableCellRenderer renderTabellaProgetti = new DefaultTableCellRenderer();
-        renderTabellaProgetti.setHorizontalAlignment(SwingConstants.CENTER);
-        renderTabellaProgetti.setVerticalAlignment(SwingConstants.CENTER);
-        tabellaProgetti.getColumnModel().getColumn(0).setCellRenderer(renderTabellaProgetti);
-		tabellaProgetti.getColumnModel().getColumn(1).setCellRenderer(renderTabellaProgetti);
-		tabellaProgetti.getColumnModel().getColumn(2).setCellRenderer(renderTabellaProgetti);
-		tabellaProgetti.getColumnModel().getColumn(3).setCellRenderer(renderTabellaProgetti);
-		tabellaProgetti.getColumnModel().getColumn(4).setCellRenderer(renderTabellaProgetti);
-		tabellaProgetti.getColumnModel().getColumn(5).setCellRenderer(renderTabellaProgetti);
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaProgetti.getModel());
-		DataComparator comparatorDate = new DataComparator();
-		sorter.setComparator(3, comparatorDate);
-		sorter.setComparator(4, comparatorDate);
-		sorter.setComparator(5, comparatorDate);
-		tabellaProgetti.setRowSorter(sorter);
-		tabellaProgetti.getRowSorter().toggleSortOrder(0);
 		tabellaProgetti.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -500,8 +485,44 @@ public class GestioneProgettiSegreteria extends JFrame {
 		contentPane.add(esciButton);
 	}
 	
-	//Altri metodi
-	//-----------------------------------------------------------------
+	private void impostaProprietàTabellaProgetti() {
+		impostaRendererTabellaProgetti();
+		impostaModelloColonneTabellaProgetti();
+		impostaSortertabellaProgetti();
+		
+	}
+
+	private void impostaRendererTabellaProgetti() {
+		DefaultTableCellRenderer renderTabellaProgetti = new DefaultTableCellRenderer();
+        renderTabellaProgetti.setHorizontalAlignment(SwingConstants.CENTER);
+        renderTabellaProgetti.setVerticalAlignment(SwingConstants.CENTER);
+        tabellaProgetti.getColumnModel().getColumn(0).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(1).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(2).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(3).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(4).setCellRenderer(renderTabellaProgetti);
+		tabellaProgetti.getColumnModel().getColumn(5).setCellRenderer(renderTabellaProgetti);
+	}
+
+	private void impostaModelloColonneTabellaProgetti() {
+        tabellaProgetti.getColumnModel().getColumn(0).setMinWidth(450);
+		tabellaProgetti.getColumnModel().getColumn(1).setMinWidth(330);
+		tabellaProgetti.getColumnModel().getColumn(2).setMinWidth(200);
+		tabellaProgetti.getColumnModel().getColumn(3).setMinWidth(100);
+		tabellaProgetti.getColumnModel().getColumn(4).setMinWidth(100);
+		tabellaProgetti.getColumnModel().getColumn(5).setMinWidth(100);
+	}
+
+	private void impostaSortertabellaProgetti() {
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabellaProgetti.getModel());
+		DataComparator comparatorDate = new DataComparator();
+		sorter.setComparator(3, comparatorDate);
+		sorter.setComparator(4, comparatorDate);
+		sorter.setComparator(5, comparatorDate);
+		tabellaProgetti.setRowSorter(sorter);
+		tabellaProgetti.getRowSorter().toggleSortOrder(0);
+	}
+
 	private void resetFiltri(ControllerProgettiSegreteria controller) {
 		filtroNomeTextField.setText("");
 		ambitoComboBox.setSelectedIndex(0);
@@ -553,8 +574,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 			dataModelTabella.fireTableDataChanged();
 			tabellaProgetti.clearSelection();
 			pulisciCampi();
-		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog erroreFatale = new ErroreDialog(eccezioneSQL, true);
 			erroreFatale.setVisible(true);
 		}
 	}
@@ -564,8 +585,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 			modelloFiltroComboBox.removeAllElements();
 			modelloFiltroComboBox.addAll(controller.ottieniTuttiAmbiti());
 			ambitoComboBox.setModel(modelloFiltroComboBox);
-		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog erroreFatale = new ErroreDialog(eccezioneSQL, true);
 			erroreFatale.setVisible(true);
 		}
 	}
@@ -573,8 +594,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private void inizializzaFiltroTipologieComboBox(ControllerProgettiSegreteria controller) {
 		try {
 			tipologiaComboBox = new JComboBox(controller.ottieniTipologie().toArray());
-		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog erroreFatale = new ErroreDialog(eccezioneSQL, true);
 			erroreFatale.setVisible(true);
 		}
 	}
@@ -588,27 +609,27 @@ public class GestioneProgettiSegreteria extends JFrame {
 					JOptionPane.INFORMATION_MESSAGE);
 			inizializzaFiltroAmbitiComboBox(controller);
 			ambitoNuovoTextField.setText("");
-		} catch (SQLException e) {
+		} catch (SQLException eccezioneSQL) {
 			ErroreDialog errore = null;
-			switch(e.getSQLState()) {
+			switch(eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_PKEY_UNIQUE:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Non possono esistere ambiti duplicati." +
 						"\nVerificare che il nome dell'ambito non esista già.", false);
 				break;
 			case VIOLAZIONE_VINCOLI_TABELLA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Verificare che non ci siano numeri nel nome dell'ambito.", false);
 				break;
 			case VIOLAZIONE_LUNGHEZZA_STRINGA:
-				errore = new ErroreDialog(e,
+				errore = new ErroreDialog(eccezioneSQL,
 						"Creazione Fallita",
 						"Verificare che il nome dell'ambito non abbia più di 20 caratteri.", false);
 				break;
 			default:
-				errore = new ErroreDialog(e, true);
+				errore = new ErroreDialog(eccezioneSQL, true);
 			}
 			errore.setVisible(true);
 		}
@@ -627,8 +648,8 @@ public class GestioneProgettiSegreteria extends JFrame {
 	private void impostaModelloTabellaProgettiSegreteria(ControllerProgettiSegreteria controller) {
 		try {
 			dataModelTabella.setProgettiTabella(controller.ottieniProgetti());
-		} catch (SQLException e) {
-			ErroreDialog erroreFatale = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog erroreFatale = new ErroreDialog(eccezioneSQL, true);
 			erroreFatale.setVisible(true);
 		}
 	}

@@ -77,8 +77,8 @@ public class Login extends JFrame {
 		emailTextField.setColumns(10);
 		emailTextField.addKeyListener(new KeyAdapter() {
 		    @Override
-		    public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+		    public void keyPressed(KeyEvent event) {
+			if (event.getKeyCode() == KeyEvent.VK_ENTER)
 			    login(controller);
 		    }
 		});
@@ -91,8 +91,8 @@ public class Login extends JFrame {
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
 		passwordField.addKeyListener(new KeyAdapter() {
 		    @Override
-		    public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+		    public void keyPressed(KeyEvent event) {
+			if (event.getKeyCode() == KeyEvent.VK_ENTER)
 			    login(controller);
 		    }
 		});
@@ -208,14 +208,14 @@ public class Login extends JFrame {
 		} else {
 		    try {
 		    	controller.eseguiLoginDipendente(emailTextField.getText(), passwordField.getText());
-		    } catch (SQLException e1) {
-		    	if (e1.getSQLState().equals(CREDENZIALI_ERRATE))
+		    } catch (SQLException eccezioneSQL) {
+		    	if (eccezioneSQL.getSQLState().equals(CREDENZIALI_ERRATE))
 			    	JOptionPane.showMessageDialog(null, 
 			    			"Credenziali errate.",
 			    			"Login Fallito",
 			    			JOptionPane.ERROR_MESSAGE);
 		    	else {
-		    		ErroreDialog errore = new ErroreDialog(e1, true);
+		    		ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 		    		errore.setVisible(true);
 		    	}
 		    }

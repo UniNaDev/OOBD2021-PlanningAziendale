@@ -229,8 +229,8 @@ public class MieiMeeting extends JFrame {
 			ArrayList<Meeting> meetings = controller.ottieniMeetingDipendente();
 			modelloListaMeeting.addAll(meetings);
 			meetingList.setModel(modelloListaMeeting);
-		} catch (SQLException e) {
-			ErroreDialog errore = new ErroreDialog(e, true);
+		} catch (SQLException eccezioneSQL) {
+			ErroreDialog errore = new ErroreDialog(eccezioneSQL, true);
 			errore.setVisible(true);
 		}
 	}
