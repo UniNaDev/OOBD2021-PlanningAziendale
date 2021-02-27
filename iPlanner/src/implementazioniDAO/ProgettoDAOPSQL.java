@@ -449,7 +449,7 @@ public class ProgettoDAOPSQL implements ProgettoDAO {
 		
 		int record = aggiornaRuoloCollaboratorePS.executeUpdate();
 
-		if(record==1)
+		if(record == 1)
 			return true;
 		else
 			return false;

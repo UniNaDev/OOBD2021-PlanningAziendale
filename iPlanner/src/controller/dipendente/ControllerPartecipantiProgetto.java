@@ -59,27 +59,12 @@ public class ControllerPartecipantiProgetto {
 		return projDAO.ottieniPartecipantiProgettoSenzaRuolo(codiceProgetto);
 	}
 
-	public boolean inserisciPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto){
-		try {
-			projDAO.inserisciPartecipanteProgetto(collaborazioneProgetto);
-			return true;
-		} catch (SQLException e) {
-			
-			String unicitàProjectManager="P0004";
-			if(e.getSQLState().equals(unicitàProjectManager))
-			JOptionPane.showMessageDialog(null, "Errore: Esiste già un project manager per questo progetto");
-			return false;
-		}
+	public void inserisciPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException{
+		projDAO.inserisciPartecipanteProgetto(collaborazioneProgetto);
 	}
 
-	public boolean eliminaPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto){
-		try {
-			projDAO.eliminaPartecipanteProgetto(collaborazioneProgetto);
-			return true;
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return false;
-		}
+	public void eliminaPartecipanteProgetto(CollaborazioneProgetto collaborazioneProgetto) throws SQLException{
+		projDAO.eliminaPartecipanteProgetto(collaborazioneProgetto);
 	}
 	
 	public String [] ottieniRuoli() throws SQLException{
@@ -89,24 +74,15 @@ public class ControllerPartecipantiProgetto {
 		return ruoli;
 	}
 	
-	public boolean aggiornaRuoloCollaboratore(CollaborazioneProgetto collaborazioneProgetto){
-		try {
-			projDAO.aggiornaRuoloCollaboratore(collaborazioneProgetto);
-			return true;
-		} catch (SQLException e) {
-			
-			String unicitàProjectManager="P0004";
-			if(e.getSQLState().equals(unicitàProjectManager))
-				JOptionPane.showMessageDialog(null, "Errore: Esiste già un project manager per questo progetto");
-			return false;
-		}
+	public void aggiornaRuoloCollaboratore(CollaborazioneProgetto collaborazioneProgetto) throws SQLException{
+		projDAO.aggiornaRuoloCollaboratore(collaborazioneProgetto);
 	}
 	
 	public float ottieniMaxStipendio() {
 		try {
 			return dipDAO.ottieniMaxStipendio();
 		} catch (SQLException e) {
-			return 100000000f;
+			return Float.MAX_VALUE;
 		}
 	}
 

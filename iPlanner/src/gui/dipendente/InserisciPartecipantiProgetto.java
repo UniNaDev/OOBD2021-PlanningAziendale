@@ -1,7 +1,8 @@
+/*Finestra per inserire e aggiornare i partecipanti a un progetto scelto dalla finestra precedente.
+**************************************************************************************************/
 package gui.dipendente;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -43,6 +44,7 @@ import entita.PartecipazioneMeeting;
 import entita.Progetto;
 import entita.SalaRiunione;
 import entita.Skill;
+import gui.ErroreDialog;
 import gui.cellRenderers.PartecipantiListRenderer;
 import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.PartecipantiTableModel;
@@ -74,14 +76,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JSplitPane;
 
-
-
 public class InserisciPartecipantiProgetto extends JFrame {
-
-	//ATTRIBUTI
-	//---------------------------------------------
-	
-	//Attributi GUI
 	private JPanel contentPane;
 	private JLabel gestionePartecipantiProgettoLabel;
 	private JLabel infoDipendenteLabel;
@@ -150,9 +145,10 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private TableRowSorter<TableModel> sorterDipendenteProgetto;
 
 	private Progetto progettoSelezionato;
+	private Dipendente dipendenteSelezionato;
+	
+	private final String VIOLAZIONE_UNICITA_PROJECTMANAGER = "P0004";
 
-	//Creazione frame
-	//---------------------------------------------
 	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato) {
 		this.progettoSelezionato=progettoSelezionato;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
@@ -252,18 +248,13 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		ruoloLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		ruoloLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
 		
-		try {
-			ruoloComboBox = new JComboBox(controller.ottieniRuoli());
-			ruoloComboBox.setUI(new BasicComboBoxUI());
-			ruoloComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-			ruoloComboBox.setBackground(Color.WHITE);
-			ruoloComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			ruoloComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
-			ruoloComboBox.setSelectedItem(null);
-		} catch (SQLException e4) {
-			ruoloComboBox.setSelectedItem(null);
-			e4.printStackTrace();
-		}
+		inizializzaComboBoxRuoli(controller);
+		ruoloComboBox.setUI(new BasicComboBoxUI());
+		ruoloComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		ruoloComboBox.setBackground(Color.WHITE);
+		ruoloComboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		ruoloComboBox.setFont(new Font("Consolas", Font.PLAIN, 12));
+		ruoloComboBox.setSelectedItem(null);
 		
 		skillScrollPane = new JScrollPane();
 		skillScrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
@@ -374,12 +365,11 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		});
 		aggiornaRuoloButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(partecipantiList.getSelectedValue()==null) {
-					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista");
+				if(partecipantiList.isSelectionEmpty()) {
+					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla lista.", "Aggiornamento Fallito", JOptionPane.INFORMATION_MESSAGE);
 					partecipantiLabel.setForeground(Color.RED);
 				}
-				else
-				{
+				else {
 					aggiornaRuoloCollaboratore(controller);
 				}	
 			}
@@ -397,14 +387,13 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				if(dipendenteTable.getSelectedRow()==-1) {
-					JOptionPane.showMessageDialog(null, "Seleziona un partecipante dalla tabella");
+				if(dipendenteSelezionato.equals(null)) {
+					JOptionPane.showMessageDialog(null, "Selezionare un partecipante dalla tabella.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 				}
-				if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
-					JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
+				else if(ruoloComboBox.getSelectedItem().equals(null)) {
+					JOptionPane.showMessageDialog(null, "Selezionare un ruolo prima.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 				}
-				else if(ruoloComboBox.getSelectedItem()!=null && dipendenteTable.getSelectedRow()!=-1){
+				else{
 					inserisciPartecipanteProgetto(controller);				
 				}	
 			}
@@ -448,7 +437,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(partecipantiList.isSelectionEmpty()) {
-					JOptionPane.showMessageDialog(null, "Seleziona un partecipante da eliminare");
+					JOptionPane.showMessageDialog(null, "Seleziona un partecipante da eliminare.", "Eliminazione Fallita", JOptionPane.INFORMATION_MESSAGE);
 					partecipantiLabel.setForeground(Color.RED);
 				}
 				else {
@@ -459,6 +448,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		comandiPanel2.add(eliminaPartecipanteButton);
 		
 		filtraButton = new JButton("Filtra");
+		filtraButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		filtraButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				applicaFiltri(controller);
@@ -619,9 +609,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				if(e.getClickCount()==2) {
-					if(ruoloComboBox.getSelectedItem()==null && dipendenteTable.getSelectedRow()!=-1) {
-						JOptionPane.showMessageDialog(null, "Seleziona un ruolo");
+				if(e.getClickCount() == 2) {
+					if(ruoloComboBox.getSelectedItem().equals(null) && dipendenteTable.getSelectedRow()!=-1) {
+						JOptionPane.showMessageDialog(null, "Selezionare un ruolo prima.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
 						inserisciPartecipanteProgetto(controller);
@@ -830,6 +820,17 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
+	
+	//Altri metodi
+	//--------------------------------------------------
+	private void inizializzaComboBoxRuoli(ControllerPartecipantiProgetto controller) {
+		try {
+			ruoloComboBox = new JComboBox(controller.ottieniRuoli());
+		} catch (SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
+		}
+	}
 
 	private void inizializzaListaPartecipanti() {
 		partecipantiListModel = new DefaultListModel();
@@ -839,7 +840,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	}
 
 	private void impostaPartecipantiListRenderer() {
-		partecipantiListRenderer=new PartecipantiListRenderer();
+		partecipantiListRenderer = new PartecipantiListRenderer();
 		partecipantiList.setCellRenderer(partecipantiListRenderer);
 	}
 	
@@ -848,8 +849,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			tipologiaProgettoComboBox.setModel(tipologiaProgettoModel);
 			tipologiaProgettoModel.addElement(null);
 			tipologiaProgettoModel.addAll(controller.ottieniTipologie());
-		} catch (SQLException e3) {
-			JOptionPane.showMessageDialog(null,e3.getMessage());
+		} catch (SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}	
 	}
 
@@ -859,8 +861,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			skillModel.addElement(null);
 			skillModel.addAll(controller.ottieniSkill());
 			skillFiltroComboBox.setModel(skillModel);
-		} catch (SQLException e3) {
-			JOptionPane.showMessageDialog(null,e3.getMessage());
+		} catch (SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 
@@ -868,10 +871,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		try {
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato));
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 
@@ -915,16 +916,29 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	
 	private void aggiornaRuoloCollaboratore(ControllerPartecipantiProgetto controller) {
 		partecipantiLabel.setForeground(Color.BLACK);
-		String nuovoRuolo=ruoloComboBox.getSelectedItem().toString();
-		CollaborazioneProgetto collaborazioneProgettoPrecedente=(CollaborazioneProgetto) partecipantiList.getSelectedValue();
-		CollaborazioneProgetto collaborazioneProgettoNuova=new CollaborazioneProgetto(progettoSelezionato, collaborazioneProgettoPrecedente.getCollaboratore(), nuovoRuolo);
-		if(controller.aggiornaRuoloCollaboratore(collaborazioneProgettoNuova)==true) {
-			JOptionPane.showMessageDialog(null, "Modifica effettuata con successo");
-			aggiornaListaPartecipantiDopoAggiornamento(collaborazioneProgettoNuova);
+		
+		String nuovoRuolo = ruoloComboBox.getSelectedItem().toString();
+		CollaborazioneProgetto collaborazioneSelezionata = (CollaborazioneProgetto) partecipantiList.getSelectedValue();
+		collaborazioneSelezionata.setRuoloCollaboratore(nuovoRuolo);
+		
+		try {
+			controller.aggiornaRuoloCollaboratore(collaborazioneSelezionata);
+			JOptionPane.showMessageDialog(null, "Modifica effettuata con successo.", "Aggiornamento Riuscito", JOptionPane.INFORMATION_MESSAGE);
+			aggiornaListaPartecipantiDopoAggiornamento(collaborazioneSelezionata);
 			aggiornaSorter();
+			svuotaCampi();
+		} catch(SQLException e) {
+			ErroreDialog errore;
+			switch(e.getSQLState()) {
+			case VIOLAZIONE_UNICITA_PROJECTMANAGER:
+				errore = new ErroreDialog(e,"Esiste già un project manager per questo progetto.", "Aggiornamento Fallito", false);
+				break;
+			default:
+				errore = new ErroreDialog(e,true);
+			}
+			errore.setVisible(true);
 		}
-		svuotaCampi();
-		} 
+	} 
 	
 	private void aggiornaListaPartecipantiDopoAggiornamento(CollaborazioneProgetto collaborazioneProgettoNuova) {
 		partecipantiListModel.removeElementAt(partecipantiList.getSelectedIndex());
@@ -932,18 +946,27 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	}
 	
 	private void inserisciPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
-		
-		String ruolo=ruoloComboBox.getSelectedItem().toString();
-		Dipendente dipendente=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
-		CollaborazioneProgetto collaborazione=new CollaborazioneProgetto(progettoSelezionato, dipendente, ruolo);
+		String ruolo = ruoloComboBox.getSelectedItem().toString();
+		CollaborazioneProgetto collaborazione = new CollaborazioneProgetto(progettoSelezionato, dipendenteSelezionato, ruolo);
 	
-		if(controller.inserisciPartecipanteProgetto(collaborazione)==true) {
-			JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente");
+		try {
+			controller.inserisciPartecipanteProgetto(collaborazione);
+			JOptionPane.showMessageDialog(null, "Dipendente inserito correttamente.", "Inserimento Riuscito", JOptionPane.INFORMATION_MESSAGE);
 			aggiornaListaPartecipantiDopoInserimento(collaborazione);
 			aggiornaTabella(controller);
+			aggiornaSorter();
+			svuotaCampi();
+		} catch(SQLException e) {
+			ErroreDialog errore;
+			switch(e.getSQLState()) {
+			case VIOLAZIONE_UNICITA_PROJECTMANAGER:
+				errore = new ErroreDialog(e,"Esiste già un project manager per questo progetto.", "Inserimento Riuscito", false);
+				break;
+			default:
+				errore = new ErroreDialog(e,true);
+			}
+			errore.setVisible(true);
 		}
-		aggiornaSorter();
-		svuotaCampi();
 	} 
 	
 	private void aggiornaListaPartecipantiDopoInserimento(CollaborazioneProgetto collaborazione) {
@@ -952,13 +975,17 @@ public class InserisciPartecipantiProgetto extends JFrame {
 
 	private void eliminaPartecipanteProgetto(ControllerPartecipantiProgetto controller) {
 		partecipantiLabel.setForeground(Color.BLACK);
-		if(controller.eliminaPartecipanteProgetto((CollaborazioneProgetto)partecipantiList.getSelectedValue())==true) {
-			JOptionPane.showMessageDialog(null, "Partecipante eliminato");
+		try{
+			controller.eliminaPartecipanteProgetto((CollaborazioneProgetto)partecipantiList.getSelectedValue());
+			JOptionPane.showMessageDialog(null, "Partecipante eliminato correttamente.", "Eliminazione Riuscita", JOptionPane.INFORMATION_MESSAGE);
 			aggiornaListaPartecipantiDopoEliminazione();
 			aggiornaTabella(controller);
+			aggiornaSorter();
+			svuotaCampi();
+		} catch(SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
-		aggiornaSorter();
-		svuotaCampi();
 	}
 
 	private void aggiornaListaPartecipantiDopoEliminazione() {
@@ -972,24 +999,21 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			dataModelDipendente.fireTableDataChanged();
 			dataModelDipendente.setDipendenteTabella(controller.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato));
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage()
-							+ "\nVerificare che il programma sia aggiornato\noppure contattare uno sviluppatore.",
-					"Errore #" + e.getSQLState(), JOptionPane.ERROR_MESSAGE);
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 		aggiornaSorter();
 	}
 
 	private void aggiornaSorter() {
 		if(dipendenteTable.getRowCount()!=0)
-		sorterDipendenteProgetto.setModel(dataModelDipendente);
+			sorterDipendenteProgetto.setModel(dataModelDipendente);
 	}
 	
 	private void impostaInfoDipendenteDaTabella(ControllerPartecipantiProgetto controller) {
-		
-		if(dipendenteTable.getSelectedRow()!=-1) {
+		if(dipendenteTable.getSelectedRow() != -1) {
 			partecipantiList.clearSelection();
-			Dipendente dipendenteSelezionato=dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
+			dipendenteSelezionato = dataModelDipendente.getSelected(dipendenteTable.convertRowIndexToModel(dipendenteTable.getSelectedRow()));
 			impostaInfoDipendente(dipendenteSelezionato,controller);
 			ruoloComboBox.setSelectedItem(null);
 		}
@@ -997,7 +1021,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	
 	private void impostaInfoDipendenteDaLista(ControllerPartecipantiProgetto controller) {
 		CollaborazioneProgetto collaborazione = (CollaborazioneProgetto) partecipantiList.getSelectedValue();
-		if(collaborazione!=null) {
+		if(collaborazione != null) {
 			impostaInfoDipendente(collaborazione.getCollaboratore(), controller);
 			ruoloComboBox.setSelectedItem(collaborazione.getRuoloCollaboratore());
 			dipendenteTable.clearSelection();
@@ -1023,8 +1047,9 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		    skillList.setModel(listaSkillModel);
 			listaSkillModel.removeAllElements();
 			listaSkillModel.addAll(controller.ottieniSkillDipendente(dipendente.getCf()));
-		} catch (SQLException e2) {
-			e2.printStackTrace();
+		} catch (SQLException e) {
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 
@@ -1075,7 +1100,8 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			dipendenteTable.setModel(dataModelDipendente);
 			dataModelDipendente.fireTableDataChanged();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
+			ErroreDialog errore = new ErroreDialog(e,true);
+			errore.setVisible(true);
 		}
 	}
 	

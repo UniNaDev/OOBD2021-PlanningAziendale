@@ -102,7 +102,7 @@ public class GestioneProgettiDipendente extends JFrame {
 	private PartecipantiListRenderer partecipantiListRenderer;
 	private JLabel partecipantiProgettoLabel;
 	private JScrollPane partecipantiScrollPane;
-	private JButton inserisciPartecipanteButton;
+	private JButton gestionePartecipantiButton;
 	private JButton eliminaButton;
 	private JButton confermaModificheButton;
 	private JButton creaNuovoButton;
@@ -423,16 +423,16 @@ public class GestioneProgettiDipendente extends JFrame {
 			}
 		});
 		
-		inserisciPartecipanteButton = new JButton("Inserisci partecipanti");
-		inserisciPartecipanteButton.setPreferredSize(new Dimension(190, 30));
-		inserisciPartecipanteButton.setMaximumSize(new Dimension(150, 150));
-		inserisciPartecipanteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		inserisciPartecipanteButton.setBackground(Color.WHITE);
-		inserisciPartecipanteButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		inserisciPartecipanteButton.setMargin(new Insets(2, 20, 2, 20));
-		inserisciPartecipanteButton.setFont(new Font("Consolas", Font.PLAIN, 15));
-		inserisciPartecipanteButton.setAlignmentX(0.5f);
-		inserisciPartecipanteButton.addActionListener(new ActionListener() {
+		gestionePartecipantiButton = new JButton("Gestione Partecipanti");
+		gestionePartecipantiButton.setPreferredSize(new Dimension(190, 30));
+		gestionePartecipantiButton.setMaximumSize(new Dimension(150, 150));
+		gestionePartecipantiButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		gestionePartecipantiButton.setBackground(Color.WHITE);
+		gestionePartecipantiButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
+		gestionePartecipantiButton.setMargin(new Insets(2, 20, 2, 20));
+		gestionePartecipantiButton.setFont(new Font("Consolas", Font.PLAIN, 15));
+		gestionePartecipantiButton.setAlignmentX(0.5f);
+		gestionePartecipantiButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					if(progettiTable.getSelectedRow()!=-1) {
 						controller.apriGUIInserisciPartecipantiProgetto(progettoSelezionato);
@@ -441,16 +441,16 @@ public class GestioneProgettiDipendente extends JFrame {
 						JOptionPane.showMessageDialog(null, "Selezionare un progetto dalla tabella");	
 			}
 		});
-		inserisciPartecipanteButton.addMouseListener(new MouseAdapter() {
+		gestionePartecipantiButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) 
 			{
-				inserisciPartecipanteButton.setBackground(Color.LIGHT_GRAY);
+				gestionePartecipantiButton.setBackground(Color.LIGHT_GRAY);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) 
 			{
-				inserisciPartecipanteButton.setBackground(Color.WHITE);
+				gestionePartecipantiButton.setBackground(Color.WHITE);
 			}
 		});
 		
@@ -539,7 +539,7 @@ public class GestioneProgettiDipendente extends JFrame {
 			}
 		});
 		
-		comandiPanel2.add(inserisciPartecipanteButton);
+		comandiPanel2.add(gestionePartecipantiButton);
 		comandiPanel2.add(confermaModificheButton);
 		comandiPanel2.add(creaNuovoButton);
 		comandiPanel2.add(eliminaButton);
@@ -1003,12 +1003,12 @@ public class GestioneProgettiDipendente extends JFrame {
 	private void checkProjectManager(ControllerProgetto controller) {
 		try {
 			if (controller.isProjectManager(progettoSelezionato)) {
-				inserisciPartecipanteButton.setEnabled(true);
+				gestionePartecipantiButton.setEnabled(true);
 				eliminaButton.setEnabled(true);
 				confermaModificheButton.setEnabled(true);	
 			}
 			else {
-				inserisciPartecipanteButton.setEnabled(false);
+				gestionePartecipantiButton.setEnabled(false);
 				eliminaButton.setEnabled(false);
 				confermaModificheButton.setEnabled(false);
 			}
