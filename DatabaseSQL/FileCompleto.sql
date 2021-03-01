@@ -98,7 +98,7 @@ CREATE TABLE Skill(
 	NomeSkill varchar(50) NOT NULL,
 	
 	PRIMARY KEY (IDSkill),
-	UNIQUE (NomeSkill),
+	UNIQUE (NomeSkill)
 );
 
 
@@ -427,7 +427,7 @@ $$;
 ------------------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER capienza_rispettata_meeting BEFORE INSERT OR UPDATE OF CodSala ON Meeting
+CREATE TRIGGER capienza_rispettata_meeting AFTER UPDATE OF CodSala ON Meeting
 FOR EACH ROW
 EXECUTE PROCEDURE check_capienza_meeting();
 -----------------------------------------------------------------------------
@@ -654,14 +654,20 @@ $$;
 --------------------------------------------------------------------------------------------------------------
 
 --TRIGGER
-CREATE TRIGGER unicità_projectmanager AFTER INSERT OR UPDATE ON Partecipazione
+CREATE TRIGGER unicità_projectmanager BEFORE INSERT OR UPDATE ON Partecipazione
 FOR EACH ROW
 EXECUTE PROCEDURE check_projectmanager();
 --------------------------------------------------------------------------------
 
 /* Inserimento Dati */
 
---LuogoNascita INSERT tramite file CSV
+--LuogoNascita (qui avviene un insert parziale, ma nel progetto completo era previsto un import tramite csv completo)
+INSERT INTO LuogoNascita(CodComune,NomeComune,NomeProvincia) VALUES
+	('A074','Agliè','Torino'),
+	('F839','Napoli','Napoli'),
+	('G266','Palazzolo','Vercelli'),
+	('H454','Roccavivara','Campobasso'),
+	('G130','Orta di Atella','Caserta');
 
 --Dipendente
 INSERT INTO Dipendente(CF,Nome,Cognome,DataNascita,Sesso,Indirizzo,Email,TelefonoCasa,Salario,Password,CodComune) VALUES

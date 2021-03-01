@@ -23,7 +23,7 @@ public class ManagerConnessioneDB {
 	private Connection connection = null;
 	
 	private final String username = "postgres";
-	private final String password = "160995";
+	private final String password = "postgres";
 	private final String nomeDB = "iplanner";
 	private final String url = "jdbc:postgresql://localhost:5432/";
 	

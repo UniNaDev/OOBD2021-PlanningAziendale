@@ -47,6 +47,7 @@ public class ControllerProgetto {
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.ambitoDAO = ambitoDAO;
+		this.salaDAO = salaDAO;
 		this.skillDAO = skillDAO;
 		this.dipendenteLogged = dipendenteLogged;
 		

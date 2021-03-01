@@ -46,7 +46,7 @@ public class ControllerMeeting {
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
 		this.salaDAO = salaDAO;
-		this.skillDAO=skillDAO;
+		this.skillDAO = skillDAO;
 		this.dipendenteLogged = dipendenteLogged;
 		
 		mieiMeetingFrame = new MieiMeeting(this);

@@ -294,7 +294,7 @@ public class CostruttoreDB {
                 		+ "	FOREIGN KEY (CodSala) REFERENCES SalaRiunione(CodSala) ON DELETE CASCADE ON UPDATE CASCADE,\r\n"
                 		+ "	\r\n"
                 		+ "	--Associazione 1 a Molti (Progetto,Meeting)\r\n"
-                		+ "	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE --ON UPDATE CASCADE--\r\n"
+                		+ "	FOREIGN KEY (CodProgetto) REFERENCES Progetto(CodProgetto) ON DELETE CASCADE\r\n"
                 		+ ");";
                 risultato = statement.executeUpdate(createTable);
                 statement.close();
@@ -348,7 +348,7 @@ public class CostruttoreDB {
                 String createTable = "CREATE TABLE Partecipazione(\r\n"
                 		+ "	CodProgetto integer NOT NULL,\r\n"
                 		+ "	CF char(16) NOT NULL,\r\n"
-                		+ "	RuoloDipendente ruolo NOT NULL, --Project Manager = Creatore\r\n"
+                		+ "	RuoloDipendente ruolo NOT NULL,\r\n"
                 		+ "	\r\n"
                 		+ "	CONSTRAINT CfPartecipazione CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),\r\n"
                 		+ "	CONSTRAINT PartecipazioneEsistente UNIQUE(CF,CodProgetto),\r\n"
@@ -392,12 +392,12 @@ public class CostruttoreDB {
                 		+ "	CF char(16) NOT NULL,\r\n"
                 		+ "	IDMeeting integer NOT NULL ,\r\n"
                 		+ "	Presente BOOLEAN NOT NULL DEFAULT FALSE,\r\n"
-                		+ "	Organizzatore BOOLEAN NOT NULL DEFAULT FALSE, --TRUE = Organizzatore del meeting, FALSE = semplice invitato\r\n"
+                		+ "	Organizzatore BOOLEAN NOT NULL DEFAULT FALSE,\r\n"
                 		+ "	\r\n"
                 		+ "	CONSTRAINT CfPresenza CHECK(CF ~* '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$'),\r\n"
                 		+ "	CONSTRAINT PresenzaEsistente UNIQUE(CF,IDMeeting),\r\n"
                 		+ "	FOREIGN KEY (CF) REFERENCES Dipendente(CF) ON DELETE CASCADE ON UPDATE CASCADE,\r\n"
-                		+ "	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
+                		+ "	FOREIGN KEY (IDMeeting) REFERENCES Meeting(IDMeeting) ON DELETE CASCADE\r\n"
                 		+ ");";
                 risultato = statement.executeUpdate(createTable);
                 statement.close();
@@ -867,7 +867,7 @@ public class CostruttoreDB {
     if(connessioneEsiste()) {
             Statement statement = connection.createStatement();
             if (!esisteTrigger("no_onnipresenza_meeting")) {
-                String createTrigger = "CREATE TRIGGER no_onnipresenza_meeting AFTER UPDATE ON Meeting\r\n"
+                String createTrigger = "CREATE TRIGGER no_onnipresenza_meeting BEFORE INSERT OR UPDATE ON Meeting\r\n"
                 		+ "FOR EACH ROW\r\n"
                 		+ "EXECUTE PROCEDURE check_onnipresenza_meeting();";
                 risultato = statement.executeUpdate(createTrigger);

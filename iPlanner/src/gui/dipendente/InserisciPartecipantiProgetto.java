@@ -405,7 +405,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 				if(dipendenteSelezionato.equals(null)) {
 					JOptionPane.showMessageDialog(null, "Selezionare un partecipante dalla tabella.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 				}
-				else if(ruoloComboBox.getSelectedItem().equals(null)) {
+				else if(ruoloComboBox.getSelectedItem() == null) {
 					JOptionPane.showMessageDialog(null, "Selezionare un ruolo prima.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else{
@@ -946,7 +946,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			ErroreDialog errore;
 			switch(eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_UNICITA_PROJECTMANAGER:
-				errore = new ErroreDialog(eccezioneSQL,"Esiste già un project manager per questo progetto.", "Aggiornamento Fallito", false);
+				errore = new ErroreDialog(eccezioneSQL,"Aggiornamento Fallito","Esiste già un project manager per questo progetto.", false);
 				break;
 			default:
 				errore = new ErroreDialog(eccezioneSQL,true);
@@ -975,7 +975,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			ErroreDialog errore;
 			switch(eccezioneSQL.getSQLState()) {
 			case VIOLAZIONE_UNICITA_PROJECTMANAGER:
-				errore = new ErroreDialog(eccezioneSQL,"Esiste già un project manager per questo progetto.", "Inserimento Riuscito", false);
+				errore = new ErroreDialog(eccezioneSQL, "Inserimento Fallito","Esiste già un project manager per questo progetto.",false);
 				break;
 			default:
 				errore = new ErroreDialog(eccezioneSQL,true);
