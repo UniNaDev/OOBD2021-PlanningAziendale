@@ -17,6 +17,7 @@ import entita.Progetto;
 import entita.SalaRiunione;
 import gui.dipendente.GestioneMeetingDipendente;
 import gui.dipendente.MieiMeeting;
+import interfacceDAO.AmbitoProgettoDAO;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
@@ -35,10 +36,11 @@ public class ControllerMeeting {
 	private MeetingDAO meetDAO = null;
 	private SkillDAO skillDAO = null;
 	private SalaRiunioneDAO salaDAO = null;
+	private AmbitoProgettoDAO ambitoDAO = null;	
 	
 	private Dipendente dipendenteLogged = null;
 
-	public ControllerMeeting(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, SalaRiunioneDAO salaDAO, Dipendente dipendenteLogged) {
+	public ControllerMeeting(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, SkillDAO skillDAO, AmbitoProgettoDAO ambitoDAO, SalaRiunioneDAO salaDAO, Dipendente dipendenteLogged) {
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
@@ -55,6 +57,11 @@ public class ControllerMeeting {
 		gestioneMeetingFrame= new GestioneMeetingDipendente(this);
 		gestioneMeetingFrame.setVisible(true);
 		mieiMeetingFrame.setVisible(false);
+	}
+	
+	public void tornaAHome() {
+		mieiMeetingFrame.setVisible(false);
+		ControllerGestioneProfilo controller = new ControllerGestioneProfilo(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, dipendenteLogged);
 	}
 	
 	public void apriGUIInserisciPartecipantiMeeting(Meeting meetingSelezionato) {

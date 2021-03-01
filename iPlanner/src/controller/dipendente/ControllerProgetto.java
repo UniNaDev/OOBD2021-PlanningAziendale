@@ -23,6 +23,7 @@ import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
 import interfacceDAO.MeetingDAO;
 import interfacceDAO.ProgettoDAO;
+import interfacceDAO.SalaRiunioneDAO;
 import interfacceDAO.SkillDAO;
 
 
@@ -35,11 +36,12 @@ public class ControllerProgetto {
 	private ProgettoDAO projDAO = null;
 	private MeetingDAO meetDAO = null;
 	private AmbitoProgettoDAO ambitoDAO = null;
-	private SkillDAO skillDAO=null;
+	private SkillDAO skillDAO = null;
+	private SalaRiunioneDAO salaDAO = null;
 	
 	private Dipendente dipendenteLogged = null;
 
-	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, AmbitoProgettoDAO ambitoDAO,SkillDAO skillDAO, Dipendente dipendenteLogged) {
+	public ControllerProgetto(LuogoNascitaDAO luogoDAO, DipendenteDAO dipDAO, ProgettoDAO projDAO, MeetingDAO meetDAO, AmbitoProgettoDAO ambitoDAO,SkillDAO skillDAO, SalaRiunioneDAO salaDAO, Dipendente dipendenteLogged) {
 		this.luogoDAO = luogoDAO;
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
@@ -60,6 +62,11 @@ public class ControllerProgetto {
 		gestioneProgettiFrame = new GestioneProgettiDipendente(this,dipendenteLogged);
 		gestioneProgettiFrame.setVisible(true);
 		mieiProgettiFrame.setVisible(false);
+	}
+	
+	public void tornaAHome() {
+		mieiProgettiFrame.setVisible(false);
+		ControllerGestioneProfilo controller = new ControllerGestioneProfilo(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, ambitoDAO, dipendenteLogged);
 	}
 	
 	public ArrayList<Progetto> ottieniProgettiDipendente() throws SQLException {

@@ -3,6 +3,7 @@
 
 package controller.dipendente;
 
+import java.awt.Frame;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -12,6 +13,8 @@ import entita.Dipendente;
 import entita.Meeting;
 import entita.PartecipazioneMeeting;
 import entita.Skill;
+import gui.dipendente.GestioneMeetingDipendente;
+import gui.dipendente.GestioneProgettiDipendente;
 import gui.dipendente.InserisciPartecipantiMeeting;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -46,8 +49,13 @@ public class ControllerPartecipantiMeeting {
 		this.dipendenteLogged = dipendente;
 		this.meetingSelezionato = meetingSelezionato;
 		
-		inserisciPartecipantiMeetingFrame= new InserisciPartecipantiMeeting(this,meetingSelezionato);
+		inserisciPartecipantiMeetingFrame = new InserisciPartecipantiMeeting(this,meetingSelezionato);
 		inserisciPartecipantiMeetingFrame.setVisible(true);
+		
+		for (Frame frame : Frame.getFrames()) {
+			if (frame.isVisible() && frame.getClass().equals(GestioneMeetingDipendente.class))
+				frame.setVisible(false);
+		}
 
 	}
 	

@@ -50,6 +50,8 @@ import org.joda.time.format.DateTimeFormatter;
 import controller.dipendente.ControllerMeeting;
 
 import javax.swing.event.ListSelectionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MieiMeeting extends JFrame {
 	private JPanel contentPane;
@@ -72,6 +74,12 @@ public class MieiMeeting extends JFrame {
 	private Meeting meetingSelezionato;
 
 	public MieiMeeting(ControllerMeeting controller) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				controller.tornaAHome();
+			}
+		});
 		setMinimumSize(new Dimension(1440, 900));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiMeeting.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - I Miei Meeting");

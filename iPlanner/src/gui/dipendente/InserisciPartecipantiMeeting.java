@@ -15,6 +15,7 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -49,6 +50,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.Dimension;
@@ -124,6 +127,17 @@ public class InserisciPartecipantiMeeting extends JFrame {
 	private DateTimeFormatter formatHour = DateTimeFormat.forPattern("HH:mm");
 
 	public InserisciPartecipantiMeeting(ControllerPartecipantiMeeting controller, Meeting meetingSelezionato) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				for (Frame frame: Frame.getFrames()) {
+					if (!frame.isVisible() && frame.getClass().equals(GestioneMeetingDipendente.class)) {
+						frame.setVisible(true);
+						setVisible(false);
+					}
+				}
+			}
+		});
 		this.meetingSelezionato = meetingSelezionato;
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
@@ -136,6 +150,7 @@ public class InserisciPartecipantiMeeting extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));

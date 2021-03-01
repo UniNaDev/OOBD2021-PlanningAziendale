@@ -3,17 +3,21 @@
 
 package controller.dipendente;
 
+import java.awt.Frame;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import entita.CollaborazioneProgetto;
 import entita.Dipendente;
 import entita.Progetto;
 import entita.Skill;
+import gui.dipendente.GestioneProgettiDipendente;
 import gui.dipendente.InserisciPartecipantiProgetto;
 import interfacceDAO.DipendenteDAO;
 import interfacceDAO.LuogoNascitaDAO;
@@ -39,13 +43,18 @@ public class ControllerPartecipantiProgetto {
 		this.dipDAO = dipDAO;
 		this.projDAO = projDAO;
 		this.meetDAO = meetDAO;
-		this.skillDAO=skillDAO;
+		this.skillDAO = skillDAO;
 		this.dipendenteLogged = dipendenteLogged;
 		this.progettoSelezionato = progettoSelezionato;
 		
 		inserisciPartecipantiProgettoFrame = new InserisciPartecipantiProgetto(this,progettoSelezionato);
 		inserisciPartecipantiProgettoFrame.setVisible(true);
-	}
+		
+		for (Frame frame : Frame.getFrames()) {
+			if (frame.isVisible() && frame.getClass().equals(GestioneProgettiDipendente.class))
+				frame.setVisible(false);
+		}
+	}	
 
 	public ArrayList<Dipendente> ottieniDipendentiNonPartecipantiProgetto(Progetto progettoSelezionato) throws SQLException {
 		return dipDAO.ottieniDipendentiNonPartecipantiProgetto(progettoSelezionato);

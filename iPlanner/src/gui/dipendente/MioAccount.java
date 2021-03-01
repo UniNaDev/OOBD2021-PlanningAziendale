@@ -116,7 +116,6 @@ public class MioAccount extends JFrame {
 	private final String VIOLAZIONE_VINCOLI_TABELLA = "23514";
 
 	public MioAccount(ControllerGestioneProfilo controller, Dipendente dipendenteLogged) {
-
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MioAccount.class.getResource("/Icone/WindowIcon_16.png")));
 		setTitle("iPlanner - Il mio Account");

@@ -66,6 +66,8 @@ import gui.customUI.CustomScrollBarUI;
 import gui.tableModels.DataComparator;
 import gui.tableModels.ProgettoTableModel;
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GestioneProgettiDipendente extends JFrame {
 	private JPanel contentPane;
@@ -144,6 +146,12 @@ public class GestioneProgettiDipendente extends JFrame {
 	private String[] siNoOpzioni = {null, "Si", "No"};
 	
 	public GestioneProgettiDipendente(ControllerProgetto controller, Dipendente dipendente) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				controller.tornaAHome();
+			}
+		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneProgettiDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1600,900));
 		setTitle("iPlanner - Gestione progetto");

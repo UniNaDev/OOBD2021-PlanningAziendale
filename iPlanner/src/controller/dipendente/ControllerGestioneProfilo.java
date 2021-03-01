@@ -53,12 +53,14 @@ public class ControllerGestioneProfilo {
     }
 
     public void apriGUIMioAccount() {
+    	homeFrame.setVisible(false);
 		accountFrame = new MioAccount(this, dipendenteLogged);
 		accountFrame.setVisible(true);
     }
 
     public void chiudiGUIMioAccount() {
     	accountFrame.setVisible(false);
+    	homeFrame.setVisible(true);
     }
 
     public void logout() {
@@ -66,15 +68,17 @@ public class ControllerGestioneProfilo {
     }
 
     public void apriGUIMieiProgetti() {
-    	ControllerProgetto controller = new ControllerProgetto(luogoDAO, dipDAO, projDAO, meetDAO, ambitoDAO, skillDAO, dipendenteLogged);
+    	homeFrame.setVisible(false);
+    	ControllerProgetto controller = new ControllerProgetto(luogoDAO, dipDAO, projDAO, meetDAO, ambitoDAO, skillDAO, salaDAO, dipendenteLogged);
     }
 
     public void apriGUIMieiMeeting() {
-    	ControllerMeeting controller = new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, salaDAO, dipendenteLogged);
+    	homeFrame.setVisible(false);
+    	ControllerMeeting controller = new ControllerMeeting(luogoDAO, dipDAO, projDAO, meetDAO, skillDAO, ambitoDAO, salaDAO, dipendenteLogged);
     }
 
     public void tornaAHome() {
-		homeFrame.setVisible(false);
+		homeFrame.dispose();
 		homeFrame = new Home(this, dipendenteLogged);
 		homeFrame.setVisible(true);
     }

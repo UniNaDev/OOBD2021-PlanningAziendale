@@ -13,6 +13,7 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -75,6 +76,8 @@ import javax.swing.JSeparator;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JSplitPane;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class InserisciPartecipantiProgetto extends JFrame {
 	private JPanel contentPane;
@@ -150,6 +153,17 @@ public class InserisciPartecipantiProgetto extends JFrame {
 	private final String VIOLAZIONE_UNICITA_PROJECTMANAGER = "P0004";
 
 	public InserisciPartecipantiProgetto(ControllerPartecipantiProgetto controller, Progetto progettoSelezionato) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				for (Frame frame: Frame.getFrames()) {
+					if (!frame.isVisible() && frame.getClass().equals(GestioneProgettiDipendente.class)) {
+						frame.setVisible(true);
+						setVisible(false);
+					}
+				}
+			}
+		});
 		this.progettoSelezionato=progettoSelezionato;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1600, 900));
@@ -160,6 +174,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
 		panel.setFont(new Font("Tahoma", Font.PLAIN, 18));

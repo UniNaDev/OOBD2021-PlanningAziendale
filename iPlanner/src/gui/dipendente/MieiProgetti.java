@@ -54,6 +54,8 @@ import org.joda.time.format.DateTimeFormatter;
 import controller.dipendente.ControllerProgetto;
 
 import javax.swing.event.ListSelectionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MieiProgetti extends JFrame {
 
@@ -77,6 +79,12 @@ public class MieiProgetti extends JFrame {
 	private ProgettoListRenderer progettoCellRenderer;
 
 	public MieiProgetti(ControllerProgetto controller) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				controller.tornaAHome();
+			}
+		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MieiProgetti.class.getResource("/Icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1440, 900));
 		setTitle("iPlanner - I Miei Progetti");
@@ -99,8 +107,7 @@ public class MieiProgetti extends JFrame {
 		infoProgettoPanel.setFont(new Font("Consolas", Font.PLAIN, 21));
 		infoProgettoPanel.setBackground(Color.WHITE);
 
-		TitledBorder titleBorder = new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE,
-				new Font("Consolas", Font.PLAIN, 30));
+		TitledBorder titleBorder = new TitledBorder(null, "Info", DO_NOTHING_ON_CLOSE, DO_NOTHING_ON_CLOSE, new Font("Consolas", Font.PLAIN, 30));
 		titleBorder.setTitlePosition(TitledBorder.CENTER);
 		infoProgettoPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
 

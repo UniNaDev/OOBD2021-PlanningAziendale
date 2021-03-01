@@ -63,6 +63,8 @@ import javax.swing.JTable;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GestioneMeetingDipendente extends JFrame {
 
@@ -144,6 +146,12 @@ public class GestioneMeetingDipendente extends JFrame {
 	private DateTimeFormatter formatOra = DateTimeFormat.forPattern("HH:mm");
 
 	public GestioneMeetingDipendente(ControllerMeeting controller) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				controller.tornaAHome();
+			}
+		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestioneMeetingDipendente.class.getResource("/icone/WindowIcon_16.png")));
 		setMinimumSize(new Dimension(1300, 700));
 		setTitle("iPlanner - Gestione Meeting");
