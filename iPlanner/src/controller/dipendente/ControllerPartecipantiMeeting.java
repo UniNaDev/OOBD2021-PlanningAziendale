@@ -77,7 +77,7 @@ public class ControllerPartecipantiMeeting {
 	}
 
 	public void aggiornaPresenzaInvitato(PartecipazioneMeeting partecipazioneMeeting) throws SQLException{
-			meetDAO.aggiornaPresenzaInvitato(partecipazioneMeeting);
+		meetDAO.aggiornaPresenzaInvitato(partecipazioneMeeting);
 	}
 
 }

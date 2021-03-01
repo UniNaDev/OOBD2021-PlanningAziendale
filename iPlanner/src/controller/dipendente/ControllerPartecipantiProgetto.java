@@ -90,7 +90,7 @@ public class ControllerPartecipantiProgetto {
 	public float ottieniMaxStipendio() {
 		try {
 			return dipDAO.ottieniMaxStipendio();
-		} catch (SQLException e) {
+		} catch (SQLException eccezioneSQL) {
 			return Float.MAX_VALUE;
 		}
 	}
