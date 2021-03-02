@@ -127,7 +127,7 @@ CREATE TABLE Meeting(
 	Modalità modalità NOT NULL,
 	Piattaforma piattaforma,
 	CodSala varchar(10),
-	CodProgetto integer ,
+	CodProgetto integer NOT NULL,
 	
 	PRIMARY KEY(IDMeeting),
 	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),

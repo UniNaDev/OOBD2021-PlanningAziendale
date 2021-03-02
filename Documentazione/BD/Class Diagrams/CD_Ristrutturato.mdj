@@ -1200,57 +1200,6 @@
 										},
 										{
 											"_type": "UMLEnumerationLiteralView",
-											"_id": "AAAAAAF2Z4y1KEdwTW4=",
-											"_parent": {
-												"$ref": "AAAAAAF2Ta5/SOvY8kc="
-											},
-											"model": {
-												"$ref": "AAAAAAF2Z4y1GkdtVHs="
-											},
-											"font": "Arial;13;0",
-											"left": 893,
-											"top": 360,
-											"width": 195.837890625,
-											"height": 13,
-											"text": "Quality Manager",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLEnumerationLiteralView",
-											"_id": "AAAAAAF2hPTp6NhY1n4=",
-											"_parent": {
-												"$ref": "AAAAAAF2Ta5/SOvY8kc="
-											},
-											"model": {
-												"$ref": "AAAAAAF2hPTp2dhVeMk="
-											},
-											"font": "Arial;13;0",
-											"left": 893,
-											"top": 375,
-											"width": 195.837890625,
-											"height": 13,
-											"text": "Responsabile marketing",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLEnumerationLiteralView",
-											"_id": "AAAAAAF2hPT8JNjytdI=",
-											"_parent": {
-												"$ref": "AAAAAAF2Ta5/SOvY8kc="
-											},
-											"model": {
-												"$ref": "AAAAAAF2hPT8GtjvO04="
-											},
-											"font": "Arial;13;0",
-											"left": 893,
-											"top": 390,
-											"width": 195.837890625,
-											"height": 13,
-											"text": "Responsabile delle comunicazioni",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLEnumerationLiteralView",
 											"_id": "AAAAAAF2hPWC4NrjY0U=",
 											"_parent": {
 												"$ref": "AAAAAAF2Ta5/SOvY8kc="
@@ -1260,7 +1209,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 893,
-											"top": 405,
+											"top": 360,
 											"width": 195.837890625,
 											"height": 13,
 											"text": "Altro",
@@ -1271,7 +1220,7 @@
 									"left": 888,
 									"top": 310,
 									"width": 205.837890625,
-									"height": 113
+									"height": 68
 								}
 							],
 							"font": "Arial;13;0",
@@ -1279,7 +1228,7 @@
 							"left": 888,
 							"top": 272,
 							"width": 205.837890625,
-							"height": 151,
+							"height": 106,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2Ta5/SOvPfas="
 							},
@@ -2038,7 +1987,7 @@
 									"hostEdge": {
 										"$ref": "AAAAAAF2Tb39qvcSCOA="
 									},
-									"text": "0..1"
+									"text": "1"
 								},
 								{
 									"_type": "UMLQualifierCompartmentView",
@@ -6000,30 +5949,6 @@
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
-							"_id": "AAAAAAF2Z4y1GkdtVHs=",
-							"_parent": {
-								"$ref": "AAAAAAF2Ta5/R+vM6gs="
-							},
-							"name": "Quality Manager"
-						},
-						{
-							"_type": "UMLEnumerationLiteral",
-							"_id": "AAAAAAF2hPTp2dhVeMk=",
-							"_parent": {
-								"$ref": "AAAAAAF2Ta5/R+vM6gs="
-							},
-							"name": "Responsabile marketing"
-						},
-						{
-							"_type": "UMLEnumerationLiteral",
-							"_id": "AAAAAAF2hPT8GtjvO04=",
-							"_parent": {
-								"$ref": "AAAAAAF2Ta5/R+vM6gs="
-							},
-							"name": "Responsabile delle comunicazioni"
-						},
-						{
-							"_type": "UMLEnumerationLiteral",
 							"_id": "AAAAAAF2hPWC1drghAg=",
 							"_parent": {
 								"$ref": "AAAAAAF2Ta5/R+vM6gs="
@@ -6069,7 +5994,7 @@
 								"reference": {
 									"$ref": "AAAAAAF2TZMyMeRn9Sg="
 								},
-								"multiplicity": "0..1"
+								"multiplicity": "1"
 							}
 						}
 					],

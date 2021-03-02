@@ -282,7 +282,7 @@ public class CostruttoreDB {
                 		+ "	Modalità modalità NOT NULL,\r\n"
                 		+ "	Piattaforma piattaforma,\r\n"
                 		+ "	CodSala varchar(10),\r\n"
-                		+ "	CodProgetto integer ,\r\n"
+                		+ "	CodProgetto integer NOT NULL,\r\n"
                 		+ "	\r\n"
                 		+ "	PRIMARY KEY(IDMeeting),\r\n"
                 		+ "	CONSTRAINT DataValidaMeeting CHECK(DataInizio <= DataFine),\r\n"

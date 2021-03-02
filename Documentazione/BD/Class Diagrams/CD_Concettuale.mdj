@@ -1501,7 +1501,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 909,
-											"top": 253,
+											"top": 245,
 											"width": 164.759765625,
 											"height": 13,
 											"text": "«enumeration»"
@@ -1514,7 +1514,7 @@
 											},
 											"font": "Arial;13;1",
 											"left": 909,
-											"top": 268,
+											"top": 260,
 											"width": 164.759765625,
 											"height": 13,
 											"text": "ruolo"
@@ -1528,7 +1528,6 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": -16,
-											"top": 16,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -1542,14 +1541,13 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": -16,
-											"top": 16,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 904,
-									"top": 248,
+									"top": 240,
 									"width": 174.759765625,
 									"height": 38,
 									"stereotypeLabel": {
@@ -1577,7 +1575,6 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": -8,
-									"top": 8,
 									"width": 10,
 									"height": 10
 								},
@@ -1593,7 +1590,6 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": -8,
-									"top": 8,
 									"width": 10,
 									"height": 10
 								},
@@ -1609,7 +1605,6 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": -8,
-									"top": 8,
 									"width": 10,
 									"height": 10
 								},
@@ -1625,7 +1620,6 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": -8,
-									"top": 8,
 									"width": 10,
 									"height": 10
 								},
@@ -1650,7 +1644,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 909,
-											"top": 291,
+											"top": 283,
 											"width": 164.759765625,
 											"height": 13,
 											"text": "Project Manager",
@@ -1667,7 +1661,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 909,
-											"top": 306,
+											"top": 298,
 											"width": 164.759765625,
 											"height": 13,
 											"text": "Team Member",
@@ -1684,44 +1678,10 @@
 											},
 											"font": "Arial;13;0",
 											"left": 909,
-											"top": 321,
+											"top": 313,
 											"width": 164.759765625,
 											"height": 13,
 											"text": "Team Leader",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLEnumerationLiteralView",
-											"_id": "AAAAAAF2Z0RELr9yYZI=",
-											"_parent": {
-												"$ref": "AAAAAAF2Ta5/SOvY8kc="
-											},
-											"model": {
-												"$ref": "AAAAAAF2Z0REI79siQk="
-											},
-											"font": "Arial;13;0",
-											"left": 909,
-											"top": 336,
-											"width": 164.759765625,
-											"height": 13,
-											"text": "Quality Manager",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLEnumerationLiteralView",
-											"_id": "AAAAAAF2hPRtXlpEAEc=",
-											"_parent": {
-												"$ref": "AAAAAAF2Ta5/SOvY8kc="
-											},
-											"model": {
-												"$ref": "AAAAAAF2hPRtTVo+LjE="
-											},
-											"font": "Arial;13;0",
-											"left": 909,
-											"top": 351,
-											"width": 164.759765625,
-											"height": 13,
-											"text": "Responsabile comunicazioni",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1733,9 +1693,10 @@
 											"model": {
 												"$ref": "AAAAAAF2hPSdWlqukmI="
 											},
+											"visible": false,
 											"font": "Arial;13;0",
 											"left": 909,
-											"top": 366,
+											"top": 350,
 											"width": 164.759765625,
 											"height": 13,
 											"text": "Responsabile marketing",
@@ -1752,7 +1713,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 909,
-											"top": 381,
+											"top": 328,
 											"width": 164.759765625,
 											"height": 13,
 											"text": "Altro",
@@ -1761,17 +1722,17 @@
 									],
 									"font": "Arial;13;0",
 									"left": 904,
-									"top": 286,
+									"top": 278,
 									"width": 174.759765625,
-									"height": 113
+									"height": 68
 								}
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
 							"left": 904,
-							"top": 248,
+							"top": 240,
 							"width": 174.759765625,
-							"height": 151,
+							"height": 106,
 							"nameCompartment": {
 								"$ref": "AAAAAAF2Ta5/SOvPfas="
 							},
@@ -2530,7 +2491,7 @@
 									"hostEdge": {
 										"$ref": "AAAAAAF2Tb39qvcSCOA="
 									},
-									"text": "0..1"
+									"text": "1"
 								},
 								{
 									"_type": "UMLQualifierCompartmentView",
@@ -4899,22 +4860,6 @@
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
-							"_id": "AAAAAAF2Z0REI79siQk=",
-							"_parent": {
-								"$ref": "AAAAAAF2Ta5/R+vM6gs="
-							},
-							"name": "Quality Manager"
-						},
-						{
-							"_type": "UMLEnumerationLiteral",
-							"_id": "AAAAAAF2hPRtTVo+LjE=",
-							"_parent": {
-								"$ref": "AAAAAAF2Ta5/R+vM6gs="
-							},
-							"name": "Responsabile comunicazioni"
-						},
-						{
-							"_type": "UMLEnumerationLiteral",
 							"_id": "AAAAAAF2hPSdWlqukmI=",
 							"_parent": {
 								"$ref": "AAAAAAF2Ta5/R+vM6gs="
@@ -4968,7 +4913,7 @@
 								"reference": {
 									"$ref": "AAAAAAF2TZMyMeRn9Sg="
 								},
-								"multiplicity": "0..1"
+								"multiplicity": "1"
 							}
 						}
 					],
