@@ -402,7 +402,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 		inserisciPartecipanteButton.setAlignmentX(0.5f);
 		inserisciPartecipanteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(dipendenteSelezionato.equals(null)) {
+				if(dipendenteSelezionato == null) {
 					JOptionPane.showMessageDialog(null, "Selezionare un partecipante dalla tabella.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else if(ruoloComboBox.getSelectedItem() == null) {
@@ -625,7 +625,7 @@ public class InserisciPartecipantiProgetto extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				
 				if(event.getClickCount() == 2) {
-					if(ruoloComboBox.getSelectedItem().equals(null) && dipendenteTable.getSelectedRow()!=-1) {
+					if(ruoloComboBox.getSelectedItem() == null && dipendenteTable.getSelectedRow()!=-1) {
 						JOptionPane.showMessageDialog(null, "Selezionare un ruolo prima.", "Inserimento Fallito", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
