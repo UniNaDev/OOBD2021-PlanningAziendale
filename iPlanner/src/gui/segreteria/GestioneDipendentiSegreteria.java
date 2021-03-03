@@ -1430,7 +1430,7 @@ public class GestioneDipendentiSegreteria extends JFrame {
 		telefonoFissoTextField.setText("");
 		passwordField.setText("");
 		confermaPasswordField.setText("");
-		salarioTextField.setText("");
+		salarioTextField.setText("0.0");
 		skillsList.clearSelection();
 		dipendenteSelezionato = null;
 		campiNeri();
