@@ -47,6 +47,7 @@ public class ControllerMeeting {
 		this.meetDAO = meetDAO;
 		this.salaDAO = salaDAO;
 		this.skillDAO = skillDAO;
+		this.ambitoDAO = ambitoDAO;
 		this.dipendenteLogged = dipendenteLogged;
 		
 		mieiMeetingFrame = new MieiMeeting(this);
