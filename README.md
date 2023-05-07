@@ -28,4 +28,4 @@ Per utilizzare il sistema, è necessario:
 
 ## Contributi
 
-Questo progetto è stato sviluppato per un progetto accademico e non è attualmente in fase di sviluppo attivo. Tuttavia, sono benvenuti i contributi e i suggerimenti per migliorare il sistema.
+Questo progetto è stato sviluppato per un esame universitario e non è attualmente in fase di sviluppo attivo. Tuttavia, sono benvenuti i contributi e i suggerimenti per migliorare il sistema.
