@@ -1,8 +1,31 @@
 # Sistema Informativo per la gestione di progetti aziendali
 
 ## Traccia: Sistema di planning per gestione progetti
-Si sviluppi un sistema informativo, composto da una base di dati relazionale e un applicativo Java dotato di GUI (Swing o JavaFX), per la gestione di **progetti** in un’azienda. Si tenga traccia dei **partecipanti** al progetto, identificando i **ruoli** per ognuno di essi (per ogni progetto ci sarà **solo un project manager**). Ad ogni progetto è associato una **tipologia** (“Ricerca di base”, “Ricerca Industriale”, “Ricerca sperimentale”, “Sviluppo Sperimentale”, ...) ed **uno o più ambiti** (Economia, Medicina, …). Il sistema dovrà permettere anche l'organizzazione di **meeting** fisicamente, in **sale riunioni**, o **telematicamente** su una piattaforma di videoconferenza. Si dovrà tenere traccia delle **partecipazioni ai progetti ed ai meeting, ai fini della valutazione del singolo partecipante.** In fase di creazione di un nuovo progetto, i partecipanti dovranno essere selezionati in base a **criteri di ricerca che includono anche il salario medio e la valutazione aziendale del partecipante, oltre alla tipologia di progetti cui ha preso parte.** Per il gruppo da 3: ad ogni partecipante sarà associata una **lista di skill**. Inoltre, in fase di creazione di un nuovo progetto, i partecipanti potranno essere **scelti in funzione anche delle loro skill**. In fase di registrazione di un partecipante, **inserire le skill e se non presente nel DB, crearne una nuova.**
 
-Questo progetto consiste nello sviluppo di un sistema informativo che aiuti l'azienda nella gestione dei propri progetti. Il sistema sarà composto da una base di dati relazionale e un applicativo Java con interfaccia grafica utente (GUI) in Swing o JavaFX.
+Questo progetto consiste nello sviluppo di un sistema informativo che aiuti l'azienda nella gestione dei propri progetti. Il sistema sarà composto da una base di dati relazionale e un applicativo Java con interfaccia grafica utente (GUI) in Swing.
 
-##**Funzionalità**
+## Funzionalità
+
+Il sistema è in grado di:
+
+- Tenere traccia dei partecipanti ai progetti, identificando il ruolo di ognuno di essi (per ogni progetto ci sarà solo un project manager).
+- Associare ad ogni progetto una tipologia tra le seguenti: "Ricerca di base", "Ricerca Industriale", "Ricerca sperimentale", "Sviluppo Sperimentale" e uno o più ambiti come Economia, Medicina, etc.
+- Organizzare meeting fisicamente in sale riunioni o telematicamente su una piattaforma di videoconferenza.
+- Tenere traccia delle partecipazioni ai progetti e ai meeting, ai fini della valutazione del singolo partecipante.
+- Selezionare i partecipanti in base a criteri di ricerca come il salario medio e la valutazione aziendale del partecipante, oltre alla tipologia di progetti cui ha preso parte.
+- Assegnare a ogni partecipante una lista di skill.
+- Selezionare i partecipanti in base alle loro skill durante la creazione di un nuovo progetto.
+- Registrare le skill di un partecipante e, se non presenti nel database, crearne una nuova.
+
+Per ulteriori informazioni leggere la documentazione.
+
+## Installazione
+Per utilizzare il sistema, è necessario:
+
+- Installare un database relazionale (es. MySQL,PostgreSQL)
+- Installare Java SDK (versione minima 8)
+- Scaricare il codice sorgente e i file di configurazione dal repository GitHub
+
+## Contributi
+
+Questo progetto è stato sviluppato per un progetto accademico e non è attualmente in fase di sviluppo attivo. Tuttavia, sono benvenuti i contributi e i suggerimenti per migliorare il sistema.
